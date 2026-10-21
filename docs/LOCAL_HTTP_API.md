@@ -31,38 +31,29 @@ Output remains experimental and may be incoherent or factually wrong. The API do
 
 ## Optional POST /learn ingestion (not training)
 
-Only use examples you have separately authorized to provide from Digit; its Observations/Corpus/Context are not automatically permitted. The handler stores question/answer pairs without modifying GRU weights, training files, or checkpoints.
+Only send Digit examples separately approved for transfer. The handler stores question/answer pairs without modifying GRU weights or checkpoints. It does not independently verify whether the caller's approved=true claim is justified.
 
-Start the API **manually** with a private ingest destination and shared token in the same shell:
+Start the API with a private learning queue, **without any token**:
 
-    export STN_LABZ_LEARN_TOKEN="$(python3 -c 'import secrets; print(secrets.token_hex(32))')"
     python3 http_api.py --model ./model --checkpoint corpus_state_768000.stn \
       --port 8765 --learn-file ./digit_approved_learning.jsonl
 
-The token must be passed to Digit through a separately approved method; do not commit it or place it in source files or command-line arguments. The queue is created with mode 0600. Store the queue outside any public web root and avoid submitting private conversation data. If --learn-file is omitted, the endpoint returns 503 and does not accept data. Restart the server after changing configuration.
+The queue is created with permissions 0600 if not present. If --learn-file is omitted, the endpoint returns HTTP 503. Keep the queue outside the web root.
 
-Digit should send an HTTP POST to http://127.0.0.1:8765/learn on the same host, with Content-Type: application/json and X-STN-Learn-Token header containing the token. The exact JSON payload is:
+Digit must run on the **same VPS** and send:
 
-    {
-      "input": "Why does PHP seem difficult?",
-      "response": "PHP may seem difficult because its syntax and execution model are unfamiliar.",
-      "source": "digit",
-      "approved": true
-    }
-
-All four fields are required, and extra fields are rejected. input must be 1..1024 UTF-8 bytes, response 1..2048 UTF-8 bytes, source must literally be digit, and approved must be true. The complete body must fit within 4096 bytes.
-
-Example after setting the token above:
-
-    curl -sS -X POST http://127.0.0.1:8765/learn \
-      -H "X-STN-Learn-Token: $STN_LABZ_LEARN_TOKEN" \
+    curl -i -X POST http://127.0.0.1:8765/learn \
       -H 'Content-Type: application/json' \
       -d '{"input":"Why is PHP hard?","response":"PHP syntax may be unfamiliar.","source":"digit","approved":true}'
 
-On success the server returns HTTP 202 with:
+The server accepts the exact required JSON fields input, response, source, and approved. input is 1..1024 UTF-8 bytes, response 1..2048 UTF-8 bytes, source must be digit, approved must be true, and total body must fit within 4096 bytes. Extra fields are rejected.
+
+On success, HTTP 202:
 
     {"accepted":true,"trained":false,"status":"queued_for_review"}
 
-Other results: 400 invalid record, 403 absent/bad token, 413 body too large, 503 learning disabled, 502 file write failed. The handler is synchronous and the server accepts one request at a time. Do not confuse queued_for_review with verified provenance or approved training.
+Errors include HTTP 400 for invalid records, 413 for oversized request, 503 when ingestion is disabled, and 502 for write failures.
 
-The server cannot independently prove that a caller's approved=true claim is true. Digit-side selection and human-approved data provenance remain mandatory. This endpoint does **not** start training, convert JSONL into the existing newline-text corpus format, update weights, or activate a new checkpoint. Those are separate future development and operator approval gates.
+No X-STN-Learn-Token header, STN_LABZ_LEARN_TOKEN variable, or authentication configuration is needed. **This removes the only /learn authentication barrier:** any local process that can connect to 127.0.0.1:8765 can submit approved=true records. Do not proxy or expose the service publicly. Digit-side example selection and provenance approval remain required.
+
+The endpoint does NOT train, convert JSONL into a corpus, update checkpoints, or activate model versions.
