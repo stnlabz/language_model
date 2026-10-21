@@ -22,7 +22,7 @@ VALID = $(RUN)_validation.bin
 CHECKPOINT = $(RUN)_$(STEPS).stn
 
 .DEFAULT_GOAL := help
-.PHONY: help all build test prepare-data train evaluate generate probe pipeline status train-state resume quality
+.PHONY: help all build test prepare-data train evaluate generate probe pipeline status train-state resume quality compare-sampling
 
 help:
 	@printf '%s\n' \
@@ -36,6 +36,7 @@ help:
 		'Stateful:   make train-state RUN=corpus STEPS=6400' \
 		'Resume:     make resume RUN=corpus STEPS=6400 STATE_IN=prior.stn STATE_OUT=next.stn' \
 		'Quality:    make quality CHECKPOINT=corpus_state_512000.stn RUN=corpus_v1' \
+		'Sampling:   make compare-sampling CHECKPOINT=corpus_state_768000.stn RUN=corpus_v1' \
 		'Status:     make status' \
 		'' \
 		'RUN labels experiment artifacts; distinct RUN names avoid collisions.' \
@@ -103,3 +104,8 @@ resume: build
 quality: build
 	@test -s '$(CHECKPOINT)' && test -s '$(TRAIN)' || { echo 'Missing checkpoint or training reference' >&2; exit 1; }
 	$(PYTHON) tests/evaluate_quality.py --model ./model --checkpoint '$(CHECKPOINT)' --train '$(TRAIN)' --seed '$(SEED)' --bytes '$(BYTES)'
+
+# Read-only generation experiment; no training or checkpoint changes.
+compare-sampling: build
+	@test -s '$(CHECKPOINT)' && test -s '$(TRAIN)' || { echo 'Missing checkpoint or training reference' >&2; exit 1; }
+	$(PYTHON) tests/compare_sampling.py --model ./model --checkpoint '$(CHECKPOINT)' --train '$(TRAIN)' --seed '$(SEED)' --bytes '$(BYTES)'
