@@ -119,7 +119,8 @@ int main(int argc,char **argv) {
     /* Exclusive creation on MSVC: x-mode is supported. */
     FILE *out=fopen(argv[3],"wbx");
     if(!out){perror("new corpus");goto done;}
-    int ok=fwrite(corpus,1,total,out)==total && !fclose(out);
+    int ok=fwrite(corpus,1,total,out)==total;
+    if(fclose(out)!=0)ok=0;
     if(!ok){fputs("corpus write failure\n",stderr);remove(argv[3]);goto done;}
     printf("migration=approved_digit_jsonl records=%zu output_bytes=%zu\n",rows,total);
     result=0;
