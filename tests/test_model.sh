@@ -10,6 +10,22 @@ cc -std=c11 -O2 -Wall -Wextra -Werror -pedantic prepare.c -o "$d/prepare"
 "$d/prepare" prepare samples/synthetic_language.txt "$d/train.bin" "$d/valid.bin"
 "$d/model" train "$d/train.bin" "$d/valid.bin" 200 "$d/prototype.stn" > "$d/training.log"
 test -s "$d/prototype.stn"
+# Re-running identical sequence training must reproduce metrics and weights.
+"$d/model" train "$d/train.bin" "$d/valid.bin" 200 "$d/repeat.stn" > "$d/repeat.log"
+cmp "$d/prototype.stn" "$d/repeat.stn"
+cmp "$d/training.log" "$d/repeat.log"
+# A learnable dataset should reduce the initial held-out loss.
+awk '
+    /^parameters=/ {
+        split($2, part, "="); initial = part[2]
+    }
+    /^steps=/ {
+        split($3, part, "="); final = part[2]
+    }
+    END {
+        if (initial == "" || final == "" || !(final < initial)) exit 1
+    }
+' "$d/training.log"
 grep -q '^parameters=' "$d/training.log"
 grep -q '^steps=200' "$d/training.log"
 "$d/model" eval "$d/prototype.stn" "$d/valid.bin" | grep -q '^validation_loss='
