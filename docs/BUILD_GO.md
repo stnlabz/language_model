@@ -53,3 +53,7 @@ Inspected attached 3,667-line snapshot: 1,215 Corpus LESSON records, 6 Corpus in
 The vocabulary-constrained decoder samples next bytes using the trained GRU probability distribution while preventing word spellings absent from the run's training corpus. This is experimental decoding, not a new model architecture, retrieval answer, or proof of conversational quality. Inspect best_sample.txt alongside best_sample.hex; if it is word salad, the goal remains unmet.
 
 At completion, build go prints runs/gru_run/best_sample.txt directly to the CMD console, in addition to writing it to disk. Console output is the actual GRU-constrained generation, and may still be ungrammatical. This is not a language-quality pass.
+
+## Training optimizer correction (2026-10-21)
+
+The native GRU previously multiplied the per-batch learning rate by the 64-position sequence length after already averaging each gradient over the sequence. That yielded up to 64-fold larger updates for each complete block. The optimizer now applies RATE to the mean gradient directly. Checkpoint serialization, existing model weights, adaptation, validation partitioning and native CMD invocation are unchanged. This corrects the update scale but is **not evidence of English fluency**. Retrain and examine generated output; the existing checkpoints were trained with the old update rule and remain untouched.
