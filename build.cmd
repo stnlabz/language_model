@@ -85,13 +85,18 @@ if not exist samples\synthetic_language.txt (
     echo ERROR: Synthetic test corpus missing.
     exit /b 1
 )
-if not exist runs mkdir runs
-if errorlevel 1 exit /b 1
-set "RUN=runs\go_%RANDOM%_%RANDOM%_%RANDOM%"
-if exist "%RUN%" (
-    echo ERROR: Run directory collision.
-    exit /b 1
+rem Operator-directed: replace prior run artifacts with one stable run folder.
+if exist "runs" (
+    echo Clearing previous runs...
+    rmdir /S /Q "runs"
+    if exist "runs" (
+        echo ERROR: Could not clear runs. No training started.
+        exit /b 1
+    )
 )
+mkdir "runs"
+if errorlevel 1 exit /b 1
+set "RUN=runs\gru_run"
 mkdir "%RUN%"
 if errorlevel 1 exit /b 1
 echo run_directory=%RUN% > "%RUN%\report.txt"
