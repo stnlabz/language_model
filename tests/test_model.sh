@@ -54,4 +54,24 @@ fi
 if "$d/model" generate "$d/prototype.stn" "x" 257 >/dev/null 2>&1; then
     echo "FAIL: unbounded generation accepted" >&2; exit 1
 fi
+# Stateful training: identical weights for uninterrupted and resumed
+# 128 + 128 positions, using the same 64-position update boundaries.
+"$d/model" train-state "$d/train.bin" "$d/valid.bin" 256 "$d/full_state.stn" > "$d/full_state.log"
+"$d/model" train-state "$d/train.bin" "$d/valid.bin" 128 "$d/first_state.stn" > "$d/first_state.log"
+"$d/model" resume "$d/first_state.stn" "$d/train.bin" "$d/valid.bin" 128 "$d/resumed_state.stn" > "$d/resumed_state.log"
+cmp "$d/full_state.stn" "$d/resumed_state.stn"
+"$d/model" eval "$d/resumed_state.stn" "$d/valid.bin" | grep -q '^validation_loss='
+grep -q 'total_positions=256' "$d/resumed_state.log"
+if "$d/model" resume "$d/prototype.stn" "$d/train.bin" "$d/valid.bin" 64 "$d/legacy_wrong.stn" >/dev/null 2>&1; then
+    echo "FAIL: legacy checkpoint incorrectly accepted as resumable" >&2; exit 1
+fi
+if "$d/model" resume "$d/first_state.stn" "$d/valid.bin" "$d/train.bin" 64 "$d/wrong_data.stn" >/dev/null 2>&1; then
+    echo "FAIL: changed training data incorrectly accepted" >&2; exit 1
+fi
+if "$d/model" resume "$d/first_state.stn" "$d/train.bin" "$d/valid.bin" 63 "$d/wrong_count.stn" >/dev/null 2>&1; then
+    echo "FAIL: unaligned training steps accepted" >&2; exit 1
+fi
+if "$d/model" resume "$d/first_state.stn" "$d/train.bin" "$d/valid.bin" 64 "$d/full_state.stn" >/dev/null 2>&1; then
+    echo "FAIL: existing state checkpoint overwritten" >&2; exit 1
+fi
 echo "Milestone 3 model checks: PASS"
