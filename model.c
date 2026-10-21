@@ -227,6 +227,8 @@ static int save(const char *path, const model *m)
     if (!ok) remove(path);
     return ok;
 }
+static int restore_state(const char *path, model *m, uint64_t *position,
+                         uint64_t *data_hash, uint64_t *data_length);
 static int restore(const char *path, model *m)
 {
     FILE *f = fopen(path, "rb");
@@ -238,7 +240,73 @@ static int restore(const char *path, model *m)
     if (ok) ok = fread(m, sizeof(*m), 1, f) == 1 && fgetc(f) == EOF &&
                  checksum((const unsigned char *)m, sizeof(*m)) == header[3];
     fclose(f);
+    if (!ok && header[0] == MAGIC && header[1] == STATE_VERSION) {
+        uint64_t position, hash, length;
+        return restore_state(path, m, &position, &hash, &length);
+    }
     return ok;
+}
+/* Stateful checkpoints include completed positions and training-data identity.
+ * Legacy version-1 checkpoints remain readable for evaluation and generation.
+ * Stateful training requires 64-position sessions for identical update grouping. */
+#define STATE_VERSION 2u
+static int save_state(const char *path, const model *m, uint64_t position,
+                      uint64_t data_hash, uint64_t data_length)
+{
+    FILE *f = fopen(path, "rb");
+    if (f) { fclose(f); return 0; }
+    f = fopen(path, "wb");
+    if (!f) return 0;
+    const uint64_t header[7] = {MAGIC, STATE_VERSION, sizeof(*m),
+        checksum((const unsigned char *)m, sizeof(*m)), position,
+        data_hash, data_length};
+    int ok = fwrite(header, sizeof(header), 1, f) == 1 &&
+             fwrite(m, sizeof(*m), 1, f) == 1;
+    if (fclose(f)) ok = 0;
+    if (!ok) remove(path);
+    return ok;
+}
+static int restore_state(const char *path, model *m, uint64_t *position,
+                         uint64_t *data_hash, uint64_t *data_length)
+{
+    FILE *f = fopen(path, "rb");
+    if (!f) return 0;
+    uint64_t header[7];
+    int ok = fread(header, sizeof(header), 1, f) == 1 &&
+             header[0] == MAGIC && header[1] == STATE_VERSION &&
+             header[2] == sizeof(*m) && header[4] % WINDOW == 0 &&
+             header[6] >= 2 && header[6] <= LIMIT;
+    if (ok) ok = fread(m, sizeof(*m), 1, f) == 1 && fgetc(f) == EOF &&
+                 checksum((const unsigned char *)m, sizeof(*m)) == header[3];
+    if (ok) {
+        *position = header[4];
+        *data_hash = header[5];
+        *data_length = header[6];
+    }
+    fclose(f);
+    return ok;
+}
+static double train_blocks(model *m, const unsigned char *train, size_t n,
+                           uint64_t start, int count)
+{
+    double total = 0.0;
+    for (int first = 0; first < count; first += WINDOW) {
+        step history[WINDOW];
+        unsigned char targets[WINDOW];
+        float h[H] = {0};
+        for (int k = 0; k < WINDOW; ++k) {
+            size_t pos = (size_t)((start + (uint64_t)first +
+                                   (uint64_t)k) % (n - 1u));
+            if (pos == 0) memset(h, 0, sizeof(h));
+            forward(m, h, train[pos], &history[k]);
+            targets[k] = train[pos + 1u];
+            memcpy(h, history[k].h, sizeof(h));
+        }
+        double loss = update_sequence(m, history, targets, WINDOW);
+        if (loss < 0.0) return -1.0;
+        total += loss;
+    }
+    return total;
 }
 /* UTF-8 decoder state tracks legal next-byte ranges. A complete sequence
  * has remaining==0; restricting leads near the end prevents truncation. */
@@ -349,6 +417,75 @@ int main(int argc, char **argv)
         printf("steps=%d training_loss=%.6f validation_loss=%.6f\n",
                steps, total / steps, evaluate(m, valid, v));
         int ok = save(argv[5], m);
+        if (!ok) fputs("cannot create checkpoint (or already exists)\n", stderr);
+        free(train); free(valid); free(m);
+        return ok ? 0 : 1;
+    }
+    if (argc == 6 && !strcmp(argv[1], "train-state")) {
+        int count = parse_steps(argv[4], 100000);
+        if (!count || count % WINDOW != 0 ||
+            !strcmp(argv[2], argv[3]) ||
+            !strcmp(argv[2], argv[5]) || !strcmp(argv[3], argv[5])) {
+            fputs("stateful training requires 64-position aligned steps and distinct paths\n", stderr);
+            free(m); return 2;
+        }
+        size_t n = 0, v = 0;
+        unsigned char *train = read_data(argv[2], &n);
+        unsigned char *valid = read_data(argv[3], &v);
+        if (!train || !valid) {
+            fputs("missing, short, or oversized dataset\n", stderr);
+            free(train); free(valid); free(m); return 1;
+        }
+        uint64_t position = 0, data_hash = checksum(train, n);
+        initialize(m);
+        printf("parameters=%zu initial_validation_loss=%.6f\n",
+               sizeof(*m) / sizeof(float), evaluate(m, valid, v));
+        double loss = train_blocks(m, train, n, position, count);
+        if (loss < 0.0) {
+            fputs("out of memory during training\n", stderr);
+            free(train); free(valid); free(m); return 1;
+        }
+        position += (uint64_t)count;
+        printf("steps=%d total_positions=%llu training_loss=%.6f validation_loss=%.6f\n",
+               count, (unsigned long long)position, loss / count,
+               evaluate(m, valid, v));
+        int ok = save_state(argv[5], m, position, data_hash, n);
+        if (!ok) fputs("cannot create checkpoint (or already exists)\n", stderr);
+        free(train); free(valid); free(m);
+        return ok ? 0 : 1;
+    }
+    if (argc == 7 && !strcmp(argv[1], "resume")) {
+        int count = parse_steps(argv[5], 100000);
+        if (!count || count % WINDOW != 0 ||
+            !strcmp(argv[2], argv[3]) || !strcmp(argv[2], argv[4]) ||
+            !strcmp(argv[2], argv[6]) || !strcmp(argv[3], argv[4]) ||
+            !strcmp(argv[3], argv[6]) || !strcmp(argv[4], argv[6])) {
+            fputs("invalid resume paths or step count (multiple of 64 required)\n", stderr);
+            free(m); return 2;
+        }
+        size_t n = 0, v = 0;
+        unsigned char *train = read_data(argv[3], &n);
+        unsigned char *valid = read_data(argv[4], &v);
+        uint64_t position = 0, data_hash = 0, data_length = 0;
+        if (!train || !valid ||
+            !restore_state(argv[2], m, &position, &data_hash, &data_length) ||
+            data_hash != checksum(train, n) || data_length != n ||
+            UINT64_MAX - position < (uint64_t)count) {
+            fputs("invalid state checkpoint or training data mismatch\n", stderr);
+            free(train); free(valid); free(m); return 1;
+        }
+        printf("resume_from=%llu initial_validation_loss=%.6f\n",
+               (unsigned long long)position, evaluate(m, valid, v));
+        double loss = train_blocks(m, train, n, position, count);
+        if (loss < 0.0) {
+            fputs("out of memory during training\n", stderr);
+            free(train); free(valid); free(m); return 1;
+        }
+        position += (uint64_t)count;
+        printf("steps=%d total_positions=%llu training_loss=%.6f validation_loss=%.6f\n",
+               count, (unsigned long long)position, loss / count,
+               evaluate(m, valid, v));
+        int ok = save_state(argv[6], m, position, data_hash, n);
         if (!ok) fputs("cannot create checkpoint (or already exists)\n", stderr);
         free(train); free(valid); free(m);
         return ok ? 0 : 1;
