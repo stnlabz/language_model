@@ -6,7 +6,7 @@ This is an opt-in deployment recipe, NOT an automatic installation. No change is
 
 Confirm the model and checkpoint exist, and ensure no other process already occupies port 8765. Stop any existing foreground instance of http_api.py before launching systemd (Ctrl-C in its terminal). Review the unit at deploy/stn-labz-gru-api.service before installing it. It expects the VPS paths /home/stnchain/language_model and /usr/bin/python3; adjust paths before installation if they differ.
 
-Never expose this HTTP port over the public network: the inference endpoint has no authentication. The /learn token is a shared secret, not a replacement for local network isolation.
+Never expose this HTTP port over the public network: neither inference nor learning ingestion requires authentication. Any local process can submit a learning record.
 
 ## Install (operator-issued commands)
 
@@ -21,20 +21,7 @@ Create the approved learning queue *before* starting the service. If it exists, 
     touch /home/stnchain/language_model/digit_approved_learning.jsonl
     chmod 600 /home/stnchain/language_model/digit_approved_learning.jsonl
 
-Create the environment file manually. Use the SAME token that Digit is configured to send. **Do not create a new token without updating Digit**. Replace the placeholder locally, without displaying it or committing it. A literal value (including STN_LABZ_LEARN_TOKEN if you deliberately configured that value) must still be 24 characters or more, because http_api.py enforces that minimum.
-
-    sudo install -m 600 -o root -g root /dev/null /etc/stn-labz-gru-api.env
-    sudoedit /etc/stn-labz-gru-api.env
-
-The environment file must contain:
-
-    STN_LABZ_LEARN_TOKEN=REPLACE_WITH_EXISTING_PRIVATE_TOKEN
-
-Save it and confirm permissions without printing contents:
-
-    sudo stat -c '%U %G %a' /etc/stn-labz-gru-api.env
-
-Then install and start:
+No token or environment file is required. Then install and start:
 
     sudo install -m 644 deploy/stn-labz-gru-api.service /etc/systemd/system/stn-labz-gru-api.service
     sudo systemctl daemon-reload
@@ -46,7 +33,7 @@ Then install and start:
     curl -i http://127.0.0.1:8765/health
     journalctl -u stn-labz-gru-api.service -n 30 --no-pager
 
-Once the token is available to an authorized client, test /learn from the same VPS and verify the queue line count increases. HTTP 202 means stored, not trained.
+Test /learn from the same VPS without an authentication header and verify the queue line count increases. HTTP 202 means stored, not trained.
 
 ## Manage and rollback
 
@@ -59,10 +46,10 @@ Stopping or disabling does not delete queue records or checkpoints. Avoid runnin
 ## Security and limitations
 
 - The unit runs as stnchain, not root; bind remains hardcoded to loopback.
-- The shared token is loaded from a root-owned environment file, not stored in GitHub.
+- There is no secret token or authentication header. Localhost-only binding is the sole network boundary; local processes can submit records.
 - ProtectSystem=strict and a narrow ReadWritePaths restrict writes to the existing learning queue. PrivateTmp and NoNewPrivileges add isolation.
 - The checkpoint and executable must remain readable to stnchain. Queue ownership must allow stnchain to append.
-- This is a single-threaded experimental Python HTTP server. There is no rate limiting, TLS, authentication on /generate, request concurrency, or guaranteed training.
+- This is a single-threaded experimental Python HTTP server. There is no rate limiting, TLS, request authentication on either /learn or /generate, request concurrency, or guaranteed training.
 - systemd automatically restarts after failures. It will not restart for an intentional systemctl stop.
 - If switching checkpoints later, explicitly review and update the service unit, then daemon-reload and restart; no automatic checkpoint promotion.
 
