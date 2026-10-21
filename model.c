@@ -166,11 +166,13 @@ static double update_sequence(model *m, const step *history,
                 g->un[i][j] += (s->r[i] * s->before[i]) * dn[j];
             }
         }
+        /* The NEXT timestep resets its incoming state when it consumes
+         * newline. Consequently the gradient from that timestep cannot
+         * flow into the current timestep. The previous test used the
+         * current input and cut the wrong side of the boundary. */
+        if (t + 1 < length && history[t + 1].input == '\n')
+            memset(previous, 0, sizeof(previous));
         memcpy(future, previous, sizeof(future));
-        /* A fresh record has a fresh hidden state: do not backpropagate
-         * across the preceding newline when a block spans two records. */
-        if (s->input == '\n')
-            memset(future, 0, sizeof(future));
     }
     /* Apply a per-batch learning rate to the *mean* 64-byte gradient.
      * Multiplying RATE by 64 previously made updates up to 0.96 per
