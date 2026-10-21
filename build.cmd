@@ -46,6 +46,9 @@ if not exist build\prepare.exe (
 echo Building native JSONL converter...
 cl /nologo /TC /std:c11 /W4 /O2 /D_CRT_SECURE_NO_WARNINGS migrate.c /Fo:build\migrate.obj /Fe:build\migrate.exe
 if errorlevel 1 exit /b 1
+echo Building original word-level GRU...
+cl /nologo /TC /std:c11 /W4 /O2 /D_CRT_SECURE_NO_WARNINGS word_gru.c /Fo:build\word_gru.obj /Fe:build\word_gru.exe
+if errorlevel 1 exit /b 1
 echo Building validation comparison tool...
 cl /nologo /TC /std:c11 /W4 /O2 /D_CRT_SECURE_NO_WARNINGS compare_loss.c /Fo:build\compare_loss.obj /Fe:build\compare_loss.exe
 if errorlevel 1 exit /b 1
@@ -119,93 +122,23 @@ echo Stage 4: Preparing train and validation...
 build\prepare.exe prepare "%RUN%\digit_corpus.txt" "%RUN%\digit_train.bin" "%RUN%\digit_valid.bin" > "%RUN%\prepare.log" 2>&1
 if errorlevel 1 goto failed
 
-echo Stage 5: Evaluating baseline on NEW validation dataset...
-build\model.exe eval corpus_state_768000.stn "%RUN%\digit_valid.bin" > "%RUN%\baseline_eval.log" 2>&1
+echo Stage 5: Training word-level GRU on Digit's approved statements...
+build\word_gru.exe train "%RUN%\digit_train.bin" "%RUN%\digit_valid.bin" "%RUN%\word_gru.stn" "%RUN%\best_sample.txt" > "%RUN%\word_gru.log" 2>&1
 if errorlevel 1 goto failed
-set "BEST=corpus_state_768000.stn"
-set "BESTLOG=%RUN%\baseline_eval.log"
-
-echo Stage 6: Adapting weights to approved Digit snapshot...
-build\model.exe adapt corpus_state_768000.stn "%RUN%\digit_train.bin" "%RUN%\digit_valid.bin" 64000 "%RUN%\state_64000.stn" > "%RUN%\train_64000.log" 2>&1
-if errorlevel 1 goto failed
-build\model.exe eval "%RUN%\state_64000.stn" "%RUN%\digit_valid.bin" > "%RUN%\eval_64000.log" 2>&1
-if errorlevel 1 goto failed
-call :choose "%RUN%\state_64000.stn" "%RUN%\eval_64000.log"
-if errorlevel 1 goto failed
-
-echo Stage 7: Resuming three bounded increments...
-build\model.exe resume "%RUN%\state_64000.stn" "%RUN%\digit_train.bin" "%RUN%\digit_valid.bin" 64000 "%RUN%\state_128000.stn" > "%RUN%\train_128000.log" 2>&1
-if errorlevel 1 goto failed
-build\model.exe eval "%RUN%\state_128000.stn" "%RUN%\digit_valid.bin" > "%RUN%\eval_128000.log" 2>&1
-if errorlevel 1 goto failed
-call :choose "%RUN%\state_128000.stn" "%RUN%\eval_128000.log"
-if errorlevel 1 goto failed
-
-build\model.exe resume "%RUN%\state_128000.stn" "%RUN%\digit_train.bin" "%RUN%\digit_valid.bin" 64000 "%RUN%\state_192000.stn" > "%RUN%\train_192000.log" 2>&1
-if errorlevel 1 goto failed
-build\model.exe eval "%RUN%\state_192000.stn" "%RUN%\digit_valid.bin" > "%RUN%\eval_192000.log" 2>&1
-if errorlevel 1 goto failed
-call :choose "%RUN%\state_192000.stn" "%RUN%\eval_192000.log"
-if errorlevel 1 goto failed
-
-build\model.exe resume "%RUN%\state_192000.stn" "%RUN%\digit_train.bin" "%RUN%\digit_valid.bin" 64000 "%RUN%\state_256000.stn" > "%RUN%\train_256000.log" 2>&1
-if errorlevel 1 goto failed
-build\model.exe eval "%RUN%\state_256000.stn" "%RUN%\digit_valid.bin" > "%RUN%\eval_256000.log" 2>&1
-if errorlevel 1 goto failed
-call :choose "%RUN%\state_256000.stn" "%RUN%\eval_256000.log"
-if errorlevel 1 goto failed
-
-
-rem The Digit corpus is larger than the previous 256000-position training
-rem budget. Continue through multiple passes with held-out selection.
-echo Stage 7b: Extended corpus training with held-out checkpoint selection...
-set "PREVIOUS=256000"
-for %%S in (320000 384000 448000 512000 576000 640000 704000 768000 832000 896000 960000 1024000) do (
-    call :train_more %%S
-    if errorlevel 1 goto failed
-)
-
-echo Stage 8: Capturing fixed-seed generation samples...
-build\model.exe sample "%BEST%" "Question: Why does PHP seem hard? Answer:" 128 913 0.65 0 utf8 > "%RUN%\best_sample.hex" 2>&1
-if errorlevel 1 goto failed
-build\model.exe sample-lex "%BEST%" "%RUN%\digit_train.bin" "record-start" 128 913 0.65 0 utf8 > "%RUN%\best_sample.txt" 2>&1
-if errorlevel 1 goto failed
+echo model=original_word_level_gru >> "%RUN%\report.txt"
+echo checkpoint=%RUN%\word_gru.stn >> "%RUN%\report.txt"
 echo result=training_completed_language_unqualified >> "%RUN%\report.txt"
 echo language_quality=NOT_VERIFIED >> "%RUN%\report.txt"
-echo spelling_constraint=corpus_vocabulary >> "%RUN%\report.txt"
-echo lowest_loss_checkpoint=%BEST% >> "%RUN%\report.txt"
 echo end_date=%DATE% %TIME% >> "%RUN%\report.txt"
 echo.
-echo BUILD GO TRAINING COMPLETE - LANGUAGE NOT QUALIFIED: %RUN%\report.txt
-echo Lowest-loss checkpoint only: %BEST%
-echo.
+echo WORD GRU TRAINING COMPLETE - LANGUAGE NOT QUALIFIED
 echo ===== GRU GENERATED ENGLISH =====
 type "%RUN%\best_sample.txt"
 if errorlevel 1 goto failed
 echo ================================
-echo.
-echo Validation comparisons are on the newly prepared holdout only.
-echo WARNING: Model has not passed a language-quality test. Do not treat this as a usable language model.
-exit /b 0
-
-
-:train_more
-build\model.exe resume "%RUN%\state_%PREVIOUS%.stn" "%RUN%\digit_train.bin" "%RUN%\digit_valid.bin" 64000 "%RUN%\state_%~1.stn" > "%RUN%\train_%~1.log" 2>&1
-if errorlevel 1 exit /b 1
-build\model.exe eval "%RUN%\state_%~1.stn" "%RUN%\digit_valid.bin" > "%RUN%\eval_%~1.log" 2>&1
-if errorlevel 1 exit /b 1
-call :choose "%RUN%\state_%~1.stn" "%RUN%\eval_%~1.log"
-if errorlevel 1 exit /b 1
-set "PREVIOUS=%~1"
-exit /b 0
-
-:choose
-build\compare_loss.exe "%BESTLOG%" "%~2" >> "%RUN%\report.txt" 2>&1
-if errorlevel 2 exit /b 2
-if not errorlevel 1 (
-    set "BEST=%~1"
-    set "BESTLOG=%~2"
-)
+echo Model checkpoint: %RUN%\word_gru.stn
+echo Training and validation logs: %RUN%\word_gru.log
+echo WARNING: English coherence is not verified by a successful build.
 exit /b 0
 
 :failed
