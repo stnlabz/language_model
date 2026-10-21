@@ -441,8 +441,9 @@ static int lex_load(const char *path) {
 static int lex_allowed(int node,int in_word,int c) {
     int k=lex_code((unsigned char)c);
     if(k>=0){
-        /* Case-normalized decoded words; no made-up words. */
-        if(c>='A'&&c<='Z')return 0;
+        /* Uppercase is allowed at the start of a word; the trie
+         * validates the spelling case-insensitively. */
+        if(c>='A'&&c<='Z'&&in_word)return 0;
         return lex_nodes[node].child[k]!=0;
     }
     if(in_word && !lex_nodes[node].terminal)return 0;
@@ -643,9 +644,17 @@ int main(int argc, char **argv)
         float h[H]={0};
         step st;
         const unsigned char *prefix=(const unsigned char *)argv[4];
-        for(size_t i=0;prefix[i];i++){
-            forward(m,h,prefix[i],&st);
+        if(!strcmp(argv[4],"record-start")){
+            /* This corpus mostly consists of standalone sentences, not
+             * question/answer pairs. Start at a record boundary rather
+             * than priming with a largely absent QA format. */
+            forward(m,h,'\n',&st);
             memcpy(h,st.h,sizeof(h));
+        } else {
+            for(size_t i=0;prefix[i];i++){
+                forward(m,h,prefix[i],&st);
+                memcpy(h,st.h,sizeof(h));
+            }
         }
         int node=0,in_word=0,recent_count=0;
         unsigned char recent[32]={0},output[257]={0};
