@@ -1,63 +1,9 @@
-# Windows CMD unattended build go
+# build go — native Word GRU
 
-The command build go compiles native C11 components with MSVC cl.exe and runs one finite migration and training experiment. No Python, PowerShell, CMake, or Visual Studio project is needed.
+The Operator-authorized language-learning replacement uses `word_gru.c`: an original, C11, word-token gated recurrent unit. It trains from the approved Digit JSONL converted into line-oriented lessons by `migrate.c` and partitioned into train/validation by `prepare.c`. No external pretrained weights, inference services or runtime dependencies are used.
 
-## Prerequisites
+Run `build go` in an MSVC Developer CMD. Existing `runs` content is deleted at the start of each run, and results are written to `runs\gru_run` only.
 
-Place these files in the Windows repository working directory:
-- digit_approved_learning.jsonl — a consistent, approved snapshot transferred from Digit. The source may keep growing on its original host.
-- corpus_state_768000.stn — original compatible checkpoint.
+The training run creates `word_gru.stn` (the lowest-held-out-loss weight snapshot including training vocabulary), `word_gru.log`, and `best_sample.txt`. The sample comes from sampling the word GRU distribution; it is not a copied approved sentence or a hardcoded answer. `build go` displays the sample in CMD.
 
-From Windows Developer CMD:
-
-    git pull origin main
-    build go
-
-## Stages
-
-1. Build model.exe, prepare.exe, migrate.exe, and compare_loss.exe with cl.exe.
-2. Perform native synthetic corpus prepare/train/eval smoke checks.
-3. Copy digit_approved_learning.jsonl into a unique runs/go_... directory.
-4. Convert approved dialogue records into Question/Answer examples and Digit Corpus records (including LESSON and interface:/input) into plain statements. Keep Context and Observation records untouched in the frozen JSONL snapshot rather than pretending they are conversations. Reject incomplete or unauthorized rows.
-5. Report counts of Corpus statements, dialogues, retained Context, and retained Observations. Require at least five usable lesson/dialogue records; prepare training and validation bytes from those records only.
-6. Evaluate original checkpoint on NEW validation data.
-7. Adapt original weights on new data for 64,000 positions and save a checkpoint with the NEW training-data hash.
-8. Resume three more 64,000-position increments on that same new data; 256,000 positions total for this run.
-9. Evaluate after each increment against the same new holdout and track the best held-out loss, keeping all checkpoints.
-10. Generate both a raw fixed-seed sample and a GRU-driven corpus-vocabulary-constrained sample from the lowest-loss checkpoint. Write both to the run folder. The latter is text, not hex, and avoids invented word spellings; it does NOT establish grammatical or meaningful answers. Mark language quality NOT VERIFIED even if training completes.
-
-The original resume checksum guard is preserved; model adapt is a distinct, explicit operation for the changed corpus, and it never changes the source checkpoint.
-
-## Output
-
-Each run writes logs and files in runs/go_... including report.txt, digit_snapshot.jsonl, digit_corpus.txt, digit_train.bin, digit_valid.bin, baseline_eval.log, train_*.log, eval_*.log, state_*.stn, best_sample.hex (raw) and best_sample.txt (vocabulary constrained).
-
-A failed stage stops the run, retains partial artifacts, and marks report.txt FAILED. Existing checkpoints and the original input remain unchanged. The machine must stay awake, and CMD must remain running. No automatic deployment to the VPS occurs.
-
-## Limits
-
-- CPU-only native training; no GPU backend added.
-- Training data requires >=5 complete, approved input records with exactly the input, response, source, approved fields; source must be digit. Output must remain within the existing 16 MiB preparer cap.
-- The converter does not remove duplicates. It explicitly separates Corpus statements and dialogues from Context and Observation records. All original records remain in the immutable run snapshot. An approved=true field and a Corpus label are not independent verification of quality or truth.
-- The Windows snapshot copy cannot guarantee atomicity if the file is actively written at the same path. Use a consistent transferred snapshot. A truncated final record is rejected.
-- A lower held-out next-byte loss does not prove fluency or answer quality. Manual language review remains required.
-- New held-out loss is NOT directly comparable to the 1.626341 result on the earlier corpus.
-- The pipeline runs one bounded job and exits; it does not poll for new records, restart itself, or alter any agent or systemd service.
-
-The model is not considered conversationally usable merely because training returns success or validation loss improves. This migration preserves the structured data without treating Context/Observations as conversational training. It does not repair GRU language generation or provide an automated semantic quality test.
-
-## Snapshot observed 2026-10-21
-
-Inspected attached 3,667-line snapshot: 1,215 Corpus LESSON records, 6 Corpus interface:/input records, 1,221 Context records, 1,220 Observation records, and 5 dialogue records. The earlier LESSON-only converter failed on the six interface:/input records. Both Corpus categories now migrate as statements, not fabricated questions. Context and Observations stay in the run snapshot. The 1,215 LESSON entries were marked unverified in their input labels; the accepted JSONL approved=true flag does not independently validate their contents. This fix restores migration compatibility; it cannot guarantee meaningful language output.
-
-The vocabulary-constrained decoder samples next bytes using the trained GRU probability distribution while preventing word spellings absent from the run's training corpus. This is experimental decoding, not a new model architecture, retrieval answer, or proof of conversational quality. Inspect best_sample.txt alongside best_sample.hex; if it is word salad, the goal remains unmet.
-
-At completion, build go prints runs/gru_run/best_sample.txt directly to the CMD console, in addition to writing it to disk. Console output is the actual GRU-constrained generation, and may still be ungrammatical. This is not a language-quality pass.
-
-## Training optimizer correction (2026-10-21)
-
-The native GRU previously multiplied the per-batch learning rate by the 64-position sequence length after already averaging each gradient over the sequence. That yielded up to 64-fold larger updates for each complete block. The optimizer now applies RATE to the mean gradient directly. Checkpoint serialization, existing model weights, adaptation, validation partitioning and native CMD invocation are unchanged. This corrects the update scale but is **not evidence of English fluency**. Retrain and examine generated output; the existing checkpoints were trained with the old update rule and remain untouched.
-
-## Digit statement-boundary GRU correction
-
-The migrated Digit JSONL consists predominantly of independent lesson statements and only a small number of real question/answer pairs. The GRU's block training and validation now reset recurrent context at line-record boundaries; truncated backpropagation is also cut at those boundaries. The displayed sample uses `sample-lex ... record-start ...`, which conditions the GRU on a record separator rather than treating the few QA pairs as a generally trained QA interface. The existing raw QA sample remains in `best_sample.hex` for comparison. Vocabulary-constrained decoding still does not establish meaning, prompt-following or correctness. Language acceptance requires actual inspection of output. No external pretrained model or extra runtime dependency is introduced.
+**Qualification boundary:** A successful build, decreasing word-token loss, or valid spelling does **not** prove coherent language. Inspect real generated sentences and classify incoherent output as FAIL. The checkpoint file format is incompatible with the historical byte-level `model.c` checkpoints. This experimental replacement does not change Digit, Ezra, other agents, or deployments.
