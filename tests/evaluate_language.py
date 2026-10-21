@@ -142,7 +142,7 @@ def main():
         print(f"utf8_prompt={prompt!r} utf8_valid=yes output_bytes={len(sample)}")
         print(f"  utf8_generated={decoded!r}")
     print("note=Legacy generation uses a fixed code-level RNG; controlled comparisons use explicit seeds.")
-    print("note=Scores on 369 validation bytes cannot establish language fluency or generalization.")
+    print(f"note=Scores on {len(validation)} validation bytes cannot establish language fluency or generalization.")
 
 
 if __name__ == "__main__":
