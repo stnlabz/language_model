@@ -2,11 +2,14 @@
 """Experimental loopback-only HTTP adapter for STN-Labz native model.
 
 AI-assisted. No agent integration, deployment hooks, third-party packages,
-remote service calls, or training. Operator starts and stops this foreground
+remote service calls, or training. Optional data ingestion writes to a
+private JSONL file only when explicitly configured. Operator starts and stops this foreground
 process explicitly. Do not expose it through a public proxy.
 """
 import argparse
 import json
+import os
+import hmac
 import pathlib
 import re
 import subprocess
@@ -45,9 +48,43 @@ def generate(binary, checkpoint, request):
             "experimental": True}
 
 
+def validate_learning(request):
+    """Validate a bounded, explicitly approved Digit exchange."""
+    required = {"input", "response", "source", "approved"}
+    if not isinstance(request, dict) or set(request) != required:
+        raise ValueError("learn requires input, response, source, approved")
+    if request["approved"] is not True:
+        raise ValueError("record must be explicitly approved")
+    for key, limit in (("input", 1024), ("response", 2048)):
+        value = request[key]
+        if (not isinstance(value, str) or not value.strip() or
+                "\x00" in value or len(value.encode("utf-8")) > limit):
+            raise ValueError(f"{key} must be nonempty UTF-8, max {limit} bytes, without NUL")
+    if request["source"] != "digit":
+        raise ValueError("source must be digit")
+    return {"input": request["input"], "response": request["response"],
+            "source": "digit", "approved": True}
+
+
+def append_learning(path, record):
+    """Append private JSONL records; no training or checkpoint update."""
+    line = (json.dumps(record, ensure_ascii=True, separators=(",", ":")) + "\n").encode("utf-8")
+    descriptor = os.open(path, os.O_WRONLY | os.O_APPEND | os.O_CREAT | getattr(os, "O_NOFOLLOW", 0), 0o600)
+    try:
+        if not os.path.isfile(path):
+            raise OSError("learning path must be a regular file")
+        if os.write(descriptor, line) != len(line):
+            raise OSError("incomplete learning write")
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+
+
 class Handler(BaseHTTPRequestHandler):
     binary = "./model"
     checkpoint = ""
+    learn_file = None
+    learn_token = None
 
     def _respond(self, code, data):
         payload = json.dumps(data, ensure_ascii=True).encode("utf-8")
@@ -65,7 +102,7 @@ class Handler(BaseHTTPRequestHandler):
         return self._respond(404, {"error": "not found"})
 
     def do_POST(self):
-        if self.path != "/generate":
+        if self.path not in ("/generate", "/learn"):
             return self._respond(404, {"error": "not found"})
         try:
             size = int(self.headers.get("Content-Length", "-1"))
@@ -76,6 +113,16 @@ class Handler(BaseHTTPRequestHandler):
             return self._respond(413, {"error": "request size must be 1..4096 bytes"})
         try:
             data = json.loads(self.rfile.read(size).decode("utf-8"))
+            if self.path == "/learn":
+                if not self.learn_file or not self.learn_token:
+                    return self._respond(503, {"error": "learning ingestion disabled"})
+                token = self.headers.get("X-STN-Learn-Token", "")
+                if not hmac.compare_digest(token, self.learn_token):
+                    return self._respond(403, {"error": "forbidden"})
+                record = validate_learning(data)
+                append_learning(self.learn_file, record)
+                return self._respond(202, {"accepted": True, "trained": False,
+                                            "status": "queued_for_review"})
             result = generate(self.binary, self.checkpoint, data)
         except (ValueError, UnicodeError, json.JSONDecodeError) as exc:
             return self._respond(400, {"error": str(exc)})
@@ -93,11 +140,17 @@ def main():
     parser.add_argument("--model", default="./model")
     parser.add_argument("--checkpoint", required=True)
     parser.add_argument("--port", type=int, default=8765)
+    parser.add_argument("--learn-file", help="explicit private JSONL ingestion destination")
     args = parser.parse_args()
     if not 1024 <= args.port <= 65535:
         parser.error("port must be 1024..65535")
     if not pathlib.Path(args.model).is_file() or not pathlib.Path(args.checkpoint).is_file():
         parser.error("model executable or checkpoint missing")
+    token = os.environ.get("STN_LABZ_LEARN_TOKEN", "")
+    if args.learn_file and len(token) < 24:
+        parser.error("set STN_LABZ_LEARN_TOKEN to a private secret of at least 24 characters")
+    Handler.learn_file = args.learn_file
+    Handler.learn_token = token if args.learn_file else None
     Handler.binary = args.model
     Handler.checkpoint = args.checkpoint
     server = HTTPServer(("127.0.0.1", args.port), Handler)
