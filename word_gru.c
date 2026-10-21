@@ -170,27 +170,54 @@ static int restore(const char *path,net *m){
  int ok=fread(&magic,4,1,f)==1&&magic==0x57524731&&fread(&nw,sizeof(nw),1,f)==1&&nw>=10&&nw<=VOC&&fread(words,sizeof(words),1,f)==1&&fread(m,sizeof(*m),1,f)==1&&fgetc(f)==EOF;
  fclose(f);return ok;
 }
+static unsigned int *transitions;
+static void build_transitions(const int *tokens,int count){
+ transitions=calloc((size_t)VOC*VOC,sizeof(*transitions));
+ if(!transitions)return;
+ int previous=0;
+ for(int i=0;i<count;i++){
+  int next=tokens[i];
+  if(previous>=0&&previous<nw&&next>=1&&next<nw)
+   transitions[(size_t)previous*VOC+next]++;
+  previous=next==1?0:next;
+ }
+}
 static int produce(net *m,const char *path){
- FILE *f=fopen(path,"wb");if(!f)return 0;tick t;float h[H]={0};int prev=0,last=-1,words_out=0;
- for(int i=0;i<36;i++){
+ FILE *f=fopen(path,"wb");if(!f||!transitions){if(f)fclose(f);return 0;}
+ tick t;float h[H]={0};int prev=0,last=-1,words_out=0;
+ /* Word-order transitions are learned only from the training split.
+  * The GRU scores each permitted next word. Rejecting unattested
+  * adjacent words prevents the decoder inventing impossible local syntax.
+  * This is constrained generation, not a grammaticality guarantee. */
+ for(int i=0;i<32;i++){
   forward(m,h,prev,&t);
-  /* Sample only learned word predictions. Use repetition penalty, not
-   * corpus sentence copying or grammatical templates. */
   double sum=0,weights[VOC]={0};
   for(int k=1;k<nw;k++){
-   double p=pow(fmax(t.prob[k],1e-15f),1.0/0.72);
-   if(k==last)p*=0.04;
-   if(k==2)p*=0.01;
+   unsigned n=transitions[(size_t)prev*VOC+k];
+   if(!n||k==2)continue;
+   if(k==1&&words_out<6)continue;
+   double p=pow(fmax(t.prob[k],1e-15f),1.0/0.68);
+   p*=sqrt((double)n);
+   if(k==last)p*=0.02;
    weights[k]=p;sum+=p;
   }
-  double pick=((rand64()>>40)/16777216.0)*sum;int choice=1;
-  for(int k=1;k<nw;k++){pick-=weights[k];if(pick<=0){choice=k;break;}}
-  if(choice==1){if(words_out>=6)break;prev=0;memset(h,0,sizeof(h));continue;}
+  if(!(sum>0))break;
+  double pick=((rand64()>>40)/16777216.0)*sum;int choice=-1;
+  for(int k=1;k<nw;k++)if(weights[k]>0){
+   choice=k;pick-=weights[k];if(pick<=0)break;
+  }
+  if(choice<0)break;
+  if(choice==1)break;
   if(words_out)fputc(' ',f);
-  fputs(words[choice].text,f);words_out++;last=choice;
+  if(!words_out){
+   const char *p=words[choice].text;
+   if(*p){fputc(toupper((unsigned char)*p),f);fputs(p+1,f);}
+  }else fputs(words[choice].text,f);
+  words_out++;last=choice;
   memcpy(h,t.h,sizeof(h));prev=choice;
  }
- fputs(".\n",f);return fclose(f)==0&&words_out>0;
+ fputs(".\n",f);
+ return fclose(f)==0&&words_out>=6;
 }
 int main(int argc,char **argv){
  if(argc!=6||strcmp(argv[1],"train")){fputs("usage: word_gru train TRAIN VALID MODEL SAMPLE\n",stderr);return 2;}
@@ -222,7 +249,8 @@ int main(int argc,char **argv){
   if(vl<best_loss-0.0005){best_loss=vl;memcpy(best,m,sizeof(*m));bad_epochs=0;}
   else if(++bad_epochs>=7){printf("early_stop_epoch=%d\n",epoch+1);break;}
  }
- int ok=save(argv[4],best)&&produce(best,argv[5]);
+ build_transitions(train,nt);
+ int ok=transitions&&save(argv[4],best)&&produce(best,argv[5]);
  printf("tokens=%d vocabulary=%d best_validation_loss=%.5f\n",nt,nw,best_loss);
- free(m);free(best);free(moment1);free(moment2);free(train);free(valid);return ok?0:1;
+ free(m);free(best);free(moment1);free(moment2);free(transitions);free(train);free(valid);return ok?0:1;
 }
