@@ -57,3 +57,7 @@ At completion, build go prints runs/gru_run/best_sample.txt directly to the CMD 
 ## Training optimizer correction (2026-10-21)
 
 The native GRU previously multiplied the per-batch learning rate by the 64-position sequence length after already averaging each gradient over the sequence. That yielded up to 64-fold larger updates for each complete block. The optimizer now applies RATE to the mean gradient directly. Checkpoint serialization, existing model weights, adaptation, validation partitioning and native CMD invocation are unchanged. This corrects the update scale but is **not evidence of English fluency**. Retrain and examine generated output; the existing checkpoints were trained with the old update rule and remain untouched.
+
+## Digit statement-boundary GRU correction
+
+The migrated Digit JSONL consists predominantly of independent lesson statements and only a small number of real question/answer pairs. The GRU's block training and validation now reset recurrent context at line-record boundaries; truncated backpropagation is also cut at those boundaries. The displayed sample uses `sample-lex ... record-start ...`, which conditions the GRU on a record separator rather than treating the few QA pairs as a generally trained QA interface. The existing raw QA sample remains in `best_sample.hex` for comparison. Vocabulary-constrained decoding still does not establish meaning, prompt-following or correctness. Language acceptance requires actual inspection of output. No external pretrained model or extra runtime dependency is introduced.
