@@ -74,4 +74,15 @@ fi
 if "$d/model" resume "$d/first_state.stn" "$d/train.bin" "$d/valid.bin" 64 "$d/full_state.stn" >/dev/null 2>&1; then
     echo "FAIL: existing state checkpoint overwritten" >&2; exit 1
 fi
+# Generation-only controls must be deterministic, bounded and UTF-8 safe.
+"$d/model" sample "$d/prototype.stn" "The engineer " 64 913 0.8 0.2 utf8 > "$d/sample_a.txt"
+"$d/model" sample "$d/prototype.stn" "The engineer " 64 913 0.8 0.2 utf8 > "$d/sample_b.txt"
+cmp "$d/sample_a.txt" "$d/sample_b.txt"
+test "$(wc -c < "$d/sample_a.txt" | tr -d ' ')" -eq 257
+if "$d/model" sample "$d/prototype.stn" "x" 64 913 0 0 utf8 >/dev/null 2>&1; then
+    echo "FAIL: invalid temperature accepted" >&2; exit 1
+fi
+if "$d/model" sample "$d/prototype.stn" "x" 64 913 0.8 3 utf8 >/dev/null 2>&1; then
+    echo "FAIL: invalid penalty accepted" >&2; exit 1
+fi
 echo "Milestone 3 model checks: PASS"
