@@ -18,8 +18,8 @@ From Windows Developer CMD:
 1. Build model.exe, prepare.exe, migrate.exe, and compare_loss.exe with cl.exe.
 2. Perform native synthetic corpus prepare/train/eval smoke checks.
 3. Copy digit_approved_learning.jsonl into a unique runs/go_... directory.
-4. Convert approved JSONL records into single-line Question/Answer examples; reject incomplete or unauthorized rows.
-5. Reject snapshots where more than half the input records carry structured Digit Context, Corpus, or Observation labels; these are not valid conversational training corpora. Prepare train and held-out validation bytes only after that check passes.
+4. Convert approved dialogue records into Question/Answer examples and Digit Corpus LESSON records into plain statements. Keep Context and Observation records untouched in the frozen JSONL snapshot rather than pretending they are conversations. Reject incomplete or unauthorized rows.
+5. Report counts of lessons, dialogues, retained Context, and retained Observations. Require at least five usable lesson/dialogue records; prepare training and validation bytes from those records only.
 6. Evaluate original checkpoint on NEW validation data.
 7. Adapt original weights on new data for 64,000 positions and save a checkpoint with the NEW training-data hash.
 8. Resume three more 64,000-position increments on that same new data; 256,000 positions total for this run.
@@ -38,10 +38,10 @@ A failed stage stops the run, retains partial artifacts, and marks report.txt FA
 
 - CPU-only native training; no GPU backend added.
 - Training data requires >=5 complete, approved input records with exactly the input, response, source, approved fields; source must be digit. Output must remain within the existing 16 MiB preparer cap.
-- The converter does not remove duplicates or silently filter structured Digit records. It rejects the snapshot before publishing a corpus if such records are a majority. This check does not certify the remaining examples as genuine conversations; review provenance and quality before running.
+- The converter does not remove duplicates. It explicitly separates Corpus LESSON statements and dialogues from Context and Observation records. All original records remain in the immutable run snapshot. An approved=true field and a LESSON label are not independent verification of quality or truth.
 - The Windows snapshot copy cannot guarantee atomicity if the file is actively written at the same path. Use a consistent transferred snapshot. A truncated final record is rejected.
 - A lower held-out next-byte loss does not prove fluency or answer quality. Manual language review remains required.
 - New held-out loss is NOT directly comparable to the 1.626341 result on the earlier corpus.
 - The pipeline runs one bounded job and exits; it does not poll for new records, restart itself, or alter any agent or systemd service.
 
-The model is not considered conversationally usable merely because training returns success or validation loss improves. This patch prevents the previous predominantly structured snapshot from silently passing into training. It does not repair GRU language generation or provide an automated semantic quality test.
+The model is not considered conversationally usable merely because training returns success or validation loss improves. This migration preserves the structured data without treating Context/Observations as conversational training. It does not repair GRU language generation or provide an automated semantic quality test.
