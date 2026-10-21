@@ -24,13 +24,13 @@ From Windows Developer CMD:
 7. Adapt original weights on new data for 64,000 positions and save a checkpoint with the NEW training-data hash.
 8. Resume three more 64,000-position increments on that same new data; 256,000 positions total for this run.
 9. Evaluate after each increment against the same new holdout and track the best held-out loss, keeping all checkpoints.
-10. Generate a fixed-seed sample from the lowest-loss checkpoint; write results to the unique run folder. Mark language quality NOT VERIFIED even if training completes.
+10. Generate both a raw fixed-seed sample and a GRU-driven corpus-vocabulary-constrained sample from the lowest-loss checkpoint. Write both to the run folder. The latter is text, not hex, and avoids invented word spellings; it does NOT establish grammatical or meaningful answers. Mark language quality NOT VERIFIED even if training completes.
 
 The original resume checksum guard is preserved; model adapt is a distinct, explicit operation for the changed corpus, and it never changes the source checkpoint.
 
 ## Output
 
-Each run writes logs and files in runs/go_... including report.txt, digit_snapshot.jsonl, digit_corpus.txt, digit_train.bin, digit_valid.bin, baseline_eval.log, train_*.log, eval_*.log, state_*.stn, and best_sample.hex.
+Each run writes logs and files in runs/go_... including report.txt, digit_snapshot.jsonl, digit_corpus.txt, digit_train.bin, digit_valid.bin, baseline_eval.log, train_*.log, eval_*.log, state_*.stn, best_sample.hex (raw) and best_sample.txt (vocabulary constrained).
 
 A failed stage stops the run, retains partial artifacts, and marks report.txt FAILED. Existing checkpoints and the original input remain unchanged. The machine must stay awake, and CMD must remain running. No automatic deployment to the VPS occurs.
 
@@ -49,3 +49,5 @@ The model is not considered conversationally usable merely because training retu
 ## Snapshot observed 2026-10-21
 
 Inspected attached 3,667-line snapshot: 1,215 Corpus LESSON records, 6 Corpus interface:/input records, 1,221 Context records, 1,220 Observation records, and 5 dialogue records. The earlier LESSON-only converter failed on the six interface:/input records. Both Corpus categories now migrate as statements, not fabricated questions. Context and Observations stay in the run snapshot. The 1,215 LESSON entries were marked unverified in their input labels; the accepted JSONL approved=true flag does not independently validate their contents. This fix restores migration compatibility; it cannot guarantee meaningful language output.
+
+The vocabulary-constrained decoder samples next bytes using the trained GRU probability distribution while preventing word spellings absent from the run's training corpus. This is experimental decoding, not a new model architecture, retrieval answer, or proof of conversational quality. Inspect best_sample.txt alongside best_sample.hex; if it is word salad, the goal remains unmet.
