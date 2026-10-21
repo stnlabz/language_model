@@ -153,14 +153,15 @@ if errorlevel 1 goto failed
 echo Stage 8: Capturing fixed-seed generation samples...
 build\model.exe sample "%BEST%" "Question: Why does PHP seem hard? Answer:" 128 913 0.65 0 utf8 > "%RUN%\best_sample.hex" 2>&1
 if errorlevel 1 goto failed
-echo result=completed >> "%RUN%\report.txt"
-echo best_checkpoint=%BEST% >> "%RUN%\report.txt"
+echo result=training_completed_language_unqualified >> "%RUN%\report.txt"
+echo language_quality=NOT_VERIFIED >> "%RUN%\report.txt"
+echo lowest_loss_checkpoint=%BEST% >> "%RUN%\report.txt"
 echo end_date=%DATE% %TIME% >> "%RUN%\report.txt"
 echo.
-echo BUILD GO COMPLETE: %RUN%\report.txt
-echo Best candidate: %BEST%
+echo BUILD GO TRAINING COMPLETE - LANGUAGE NOT QUALIFIED: %RUN%\report.txt
+echo Lowest-loss checkpoint only: %BEST%
 echo Validation comparisons are on the newly prepared holdout only.
-echo Check sample output manually for legibility; coherence is not auto-qualified.
+echo WARNING: Model has not passed a language-quality test. Do not treat this as a usable language model.
 exit /b 0
 
 :choose
@@ -176,5 +177,5 @@ exit /b 0
 echo result=FAILED >> "%RUN%\report.txt"
 echo failure_time=%DATE% %TIME% >> "%RUN%\report.txt"
 echo.
-echo BUILD GO FAILED. See logs and %RUN%\report.txt
+echo BUILD GO STOPPED. See logs and %RUN%\report.txt
 exit /b 1
