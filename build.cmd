@@ -155,6 +155,16 @@ if errorlevel 1 goto failed
 call :choose "%RUN%\state_256000.stn" "%RUN%\eval_256000.log"
 if errorlevel 1 goto failed
 
+
+rem The Digit corpus is larger than the previous 256000-position training
+rem budget. Continue through multiple passes with held-out selection.
+echo Stage 7b: Extended corpus training with held-out checkpoint selection...
+set "PREVIOUS=256000"
+for %%S in (320000 384000 448000 512000 576000 640000 704000 768000 832000 896000 960000 1024000) do (
+    call :train_more %%S
+    if errorlevel 1 goto failed
+)
+
 echo Stage 8: Capturing fixed-seed generation samples...
 build\model.exe sample "%BEST%" "Question: Why does PHP seem hard? Answer:" 128 913 0.65 0 utf8 > "%RUN%\best_sample.hex" 2>&1
 if errorlevel 1 goto failed
@@ -176,6 +186,17 @@ echo ================================
 echo.
 echo Validation comparisons are on the newly prepared holdout only.
 echo WARNING: Model has not passed a language-quality test. Do not treat this as a usable language model.
+exit /b 0
+
+
+:train_more
+build\model.exe resume "%RUN%\state_%PREVIOUS%.stn" "%RUN%\digit_train.bin" "%RUN%\digit_valid.bin" 64000 "%RUN%\state_%~1.stn" > "%RUN%\train_%~1.log" 2>&1
+if errorlevel 1 exit /b 1
+build\model.exe eval "%RUN%\state_%~1.stn" "%RUN%\digit_valid.bin" > "%RUN%\eval_%~1.log" 2>&1
+if errorlevel 1 exit /b 1
+call :choose "%RUN%\state_%~1.stn" "%RUN%\eval_%~1.log"
+if errorlevel 1 exit /b 1
+set "PREVIOUS=%~1"
 exit /b 0
 
 :choose
