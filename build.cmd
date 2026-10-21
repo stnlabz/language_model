@@ -158,7 +158,7 @@ if errorlevel 1 goto failed
 echo Stage 8: Capturing fixed-seed generation samples...
 build\model.exe sample "%BEST%" "Question: Why does PHP seem hard? Answer:" 128 913 0.65 0 utf8 > "%RUN%\best_sample.hex" 2>&1
 if errorlevel 1 goto failed
-build\model.exe sample-lex "%BEST%" "%RUN%\digit_train.bin" "Question: Why does PHP seem hard? Answer:" 128 913 0.65 0 utf8 > "%RUN%\best_sample.txt" 2>&1
+build\model.exe sample-lex "%BEST%" "%RUN%\digit_train.bin" "record-start" 128 913 0.65 0 utf8 > "%RUN%\best_sample.txt" 2>&1
 if errorlevel 1 goto failed
 echo result=training_completed_language_unqualified >> "%RUN%\report.txt"
 echo language_quality=NOT_VERIFIED >> "%RUN%\report.txt"
