@@ -103,7 +103,7 @@ int main(int argc,char **argv) {
     /* Build in memory; never publish a partially converted output. */
     char *corpus=malloc(CORPUS_LIMIT+1),line[LINE_MAX_BYTES+1],q[4096],a[4096];
     if(!corpus){fclose(src);return 1;}
-    size_t total=0,rows=0;
+    size_t total=0,rows=0,structured=0;
     int result=1;
     while(fgets(line,sizeof(line),src)) {
         size_t length=strlen(line);
@@ -111,11 +111,19 @@ int main(int argc,char **argv) {
         line[length-1]=0;
         if(length>1&&line[length-2]=='\r')line[length-2]=0;
         if(!line_pair(line,q,a)){fprintf(stderr,"invalid record at line %zu\n",rows+1);goto done;}
+        if(!strncmp(q,"Digit Context record ",21) ||
+           !strncmp(q,"Digit Corpus record ",20) ||
+           !strncmp(q,"Digit Observation record ",25))structured++;
         int count=snprintf(corpus+total,CORPUS_LIMIT+1-total,"Question: %s Answer: %s\n",q,a);
         if(count<0||(size_t)count>=CORPUS_LIMIT+1-total){fputs("corpus exceeds 16MiB\n",stderr);goto done;}
         total+=(size_t)count;rows++;
     }
     if(ferror(src)||rows<5){fputs("snapshot read error or fewer than 5 records\n",stderr);goto done;}
+    fprintf(stdout,"records=%zu structured_records=%zu conversation_candidates=%zu\n",rows,structured,rows-structured);
+    if(structured>rows/2){
+        fputs("DATA QUALITY FAILED: majority are structured records, not conversations. No training corpus written.\n",stderr);
+        goto done;
+    }
     /* Exclusive creation on MSVC: x-mode is supported. */
     FILE *out=fopen(argv[3],"wbx");
     if(!out){perror("new corpus");goto done;}
