@@ -110,7 +110,11 @@ static double learn(net *m,tick *ts,int count){
   }
   for(int i=0;i<H;i++){
    float a=0;for(int j=0;j<H;j++)a+=m->un[i][j]*dn[j];
-   dr[i]=a*t->prev[i]*t->r[i]*(1-t->r[i]);back[i]=dh[i]*t->z[i]+a*t->r[i];
+   dr[i]=a*t->prev[i]*t->r[i]*(1-t->r[i]);
+  }
+  for(int i=0;i<H;i++){
+   float a=0;for(int j=0;j<H;j++)a+=m->un[i][j]*dn[j];
+   back[i]=dh[i]*t->z[i]+a*t->r[i];
    for(int j=0;j<H;j++)back[i]+=m->uz[i][j]*dz[j]+m->ur[i][j]*dr[j];
   }
   for(int i=0;i<H;i++)for(int j=0;j<H;j++){
