@@ -1,0 +1,26 @@
+# STN-Labz GRU loopback API; install manually after reviewing docs/SYSTEMD_API.md.
+# Requires a root-owned EnvironmentFile at /etc/stn-labz-gru-api.env.
+[Unit]
+Description=STN-Labz GRU experimental local HTTP API
+After=network.target
+
+[Service]
+Type=simple
+User=stnchain
+Group=stnchain
+WorkingDirectory=/home/stnchain/language_model
+EnvironmentFile=/etc/stn-labz-gru-api.env
+ExecStart=/usr/bin/python3 /home/stnchain/language_model/http_api.py --model /home/stnchain/language_model/model --checkpoint /home/stnchain/language_model/corpus_state_768000.stn --port 8765 --learn-file /home/stnchain/language_model/digit_approved_learning.jsonl
+Restart=on-failure
+RestartSec=5
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/stnchain/language_model/digit_approved_learning.jsonl
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
