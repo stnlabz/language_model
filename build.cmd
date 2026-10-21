@@ -168,6 +168,12 @@ echo end_date=%DATE% %TIME% >> "%RUN%\report.txt"
 echo.
 echo BUILD GO TRAINING COMPLETE - LANGUAGE NOT QUALIFIED: %RUN%\report.txt
 echo Lowest-loss checkpoint only: %BEST%
+echo.
+echo ===== GRU GENERATED ENGLISH =====
+type "%RUN%\best_sample.txt"
+if errorlevel 1 goto failed
+echo ================================
+echo.
 echo Validation comparisons are on the newly prepared holdout only.
 echo WARNING: Model has not passed a language-quality test. Do not treat this as a usable language model.
 exit /b 0
