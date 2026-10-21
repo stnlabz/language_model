@@ -297,7 +297,7 @@ static int parse_seed(const char *value, uint64_t *seed)
 }
 static void usage(const char *name)
 {
-    fprintf(stderr, "usage:\n  %s train <train.bin> <validation.bin> <steps:1..100000> <new-checkpoint>\n  %s eval <checkpoint> <validation.bin>\n  %s generate <checkpoint> <ascii-prefix> <length:1..256>\n", name, name, name);
+    fprintf(stderr, "usage:\n  %s train <train.bin> <validation.bin> <steps:1..100000> <new-checkpoint>\n  %s eval <checkpoint> <validation.bin>\n  %s generate <checkpoint> <utf8-prefix> <length:1..256> [seed:uint64] [utf8]\n", name, name, name);
 }
 static int parse_steps(const char *s, int max)
 {
