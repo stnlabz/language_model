@@ -28,6 +28,17 @@ awk '
 ' "$d/training.log"
 grep -q '^parameters=' "$d/training.log"
 grep -q '^steps=200' "$d/training.log"
+# Regression gate against the reported broken 1,000-step BPTT result
+# (validation loss 5.541507). A passing result is not language fluency.
+"$d/model" train "$d/train.bin" "$d/valid.bin" 1000 "$d/scale.stn" > "$d/scale.log"
+awk '
+    /^steps=1000 / {
+        split($3, part, "=")
+        if (!(part[2] + 0 < 5.541507)) exit 1
+        found = 1
+    }
+    END { if (!found) exit 1 }
+' "$d/scale.log"
 "$d/model" eval "$d/prototype.stn" "$d/valid.bin" | grep -q '^validation_loss='
 "$d/model" generate "$d/prototype.stn" "Digit " 16 > "$d/generated.txt"
 test "$(wc -c < "$d/generated.txt" | tr -d ' ')" -eq 65
