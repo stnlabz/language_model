@@ -465,6 +465,38 @@ int main(int argc, char **argv)
         free(train); free(valid); free(m);
         return ok ? 0 : 1;
     }
+    /* Explicit new-corpus continuation: preserve weights, reset data position.
+     * This command NEVER replaces the source checkpoint. */
+    if (argc == 7 && !strcmp(argv[1], "adapt")) {
+        int count = parse_steps(argv[5], 100000);
+        if (!count || count % WINDOW != 0 ||
+            !strcmp(argv[2], argv[3]) || !strcmp(argv[2], argv[4]) ||
+            !strcmp(argv[2], argv[6]) || !strcmp(argv[3], argv[4]) ||
+            !strcmp(argv[3], argv[6]) || !strcmp(argv[4], argv[6])) {
+            fputs("invalid adapt paths or step count\n", stderr);
+            free(m); return 2;
+        }
+        size_t n = 0, v = 0;
+        unsigned char *train = read_data(argv[3], &n);
+        unsigned char *valid = read_data(argv[4], &v);
+        if (!train || !valid || !restore(argv[2], m)) {
+            fputs("invalid source checkpoint or new dataset\n", stderr);
+            free(train); free(valid); free(m); return 1;
+        }
+        printf("adapt_source=%s initial_validation_loss=%.6f\n",
+               argv[2], evaluate(m, valid, v));
+        double loss = train_blocks(m, train, n, 0, count);
+        if (loss < 0.0) {
+            fputs("out of memory during adaptation\n", stderr);
+            free(train); free(valid); free(m); return 1;
+        }
+        printf("steps=%d total_positions=%d training_loss=%.6f validation_loss=%.6f\n",
+               count, count, loss / count, evaluate(m, valid, v));
+        int ok = save_state(argv[6], m, (uint64_t)count, checksum(train, n), n);
+        if (!ok) fputs("cannot create adapted checkpoint\n", stderr);
+        free(train); free(valid); free(m);
+        return ok ? 0 : 1;
+    }
     if (argc == 7 && !strcmp(argv[1], "resume")) {
         int count = parse_steps(argv[5], 100000);
         if (!count || count % WINDOW != 0 ||
