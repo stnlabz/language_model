@@ -166,11 +166,15 @@ static double update_sequence(model *m, const step *history,
         }
         memcpy(future, previous, sizeof(future));
     }
-    const float rate = RATE / (float)length;
+    /* Average the batch gradients, then scale the learning rate by the
+     * number of training positions represented by the update. The prior
+     * revision divided the rate by length *and* clipped the sum, reducing
+     * 1,000 token-level updates to about 16 very small batch updates. */
+    const float rate = RATE * (float)length;
     float *weights = (float *)m;
     const float *grads = (const float *)g;
     for (size_t i = 0; i < sizeof(*m) / sizeof(float); ++i)
-        weights[i] -= rate * clamp_gradient(grads[i]);
+        weights[i] -= rate * clamp_gradient(grads[i] / (float)length);
     free(g);
     return loss;
 }
