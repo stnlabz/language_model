@@ -6,6 +6,7 @@
  * Training uses gradient accumulation and truncated backpropagation through
  * 64-byte sequences. No cross-sequence gradient is retained.
  */
+#include <errno.h>
 #include <math.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -239,6 +240,61 @@ static int restore(const char *path, model *m)
     fclose(f);
     return ok;
 }
+/* UTF-8 decoder state tracks legal next-byte ranges. A complete sequence
+ * has remaining==0; restricting leads near the end prevents truncation. */
+typedef struct { int remaining, low, high; } utf8_state;
+static int utf8_advance(utf8_state *state, int b)
+{
+    if (state->remaining) {
+        if (b < state->low || b > state->high) return 0;
+        --state->remaining;
+        state->low = 0x80;
+        state->high = 0xbf;
+        return 1;
+    }
+    if (b >= 0 && b <= 0x7f) return 1;
+    if (b >= 0xc2 && b <= 0xdf) {
+        state->remaining = 1;
+        state->low = 0x80; state->high = 0xbf;
+    } else if (b == 0xe0) {
+        state->remaining = 2;
+        state->low = 0xa0; state->high = 0xbf;
+    } else if (b >= 0xe1 && b <= 0xec) {
+        state->remaining = 2;
+        state->low = 0x80; state->high = 0xbf;
+    } else if (b == 0xed) {
+        state->remaining = 2;
+        state->low = 0x80; state->high = 0x9f;
+    } else if (b >= 0xee && b <= 0xef) {
+        state->remaining = 2;
+        state->low = 0x80; state->high = 0xbf;
+    } else if (b == 0xf0) {
+        state->remaining = 3;
+        state->low = 0x90; state->high = 0xbf;
+    } else if (b >= 0xf1 && b <= 0xf3) {
+        state->remaining = 3;
+        state->low = 0x80; state->high = 0xbf;
+    } else if (b == 0xf4) {
+        state->remaining = 3;
+        state->low = 0x80; state->high = 0x8f;
+    } else return 0;
+    return 1;
+}
+static int utf8_allowed(const utf8_state *state, int b, int bytes_left)
+{
+    utf8_state next = *state;
+    return utf8_advance(&next, b) && next.remaining <= bytes_left;
+}
+static int parse_seed(const char *value, uint64_t *seed)
+{
+    char *end;
+    if (!value[0] || value[0] == '-') return 0;
+    errno = 0;
+    unsigned long long result = strtoull(value, &end, 10);
+    if (errno || *end) return 0;
+    *seed = (uint64_t)result;
+    return 1;
+}
 static void usage(const char *name)
 {
     fprintf(stderr, "usage:\n  %s train <train.bin> <validation.bin> <steps:1..100000> <new-checkpoint>\n  %s eval <checkpoint> <validation.bin>\n  %s generate <checkpoint> <ascii-prefix> <length:1..256>\n", name, name, name);
@@ -307,27 +363,64 @@ int main(int argc, char **argv)
         printf("validation_loss=%.6f\n", evaluate(m, data, n));
         free(data); free(m); return 0;
     }
-    if (argc == 5 && !strcmp(argv[1], "generate")) {
+    if (argc >= 5 && argc <= 7 && !strcmp(argv[1], "generate")) {
         int count = parse_steps(argv[4], 256);
-        if (!count || !restore(argv[2], m) || !argv[3][0]) {
-            fputs("invalid prefix, output limit, or checkpoint\n", stderr);
+        int strict_utf8 = argc == 7 && !strcmp(argv[6], "utf8");
+        uint64_t seed = UINT64_C(20261020);
+        if (!count || !restore(argv[2], m) || !argv[3][0] ||
+            (argc >= 6 && !parse_seed(argv[5], &seed)) ||
+            (argc == 7 && !strict_utf8)) {
+            fputs("invalid prefix, output limit, seed, mode, or checkpoint\n", stderr);
             free(m); return 1;
         }
+        rng = seed ? seed : UINT64_C(20261020);
         float h[H] = {0};
         step s;
         const unsigned char *p = (const unsigned char *)argv[3];
+        utf8_state state = {0, 0, 0};
         for (size_t i = 0; p[i]; i++) {
+            if (strict_utf8 && !utf8_advance(&state, p[i])) {
+                fputs("invalid UTF-8 prefix\n", stderr);
+                free(m); return 1;
+            }
             forward(m, h, p[i], &s);
             memcpy(h, s.h, sizeof(h));
+        }
+        if (strict_utf8 && state.remaining) {
+            fputs("incomplete UTF-8 prefix\n", stderr);
+            free(m); return 1;
         }
         for (int i = 0; i < count; i++) {
             float u = (float)((random64() >> 40) / 16777216.0);
             int next = 255;
-            for (int k = 0; k < V; k++) {
-                u -= s.p[k];
-                if (u <= 0) { next = k; break; }
+            if (strict_utf8) {
+                float mass = 0.0f;
+                for (int k = 0; k < V; k++)
+                    if (utf8_allowed(&state, k, count - i - 1))
+                        mass += s.p[k];
+                if (!(mass > 0.0f) || !isfinite(mass)) {
+                    fputs("no legal UTF-8 next byte\n", stderr);
+                    free(m); return 1;
+                }
+                u *= mass;
+                for (int k = 0; k < V; k++) {
+                    if (!utf8_allowed(&state, k, count - i - 1)) continue;
+                    next = k;
+                    u -= s.p[k];
+                    if (u <= 0) break;
+                }
+                /* Last legal candidate if rounding left a positive residual. */
+                if (!utf8_allowed(&state, next, count - i - 1)) {
+                    fputs("invalid UTF-8 sampling state\n", stderr);
+                    free(m); return 1;
+                }
+                (void)utf8_advance(&state, next);
+            } else {
+                for (int k = 0; k < V; k++) {
+                    u -= s.p[k];
+                    if (u <= 0) { next = k; break; }
+                }
             }
-            /* Escaped bytes make arbitrary generated values safe to inspect. */
             printf("\\x%02x", (unsigned int)next);
             forward(m, h, (unsigned char)next, &s);
             memcpy(h, s.h, sizeof(h));
