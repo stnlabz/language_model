@@ -13,9 +13,9 @@
 #define VOC 768
 #define MAXTOK 500000
 #define MAXWORD 48
-#define EPOCHS 18
+#define EPOCHS 60
 #define BPTT 24
-#define LR 0.012f
+#define LR 0.003f
 typedef struct {char text[MAXWORD];int freq;} word;
 static word words[VOC];
 static int nw=3;
@@ -95,7 +95,27 @@ static void forward(net *m,const float *prev,int tok,tick *t){
  for(int k=0;k<nw;k++){t->prob[k]=expf(t->prob[k]-max);sum+=t->prob[k];}
  for(int k=0;k<nw;k++)t->prob[k]/=sum;
 }
-static float clip(float x){return x>3?3:x< -3?-3:x;}
+static float clip(float x){return x>5?5:x< -5?-5:x;}
+static net *moment1,*moment2;
+static unsigned long adam_steps;
+static int optimizer_init(void){
+ moment1=calloc(1,sizeof(*moment1));moment2=calloc(1,sizeof(*moment2));
+ return moment1&&moment2;
+}
+static void optimize(net *m,const net *g,int count){
+ float *w=(float*)m,*v=(float*)moment1,*q=(float*)moment2;
+ const float *grad=(const float*)g;
+ ++adam_steps;
+ const double corr1=1.0-pow(0.9,(double)adam_steps);
+ const double corr2=1.0-pow(0.999,(double)adam_steps);
+ for(size_t i=0;i<sizeof(*m)/sizeof(float);i++){
+  float d=clip(grad[i]/(float)count);
+  v[i]=0.9f*v[i]+0.1f*d;
+  q[i]=0.999f*q[i]+0.001f*d*d;
+  double a=(double)v[i]/corr1,b=(double)q[i]/corr2;
+  w[i]-=(float)(LR*a/(sqrt(b)+1e-8));
+ }
+}
 static double learn(net *m,tick *ts,int count){
  net *g=calloc(1,sizeof(*g));if(!g)return -1;
  float future[H]={0};double loss=0;
@@ -128,8 +148,7 @@ static double learn(net *m,tick *ts,int count){
   memcpy(future,back,sizeof(future));
   if(t->reset)memset(future,0,sizeof(future));
  }
- float *w=(float*)m,*gr=(float*)g;
- for(size_t i=0;i<sizeof(*m)/sizeof(float);i++)w[i]-=LR*clip(gr[i]/count);
+ optimize(m,g,count);
  free(g);return loss;
 }
 static double evaluate(net *m,const int *seq,int count){
@@ -184,7 +203,8 @@ int main(int argc,char **argv){
  if(!train||!valid||nt<100||nv<10){fputs("insufficient tokenized corpus\n",stderr);free(train);free(valid);return 1;}
  net *m=malloc(sizeof(*m)),*best=malloc(sizeof(*m));
  if(!m||!best){free(m);free(best);free(train);free(valid);return 1;}
- init(m);double best_loss=1e9;
+ if(!optimizer_init()){free(m);free(best);free(train);free(valid);free(moment1);free(moment2);return 1;}
+ init(m);double best_loss=1e9;int bad_epochs=0;
  for(int epoch=0;epoch<EPOCHS;epoch++){
   double total=0;int pos=0;float h[H]={0};int prev=0;
   while(pos<nt){
@@ -199,9 +219,10 @@ int main(int argc,char **argv){
   }
   double vl=evaluate(m,valid,nv);
   printf("epoch=%d train_loss=%.5f valid_loss=%.5f\n",epoch+1,total/nt,vl);
-  if(vl<best_loss){best_loss=vl;memcpy(best,m,sizeof(*m));}
+  if(vl<best_loss-0.0005){best_loss=vl;memcpy(best,m,sizeof(*m));bad_epochs=0;}
+  else if(++bad_epochs>=7){printf("early_stop_epoch=%d\n",epoch+1);break;}
  }
  int ok=save(argv[4],best)&&produce(best,argv[5]);
  printf("tokens=%d vocabulary=%d best_validation_loss=%.5f\n",nt,nw,best_loss);
- free(m);free(best);free(train);free(valid);return ok?0:1;
+ free(m);free(best);free(moment1);free(moment2);free(train);free(valid);return ok?0:1;
 }
