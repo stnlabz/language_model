@@ -22,7 +22,7 @@ VALID = $(RUN)_validation.bin
 CHECKPOINT = $(RUN)_$(STEPS).stn
 
 .DEFAULT_GOAL := help
-.PHONY: help all build test prepare-data train evaluate generate probe pipeline status train-state resume
+.PHONY: help all build test prepare-data train evaluate generate probe pipeline status train-state resume quality
 
 help:
 	@printf '%s\n' \
@@ -35,6 +35,7 @@ help:
 		'Pipeline:   make pipeline DATA=stn_language_sentences.txt RUN=corpus' \
 		'Stateful:   make train-state RUN=corpus STEPS=6400' \
 		'Resume:     make resume RUN=corpus STEPS=6400 STATE_IN=prior.stn STATE_OUT=next.stn' \
+		'Quality:    make quality CHECKPOINT=corpus_state_512000.stn RUN=corpus_v1' \
 		'Status:     make status' \
 		'' \
 		'RUN labels experiment artifacts; distinct RUN names avoid collisions.' \
@@ -97,3 +98,8 @@ resume: build
 	@test -s '$(TRAIN)' && test -s '$(VALID)' || { echo 'Missing prepared data' >&2; exit 1; }
 	@if test -e '$(STATE_OUT)'; then echo 'State output exists; choose a new STATE_OUT' >&2; exit 1; fi
 	nice -n '$(NICE)' timeout '$(TIMEOUT)' ./model resume '$(STATE_IN)' '$(TRAIN)' '$(VALID)' '$(STEPS)' '$(STATE_OUT)'
+
+# Read-only lexical/format diagnostics; explicit checkpoint is supported.
+quality: build
+	@test -s '$(CHECKPOINT)' && test -s '$(TRAIN)' || { echo 'Missing checkpoint or training reference' >&2; exit 1; }
+	$(PYTHON) tests/evaluate_quality.py --model ./model --checkpoint '$(CHECKPOINT)' --train '$(TRAIN)' --seed '$(SEED)' --bytes '$(BYTES)'
