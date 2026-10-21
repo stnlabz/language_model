@@ -169,7 +169,7 @@ static double update_sequence(model *m, const step *history,
         memcpy(future, previous, sizeof(future));
         /* A fresh record has a fresh hidden state: do not backpropagate
          * across the preceding newline when a block spans two records. */
-        if (t > 0 && history[t - 1].input == '\n')
+        if (s->input == '\n')
             memset(future, 0, sizeof(future));
     }
     /* Apply a per-batch learning rate to the *mean* 64-byte gradient.
@@ -204,13 +204,11 @@ static float evaluate(const model *m, const unsigned char *p, size_t n)
     double loss = 0;
     step s;
     for (size_t t = 0; t + 1 < n; t++) {
+        if (p[t] == '\n') memset(h, 0, sizeof(h));
         forward(m, h, p[t], &s);
         loss -= log(fmax((double)s.p[p[t+1]], 1e-20));
         memcpy(h, s.h, sizeof(h));
-        /* Records are one training statement per line. Do not carry
-         * unrelated sentence context across the newline boundary. */
-        if (p[t] == '\n' || (t + 1) % WINDOW == 0)
-            memset(h, 0, sizeof(h));
+
     }
     return (float)(loss / (double)(n - 1));
 }
@@ -297,14 +295,14 @@ static double train_blocks(model *m, const unsigned char *train, size_t n,
                            uint64_t start, int count)
 {
     double total = 0.0;
+    float h[H] = {0};
     for (int first = 0; first < count; first += WINDOW) {
         step history[WINDOW];
         unsigned char targets[WINDOW];
-        float h[H] = {0};
         for (int k = 0; k < WINDOW; ++k) {
             size_t pos = (size_t)((start + (uint64_t)first +
                                    (uint64_t)k) % (n - 1u));
-            if (pos == 0 || (pos > 0 && train[pos - 1u] == '\n'))
+            if (pos == 0 || train[pos] == '\n')
                 memset(h, 0, sizeof(h));
             forward(m, h, train[pos], &history[k]);
             targets[k] = train[pos + 1u];
@@ -478,7 +476,7 @@ int main(int argc, char **argv)
             float h[H] = {0};
             for (int k = 0; k < count; ++k) {
                 size_t pos = (size_t)(first + k) % (n - 1u);
-                if (pos == 0) memset(h, 0, sizeof(h));
+                if (pos == 0 || train[pos] == '\n') memset(h, 0, sizeof(h));
                 forward(m, h, train[pos], &history[k]);
                 targets[k] = train[pos + 1u];
                 memcpy(h, history[k].h, sizeof(h));
