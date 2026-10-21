@@ -363,6 +363,24 @@ int main(int argc, char **argv)
         printf("validation_loss=%.6f\n", evaluate(m, data, n));
         free(data); free(m); return 0;
     }
+    /* Diagnostic only: next-byte probabilities after consuming a prefix. */
+    if (argc == 4 && !strcmp(argv[1], "probe")) {
+        if (!argv[3][0] || !restore(argv[2], m)) {
+            fputs("invalid prefix or checkpoint\n", stderr);
+            free(m); return 1;
+        }
+        float h[H] = {0};
+        step s;
+        const unsigned char *p = (const unsigned char *)argv[3];
+        for (size_t i = 0; p[i]; ++i) {
+            forward(m, h, p[i], &s);
+            memcpy(h, s.h, sizeof(h));
+        }
+        for (int k = 0; k < V; ++k)
+            printf("%s%.9g", k ? "," : "", (double)s.p[k]);
+        putchar('\n');
+        free(m); return 0;
+    }
     if (argc >= 5 && argc <= 7 && !strcmp(argv[1], "generate")) {
         int count = parse_steps(argv[4], 256);
         int strict_utf8 = argc == 7 && !strcmp(argv[6], "utf8");
