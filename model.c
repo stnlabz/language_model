@@ -18,6 +18,7 @@
 #define LIMIT (16u * 1024u * 1024u)
 #define MAGIC UINT64_C(0x53544e4c4d303031)
 #define VERSION 1u
+#define STATE_VERSION 2u
 #define WINDOW 64
 #define RATE 0.015f
 
@@ -233,7 +234,7 @@ static int restore(const char *path, model *m)
 {
     FILE *f = fopen(path, "rb");
     if (!f) return 0;
-    uint64_t header[4];
+    uint64_t header[4] = {0};
     int ok = fread(header, sizeof(header), 1, f) == 1 &&
              header[0] == MAGIC && header[1] == VERSION &&
              header[2] == sizeof(*m);
@@ -249,7 +250,6 @@ static int restore(const char *path, model *m)
 /* Stateful checkpoints include completed positions and training-data identity.
  * Legacy version-1 checkpoints remain readable for evaluation and generation.
  * Stateful training requires 64-position sessions for identical update grouping. */
-#define STATE_VERSION 2u
 static int save_state(const char *path, const model *m, uint64_t position,
                       uint64_t data_hash, uint64_t data_length)
 {
