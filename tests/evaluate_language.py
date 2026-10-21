@@ -32,9 +32,14 @@ def score_model(binary, checkpoint, validation):
     return float(match.group(1))
 
 
-def generate(binary, checkpoint, prompt, count):
+def generate(binary, checkpoint, prompt, count, seed=None, utf8=False):
+    command = [binary, "generate", checkpoint, prompt, str(count)]
+    if seed is not None or utf8:
+        command.append(str(20261020 if seed is None else seed))
+    if utf8:
+        command.append("utf8")
     result = subprocess.run(
-        [binary, "generate", checkpoint, prompt, str(count)],
+        command,
         capture_output=True, text=True, check=True, timeout=120,
     )
     encoded = result.stdout.strip()
@@ -85,7 +90,30 @@ def main():
         repeats = max((len(list(g)) for _, g in __import__("itertools").groupby(generated)), default=0)
         print(f"prompt={prompt!r} utf8_valid={valid} printable_ascii={printable}/64 distinct_bytes={diversity}/64 longest_byte_run={repeats}")
         print(f"  generated={text!r}")
-    print("note=Generation uses fixed code-level RNG and may not substantially vary by prompt.")
+    # Preserve legacy baseline, then compare prompts under identical seed.
+    prompts = ("The engineer ", "Digit ", "A question ")
+    seed = 913
+    controlled = [generate(args.model, args.checkpoint, prompt, 64, seed=seed)
+                  for prompt in prompts]
+    print(f"controlled_seed={seed}")
+    print(f"controlled_prompt_unique_outputs={len(set(controlled))}/3")
+    print(f"controlled_first_byte_diversity={len({sample[0] for sample in controlled})}/3")
+    different_seed = generate(args.model, args.checkpoint, prompts[0], 64, seed=914)
+    print(f"seed_changes_output={different_seed != controlled[0]}")
+    repeat = generate(args.model, args.checkpoint, prompts[0], 64, seed=seed)
+    if repeat != controlled[0]:
+        raise ValueError("generation not reproducible with identical seed")
+    print("seed_reproducible=yes")
+    for prompt in prompts:
+        sample = generate(args.model, args.checkpoint, prompt, 64,
+                          seed=seed, utf8=True)
+        try:
+            decoded = sample.decode("utf-8")
+        except UnicodeDecodeError as exc:
+            raise ValueError(f"utf8 mode produced invalid output: {exc}")
+        print(f"utf8_prompt={prompt!r} utf8_valid=yes output_bytes={len(sample)}")
+        print(f"  utf8_generated={decoded!r}")
+    print("note=Legacy generation uses a fixed code-level RNG; controlled comparisons use explicit seeds.")
     print("note=Scores on 369 validation bytes cannot establish language fluency or generalization.")
 
 
