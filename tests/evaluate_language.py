@@ -48,6 +48,23 @@ def generate(binary, checkpoint, prompt, count, seed=None, utf8=False):
     return bytes(int(encoded[k + 2:k + 4], 16) for k in range(0, len(encoded), 4))
 
 
+def probe(binary, checkpoint, prompt):
+    result = subprocess.run(
+        [binary, "probe", checkpoint, prompt],
+        capture_output=True, text=True, check=True, timeout=120,
+    )
+    values = [float(item) for item in result.stdout.strip().split(",")]
+    if len(values) != 256 or any(not math.isfinite(v) or v < 0 for v in values):
+        raise ValueError("invalid probability vector from probe")
+    if abs(sum(values) - 1.0) > 0.0001:
+        raise ValueError("probe probabilities not normalized")
+    return values
+
+
+def total_variation(a, b):
+    return 0.5 * sum(abs(x - y) for x, y in zip(a, b))
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", default="./model")
@@ -95,6 +112,17 @@ def main():
     seed = 913
     controlled = [generate(args.model, args.checkpoint, prompt, 64, seed=seed)
                   for prompt in prompts]
+    distributions = [probe(args.model, args.checkpoint, p) for p in prompts]
+    repeat_distribution = probe(args.model, args.checkpoint, prompts[0])
+    if distributions[0] != repeat_distribution:
+        raise ValueError("probe not reproducible")
+    for i in range(len(prompts)):
+        top = max(range(256), key=lambda b: distributions[i][b])
+        print(f"probe_prompt={prompts[i]!r} top_byte=0x{top:02x} top_probability={distributions[i][top]:.6f}")
+    for i in range(len(prompts)):
+        for j in range(i + 1, len(prompts)):
+            print(f"prompt_pair={i + 1},{j + 1} total_variation={total_variation(distributions[i], distributions[j]):.9f}")
+    print("note=TV=0 means identical next-byte distributions; TV=1 means disjoint distributions.")
     print(f"controlled_seed={seed}")
     print(f"controlled_prompt_unique_outputs={len(set(controlled))}/3")
     print(f"controlled_first_byte_diversity={len({sample[0] for sample in controlled})}/3")
