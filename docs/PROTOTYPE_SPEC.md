@@ -1,7 +1,7 @@
 # STN-Labz Native Language Model — Milestone 1 Prototype Specification
 
-**Status:** PROPOSED — Operator review required before implementation  
-**Scope:** Specification only. No model code, training, deployment, Digit integration, RictusD integration, or data import is authorized by this document.
+**Status:** APPROVED - PM 20261027:0233Z 
+**Scope:** Specification only. No model code, training, deployment, Digit integration, Rictus integration, or data import is authorized by this document.
 
 ## 1. Objective
 
