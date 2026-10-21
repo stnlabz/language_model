@@ -9,7 +9,6 @@ process explicitly. Do not expose it through a public proxy.
 import argparse
 import json
 import os
-import hmac
 import pathlib
 import re
 import subprocess
@@ -84,7 +83,6 @@ class Handler(BaseHTTPRequestHandler):
     binary = "./model"
     checkpoint = ""
     learn_file = None
-    learn_token = None
 
     def _respond(self, code, data):
         payload = json.dumps(data, ensure_ascii=True).encode("utf-8")
@@ -114,11 +112,8 @@ class Handler(BaseHTTPRequestHandler):
         try:
             data = json.loads(self.rfile.read(size).decode("utf-8"))
             if self.path == "/learn":
-                if not self.learn_file or not self.learn_token:
+                if not self.learn_file:
                     return self._respond(503, {"error": "learning ingestion disabled"})
-                token = self.headers.get("X-STN-Learn-Token", "")
-                if not hmac.compare_digest(token, self.learn_token):
-                    return self._respond(403, {"error": "forbidden"})
                 record = validate_learning(data)
                 append_learning(self.learn_file, record)
                 return self._respond(202, {"accepted": True, "trained": False,
@@ -146,11 +141,7 @@ def main():
         parser.error("port must be 1024..65535")
     if not pathlib.Path(args.model).is_file() or not pathlib.Path(args.checkpoint).is_file():
         parser.error("model executable or checkpoint missing")
-    token = os.environ.get("STN_LABZ_LEARN_TOKEN", "")
-    if args.learn_file and len(token) < 24:
-        parser.error("set STN_LABZ_LEARN_TOKEN to a private secret of at least 24 characters")
     Handler.learn_file = args.learn_file
-    Handler.learn_token = token if args.learn_file else None
     Handler.binary = args.model
     Handler.checkpoint = args.checkpoint
     server = HTTPServer(("127.0.0.1", args.port), Handler)
