@@ -203,7 +203,10 @@ static float evaluate(const model *m, const unsigned char *p, size_t n)
         forward(m, h, p[t], &s);
         loss -= log(fmax((double)s.p[p[t+1]], 1e-20));
         memcpy(h, s.h, sizeof(h));
-        if ((t + 1) % WINDOW == 0) memset(h, 0, sizeof(h));
+        /* Records are one training statement per line. Do not carry
+         * unrelated sentence context across the newline boundary. */
+        if (p[t] == '\n' || (t + 1) % WINDOW == 0)
+            memset(h, 0, sizeof(h));
     }
     return (float)(loss / (double)(n - 1));
 }
@@ -297,7 +300,8 @@ static double train_blocks(model *m, const unsigned char *train, size_t n,
         for (int k = 0; k < WINDOW; ++k) {
             size_t pos = (size_t)((start + (uint64_t)first +
                                    (uint64_t)k) % (n - 1u));
-            if (pos == 0) memset(h, 0, sizeof(h));
+            if (pos == 0 || (pos > 0 && train[pos - 1u] == '\n'))
+                memset(h, 0, sizeof(h));
             forward(m, h, train[pos], &history[k]);
             targets[k] = train[pos + 1u];
             memcpy(h, history[k].h, sizeof(h));
