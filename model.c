@@ -3,8 +3,8 @@
  * AI-assisted code, Operator-authorized Milestone 3.
  * No external model, agent integration, networking or background processes.
  *
- * Training uses online truncated BPTT of depth one with state carried over
- * 64-byte segments. This is a deliberately limited experimental optimizer.
+ * Training uses gradient accumulation and truncated backpropagation through
+ * 64-byte sequences. No cross-sequence gradient is retained.
  */
 #include <math.h>
 #include <stdint.h>
@@ -99,44 +99,79 @@ static void forward(const model *m, const float before[H], unsigned char token, 
     }
     for (int k = 0; k < V; k++) s->p[k] /= sum;
 }
-static float update(model *m, step *s, unsigned char target)
+/* Truncated backpropagation through up to WINDOW successive byte predictions.
+ * All gradients are accumulated before weights change, preserving the
+ * forward-pass weights used by the entire sequence. */
+static float clamp_gradient(float value)
 {
-    float error[V], dh[H] = {0}, dz[H], dn[H], dr[H] = {0};
-    float loss = -logf(fmaxf(s->p[target], 1e-20f));
-    for (int k = 0; k < V; k++) error[k] = s->p[k] - (k == target ? 1.0f : 0.0f);
-    for (int j = 0; j < H; j++)
-        for (int k = 0; k < V; k++) dh[j] += m->out[j][k] * error[k];
-    for (int j = 0; j < H; j++) {
-        dn[j] = dh[j] * (1.0f - s->z[j]) * (1.0f - s->n[j] * s->n[j]);
-        dz[j] = dh[j] * (s->before[j] - s->n[j]) * s->z[j] * (1.0f - s->z[j]);
-    }
-    for (int i = 0; i < H; i++) {
-        float d = 0;
-        for (int j = 0; j < H; j++) d += m->un[i][j] * dn[j];
-        dr[i] = d * s->before[i] * s->r[i] * (1.0f - s->r[i]);
-    }
-    /* Gradient clipping is componentwise to bound single-step changes. */
-    for (int k = 0; k < V; k++) {
-        float e = fmaxf(-1.0f, fminf(1.0f, error[k]));
-        m->bo[k] -= RATE * e;
-        for (int j = 0; j < H; j++) m->out[j][k] -= RATE * e * s->h[j];
-    }
-    for (int j = 0; j < H; j++) {
-        float z = fmaxf(-1.0f, fminf(1.0f, dz[j]));
-        float r = fmaxf(-1.0f, fminf(1.0f, dr[j]));
-        float n = fmaxf(-1.0f, fminf(1.0f, dn[j]));
-        m->iz[s->input][j] -= RATE * z;
-        m->ir[s->input][j] -= RATE * r;
-        m->in[s->input][j] -= RATE * n;
-        m->bz[j] -= RATE * z;
-        m->br[j] -= RATE * r;
-        m->bn[j] -= RATE * n;
-        for (int i = 0; i < H; i++) {
-            m->uz[i][j] -= RATE * z * s->before[i];
-            m->ur[i][j] -= RATE * r * s->before[i];
-            m->un[i][j] -= RATE * n * (s->r[i] * s->before[i]);
+    return fmaxf(-1.0f, fminf(1.0f, value));
+}
+static double update_sequence(model *m, const step *history,
+                              const unsigned char *targets, int length)
+{
+    model *g = calloc(1, sizeof(*g));
+    if (!g) return -1.0;
+    float future[H] = {0};
+    double loss = 0.0;
+    for (int t = length - 1; t >= 0; --t) {
+        const step *s = &history[t];
+        float error[V], dh[H], dz[H], dn[H], dr[H], previous[H];
+        loss -= log(fmax((double)s->p[targets[t]], 1e-20));
+        for (int k = 0; k < V; ++k) {
+            error[k] = s->p[k] - (k == targets[t] ? 1.0f : 0.0f);
+            g->bo[k] += error[k];
+            for (int j = 0; j < H; ++j)
+                g->out[j][k] += s->h[j] * error[k];
         }
+        for (int j = 0; j < H; ++j) {
+            dh[j] = future[j];
+            for (int k = 0; k < V; ++k)
+                dh[j] += m->out[j][k] * error[k];
+            dn[j] = dh[j] * (1.0f - s->z[j]) *
+                    (1.0f - s->n[j] * s->n[j]);
+            dz[j] = dh[j] * (s->before[j] - s->n[j]) *
+                    s->z[j] * (1.0f - s->z[j]);
+        }
+        for (int i = 0; i < H; ++i) {
+            float candidate = 0.0f;
+            for (int j = 0; j < H; ++j)
+                candidate += m->un[i][j] * dn[j];
+            dr[i] = candidate * s->before[i] *
+                    s->r[i] * (1.0f - s->r[i]);
+        }
+        /* Compute all reset-gate derivatives before the previous-state
+         * gradient. This avoids using partially initialized dr values. */
+        for (int i = 0; i < H; ++i) {
+            previous[i] = dh[i] * s->z[i];
+            float candidate = 0.0f;
+            for (int j = 0; j < H; ++j) {
+                candidate += m->un[i][j] * dn[j];
+                previous[i] += m->uz[i][j] * dz[j] +
+                               m->ur[i][j] * dr[j];
+            }
+            previous[i] += candidate * s->r[i];
+        }
+        for (int j = 0; j < H; ++j) {
+            g->iz[s->input][j] += dz[j];
+            g->ir[s->input][j] += dr[j];
+            g->in[s->input][j] += dn[j];
+            g->bz[j] += dz[j];
+            g->br[j] += dr[j];
+            g->bn[j] += dn[j];
+            for (int i = 0; i < H; ++i) {
+                g->uz[i][j] += s->before[i] * dz[j];
+                g->ur[i][j] += s->before[i] * dr[j];
+                g->un[i][j] += (s->r[i] * s->before[i]) * dn[j];
+            }
+        }
+        memcpy(future, previous, sizeof(future));
     }
+    const float rate = RATE / (float)length;
+    float *weights = (float *)m;
+    const float *grads = (const float *)g;
+    for (size_t i = 0; i < sizeof(*m) / sizeof(float); ++i)
+        weights[i] -= rate * clamp_gradient(grads[i]);
+    free(g);
     return loss;
 }
 static unsigned char *read_data(const char *path, size_t *n)
@@ -229,15 +264,27 @@ int main(int argc, char **argv)
         initialize(m);
         printf("parameters=%zu initial_validation_loss=%.6f\n",
                sizeof(*m)/sizeof(float), evaluate(m, valid, v));
-        float h[H] = {0};
-        step s;
-        double total = 0;
-        for (int t = 0; t < steps; t++) {
-            size_t pos = (size_t)t % (n - 1u);
-            if (pos == 0 || pos % WINDOW == 0) memset(h, 0, sizeof(h));
-            forward(m, h, train[pos], &s);
-            total += update(m, &s, train[pos + 1u]);
-            memcpy(h, s.h, sizeof(h));
+        double total = 0.0;
+        for (int first = 0; first < steps;) {
+            int count = steps - first;
+            if (count > WINDOW) count = WINDOW;
+            step history[WINDOW];
+            unsigned char targets[WINDOW];
+            float h[H] = {0};
+            for (int k = 0; k < count; ++k) {
+                size_t pos = (size_t)(first + k) % (n - 1u);
+                if (pos == 0) memset(h, 0, sizeof(h));
+                forward(m, h, train[pos], &history[k]);
+                targets[k] = train[pos + 1u];
+                memcpy(h, history[k].h, sizeof(h));
+            }
+            double block_loss = update_sequence(m, history, targets, count);
+            if (block_loss < 0.0) {
+                fputs("out of memory during training\n", stderr);
+                free(train); free(valid); free(m); return 1;
+            }
+            total += block_loss;
+            first += count;
         }
         printf("steps=%d training_loss=%.6f validation_loss=%.6f\n",
                steps, total / steps, evaluate(m, valid, v));
