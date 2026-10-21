@@ -14,6 +14,7 @@ NICE ?= 10
 PROMPT ?= The engineer
 SEED ?= 913
 BYTES ?= 64
+PORT ?= 8765
 STATE_IN ?=
 STATE_OUT ?= $(RUN)_state_$(STEPS).stn
 
@@ -22,7 +23,7 @@ VALID = $(RUN)_validation.bin
 CHECKPOINT = $(RUN)_$(STEPS).stn
 
 .DEFAULT_GOAL := help
-.PHONY: help all build test prepare-data train evaluate generate probe pipeline status train-state resume quality compare-sampling
+.PHONY: help all build test prepare-data train evaluate generate probe pipeline status train-state resume quality compare-sampling api
 
 help:
 	@printf '%s\n' \
@@ -37,6 +38,7 @@ help:
 		'Resume:     make resume RUN=corpus STEPS=6400 STATE_IN=prior.stn STATE_OUT=next.stn' \
 		'Quality:    make quality CHECKPOINT=corpus_state_512000.stn RUN=corpus_v1' \
 		'Sampling:   make compare-sampling CHECKPOINT=corpus_state_768000.stn RUN=corpus_v1' \
+		'API:        make api CHECKPOINT=corpus_state_768000.stn PORT=8765' \
 		'Status:     make status' \
 		'' \
 		'RUN labels experiment artifacts; distinct RUN names avoid collisions.' \
@@ -109,3 +111,8 @@ quality: build
 compare-sampling: build
 	@test -s '$(CHECKPOINT)' && test -s '$(TRAIN)' || { echo 'Missing checkpoint or training reference' >&2; exit 1; }
 	$(PYTHON) tests/compare_sampling.py --model ./model --checkpoint '$(CHECKPOINT)' --train '$(TRAIN)' --seed '$(SEED)' --bytes '$(BYTES)'
+
+# Explicit foreground, loopback-only HTTP inference. Stop with Ctrl-C.
+api: build
+	@test -s '$(CHECKPOINT)' || { echo 'Missing checkpoint' >&2; exit 1; }
+	$(PYTHON) http_api.py --model ./model --checkpoint '$(CHECKPOINT)' --port '$(PORT)'
