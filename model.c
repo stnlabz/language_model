@@ -363,6 +363,17 @@ static int parse_seed(const char *value, uint64_t *seed)
     *seed = (uint64_t)result;
     return 1;
 }
+/* Decode-only controls. This leaves training and old generate unchanged. */
+static int parse_float_range(const char *text, float lo, float hi, float *out)
+{
+    char *end;
+    errno = 0;
+    float value = strtof(text, &end);
+    if (!text[0] || *end || errno || !isfinite(value) ||
+        value < lo || value > hi) return 0;
+    *out = value;
+    return 1;
+}
 static void usage(const char *name)
 {
     fprintf(stderr, "usage:\n  %s train <train.bin> <validation.bin> <steps:1..100000> <new-checkpoint>\n  %s eval <checkpoint> <validation.bin>\n  %s generate <checkpoint> <utf8-prefix> <length:1..256> [seed:uint64] [utf8]\n", name, name, name);
@@ -515,6 +526,77 @@ int main(int argc, char **argv)
         }
         for (int k = 0; k < V; ++k)
             printf("%s%.9g", k ? "," : "", (double)s.p[k]);
+        putchar('\n');
+        free(m); return 0;
+    }
+    /* Experimental sampler: byte-level temperature and recent-byte penalty.
+     * Fixed seed and unchanged checkpoint support controlled comparisons. */
+    if (argc == 9 && !strcmp(argv[1], "sample")) {
+        int count = parse_steps(argv[4], 256);
+        uint64_t seed = 0;
+        float temperature = 0.0f, penalty = 0.0f;
+        if (!count || !argv[3][0] || !restore(argv[2], m) ||
+            !parse_seed(argv[5], &seed) ||
+            !parse_float_range(argv[6], 0.25f, 2.0f, &temperature) ||
+            !parse_float_range(argv[7], 0.0f, 2.0f, &penalty) ||
+            strcmp(argv[8], "utf8")) {
+            fputs("invalid sample arguments\n", stderr);
+            free(m); return 2;
+        }
+        rng = seed ? seed : UINT64_C(20261020);
+        float h[H] = {0};
+        step s;
+        utf8_state state = {0, 0, 0};
+        const unsigned char *prefix = (const unsigned char *)argv[3];
+        for (size_t i = 0; prefix[i]; ++i) {
+            if (!utf8_advance(&state, prefix[i])) {
+                fputs("invalid UTF-8 prefix\n", stderr); free(m); return 2;
+            }
+            forward(m, h, prefix[i], &s);
+            memcpy(h, s.h, sizeof(h));
+        }
+        if (state.remaining) {
+            fputs("incomplete UTF-8 prefix\n", stderr); free(m); return 2;
+        }
+        unsigned char recent[32] = {0};
+        int recent_count = 0;
+        for (int i = 0; i < count; ++i) {
+            double weights[V] = {0};
+            double mass = 0.0;
+            for (int k = 0; k < V; ++k) {
+                if (!utf8_allowed(&state, k, count - i - 1)) continue;
+                int repeats = 0;
+                for (int q = 0; q < recent_count; ++q)
+                    if (recent[q] == (unsigned char)k) ++repeats;
+                /* Apply penalty to repeated bytes, not words or meaning. */
+                double probability = fmax((double)s.p[k], 1e-30);
+                weights[k] = exp(log(probability) / temperature -
+                                 (double)penalty * repeats);
+                mass += weights[k];
+            }
+            if (!(mass > 0.0) || !isfinite(mass)) {
+                fputs("no legal sample candidate\n", stderr);
+                free(m); return 1;
+            }
+            double u = ((random64() >> 40) / 16777216.0) * mass;
+            int next = -1, fallback = -1;
+            for (int k = 0; k < V; ++k) {
+                if (weights[k] <= 0.0) continue;
+                fallback = k;
+                u -= weights[k];
+                if (u <= 0.0) { next = k; break; }
+            }
+            if (next < 0) next = fallback;
+            if (next < 0 || !utf8_advance(&state, next)) {
+                fputs("invalid UTF-8 sample state\n", stderr);
+                free(m); return 1;
+            }
+            printf("\\x%02x", (unsigned int)next);
+            recent[i % 32] = (unsigned char)next;
+            if (recent_count < 32) ++recent_count;
+            forward(m, h, (unsigned char)next, &s);
+            memcpy(h, s.h, sizeof(h));
+        }
         putchar('\n');
         free(m); return 0;
     }
