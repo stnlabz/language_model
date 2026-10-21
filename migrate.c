@@ -1,6 +1,7 @@
 /* STN-Labz native Windows JSONL -> byte corpus conversion.
  * Accepted schema: input,response,source,approved. Source is read-only.
- * Output is new-file-only, one Q/A pair per physical line, max 16 MiB.
+ * Output is new-file-only. Dialogues remain Q/A; Corpus LESSON entries
+ * become statements. Context and Observations remain in the snapshot only.
  */
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
@@ -103,7 +104,7 @@ int main(int argc,char **argv) {
     /* Build in memory; never publish a partially converted output. */
     char *corpus=malloc(CORPUS_LIMIT+1),line[LINE_MAX_BYTES+1],q[4096],a[4096];
     if(!corpus){fclose(src);return 1;}
-    size_t total=0,rows=0,structured=0;
+    size_t total=0,rows=0,lessons=0,context=0,observations=0,dialogues=0;
     int result=1;
     while(fgets(line,sizeof(line),src)) {
         size_t length=strlen(line);
@@ -111,17 +112,32 @@ int main(int argc,char **argv) {
         line[length-1]=0;
         if(length>1&&line[length-2]=='\r')line[length-2]=0;
         if(!line_pair(line,q,a)){fprintf(stderr,"invalid record at line %zu\n",rows+1);goto done;}
-        if(!strncmp(q,"Digit Context record ",21) ||
-           !strncmp(q,"Digit Corpus record ",20) ||
-           !strncmp(q,"Digit Observation record ",25))structured++;
-        int count=snprintf(corpus+total,CORPUS_LIMIT+1-total,"Question: %s Answer: %s\n",q,a);
+        int count;
+        if(!strncmp(q,"Digit Context record ",21)){
+            context++;rows++;continue;
+        } else if(!strncmp(q,"Digit Observation record ",25)){
+            observations++;rows++;continue;
+        } else if(!strncmp(q,"Digit Corpus record ",20)){
+            /* Corpus entries are statements, not questions. Keep only
+             * explicitly labeled LESSON entries; reject unknown categories. */
+            if(!strstr(q,", category LESSON,")){
+                fprintf(stderr,"unsupported Corpus category at line %zu\n",rows+1);
+                goto done;
+            }
+            count=snprintf(corpus+total,CORPUS_LIMIT+1-total,"%s\n",a);
+            lessons++;
+        } else {
+            count=snprintf(corpus+total,CORPUS_LIMIT+1-total,"Question: %s Answer: %s\n",q,a);
+            dialogues++;
+        }
         if(count<0||(size_t)count>=CORPUS_LIMIT+1-total){fputs("corpus exceeds 16MiB\n",stderr);goto done;}
         total+=(size_t)count;rows++;
     }
     if(ferror(src)||rows<5){fputs("snapshot read error or fewer than 5 records\n",stderr);goto done;}
-    fprintf(stdout,"records=%zu structured_records=%zu conversation_candidates=%zu\n",rows,structured,rows-structured);
-    if(structured>rows/2){
-        fputs("DATA QUALITY FAILED: majority are structured records, not conversations. No training corpus written.\n",stderr);
+    fprintf(stdout,"records=%zu lessons=%zu dialogues=%zu context_retained=%zu observations_retained=%zu\n",
+            rows,lessons,dialogues,context,observations);
+    if(lessons+dialogues<5){
+        fputs("DATA QUALITY FAILED: fewer than five usable lesson/dialogue records.\n",stderr);
         goto done;
     }
     /* Exclusive creation on MSVC: x-mode is supported. */
