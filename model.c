@@ -167,6 +167,10 @@ static double update_sequence(model *m, const step *history,
             }
         }
         memcpy(future, previous, sizeof(future));
+        /* A fresh record has a fresh hidden state: do not backpropagate
+         * across the preceding newline when a block spans two records. */
+        if (t > 0 && history[t - 1].input == '\n')
+            memset(future, 0, sizeof(future));
     }
     /* Apply a per-batch learning rate to the *mean* 64-byte gradient.
      * Multiplying RATE by 64 previously made updates up to 0.96 per
