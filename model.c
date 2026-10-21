@@ -168,11 +168,11 @@ static double update_sequence(model *m, const step *history,
         }
         memcpy(future, previous, sizeof(future));
     }
-    /* Average the batch gradients, then scale the learning rate by the
-     * number of training positions represented by the update. The prior
-     * revision divided the rate by length *and* clipped the sum, reducing
-     * 1,000 token-level updates to about 16 very small batch updates. */
-    const float rate = RATE * (float)length;
+    /* Apply a per-batch learning rate to the *mean* 64-byte gradient.
+     * Multiplying RATE by 64 previously made updates up to 0.96 per
+     * weight per batch; that can erase learned patterns during adaptation.
+     * Keep the trained architecture and checkpoint format unchanged. */
+    const float rate = RATE;
     float *weights = (float *)m;
     const float *grads = (const float *)g;
     for (size_t i = 0; i < sizeof(*m) / sizeof(float); ++i)
