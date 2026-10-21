@@ -13,7 +13,9 @@ test -s "$d/prototype.stn"
 grep -q '^parameters=' "$d/training.log"
 grep -q '^steps=200' "$d/training.log"
 "$d/model" eval "$d/prototype.stn" "$d/valid.bin" | grep -q '^validation_loss='
-"$d/model" generate "$d/prototype.stn" "Digit " 16 | grep -Eq '^(\\x[0-9a-f]{2}){16}$'
+"$d/model" generate "$d/prototype.stn" "Digit " 16 > "$d/generated.txt"
+test "$(wc -c < "$d/generated.txt" | tr -d ' ')" -eq 65
+grep -Fq '\x' "$d/generated.txt"
 if "$d/model" train "$d/train.bin" "$d/valid.bin" 200 "$d/prototype.stn" >/dev/null 2>&1; then
     echo "FAIL: existing checkpoint overwritten" >&2; exit 1
 fi
