@@ -1,6 +1,6 @@
 /* STN-Labz native Windows JSONL -> byte corpus conversion.
  * Accepted schema: input,response,source,approved. Source is read-only.
- * Output is new-file-only. Dialogues remain Q/A; Corpus LESSON entries
+ * Output is new-file-only. Dialogues remain Q/A; Corpus records
  * become statements. Context and Observations remain in the snapshot only.
  */
 #define _CRT_SECURE_NO_WARNINGS
@@ -118,12 +118,8 @@ int main(int argc,char **argv) {
         } else if(!strncmp(q,"Digit Observation record ",25)){
             observations++;rows++;continue;
         } else if(!strncmp(q,"Digit Corpus record ",20)){
-            /* Corpus entries are statements, not questions. Keep only
-             * explicitly labeled LESSON entries; reject unknown categories. */
-            if(!strstr(q,", category LESSON,")){
-                fprintf(stderr,"unsupported Corpus category at line %zu\n",rows+1);
-                goto done;
-            }
+            /* Corpus records are statements, not questions. Preserve
+             * the existing category and verification metadata in snapshot. */
             count=snprintf(corpus+total,CORPUS_LIMIT+1-total,"%s\n",a);
             lessons++;
         } else {
