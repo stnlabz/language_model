@@ -54,14 +54,14 @@ status:
 # The existing prepare executable refuses to overwrite train/validation files.
 prepare-data: build
 	@test -f '$(DATA)' || { echo 'Missing authorized corpus: $(DATA)' >&2; exit 1; }
-	@test ! -e '$(TRAIN)' && ! -e '$(VALID)' || { echo 'Prepared output exists; use a new RUN' >&2; exit 1; }
+	@if test -e '$(TRAIN)' || test -e '$(VALID)'; then echo 'Prepared output exists; use a new RUN' >&2; exit 1; fi
 	./prepare prepare '$(DATA)' '$(TRAIN)' '$(VALID)'
 
 # Existing checkpoints are never overwritten. timeout and nice
 # reduce the impact on other services running on the shared VPS.
 train: build
 	@test -s '$(TRAIN)' && test -s '$(VALID)' || { echo 'Missing prepared data: run make prepare-data first' >&2; exit 1; }
-	@test ! -e '$(CHECKPOINT)' || { echo 'Checkpoint exists; choose a new RUN or STEPS' >&2; exit 1; }
+	@if test -e '$(CHECKPOINT)'; then echo 'Checkpoint exists; choose a new RUN or STEPS' >&2; exit 1; fi
 	nice -n '$(NICE)' timeout '$(TIMEOUT)' ./model train '$(TRAIN)' '$(VALID)' '$(STEPS)' '$(CHECKPOINT)'
 
 evaluate: build
