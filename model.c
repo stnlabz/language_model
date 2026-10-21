@@ -384,6 +384,63 @@ static int parse_steps(const char *s, int max)
     long n = strtol(s, &end, 10);
     return (s[0] && !*end && n >= 1 && n <= max) ? (int)n : 0;
 }
+
+/* Experimental corpus-vocabulary constrained GRU sampling.
+ * The GRU still chooses each byte: this only disallows invented spellings.
+ * It does NOT establish grammar, factuality, or prompt comprehension. */
+#define LEX_MAX_NODES 200000
+typedef struct { int child[27]; unsigned char terminal; } lex_node;
+static lex_node *lex_nodes;
+static int lex_count;
+static int lex_code(unsigned char c) {
+    if (c >= 'a' && c <= 'z') return (int)(c-'a');
+    if (c >= 'A' && c <= 'Z') return (int)(c-'A');
+    if (c == '\'') return 26;
+    return -1;
+}
+static void lex_insert(const unsigned char *word, int n) {
+    int node=0;
+    if(n<2 || n>32)return;
+    for(int i=0;i<n;i++){
+        int c=lex_code(word[i]);
+        if(c<0)return;
+        int child=lex_nodes[node].child[c];
+        if(!child){
+            if(lex_count>=LEX_MAX_NODES)return;
+            child=lex_count++;
+            lex_nodes[node].child[c]=child;
+        }
+        node=child;
+    }
+    lex_nodes[node].terminal=1;
+}
+static int lex_load(const char *path) {
+    size_t n=0;
+    unsigned char *data=read_data(path,&n);
+    if(!data)return 0;
+    lex_nodes=calloc(LEX_MAX_NODES,sizeof(*lex_nodes));
+    if(!lex_nodes){free(data);return 0;}
+    lex_count=1;
+    for(size_t i=0;i<n;){
+        while(i<n && lex_code(data[i])<0)i++;
+        size_t start=i;
+        while(i<n && lex_code(data[i])>=0)i++;
+        if(i>start)lex_insert(data+start,(int)(i-start));
+    }
+    free(data);
+    return lex_count>20;
+}
+static int lex_allowed(int node,int in_word,int c) {
+    int k=lex_code((unsigned char)c);
+    if(k>=0){
+        /* Case-normalized decoded words; no made-up words. */
+        if(c>='A'&&c<='Z')return 0;
+        return lex_nodes[node].child[k]!=0;
+    }
+    if(in_word && !lex_nodes[node].terminal)return 0;
+    return c==' ' || c=='.' || c==',' || c=='\n' || c=='?' || c=='!';
+}
+
 int main(int argc, char **argv)
 {
     if (argc < 2) { usage(argv[0]); return 2; }
@@ -560,6 +617,62 @@ int main(int argc, char **argv)
             printf("%s%.9g", k ? "," : "", (double)s.p[k]);
         putchar('\n');
         free(m); return 0;
+    }
+
+    if(argc==10 && !strcmp(argv[1],"sample-lex")){
+        int count=parse_steps(argv[5],256);
+        uint64_t seed=0;
+        float temperature=0,penalty=0;
+        if(!count || !argv[4][0] || !restore(argv[2],m) ||
+           !parse_seed(argv[6],&seed) ||
+           !parse_float_range(argv[7],0.25f,2.0f,&temperature) ||
+           !parse_float_range(argv[8],0.0f,2.0f,&penalty) ||
+           strcmp(argv[9],"utf8") || !lex_load(argv[3])){
+            fputs("invalid sample-lex inputs or insufficient corpus vocabulary\n",stderr);
+            free(lex_nodes);free(m);return 2;
+        }
+        rng=seed?seed:UINT64_C(20261020);
+        float h[H]={0};
+        step st;
+        const unsigned char *prefix=(const unsigned char *)argv[4];
+        for(size_t i=0;prefix[i];i++){
+            forward(m,h,prefix[i],&st);
+            memcpy(h,st.h,sizeof(h));
+        }
+        int node=0,in_word=0,recent_count=0;
+        unsigned char recent[32]={0},output[257]={0};
+        int emitted=0,last_boundary=0;
+        for(int i=0;i<count;i++){
+            double w[V]={0},mass=0;
+            for(int c=0;c<128;c++){
+                if(!lex_allowed(node,in_word,c))continue;
+                int repeats=0;
+                for(int j=0;j<recent_count;j++)if(recent[j]==(unsigned char)c)repeats++;
+                double prob=fmax((double)st.p[c],1e-30);
+                w[c]=exp(log(prob)/temperature-(double)penalty*repeats);
+                mass+=w[c];
+            }
+            if(!(mass>0) || !isfinite(mass))break;
+            double u=((random64()>>40)/16777216.0)*mass;
+            int next=-1,fallback=-1;
+            for(int c=0;c<128;c++)if(w[c]>0){
+                fallback=c;u-=w[c];if(u<=0){next=c;break;}
+            }
+            if(next<0)next=fallback;
+            if(next<0)break;
+            int k=lex_code((unsigned char)next);
+            if(k>=0){node=lex_nodes[node].child[k];in_word=1;}
+            else {node=0;in_word=0;last_boundary=i+1;}
+            output[emitted++]=(unsigned char)next;
+            recent[i%32]=(unsigned char)next;
+            if(recent_count<32)recent_count++;
+            forward(m,h,(unsigned char)next,&st);
+            memcpy(h,st.h,sizeof(h));
+        }
+        /* Avoid displaying cut-off invented fragments. */
+        output[last_boundary]=0;
+        puts((const char *)output);
+        free(lex_nodes);free(m);return last_boundary>0?0:1;
     }
     /* Experimental sampler: byte-level temperature and recent-byte penalty.
      * Fixed seed and unchanged checkpoint support controlled comparisons. */
