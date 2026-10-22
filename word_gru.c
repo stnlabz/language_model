@@ -31,15 +31,47 @@ typedef struct {
  int token,target,reset;
  float prev[H],z[H],r[H],n[H],h[H],prob[VOC];
 } tick;
-static int lookup(const char *p){for(int i=3;i<nw;i++)if(!strcmp(p,words[i].text))return i;return 2;}
-static void vocabulary(const char *p){
- int found=-1;
- for(int i=3;i<nw;i++)if(!strcmp(p,words[i].text)){found=i;break;}
- if(found>=0){words[found].freq++;return;}
- if(nw<VOC){strcpy(words[nw].text,p);words[nw++].freq=1;return;}
- /* bounded frequent-word replacement; preserve higher-frequency terms */
- int low=3;for(int i=4;i<nw;i++)if(words[i].freq<words[low].freq)low=i;
- if(words[low].freq==1){strcpy(words[low].text,p);words[low].freq=1;}
+#define TERMS 32768
+typedef struct {char text[MAXWORD];unsigned int count;} term;
+static term *counts;
+static unsigned int distinct;
+static unsigned hash_word(const char *s){
+ unsigned h=2166136261u;
+ while(*s){h=((h^(unsigned char)*s++)*16777619u);}
+ return h;
+}
+static int lookup(const char *p){
+ for(int i=3;i<nw;i++)if(!strcmp(p,words[i].text))return i;
+ return 2;
+}
+static int vocabulary(const char *p){
+ if(!counts)return 0;
+ unsigned slot=hash_word(p)%(unsigned)TERMS;
+ for(unsigned i=0;i<TERMS;i++){
+  term *t=&counts[(slot+i)%(unsigned)TERMS];
+  if(!t->count){
+   memcpy(t->text,p,strlen(p)+1);
+   t->count=1;distinct++;return 1;
+  }
+  if(!strcmp(t->text,p)){t->count++;return 1;}
+ }
+ return 0;
+}
+static int word_order(const void *a,const void *b){
+ const term *x=(const term*)a,*y=(const term*)b;
+ if(x->count>y->count)return -1;
+ if(x->count<y->count)return 1;
+ return strcmp(x->text,y->text);
+}
+static int finish_vocabulary(void){
+ qsort(counts,TERMS,sizeof(*counts),word_order);
+ for(unsigned i=0;i<distinct&&nw<VOC;i++){
+  if(!counts[i].count)break;
+  strcpy(words[nw].text,counts[i].text);
+  words[nw++].freq=(int)counts[i].count;
+ }
+ free(counts);counts=NULL;
+ return nw>10;
 }
 static unsigned char *load(const char *path,size_t *n){
  FILE *f=fopen(path,"rb");if(!f)return NULL;
@@ -59,7 +91,7 @@ static int *tokenize(const unsigned char *src,size_t n,int *out,int build){
    if(len<MAXWORD-1)buf[len++]=(char)tolower(c);
   }else{
    if(len){
-    buf[len]=0;if(build)vocabulary(buf);
+    buf[len]=0;if(build){if(!vocabulary(buf)){free(seq);return NULL;}}
     else seq[count++]=lookup(buf);
     len=0;
    }
@@ -224,7 +256,12 @@ int main(int argc,char **argv){
  size_t tn=0,vn=0;unsigned char *tr=load(argv[2],&tn),*va=load(argv[3],&vn);
  if(!tr||!va){fputs("training corpus unavailable\n",stderr);free(tr);free(va);return 1;}
  strcpy(words[0].text,"<bos>");strcpy(words[1].text,"<eos>");strcpy(words[2].text,"<unk>");
- int count=0;int *scratch=tokenize(tr,tn,&count,1);free(scratch);
+ counts=calloc(TERMS,sizeof(*counts));
+ if(!counts){free(tr);free(va);return 1;}
+ int count=0;int *scratch=tokenize(tr,tn,&count,1);
+ if(!scratch||!finish_vocabulary()){fputs("vocabulary construction failed\n",stderr);free(scratch);free(counts);free(tr);free(va);return 1;}
+ free(scratch);
+ printf("vocabulary_selected=%d distinct_training_words=%u\n",nw-3,distinct);
  int nt=0,nv=0;int *train=tokenize(tr,tn,&nt,0),*valid=tokenize(va,vn,&nv,0);
  free(tr);free(va);
  if(!train||!valid||nt<100||nv<10){fputs("insufficient tokenized corpus\n",stderr);free(train);free(valid);return 1;}
