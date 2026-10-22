@@ -34,10 +34,20 @@ def generate(binary, checkpoint, request, word_model=False):
     if (type(temperature) not in (float, int) or not 0.25 <= temperature <= 2 or
             type(penalty) not in (float, int) or not 0 <= penalty <= 2):
         raise ValueError("temperature or penalty out of range")
-    command = [binary, "sample", checkpoint, prompt, str(count), str(seed),\n               str(temperature), str(penalty)]\n    if not word_model:\n        command.append("utf8")\n    result = subprocess.run(\n        command,
+    command = [binary, "sample", checkpoint, prompt, str(count), str(seed),
+               str(temperature), str(penalty)]
+    if not word_model:
+        command.append("utf8")
+    result = subprocess.run(\n        command,
         capture_output=True, text=True, check=True, timeout=30,
     )
-    if word_model:\n        output = result.stdout.strip()\n        if not output or len(output) > 8192:\n            raise RuntimeError("invalid word model output")\n        return {"text": output, "generated_words_max": count,\n                "model": "stn-labz-word-gru", "experimental": True}\n    encoded = result.stdout.strip()
+    if word_model:
+        output = result.stdout.strip()
+        if not output or len(output) > 8192:
+            raise RuntimeError("invalid word model output")
+        return {"text": output, "generated_words_max": count,
+                "model": "stn-labz-word-gru", "experimental": True}
+    encoded = result.stdout.strip()
     if len(encoded) != 4 * count or not ENCODED.fullmatch(encoded):
         raise RuntimeError("invalid model output")
     output = bytes.fromhex(encoded.replace("\\x", "")).decode("utf-8")
