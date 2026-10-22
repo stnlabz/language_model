@@ -38,7 +38,8 @@ def generate(binary, checkpoint, request, word_model=False):
                str(temperature), str(penalty)]
     if not word_model:
         command.append("utf8")
-    result = subprocess.run(\n        command,
+    result = subprocess.run(
+        command,
         capture_output=True, text=True, check=True, timeout=30,
     )
     if word_model:
