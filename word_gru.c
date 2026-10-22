@@ -204,6 +204,8 @@ static int restore(const char *path,net *m){
  int ok=fread(&magic,4,1,f)==1&&magic==0x57524731&&fread(&nw,sizeof(nw),1,f)==1&&nw>=10&&nw<=VOC&&fread(words,sizeof(words),1,f)==1&&fread(m,sizeof(*m),1,f)==1&&fgetc(f)==EOF;
  fclose(f);return ok;
 }
+static const int *training_tokens;
+static int training_count;
 static unsigned int *transitions;
 static void build_transitions(const int *tokens,int count){
  transitions=calloc((size_t)VOC*VOC,sizeof(*transitions));
@@ -229,7 +231,17 @@ static int produce(net *m,const char *path){
   for(int k=1;k<nw;k++){
    unsigned n=transitions[(size_t)prev*VOC+k];
    if(!n||k==2)continue;
-   if(k==1&&words_out<6)continue;
+   if(words_out>0){
+    n=0;
+    for(int j=1;j<training_count;j++){
+     int a=training_tokens[j-1],b=training_tokens[j];
+     int before=j>=2?training_tokens[j-2]:0;
+     if(before==penultimate&&a==prev&&b==k)n++;
+     /* Crossing sentence endings cannot supply a phrase continuation. */
+    }
+   }
+   if(!n)continue;
+   if(k==1&&words_out<5)continue;
    double p=pow(fmax(t.prob[k],1e-15f),1.0/0.68);
    p*=sqrt((double)n);
    if(k==last)p*=0.02;
@@ -248,7 +260,7 @@ static int produce(net *m,const char *path){
    if(*p){fputc(toupper((unsigned char)*p),f);fputs(p+1,f);}
   }else fputs(words[choice].text,f);
   words_out++;last=choice;
-  memcpy(h,t.h,sizeof(h));prev=choice;
+  memcpy(h,t.h,sizeof(h));penultimate=prev;prev=choice;
  }
  fputs(".\n",f);
  return fclose(f)==0&&words_out>=6;
@@ -292,6 +304,7 @@ int main(int argc,char **argv){
   if(vl<best_loss-0.0005){best_loss=vl;memcpy(best,m,sizeof(*m));bad_epochs=0;}
   else if(++bad_epochs>=5){printf("early_stop_epoch=%d\n",epoch+1);break;}
  }
+ training_tokens=train;training_count=nt;
  build_transitions(train,nt);
  int ok=transitions&&save(argv[4],best)&&produce(best,argv[5]);
  printf("tokens=%d vocabulary=%d best_validation_loss=%.5f\n",nt,nw,best_loss);
