@@ -235,7 +235,7 @@ static int produce(net *m,const char *path){
     n=0;
     for(int j=1;j<training_count;j++){
      int a=training_tokens[j-1],b=training_tokens[j];
-     int before=j>=2?training_tokens[j-2]:0;
+     int before=j>=2?(training_tokens[j-2]==1?0:training_tokens[j-2]):0;
      if(before==penultimate&&a==prev&&b==k)n++;
      /* Crossing sentence endings cannot supply a phrase continuation. */
     }
