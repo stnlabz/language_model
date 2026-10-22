@@ -10,12 +10,13 @@
 #include <math.h>
 #include <ctype.h>
 #define H 32
-#define VOC 768
+#define VOC 2048
 #define MAXTOK 500000
 #define MAXWORD 48
 #define EPOCHS 60
 #define BPTT 24
-#define LR 0.003f
+#define LR 0.002f
+#define WEIGHT_DECAY 0.0001f
 typedef struct {char text[MAXWORD];int freq;} word;
 static word words[VOC];
 static int nw=3;
@@ -146,6 +147,7 @@ static void optimize(net *m,const net *g,int count){
   q[i]=0.999f*q[i]+0.001f*d*d;
   double a=(double)v[i]/corr1,b=(double)q[i]/corr2;
   w[i]-=(float)(LR*a/(sqrt(b)+1e-8));
+  w[i]*=(1.0f-LR*WEIGHT_DECAY);
  }
 }
 static double learn(net *m,tick *ts,int count){
@@ -264,6 +266,10 @@ int main(int argc,char **argv){
  printf("vocabulary_selected=%d distinct_training_words=%u\n",nw-3,distinct);
  int nt=0,nv=0;int *train=tokenize(tr,tn,&nt,0),*valid=tokenize(va,vn,&nv,0);
  free(tr);free(va);
+ int unknown_train=0,unknown_valid=0;
+ if(train)for(int i=0;i<nt;i++)if(train[i]==2)unknown_train++;
+ if(valid)for(int i=0;i<nv;i++)if(valid[i]==2)unknown_valid++;
+ printf("train_unknown=%d/%d validation_unknown=%d/%d\n",unknown_train,nt,unknown_valid,nv);
  if(!train||!valid||nt<100||nv<10){fputs("insufficient tokenized corpus\n",stderr);free(train);free(valid);return 1;}
  net *m=malloc(sizeof(*m)),*best=malloc(sizeof(*m));
  if(!m||!best){free(m);free(best);free(train);free(valid);return 1;}
@@ -284,7 +290,7 @@ int main(int argc,char **argv){
   double vl=evaluate(m,valid,nv);
   printf("epoch=%d train_loss=%.5f valid_loss=%.5f\n",epoch+1,total/nt,vl);
   if(vl<best_loss-0.0005){best_loss=vl;memcpy(best,m,sizeof(*m));bad_epochs=0;}
-  else if(++bad_epochs>=7){printf("early_stop_epoch=%d\n",epoch+1);break;}
+  else if(++bad_epochs>=5){printf("early_stop_epoch=%d\n",epoch+1);break;}
  }
  build_transitions(train,nt);
  int ok=transitions&&save(argv[4],best)&&produce(best,argv[5]);
