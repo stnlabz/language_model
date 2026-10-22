@@ -220,7 +220,7 @@ static void build_transitions(const int *tokens,int count){
 }
 static int produce(net *m,const char *path){
  FILE *f=fopen(path,"wb");if(!f||!transitions){if(f)fclose(f);return 0;}
- tick t;float h[H]={0};int prev=0,last=-1,words_out=0;
+ tick t;float h[H]={0};int prev=0,last=-1,words_out=0,penultimate=0;
  /* Word-order transitions are learned only from the training split.
   * The GRU scores each permitted next word. Rejecting unattested
   * adjacent words prevents the decoder inventing impossible local syntax.
