@@ -287,7 +287,7 @@ static int sample_checkpoint(int argc,char **argv){
  const unsigned char *p=(const unsigned char*)argv[3];char token[MAXWORD];int len=0;
  /* Consume the user's prompt as context without echoing it. */
  for(size_t i=0;;i++){
-  unsigned char c=p[i];int letter=(c>='A'&&c<='Z')||(c>='a'&&c<='z')||(c>='0'&&c<='9')||c=='\\'';
+  unsigned char c=p[i];int letter=(c>='A'&&c<='Z')||(c>='a'&&c<='z')||(c>='0'&&c<='9')||c=='\'');
   if(letter){if(len<MAXWORD-1)token[len++]=(char)tolower(c);}
   else if(len){
    token[len]=0;
