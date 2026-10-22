@@ -17,7 +17,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 ENCODED = re.compile(r"(?:\\x[0-9a-f]{2})+")
 
 
-def generate(binary, checkpoint, request):
+def generate(binary, checkpoint, request, word_model=False):
     if not isinstance(request, dict) or set(request) - {"prompt", "length", "seed", "temperature", "penalty"}:
         raise ValueError("unsupported request fields")
     prompt = request.get("prompt")
@@ -34,12 +34,10 @@ def generate(binary, checkpoint, request):
     if (type(temperature) not in (float, int) or not 0.25 <= temperature <= 2 or
             type(penalty) not in (float, int) or not 0 <= penalty <= 2):
         raise ValueError("temperature or penalty out of range")
-    result = subprocess.run(
-        [binary, "sample", checkpoint, prompt, str(count), str(seed),
-         str(temperature), str(penalty), "utf8"],
+    command = [binary, "sample", checkpoint, prompt, str(count), str(seed),\n               str(temperature), str(penalty)]\n    if not word_model:\n        command.append("utf8")\n    result = subprocess.run(\n        command,
         capture_output=True, text=True, check=True, timeout=30,
     )
-    encoded = result.stdout.strip()
+    if word_model:\n        output = result.stdout.strip()\n        if not output or len(output) > 8192:\n            raise RuntimeError("invalid word model output")\n        return {"text": output, "generated_words_max": count,\n                "model": "stn-labz-word-gru", "experimental": True}\n    encoded = result.stdout.strip()
     if len(encoded) != 4 * count or not ENCODED.fullmatch(encoded):
         raise RuntimeError("invalid model output")
     output = bytes.fromhex(encoded.replace("\\x", "")).decode("utf-8")
@@ -82,7 +80,7 @@ def append_learning(path, record):
 class Handler(BaseHTTPRequestHandler):
     binary = "./model"
     checkpoint = ""
-    learn_file = None
+    learn_file = None\n    word_model = False
 
     def _respond(self, code, data):
         payload = json.dumps(data, ensure_ascii=True).encode("utf-8")
@@ -118,7 +116,7 @@ class Handler(BaseHTTPRequestHandler):
                 append_learning(self.learn_file, record)
                 return self._respond(202, {"accepted": True, "trained": False,
                                             "status": "queued_for_review"})
-            result = generate(self.binary, self.checkpoint, data)
+            result = generate(self.binary, self.checkpoint, data, self.word_model)
         except (ValueError, UnicodeError, json.JSONDecodeError) as exc:
             return self._respond(400, {"error": str(exc)})
         except (OSError, subprocess.CalledProcessError, subprocess.TimeoutExpired, RuntimeError):
@@ -135,7 +133,7 @@ def main():
     parser.add_argument("--model", default="./model")
     parser.add_argument("--checkpoint", required=True)
     parser.add_argument("--port", type=int, default=8765)
-    parser.add_argument("--learn-file", help="explicit private JSONL ingestion destination")
+    parser.add_argument("--learn-file", help="explicit private JSONL ingestion destination")\n    parser.add_argument("--word-model", action="store_true",\n                        help="opt in to word_gru sample/checkpoint on a separate service instance")
     args = parser.parse_args()
     if not 1024 <= args.port <= 65535:
         parser.error("port must be 1024..65535")
@@ -143,7 +141,7 @@ def main():
         parser.error("model executable or checkpoint missing")
     Handler.learn_file = args.learn_file
     Handler.binary = args.model
-    Handler.checkpoint = args.checkpoint
+    Handler.checkpoint = args.checkpoint\n    Handler.word_model = args.word_model
     server = HTTPServer(("127.0.0.1", args.port), Handler)
     print(f"STN-Labz experimental API listening on 127.0.0.1:{args.port}", flush=True)
     try:
