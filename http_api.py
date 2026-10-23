@@ -91,7 +91,8 @@ def append_learning(path, record):
 class Handler(BaseHTTPRequestHandler):
     binary = "./model"
     checkpoint = ""
-    learn_file = None\n    word_model = False
+    learn_file = None
+    word_model = False
 
     def _respond(self, code, data):
         payload = json.dumps(data, ensure_ascii=True).encode("utf-8")
@@ -144,7 +145,9 @@ def main():
     parser.add_argument("--model", default="./model")
     parser.add_argument("--checkpoint", required=True)
     parser.add_argument("--port", type=int, default=8765)
-    parser.add_argument("--learn-file", help="explicit private JSONL ingestion destination")\n    parser.add_argument("--word-model", action="store_true",\n                        help="opt in to word_gru sample/checkpoint on a separate service instance")
+    parser.add_argument("--learn-file", help="explicit private JSONL ingestion destination")
+    parser.add_argument("--word-model", action="store_true",
+                        help="opt in to word_gru sample/checkpoint on a separate service instance")
     args = parser.parse_args()
     if not 1024 <= args.port <= 65535:
         parser.error("port must be 1024..65535")
@@ -152,7 +155,8 @@ def main():
         parser.error("model executable or checkpoint missing")
     Handler.learn_file = args.learn_file
     Handler.binary = args.model
-    Handler.checkpoint = args.checkpoint\n    Handler.word_model = args.word_model
+    Handler.checkpoint = args.checkpoint
+    Handler.word_model = args.word_model
     server = HTTPServer(("127.0.0.1", args.port), Handler)
     print(f"STN-Labz experimental API listening on 127.0.0.1:{args.port}", flush=True)
     try:
