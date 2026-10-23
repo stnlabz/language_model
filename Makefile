@@ -18,6 +18,10 @@ TEMPERATURE ?= 0.65
 PENALTY ?= 0.0
 BYTES ?= 64
 PORT ?= 8766
+# Foreground, CPU-only Digit snapshot -> fresh checkpoint workflow.
+GO_SOURCE ?= digit_approved_learning.jsonl
+GO_DIR ?= runs
+GO_TIMEOUT ?= 6h
 STATE_IN ?=
 STATE_OUT ?= $(RUN)_state_$(STEPS).stn
 
@@ -27,7 +31,7 @@ CHECKPOINT ?= word_gru.stn
 SAMPLE ?= $(RUN)_word_sample.txt
 
 .DEFAULT_GOAL := help
-.PHONY: help all build test prepare-data train evaluate generate probe pipeline status train-state resume quality compare-sampling api
+.PHONY: help all build test prepare-data train evaluate generate probe pipeline status train-state resume quality compare-sampling api go
 
 help:
 	@echo 'Word GRU checkpoint: word_gru.stn'
@@ -37,6 +41,8 @@ help:
 	@echo 'Generate: make generate CHECKPOINT=word_gru.stn PROMPT="The engineer"'
 	@echo 'API: make api CHECKPOINT=word_gru.stn PORT=8766'
 	@echo 'Pipeline: make pipeline DATA=stn_language_sentences.txt RUN=corpus'
+	@echo 'CPU train from Digit JSONL: make go (GO_SOURCE=... GO_TIMEOUT=6h)'
+	@echo 'go creates a new runs/ directory and checkpoint; never replaces the live model.'
 	@echo 'Status: make status'
 	@echo 'Legacy byte-GRU training/stateful/quality/probe targets are unsupported.'
 	@echo 'Existing server API on port 8765 is untouched.'
@@ -83,6 +89,33 @@ pipeline:
 	$(MAKE) prepare-data DATA='$(DATA)' RUN='$(RUN)'
 	$(MAKE) train RUN='$(RUN)' STEPS='$(STEPS)' NICE='$(NICE)' TIMEOUT='$(TIMEOUT)'
 	@echo 'Word GRU training complete; consult validation loss and sample artifact.'
+
+# Explicit foreground CPU-only rebuild from an approved Digit learning queue.
+# Never train directly on a file that the /learn API can be appending to.
+# Use a unique output directory so a weekly scheduled run cannot overwrite
+# old checkpoints, training splits, snapshots, or the inference checkpoint.
+# The converter and preparer enforce their existing 64/16 MiB limits.
+# A full queue must be reviewed for suitability before first production use.
+go:
+	@set -eu; \
+	$(MAKE) build; \
+	test -s '$(GO_SOURCE)' || { echo 'Missing/nonempty Digit queue: $(GO_SOURCE)' >&2; exit 1; }; \
+	stamp=$(date -u +%Y%m%dT%H%M%SZ); \
+	dir='$(GO_DIR)/go_'$stamp; \
+	mkdir -m 0700 -p '$(GO_DIR)'; \
+	if test -e "$dir"; then echo "Run directory already exists: $dir" >&2; exit 1; fi; \
+	mkdir -m 0700 "$dir"; \
+	cp '$(GO_SOURCE)' "$dir/snapshot.jsonl"; \
+	if ! cmp -s '$(GO_SOURCE)' "$dir/snapshot.jsonl"; then \
+	  echo 'Source changed during snapshot; refusing inconsistent training input' >&2; exit 1; \
+	fi; \
+	$(PYTHON) tools/migrate_digit_jsonl.py \
+	  --input "$dir/snapshot.jsonl" --output "$dir/corpus.txt"; \
+	$(MAKE) prepare-data DATA="$dir/corpus.txt" RUN="$dir/gru"; \
+	$(MAKE) train RUN="$dir/gru" CHECKPOINT="$dir/word_gru.stn" \
+	  SAMPLE="$dir/word_sample.txt" NICE='$(NICE)' TIMEOUT='$(GO_TIMEOUT)'; \
+	echo "CPU GRU run completed: $dir/word_gru.stn"; \
+	echo 'Checkpoint is NOT installed or promoted to any running agent.'
 
 # Word-GRU stateful resume and legacy byte-GRU quality tools are not supported.
 train-state resume quality compare-sampling:
