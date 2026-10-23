@@ -197,7 +197,8 @@ static double evaluate(net *m,const int *seq,int count){
 static int save(const char *path,net *m){
  FILE *f=fopen(path,"wb");if(!f)return 0;
  const uint32_t magic=0x57524731;int ok=fwrite(&magic,4,1,f)==1&&fwrite(&nw,sizeof(nw),1,f)==1&&fwrite(words,sizeof(words),1,f)==1&&fwrite(m,sizeof(*m),1,f)==1;
- if(fclose(f))ok=0;return ok;
+ if(fclose(f))ok=0;
+ return ok;
 }
 static int restore(const char *path,net *m){
  FILE *f=fopen(path,"rb");if(!f)return 0;uint32_t magic=0;
