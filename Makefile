@@ -1,7 +1,8 @@
 # STN-Labz language_model Makefile
 # AI-assisted; build and tests do not train on the operator corpus.
 # Training, data preparation, and pipeline are explicit commands only.
-# No deletes, deployment, Git commands, or background services.
+# No deployment, Git commands, or background services.
+# Only 'make go' removes its prior, dedicated gru_run training directory.
 
 CC = gcc
 CFLAGS = -std=c11 -O2 -Wall -Wextra -Werror -pedantic
@@ -20,7 +21,7 @@ BYTES ?= 64
 PORT ?= 8766
 # Foreground, CPU-only Digit snapshot -> fresh checkpoint workflow.
 GO_SOURCE ?= digit_approved_learning.jsonl
-GO_DIR ?= runs
+GO_DIR := gru_run
 GO_TIMEOUT ?= 6h
 STATE_IN ?=
 STATE_OUT ?= $(RUN)_state_$(STEPS).stn
@@ -42,7 +43,7 @@ help:
 	@echo 'API: make api CHECKPOINT=word_gru.stn PORT=8766'
 	@echo 'Pipeline: make pipeline DATA=stn_language_sentences.txt RUN=corpus'
 	@echo 'CPU train from Digit JSONL: make go (GO_SOURCE=... GO_TIMEOUT=6h)'
-	@echo 'go creates a new runs/ directory and checkpoint; never replaces the live model.'
+	@echo 'go reuses gru_run/ (clears the old run); never replaces the live model.'
 	@echo 'Status: make status'
 	@echo 'Legacy byte-GRU training/stateful/quality/probe targets are unsupported.'
 	@echo 'Existing server API on port 8765 is untouched.'
@@ -90,31 +91,37 @@ pipeline:
 	$(MAKE) train RUN='$(RUN)' STEPS='$(STEPS)' NICE='$(NICE)' TIMEOUT='$(TIMEOUT)'
 	@echo 'Word GRU training complete; consult validation loss and sample artifact.'
 
-# Explicit foreground CPU-only rebuild from an approved Digit learning queue.
-# Never train directly on a file that the /learn API can be appending to.
-# Use a unique output directory so a weekly scheduled run cannot overwrite
-# old checkpoints, training splits, snapshots, or the inference checkpoint.
-# The converter and preparer enforce their existing 64/16 MiB limits.
-# A full queue must be reviewed for suitability before first production use.
+# Explicit CPU-only retraining; every run reuses exactly one gru_run directory.
+# Only generated run artifacts are deleted. Never alter the live word_gru.stn.
+# The source queue must be outside gru_run and is never deleted by this target.
+# No timestamped subdirectories, background services, or model promotion.
 go:
 	@set -eu; \
 	$(MAKE) build; \
-	test -s '$(GO_SOURCE)' || { echo 'Missing/nonempty Digit queue: $(GO_SOURCE)' >&2; exit 1; }; \
-	stamp=$(date -u +%Y%m%dT%H%M%SZ); \
-	dir='$(GO_DIR)/go_'$stamp; \
-	mkdir -m 0700 -p '$(GO_DIR)'; \
-	if test -e "$dir"; then echo "Run directory already exists: $dir" >&2; exit 1; fi; \
-	mkdir -m 0700 "$dir"; \
-	cp '$(GO_SOURCE)' "$dir/snapshot.jsonl"; \
-	if ! cmp -s '$(GO_SOURCE)' "$dir/snapshot.jsonl"; then \
+	test -s '$(GO_SOURCE)' || { echo 'Missing or empty Digit queue: $(GO_SOURCE)' >&2; exit 1; }; \
+	case '$(GO_SOURCE)' in gru_run/*|./gru_run/*) \
+	  echo 'GO_SOURCE must be outside gru_run' >&2; exit 1;; \
+	esac; \
+	if test -L '$(GO_DIR)'; then echo 'Refusing symlink at gru_run' >&2; exit 1; fi; \
+	if test -e '$(GO_DIR)' && ! test -d '$(GO_DIR)'; then \
+	  echo 'gru_run exists but is not a directory' >&2; exit 1; \
+	fi; \
+	if test -d '$(GO_DIR)'; then \
+	  rm -f -- '$(GO_DIR)/snapshot.jsonl' '$(GO_DIR)/corpus.txt' \
+	    '$(GO_DIR)/gru_train.bin' '$(GO_DIR)/gru_validation.bin' \
+	    '$(GO_DIR)/word_gru.stn' '$(GO_DIR)/word_sample.txt'; \
+	fi; \
+	mkdir -p -m 0700 '$(GO_DIR)'; \
+	cp '$(GO_SOURCE)' '$(GO_DIR)/snapshot.jsonl'; \
+	if ! cmp -s '$(GO_SOURCE)' '$(GO_DIR)/snapshot.jsonl'; then \
 	  echo 'Source changed during snapshot; refusing inconsistent training input' >&2; exit 1; \
 	fi; \
 	$(PYTHON) tools/migrate_digit_jsonl.py \
-	  --input "$dir/snapshot.jsonl" --output "$dir/corpus.txt"; \
-	$(MAKE) prepare-data DATA="$dir/corpus.txt" RUN="$dir/gru"; \
-	$(MAKE) train RUN="$dir/gru" CHECKPOINT="$dir/word_gru.stn" \
-	  SAMPLE="$dir/word_sample.txt" NICE='$(NICE)' TIMEOUT='$(GO_TIMEOUT)'; \
-	echo "CPU GRU run completed: $dir/word_gru.stn"; \
+	  --input '$(GO_DIR)/snapshot.jsonl' --output '$(GO_DIR)/corpus.txt'; \
+	$(MAKE) prepare-data DATA='$(GO_DIR)/corpus.txt' RUN='$(GO_DIR)/gru'; \
+	$(MAKE) train RUN='$(GO_DIR)/gru' CHECKPOINT='$(GO_DIR)/word_gru.stn' \
+	  SAMPLE='$(GO_DIR)/word_sample.txt' NICE='$(NICE)' TIMEOUT='$(GO_TIMEOUT)'; \
+	echo 'CPU GRU run completed: gru_run/word_gru.stn'; \
 	echo 'Checkpoint is NOT installed or promoted to any running agent.'
 
 # Word-GRU stateful resume and legacy byte-GRU quality tools are not supported.
