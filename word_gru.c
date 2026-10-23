@@ -265,7 +265,65 @@ static int produce(net *m,const char *path){
  fputs(".\n",f);
  return fclose(f)==0&&words_out>=6;
 }
+/* Standalone Linux/Windows inference for the versioned word GRU checkpoint.
+ * Sampling does not require the training corpus or the training-only trigram table.
+ * Output is model-generated text, not a canned response or corpus lookup. */
+static int sample_checkpoint(int argc,char **argv){
+ if(argc!=8){fputs("usage: word_gru sample CHECKPOINT PROMPT WORDS SEED TEMPERATURE PENALTY\\n",stderr);return 2;}
+ char *end=NULL;
+ long limit=strtol(argv[4],&end,10);
+ if(!argv[4][0]||*end||limit<1||limit>128)return 2;
+ unsigned long long seed=strtoull(argv[5],&end,10);
+ if(!argv[5][0]||*end||seed==0)return 2;
+ float temperature=strtof(argv[6],&end);
+ if(!argv[6][0]||*end||!isfinite(temperature)||temperature<0.25f||temperature>2.0f)return 2;
+ float penalty=strtof(argv[7],&end);
+ if(!argv[7][0]||*end||!isfinite(penalty)||penalty<0||penalty>2)return 2;
+ net *m=malloc(sizeof(*m));
+ if(!m)return 1;
+ if(!restore(argv[2],m)){fputs("invalid or incompatible word GRU checkpoint\\n",stderr);free(m);return 1;}
+ rnd=seed;
+ float h[H]={0};tick t;int prev=0;
+ const unsigned char *p=(const unsigned char*)argv[3];char token[MAXWORD];int len=0;
+ /* Consume the user's prompt as context without echoing it. */
+ for(size_t i=0;;i++){
+  unsigned char c=p[i];int letter=(c>='A'&&c<='Z')||(c>='a'&&c<='z')||(c>='0'&&c<='9')||c=='\'';
+  if(letter){if(len<MAXWORD-1)token[len++]=(char)tolower(c);}
+  else if(len){
+   token[len]=0;
+   forward(m,h,prev,&t);memcpy(h,t.h,sizeof(h));
+   prev=lookup(token);len=0;
+  }
+  if(!c)break;
+ }
+ int used[VOC]={0};int output=0;
+ for(int step=0;step<limit;step++){
+  forward(m,h,prev,&t);
+  double sum=0;double weight[VOC];
+  for(int k=0;k<nw;k++){
+   if(k==0||k==2||(k==1&&output<3)){weight[k]=0;continue;}
+   double w=pow(fmax((double)t.prob[k],1e-20),1.0/(double)temperature);
+   if(k>2&&used[k])w/=1.0+(double)penalty*used[k];
+   weight[k]=w;sum+=w;
+  }
+  if(!(sum>0))break;
+  double draw=((rand64()>>40)/16777216.0)*sum;
+  int chosen=1;
+  for(int k=0;k<nw;k++){draw-=weight[k];if(draw<=0){chosen=k;break;}}
+  if(chosen==1)break;
+  if(output)putchar(' ');
+  const char *w=words[chosen].text;
+  if(!output&&*w){putchar(toupper((unsigned char)*w));fputs(w+1,stdout);}
+  else fputs(w,stdout);
+  output++;used[chosen]++;
+  memcpy(h,t.h,sizeof(h));prev=chosen;
+ }
+ puts(".");
+ free(m);
+ return output?0:1;
+}
 int main(int argc,char **argv){
+ if(argc>1&&!strcmp(argv[1],"sample"))return sample_checkpoint(argc,argv);
  if(argc!=6||strcmp(argv[1],"train")){fputs("usage: word_gru train TRAIN VALID MODEL SAMPLE\n",stderr);return 2;}
  size_t tn=0,vn=0;unsigned char *tr=load(argv[2],&tn),*va=load(argv[3],&vn);
  if(!tr||!va){fputs("training corpus unavailable\n",stderr);free(tr);free(va);return 1;}
