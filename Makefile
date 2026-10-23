@@ -30,18 +30,16 @@ SAMPLE ?= $(RUN)_word_sample.txt
 .PHONY: help all build test prepare-data train evaluate generate probe pipeline status train-state resume quality compare-sampling api
 
 help:
-	@printf '%s\\n' \\
-		'Word GRU checkpoint: word_gru.stn' \\
-		'Build:    make build' \\
-		'Test:     make test' \\
-		'Prepare:  make prepare-data DATA=stn_language_sentences.txt RUN=corpus' \\
-		'Train:    make train RUN=corpus CHECKPOINT=word_gru.stn' \\
-		'Generate: make generate CHECKPOINT=word_gru.stn PROMPT="The engineer"' \\
-		'API:      make api CHECKPOINT=word_gru.stn PORT=8766' \\
-		'Pipeline: make pipeline DATA=stn_language_sentences.txt RUN=corpus' \\
-		'Status:   make status' \\
-		'Legacy byte-GRU training/stateful/quality/probe targets are unsupported here.' \\
-		'Existing checkpoints are never overwritten. Existing API on port 8765 is untouched.'
+	@echo 'Word GRU checkpoint: word_gru.stn'
+	@echo 'Build/test: make build | make test'
+	@echo 'Prepare: make prepare-data DATA=stn_language_sentences.txt RUN=corpus'
+	@echo 'Train: make train RUN=corpus CHECKPOINT=word_gru.stn'
+	@echo 'Generate: make generate CHECKPOINT=word_gru.stn PROMPT="The engineer"'
+	@echo 'API: make api CHECKPOINT=word_gru.stn PORT=8766'
+	@echo 'Pipeline: make pipeline DATA=stn_language_sentences.txt RUN=corpus'
+	@echo 'Status: make status'
+	@echo 'Legacy byte-GRU training/stateful/quality/probe targets are unsupported.'
+	@echo 'Existing server API on port 8765 is untouched.'
 
 all: build
 
