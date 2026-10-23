@@ -32,14 +32,38 @@ typedef struct {
  int token,target,reset;
  float prev[H],z[H],r[H],n[H],h[H],prob[VOC];
 } tick;
-#define TERMS 32768
+/* Count the full training vocabulary before selecting the fixed-size
+ * model vocabulary. The counting table must not silently cap unique words.
+ * It grows by powers of two with a bounded maximum allocation. Neither
+ * the trained vocabulary width nor the checkpoint format changes. */
+#define TERMS_INITIAL 32768u
+#define TERMS_MAX 1048576u
 typedef struct {char text[MAXWORD];unsigned int count;} term;
 static term *counts;
+static size_t term_slots;
 static unsigned int distinct;
 static unsigned hash_word(const char *s){
  unsigned h=2166136261u;
  while(*s){h=((h^(unsigned char)*s++)*16777619u);}
  return h;
+}
+static int grow_vocabulary_counts(void){
+ size_t next=term_slots?term_slots*2u:TERMS_INITIAL;
+ if(next>TERMS_MAX)return 0;
+ term *expanded=calloc(next,sizeof(*expanded));
+ if(!expanded)return 0;
+ if(counts){
+  for(size_t i=0;i<term_slots;i++){
+   if(!counts[i].count)continue;
+   size_t slot=(size_t)hash_word(counts[i].text)&(next-1u);
+   while(expanded[slot].count)slot=(slot+1u)&(next-1u);
+   expanded[slot]=counts[i];
+  }
+  free(counts);
+ }
+ counts=expanded;
+ term_slots=next;
+ return 1;
 }
 static int lookup(const char *p){
  for(int i=3;i<nw;i++)if(!strcmp(p,words[i].text))return i;
@@ -47,16 +71,29 @@ static int lookup(const char *p){
 }
 static int vocabulary(const char *p){
  if(!counts)return 0;
- unsigned slot=hash_word(p)%(unsigned)TERMS;
- for(unsigned i=0;i<TERMS;i++){
-  term *t=&counts[(slot+i)%(unsigned)TERMS];
-  if(!t->count){
-   memcpy(t->text,p,strlen(p)+1);
-   t->count=1;distinct++;return 1;
+ for(;;){
+  size_t slot=(size_t)hash_word(p)&(term_slots-1u);
+  for(size_t i=0;i<term_slots;i++){
+   term *t=&counts[(slot+i)&(term_slots-1u)];
+   if(!t->count){
+    if(term_slots<TERMS_MAX &&
+       ((size_t)distinct+1u)*10u>=term_slots*7u){
+     if(!grow_vocabulary_counts())return 0;
+     break;
+    }
+    memcpy(t->text,p,strlen(p)+1);
+    t->count=1;
+    distinct++;
+    return 1;
+   }
+   if(!strcmp(t->text,p)){
+    if(t->count==UINT32_MAX)return 0;
+    t->count++;
+    return 1;
+   }
   }
-  if(!strcmp(t->text,p)){t->count++;return 1;}
+  if(term_slots==TERMS_MAX)return 0;
  }
- return 0;
 }
 static int word_order(const void *a,const void *b){
  const term *x=(const term*)a,*y=(const term*)b;
@@ -65,7 +102,7 @@ static int word_order(const void *a,const void *b){
  return strcmp(x->text,y->text);
 }
 static int finish_vocabulary(void){
- qsort(counts,TERMS,sizeof(*counts),word_order);
+ qsort(counts,term_slots,sizeof(*counts),word_order);
  for(unsigned i=0;i<distinct&&nw<VOC;i++){
   if(!counts[i].count)break;
   strcpy(words[nw].text,counts[i].text);
@@ -329,12 +366,11 @@ int main(int argc,char **argv){
  size_t tn=0,vn=0;unsigned char *tr=load(argv[2],&tn),*va=load(argv[3],&vn);
  if(!tr||!va){fputs("training corpus unavailable\n",stderr);free(tr);free(va);return 1;}
  strcpy(words[0].text,"<bos>");strcpy(words[1].text,"<eos>");strcpy(words[2].text,"<unk>");
- counts=calloc(TERMS,sizeof(*counts));
- if(!counts){free(tr);free(va);return 1;}
+ if(!grow_vocabulary_counts()){free(tr);free(va);return 1;}
  int count=0;int *scratch=tokenize(tr,tn,&count,1);
  if(!scratch||!finish_vocabulary()){fputs("vocabulary construction failed\n",stderr);free(scratch);free(counts);free(tr);free(va);return 1;}
  free(scratch);
- printf("vocabulary_selected=%d distinct_training_words=%u\n",nw-3,distinct);
+ printf("vocabulary_selected=%d distinct_training_words=%u counting_slots=%zu\n",nw-3,distinct,term_slots);
  int nt=0,nv=0;int *train=tokenize(tr,tn,&nt,0),*valid=tokenize(va,vn,&nv,0);
  free(tr);free(va);
  int unknown_train=0,unknown_valid=0;
