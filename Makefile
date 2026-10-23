@@ -36,11 +36,14 @@ help:
 		'Pipeline:   make pipeline DATA=stn_language_sentences.txt RUN=corpus' \
 		'Stateful:   make train-state RUN=corpus STEPS=6400' \
 		'Resume:     make resume RUN=corpus STEPS=6400 STATE_IN=prior.stn STATE_OUT=next.stn' \
-		'Quality:    make quality CHECKPOINT=corpus_state_512000.stn RUN=corpus_v1' \
-		'Sampling:   make compare-sampling CHECKPOINT=corpus_state_768000.stn RUN=corpus_v1' \
-		'API:        make api CHECKPOINT=corpus_state_768000.stn PORT=8765' \
+		'Quality:    make quality CHECKPOINT=<existing-byte-gru-checkpoint.stn> RUN=corpus_v1' \
+		'Sampling:   make compare-sampling CHECKPOINT=<existing-byte-gru-checkpoint.stn> RUN=corpus_v1' \
+		'API:        make api CHECKPOINT=<existing-byte-gru-checkpoint.stn> PORT=8765' \
 		'Status:     make status' \
 		'' \
+		'These Makefile quality/sampling/API targets use the original byte-level GRU.' \
+		'word_gru.stn is NOT compatible with ./model or these targets.' \
+		'Use an existing compatible checkpoint path; old sample names are not defaults.' \
 		'RUN labels experiment artifacts; distinct RUN names avoid collisions.' \
 		'No target automatically downloads, overwrites, deploys, or deletes files.' \
 		'Only explicit train/pipeline targets train the model.'
