@@ -13,50 +13,45 @@ TIMEOUT ?= 120s
 NICE ?= 10
 PROMPT ?= The engineer
 SEED ?= 913
+WORDS ?= 32
+TEMPERATURE ?= 0.65
+PENALTY ?= 0.0
 BYTES ?= 64
-PORT ?= 8765
+PORT ?= 8766
 STATE_IN ?=
 STATE_OUT ?= $(RUN)_state_$(STEPS).stn
 
 TRAIN = $(RUN)_train.bin
 VALID = $(RUN)_validation.bin
-CHECKPOINT = $(RUN)_$(STEPS).stn
+CHECKPOINT ?= word_gru.stn
+SAMPLE ?= $(RUN)_word_sample.txt
 
 .DEFAULT_GOAL := help
 .PHONY: help all build test prepare-data train evaluate generate probe pipeline status train-state resume quality compare-sampling api
 
 help:
-	@printf '%s\n' \
-		'Build/test: make build | make test' \
-		'Prepare:    make prepare-data DATA=stn_language_sentences.txt RUN=corpus' \
-		'Train:      make train RUN=corpus STEPS=5000' \
-		'Evaluate:   make evaluate RUN=corpus STEPS=5000' \
-		'Generate:   make generate RUN=corpus STEPS=5000 PROMPT="The engineer"' \
-		'Probe:      make probe RUN=corpus STEPS=5000 PROMPT="The engineer"' \
-		'Pipeline:   make pipeline DATA=stn_language_sentences.txt RUN=corpus' \
-		'Stateful:   make train-state RUN=corpus STEPS=6400' \
-		'Resume:     make resume RUN=corpus STEPS=6400 STATE_IN=prior.stn STATE_OUT=next.stn' \
-		'Quality:    make quality CHECKPOINT=<existing-byte-gru-checkpoint.stn> RUN=corpus_v1' \
-		'Sampling:   make compare-sampling CHECKPOINT=<existing-byte-gru-checkpoint.stn> RUN=corpus_v1' \
-		'API:        make api CHECKPOINT=<existing-byte-gru-checkpoint.stn> PORT=8765' \
-		'Status:     make status' \
-		'' \
-		'These Makefile quality/sampling/API targets use the original byte-level GRU.' \
-		'word_gru.stn is NOT compatible with ./model or these targets.' \
-		'Use an existing compatible checkpoint path; old sample names are not defaults.' \
-		'RUN labels experiment artifacts; distinct RUN names avoid collisions.' \
-		'No target automatically downloads, overwrites, deploys, or deletes files.' \
-		'Only explicit train/pipeline targets train the model.'
+	@printf '%s\\n' \\
+		'Word GRU checkpoint: word_gru.stn' \\
+		'Build:    make build' \\
+		'Test:     make test' \\
+		'Prepare:  make prepare-data DATA=stn_language_sentences.txt RUN=corpus' \\
+		'Train:    make train RUN=corpus CHECKPOINT=word_gru.stn' \\
+		'Generate: make generate CHECKPOINT=word_gru.stn PROMPT="The engineer"' \\
+		'API:      make api CHECKPOINT=word_gru.stn PORT=8766' \\
+		'Pipeline: make pipeline DATA=stn_language_sentences.txt RUN=corpus' \\
+		'Status:   make status' \\
+		'Legacy byte-GRU training/stateful/quality/probe targets are unsupported here.' \\
+		'Existing checkpoints are never overwritten. Existing API on port 8765 is untouched.'
 
 all: build
 
 build:
 	$(CC) $(CFLAGS) prepare.c -o prepare
-	$(CC) $(CFLAGS) model.c -lm -o model
+	$(CC) $(CFLAGS) word_gru.c -lm -o word_gru
 
 test:
 	sh tests/test_prepare.sh
-	sh tests/test_model.sh
+	@echo 'Legacy byte-GRU tests are not word-GRU qualification tests.'
 
 status:
 	@printf 'DATA=%s\nRUN=%s\nSTEPS=%s\nTRAIN=%s\nVALID=%s\nCHECKPOINT=%s\n' \
@@ -72,50 +67,30 @@ prepare-data: build
 # reduce the impact on other services running on the shared VPS.
 train: build
 	@test -s '$(TRAIN)' && test -s '$(VALID)' || { echo 'Missing prepared data: run make prepare-data first' >&2; exit 1; }
-	@if test -e '$(CHECKPOINT)'; then echo 'Checkpoint exists; choose a new RUN or STEPS' >&2; exit 1; fi
-	nice -n '$(NICE)' timeout '$(TIMEOUT)' ./model train '$(TRAIN)' '$(VALID)' '$(STEPS)' '$(CHECKPOINT)'
+	@if test -e '$(CHECKPOINT)' || test -e '$(SAMPLE)'; then echo 'Word checkpoint or sample already exists; never overwrite' >&2; exit 1; fi
+	nice -n '$(NICE)' timeout '$(TIMEOUT)' ./word_gru train '$(TRAIN)' '$(VALID)' '$(CHECKPOINT)' '$(SAMPLE)'
 
-evaluate: build
-	@test -s '$(CHECKPOINT)' && test -s '$(TRAIN)' && test -s '$(VALID)' || { echo 'Missing checkpoint or data' >&2; exit 1; }
-	$(PYTHON) tests/evaluate_language.py --model ./model --checkpoint '$(CHECKPOINT)' --train '$(TRAIN)' --validation '$(VALID)'
+evaluate:
+	@echo 'Word GRU validation loss is reported by make train; no separate word-GRU evaluation command exists.' >&2; exit 2
 
 generate: build
-	@test -s '$(CHECKPOINT)' || { echo 'Missing checkpoint: $(CHECKPOINT)' >&2; exit 1; }
-	./model generate '$(CHECKPOINT)' '$(PROMPT)' '$(BYTES)' '$(SEED)' utf8
+	@test -s '$(CHECKPOINT)' || { echo 'Missing word-GRU checkpoint: $(CHECKPOINT)' >&2; exit 1; }
+	./word_gru sample '$(CHECKPOINT)' '$(PROMPT)' '$(WORDS)' '$(SEED)' '$(TEMPERATURE)' '$(PENALTY)'
 
-probe: build
-	@test -s '$(CHECKPOINT)' || { echo 'Missing checkpoint: $(CHECKPOINT)' >&2; exit 1; }
-	./model probe '$(CHECKPOINT)' '$(PROMPT)'
+probe:
+	@echo 'Word GRU has no probe command.' >&2; exit 2
 
 # Opt-in workflow; use a unique RUN for each new experiment.
 pipeline:
 	$(MAKE) prepare-data DATA='$(DATA)' RUN='$(RUN)'
 	$(MAKE) train RUN='$(RUN)' STEPS='$(STEPS)' NICE='$(NICE)' TIMEOUT='$(TIMEOUT)'
-	$(MAKE) evaluate RUN='$(RUN)' STEPS='$(STEPS)'
+	@echo 'Word GRU training complete; consult validation loss and sample artifact.'
 
-# Stateful training uses WINDOW-aligned batches; never reuse a checkpoint path.
-train-state: build
-	@test -s '$(TRAIN)' && test -s '$(VALID)' || { echo 'Missing prepared data' >&2; exit 1; }
-	@if test -e '$(STATE_OUT)'; then echo 'State output exists; choose a new STATE_OUT' >&2; exit 1; fi
-	nice -n '$(NICE)' timeout '$(TIMEOUT)' ./model train-state '$(TRAIN)' '$(VALID)' '$(STEPS)' '$(STATE_OUT)'
+# Word-GRU stateful resume and legacy byte-GRU quality tools are not supported.
+train-state resume quality compare-sampling:
+	@echo 'Unsupported for word_gru.stn; no byte-GRU fallback will run.' >&2; exit 2
 
-resume: build
-	@test -n '$(STATE_IN)' && test -s '$(STATE_IN)' || { echo 'Set STATE_IN to an existing stateful checkpoint' >&2; exit 1; }
-	@test -s '$(TRAIN)' && test -s '$(VALID)' || { echo 'Missing prepared data' >&2; exit 1; }
-	@if test -e '$(STATE_OUT)'; then echo 'State output exists; choose a new STATE_OUT' >&2; exit 1; fi
-	nice -n '$(NICE)' timeout '$(TIMEOUT)' ./model resume '$(STATE_IN)' '$(TRAIN)' '$(VALID)' '$(STEPS)' '$(STATE_OUT)'
-
-# Read-only lexical/format diagnostics; explicit checkpoint is supported.
-quality: build
-	@test -s '$(CHECKPOINT)' && test -s '$(TRAIN)' || { echo 'Missing checkpoint or training reference' >&2; exit 1; }
-	$(PYTHON) tests/evaluate_quality.py --model ./model --checkpoint '$(CHECKPOINT)' --train '$(TRAIN)' --seed '$(SEED)' --bytes '$(BYTES)'
-
-# Read-only generation experiment; no training or checkpoint changes.
-compare-sampling: build
-	@test -s '$(CHECKPOINT)' && test -s '$(TRAIN)' || { echo 'Missing checkpoint or training reference' >&2; exit 1; }
-	$(PYTHON) tests/compare_sampling.py --model ./model --checkpoint '$(CHECKPOINT)' --train '$(TRAIN)' --seed '$(SEED)' --bytes '$(BYTES)'
-
-# Explicit foreground, loopback-only HTTP inference. Stop with Ctrl-C.
+# Explicit foreground, loopback-only word-GRU HTTP inference.
 api: build
-	@test -s '$(CHECKPOINT)' || { echo 'Missing checkpoint' >&2; exit 1; }
-	$(PYTHON) http_api.py --model ./model --checkpoint '$(CHECKPOINT)' --port '$(PORT)'
+	@test -s '$(CHECKPOINT)' || { echo 'Missing word-GRU checkpoint: $(CHECKPOINT)' >&2; exit 1; }
+	$(PYTHON) http_api.py --word-model --model ./word_gru --checkpoint '$(CHECKPOINT)' --port '$(PORT)'
