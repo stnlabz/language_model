@@ -103,9 +103,15 @@ static int word_order(const void *a,const void *b){
  return strcmp(x->text,y->text);
 }
 static int finish_vocabulary(void){
+ /* Q/A boundary tokens are protocol vocabulary, not ordinary terms.
+  * Frequency selection must never replace either with <unk>. */
+ strcpy(words[nw++].text,"question");
+ strcpy(words[nw++].text,"answer");
  qsort(counts,term_slots,sizeof(*counts),word_order);
  for(unsigned i=0;i<distinct&&nw<VOC;i++){
   if(!counts[i].count)break;
+  if(!strcmp(counts[i].text,"question")||
+     !strcmp(counts[i].text,"answer"))continue;
   strcpy(words[nw].text,counts[i].text);
   words[nw++].freq=(int)counts[i].count;
  }
@@ -475,6 +481,35 @@ static int test_dialogue(void){
     dialogue_tokens("Question: x Answer: \n",seq,mask,64)>=0){
   fputs("dialogue_negative_tests=FAIL\n",stderr);return 1;
  }
+ /* Validate live conditioning against the teacher-forced training path,
+  * including the previously missing BOS state transition. */
+ nw=7;
+ strcpy(words[3].text,"question");
+ strcpy(words[4].text,"answer");
+ strcpy(words[5].text,"hello");
+ strcpy(words[6].text,"there");
+ {
+  net *m=malloc(sizeof(*m));
+  tick t;float expected[H]={0},actual[H]={0};
+  int previous=0,got=0;
+  if(!m){fputs("dialogue_conditioning=ALLOC_FAIL\n",stderr);return 1;}
+  init(m);
+  forward(m,expected,0,&t);memcpy(expected,t.h,sizeof expected);
+  previous=lookup("question");
+  forward(m,expected,previous,&t);memcpy(expected,t.h,sizeof expected);
+  previous=lookup("hello");
+  forward(m,expected,previous,&t);memcpy(expected,t.h,sizeof expected);
+  previous=lookup("there");
+  forward(m,expected,previous,&t);memcpy(expected,t.h,sizeof expected);
+  got=prime_question(m,actual,"Hello there?",&previous);
+  if(!got||previous!=lookup("answer")||
+     memcmp(actual,expected,sizeof actual)){
+   fputs("dialogue_conditioning=FAIL\n",stderr);
+   free(m);return 1;
+  }
+  free(m);
+ }
+ puts("dialogue_conditioning=PASS");
  puts("dialogue_tokenization=PASS");
  puts("dialogue_negative_tests=PASS");
  return 0;
