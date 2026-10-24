@@ -116,8 +116,17 @@ echo Stage 2: Capturing input snapshot...
 copy /b digit_approved_learning.jsonl "%RUN%\digit_snapshot.jsonl" >nul
 if errorlevel 1 goto failed
 echo Stage 3: Converting approved records...
-build\migrate.exe convert "%RUN%\digit_snapshot.jsonl" "%RUN%\digit_corpus.txt" > "%RUN%\migration.log" 2>&1
+build\migrate.exe convert "%RUN%\digit_snapshot.jsonl" "%RUN%\digit_corpus.txt" "%RUN%\dialogue_corpus.txt" > "%RUN%\migration.log" 2>&1
 if errorlevel 1 goto failed
+echo Stage 3b: Verifying dialogue data availability...
+findstr /C:"conversation_data_gate=INSUFFICIENT_DIALOGUE_DIVERSITY" "%RUN%\migration.log" >nul
+if not errorlevel 1 (
+    echo WARNING: Insufficient conversational training records; this run trains sentence structure only.
+    echo WARNING: No conversational qualification is implied.
+    echo conversation_training=INSUFFICIENT_APPROVED_DIALOGUE >> "%RUN%\report.txt"
+) else (
+    echo conversation_training=RECORD_COUNT_ONLY_REQUIRES_QUALIFICATION >> "%RUN%\report.txt"
+)
 echo Stage 4: Preparing train and validation...
 build\prepare.exe prepare "%RUN%\digit_corpus.txt" "%RUN%\digit_train.bin" "%RUN%\digit_valid.bin" > "%RUN%\prepare.log" 2>&1
 if errorlevel 1 goto failed
@@ -137,6 +146,8 @@ build\word_gru.exe sample "%RUN%\word_gru.stn" "Hello Digit" 32 913 0.65 0 > "%R
 if errorlevel 1 goto failed
 echo model=original_word_level_gru >> "%RUN%\report.txt"
 echo checkpoint=%RUN%\word_gru.stn >> "%RUN%\report.txt"
+echo language_corpus=%RUN%\digit_corpus.txt >> "%RUN%\report.txt"
+echo dialogue_corpus=%RUN%\dialogue_corpus.txt >> "%RUN%\report.txt"
 echo sample_decoder=training_trigram_constrained >> "%RUN%\report.txt"
 echo live_decoder=word_gru_sample >> "%RUN%\report.txt"
 echo result=training_completed_language_unqualified >> "%RUN%\report.txt"
@@ -159,6 +170,8 @@ if errorlevel 1 goto failed
 echo =========================================
 echo Model checkpoint: %RUN%\word_gru.stn
 echo Training and validation logs: %RUN%\word_gru.log
+echo Dialogue source: %RUN%\dialogue_corpus.txt
+echo Classification evidence: %RUN%\migration.log
 echo WARNING: Training-time word-order constraints are NOT used by live inference.
 echo WARNING: Inspect all live samples; English coherence is NOT verified by training.
 exit /b 0
