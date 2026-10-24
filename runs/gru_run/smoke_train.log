@@ -1,0 +1,2 @@
+parameters=78272 initial_validation_loss=5.546405
+steps=200 training_loss=5.545073 validation_loss=5.542449

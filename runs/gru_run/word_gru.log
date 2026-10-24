@@ -1,0 +1,15 @@
+vocabulary_selected=2045 distinct_training_words=8325 counting_slots=32768
+train_unknown=45023/595496 validation_unknown=11818/149884
+epoch=1 train_loss=4.77254 valid_loss=4.89026
+epoch=2 train_loss=4.33880 valid_loss=4.75721
+epoch=3 train_loss=4.20440 valid_loss=4.70694
+epoch=4 train_loss=4.14151 valid_loss=4.68832
+epoch=5 train_loss=4.10700 valid_loss=4.66707
+epoch=6 train_loss=4.08188 valid_loss=4.66250
+epoch=7 train_loss=4.06442 valid_loss=4.66220
+epoch=8 train_loss=4.05282 valid_loss=4.66410
+epoch=9 train_loss=4.04406 valid_loss=4.66348
+epoch=10 train_loss=4.03710 valid_loss=4.66701
+epoch=11 train_loss=4.03189 valid_loss=4.67256
+early_stop_epoch=11
+tokens=595496 vocabulary=2048 best_validation_loss=4.66250
