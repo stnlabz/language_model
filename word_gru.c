@@ -433,7 +433,25 @@ static int sample_checkpoint(int argc,char **argv){
  free(m);
  return output?0:1;
 }
+/* Deterministic, data-free fixture for the new supervised record boundary. */
+static int test_dialogue(void){
+ int seq[64]={0};unsigned char mask[64]={0};
+ int n=dialogue_tokens("Question: Hello? Answer: Hi there.\n",
+                      seq,mask,64);
+ if(n!=7||mask[0]||mask[1]||mask[2]||mask[3]||
+    mask[4]!=1||mask[5]!=1||mask[6]!=1||seq[6]!=1){
+  fputs("dialogue_tokenization=FAIL\n",stderr);return 1;
+ }
+ if(dialogue_tokens("Question: no answer here\n",seq,mask,64)>=0 ||
+    dialogue_tokens("Question: x Answer: \n",seq,mask,64)>=0){
+  fputs("dialogue_negative_tests=FAIL\n",stderr);return 1;
+ }
+ puts("dialogue_tokenization=PASS");
+ puts("dialogue_negative_tests=PASS");
+ return 0;
+}
 int main(int argc,char **argv){
+ if(argc>1&&!strcmp(argv[1],"test-dialogue"))return test_dialogue();
  if(argc>1&&!strcmp(argv[1],"sample"))return sample_checkpoint(argc,argv);
  if((argc!=6&&argc!=7)||strcmp(argv[1],"train")){
   fputs("usage: word_gru train TRAIN VALID MODEL SAMPLE [DIALOGUE]\n",stderr);return 2;
