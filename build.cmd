@@ -161,8 +161,12 @@ echo end_date=%DATE% %TIME% >> "%RUN%\report.txt"
 echo.
 echo WORD GRU TRAINING COMPLETE - LANGUAGE NOT QUALIFIED
 echo ===== TRAINING-TIME CONSTRAINED SAMPLE =====
-type "%RUN%\best_sample.txt"
-if errorlevel 1 goto failed
+if exist "%RUN%\best_sample.txt" (
+    type "%RUN%\best_sample.txt"
+    if errorlevel 1 echo WARNING: Auxiliary constrained sample unreadable.
+) else (
+    echo WARNING: Auxiliary constrained sample unavailable; checkpoint result is separate.
+)
 echo ===== LIVE INFERENCE: SELF-EXPLANATION =====
 type "%RUN%\live_identity.txt"
 if errorlevel 1 goto failed
