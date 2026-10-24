@@ -624,8 +624,27 @@ int main(int argc,char **argv){
   puts("dialogue_pairs_supervised=0");
  }
  training_tokens=train;training_count=nt;
- build_transitions(train,nt);
- int ok=transitions&&save(argv[4],best)&&produce(best,argv[5]);
+ /* Checkpoint persistence is mandatory. Training-only constrained sampling
+  * is supplementary evidence and must not invalidate a saved model just
+  * because its sampled sentence contains fewer than six words. */
+ int checkpoint_saved=save(argv[4],best);
+ if(!checkpoint_saved)
+  fputs("checkpoint_save=FAILED\n",stderr);
+ else
+  puts("checkpoint_save=PASS");
+ int sample_ok=0;
+ if(checkpoint_saved){
+  build_transitions(train,nt);
+  if(!transitions){
+   fputs("constrained_sample=UNAVAILABLE_TRANSITION_ALLOCATION\n",stderr);
+  }else{
+   sample_ok=produce(best,argv[5]);
+   if(!sample_ok)
+    fputs("constrained_sample=UNQUALIFIED_OR_WRITE_ERROR\n",stderr);
+   else puts("constrained_sample=GENERATED_UNQUALIFIED");
+  }
+ }
  printf("tokens=%d vocabulary=%d best_validation_loss=%.5f\n",nt,nw,best_loss);
- free(m);free(best);free(moment1);free(moment2);free(transitions);free(train);free(valid);return ok?0:1;
+ free(m);free(best);free(moment1);free(moment2);free(transitions);free(train);free(valid);
+ return checkpoint_saved?0:1;
 }
