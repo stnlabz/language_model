@@ -278,7 +278,7 @@ static int dialogue_train(net *m,const unsigned char *source,size_t bytes){
    while(n<BPTT&&pos<count){
     int target=tokens[pos];
     forward(m,h,prev,&ts[n]);
-    ts[n].target=target;ts[n].reset=prev==0;ts[n].supervised=1;
+    ts[n].target=target;ts[n].reset=prev==0;
     ts[n].supervised=mask[pos];
     targets+=mask[pos];
     memcpy(h,ts[n].h,sizeof h);prev=target;n++;pos++;
@@ -481,6 +481,11 @@ int main(int argc,char **argv){
    free(m);free(best);free(moment1);free(moment2);
    free(train);free(valid);return 1;
   }
+  /* The optimizer history belongs to the final epoch, not the best
+   * validation checkpoint. Reset its moments for this separate objective. */
+  memset(moment1,0,sizeof(*moment1));
+  memset(moment2,0,sizeof(*moment2));
+  adam_steps=0;
   int pairs=dialogue_train(best,dialogue,dn);
   free(dialogue);
   if(pairs<=0){
