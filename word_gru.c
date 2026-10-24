@@ -438,8 +438,8 @@ static int test_dialogue(void){
  int seq[64]={0};unsigned char mask[64]={0};
  int n=dialogue_tokens("Question: Hello? Answer: Hi there.\n",
                       seq,mask,64);
- if(n!=7||mask[0]||mask[1]||mask[2]||mask[3]||
-    mask[4]!=1||mask[5]!=1||mask[6]!=1||seq[6]!=1){
+ if(n!=6||mask[0]||mask[1]||mask[2]||
+    mask[3]!=1||mask[4]!=1||mask[5]!=1||seq[5]!=1){
   fputs("dialogue_tokenization=FAIL\n",stderr);return 1;
  }
  if(dialogue_tokens("Question: no answer here\n",seq,mask,64)>=0 ||
