@@ -412,6 +412,39 @@ static int produce(net *m,const char *path){
  fputs(".\n",f);
  return fclose(f)==0&&words_out>=6;
 }
+/* Reproducibility fingerprint only; not a cryptographic integrity check. */
+static int checkpoint_fingerprint(const char *path,uint64_t *digest,
+                                  unsigned long long *size){
+ FILE *f=fopen(path,"rb");unsigned char buf[4096];size_t n;
+ uint64_t h=UINT64_C(14695981039346656037);
+ unsigned long long total=0;
+ if(!f)return 0;
+ while((n=fread(buf,1,sizeof buf,f))>0){
+  total+=(unsigned long long)n;
+  for(size_t i=0;i<n;i++){h^=(uint64_t)buf[i];h*=UINT64_C(1099511628211);}
+ }
+ int err=ferror(f);
+ if(fclose(f)||err)return 0;
+ *digest=h;*size=total;return 1;
+}
+static int inspect_checkpoint(int argc,char **argv){
+ uint64_t digest=0;unsigned long long size=0;
+ if(argc!=3){fputs("usage: word_gru inspect CHECKPOINT\\n",stderr);return 2;}
+ if(!checkpoint_fingerprint(argv[2],&digest,&size)){
+  fputs("checkpoint fingerprint failed\\n",stderr);return 1;
+ }
+ net *m=malloc(sizeof(*m));
+ if(!m)return 1;
+ if(!restore(argv[2],m)){
+  fputs("invalid or incompatible word GRU checkpoint\\n",stderr);
+  free(m);return 1;
+ }
+ printf("checkpoint_bytes=%llu checkpoint_fnv1a64=%016llx\\n",
+        size,(unsigned long long)digest);
+ printf("checkpoint_vocabulary=%d question_id=%d answer_id=%d\\n",
+        nw,lookup("question"),lookup("answer"));
+ free(m);return 0;
+}
 /* Reproduce teacher-forcing sequence BOS -> question -> prompt -> answer.
  * The BOS forward updates the recurrent state before the first question word. */
 static int prime_question(net *m,float h[H],const char *prompt,int *prev){
@@ -443,6 +476,7 @@ static int prime_question(net *m,float h[H],const char *prompt,int *prev){
  * Sampling does not require the training corpus or the training-only trigram table.
  * Output is model-generated text, not a canned response or corpus lookup. */
 static int sample_checkpoint(int argc,char **argv){
+ int greedy=!strcmp(argv[1],"sample-greedy");
  if(argc!=8){fputs("usage: word_gru sample CHECKPOINT PROMPT WORDS SEED TEMPERATURE PENALTY\\n",stderr);return 2;}
  char *end=NULL;
  long limit=strtol(argv[4],&end,10);
@@ -473,9 +507,17 @@ static int sample_checkpoint(int argc,char **argv){
    weight[k]=w;sum+=w;
   }
   if(!(sum>0))break;
-  double draw=((rand64()>>40)/16777216.0)*sum;
   int chosen=1;
-  for(int k=0;k<nw;k++){draw-=weight[k];if(draw<=0){chosen=k;break;}}
+  if(greedy){
+   double best=-1;
+   for(int k=1;k<nw;k++)if(weight[k]>best){best=weight[k];chosen=k;}
+   if(!(best>0))break;
+  }else{
+   double draw=((rand64()>>40)/16777216.0)*sum;
+   for(int k=0;k<nw;k++)if(weight[k]>0){
+    chosen=k;draw-=weight[k];if(draw<=0)break;
+   }
+  }
   if(chosen==1)break;
   if(output)putchar(' ');
   const char *w=words[chosen].text;
@@ -549,7 +591,8 @@ static int test_dialogue(void){
 }
 int main(int argc,char **argv){
  if(argc>1&&!strcmp(argv[1],"test-dialogue"))return test_dialogue();
- if(argc>1&&!strcmp(argv[1],"sample"))return sample_checkpoint(argc,argv);
+ if(argc>1&&!strcmp(argv[1],"inspect"))return inspect_checkpoint(argc,argv);
+ if(argc>1&&(!strcmp(argv[1],"sample")||!strcmp(argv[1],"sample-greedy")))return sample_checkpoint(argc,argv);
  if((argc!=6&&argc!=7)||strcmp(argv[1],"train")){
   fputs("usage: word_gru train TRAIN VALID MODEL SAMPLE [DIALOGUE]\n",stderr);return 2;
  }
