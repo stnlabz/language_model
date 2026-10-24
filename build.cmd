@@ -125,20 +125,42 @@ if errorlevel 1 goto failed
 echo Stage 5: Training word-level GRU on Digit's approved statements...
 build\word_gru.exe train "%RUN%\digit_train.bin" "%RUN%\digit_valid.bin" "%RUN%\word_gru.stn" "%RUN%\best_sample.txt" > "%RUN%\word_gru.log" 2>&1
 if errorlevel 1 goto failed
+rem Qualification evidence must use the same decoder as production inference.
+rem The training-generated best_sample.txt is trigram-constrained and cannot
+rem establish how the checkpoint responds to prompts at runtime.
+echo Stage 6: Capturing actual inference samples...
+build\word_gru.exe sample "%RUN%\word_gru.stn" "Digit, explain yourself" 32 913 0.65 0 > "%RUN%\live_identity.txt" 2> "%RUN%\live_identity.err"
+if errorlevel 1 goto failed
+build\word_gru.exe sample "%RUN%\word_gru.stn" "What is your mission?" 32 913 0.65 0 > "%RUN%\live_mission.txt" 2> "%RUN%\live_mission.err"
+if errorlevel 1 goto failed
+build\word_gru.exe sample "%RUN%\word_gru.stn" "Hello Digit" 32 913 0.65 0 > "%RUN%\live_greeting.txt" 2> "%RUN%\live_greeting.err"
+if errorlevel 1 goto failed
 echo model=original_word_level_gru >> "%RUN%\report.txt"
 echo checkpoint=%RUN%\word_gru.stn >> "%RUN%\report.txt"
+echo sample_decoder=training_trigram_constrained >> "%RUN%\report.txt"
+echo live_decoder=word_gru_sample >> "%RUN%\report.txt"
 echo result=training_completed_language_unqualified >> "%RUN%\report.txt"
 echo language_quality=NOT_VERIFIED >> "%RUN%\report.txt"
 echo end_date=%DATE% %TIME% >> "%RUN%\report.txt"
 echo.
 echo WORD GRU TRAINING COMPLETE - LANGUAGE NOT QUALIFIED
-echo ===== GRU GENERATED ENGLISH =====
+echo ===== TRAINING-TIME CONSTRAINED SAMPLE =====
 type "%RUN%\best_sample.txt"
 if errorlevel 1 goto failed
-echo ================================
+echo ===== LIVE INFERENCE: SELF-EXPLANATION =====
+type "%RUN%\live_identity.txt"
+if errorlevel 1 goto failed
+echo ===== LIVE INFERENCE: MISSION =====
+type "%RUN%\live_mission.txt"
+if errorlevel 1 goto failed
+echo ===== LIVE INFERENCE: GREETING =====
+type "%RUN%\live_greeting.txt"
+if errorlevel 1 goto failed
+echo =========================================
 echo Model checkpoint: %RUN%\word_gru.stn
 echo Training and validation logs: %RUN%\word_gru.log
-echo WARNING: English coherence is not verified by a successful build.
+echo WARNING: Training-time word-order constraints are NOT used by live inference.
+echo WARNING: Inspect all live samples; English coherence is NOT verified by training.
 exit /b 0
 
 :failed
