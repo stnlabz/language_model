@@ -132,6 +132,16 @@ int main(int argc,char **argv) {
     if(ferror(src)||rows<5){fputs("snapshot read error or fewer than 5 records\n",stderr);goto done;}
     fprintf(stdout,"records=%zu lessons=%zu dialogues=%zu context_retained=%zu observations_retained=%zu\n",
             rows,lessons,dialogues,context,observations);
+    /* These labels describe records, not actual conversational diversity.
+     * An engineering statement corpus is not evidence of dialogue ability. */
+    fprintf(stdout,"training_records=%zu dialogue_fraction_percent=%.4f\n",
+            lessons+dialogues,
+            (lessons+dialogues) ? 100.0*(double)dialogues/(double)(lessons+dialogues) : 0.0);
+    fprintf(stdout,"conversation_data_gate=%s\n",
+            dialogues>=100 && dialogues*10>=lessons+dialogues ?
+            "SUFFICIENT_RECORD_COUNT_ONLY" : "INSUFFICIENT_DIALOGUE_DIVERSITY");
+    if(dialogues<100 || dialogues*10<lessons+dialogues)
+        fputs("WARNING: Too few dialogue records for a conversation-readiness claim. Training is an experiment only.\n",stderr);
     if(lessons+dialogues<5){
         fputs("DATA QUALITY FAILED: fewer than five usable lesson/dialogue records.\n",stderr);
         goto done;
