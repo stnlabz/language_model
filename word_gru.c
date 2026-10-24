@@ -429,19 +429,19 @@ static int checkpoint_fingerprint(const char *path,uint64_t *digest,
 }
 static int inspect_checkpoint(int argc,char **argv){
  uint64_t digest=0;unsigned long long size=0;
- if(argc!=3){fputs("usage: word_gru inspect CHECKPOINT\\n",stderr);return 2;}
+ if(argc!=3){fputs("usage: word_gru inspect CHECKPOINT\n",stderr);return 2;}
  if(!checkpoint_fingerprint(argv[2],&digest,&size)){
-  fputs("checkpoint fingerprint failed\\n",stderr);return 1;
+  fputs("checkpoint fingerprint failed\n",stderr);return 1;
  }
  net *m=malloc(sizeof(*m));
  if(!m)return 1;
  if(!restore(argv[2],m)){
-  fputs("invalid or incompatible word GRU checkpoint\\n",stderr);
+  fputs("invalid or incompatible word GRU checkpoint\n",stderr);
   free(m);return 1;
  }
- printf("checkpoint_bytes=%llu checkpoint_fnv1a64=%016llx\\n",
+ printf("checkpoint_bytes=%llu checkpoint_fnv1a64=%016llx\n",
         size,(unsigned long long)digest);
- printf("checkpoint_vocabulary=%d question_id=%d answer_id=%d\\n",
+ printf("checkpoint_vocabulary=%d question_id=%d answer_id=%d\n",
         nw,lookup("question"),lookup("answer"));
  free(m);return 0;
 }
