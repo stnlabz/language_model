@@ -395,9 +395,11 @@ static int sample_checkpoint(int argc,char **argv){
  if(!m)return 1;
  if(!restore(argv[2],m)){fputs("invalid or incompatible word GRU checkpoint\\n",stderr);free(m);return 1;}
  rnd=seed;
- float h[H]={0};tick t;int prev=0;
+ float h[H]={0};tick t;int prev=lookup("question");
  const unsigned char *p=(const unsigned char*)argv[3];char token[MAXWORD];int len=0;
- /* Consume the user's prompt as context without echoing it. */
+ /* Mirror the supervised Q/A context at inference: Question [prompt]
+  * Answer [generation]. This only conditions the recurrent state and
+  * never looks up or copies any saved answer. */
  for(size_t i=0;;i++){
   unsigned char c=p[i];int letter=(c>='A'&&c<='Z')||(c>='a'&&c<='z')||(c>='0'&&c<='9')||c=='\'';
   if(letter){if(len<MAXWORD-1)token[len++]=(char)tolower(c);}
@@ -408,6 +410,9 @@ static int sample_checkpoint(int argc,char **argv){
   }
   if(!c)break;
  }
+ /* Advance through the final question word before the answer delimiter. */
+ forward(m,h,prev,&t);memcpy(h,t.h,sizeof h);
+ prev=lookup("answer");
  int used[VOC]={0};int output=0;
  for(int step=0;step<limit;step++){
   forward(m,h,prev,&t);
