@@ -1,8 +1,8 @@
 # STN-Labz language_model Makefile
 # AI-assisted; build and tests do not train on the operator corpus.
 # Training, data preparation, and pipeline are explicit commands only.
-# No deployment, Git commands, or background services.
-# Only 'make go' removes its prior, dedicated gru_run training directory.
+# No service restart, Git commands, or background services.
+# Only 'make go' clears generated artifacts in its dedicated gru_run directory.
 
 CC = gcc
 CFLAGS = -std=c11 -O2 -Wall -Wextra -Werror -pedantic
@@ -43,7 +43,8 @@ help:
 	@echo 'API: make api CHECKPOINT=word_gru.stn PORT=8766'
 	@echo 'Pipeline: make pipeline DATA=stn_language_sentences.txt RUN=corpus'
 	@echo 'CPU train from Digit JSONL: make go (GO_SOURCE=... GO_TIMEOUT=6h)'
-	@echo 'go reuses gru_run/ (clears the old run); never replaces the live model.'
+	@echo 'go reuses gru_run/, backs up root word_gru.stn to word_gru.previous.stn,'
+	@echo 'then moves the trained checkpoint to the root; does not restart the API.'
 	@echo 'Status: make status'
 	@echo 'Legacy byte-GRU training/stateful/quality/probe targets are unsupported.'
 	@echo 'Existing server API on port 8765 is untouched.'
@@ -92,9 +93,10 @@ pipeline:
 	@echo 'Word GRU training complete; consult validation loss and sample artifact.'
 
 # Explicit CPU-only retraining; every run reuses exactly one gru_run directory.
-# Only generated run artifacts are deleted. Never alter the live word_gru.stn.
+# Only generated run artifacts are deleted. A successful run promotes its checkpoint
+# to the repository root after preserving the previous root checkpoint.
 # The source queue must be outside gru_run and is never deleted by this target.
-# No timestamped subdirectories, background services, or model promotion.
+# No timestamped subdirectories, background services, or API restart.
 go:
 	@set -eu; \
 	$(MAKE) build; \
@@ -121,8 +123,29 @@ go:
 	$(MAKE) prepare-data DATA='$(GO_DIR)/corpus.txt' RUN='$(GO_DIR)/gru'; \
 	$(MAKE) train RUN='$(GO_DIR)/gru' CHECKPOINT='$(GO_DIR)/word_gru.stn' \
 	  SAMPLE='$(GO_DIR)/word_sample.txt' NICE='$(NICE)' TIMEOUT='$(GO_TIMEOUT)'; \
-	echo 'CPU GRU run completed: gru_run/word_gru.stn'; \
-	echo 'Checkpoint is NOT installed or promoted to any running agent.'
+	test -s '$(GO_DIR)/word_gru.stn' || { \
+	  echo 'Training completed without a nonempty checkpoint' >&2; exit 1; \
+	}; \
+	if test -e 'word_gru.previous.stn' || test -L 'word_gru.previous.stn'; then \
+	  echo 'Previous checkpoint backup already exists: word_gru.previous.stn' >&2; \
+	  echo 'Refusing to replace it; preserve or remove it explicitly first.' >&2; exit 1; \
+	fi; \
+	if test -L 'word_gru.stn'; then \
+	  echo 'Refusing to replace root checkpoint symlink' >&2; exit 1; \
+	fi; \
+	if test -e 'word_gru.stn'; then \
+	  test -f 'word_gru.stn' || { echo 'Root checkpoint is not a regular file' >&2; exit 1; }; \
+	  mv -- 'word_gru.stn' 'word_gru.previous.stn'; \
+	fi; \
+	if ! mv -- '$(GO_DIR)/word_gru.stn' 'word_gru.stn'; then \
+	  if test -f 'word_gru.previous.stn' && ! test -e 'word_gru.stn'; then \
+	    mv -- 'word_gru.previous.stn' 'word_gru.stn' || true; \
+	  fi; \
+	  echo 'Checkpoint move failed' >&2; exit 1; \
+	fi; \
+	echo 'CPU GRU checkpoint moved to ./word_gru.stn'; \
+	echo 'Existing root checkpoint backed up to ./word_gru.previous.stn (when present).'; \
+	echo 'No running API was restarted.'
 
 # Word-GRU stateful resume and legacy byte-GRU quality tools are not supported.
 train-state resume quality compare-sampling:
