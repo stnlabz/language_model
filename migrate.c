@@ -94,17 +94,28 @@ static int line_pair(const char *p,char *question,char *answer) {
     return mask==15 && !*p;
 }
 int main(int argc,char **argv) {
-    if(argc!=4||strcmp(argv[1],"convert")) {
-        fprintf(stderr,"usage: %s convert <snapshot.jsonl> <new-corpus.txt>\n",argv[0]);return 2;
+    if((argc!=4&&argc!=5)||strcmp(argv[1],"convert")) {
+        fprintf(stderr,"usage: %s convert <snapshot.jsonl> <new-corpus.txt> [new-dialogue.txt]\n",argv[0]);return 2;
     }
-    if(!strcmp(argv[2],argv[3]))return 2;
+    if(!strcmp(argv[2],argv[3])||(argc==5&&
+       (!strcmp(argv[2],argv[4])||!strcmp(argv[3],argv[4]))))return 2;
     FILE *src=fopen(argv[2],"rb");if(!src){perror("snapshot");return 1;}
     FILE *check=fopen(argv[3],"rb");
     if(check){fclose(check);fclose(src);fputs("output exists\n",stderr);return 1;}
-    /* Build in memory; never publish a partially converted output. */
-    char *corpus=malloc(CORPUS_LIMIT+1),line[LINE_MAX_BYTES+1],q[4096],a[4096];
-    if(!corpus){fclose(src);return 1;}
-    size_t total=0,rows=0,lessons=0,context=0,observations=0,dialogues=0;
+    FILE *check_dialogue=NULL;
+    if(argc==5){
+        check_dialogue=fopen(argv[4],"rb");
+        if(check_dialogue){
+            fclose(check_dialogue);fclose(src);
+            fputs("dialogue output exists\n",stderr);return 1;
+        }
+    }
+    /* Keep distinct, bounded statement and dialogue outputs. The source is
+     * never edited; classified dialogues are not duplicated or invented. */
+    char *corpus=malloc(CORPUS_LIMIT+1),*dialogue=argc==5?malloc(CORPUS_LIMIT+1):NULL;
+    char line[LINE_MAX_BYTES+1],q[4096],a[4096];
+    if(!corpus||(argc==5&&!dialogue)){free(corpus);free(dialogue);fclose(src);return 1;}
+    size_t total=0,dialogue_total=0,rows=0,lessons=0,context=0,observations=0,dialogues=0;
     int result=1;
     while(fgets(line,sizeof(line),src)) {
         size_t length=strlen(line);
@@ -124,6 +135,14 @@ int main(int argc,char **argv) {
             lessons++;
         } else {
             count=snprintf(corpus+total,CORPUS_LIMIT+1-total,"Question: %s Answer: %s\n",q,a);
+            if(argc==5){
+                int d=snprintf(dialogue+dialogue_total,
+                    CORPUS_LIMIT+1-dialogue_total,"Question: %s Answer: %s\n",q,a);
+                if(d<0||(size_t)d>=CORPUS_LIMIT+1-dialogue_total){
+                    fputs("dialogue corpus exceeds limit\n",stderr);goto done;
+                }
+                dialogue_total+=(size_t)d;
+            }
             dialogues++;
         }
         if(count<0||(size_t)count>=CORPUS_LIMIT+1-total){fputs("corpus exceeds 16MiB\n",stderr);goto done;}
@@ -152,8 +171,23 @@ int main(int argc,char **argv) {
     int ok=fwrite(corpus,1,total,out)==total;
     if(fclose(out)!=0)ok=0;
     if(!ok){fputs("corpus write failure\n",stderr);remove(argv[3]);goto done;}
-    printf("migration=approved_digit_jsonl records=%zu output_bytes=%zu\n",rows,total);
+    if(argc==5){
+        /* Publish dialogue corpus as a separate artifact, never a synthetic
+         * source of additional training examples. */
+        FILE *dout=fopen(argv[4],"wbx");
+        if(!dout){
+            perror("new dialogue corpus");remove(argv[3]);goto done;
+        }
+        int dok=dialogue_total==0 || fwrite(dialogue,1,dialogue_total,dout)==dialogue_total;
+        if(fclose(dout)!=0)dok=0;
+        if(!dok){
+            fputs("dialogue corpus write failure\n",stderr);
+            remove(argv[4]);remove(argv[3]);goto done;
+        }
+    }
+    printf("migration=approved_digit_jsonl records=%zu output_bytes=%zu dialogue_bytes=%zu\n",
+           rows,total,dialogue_total);
     result=0;
 done:
-    free(corpus);fclose(src);return result;
+    free(dialogue);free(corpus);fclose(src);return result;
 }
