@@ -121,7 +121,8 @@ if errorlevel 1 goto failed
 echo Stage 3b: Verifying dialogue data availability...
 findstr /C:"conversation_data_gate=INSUFFICIENT_DIALOGUE_DIVERSITY" "%RUN%\migration.log" >nul
 if not errorlevel 1 (
-    echo WARNING: Insufficient conversational training records; this run trains sentence structure only.
+    echo WARNING: Only a small number of genuine dialogue pairs are available.
+    echo WARNING: Answer-only supervised fine-tuning is experimental.
     echo WARNING: No conversational qualification is implied.
     echo conversation_training=INSUFFICIENT_APPROVED_DIALOGUE >> "%RUN%\report.txt"
 ) else (
@@ -131,8 +132,8 @@ echo Stage 4: Preparing train and validation...
 build\prepare.exe prepare "%RUN%\digit_corpus.txt" "%RUN%\digit_train.bin" "%RUN%\digit_valid.bin" > "%RUN%\prepare.log" 2>&1
 if errorlevel 1 goto failed
 
-echo Stage 5: Training word-level GRU on Digit's approved statements...
-build\word_gru.exe train "%RUN%\digit_train.bin" "%RUN%\digit_valid.bin" "%RUN%\word_gru.stn" "%RUN%\best_sample.txt" > "%RUN%\word_gru.log" 2>&1
+echo Stage 5: Training word GRU with genuine supervised dialogue answers...
+build\word_gru.exe train "%RUN%\digit_train.bin" "%RUN%\digit_valid.bin" "%RUN%\word_gru.stn" "%RUN%\best_sample.txt" "%RUN%\dialogue_corpus.txt" > "%RUN%\word_gru.log" 2>&1
 if errorlevel 1 goto failed
 rem Qualification evidence must use the same decoder as production inference.
 rem The training-generated best_sample.txt is trigram-constrained and cannot
@@ -144,6 +145,8 @@ build\word_gru.exe sample "%RUN%\word_gru.stn" "What is your mission?" 32 913 0.
 if errorlevel 1 goto failed
 build\word_gru.exe sample "%RUN%\word_gru.stn" "Hello Digit" 32 913 0.65 0 > "%RUN%\live_greeting.txt" 2> "%RUN%\live_greeting.err"
 if errorlevel 1 goto failed
+echo training_objective=language_plus_approved_answer_only_dialogue >> "%RUN%\report.txt"
+echo supervised_dialogue_log=%RUN%\word_gru.log >> "%RUN%\report.txt"
 echo model=original_word_level_gru >> "%RUN%\report.txt"
 echo checkpoint=%RUN%\word_gru.stn >> "%RUN%\report.txt"
 echo language_corpus=%RUN%\digit_corpus.txt >> "%RUN%\report.txt"
