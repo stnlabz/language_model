@@ -15,6 +15,7 @@
 #define MAXWORD 48
 #define EPOCHS 60
 #define BPTT 24
+#define DIALOGUE_EPOCHS 24
 #define LR 0.002f
 #define WEIGHT_DECAY 0.0001f
 typedef struct {char text[MAXWORD];int freq;} word;
@@ -222,7 +223,10 @@ static double learn(net *m,tick *ts,int count){
   memcpy(future,back,sizeof(future));
   if(t->reset)memset(future,0,sizeof(future));
  }
- optimize(m,g,count);
+ /* Unsupervised question context must not dilute answer gradients. */
+ int targets=0;
+ for(int z=0;z<count;z++)targets+=ts[z].supervised!=0;
+ if(targets)optimize(m,g,targets);
  free(g);return loss;
 }
 /* Tokenize a verified Q/A record as one sequence. Unlike ordinary sentence
@@ -260,10 +264,12 @@ static int dialogue_tokens(const char *line,int *sequence,unsigned char *mask,
   }
  }
 }
-static int dialogue_train(net *m,const unsigned char *source,size_t bytes){
+static int dialogue_train(net *m,const unsigned char *source,size_t bytes,
+                          int epoch,double *loss_total){
  /* One supervised pass over the genuine approved dialogue pairs.
   * There is no artificial replay, duplication, or invented target. */
  char line[8192];int processed=0,supervised=0;
+ if(loss_total)*loss_total=0;
  const unsigned char *p=source,*end=source+bytes;
  while(p<end){
   const unsigned char *e=memchr(p,'\n',(size_t)(end-p));
@@ -286,14 +292,17 @@ static int dialogue_train(net *m,const unsigned char *source,size_t bytes){
     if(target==1){memset(h,0,sizeof h);prev=0;}
    }
    if(targets){
-    if(learn(m,ts,n)<0)return -1;
+    double loss=learn(m,ts,n);
+    if(loss<0)return -1;
+    if(loss_total)*loss_total+=loss;
     supervised+=targets;
    }
   }
   processed++;
  }
- printf("dialogue_pairs_supervised=%d answer_tokens_supervised=%d\n",
-        processed,supervised);
+ printf("dialogue_epoch=%d dialogue_pairs_supervised=%d answer_tokens_supervised=%d answer_train_loss=%.6f\n",
+        epoch,processed,supervised,
+        supervised&&loss_total?*loss_total/supervised:0.0);
  return processed;
 }
 static double evaluate(net *m,const int *seq,int count){
@@ -377,6 +386,33 @@ static int produce(net *m,const char *path){
  fputs(".\n",f);
  return fclose(f)==0&&words_out>=6;
 }
+/* Reproduce teacher-forcing sequence BOS -> question -> prompt -> answer.
+ * The BOS forward updates the recurrent state before the first question word. */
+static int prime_question(net *m,float h[H],const char *prompt,int *prev){
+ tick t;char token[MAXWORD];int len=0,seen=0;
+ const unsigned char *p=(const unsigned char*)prompt;
+ if(!m||!h||!p||!prev||!*p)return 0;
+ if(lookup("question")==2||lookup("answer")==2)return 0;
+ forward(m,h,0,&t);memcpy(h,t.h,sizeof t.h);
+ *prev=lookup("question");
+ for(size_t i=0;;i++){
+  unsigned char c=p[i];
+  int letter=(c>='A'&&c<='Z')||(c>='a'&&c<='z')||
+             (c>='0'&&c<='9')||c=='\'';
+  if(letter){
+   if(len<MAXWORD-1)token[len++]=(char)tolower(c);
+  }else if(len){
+   token[len]=0;
+   forward(m,h,*prev,&t);memcpy(h,t.h,sizeof t.h);
+   *prev=lookup(token);len=0;seen++;
+  }
+  if(!c)break;
+ }
+ if(!seen)return 0;
+ forward(m,h,*prev,&t);memcpy(h,t.h,sizeof t.h);
+ *prev=lookup("answer");
+ return 1;
+}
 /* Standalone Linux/Windows inference for the versioned word GRU checkpoint.
  * Sampling does not require the training corpus or the training-only trigram table.
  * Output is model-generated text, not a canned response or corpus lookup. */
@@ -395,24 +431,11 @@ static int sample_checkpoint(int argc,char **argv){
  if(!m)return 1;
  if(!restore(argv[2],m)){fputs("invalid or incompatible word GRU checkpoint\\n",stderr);free(m);return 1;}
  rnd=seed;
- float h[H]={0};tick t;int prev=lookup("question");
- const unsigned char *p=(const unsigned char*)argv[3];char token[MAXWORD];int len=0;
- /* Mirror the supervised Q/A context at inference: Question [prompt]
-  * Answer [generation]. This only conditions the recurrent state and
-  * never looks up or copies any saved answer. */
- for(size_t i=0;;i++){
-  unsigned char c=p[i];int letter=(c>='A'&&c<='Z')||(c>='a'&&c<='z')||(c>='0'&&c<='9')||c=='\'';
-  if(letter){if(len<MAXWORD-1)token[len++]=(char)tolower(c);}
-  else if(len){
-   token[len]=0;
-   forward(m,h,prev,&t);memcpy(h,t.h,sizeof(h));
-   prev=lookup(token);len=0;
-  }
-  if(!c)break;
+ float h[H]={0};tick t;int prev=0;
+ if(!prime_question(m,h,argv[3],&prev)){
+  fputs("checkpoint lacks dialogue markers or prompt has no words\n",stderr);
+  free(m);return 1;
  }
- /* Advance through the final question word before the answer delimiter. */
- forward(m,h,prev,&t);memcpy(h,t.h,sizeof h);
- prev=lookup("answer");
  int used[VOC]={0};int output=0;
  for(int step=0;step<limit;step++){
   forward(m,h,prev,&t);
@@ -510,7 +533,15 @@ int main(int argc,char **argv){
   memset(moment1,0,sizeof(*moment1));
   memset(moment2,0,sizeof(*moment2));
   adam_steps=0;
-  int pairs=dialogue_train(best,dialogue,dn);
+  int pairs=0;
+  /* Revisit only approved answer tokens; this does not create dialogue
+   * diversity, and training loss is not conversational qualification. */
+  for(int epoch=1;epoch<=DIALOGUE_EPOCHS;epoch++){
+   double answer_loss=0;
+   int done=dialogue_train(best,dialogue,dn,epoch,&answer_loss);
+   if(done<=0){pairs=-1;break;}
+   pairs=done;
+  }
   free(dialogue);
   if(pairs<=0){
    fputs("dialogue corpus malformed or no supervised pairs\n",stderr);
