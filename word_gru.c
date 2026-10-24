@@ -501,6 +501,19 @@ static int test_dialogue(void){
     dialogue_tokens("Question: x Answer: \n",seq,mask,64)>=0){
   fputs("dialogue_negative_tests=FAIL\n",stderr);return 1;
  }
+ /* Genuine dialogue words must not disappear into the limited
+  * frequency-selected vocabulary. */
+ nw=5;
+ strcpy(words[3].text,"question");
+ strcpy(words[4].text,"answer");
+ if(reserve_dialogue_terms(
+    (const unsigned char*)"Question: Explain yourself? Answer: Here I am.\n",
+    strlen("Question: Explain yourself? Answer: Here I am.\n"))!=5 ||
+    lookup("explain")==2||lookup("yourself")==2||
+    lookup("here")==2||lookup("am")==2){
+  fputs("dialogue_vocabulary=FAIL\n",stderr);return 1;
+ }
+ puts("dialogue_vocabulary=PASS");
  /* Validate live conditioning against the teacher-forced training path,
   * including the previously missing BOS state transition. */
  nw=7;
