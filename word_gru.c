@@ -266,7 +266,7 @@ static int dialogue_train(net *m,const unsigned char *source,size_t bytes){
  const unsigned char *p=source,*end=source+bytes;
  while(p<end){
   const unsigned char *e=memchr(p,'\n',(size_t)(end-p));
-  if(!e||e-p>=((ptrdiff_t)sizeof line)-1)return -1;
+  if(!e||(size_t)(e-p)>=sizeof line-1)return -1;
   size_t size=(size_t)(e-p);
   memcpy(line,p,size);line[size]='\n';line[size+1]=0;p=e+1;
   int tokens[4096];unsigned char mask[4096]={0};
