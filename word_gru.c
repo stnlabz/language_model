@@ -29,7 +29,7 @@ typedef struct {
  float bz[H],br[H],bn[H],out[H][VOC],bo[VOC];
 } net;
 typedef struct {
- int token,target,reset;
+ int token,target,reset,supervised;
  float prev[H],z[H],r[H],n[H],h[H],prob[VOC];
 } tick;
 /* Count the full training vocabulary before selecting the fixed-size
@@ -192,8 +192,11 @@ static double learn(net *m,tick *ts,int count){
  float future[H]={0};double loss=0;
  for(int z=count-1;z>=0;z--){
   tick *t=&ts[z];float dh[H],dn[H],dz[H],dr[H],back[H],de[H]={0};
-  float err[VOC];for(int k=0;k<nw;k++){err[k]=t->prob[k]-(k==t->target);g->bo[k]+=err[k];}
-  loss-=log(fmax((double)t->prob[t->target],1e-25));
+  float err[VOC];for(int k=0;k<nw;k++){
+   err[k]=t->supervised?(t->prob[k]-(k==t->target)):0;
+   g->bo[k]+=err[k];
+  }
+  if(t->supervised)loss-=log(fmax((double)t->prob[t->target],1e-25));
   for(int j=0;j<H;j++){
    dh[j]=future[j];for(int k=0;k<nw;k++){g->out[j][k]+=t->h[j]*err[k];dh[j]+=m->out[j][k]*err[k];}
    dn[j]=dh[j]*(1-t->z[j])*(1-t->n[j]*t->n[j]);
@@ -221,6 +224,76 @@ static double learn(net *m,tick *ts,int count){
  }
  optimize(m,g,count);
  free(g);return loss;
+}
+/* Tokenize a verified Q/A record as one sequence. Unlike ordinary sentence
+ * tokenization, '?' is not an EOS; the answer sees the question's state.
+ * Only answer tokens and EOS receive a predictive loss. */
+static int dialogue_tokens(const char *line,int *sequence,unsigned char *mask,
+                           int cap){
+ const char *answer=strstr(line," Answer: ");
+ if(strncmp(line,"Question: ",10)||!answer||answer==line+10)return -1;
+ if(!answer[9]||strstr(answer+9," Answer: "))return -1;
+ int count=0,seen_answer=0,previous=0;
+ char wordbuf[MAXWORD];int length=0;
+ for(const char *p=line;;p++){
+  unsigned char c=(unsigned char)*p;
+  int letter=(c>='A'&&c<='Z')||(c>='a'&&c<='z')||
+             (c>='0'&&c<='9')||c=='\'';
+  if(letter){
+   if(length<MAXWORD-1)wordbuf[length++]=(char)tolower(c);
+  }else{
+   if(length){
+    wordbuf[length]=0;
+    if(count>=cap-2)return -1;
+    sequence[count]=lookup(wordbuf);
+    mask[count]=(unsigned char)(seen_answer&&p>answer+9);
+    if(!strcmp(wordbuf,"answer")&&p>answer&&p<=answer+7)
+     seen_answer=1;
+    previous=sequence[count];count++;length=0;
+   }
+   if(c=='\n'||c==0){
+    if(!seen_answer||count>=cap)return -1;
+    if(previous!=1){sequence[count]=1;mask[count]=1;count++;}
+    return count;
+   }
+  }
+ }
+}
+static int dialogue_train(net *m,const unsigned char *source,size_t bytes){
+ /* One supervised pass over the genuine approved dialogue pairs.
+  * There is no artificial replay, duplication, or invented target. */
+ char line[8192];int processed=0,supervised=0;
+ const unsigned char *p=source,*end=source+bytes;
+ while(p<end){
+  const unsigned char *e=memchr(p,'\n',(size_t)(end-p));
+  if(!e||e-p>=((ptrdiff_t)sizeof line)-1)return -1;
+  size_t size=(size_t)(e-p);
+  memcpy(line,p,size);line[size]='\n';line[size+1]=0;p=e+1;
+  int tokens[4096];unsigned char mask[4096]={0};
+  int count=dialogue_tokens(line,tokens,mask,4096);
+  if(count<=0)return -1;
+  float h[H]={0};int prev=0;
+  for(int pos=0;pos<count;){
+   tick ts[BPTT];int n=0,targets=0;
+   while(n<BPTT&&pos<count){
+    int target=tokens[pos];
+    forward(m,h,prev,&ts[n]);
+    ts[n].target=target;ts[n].reset=prev==0;ts[n].supervised=1;
+    ts[n].supervised=mask[pos];
+    targets+=mask[pos];
+    memcpy(h,ts[n].h,sizeof h);prev=target;n++;pos++;
+    if(target==1){memset(h,0,sizeof h);prev=0;}
+   }
+   if(targets){
+    if(learn(m,ts,n)<0)return -1;
+    supervised+=targets;
+   }
+  }
+  processed++;
+ }
+ printf("dialogue_pairs_supervised=%d answer_tokens_supervised=%d\n",
+        processed,supervised);
+ return processed;
 }
 static double evaluate(net *m,const int *seq,int count){
  float h[H]={0};tick t;int prev=0;double loss=0;int used=0;
@@ -362,7 +435,9 @@ static int sample_checkpoint(int argc,char **argv){
 }
 int main(int argc,char **argv){
  if(argc>1&&!strcmp(argv[1],"sample"))return sample_checkpoint(argc,argv);
- if(argc!=6||strcmp(argv[1],"train")){fputs("usage: word_gru train TRAIN VALID MODEL SAMPLE\n",stderr);return 2;}
+ if((argc!=6&&argc!=7)||strcmp(argv[1],"train")){
+  fputs("usage: word_gru train TRAIN VALID MODEL SAMPLE [DIALOGUE]\n",stderr);return 2;
+ }
  size_t tn=0,vn=0;unsigned char *tr=load(argv[2],&tn),*va=load(argv[3],&vn);
  if(!tr||!va){fputs("training corpus unavailable\n",stderr);free(tr);free(va);return 1;}
  strcpy(words[0].text,"<bos>");strcpy(words[1].text,"<eos>");strcpy(words[2].text,"<unk>");
@@ -398,6 +473,23 @@ int main(int argc,char **argv){
   printf("epoch=%d train_loss=%.5f valid_loss=%.5f\n",epoch+1,total/nt,vl);
   if(vl<best_loss-0.0005){best_loss=vl;memcpy(best,m,sizeof(*m));bad_epochs=0;}
   else if(++bad_epochs>=5){printf("early_stop_epoch=%d\n",epoch+1);break;}
+ }
+ if(argc==7){
+  size_t dn=0;unsigned char *dialogue=load(argv[6],&dn);
+  if(!dialogue){
+   fputs("dialogue corpus missing, empty or exceeds 16 MiB\n",stderr);
+   free(m);free(best);free(moment1);free(moment2);
+   free(train);free(valid);return 1;
+  }
+  int pairs=dialogue_train(best,dialogue,dn);
+  free(dialogue);
+  if(pairs<=0){
+   fputs("dialogue corpus malformed or no supervised pairs\n",stderr);
+   free(m);free(best);free(moment1);free(moment2);
+   free(train);free(valid);return 1;
+  }
+ }else{
+  puts("dialogue_pairs_supervised=0");
  }
  training_tokens=train;training_count=nt;
  build_transitions(train,nt);
