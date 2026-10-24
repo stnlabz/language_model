@@ -102,16 +102,36 @@ static int word_order(const void *a,const void *b){
  if(x->count<y->count)return 1;
  return strcmp(x->text,y->text);
 }
+/* Keep every approved dialogue term in the word vocabulary before filling
+ * remaining slots by language frequency. Otherwise rare answer words become
+ * <unk> and cannot be learned or emitted, regardless of dialogue epochs. */
+static int reserve_dialogue_terms(const unsigned char *src,size_t n){
+ char buf[MAXWORD];int len=0,added=0;
+ if(!src||!n)return 0;
+ for(size_t i=0;i<=n;i++){
+  unsigned char c=i<n?src[i]:'\n';
+  int letter=(c>='A'&&c<='Z')||(c>='a'&&c<='z')||
+             (c>='0'&&c<='9')||c=='\'';
+  if(letter){
+   if(len<MAXWORD-1)buf[len++]=(char)tolower(c);
+  }else if(len){
+   buf[len]=0;len=0;
+   if(lookup(buf)!=2)continue;
+   if(nw>=VOC)return -1;
+   strcpy(words[nw].text,buf);
+   words[nw++].freq=1;
+   added++;
+  }
+ }
+ return added;
+}
 static int finish_vocabulary(void){
  /* Q/A boundary tokens are protocol vocabulary, not ordinary terms.
   * Frequency selection must never replace either with <unk>. */
- strcpy(words[nw++].text,"question");
- strcpy(words[nw++].text,"answer");
  qsort(counts,term_slots,sizeof(*counts),word_order);
  for(unsigned i=0;i<distinct&&nw<VOC;i++){
   if(!counts[i].count)break;
-  if(!strcmp(counts[i].text,"question")||
-     !strcmp(counts[i].text,"answer"))continue;
+  if(lookup(counts[i].text)!=2)continue;
   strcpy(words[nw].text,counts[i].text);
   words[nw++].freq=(int)counts[i].count;
  }
@@ -520,9 +540,19 @@ int main(int argc,char **argv){
  if((argc!=6&&argc!=7)||strcmp(argv[1],"train")){
   fputs("usage: word_gru train TRAIN VALID MODEL SAMPLE [DIALOGUE]\n",stderr);return 2;
  }
- size_t tn=0,vn=0;unsigned char *tr=load(argv[2],&tn),*va=load(argv[3],&vn);
- if(!tr||!va){fputs("training corpus unavailable\n",stderr);free(tr);free(va);return 1;}
+ size_t tn=0,vn=0,dn=0;
+ unsigned char *tr=load(argv[2],&tn),*va=load(argv[3],&vn);
+ unsigned char *dialogue=argc==7?load(argv[6],&dn):NULL;
+ if(!tr||!va||(argc==7&&!dialogue)){
+  fputs("training, validation or approved dialogue corpus unavailable\n",stderr);
+  free(tr);free(va);free(dialogue);return 1;
+ }
  strcpy(words[0].text,"<bos>");strcpy(words[1].text,"<eos>");strcpy(words[2].text,"<unk>");
+ strcpy(words[nw++].text,"question");strcpy(words[nw++].text,"answer");
+ int reserved=dialogue?reserve_dialogue_terms(dialogue,dn):0;
+ if(reserved<0){fputs("approved dialogue vocabulary exceeds capacity\n",stderr);
+  free(tr);free(va);free(dialogue);return 1;}
+ printf("dialogue_vocabulary_reserved=%d\n",reserved);
  if(!grow_vocabulary_counts()){free(tr);free(va);return 1;}
  int count=0;int *scratch=tokenize(tr,tn,&count,1);
  if(!scratch||!finish_vocabulary()){fputs("vocabulary construction failed\n",stderr);free(scratch);free(counts);free(tr);free(va);return 1;}
@@ -557,13 +587,7 @@ int main(int argc,char **argv){
   else if(++bad_epochs>=5){printf("early_stop_epoch=%d\n",epoch+1);break;}
  }
  if(argc==7){
-  size_t dn=0;unsigned char *dialogue=load(argv[6],&dn);
-  if(!dialogue){
-   fputs("dialogue corpus missing, empty or exceeds 16 MiB\n",stderr);
-   free(m);free(best);free(moment1);free(moment2);
-   free(train);free(valid);return 1;
-  }
-  /* The optimizer history belongs to the final epoch, not the best
+   /* The optimizer history belongs to the final epoch, not the best
    * validation checkpoint. Reset its moments for this separate objective. */
   memset(moment1,0,sizeof(*moment1));
   memset(moment2,0,sizeof(*moment2));
