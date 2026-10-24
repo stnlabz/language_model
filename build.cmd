@@ -105,6 +105,8 @@ if errorlevel 1 exit /b 1
 echo run_directory=%RUN% > "%RUN%\report.txt"
 echo start_date=%DATE% %TIME% >> "%RUN%\report.txt"
 echo Stage 1: Native self-test...
+build\word_gru.exe test-dialogue > "%RUN%\dialogue_fixture.log" 2>&1
+if errorlevel 1 goto failed
 build\prepare.exe prepare samples\synthetic_language.txt "%RUN%\smoke_train.bin" "%RUN%\smoke_valid.bin" > "%RUN%\smoke_prepare.log" 2>&1
 if errorlevel 1 goto failed
 build\model.exe train "%RUN%\smoke_train.bin" "%RUN%\smoke_valid.bin" 200 "%RUN%\smoke.stn" > "%RUN%\smoke_train.log" 2>&1
