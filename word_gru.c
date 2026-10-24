@@ -233,7 +233,7 @@ static int dialogue_tokens(const char *line,int *sequence,unsigned char *mask,
  const char *answer=strstr(line," Answer: ");
  if(strncmp(line,"Question: ",10)||!answer||answer==line+10)return -1;
  if(!answer[9]||strstr(answer+9," Answer: "))return -1;
- int count=0,seen_answer=0,previous=0;
+ int count=0,seen_answer=0,previous=0,answer_words=0;
  char wordbuf[MAXWORD];int length=0;
  for(const char *p=line;;p++){
   unsigned char c=(unsigned char)*p;
@@ -247,12 +247,13 @@ static int dialogue_tokens(const char *line,int *sequence,unsigned char *mask,
     if(count>=cap-2)return -1;
     sequence[count]=lookup(wordbuf);
     mask[count]=(unsigned char)(seen_answer&&p>answer+9);
+    if(mask[count])answer_words++;
     if(!strcmp(wordbuf,"answer")&&p>answer&&p<=answer+7)
      seen_answer=1;
     previous=sequence[count];count++;length=0;
    }
    if(c=='\n'||c==0){
-    if(!seen_answer||count>=cap)return -1;
+    if(!seen_answer||!answer_words||count>=cap)return -1;
     if(previous!=1){sequence[count]=1;mask[count]=1;count++;}
     return count;
    }
