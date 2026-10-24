@@ -482,7 +482,7 @@ int main(int argc,char **argv){
    tick ts[BPTT];int n=0;
    while(n<BPTT&&pos<nt){
     int target=train[pos++];forward(m,h,prev,&ts[n]);
-    ts[n].target=target;ts[n].reset=prev==0;
+    ts[n].target=target;ts[n].reset=prev==0;ts[n].supervised=1;
     memcpy(h,ts[n].h,sizeof(h));prev=target;n++;
     if(target==1){memset(h,0,sizeof(h));prev=0;}
    }
