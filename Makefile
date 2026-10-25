@@ -31,10 +31,10 @@ sqlite_corpus: sqlite_corpus.c
 sqlite-export: sqlite_corpus
 	@./sqlite_corpus '$(SQLITE_DB)'
 sqlite-learn: sqlite_corpus micro_llm
-	@tmp=$(mktemp /tmp/stn-sqlite-corpus-XXXXXX) || exit 1; \\
-	trap 'rm -f "$tmp"' EXIT HUP INT TERM; \\
-	./sqlite_corpus '$(SQLITE_DB)' > "$tmp" && \\
-	./micro_llm train "$tmp" '$(CHECKPOINT)' '$(STEPS)'
+	@tmp=$$(mktemp /tmp/stn-sqlite-corpus-XXXXXX) || exit 1; \
+	trap 'rm -f "$$tmp"' EXIT HUP INT TERM; \
+	./sqlite_corpus '$(SQLITE_DB)' > "$$tmp" && \
+	./micro_llm train "$$tmp" '$(CHECKPOINT)' '$(STEPS)'
 micro_llm: micro_llm.c
 	$(CC) $(CFLAGS) micro_llm.c -lm -o micro_llm
 gru_learn: gru_learn.c json_fields.h
