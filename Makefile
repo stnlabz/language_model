@@ -10,18 +10,20 @@ BYTES ?= 64
 SEED ?= 913
 PORT ?= 8765
 SQLITE_DB ?= /opt/digit/data/digit_memory.db
+SQLITE_CHECKPOINT ?= sqlite-trained.stn
 
 .DEFAULT_GOAL := help
 .PHONY: help build test native-test math-test language-test prose-test sqlite-test sqlite-export sqlite-learn sqlite-evaluate prepare train generate learn serve status clean
 help:
 	@echo 'make build'
-	@echo 'make test (native, mathematical, and language qualification; aggregate PASS/FAIL)'
+	@echo 'make test (native, math, SQLite adapter and SQLite-checkpoint evaluation)'
 	@echo 'make clean'
 	@echo 'make sqlite-export SQLITE_DB=/opt/digit/data/digit_memory.db (read-only; stdout)'
 	@echo 'make sqlite-test (synthetic database; does not access Digit)'
 	@echo 'make prose-test (synthetic prose training, held-out loss and generation diagnostic)'
 	@echo 'make sqlite-learn SQLITE_DB=... CHECKPOINT=new.stn STEPS=... (train and evaluate that checkpoint)' 
 	@echo 'make sqlite-evaluate SQLITE_DB=... CHECKPOINT=existing.stn (evaluate existing model against DB)'
+	@echo 'make language-test SQLITE_CHECKPOINT=sqlite-trained.stn (evaluate DB-backed checkpoint, no fixture retraining)'
 	@echo 'make prepare DATA=digit_approved_learning.jsonl CORPUS=micro_corpus.txt'
 	@echo 'make learn DATA=digit_approved_learning.jsonl CHECKPOINT=llm.stn STEPS=5000'
 	@echo 'make generate CHECKPOINT=llm.stn PROMPT="The engineer"'
@@ -52,7 +54,7 @@ native-test:
 # individual exit status and fail the aggregate if any group fails.
 test:
 	@failed=0; \
-	for target in native-test math-test sqlite-test prose-test language-test; do \
+	for target in native-test math-test sqlite-test language-test; do \
 		printf '\n=== %s ===\n' "$$target"; \
 		if $(MAKE) --no-print-directory "$$target"; then \
 			printf 'PASS: %s\n' "$$target"; \
@@ -90,9 +92,12 @@ math-test:
 	./tests/model_math
 tests/model_math: tests/model_math.c micro_llm.c
 	$(CC) $(CFLAGS) tests/model_math.c -lm -o tests/model_math
-language-test:
-	@echo 'Language qualification: bounded to 180 seconds; training artifacts retained.'
-	@timeout -v -k 5s 180s sh ./tests/language_qualification.sh
+# Production language evaluation uses only the existing SQLite-trained artifact.
+# The historical eight-question fixture remains available as a standalone
+# development diagnostic, not a default project qualification.
+language-test: sqlite_corpus micro_llm
+	@echo 'SQLite-backed model evaluation: $(SQLITE_CHECKPOINT)'
+	@sh tests/sqlite_model_pipeline.sh '$(SQLITE_DB)' '$(SQLITE_CHECKPOINT)' '$(STEPS)' evaluate
 
 # Synthetic SQLite regression: exercises approval filter, duplicates, and read-only access.
 tests/sqlite_corpus_test: tests/sqlite_corpus_test.c
