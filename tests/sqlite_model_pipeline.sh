@@ -46,17 +46,28 @@ printf '\n'
 # Reject the observed repeating-character failure, not claim that a
 # structural check proves grammar, comprehension, or language fluency.
 if ! LC_ALL=C awk '
- { for (i=1;i<=length($0);i++) {
-    c=substr($0,i,1)
+ { line=$0
+   if(length(line)<1)bad=1
+   for(i=1;i<=length(line);i++){
+    c=substr(line,i,1)
     if(c==prev)run++;else run=1
-    if(run>=12)degenerate=1
+    if(run>=12)bad=1
     if(c==" ")spaces++
     prev=c
    }
+   for(unit=2;unit<=8;unit++){
+    for(i=1;i+3*unit-1<=length(line);i++){
+     fragment=substr(line,i,unit)
+     if(fragment==substr(line,i+unit,unit) && fragment==substr(line,i+2*unit,unit)){
+      bad=1
+     }
+    }
+   }
  }
- END { if(degenerate || spaces==0)exit 1 }
+ END { if(bad || spaces==0)exit 1 }
+
 ' "$sample"; then
- echo "FAIL: actual model output is degenerate (long character repetition or no word separators)" >&2
+ echo "FAIL: actual model output has repeated character/fragment sequences or no word separators" >&2
  exit 1
 fi
-echo "Generation nondegeneracy check: PASS; language competency still requires inspection."
+echo "Generation structure check: PASS (not proof of coherent English)."
