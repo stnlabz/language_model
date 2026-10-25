@@ -77,7 +77,9 @@ static void handle(int fd,const char *binary,const char *checkpoint){
   response(fd,404,"{\"error\":\"not found\"}");return;
  }
  char *cl=NULL;
- for(char *p=strstr(request,"\r\n")+2;p<body-2;){
+ char *first_line_end=strstr(request,"\r\n");
+ if(!first_line_end){response(fd,400,"{\"error\":\"invalid request line\"}");return;}
+ for(char *p=first_line_end+2;p<body-2;){
   char *e=strstr(p,"\r\n");if(!e||e>=body)break;
   if(!strncasecmp(p,"Content-Length:",15)){cl=p+15;break;}
   p=e+2;
