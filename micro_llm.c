@@ -31,6 +31,8 @@ typedef struct {
 static float *grad,*moment,*variance;
 static unsigned char *data;
 static size_t data_len;
+/* Answer-focused supervision is enabled only for record-aligned training. */
+static int supervision_start=0;
 static Model *model;
 static int load_data(const char *path){
  FILE *f=fopen(path,"rb");if(!f){perror(path);return 0;}
@@ -113,16 +115,16 @@ static float forward(const unsigned char *tokens,int n,int target,Cache *c){
    sum+=c->prob[t][b];
   }
   for(int b=0;b<V;b++)c->prob[t][b]/=sum;
-  if(target>=0)loss-=logf(fmaxf(c->prob[t][tokens[t+1]],1e-20f));
+  if(target>=0 && t>=supervision_start)loss-=logf(fmaxf(c->prob[t][tokens[t+1]],1e-20f));
  }
- return target<0?0.f:loss/(float)n;
+ return target<0?0.f:loss/(float)(n-supervision_start);
 }
 static void backward(const unsigned char *tokens,int n,Cache *c,Model *g){
  float dy[T][D]={0},dh[T][D]={0},dx[T][D]={0};
  float dq[T][D]={0},dk[T][D]={0},dv[T][D]={0},dmix[T][D]={0};
- for(int t=0;t<n;t++){
+ for(int t=supervision_start;t<n;t++){
   for(int b=0;b<V;b++){
-   float e=(c->prob[t][b]-(b==tokens[t+1]?1.f:0.f))/(float)n;
+   float e=(c->prob[t][b]-(b==tokens[t+1]?1.f:0.f))/(float)(n-supervision_start);
    for(int i=0;i<D;i++){
     g->emb[b][i]+=e*c->y[t][i];
     dy[t][i]+=e*model->emb[b][i];
@@ -181,7 +183,18 @@ static int train(const char *corpus,const char *output,int steps){
  if(steps<1||steps>200000){fputs("steps must be 1..200000\n",stderr);return 2;}
  if(!load_data(corpus))return 1;
  if(data_len<=T+1024){fputs("corpus too short for train/validation split\n",stderr);free(data);return 1;}
- const size_t split=data_len*9/10;
+ /* Collect boundaries before splitting so held-out examples do not leak
+  * through a byte-position cut. Blank lines delimit approved records. */
+ size_t *starts=malloc((data_len+1)*sizeof(size_t));
+ if(!starts){free(data);return 1;}
+ size_t count=0;
+ starts[count++]=0;
+ for(size_t i=1;i+1<data_len;i++)
+  if(data[i-1]=='\n' && data[i]=='\n' && i+1<data_len && data[i+1]!='\n')
+   starts[count++]=i+1;
+ if(count<2){free(starts);free(data);fputs("corpus needs at least two records\n",stderr);return 1;}
+ size_t training_count=count*9/10;
+ if(training_count<1)training_count=1;
  init();
  grad=calloc(1,sizeof(*model));moment=calloc(1,sizeof(*model));variance=calloc(1,sizeof(*model));
  if(!grad||!moment||!variance)return 1;
@@ -193,12 +206,34 @@ static int train(const char *corpus,const char *output,int steps){
   memset(grad,0,sizeof(*model));
   float total=0.f;
   for(int sample=0;sample<2;sample++){
-   int n=T/2+(int)(rng()%(T/2+1));
-   size_t start=(size_t)(rng()%(split-(size_t)n-1));
-   unsigned char *tok=data+start;
-   total+=forward(tok,n,0,c);
-   backward(tok,n,c,(Model*)grad);
+   size_t index=(size_t)(rng()%training_count);
+   size_t begin=starts[index];
+   size_t end=index+1<count?starts[index+1]:data_len;
+   while(end>begin && (data[end-1]=='\n'||data[end-1]=='\r'))end--;
+   if(end<=begin+1){sample--;continue;}
+   size_t answer=begin;
+   const char label[]="Answer:";
+   for(size_t p=begin;p+sizeof(label)-1<=end;p++)
+    if(!memcmp(data+p,label,sizeof(label)-1)){answer=p+sizeof(label)-1;break;}
+   /* Crop from the record, keeping as much question context as fits
+    * before the answer. Train only answer bytes for labeled records. */
+   size_t window=begin;
+   if(end-begin>T+1){
+    if(answer>begin && end-answer<T)window=end-(T+1);
+    else if(answer>begin)window=answer>T/2?answer-T/2:begin;
+    else window=begin+(size_t)(rng()%(end-begin-T));
+   }
+   if(window<begin)window=begin;
+   if(window+1>=end)window=end-2;
+   int n=(int)((end-window-1)<T?(end-window-1):T);
+   if(n<1){sample--;continue;}
+   supervision_start=0;
+   if(answer>window && answer<window+(size_t)n)
+    supervision_start=(int)(answer-window);
+   total+=forward(data+window,n,0,c);
+   backward(data+window,n,c,(Model*)grad);
   }
+  supervision_start=0;
   float *w=(float*)model;
   float b1=1.f-powf(0.9f,(float)s),b2=1.f-powf(0.999f,(float)s);
   for(size_t i=0;i<sizeof(*model)/sizeof(float);i++){
@@ -210,16 +245,30 @@ static int train(const char *corpus,const char *output,int steps){
   if(s==1||s%100==0||s==steps){
    float validation=0;
    for(int j=0;j<8;j++){
-    int n=T/2+(int)(rng()%(T/2+1));
-    size_t pos=split+(size_t)(rng()%(data_len-split-(size_t)n-1));
-    validation+=forward(data+pos,n,0,c)/8.f;
+    size_t index=training_count+(size_t)(rng()%(count-training_count));
+    size_t begin=starts[index],end=index+1<count?starts[index+1]:data_len;
+    while(end>begin && (data[end-1]=='\n'||data[end-1]=='\r'))end--;
+    if(end<=begin+1)continue;
+    size_t window=begin;
+    if(end-begin>T+1)window=end-T-1;
+    int n=(int)((end-window-1)<T?(end-window-1):T);
+    supervision_start=0;
+    const char label[]="Answer:";
+    for(size_t p=window;p+sizeof(label)-1<=end;p++)
+     if(!memcmp(data+p,label,sizeof(label)-1)){
+      size_t offset=p+sizeof(label)-1-window;
+      if(offset<(size_t)n)supervision_start=(int)offset;
+      break;
+     }
+    validation+=forward(data+window,n,0,c)/8.f;
    }
+   supervision_start=0;
    printf("step=%d train_loss=%.5f validation_loss=%.5f\n",s,total/2.f,validation);
    fflush(stdout);
   }
  }
  int ok=save(output,(uint64_t)steps);
- free(c);free(data);free(grad);free(moment);free(variance);free(model);
+ free(starts);free(c);free(data);free(grad);free(moment);free(variance);free(model);
  return ok?0:1;
 }
 /* Compatibility only: legacy filtered sampler used by the existing service.
