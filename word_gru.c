@@ -331,6 +331,12 @@ static int dialogue_train(net *m,const unsigned char *source,size_t bytes,
         supervised&&loss_total?*loss_total/supervised:0.0);
  return processed;
 }
+/* Fail closed: a dialogue candidate cannot replace a base-language model
+ * if its complete held-out base loss increases or becomes nonfinite. */
+static int preserves_language(double candidate,double baseline){
+ return isfinite(candidate)&&isfinite(baseline)&&
+        candidate<=baseline+0.000001;
+}
 static double evaluate(net *m,const int *seq,int count){
  float h[H]={0};tick t;int prev=0;double loss=0;int used=0;
  for(int i=0;i<count;i++){
@@ -615,6 +621,12 @@ static int sample_checkpoint(int argc,char **argv){
 }
 /* Deterministic, data-free fixture for the new supervised record boundary. */
 static int test_dialogue(void){
+ if(!preserves_language(4.68370,4.68370) ||
+    preserves_language(4.93135,4.68370) ||
+    preserves_language(NAN,4.68370)){
+  fputs("dialogue_preservation_gate=FAIL\\n",stderr);return 1;
+ }
+ puts("dialogue_preservation_gate=PASS");
  int seq[64]={0};unsigned char mask[64]={0};
  int n=dialogue_tokens("Question: Hello? Answer: Hi there.\n",
                       seq,mask,64);
@@ -747,7 +759,7 @@ int main(int argc,char **argv){
    if(epoch==1||epoch==2||epoch==4||epoch%4==0){
     double candidate_loss=evaluate(m,valid,nv);
     checked++;
-    int preserves=isfinite(candidate_loss)&&candidate_loss<=best_loss+0.000001;
+    int preserves=preserves_language(candidate_loss,best_loss);
     printf("dialogue_candidate_epoch=%d base_valid_loss=%.5f delta=%+.5f preservation=%s\\n",
            epoch,candidate_loss,candidate_loss-best_loss,
            preserves?"PASS":"FAIL");
