@@ -66,7 +66,8 @@ int main(int argc,char **argv){
  if(fd<0){perror("mkstemp");return 1;}
  FILE *corpus=fdopen(fd,"wb");if(!corpus){close(fd);unlink(temp);return 1;}
  int valid=convert(argv[1],corpus);
- if(fflush(corpus)||fclose(corpus))valid=-1;
+ if(fflush(corpus))valid=-1;
+ if(fclose(corpus))valid=-1;
  if(valid){unlink(temp);return 1;}
  pid_t pid=fork();
  if(pid<0){perror("fork");unlink(temp);return 1;}
