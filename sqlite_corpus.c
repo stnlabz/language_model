@@ -35,23 +35,24 @@ static int export_corpus(const char *path){
   const unsigned char *value=sqlite3_column_text(stmt,1);
   int bytes=sqlite3_column_bytes(stmt,1);
   if(!value||bytes<1)continue;
-  if(memchr(value,0,(size_t)bytes)){
-   fputs("Corpus contains NUL byte; refusing malformed export\n",stderr);
+  if(memchr(value,0,(size_t)bytes)||memchr(value,0x1e,(size_t)bytes)){
+   fputs("Corpus contains reserved NUL or record-separator byte; refusing malformed export\n",stderr);
    rc=SQLITE_MISMATCH;break;
   }
-  /* Normalize boundary only, leaving lesson text unchanged. */
+  /* Keep internal paragraph boundaries intact. ASCII RS separates records
+   * unambiguously; blank lines are valid lesson content. */
   size_t n=(size_t)bytes;
   while(n && (value[n-1]=='\n'||value[n-1]=='\r'))n--;
   if(n<2)continue;
-  if(n>MAX_BYTES-total-2){
+  if(n>MAX_BYTES-total-1){
    fputs("Approved corpus exceeds 50MB export limit\n",stderr);
    rc=SQLITE_TOOBIG;break;
   }
-  if(fwrite(value,1,n,stdout)!=n||fwrite("\n\n",1,2,stdout)!=2){
+  if(fwrite(value,1,n,stdout)!=n||fwrite("\036",1,1,stdout)!=1){
    fputs("Corpus export write failure\n",stderr);
    rc=SQLITE_IOERR;break;
   }
-  total+=n+2;records++;
+  total+=n+1;records++;
  }
  int ok=(rc==SQLITE_DONE)&&records>0&&fflush(stdout)==0;
  if(rc==SQLITE_DONE&&records==0)fputs("No operator-verified lesson records\n",stderr);
