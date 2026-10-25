@@ -535,11 +535,17 @@ static int train(const char *corpus,const char *output,int steps){
     float *w=(float*)model;
     float b1=1.f-powf(0.9f,(float)updates);
     float b2=1.f-powf(0.999f,(float)updates);
+    /* Per-record Adam now performs tens of thousands of updates rather
+     * than 5000. A constant former step rate across those extra updates
+     * risks overshooting already-learned language distributions. Anneal
+     * using the actual record-visit budget, not reporting-group count. */
+    float completed=(float)(visit+1)/(float)total_visits;
+    float rate=0.0007f*(1.f-0.9f*completed);
     for(size_t i=0;i<sizeof(*model)/sizeof(float);i++){
      float d=fmaxf(-1.f,fminf(1.f,grad[i]/(float)record_targets));
      moment[i]=0.9f*moment[i]+0.1f*d;
      variance[i]=0.999f*variance[i]+0.001f*d*d;
-     w[i]-=0.0007f*(moment[i]/b1)/(sqrtf(variance[i]/b2)+1e-8f);
+     w[i]-=rate*(moment[i]/b1)/(sqrtf(variance[i]/b2)+1e-8f);
     }
    }
   }
