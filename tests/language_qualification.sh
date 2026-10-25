@@ -3,6 +3,7 @@
 set -eu
 cd "$(dirname "$0")/.."
 run=$(mktemp -d ./tests/qualification-XXXXXX)
+trap 'rm -rf -- "$run"' EXIT HUP INT TERM
 cc -std=c11 -O2 -Wall -Wextra -pedantic micro_llm.c -lm -o "$run/micro_llm"
 cc -std=c11 -O2 -Wall -Wextra -pedantic tests/model_math.c -lm -o "$run/model_math"
 cc -std=c11 -O2 -Wall -Wextra -pedantic tests/context_alignment.c -lm -o "$run/context_alignment"
@@ -14,7 +15,7 @@ if [ "$#" -eq 0 ]; then
 fi
 # Evaluation records are never optimized. Check all training prompts and all
 # held-out prompts, even when an earlier one fails. No sample cherry-picking.
-printf 'Qualification artifacts: %s\n' "$run"
+printf 'Qualification run (temporary): %s\n' "$run"
 sh tests/evaluate_alignment.sh "$run/micro_llm" "$checkpoint" "$run/outputs" > "$run/generation.log" && result=0 || result=$?
 cat "$run/generation.log"
 exit "$result"
