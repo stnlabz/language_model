@@ -1,0 +1,31 @@
+# Build outputs and model artifacts (any directory)
+*.o
+*.obj
+*.a
+*.so
+*.so.*
+*.dylib
+*.dll
+*.exe
+*.elf
+*.bin
+*.out
+*.stn
+*.pyc
+
+# Native executables without file extensions
+/micro_llm
+/gru_learn
+/llm_service
+/sqlite_corpus
+/tests/model_math
+/tests/native_regression
+/tests/sqlite_corpus_test
+/tests/context_utilization
+/tests/position_probe
+
+# Temporary and generated test outputs
+/tests/qualification-*/
+/tests/prose-qualification-*/
+/tests/position-probe-*-current/
+/gru_runs/
