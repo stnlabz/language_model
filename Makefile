@@ -14,8 +14,9 @@ SQLITE_DB ?= /opt/digit/data/digit_memory.db
 SQLITE_CHECKPOINT ?= sqlite-retrained.stn
 
 .DEFAULT_GOAL := help
-.PHONY: FORCE help build test native-test math-test language-test prose-test sqlite-test sqlite-export sqlite-learn sqlite-evaluate prepare train generate learn serve status clean
+.PHONY: FORCE lexicon-export help build test native-test math-test language-test prose-test sqlite-test sqlite-export sqlite-learn sqlite-evaluate prepare train generate learn serve status clean
 help:
+	@echo 'make lexicon-export CORPUS=approved-corpus.txt (native, corpus-derived words and counts to stdout)'
 	@echo 'make build'
 	@echo 'make test (native, math, SQLite adapter and SQLite-checkpoint evaluation)'
 	@echo 'make clean'
@@ -45,6 +46,10 @@ sqlite-learn: sqlite_corpus micro_llm
 	@STN_EPOCHS='$(EPOCHS)' sh tests/sqlite_model_pipeline.sh '$(SQLITE_DB)' '$(CHECKPOINT)' '$(STEPS)' train
 sqlite-evaluate: sqlite_corpus micro_llm
 	@sh tests/sqlite_model_pipeline.sh '$(SQLITE_DB)' '$(CHECKPOINT)' '$(STEPS)' evaluate
+lexicon: lexicon.c FORCE
+	$(CC) $(CFLAGS) lexicon.c -o lexicon
+lexicon-export: lexicon
+	@./lexicon '$(CORPUS)'
 micro_llm: micro_llm.c FORCE
 	$(CC) $(CFLAGS) micro_llm.c -lm -o micro_llm
 gru_learn: gru_learn.c json_fields.h
@@ -91,7 +96,7 @@ status:
 
 # Clean only generated executables; retain JSONL, corpora and model checkpoints.
 clean:
-	rm -f micro_llm gru_learn llm_service sqlite_corpus tests/native_regression tests/model_math tests/sqlite_corpus_test
+	rm -f lexicon micro_llm gru_learn llm_service sqlite_corpus tests/native_regression tests/model_math tests/sqlite_corpus_test
 
 # Mathematical checks and synthetic language qualification; no service startup.
 math-test:
