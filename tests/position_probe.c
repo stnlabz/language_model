@@ -3,8 +3,8 @@
 #include "../micro_llm.c"
 #undef main
 static void probe(const char *kind,const char *subject,const char *prompt){
- const char *answer=!strcmp(subject,"engineer")?" An engineer designs systems.":" A gardener grows plants.";
- const char *wrong=!strcmp(subject,"engineer")?" A gardener grows plants.":" An engineer designs systems.";
+ const char *answer=!strcmp(subject,"engineer")?" An engineer designs systems.":!strcmp(subject,"mechanic")?" A mechanic repairs machines.":" A gardener grows plants.";
+ const char *wrong=(!strcmp(subject,"engineer")||!strcmp(subject,"mechanic"))?" A gardener grows plants.":" An engineer designs systems.";
  unsigned char buf[512];size_t plen=strlen(prompt),alen=strlen(answer);Cache *c=malloc(sizeof(*c));
  double loss[2]={0,0};int teacher_correct=0;
  for(int option=0;option<2;option++){
@@ -29,23 +29,21 @@ static void probe(const char *kind,const char *subject,const char *prompt){
  puts("\"");free(c);
 }
 int main(int argc,char **argv){
- if(argc!=2)return 2;init();if(!restore(argv[1]))return 1;
+ if(argc!=2)return 2;
+ init();if(!restore(argv[1]))return 1;
  puts("variant,subject,prefix_bytes,exact,teacher_correct,answer_bytes,correct_nll,wrong_nll,generated");
  const char *subjects[]={"engineer","gardener"};
  for(int s=0;s<2;s++){
   const char *article=s?"a":"an",*job=subjects[s];char prompt[400],base[300],label[80];
   snprintf(base,sizeof(base),"Question: What is %s %s?\nAnswer:",article,job);
   probe("trained_short",job,base);
-  snprintf(prompt,sizeof(prompt),"Question: Tell me what %s %s does.\nAnswer:",article,job);probe("trained_tell",job,prompt);
-  snprintf(prompt,sizeof(prompt),"Question: What work does %s %s perform?\nAnswer:",article,job);probe("trained_work",job,prompt);
-  snprintf(prompt,sizeof(prompt),"Question: Describe %s %s's job.\nAnswer:",article,job);probe("trained_describe",job,prompt);
+  snprintf(prompt,sizeof(prompt),"Question: Tell me what %s %s does.\nAnswer:",article,job);probe("reference_tell",job,prompt);
+  snprintf(prompt,sizeof(prompt),"Question: What work does %s %s perform?\nAnswer:",article,job);probe("reference_work",job,prompt);
+  snprintf(prompt,sizeof(prompt),"Question: Describe %s %s's job.\nAnswer:",article,job);probe("reference_describe",job,prompt);
   snprintf(prompt,sizeof(prompt),"Question: Explain the job of %s %s.\nAnswer:",article,job);probe("heldout_explain",job,prompt);
   snprintf(prompt,sizeof(prompt),"Question: What does %s %s do for work?\nAnswer:",article,job);probe("heldout_work",job,prompt);
   for(int k=1;k<=12;k++){
    memset(prompt,' ',(size_t)k);strcpy(prompt+k,base);snprintf(label,sizeof(label),"leftpad_%02d",k);probe(label,job,prompt);
-   strcpy(prompt,base);size_t n=strlen(prompt);memset(prompt+n,' ',(size_t)k);prompt[n+k]=0;
-   /* Trailing spaces alter the answer-prefix boundary: use leading pads as
-    * the primary clean position intervention, not this additional control. */
   }
   strcpy(prompt,base);*strchr(prompt,'\n')=' ';probe("newline_to_space",job,prompt);
   strcpy(prompt,base);*strchr(prompt,'?')='.';probe("question_to_period",job,prompt);
@@ -56,8 +54,11 @@ int main(int argc,char **argv){
   strcpy(prompt,base);at=strstr(prompt,job);char *end=strchr(prompt,'\n');
   for(char *p=prompt+10;p<end;p++)if(!(p>=at&&p<at+strlen(job))&&*p!=' ')*p='x';
   probe("wording_erased",job,prompt);
+  strcpy(prompt,base);at=strstr(prompt,job);memcpy(at,subjects[1-s],8);
+  probe("subject_swapped",subjects[1-s],prompt);
   /* Equal-length alternative wording, preserving answer position exactly. */
   snprintf(prompt,sizeof(prompt),"Question: Name me %s %s.\nAnswer:",article,job);probe("unseen_same_length",job,prompt);
  }
+ probe("same_length_trained","mechanic","Question: What is a mechanic?\nAnswer:");
  free(model);return 0;
 }
