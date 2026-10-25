@@ -27,7 +27,66 @@ static void score(const unsigned char *bytes,size_t k,size_t begin,
   if(q>best){best=q;*predicted=b;}
  }
 }
-int main(int argc,char **argv){
+
+/* Compare equal-length content mutation with a one-byte position shift.
+ * Both retain the exact original target byte. No model parameters change.
+ * Padding uses a real leading space and changes both length and attention,
+ * so this diagnoses shift sensitivity rather than attributing causality to
+ * positional embeddings alone. */
+static int sensitivity_probe(const size_t *starts,size_t count,Cache *c){
+ size_t train_count=count*9/10;
+ if(train_count<1)train_count=1;
+ for(int part=0;part<2;part++){
+  size_t lo=part?train_count:0,hi=part?count:train_count;
+  double base=0,content=0,shift=0;
+  size_t used=0,rank_base=0,rank_content=0,rank_shift=0;
+  /* Replicable partition-stratified samples from real records.
+   * Select a target where a one-byte prefix remains below context T.
+   * Preserve target and suffix; replace the first third of context with
+   * byte 'x' (equal length), versus prefixing one literal space. */
+  for(size_t j=0;j<256;j++){
+   size_t index=lo+(j*(hi-lo))/256;
+   size_t begin=starts[index],end=index+1<count?starts[index+1]:data_len;
+   while(end>begin&&(data[end-1]=='\n'||data[end-1]=='\r'||data[end-1]==0x1e))end--;
+   if(end<=begin+16)continue;
+   size_t span=end-begin-1;
+   size_t offset=16+(j*17u)%(span-15);
+   if(offset>=T)offset=T-1;
+   size_t k=begin+offset;
+   if(k>=end)continue;
+   unsigned char original[T+1],changed[T+1],padded[T+1];
+   size_t n=k-begin;
+   if(n<16||n>=T)continue;
+   memcpy(original,data+begin,n);
+   memcpy(changed,original,n);
+   /* Content intervention does not alter byte count, target, or
+    * the final two thirds of the prediction context. */
+   for(size_t q=0;q<n/3;q++)changed[q]='x';
+   padded[0]=' ';memcpy(padded+1,original,n);
+   const unsigned char target=data[k];
+   const unsigned char *inputs[3]={original,changed,padded};
+   double losses[3];int ranks[3];
+   for(int a=0;a<3;a++){
+    size_t len=n+(a==2);
+    forward(inputs[a],(int)len,-1,c);
+    float prob=c->prob[len-1][target];
+    losses[a]=-log(fmax((double)prob,1e-30));
+    int rank=1;
+    for(int b=0;b<V;b++)if(c->prob[len-1][b]>prob)rank++;
+    ranks[a]=rank;
+   }
+   base+=losses[0];content+=losses[1];shift+=losses[2];
+   rank_base+=(size_t)ranks[0];rank_content+=(size_t)ranks[1];rank_shift+=(size_t)ranks[2];
+   used++;
+  }
+  if(!used){fprintf(stderr,"no eligible sensitivity samples for %s\n",part?"heldout":"training");return 1;}
+  printf("sensitivity partition=%s measured=%zu baseline_nll=%.7f content_nll=%.7f shift_nll=%.7f baseline_rank=%.3f content_rank=%.3f shift_rank=%.3f\n",
+   part?"heldout":"training",used,base/used,content/used,shift/used,
+   (double)rank_base/used,(double)rank_content/used,(double)rank_shift/used);
+ }
+ return 0;
+}
+\nint main(int argc,char **argv){
  if(argc!=3){fputs("usage: context_window_probe EXPORTED_CORPUS CHECKPOINT\n",stderr);return 2;}
  if(!load_data(argv[1]))return 1;
  /* Same record delimiter precedence as train() and evaluate_corpus(). */
@@ -46,7 +105,7 @@ int main(int argc,char **argv){
  if(!restore(argv[2])){free(model);free(starts);free(data);return 1;}
  Cache *c=malloc(sizeof(*c));
  if(!c){free(model);free(starts);free(data);return 1;}
- size_t training_count=count*9/10;
+ if(argc==4){int rc=sensitivity_probe(starts,count,c);free(c);free(model);free(starts);free(data);return rc;}\n size_t training_count=count*9/10;
  if(training_count<1)training_count=1;
  puts("partition,record,target_offset,training_context,inference_context,training_nll,inference_nll,training_rank,inference_rank,training_best,inference_best,target");
  for(int part=0;part<2;part++){
