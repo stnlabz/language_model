@@ -156,18 +156,17 @@ static int train(const char *corpus,const char *output,int steps){
  if(!grad||!moment||!variance)return 1;
  Cache *c=malloc(sizeof(*c));if(!c)return 1;
  for(int s=1;s<=steps;s++){
-  /* Four supervised next-byte targets per update, each with its own
-   * causal prefix. Previous code supervised only one position/update. */
+  /* Match training prefix lengths to inference, which can be called with
+   * any length from 1..T. Earlier training used only T-1 and T, leaving
+   * most final-position embeddings unsupervised at generation time. */
   memset(grad,0,sizeof(*model));
   float total=0;
-  for(int sample=0;sample<2;sample++){
-   size_t start=(size_t)(rng()%(split-T-1));
+  for(int sample=0;sample<4;sample++){
+   int n=1+(int)(rng()%T);
+   size_t start=(size_t)(rng()%(split-(size_t)n));
    unsigned char *tok=data+start;
-   for(int offset=0;offset<2;offset++){
-    int n=T-1+offset;
-    total+=forward(tok,n,tok[n],c);
-    backward(tok,n,tok[n],c,(Model*)grad);
-   }
+   total+=forward(tok,n,tok[n],c);
+   backward(tok,n,tok[n],c,(Model*)grad);
   }
   float *w=(float*)model;
   float b1=1.f-powf(0.9f,(float)s),b2=1.f-powf(0.999f,(float)s);
@@ -180,8 +179,9 @@ static int train(const char *corpus,const char *output,int steps){
   if(s==1||s%100==0||s==steps){
    float validation=0;
    for(int j=0;j<16;j++){
-    size_t pos=split+(size_t)(rng()%(data_len-split-T));
-    validation+=forward(data+pos,T,data[pos+T],c)/16.f;
+    int n=1+(int)(rng()%T);
+    size_t pos=split+(size_t)(rng()%(data_len-split-(size_t)n));
+    validation+=forward(data+pos,n,data[pos+n],c)/16.f;
    }
    printf("step=%d train_loss=%.5f validation_loss=%.5f\n",s,total/4.f,validation);
    fflush(stdout);
