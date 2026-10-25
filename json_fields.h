@@ -65,7 +65,12 @@ static int jfields(const char *p,JField *f,size_t fields){
    if(!strcmp(value,"true"))type=2;
    else if(!strcmp(value,"false"))type=3;
    else if(!strcmp(value,"null"))type=4;
-   else return -1;
+   else {
+    size_t j=0;if(value[j]=='-')j++;
+    if(!value[j])return -1;
+    for(;value[j];j++)if(value[j]<'0'||value[j]>'9')return -1;
+    type=5;
+   }
   }
   for(size_t i=0;i<fields;i++)if(!strcmp(key,f[i].key)){
    if(f[i].found||strlen(value)+1>f[i].cap)return -1;
