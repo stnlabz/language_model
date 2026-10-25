@@ -15,7 +15,7 @@
 #define V 256
 #define NPARAM (V*D+T*D+4*D*D+D*F+F*D+F+D)
 #define MAGIC 0x4d544c53u
-#define VERSION 3u
+#define VERSION 4u
 #define AT(a,b,stride) ((a)*(stride)+(b))
 static uint64_t seed=20261024;
 static uint64_t rng(void){seed^=seed>>12;seed^=seed<<25;seed^=seed>>27;return seed*2685821657736338717ULL;}
@@ -26,7 +26,7 @@ typedef struct {
 } Model;
 typedef struct {
  float x[T][D],q[T][D],k[T][D],v[T][D],att[T][T],mix[T][D];
- float h[T][D],ff[T][F],y[T][D],prob[V];
+ float h[T][D],ff[T][F],y[T][D],prob[T][V];
 } Cache;
 static float *grad,*moment,*variance;
 static unsigned char *data;
@@ -81,22 +81,36 @@ static float forward(const unsigned char *tokens,int n,int target,Cache *c){
   matvec(c->ff[t],&model->f2[0][0],c->y[t],F,D);
   for(int i=0;i<D;i++)c->y[t][i]+=c->h[t][i]+model->b2[i];
  }
- int last=n-1;float peak=-1e30f,sum=0;
- for(int b=0;b<V;b++){
-  float z=0;for(int i=0;i<D;i++)z+=c->y[last][i]*model->emb[b][i];
-  c->prob[b]=z;if(z>peak)peak=z;
+ float loss=0.f;
+ int first=target<0?n-1:0;
+ for(int t=first;t<n;t++){
+  float peak=-1e30f,sum=0.f;
+  for(int b=0;b<V;b++){
+   float z=0.f;
+   for(int i=0;i<D;i++)z+=c->y[t][i]*model->emb[b][i];
+   c->prob[t][b]=z;
+   if(z>peak)peak=z;
+  }
+  for(int b=0;b<V;b++){
+   c->prob[t][b]=expf(c->prob[t][b]-peak);
+   sum+=c->prob[t][b];
+  }
+  for(int b=0;b<V;b++)c->prob[t][b]/=sum;
+  if(target>=0)loss-=logf(fmaxf(c->prob[t][tokens[t+1]],1e-20f));
  }
- for(int b=0;b<V;b++){c->prob[b]=expf(c->prob[b]-peak);sum+=c->prob[b];}
- for(int b=0;b<V;b++)c->prob[b]/=sum;
- return target<0?0.f:-logf(fmaxf(c->prob[target],1e-20f));
+ return target<0?0.f:loss/(float)n;
 }
-static void backward(const unsigned char *tokens,int n,int target,Cache *c,Model *g){
+static void backward(const unsigned char *tokens,int n,Cache *c,Model *g){
  float dy[T][D]={0},dh[T][D]={0},dx[T][D]={0};
  float dq[T][D]={0},dk[T][D]={0},dv[T][D]={0},dmix[T][D]={0};
- int last=n-1;
- for(int b=0;b<V;b++){
-  float e=c->prob[b]-(b==target?1.f:0.f);
-  for(int i=0;i<D;i++){g->emb[b][i]+=e*c->y[last][i];dy[last][i]+=e*model->emb[b][i];}
+ for(int t=0;t<n;t++){
+  for(int b=0;b<V;b++){
+   float e=(c->prob[t][b]-(b==tokens[t+1]?1.f:0.f))/(float)n;
+   for(int i=0;i<D;i++){
+    g->emb[b][i]+=e*c->y[t][i];
+    dy[t][i]+=e*model->emb[b][i];
+   }
+  }
  }
  for(int t=n-1;t>=0;t--){
   float dff[F]={0},dpre[F]={0},da[T]={0};
@@ -156,34 +170,34 @@ static int train(const char *corpus,const char *output,int steps){
  if(!grad||!moment||!variance)return 1;
  Cache *c=malloc(sizeof(*c));if(!c)return 1;
  for(int s=1;s<=steps;s++){
-  /* Match training prefix lengths to inference, which can be called with
-   * any length from 1..T. Earlier training used only T-1 and T, leaving
-   * most final-position embeddings unsupervised at generation time. */
+  /* Every position now contributes a next-byte target. The old trainer
+   * supervised only four bytes per optimizer step, far too sparse for
+   * the available approved corpus. */
   memset(grad,0,sizeof(*model));
-  float total=0;
-  for(int sample=0;sample<4;sample++){
-   int n=1+(int)(rng()%T);
-   size_t start=(size_t)(rng()%(split-(size_t)n));
+  float total=0.f;
+  for(int sample=0;sample<2;sample++){
+   int n=T/2+(int)(rng()%(T/2+1));
+   size_t start=(size_t)(rng()%(split-(size_t)n-1));
    unsigned char *tok=data+start;
-   total+=forward(tok,n,tok[n],c);
-   backward(tok,n,tok[n],c,(Model*)grad);
+   total+=forward(tok,n,0,c);
+   backward(tok,n,c,(Model*)grad);
   }
   float *w=(float*)model;
   float b1=1.f-powf(0.9f,(float)s),b2=1.f-powf(0.999f,(float)s);
   for(size_t i=0;i<sizeof(*model)/sizeof(float);i++){
-   float d=fmaxf(-1.f,fminf(1.f,grad[i]/4.f));
+   float d=fmaxf(-1.f,fminf(1.f,grad[i]/2.f));
    moment[i]=0.9f*moment[i]+0.1f*d;
    variance[i]=0.999f*variance[i]+0.001f*d*d;
    w[i]-=0.0007f*(moment[i]/b1)/(sqrtf(variance[i]/b2)+1e-8f);
   }
   if(s==1||s%100==0||s==steps){
    float validation=0;
-   for(int j=0;j<16;j++){
-    int n=1+(int)(rng()%T);
-    size_t pos=split+(size_t)(rng()%(data_len-split-(size_t)n));
-    validation+=forward(data+pos,n,data[pos+n],c)/16.f;
+   for(int j=0;j<8;j++){
+    int n=T/2+(int)(rng()%(T/2+1));
+    size_t pos=split+(size_t)(rng()%(data_len-split-(size_t)n-1));
+    validation+=forward(data+pos,n,0,c)/8.f;
    }
-   printf("step=%d train_loss=%.5f validation_loss=%.5f\n",s,total/4.f,validation);
+   printf("step=%d train_loss=%.5f validation_loss=%.5f\n",s,total/2.f,validation);
    fflush(stdout);
   }
  }
@@ -217,7 +231,7 @@ static int generate(const char *checkpoint,const char *prompt,int length,int req
    if(!allowed)continue;
    if(!at_word&&(b=='.'||b==','||b==';'||b=='!'||b=='?'||b=='-'||b==' '))continue;
    if(at_word&&b==' '&&out[used-1]==' ')continue;
-   if(c->prob[b]>peak)peak=c->prob[b];
+   if(c->prob[ctx-1][b]>peak)peak=c->prob[ctx-1][b];
   }
   double sum=0;
   for(int b=0;b<V;b++){
@@ -227,8 +241,8 @@ static int generate(const char *checkpoint,const char *prompt,int length,int req
    if(!allowed||(!at_word&&(b=='.'||b==','||b==';'||b=='!'||b=='?'||b=='-'||b==' ')))continue;
    if(at_word&&b==' '&&out[used-1]==' ')continue;
    /* Avoid injecting letters with extremely weak model support. */
-   if(c->prob[b]<peak*0.10f)continue;
-   weights[b]=powf(c->prob[b]/peak,2.5f);
+   if(c->prob[ctx-1][b]<peak*0.10f)continue;
+   weights[b]=powf(c->prob[ctx-1][b]/peak,2.5f);
    sum+=weights[b];
   }
   if(!(sum>0))break;
