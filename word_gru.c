@@ -358,7 +358,7 @@ static int same_dialogue_line(const unsigned char *data,size_t n,
                               const unsigned char *line,size_t len){
  const unsigned char *p=data,*end=data+n;
  while(p<end){
-  const unsigned char *e=memchr(p,'\\n',(size_t)(end-p));
+  const unsigned char *e=memchr(p,'\n',(size_t)(end-p));
   if(!e)return -1;
   if((size_t)(e-p)==len && !memcmp(p,line,len))return 1;
   p=e+1;
@@ -370,19 +370,19 @@ static int evaluate_dialogues(net *m,const unsigned char *held,size_t hn,
  const unsigned char *p=held,*end=held+hn;
  int pairs=0,targets=0,unknown=0;double loss=0;
  while(p<end){
-  const unsigned char *e=memchr(p,'\\n',(size_t)(end-p));
-  if(!e || (size_t)(e-p)>=8190){fputs("invalid held-out line\\n",stderr);return 1;}
+  const unsigned char *e=memchr(p,'\n',(size_t)(end-p));
+  if(!e || (size_t)(e-p)>=8190){fputs("invalid held-out line\n",stderr);return 1;}
   int overlap=same_dialogue_line(train,tn,p,(size_t)(e-p));
   if(overlap!=0){
-   fputs(overlap>0?"held-out dialogue overlaps training dialogue\\n":
-                     "invalid training dialogue lines\\n",stderr);
+   fputs(overlap>0?"held-out dialogue overlaps training dialogue\n":
+                     "invalid training dialogue lines\n",stderr);
    return 1;
   }
   char line[8192];size_t n=(size_t)(e-p);
-  memcpy(line,p,n);line[n]='\\n';line[n+1]=0;
+  memcpy(line,p,n);line[n]='\n';line[n+1]=0;
   int tokens[4096];unsigned char mask[4096]={0};
   int count=dialogue_tokens(line,tokens,mask,4096);
-  if(count<=0){fputs("malformed held-out dialogue\\n",stderr);return 1;}
+  if(count<=0){fputs("malformed held-out dialogue\n",stderr);return 1;}
   float h[H]={0};int prev=0;tick t;
   for(int i=0;i<count;i++){
    forward(m,h,prev,&t);
@@ -396,40 +396,40 @@ static int evaluate_dialogues(net *m,const unsigned char *held,size_t hn,
   }
   pairs++;p=e+1;
  }
- if(!pairs||!targets){fputs("empty held-out dialogue set\\n",stderr);return 1;}
- printf("heldout_dialogue_pairs=%d answer_targets=%d answer_unknown=%d\\n",
+ if(!pairs||!targets){fputs("empty held-out dialogue set\n",stderr);return 1;}
+ printf("heldout_dialogue_pairs=%d answer_targets=%d answer_unknown=%d\n",
         pairs,targets,unknown);
- printf("heldout_dialogue_answer_loss=%.6f\\n",loss/targets);
+ printf("heldout_dialogue_answer_loss=%.6f\n",loss/targets);
  puts("heldout_dialogue_semantic_relevance=NOT_EVALUATED");
  return 0;
 }
 static int evaluate_checkpoint(int argc,char **argv){
  if(argc!=6){
-  fputs("usage: word_gru evaluate-checkpoint CHECKPOINT BASE_VALID TRAIN_DIALOGUE HELDOUT_DIALOGUE\\n",stderr);
+  fputs("usage: word_gru evaluate-checkpoint CHECKPOINT BASE_VALID TRAIN_DIALOGUE HELDOUT_DIALOGUE\n",stderr);
   return 2;
  }
  if(!strcmp(argv[4],argv[5]) || !strcmp(argv[3],argv[5])){
-  fputs("held-out paths must differ from training and base validation paths\\n",stderr);
+  fputs("held-out paths must differ from training and base validation paths\n",stderr);
   return 2;
  }
  net *m=malloc(sizeof(*m));if(!m)return 1;
- if(!restore(argv[2],m)){fputs("invalid checkpoint\\n",stderr);free(m);return 1;}
+ if(!restore(argv[2],m)){fputs("invalid checkpoint\n",stderr);free(m);return 1;}
  size_t vn=0,tn=0,hn=0;
  unsigned char *valid=load(argv[3],&vn);
  unsigned char *train=load(argv[4],&tn);
  unsigned char *held=load(argv[5],&hn);
  if(!valid||!train||!held){
-  fputs("missing or oversized evaluation corpus\\n",stderr);
+  fputs("missing or oversized evaluation corpus\n",stderr);
   free(valid);free(train);free(held);free(m);return 1;
  }
  int count=0;int *seq=tokenize(valid,vn,&count,0);
  if(!seq||!count){
-  fputs("invalid base validation corpus\\n",stderr);
+  fputs("invalid base validation corpus\n",stderr);
   free(seq);free(valid);free(train);free(held);free(m);return 1;
  }
  int unknown=0;for(int i=0;i<count;i++)unknown+=seq[i]==2;
  double loss=evaluate(m,seq,count);
- printf("checkpoint_base_validation_loss=%.6f tokens=%d unknown=%d\\n",loss,count,unknown);
+ printf("checkpoint_base_validation_loss=%.6f tokens=%d unknown=%d\n",loss,count,unknown);
  int rc=evaluate_dialogues(m,held,hn,train,tn);
  free(seq);free(valid);free(train);free(held);free(m);
  return rc;
