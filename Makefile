@@ -30,7 +30,8 @@ llm_service: llm_service.c json_fields.h
 	$(CC) $(CFLAGS) llm_service.c -o llm_service
 tests/native_regression: tests/native_regression.c json_fields.h
 	$(CC) $(CFLAGS) tests/native_regression.c -o tests/native_regression
-native-test: build tests/native_regression
+native-test:
+	@$(MAKE) --no-print-directory -B build tests/native_regression
 	./tests/native_regression
 
 # Run every test group even when an earlier group fails. Preserve the
@@ -70,9 +71,11 @@ clean:
 	rm -f micro_llm gru_learn llm_service tests/native_regression tests/model_math
 
 # Mathematical checks and synthetic language qualification; no service startup.
-math-test: tests/model_math
+math-test:
+	@$(MAKE) --no-print-directory -B tests/model_math
 	./tests/model_math
 tests/model_math: tests/model_math.c micro_llm.c
 	$(CC) $(CFLAGS) tests/model_math.c -lm -o tests/model_math
 language-test:
-	sh ./tests/language_qualification.sh
+	@echo 'Language qualification: bounded to 180 seconds; training artifacts retained.'
+	@timeout -k 5s 180s sh ./tests/language_qualification.sh || { code=$?; if [ "$code" -eq 124 ] || [ "$code" -eq 137 ]; then echo 'FAIL: language qualification exceeded its 180-second limit' >&2; fi; exit "$code"; }
