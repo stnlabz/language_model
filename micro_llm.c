@@ -38,6 +38,9 @@ static size_t data_len;
 /* Answer-focused supervision starts at the token that predicts the first
  * answer byte (the position immediately preceding the answer). */
 static int supervision_start=0;
+/* General corpus training combines variable-size windows by supervised byte,
+ * not by window count. Aligned-record training retains unit scaling. */
+static float gradient_target_scale=1.f;
 static Model *model;
 /* Read approved .txt lessons in deterministic lexical order. No lesson is
  * rewritten or converted on disk. Limit input to the existing 50MB budget. */
@@ -208,7 +211,7 @@ static void backward(const unsigned char *tokens,int n,Cache *c,Model *g){
  float dq[T][D]={0},dk[T][D]={0},dv[T][D]={0},dmix[T][D]={0};
  for(int t=supervision_start;t<n;t++){
   for(int b=0;b<V;b++){
-   float e=(c->prob[t][b]-(b==tokens[t+1]?1.f:0.f))/(float)(n-supervision_start);
+   float e=(c->prob[t][b]-(b==tokens[t+1]?1.f:0.f))*gradient_target_scale/(float)(n-supervision_start);
    for(int i=0;i<D;i++){
     g->emb[b][i]+=e*c->y[t][i];
     dy[t][i]+=e*model->emb[b][i];
@@ -431,7 +434,7 @@ static int train(const char *corpus,const char *output,int steps){
    * counted once in the coverage bitmap. */
   memset(grad,0,sizeof(*model));
   double total=0.0;
-  size_t batches=0;
+  size_t batches=0,supervised_in_step=0;
   size_t first_record,last_record;
   if((size_t)steps<=training_count){
    first_record=((size_t)(s-1)*training_count)/(size_t)steps;
@@ -458,8 +461,11 @@ static int train(const char *corpus,const char *output,int steps){
     size_t target_begin=window+1>first?window+1:first;
     if(target_begin<window+(size_t)n+1){
      supervision_start=(int)(target_begin-window-1);
-     total+=forward(data+window,n,0,c);
+     size_t targets=(size_t)(n-supervision_start);
+     total+=(double)forward(data+window,n,0,c)*(double)targets;
+     gradient_target_scale=(float)targets;
      backward(data+window,n,c,(Model*)grad);
+     supervised_in_step+=targets;
      for(size_t k=target_begin;k<=window+(size_t)n;k++)seen[k]=1;
      batches++;
     }
@@ -468,10 +474,11 @@ static int train(const char *corpus,const char *output,int steps){
   }
   if(!batches){fputs("training step produced no supervised targets\n",stderr);return 1;}
   supervision_start=0;
+  gradient_target_scale=1.f;
   float *w=(float*)model;
   float b1=1.f-powf(0.9f,(float)s),b2=1.f-powf(0.999f,(float)s);
   for(size_t i=0;i<sizeof(*model)/sizeof(float);i++){
-   float d=fmaxf(-1.f,fminf(1.f,grad[i]/(float)batches));
+   float d=fmaxf(-1.f,fminf(1.f,grad[i]/(float)supervised_in_step));
    moment[i]=0.9f*moment[i]+0.1f*d;
    variance[i]=0.999f*variance[i]+0.001f*d*d;
    w[i]-=0.0007f*(moment[i]/b1)/(sqrtf(variance[i]/b2)+1e-8f);
@@ -504,7 +511,7 @@ static int train(const char *corpus,const char *output,int steps){
     validation+=forward(data+window,n,0,c)/8.f;
    }
    supervision_start=0;
-   printf("step=%d train_loss=%.5f validation_loss=%.5f\n",s,(float)(total/(double)batches),validation);
+   printf("step=%d train_loss=%.5f validation_loss=%.5f\n",s,(float)(total/(double)supervised_in_step),validation);
    fflush(stdout);
   }
  }
