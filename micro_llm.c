@@ -10,6 +10,7 @@
 #include <string.h>
 #include <math.h>
 #include <errno.h>
+#include <unistd.h>
 #include <dirent.h>
 #include <sys/stat.h>
 #include <limits.h>
@@ -250,12 +251,26 @@ static void backward(const unsigned char *tokens,int n,Cache *c,Model *g){
 }
 typedef struct {uint32_t magic,version,dimensions,context,bytes;uint64_t steps;} Header;
 static int save(const char *name,uint64_t steps){
- FILE *check=fopen(name,"rb");if(check){fclose(check);fputs("refusing to overwrite existing checkpoint\n",stderr);return 0;}
- FILE *f=fopen(name,"wb");if(!f){perror(name);return 0;}
+ /* Write beside the active checkpoint and atomically replace it only when
+  * the complete new model has been saved. No retained backup/checkpoints. */
+ size_t len=strlen(name);
+ if(len>SIZE_MAX-12)return 0;
+ char *temp=malloc(len+12);
+ if(!temp)return 0;
+ memcpy(temp,name,len);
+ memcpy(temp+len,".tmp-XXXXXX",12);
+ int fd=mkstemp(temp);
+ if(fd<0){perror("checkpoint temporary file");free(temp);return 0;}
+ FILE *f=fdopen(fd,"wb");
+ if(!f){perror("fdopen checkpoint");close(fd);unlink(temp);free(temp);return 0;}
  Header h={MAGIC,VERSION,D,T,(uint32_t)sizeof(*model),steps};
  int ok=fwrite(&h,sizeof(h),1,f)==1&&fwrite(model,sizeof(*model),1,f)==1;
- if(fclose(f))ok=0;
- if(!ok)remove(name);
+ if(fflush(f)!=0)ok=0;
+ if(ok && fsync(fd)!=0)ok=0;
+ if(fclose(f)!=0)ok=0;
+ if(ok && rename(temp,name)!=0){perror("replace checkpoint");ok=0;}
+ if(!ok)unlink(temp);
+ free(temp);
  return ok;
 }
 static int restore(const char *name){
