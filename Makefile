@@ -11,9 +11,10 @@ SEED ?= 913
 PORT ?= 8765
 
 .DEFAULT_GOAL := help
-.PHONY: help build test prepare train generate learn serve status clean
+.PHONY: help build test native-test math-test language-test prepare train generate learn serve status clean
 help:
 	@echo 'make build'
+	@echo 'make test (native, mathematical, and language qualification; aggregate PASS/FAIL)'
 	@echo 'make clean'
 	@echo 'make prepare DATA=digit_approved_learning.jsonl CORPUS=micro_corpus.txt'
 	@echo 'make learn DATA=digit_approved_learning.jsonl CHECKPOINT=llm.stn STEPS=5000'
@@ -29,8 +30,28 @@ llm_service: llm_service.c json_fields.h
 	$(CC) $(CFLAGS) llm_service.c -o llm_service
 tests/native_regression: tests/native_regression.c json_fields.h
 	$(CC) $(CFLAGS) tests/native_regression.c -o tests/native_regression
-test: build tests/native_regression
+native-test: build tests/native_regression
 	./tests/native_regression
+
+# Run every test group even when an earlier group fails. Preserve the
+# individual exit status and fail the aggregate if any group fails.
+test:
+	@failed=0; \
+	for target in native-test math-test language-test; do \
+		printf '\n=== %s ===\n' "$target"; \
+		if $(MAKE) --no-print-directory "$target"; then \
+			printf 'PASS: %s\n' "$target"; \
+		else \
+			printf 'FAIL: %s\n' "$target"; \
+			failed=1; \
+		fi; \
+	done; \
+	if [ "$failed" -eq 0 ]; then \
+		printf '\nALL TEST GROUPS PASS\n'; \
+	else \
+		printf '\nTEST SUITE FAIL: see individual group results\n' >&2; \
+	fi; \
+	exit "$failed"
 prepare: gru_learn
 	@echo 'Corpus preparation is integrated into gru_learn. Use make learn.'
 train: micro_llm
@@ -49,7 +70,6 @@ clean:
 	rm -f micro_llm gru_learn llm_service tests/native_regression tests/model_math
 
 # Mathematical checks and synthetic language qualification; no service startup.
-.PHONY: math-test language-test
 math-test: tests/model_math
 	./tests/model_math
 tests/model_math: tests/model_math.c micro_llm.c
