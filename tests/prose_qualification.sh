@@ -6,6 +6,7 @@ cd "$(dirname "$0")/.."
 run=$(mktemp -d ./tests/prose-qualification-XXXXXX)
 printf 'Prose qualification artifacts: %s\n' "$run"
 cc -std=c11 -O2 -Wall -Wextra -pedantic micro_llm.c -lm -o "$run/micro_llm"
+cc -std=c11 -O2 -Wall -Wextra -pedantic tests/context_utilization.c -lm -o "$run/context_utilization"
 # Each paragraph is a distinct record. The final two records are held out
 # by the general trainer's record-partition logic.
 cat > "$run/corpus.txt" <<'EOF'
@@ -57,6 +58,8 @@ fi
 "$run/micro_llm" train "$run/corpus.txt" "$run/model.stn" 200 > "$run/train.log" 2>&1
 # Evaluate genuine unfiltered greedy continuation; save raw output.
 "$run/micro_llm" generate "$run/model.stn" 'The morning air is' 48 913 greedy > "$run/generation.txt"
+"$run/context_utilization" "$run/model.stn" > "$run/context.log"
+cat "$run/context.log"
 # Record evidence, not fabricated fluency qualification.
 cat "$run/inspect.log"
 grep 'step=' "$run/train.log"
