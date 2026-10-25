@@ -38,20 +38,20 @@ native-test: build tests/native_regression
 test:
 	@failed=0; \
 	for target in native-test math-test language-test; do \
-		printf '\n=== %s ===\n' "$target"; \
-		if $(MAKE) --no-print-directory "$target"; then \
-			printf 'PASS: %s\n' "$target"; \
+		printf '\n=== %s ===\n' "$$target"; \
+		if $(MAKE) --no-print-directory "$$target"; then \
+			printf 'PASS: %s\n' "$$target"; \
 		else \
-			printf 'FAIL: %s\n' "$target"; \
+			printf 'FAIL: %s\n' "$$target"; \
 			failed=1; \
 		fi; \
 	done; \
-	if [ "$failed" -eq 0 ]; then \
+	if [ "$$failed" -eq 0 ]; then \
 		printf '\nALL TEST GROUPS PASS\n'; \
 	else \
 		printf '\nTEST SUITE FAIL: see individual group results\n' >&2; \
 	fi; \
-	exit "$failed"
+	exit "$$failed"
 prepare: gru_learn
 	@echo 'Corpus preparation is integrated into gru_learn. Use make learn.'
 train: micro_llm
