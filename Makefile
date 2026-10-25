@@ -11,9 +11,10 @@ SEED ?= 913
 PORT ?= 8765
 
 .DEFAULT_GOAL := help
-.PHONY: help build test prepare train generate learn serve status
+.PHONY: help build test prepare train generate learn serve status clean
 help:
 	@echo 'make build'
+	@echo 'make clean'
 	@echo 'make prepare DATA=digit_approved_learning.jsonl CORPUS=micro_corpus.txt'
 	@echo 'make learn DATA=digit_approved_learning.jsonl CHECKPOINT=llm.stn STEPS=5000'
 	@echo 'make generate CHECKPOINT=llm.stn PROMPT="The engineer"'
@@ -42,3 +43,7 @@ serve: build
 	./llm_service './micro_llm' '$(CHECKPOINT)' '$(PORT)'
 status:
 	@echo 'DATA=$(DATA) CHECKPOINT=$(CHECKPOINT) STEPS=$(STEPS)'
+
+# Clean only generated executables; retain JSONL, corpora and model checkpoints.
+clean:
+	rm -f micro_llm gru_learn llm_service tests/native_regression
