@@ -1,1 +1,0 @@
-format=raw_utf8_bytes vocabulary=256 seed=20261020 input_fnv64=e771fbf3073f406f records=30 train_bytes=1282 validation_bytes=369

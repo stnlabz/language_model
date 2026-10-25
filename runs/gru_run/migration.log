@@ -1,5 +1,0 @@
-WARNING: Too few dialogue records for a conversation-readiness claim. Training is an experiment only.
-records=89856 lessons=85674 dialogues=7 context_retained=1835 observations_retained=2340
-training_records=85681 dialogue_fraction_percent=0.0082
-conversation_data_gate=INSUFFICIENT_DIALOGUE_DIVERSITY
-migration=approved_digit_jsonl records=89856 output_bytes=4675728 dialogue_bytes=651

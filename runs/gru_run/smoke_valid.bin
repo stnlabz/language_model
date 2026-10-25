@@ -1,7 +1,0 @@
-A small language model begins by predicting the next token.
-The training program records the input and configuration.
-A question can have several valid natural expressions.
-Simple code is easier to inspect and maintain.
-Each experiment uses the same documented seed.
-An answer should be useful, clear, and relevant.
-Context is information that can be used when needed.

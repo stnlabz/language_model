@@ -1,7 +1,0 @@
-Question: Why does PHP seem hard? Answer: PHP can seem difficult because its syntax and execution model are unfamiliar.
-Question: Does Digit teach code? Answer: Digit is not a teacher; Digit is an engineer.
-Question: Who created digit? Answer: Digit was created by STN-Labz.
-Question: explain php Answer: I don't know based on the available evidence.
-Question: can you explain a chos-mvc module? Answer: I don't know based on the available evidence.
-Question: how often are you pushing data the gru_learning? Answer: I don't know based on the available evidence.
-Question: :) how are you? Answer: Evidence retrieval failed. I cannot verify an answer.
