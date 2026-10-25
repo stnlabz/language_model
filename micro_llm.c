@@ -508,6 +508,13 @@ static int train(const char *corpus,const char *output,int steps){
    fflush(stdout);
   }
  }
+ size_t final_covered=0;
+ for(size_t k=0;k<data_len;k++)final_covered+=seen[k]!=0;
+ if(final_covered!=eligible){
+  fprintf(stderr,"incomplete corpus supervision: %zu of %zu eligible targets; refusing checkpoint\n",final_covered,eligible);
+  free(seen);free(starts);free(c);free(data);free(grad);free(moment);free(variance);free(model);
+  return 1;
+ }
  int ok=save(output,(uint64_t)steps);
  free(seen);free(starts);free(c);free(data);free(grad);free(moment);free(variance);free(model);
  return ok?0:1;
