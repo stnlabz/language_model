@@ -417,47 +417,33 @@ static int train(const char *corpus,const char *output,int steps){
   memset(grad,0,sizeof(*model));
   float total=0.f;
   for(int sample=0;sample<2;sample++){
-   /* Walk the training corpus in context-sized strides. Every optimizer
-    * window advances coverage instead of repeatedly drawing random text.
-    * The rotating phase prevents identical window alignment each epoch. */
-   const size_t usable=starts[training_count];
+   /* Visit records in stable rotation. Within each record, sweep across
+    * target bytes in T-byte increments instead of pinning Q&A examples to
+    * one answer window or relying on random crops. Plain lessons and prose
+    * are supervised on all next bytes; labeled records on answer bytes.
+    * Windows never cross record boundaries. */
    size_t serial=((size_t)(s-1)*2u+(size_t)sample);
-   size_t phase=(serial/((usable+T-1)/T))%T;
-   size_t pick=((serial%((usable+T-1)/T))*T+phase)%usable;
-   size_t low=0,high=training_count;
-   while(low+1<high){
-    size_t mid=low+(high-low)/2;
-    if(starts[mid]<=pick)low=mid;else high=mid;
-   }
-   size_t index=low;
+   size_t index=serial%training_count;
    size_t begin=starts[index];
    size_t end=index+1<count?starts[index+1]:data_len;
    while(end>begin && (data[end-1]=='\n'||data[end-1]=='\r'))end--;
    if(end<=begin+1)continue;
    size_t answer=begin;
-   const char label[]="Answer:";
-   for(size_t p=begin;p+sizeof(label)-1<=end;p++)
-    if(!memcmp(data+p,label,sizeof(label)-1)){answer=p+sizeof(label)-1;break;}
-   /* Crop from the record, keeping as much question context as fits
-    * before the answer. Train only answer bytes for labeled records. */
-   size_t window=begin;
-   if(answer==begin && end-begin>T+1){
-    /* Align this window to the scheduled byte, not a random location. */
-    size_t last=end-(T+1);
-    window=pick<begin?begin:(pick>last?last:pick);
-   }
-   if(answer>begin && end-begin>T+1){
-    if(answer>begin && end-answer<T)window=end-(T+1);
-    else if(answer>begin)window=answer>T/2?answer-T/2:begin;
-    else window=begin+(size_t)(rng()%(end-begin-T));
-   }
-   if(window<begin)window=begin;
-   if(window+1>=end)window=end-2;
+   for(size_t p=begin;p+7<=end;p++)
+    if(!memcmp(data+p,"Answer:",7)){answer=p+7;break;}
+   size_t first=answer>begin?answer:begin+1;
+   if(first>=end)continue;
+   size_t span=end-first;
+   size_t cycle=serial/training_count;
+   size_t target=first+((cycle*T)%span);
+   size_t window=target>begin+T?target-T:begin;
    int n=(int)((end-window-1)<T?(end-window-1):T);
-   if(n<1){sample--;continue;}
+   if(n<1)continue;
    supervision_start=0;
-   if(answer>window && answer<window+(size_t)n)
+   if(answer>window){
+    if(answer>window+(size_t)n)continue;
     supervision_start=(int)(answer-window-1);
+   }
    total+=forward(data+window,n,0,c);
    backward(data+window,n,c,(Model*)grad);
   }
