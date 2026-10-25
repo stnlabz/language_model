@@ -477,11 +477,11 @@ static int train(const char *corpus,const char *output,int steps){
  grad=calloc(1,sizeof(*model));moment=calloc(1,sizeof(*model));variance=calloc(1,sizeof(*model));
  if(!grad||!moment||!variance)return 1;
  Cache *c=malloc(sizeof(*c));if(!c)return 1;
+ size_t updates=0;
  for(int s=1;s<=steps;s++){
   /* Spread complete training epochs across the optimizer-step budget.
    * Steps are weight updates; epochs are complete record passes.
    * The coverage bitmap tracks unique targets, not repeated visits. */
-  memset(grad,0,sizeof(*model));
   double total=0.0;
   size_t batches=0,supervised_in_step=0;
   /* Every epoch visits all training records, with a deterministic
@@ -508,6 +508,8 @@ static int train(const char *corpus,const char *output,int steps){
     * targets after a boundary learned from too little preceding language.
     * Supervise each target once, but retain up to half a context window
     * from the preceding chunk when possible. */
+   memset(grad,0,sizeof(*model));
+   size_t record_targets=0;
    size_t next=first;
    while(next<end){
     size_t window=next>begin+(size_t)(T/2)?next-(size_t)(T/2)-1:begin;
@@ -521,22 +523,27 @@ static int train(const char *corpus,const char *output,int steps){
     gradient_target_scale=(float)targets;
     backward(data+window,n,c,(Model*)grad);
     supervised_in_step+=targets;
+    record_targets+=targets;
     for(size_t k=next;k<next+targets;k++)seen[k]=1;
     batches++;
     next+=targets;
    }
+   if(record_targets){
+    supervision_start=0;
+    gradient_target_scale=1.f;
+    updates++;
+    float *w=(float*)model;
+    float b1=1.f-powf(0.9f,(float)updates);
+    float b2=1.f-powf(0.999f,(float)updates);
+    for(size_t i=0;i<sizeof(*model)/sizeof(float);i++){
+     float d=fmaxf(-1.f,fminf(1.f,grad[i]/(float)record_targets));
+     moment[i]=0.9f*moment[i]+0.1f*d;
+     variance[i]=0.999f*variance[i]+0.001f*d*d;
+     w[i]-=0.0007f*(moment[i]/b1)/(sqrtf(variance[i]/b2)+1e-8f);
+    }
+   }
   }
   if(!batches){fputs("training step produced no supervised targets\n",stderr);return 1;}
-  supervision_start=0;
-  gradient_target_scale=1.f;
-  float *w=(float*)model;
-  float b1=1.f-powf(0.9f,(float)s),b2=1.f-powf(0.999f,(float)s);
-  for(size_t i=0;i<sizeof(*model)/sizeof(float);i++){
-   float d=fmaxf(-1.f,fminf(1.f,grad[i]/(float)supervised_in_step));
-   moment[i]=0.9f*moment[i]+0.1f*d;
-   variance[i]=0.999f*variance[i]+0.001f*d*d;
-   w[i]-=0.0007f*(moment[i]/b1)/(sqrtf(variance[i]/b2)+1e-8f);
-  }
   if(s==1||s%100==0||s==steps){
    size_t covered=0;
    for(size_t k=0;k<data_len;k++)covered+=seen[k]!=0;
@@ -565,7 +572,7 @@ static int train(const char *corpus,const char *output,int steps){
     validation+=forward(data+window,n,0,c)/8.f;
    }
    supervision_start=0;
-   printf("step=%d train_loss=%.5f validation_loss=%.5f\n",s,(float)(total/(double)supervised_in_step),validation);
+   printf("step=%d updates=%zu train_loss=%.5f validation_loss=%.5f\n",s,updates,(float)(total/(double)supervised_in_step),validation);
    fflush(stdout);
   }
  }
