@@ -292,14 +292,13 @@ static int train(const char *corpus,const char *output,int steps){
   for(int sample=0;sample<2;sample++){
    /* Sample prose proportionally to its byte length, not by paragraph count.
     * Find the record containing a uniformly selected training byte. */
-   size_t index=(size_t)(rng()%training_count);
    size_t pick=(size_t)(rng()%starts[training_count]);
    size_t low=0,high=training_count;
    while(low+1<high){
     size_t mid=low+(high-low)/2;
     if(starts[mid]<=pick)low=mid;else high=mid;
    }
-   index=low;
+   size_t index=low;
    size_t begin=starts[index];
    size_t end=index+1<count?starts[index+1]:data_len;
    while(end>begin && (data[end-1]=='\n'||data[end-1]=='\r'))end--;
@@ -350,7 +349,10 @@ static int train(const char *corpus,const char *output,int steps){
     while(end>begin && (data[end-1]=='\n'||data[end-1]=='\r'))end--;
     if(end<=begin+1)continue;
     size_t window=begin;
-    if(end-begin>T+1)window=end-T-1;
+    if(end-begin>T+1){
+     size_t available=end-begin-(T+1);
+     window=begin+(size_t)(rng()%(available+1));
+    }
     int n=(int)((end-window-1)<T?(end-window-1):T);
     supervision_start=0;
     const char label[]="Answer:";
