@@ -727,26 +727,49 @@ int main(int argc,char **argv){
   else if(++bad_epochs>=5){printf("early_stop_epoch=%d\n",epoch+1);break;}
  }
  if(argc==7){
-   /* The optimizer history belongs to the final epoch, not the best
-   * validation checkpoint. Reset its moments for this separate objective. */
+  /* Preserve the best base-language checkpoint. Train a separate candidate:
+   * low loss on seven answer pairs must never automatically replace a model
+   * that performs better on the untouched base validation split. */
+  memcpy(m,best,sizeof(*m));
   memset(moment1,0,sizeof(*moment1));
   memset(moment2,0,sizeof(*moment2));
   adam_steps=0;
-  int pairs=0;
-  /* Revisit only approved answer tokens; this does not create dialogue
-   * diversity, and training loss is not conversational qualification. */
+  int pairs=0,accepted_epoch=0,checked=0;
+  double accepted_answer_loss=1e100;
   for(int epoch=1;epoch<=DIALOGUE_EPOCHS;epoch++){
    double answer_loss=0;
-   int done=dialogue_train(best,dialogue,dn,epoch,&answer_loss);
+   int done=dialogue_train(m,dialogue,dn,epoch,&answer_loss);
    if(done<=0){pairs=-1;break;}
    pairs=done;
+   /* Evaluate bounded deterministic checkpoints to avoid 24 expensive
+    * full validation passes on a CPU-only host. Every accepted candidate
+    * must pass the complete held-out base validation split. */
+   if(epoch==1||epoch==2||epoch==4||epoch%4==0){
+    double candidate_loss=evaluate(m,valid,nv);
+    checked++;
+    int preserves=isfinite(candidate_loss)&&candidate_loss<=best_loss+0.000001;
+    printf("dialogue_candidate_epoch=%d base_valid_loss=%.5f delta=%+.5f preservation=%s\\n",
+           epoch,candidate_loss,candidate_loss-best_loss,
+           preserves?"PASS":"FAIL");
+    if(preserves&&answer_loss<accepted_answer_loss){
+     accepted_answer_loss=answer_loss;
+     accepted_epoch=epoch;
+     memcpy(best,m,sizeof(*best));
+    }
+   }
   }
   free(dialogue);
   if(pairs<=0){
-   fputs("dialogue corpus malformed or no supervised pairs\n",stderr);
+   fputs("dialogue corpus malformed or no supervised pairs\\n",stderr);
    free(m);free(best);free(moment1);free(moment2);
    free(train);free(valid);return 1;
   }
+  printf("dialogue_candidates_checked=%d accepted_epoch=%d\\n",checked,accepted_epoch);
+  if(!accepted_epoch)
+   puts("dialogue_checkpoint=BASE_RETAINED (all evaluated dialogue candidates regressed)");
+  else
+   printf("dialogue_checkpoint=ACCEPTED epoch=%d dialogue_train_loss=%.6f\\n",
+          accepted_epoch,accepted_answer_loss);
  }else{
   puts("dialogue_pairs_supervised=0");
  }
