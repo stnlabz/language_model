@@ -424,17 +424,23 @@ static int train(const char *corpus,const char *output,int steps){
  if(!grad||!moment||!variance)return 1;
  Cache *c=malloc(sizeof(*c));if(!c)return 1;
  for(int s=1;s<=steps;s++){
-  /* Each optimizer sample trains exactly one next-byte target with the
-   * same preceding context as inference. Report measured coverage. */
+  /* Cover every training record in a complete scheduled pass. When the
+   * requested number of optimizer steps is smaller than the record count,
+   * group consecutive records within steps. Otherwise rotate records.
+   * Windows never cross record boundaries. Every supervised target is
+   * counted once in the coverage bitmap. */
   memset(grad,0,sizeof(*model));
-  float total=0.f;
-  for(int sample=0;sample<2;sample++){
-   /* Match autoregressive inference: for each selected target byte k,
-    * use exactly the preceding min(T,k-record_begin) bytes as context.
-    * The previous window construction computed target but supervised
-    * unrelated positions, often leaving later record bytes unseen. */
-   size_t serial=((size_t)(s-1)*2u+(size_t)sample);
-   size_t index=serial%training_count;
+  double total=0.0;
+  size_t batches=0;
+  size_t first_record,last_record;
+  if((size_t)steps<=training_count){
+   first_record=((size_t)(s-1)*training_count)/(size_t)steps;
+   last_record=((size_t)s*training_count)/(size_t)steps;
+  }else{
+   first_record=((size_t)(s-1)%training_count);
+   last_record=first_record+1;
+  }
+  for(size_t index=first_record;index<last_record;index++){
    size_t begin=starts[index];
    size_t end=index+1<count?starts[index+1]:data_len;
    while(end>begin&&(data[end-1]=='\n'||data[end-1]=='\r'))end--;
@@ -443,22 +449,29 @@ static int train(const char *corpus,const char *output,int steps){
    for(size_t p=begin;p+7<=end;p++)
     if(!memcmp(data+p,"Answer:",7)){first=p+7;break;}
    if(first>=end)continue;
-   size_t span=end-first;
-   size_t cycle=serial/training_count;
-   size_t target=first+(cycle%span);
-   size_t window=target-begin>T?target-T:begin;
-   int n=(int)(target-window);
-   if(n<1||n>T)continue;
-   supervision_start=n-1;
-   total+=forward(data+window,n,0,c);
-   backward(data+window,n,c,(Model*)grad);
-   seen[target]=1;
+   /* The model learns every next byte in each contiguous context window.
+    * Overlapping input by the last target byte preserves next-byte
+    * continuity without supervising the same target twice. */
+   for(size_t window=begin;window+1<end;){
+    int n=(int)((end-window-1)<T?(end-window-1):T);
+    if(n<1)break;
+    size_t target_begin=window+1>first?window+1:first;
+    if(target_begin<window+(size_t)n+1){
+     supervision_start=(int)(target_begin-window-1);
+     total+=forward(data+window,n,0,c);
+     backward(data+window,n,c,(Model*)grad);
+     for(size_t k=target_begin;k<=window+(size_t)n;k++)seen[k]=1;
+     batches++;
+    }
+    window+=(size_t)n;
+   }
   }
+  if(!batches){fputs("training step produced no supervised targets\n",stderr);return 1;}
   supervision_start=0;
   float *w=(float*)model;
   float b1=1.f-powf(0.9f,(float)s),b2=1.f-powf(0.999f,(float)s);
   for(size_t i=0;i<sizeof(*model)/sizeof(float);i++){
-   float d=fmaxf(-1.f,fminf(1.f,grad[i]/2.f));
+   float d=fmaxf(-1.f,fminf(1.f,grad[i]/(float)batches));
    moment[i]=0.9f*moment[i]+0.1f*d;
    variance[i]=0.999f*variance[i]+0.001f*d*d;
    w[i]-=0.0007f*(moment[i]/b1)/(sqrtf(variance[i]/b2)+1e-8f);
@@ -491,7 +504,7 @@ static int train(const char *corpus,const char *output,int steps){
     validation+=forward(data+window,n,0,c)/8.f;
    }
    supervision_start=0;
-   printf("step=%d train_loss=%.5f validation_loss=%.5f\n",s,total/2.f,validation);
+   printf("step=%d train_loss=%.5f validation_loss=%.5f\n",s,(float)(total/(double)batches),validation);
    fflush(stdout);
   }
  }
