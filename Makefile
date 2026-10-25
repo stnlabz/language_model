@@ -59,10 +59,11 @@ build:
 	$(CC) $(CFLAGS) prepare.c -o prepare
 	$(CC) $(CFLAGS) word_gru.c -lm -o word_gru
 
-test:
+test: build
 	sh tests/test_prepare.sh
 	$(PYTHON) -m unittest discover -s tests -p 'test_migrate_digit_jsonl.py'
-	@echo 'Parser and corpus conversion checks passed; language quality remains unqualified.'
+	./word_gru test-dialogue
+	@echo 'Data, native Q/A conditioning, and conversion fixtures passed; language quality remains unqualified.'
 
 status:
 	@printf 'DATA=%s\nRUN=%s\nSTEPS=%s\nTRAIN=%s\nVALID=%s\nCHECKPOINT=%s\n' \
