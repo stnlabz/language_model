@@ -1,0 +1,1 @@
+PHP is an open-source server-side scripting language primarily designed for web development.

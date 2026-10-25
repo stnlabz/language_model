@@ -1,0 +1,16 @@
+checkpoint_version=4 checkpoint_steps=5000
+initial_candidate byte=97 rank=4 probability=0.0853697658
+initial_candidate byte=99 rank=3 probability=0.0958491042
+initial_candidate byte=100 rank=7 probability=0.0497083776
+initial_candidate byte=105 rank=5 probability=0.0826962143
+initial_candidate byte=114 rank=6 probability=0.0631461814
+initial_candidate byte=115 rank=2 probability=0.0983076096
+initial_candidate byte=116 rank=1 probability=0.130384371
+first_tripled_fragment_start=6 fragment_bytes=2
+reference_bytes=92 prompt_bytes=80 reference_continuation_bytes=12 first_wrong_generated_byte=1
+prompt=PHP is an open-source server-side scripting language primarily designed for web 
+reference_continuation=development.
+teacher_accuracy=2/12 teacher_mean_loss=2.882046 free_reference_accuracy=0/12 free_reference_mean_loss=3.624542
+free=t interereres intererererererere iot iont iont int.at.equt int is iont iont iorequeque iorer
+first_byte_corrected=d interereres intererererererere int int iont iot int.equt iotionthererer iont ioreque iore 
+training_full_prefix_vs_inference_max_probability_difference=0

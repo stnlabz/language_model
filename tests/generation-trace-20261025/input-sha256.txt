@@ -1,0 +1,4 @@
+4c3cc0c2afc7b0b01166214badb1572788784608806e6edbcbb07927d05ad2a9  micro_llm.c
+07245c4c4295d93409bb4bd458c4f5be49fac7feb7fe3b4a8d424e284bc7d784  sqlite-retrained.stn
+07245c4c4295d93409bb4bd458c4f5be49fac7feb7fe3b4a8d424e284bc7d784  tests/generation-trace-20261025/frozen.stn
+2c4fed99694ae2e1c3607bdf6b3d615108593fced4ace9f9556e555dbcee8b5d  lessons/php.txt
