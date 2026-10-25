@@ -1,0 +1,23 @@
+Question: What is an engineer?
+Answer: An engineer designs systems.
+
+Question: What is a gardener?
+Answer: A gardener grows plants.
+
+Question: What is a pilot?
+Answer: A pilot flies aircraft.
+
+Question: What is a baker?
+Answer: A baker makes bread.
+
+Question: What is a painter?
+Answer: A painter creates pictures.
+
+Question: What is a mechanic?
+Answer: A mechanic repairs machines.
+
+Question: What is a teacher?
+Answer: A teacher explains lessons.
+
+Question: What is a carpenter?
+Answer: A carpenter builds furniture.
