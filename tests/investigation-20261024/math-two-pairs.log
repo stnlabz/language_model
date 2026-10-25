@@ -1,0 +1,11 @@
+gradient family=emb max_absolute_error=2.20537e-06
+gradient family=pos max_absolute_error=4.35095e-05
+gradient family=q max_absolute_error=3.59793e-05
+gradient family=k max_absolute_error=0.00012362
+gradient family=v max_absolute_error=0.000129655
+gradient family=o max_absolute_error=0.000107972
+gradient family=f1 max_absolute_error=0.000149265
+gradient family=f2 max_absolute_error=3.39709e-05
+gradient family=b1 max_absolute_error=0.000110336
+gradient family=b2 max_absolute_error=3.34084e-05
+math qualification: PASS failures=0

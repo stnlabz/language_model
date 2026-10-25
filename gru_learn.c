@@ -1,6 +1,8 @@
 /* gru_learn: native C approved JSONL -> temporary plain-text corpus -> native LM trainer.
  * Model is a causal Transformer. No GRU is used.
  * Linux/POSIX, no Python. Never modifies approved source.
+ * Blank-line record boundaries prevent adjacent unrelated lessons from
+ * being presented as one uninterrupted text sequence.
  */
 #define _POSIX_C_SOURCE 200809L
 #include <stdio.h>
@@ -37,16 +39,16 @@ static int convert(const char *input,FILE *out){
   if(jfields(line,fields,5)){fprintf(stderr,"invalid JSON or unsupported record at line %zu\n",nline);ok=0;break;}
   if(fields[0].type!=2)continue;
   if(!strcmp(type,"statement")&&fields[4].type==1&&statement[0]){
-   if(fprintf(out,"%s\n",statement)<0){ok=0;break;}
+   if(fprintf(out,"%s\n\n",statement)<0){ok=0;break;}
    ++accepted;continue;
   }
   if(fields[3].type!=1||!answer[0]||fields[2].type!=1)continue;
   if(starts(question,"Digit Corpus record ")){
-   if(fprintf(out,"%s\n",answer)<0){ok=0;break;}
+   if(fprintf(out,"%s\n\n",answer)<0){ok=0;break;}
    ++accepted;
   }else if(!starts(question,"Digit Context record ")&&
            !starts(question,"Digit Observation record ")){
-   if(fprintf(out,"Question: %s\nAnswer: %s\n",question,answer)<0){ok=0;break;}
+   if(fprintf(out,"Question: %s\nAnswer: %s\n\n",question,answer)<0){ok=0;break;}
    ++accepted;
   }
  }

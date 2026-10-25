@@ -40,10 +40,27 @@ static int load_data(const char *path){
  data_len=(size_t)n;int ok=fread(data,1,data_len,f)==data_len;
  fclose(f);if(!ok){free(data);data=NULL;}return ok;
 }
+/* Initialize each parameter family at an appropriate scale.
+ * Uniform +/-0.025 for every tensor made query/key scores effectively
+ * zero at startup, leaving attention nearly uniform and gradients weak.
+ * Embedding and projection scales are separated; biases start at zero.
+ * STN-Labz: model-initialization correction, no external weights. */
 static void init(void){
  model=calloc(1,sizeof(*model));if(!model)exit(2);
- float *p=(float*)model;
- for(size_t i=0;i<sizeof(*model)/sizeof(float);i++)p[i]=rnd()*0.05f;
+ for(int b=0;b<V;b++)for(int i=0;i<D;i++)
+  model->emb[b][i]=rnd()*0.8f;
+ for(int t=0;t<T;t++)for(int i=0;i<D;i++)
+  model->pos[t][i]=rnd()*0.08f;
+ for(int i=0;i<D;i++)for(int j=0;j<D;j++){
+  model->q[i][j]=rnd()*0.36f;
+  model->k[i][j]=rnd()*0.36f;
+  model->v[i][j]=rnd()*0.36f;
+  model->o[i][j]=rnd()*0.36f;
+ }
+ for(int i=0;i<D;i++)for(int j=0;j<F;j++)
+  model->f1[i][j]=rnd()*0.28f;
+ for(int i=0;i<F;i++)for(int j=0;j<D;j++)
+  model->f2[i][j]=rnd()*0.28f;
 }
 static void matvec(const float *x,const float *w,float *y,int rows,int cols){
  for(int j=0;j<cols;j++){float z=0;for(int i=0;i<rows;i++)z+=x[i]*w[AT(i,j,cols)];y[j]=z;}
@@ -205,10 +222,12 @@ static int train(const char *corpus,const char *output,int steps){
  free(c);free(data);free(grad);free(moment);free(variance);free(model);
  return ok?0:1;
 }
+/* Compatibility only: legacy filtered sampler used by the existing service.
+ * Qualification uses explicit unfiltered greedy/sample modes below. */
 /* Constrain decoding to corpus-like printable English bytes.
  * This prevents arbitrary high-byte output, but does not claim semantic fluency.
  * A low-temperature, top-k decoder reduces unstable random characters. */
-static int generate(const char *checkpoint,const char *prompt,int length,int requested_seed){
+static int generate_legacy(const char *checkpoint,const char *prompt,int length,int requested_seed){
  if(length<1||length>256)return 2;
  init();if(!restore(checkpoint)){free(model);return 1;}
  seed=(uint64_t)(unsigned)requested_seed+1;
@@ -258,9 +277,43 @@ static int generate(const char *checkpoint,const char *prompt,int length,int req
  putchar('\n');
  free(out);free(c);free(model);return 0;
 }
+/* Decode the actual 256-byte model distribution. Greedy mode is intended
+ * for reproducible qualification; sampling retains temperature 0.4.
+ * No character whitelist, word-state rules, or punctuation substitutions. */
+static int generate(const char *checkpoint,const char *prompt,int length,int requested_seed,int greedy){
+ if(length<1||length>256)return 2;
+ init();if(!restore(checkpoint)){free(model);return 1;}
+ seed=(uint64_t)(unsigned)requested_seed+1;
+ size_t plen=strlen(prompt);if(plen==0||plen>4096){free(model);return 2;}
+ size_t capacity=plen+(size_t)length;
+ unsigned char *out=malloc(capacity);Cache *c=malloc(sizeof(*c));
+ if(!out||!c){free(out);free(c);free(model);return 1;}
+ memcpy(out,prompt,plen);size_t used=plen;
+ for(int n=0;n<length;n++){
+  int ctx=(int)(used<T?used:T);
+  forward(out+used-ctx,ctx,-1,c);
+  int choice=0;
+  for(int b=1;b<V;b++)if(c->prob[ctx-1][b]>c->prob[ctx-1][choice])choice=b;
+  float peak=c->prob[ctx-1][choice];
+  if(!isfinite(peak)||!(peak>0)){free(out);free(c);free(model);fputs("invalid model probabilities\n",stderr);return 1;}
+  if(!greedy){
+   double weights[V],sum=0;
+   for(int b=0;b<V;b++){weights[b]=pow((double)c->prob[ctx-1][b]/peak,2.5);sum+=weights[b];}
+   double pick=((rng()>>40)/16777216.0)*sum;
+   for(int b=0;b<V;b++){pick-=weights[b];if(pick<0){choice=b;break;}}
+  }
+  out[used++]=(unsigned char)choice;
+ }
+ int ok=fwrite(out+plen,1,used-plen,stdout)==used-plen && putchar('\n')!=EOF;
+ free(out);free(c);free(model);return ok?0:1;
+}
 int main(int argc,char **argv){
  if(argc==5&&!strcmp(argv[1],"train"))return train(argv[2],argv[3],atoi(argv[4]));
- if(argc==6&&!strcmp(argv[1],"generate"))return generate(argv[2],argv[3],atoi(argv[4]),atoi(argv[5]));
- fputs("usage:\n  micro_llm train CORPUS CHECKPOINT STEPS\n  micro_llm generate CHECKPOINT PROMPT BYTES SEED\n",stderr);
+ if(argc==6&&!strcmp(argv[1],"generate"))return generate_legacy(argv[2],argv[3],atoi(argv[4]),atoi(argv[5]));
+ if((argc==7)&&!strcmp(argv[1],"generate")){
+  if(argc==7&&strcmp(argv[6],"greedy")&&strcmp(argv[6],"sample"))return 2;
+  return generate(argv[2],argv[3],atoi(argv[4]),atoi(argv[5]),argc==7&&!strcmp(argv[6],"greedy"));
+ }
+ fputs("usage:\n  micro_llm train CORPUS CHECKPOINT STEPS\n  micro_llm generate CHECKPOINT PROMPT BYTES SEED [sample|greedy]\n",stderr);
  return 2;
 }

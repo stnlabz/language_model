@@ -1,1 +1,1 @@
-Do not assume all credentials provide equivalent behavior.
+Do not assume every application.

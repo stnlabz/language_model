@@ -1,1 +1,1 @@
-format=raw_utf8_bytes vocabulary=256 seed=20261020 input_fnv64=5532226b9553fa5a records=85094 train_bytes=3717891 validation_bytes=936131
+format=raw_utf8_bytes vocabulary=256 seed=20261020 input_fnv64=586f5a316708e407 records=85681 train_bytes=3735253 validation_bytes=940475

@@ -112,4 +112,16 @@ static void end_to_end(void){
  service_test(ckpt);
  unlink(src);unlink(bad);unlink(ckpt);rmdir(dir);
 }
-int main(void){json_tests();end_to_end();if(failures){fprintf(stderr,"%d failures\n",failures);return 1;}puts("native regression tests passed");return 0;}
+/* Native model training and unfiltered deterministic qualification.
+ * The shell runner builds C tools and keeps fixtures inside the repository. */
+static int language_probe(void){
+ char *args[]={"/bin/sh","./tests/language_qualification.sh",NULL};
+ return run("/bin/sh",args);
+}
+int main(int argc,char **argv){
+ if(argc==2&&!strcmp(argv[1],"--language-probe"))return language_probe();
+ if(argc!=1){fputs("usage: native_regression [--language-probe]\\n",stderr);return 2;}
+ json_tests();end_to_end();
+ if(failures){fprintf(stderr,"%d failures\\n",failures);return 1;}
+ puts("native regression tests passed");return 0;
+}

@@ -46,4 +46,13 @@ status:
 
 # Clean only generated executables; retain JSONL, corpora and model checkpoints.
 clean:
-	rm -f micro_llm gru_learn llm_service tests/native_regression
+	rm -f micro_llm gru_learn llm_service tests/native_regression tests/model_math
+
+# Mathematical checks and synthetic language qualification; no service startup.
+.PHONY: math-test language-test
+math-test: tests/model_math
+	./tests/model_math
+tests/model_math: tests/model_math.c micro_llm.c
+	$(CC) $(CFLAGS) tests/model_math.c -lm -o tests/model_math
+language-test:
+	./tests/language_qualification.sh

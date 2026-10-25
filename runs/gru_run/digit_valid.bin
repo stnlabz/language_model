@@ -17064,3 +17064,121 @@ Human-readable messages can be generated separately.
 Message queues.
 Defense in depth can be appropriate.
 One source of authorization semantics is easier to maintain.
+It should evaluate policy.
+A user can often be allowed to see their own effective permissions.
+The server still enforces them.
+Disable Delete if user lacks documents.delete.
+That is acceptable if the server remains authoritative.
+Possible optimizations include:
+Role-permission caching.
+Precomputed grants.
+If rule priority matters, store and evaluate explicit priority.
+Do not let accidental storage order decide authority.
+If explicit deny wins, implement that rule.
+Conditions should use trusted state.
+These are contextual policy conditions.
+A time window can restrict authority.
+Qualification alone does not grant access.
+Access decision.
+Do not infer one from another unless policy explicitly defines the relationship.
+A principal can hold a position without a particular permission.
+A principal can be qualified without active access.
+Permission is not a social title.
+Human-directed policy determines that authority.
+Software should enforce the defined decision.
+Do not reinterpret policy to make an operation convenient.
+Use evidence from the permission state.
+Required permission P.
+Principal S.
+If yes, permit the operation.
+If no, deny the operation.
+Trustworthiness is not a permission.
+Historical behavior is not current permission.
+Network origin is not automatically application authority.
+Identifier secrecy is not permission.
+Define who may grant it.
+Define whether it can expire.
+Do not merely add the name to a database table.
+Identify the target principal.
+Remove or deactivate it.
+Identify permissions removed.
+Invalidate derived permission state where required.
+When investigating unexpected access:
+Enumerate roles.
+Confirm the resource is within scope.
+Confirm the enforcement point requires the intended permission.
+Which operations require protection?
+What is the precedence rule?
+Who can grant them?
+How quickly does revocation take effect?
+How are changes audited?
+How are permissions tested?
+Keep inheritance visible.
+Keep policy deterministic.
+A reliable permission system rejects unknown permissions.
+A reliable permission system does not use UI hiding as enforcement.
+If it expired, it is not active.
+If the client merely claims it, it is not established.
+Permission is explicit authority.
+Command-line arguments.
+Environment variables.
+Message queues.
+A trust boundary is a point where data moves between components or contexts with different trust assumptions.
+Do not trust data merely because it is inside the application now.
+Is this input safe in every possible output context?
+Valid input can still be unauthorized.
+Define its length or size constraints.
+Define its range where applicable.
+Define whether it is required.
+Parse it.
+Validate it.
+Know what valid input means first.
+For example:
+Integer from 1 through 100.
+42
+Invalid:
+-5
+The validation rule is clear.
+Do not accept:
+Type conversion can hide invalid input.
+Parsing and validation are related but distinct.
+Syntax describes structure.
+pending
+PATCH
+Reject unknown values.
+POTS
+as:
+Validation should not guess intent.
+Different languages interpret truthiness differently.
+port:
+999999 is digits.
+Type validation and range validation are separate.
+A quantity can require:
+Both.
+Neither.
+Define the actual domain.
+username:
+Do not allow unlimited input when the application has a finite requirement.
+A database column size can be measured according to database semantics.
+Do not assume one byte equals one character.
+lowercase ASCII letters.
+That is valid if the identifier specification defines it.
+A URL is not a shell argument.
+A shell argument is not SQL.
+Context matters.
+Regular expressions can validate some formats.
+Regular expressions can also have performance risks.
+Keep expressions bounded and understandable.
+The string has the expected shape.
+01/02/03
+February 30 is not valid.
+Leap years matter.
+Time zones matter for timestamps.
+Daylight-saving transitions can create nonexistent or repeated local times.
+999999999999999999999999999999999999
+Signed zero.
+Money should not casually use binary floating-point when exact decimal behavior is required.
+This is a representation issue beyond validation.
+Input validation should still enforce permitted monetary format and range.
+Amount must have no more than two decimal places if policy requires cents.
+Do not silently round arbitrary user input unless the interface defines rounding.
