@@ -77,7 +77,7 @@ static void service_test(const char *ckpt){
      while(used+1<sizeof(response_buf)&&(received=recv(sock,response_buf+used,sizeof(response_buf)-used-1,0))>0)used+=(size_t)received;
      response_buf[used]=0;
      CHECK(strstr(response_buf,"200 OK")!=NULL);
-     CHECK(strstr(response_buf,"\\"text\\"")!=NULL);
+     CHECK(strstr(response_buf,"\"text\"")!=NULL);
     }
    }else CHECK(0);
    close(sock);
