@@ -11,11 +11,11 @@
 #include <errno.h>
 #define D 48
 #define F 96
-#define T 64
+#define T 96
 #define V 256
 #define NPARAM (V*D+T*D+4*D*D+D*F+F*D+F+D)
 #define MAGIC 0x4d544c53u
-#define VERSION 2u
+#define VERSION 3u
 #define AT(a,b,stride) ((a)*(stride)+(b))
 static uint64_t seed=20261024;
 static uint64_t rng(void){seed^=seed>>12;seed^=seed<<25;seed^=seed>>27;return seed*2685821657736338717ULL;}
@@ -191,6 +191,9 @@ static int train(const char *corpus,const char *output,int steps){
  free(c);free(data);free(grad);free(moment);free(variance);free(model);
  return ok?0:1;
 }
+/* Constrain decoding to corpus-like printable English bytes.
+ * This prevents arbitrary high-byte output, but does not claim semantic fluency.
+ * A low-temperature, top-k decoder reduces unstable random characters. */
 static int generate(const char *checkpoint,const char *prompt,int length,int requested_seed){
  if(length<1||length>256)return 2;
  init();if(!restore(checkpoint)){free(model);return 1;}
@@ -200,14 +203,45 @@ static int generate(const char *checkpoint,const char *prompt,int length,int req
  unsigned char *out=malloc(capacity);Cache *c=malloc(sizeof(*c));
  if(!out||!c){free(out);free(c);free(model);return 1;}
  memcpy(out,prompt,plen);size_t used=plen;
+ int at_word=0;
  for(int n=0;n<length;n++){
   int ctx=(int)(used<T?used:T);
   forward(out+used-ctx,ctx,-1,c);
-  double pick=((rng()>>40)/16777216.0),sum=0;int choice=V-1;
-  for(int b=0;b<V;b++){sum+=c->prob[b];if(pick<=sum){choice=b;break;}}
+  float weights[V]={0};
+  float peak=0;
+  for(int b=0;b<V;b++){
+   /* ASCII letters, space, and conservative sentence punctuation only. */
+   int allowed=(b>='a'&&b<='z')||(b>='A'&&b<='Z')||
+               b==' '||b=='.'||b==','||b==';'||b=='!'||b=='?'||
+               b=='-'||b=='\''|| (b>='0'&&b<='9');
+   if(!allowed)continue;
+   if(!at_word&&(b=='.'||b==','||b==';'||b=='!'||b=='?'||b=='-'))continue;
+   if(at_word&&b==' '&&out[used-1]==' ')continue;
+   if(c->prob[b]>peak)peak=c->prob[b];
+  }
+  double sum=0;
+  for(int b=0;b<V;b++){
+   int allowed=(b>='a'&&b<='z')||(b>='A'&&b<='Z')||
+               b==' '||b=='.'||b==','||b==';'||b=='!'||b=='?'||
+               b=='-'||b=='\''||(b>='0'&&b<='9');
+   if(!allowed||(!at_word&&(b=='.'||b==','||b==';'||b=='!'||b=='?'||b=='-')))continue;
+   if(at_word&&b==' '&&out[used-1]==' ')continue;
+   /* Avoid injecting letters with extremely weak model support. */
+   if(c->prob[b]<peak*0.10f)continue;
+   weights[b]=powf(c->prob[b]/peak,2.5f);
+   sum+=weights[b];
+  }
+  if(!(sum>0))break;
+  double pick=((rng()>>40)/16777216.0)*sum;
+  int choice=' ';
+  for(int b=0;b<V;b++)if(weights[b]>0){pick-=weights[b];if(pick<=0){choice=b;break;}}
   out[used++]=(unsigned char)choice;
+  if(choice==' ')at_word=0;
+  else if(choice=='.'||choice=='!'||choice=='?'){break;}
+  else at_word=1;
  }
- fwrite(out+plen,1,(size_t)length,stdout);putchar('\n');
+ fwrite(out+plen,1,used-plen,stdout);
+ putchar('\n');
  free(out);free(c);free(model);return 0;
 }
 int main(int argc,char **argv){
