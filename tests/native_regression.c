@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -37,6 +38,32 @@ static int run(const char *exe,char *const argv[]){
  int status=0;if(waitpid(pid,&status,0)<0)return -1;
  return WIFEXITED(status)?WEXITSTATUS(status):-1;
 }
+
+static void service_test(const char *ckpt){
+ int port=22000+(getpid()%20000);
+ char portstr[16];snprintf(portstr,sizeof(portstr),"%d",port);
+ pid_t pid=fork();
+ if(pid<0){CHECK(0);return;}
+ if(pid==0){execl("./llm_service","./llm_service","./micro_llm",ckpt,portstr,(char*)NULL);_exit(127);}
+ int sock=-1;
+ for(int attempt=0;attempt<20;attempt++){
+  sock=socket(AF_INET,SOCK_STREAM,0);if(sock<0)break;
+  struct sockaddr_in addr={0};addr.sin_family=AF_INET;addr.sin_port=htons((unsigned short)port);
+  inet_pton(AF_INET,"127.0.0.1",&addr.sin_addr);
+  if(connect(sock,(struct sockaddr*)&addr,sizeof(addr))==0)break;
+  close(sock);sock=-1;struct timespec delay={0,100000000L};nanosleep(&delay,NULL);
+ }
+ if(sock>=0){
+  const char *req="GET /health HTTP/1.1\r\nHost: 127.0.0.1\r\n\r\n";
+  CHECK(send(sock,req,strlen(req),0)==(ssize_t)strlen(req));
+  char reply[1024];ssize_t n=recv(sock,reply,sizeof(reply)-1,0);
+  CHECK(n>0);
+  if(n>0){reply[n]=0;CHECK(strstr(reply,"200 OK")!=NULL);}
+  close(sock);
+ }else CHECK(0);
+ kill(pid,SIGTERM);waitpid(pid,NULL,0);
+}
+
 static void end_to_end(void){
  char dir[]="/tmp/stn-native-test-XXXXXX";
  CHECK(mkdtemp(dir)!=NULL);
@@ -60,6 +87,7 @@ static void end_to_end(void){
  }
  char *gen[]={"./micro_llm","generate",ckpt,"Hello","8","42",NULL};
  CHECK(run("./micro_llm",gen)==0);
+ service_test(ckpt);
  unlink(src);unlink(bad);unlink(ckpt);rmdir(dir);
 }
 int main(void){json_tests();end_to_end();if(failures){fprintf(stderr,"%d failures\n",failures);return 1;}puts("native regression tests passed");return 0;}
