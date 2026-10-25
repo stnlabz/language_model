@@ -60,7 +60,8 @@ build:
 
 test:
 	sh tests/test_prepare.sh
-	@echo 'Legacy byte-GRU tests are not word-GRU qualification tests.'
+	$(PYTHON) -m unittest discover -s tests -p 'test_migrate_digit_jsonl.py'
+	@echo 'Parser and corpus conversion checks passed; language quality remains unqualified.'
 
 status:
 	@printf 'DATA=%s\nRUN=%s\nSTEPS=%s\nTRAIN=%s\nVALID=%s\nCHECKPOINT=%s\n' \
