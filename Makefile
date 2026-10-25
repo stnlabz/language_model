@@ -5,6 +5,7 @@ DATA ?= digit_approved_learning.jsonl
 CORPUS ?= micro_corpus.txt
 CHECKPOINT ?= llm.stn
 STEPS ?= 5000
+EPOCHS ?= 3
 PROMPT ?= The engineer
 BYTES ?= 64
 SEED ?= 913
@@ -21,7 +22,7 @@ help:
 	@echo 'make sqlite-export SQLITE_DB=/opt/digit/data/digit_memory.db (read-only; stdout)'
 	@echo 'make sqlite-test (synthetic database; does not access Digit)'
 	@echo 'make prose-test (synthetic prose training, held-out loss and generation diagnostic)'
-	@echo 'make sqlite-learn SQLITE_DB=... CHECKPOINT=new.stn STEPS=... (train only; evaluation is separate)' 
+	@echo 'make sqlite-learn SQLITE_DB=... CHECKPOINT=new.stn STEPS=... EPOCHS=3 (train only; evaluation is separate)' 
 	@echo 'make sqlite-evaluate SQLITE_DB=... CHECKPOINT=existing.stn (evaluate existing model against DB)'
 	@echo 'make language-test SQLITE_CHECKPOINT=sqlite-retrained.stn (evaluate DB-backed checkpoint, no fixture retraining)'
 	@echo 'make prepare DATA=digit_approved_learning.jsonl CORPUS=micro_corpus.txt'
@@ -41,7 +42,7 @@ sqlite_corpus: sqlite_corpus.c FORCE
 sqlite-export: sqlite_corpus
 	@./sqlite_corpus '$(SQLITE_DB)'
 sqlite-learn: sqlite_corpus micro_llm
-	@sh tests/sqlite_model_pipeline.sh '$(SQLITE_DB)' '$(CHECKPOINT)' '$(STEPS)' train
+	@STN_EPOCHS='$(EPOCHS)' sh tests/sqlite_model_pipeline.sh '$(SQLITE_DB)' '$(CHECKPOINT)' '$(STEPS)' train
 sqlite-evaluate: sqlite_corpus micro_llm
 	@sh tests/sqlite_model_pipeline.sh '$(SQLITE_DB)' '$(CHECKPOINT)' '$(STEPS)' evaluate
 micro_llm: micro_llm.c FORCE
