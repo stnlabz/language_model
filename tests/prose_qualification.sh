@@ -4,7 +4,8 @@
 set -eu
 cd "$(dirname "$0")/.."
 run=$(mktemp -d ./tests/prose-qualification-XXXXXX)
-printf 'Prose qualification artifacts: %s\n' "$run"
+trap 'rm -rf -- "$run"' EXIT HUP INT TERM
+printf 'Prose qualification (temporary): %s\n' "$run"
 cc -std=c11 -O2 -Wall -Wextra -pedantic micro_llm.c -lm -o "$run/micro_llm"
 cc -std=c11 -O2 -Wall -Wextra -pedantic tests/context_utilization.c -lm -o "$run/context_utilization"
 # Each paragraph is a distinct record. The final two records are held out
