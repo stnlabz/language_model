@@ -40,10 +40,27 @@ static int load_data(const char *path){
  data_len=(size_t)n;int ok=fread(data,1,data_len,f)==data_len;
  fclose(f);if(!ok){free(data);data=NULL;}return ok;
 }
+/* Initialize each parameter family at an appropriate scale.
+ * Uniform +/-0.025 for every tensor made query/key scores effectively
+ * zero at startup, leaving attention nearly uniform and gradients weak.
+ * Embedding and projection scales are separated; biases start at zero.
+ * STN-Labz: model-initialization correction, no external weights. */
 static void init(void){
  model=calloc(1,sizeof(*model));if(!model)exit(2);
- float *p=(float*)model;
- for(size_t i=0;i<sizeof(*model)/sizeof(float);i++)p[i]=rnd()*0.05f;
+ for(int b=0;b<V;b++)for(int i=0;i<D;i++)
+  model->emb[b][i]=rnd()*0.8f;
+ for(int t=0;t<T;t++)for(int i=0;i<D;i++)
+  model->pos[t][i]=rnd()*0.08f;
+ for(int i=0;i<D;i++)for(int j=0;j<D;j++){
+  model->q[i][j]=rnd()*0.36f;
+  model->k[i][j]=rnd()*0.36f;
+  model->v[i][j]=rnd()*0.36f;
+  model->o[i][j]=rnd()*0.36f;
+ }
+ for(int i=0;i<D;i++)for(int j=0;j<F;j++)
+  model->f1[i][j]=rnd()*0.28f;
+ for(int i=0;i<F;i++)for(int j=0;j<D;j++)
+  model->f2[i][j]=rnd()*0.28f;
 }
 static void matvec(const float *x,const float *w,float *y,int rows,int cols){
  for(int j=0;j<cols;j++){float z=0;for(int i=0;i<rows;i++)z+=x[i]*w[AT(i,j,cols)];y[j]=z;}
