@@ -290,11 +290,23 @@ static int train(const char *corpus,const char *output,int steps){
   memset(grad,0,sizeof(*model));
   float total=0.f;
   for(int sample=0;sample<2;sample++){
-   size_t index=(size_t)(rng()%training_count);
+   /* Walk the training corpus in context-sized strides. Every optimizer
+    * window advances coverage instead of repeatedly drawing random text.
+    * The rotating phase prevents identical window alignment each epoch. */
+   const size_t usable=starts[training_count];
+   size_t serial=((size_t)(s-1)*2u+(size_t)sample);
+   size_t phase=(serial/((usable+T-1)/T))%T;
+   size_t pick=((serial%((usable+T-1)/T))*T+phase)%usable;
+   size_t low=0,high=training_count;
+   while(low+1<high){
+    size_t mid=low+(high-low)/2;
+    if(starts[mid]<=pick)low=mid;else high=mid;
+   }
+   size_t index=low;
    size_t begin=starts[index];
    size_t end=index+1<count?starts[index+1]:data_len;
    while(end>begin && (data[end-1]=='\n'||data[end-1]=='\r'))end--;
-   if(end<=begin+1){sample--;continue;}
+   if(end<=begin+1)continue;
    size_t answer=begin;
    const char label[]="Answer:";
    for(size_t p=begin;p+sizeof(label)-1<=end;p++)
@@ -302,7 +314,12 @@ static int train(const char *corpus,const char *output,int steps){
    /* Crop from the record, keeping as much question context as fits
     * before the answer. Train only answer bytes for labeled records. */
    size_t window=begin;
-   if(end-begin>T+1){
+   if(answer==begin && end-begin>T+1){
+    /* Align this window to the scheduled byte, not a random location. */
+    size_t last=end-(T+1);
+    window=pick<begin?begin:(pick>last?last:pick);
+   }
+   if(answer>begin && end-begin>T+1){
     if(answer>begin && end-answer<T)window=end-(T+1);
     else if(answer>begin)window=answer>T/2?answer-T/2:begin;
     else window=begin+(size_t)(rng()%(end-begin-T));
@@ -327,6 +344,9 @@ static int train(const char *corpus,const char *output,int steps){
    w[i]-=0.0007f*(moment[i]/b1)/(sqrtf(variance[i]/b2)+1e-8f);
   }
   if(s==1||s%100==0||s==steps){
+   size_t covered=((size_t)s*2u*T);
+   printf("exposure_window_bytes=%zu training_partition_bytes=%zu approx_passes=%.3f\n",
+          covered,starts[training_count],(double)covered/(double)starts[training_count]);
    float validation=0;
    for(int j=0;j<8;j++){
     size_t index=training_count+(size_t)(rng()%(count-training_count));
@@ -334,7 +354,10 @@ static int train(const char *corpus,const char *output,int steps){
     while(end>begin && (data[end-1]=='\n'||data[end-1]=='\r'))end--;
     if(end<=begin+1)continue;
     size_t window=begin;
-    if(end-begin>T+1)window=end-T-1;
+    if(end-begin>T+1){
+     size_t available=end-begin-(T+1);
+     window=begin+(size_t)(rng()%(available+1));
+    }
     int n=(int)((end-window-1)<T?(end-window-1):T);
     supervision_start=0;
     const char label[]="Answer:";
@@ -472,10 +495,10 @@ static void audit_corpus(void){
         records,qa,prose,short_records);
  printf("audit qa_bytes=%zu prose_bytes=%zu largest_record=%zu context=%d\n",
         qa_bytes,prose_bytes,largest,T);
- printf("audit long_records=%zu current_training_window_limit=%d\n",
+ printf("audit long_records=%zu model_context_plus_target=%d\n",
         clipped,T+1);
  if(clipped)
-  puts("audit WARNING: existing trainer samples only one initial/context-selected window per record per update; full-length prose coverage is not established.");
+  puts("audit NOTE: long prose records use random windows throughout their length; coverage over a finite training run is not guaranteed.");
  if(prose)
   puts("audit NOTE: unlabeled prose uses next-byte targets, not question-answer supervision.");
 }
