@@ -26,6 +26,12 @@ def main():
                 ap.error(f"invalid JSON at line {n}: {e}")
             if not isinstance(rec, dict) or rec.get("approved") is not True:
                 continue
+            if rec.get("type") == "statement" and isinstance(rec.get("text"), str):
+                statement = rec["text"].strip()
+                if statement:
+                    text.append(statement + "\n")
+                    count += 1
+                continue
             question, response = rec.get("input"), rec.get("response")
             if not isinstance(response, str) or not response.strip():
                 continue
@@ -37,9 +43,6 @@ def main():
                 count += 1
             elif isinstance(question, str) and question.startswith("Digit Corpus record "):
                 text.append(response.strip() + "\n")
-                count += 1
-            elif rec.get("type") == "statement" and isinstance(rec.get("text"), str):
-                text.append(rec["text"].strip() + "\n")
                 count += 1
     if count < 5:
         ap.error("fewer than five approved usable records")
