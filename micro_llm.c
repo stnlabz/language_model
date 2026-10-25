@@ -290,9 +290,13 @@ static int train(const char *corpus,const char *output,int steps){
   memset(grad,0,sizeof(*model));
   float total=0.f;
   for(int sample=0;sample<2;sample++){
-   /* Sample prose proportionally to its byte length, not by paragraph count.
-    * Find the record containing a uniformly selected training byte. */
-   size_t pick=(size_t)(rng()%starts[training_count]);
+   /* Walk the training corpus in context-sized strides. Every optimizer
+    * window advances coverage instead of repeatedly drawing random text.
+    * The rotating phase prevents identical window alignment each epoch. */
+   const size_t usable=starts[training_count];
+   size_t serial=((size_t)(s-1)*2u+(size_t)sample);
+   size_t phase=(serial/((usable+T-1)/T))%T;
+   size_t pick=((serial%((usable+T-1)/T))*T+phase)%usable;
    size_t low=0,high=training_count;
    while(low+1<high){
     size_t mid=low+(high-low)/2;
@@ -302,7 +306,7 @@ static int train(const char *corpus,const char *output,int steps){
    size_t begin=starts[index];
    size_t end=index+1<count?starts[index+1]:data_len;
    while(end>begin && (data[end-1]=='\n'||data[end-1]=='\r'))end--;
-   if(end<=begin+1){sample--;continue;}
+   if(end<=begin+1)continue;
    size_t answer=begin;
    const char label[]="Answer:";
    for(size_t p=begin;p+sizeof(label)-1<=end;p++)
@@ -311,11 +315,9 @@ static int train(const char *corpus,const char *output,int steps){
     * before the answer. Train only answer bytes for labeled records. */
    size_t window=begin;
    if(answer==begin && end-begin>T+1){
-    /* Ordinary prose: each update can reach any byte in a long lesson,
-     * using its preceding context. No blank-line record is truncated
-     * permanently to the first 96 bytes. */
+    /* Align this window to the scheduled byte, not a random location. */
     size_t last=end-(T+1);
-    window=begin+(size_t)(rng()%(last-begin+1));
+    window=pick<begin?begin:(pick>last?last:pick);
    }
    if(answer>begin && end-begin>T+1){
     if(answer>begin && end-answer<T)window=end-(T+1);
@@ -342,6 +344,9 @@ static int train(const char *corpus,const char *output,int steps){
    w[i]-=0.0007f*(moment[i]/b1)/(sqrtf(variance[i]/b2)+1e-8f);
   }
   if(s==1||s%100==0||s==steps){
+   size_t covered=((size_t)s*2u*T);
+   printf("exposure_window_bytes=%zu training_partition_bytes=%zu approx_passes=%.3f\n",
+          covered,starts[training_count],(double)covered/(double)starts[training_count]);
    float validation=0;
    for(int j=0;j<8;j++){
     size_t index=training_count+(size_t)(rng()%(count-training_count));
