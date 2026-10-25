@@ -45,8 +45,9 @@ help:
 	@echo 'API: make api CHECKPOINT=word_gru.stn PORT=8766'
 	@echo 'Pipeline: make pipeline DATA=stn_language_sentences.txt RUN=corpus'
 	@echo 'CPU train from approved Digit JSONL with separated Q/A: make go (GO_SOURCE=... GO_TIMEOUT=6h)'
-	@echo 'go reuses gru_run/, backs up root word_gru.stn to word_gru.previous.stn,'
-	@echo 'then moves the trained checkpoint to the root; does not restart the API.'
+	@echo 'go reuses gru_run/, archives older backups under checkpoint_backups/,'
+	@echo 'then rotates the current checkpoint to word_gru.previous.stn and promotes the new one.'
+	@echo 'No API restart or service activation is performed.'
 	@echo 'Status: make status'
 	@echo 'Legacy byte-GRU training/stateful/quality/probe targets are unsupported.'
 	@echo 'Existing server API on port 8765 is untouched.'
@@ -110,10 +111,6 @@ go:
 	@set -eu; \
 	$(MAKE) build; \
 	test -s '$(GO_SOURCE)' || { echo 'Missing or empty Digit queue: $(GO_SOURCE)' >&2; exit 1; }; \
-	if test -e 'word_gru.previous.stn' || test -L 'word_gru.previous.stn'; then \
-	  echo 'Existing rollback checkpoint word_gru.previous.stn must be preserved; refusing a second automatic promotion.' >&2; \
-	  echo 'Operator must explicitly decide how to retain or relocate that backup before another make go.' >&2; exit 1; \
-	fi; \
 	case '$(GO_SOURCE)' in gru_run/*|./gru_run/*) \
 	  echo 'GO_SOURCE must be outside gru_run' >&2; exit 1;; \
 	esac; \
@@ -145,9 +142,20 @@ go:
 	test -s '$(GO_DIR)/word_gru.stn' || { \
 	  echo 'Training completed without a nonempty checkpoint' >&2; exit 1; \
 	}; \
-	if test -e 'word_gru.previous.stn' || test -L 'word_gru.previous.stn'; then \
-	  echo 'Previous checkpoint backup already exists: word_gru.previous.stn' >&2; \
-	  echo 'Refusing to replace it; preserve or remove it explicitly first.' >&2; exit 1; \
+	if test -L 'word_gru.previous.stn'; then \
+	  echo 'Refusing symlink at previous checkpoint' >&2; exit 1; \
+	fi; \
+	if test -e 'word_gru.previous.stn'; then \
+	  test -f 'word_gru.previous.stn' || { echo 'Previous checkpoint is not a regular file' >&2; exit 1; }; \
+	  if test -L 'checkpoint_backups' || { test -e 'checkpoint_backups' && ! test -d 'checkpoint_backups'; }; then \
+	    echo 'Backup archive path is not a normal directory' >&2; exit 1; \
+	  fi; \
+	  mkdir -p -m 0700 'checkpoint_backups'; \
+	  archive=$(mktemp -d 'checkpoint_backups/previous.XXXXXXXX') || { echo 'Cannot allocate a unique backup archive' >&2; exit 1; }; \
+	  if ! mv -- 'word_gru.previous.stn' "$archive/word_gru.stn"; then \
+	    echo 'Cannot archive existing rollback checkpoint' >&2; exit 1; \
+	  fi; \
+	  printf 'Archived older rollback checkpoint: %s\\n' "$archive/word_gru.stn"; \
 	fi; \
 	if test -L 'word_gru.stn'; then \
 	  echo 'Refusing to replace root checkpoint symlink' >&2; exit 1; \
