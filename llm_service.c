@@ -55,7 +55,8 @@ static int infer(const char *binary,const char *checkpoint,const char *prompt,co
  return WIFEXITED(status)&&WEXITSTATUS(status)==0?0:-1;
 }
 static int integer(const char *s,long minimum,long maximum){
- if(!s||!*s)return 0;char *end;errno=0;long v=strtol(s,&end,10);
+ if(!s||!*s)return 0;
+ char *end;errno=0;long v=strtol(s,&end,10);
  return !errno&&end&&!*end&&v>=minimum&&v<=maximum;
 }
 static void handle(int fd,const char *binary,const char *checkpoint){
@@ -95,7 +96,8 @@ static void handle(int fd,const char *binary,const char *checkpoint){
  if(header_len+length>MAX_REQ){response(fd,413,"{\"error\":\"request too large\"}");return;}
  while(total<header_len+length){
   got=recv(fd,request+total,header_len+length-total,0);
-  if(got<=0)return;total+=(size_t)got;
+  if(got<=0)return;
+  total+=(size_t)got;
  }
  request[header_len+length]=0;
  char prompt[4096]={0},limit[16]="64",seed[16]="913";
