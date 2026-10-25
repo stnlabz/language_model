@@ -55,4 +55,4 @@ math-test: tests/model_math
 tests/model_math: tests/model_math.c micro_llm.c
 	$(CC) $(CFLAGS) tests/model_math.c -lm -o tests/model_math
 language-test:
-	./tests/language_qualification.sh
+	sh ./tests/language_qualification.sh
