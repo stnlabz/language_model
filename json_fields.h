@@ -86,6 +86,7 @@ static int jfields(const char *p,JField *f,size_t fields){
   if(*p=='}'){++p;jspace(&p);return *p?-1:0;}
   if(*p++!=',')return -1;
   jspace(&p);
+  if(*p=='}')return -1;
  }
 }
 #endif
