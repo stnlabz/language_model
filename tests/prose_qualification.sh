@@ -71,7 +71,7 @@ if [ ! -s "$run/generation.txt" ]; then
 fi
 # Detect a concrete autoregressive failure mode, not merely a nonempty file.
 # Three or more repetitions of a multi-character phrase indicate collapse.
-if grep -Eq '([[:alpha:]]{2,}[[:space:]]+)(\\1){2,}' "$run/generation.txt"; then
+if grep -Eq '([[:alpha:]]{2,}[[:space:]]+)(\1){2,}' "$run/generation.txt"; then
  echo 'FAIL: degenerate repeated prose continuation' >&2
  exit 1
 fi
