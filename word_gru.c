@@ -666,6 +666,21 @@ int main(int argc,char **argv){
  }else{
   puts("dialogue_pairs_supervised=0");
  }
+ /* This evaluates the checkpoint actually saved, after any answer fine-tuning.
+  * The earlier best_validation_loss is a pre-dialogue selection metric.
+  * Both values concern the base text split, not held-out conversation quality. */
+ double final_base_valid_loss=evaluate(best,valid,nv);
+ if(!isfinite(final_base_valid_loss)){
+  fputs("final checkpoint validation failed (nonfinite loss)\n",stderr);
+  free(m);free(best);free(moment1);free(moment2);
+  free(transitions);free(train);free(valid);return 1;
+ }
+ printf("final_checkpoint_base_valid_loss=%.5f\n",final_base_valid_loss);
+ if(argc==7){
+  printf("base_validation_loss_change_after_dialogue=%+.5f\n",
+         final_base_valid_loss-best_loss);
+  puts("dialogue_generalization=NOT_EVALUATED (no held-out dialogue set)");
+ }
  training_tokens=train;training_count=nt;
  /* Checkpoint persistence is mandatory. Training-only constrained sampling
   * is supplementary evidence and must not invalidate a saved model just
