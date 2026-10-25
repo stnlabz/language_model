@@ -31,7 +31,8 @@ typedef struct {
 static float *grad,*moment,*variance;
 static unsigned char *data;
 static size_t data_len;
-/* Answer-focused supervision is enabled only for record-aligned training. */
+/* Answer-focused supervision starts at the token that predicts the first
+ * answer byte (the position immediately preceding the answer). */
 static int supervision_start=0;
 static Model *model;
 static int load_data(const char *path){
@@ -229,7 +230,7 @@ static int train(const char *corpus,const char *output,int steps){
    if(n<1){sample--;continue;}
    supervision_start=0;
    if(answer>window && answer<window+(size_t)n)
-    supervision_start=(int)(answer-window);
+    supervision_start=(int)(answer-window-1);
    total+=forward(data+window,n,0,c);
    backward(data+window,n,c,(Model*)grad);
   }
@@ -257,7 +258,7 @@ static int train(const char *corpus,const char *output,int steps){
     for(size_t p=window;p+sizeof(label)-1<=end;p++)
      if(!memcmp(data+p,label,sizeof(label)-1)){
       size_t offset=p+sizeof(label)-1-window;
-      if(offset<(size_t)n)supervision_start=(int)offset;
+      if(offset<(size_t)n)supervision_start=(int)(offset?offset-1:0);
       break;
      }
     validation+=forward(data+window,n,0,c)/8.f;
