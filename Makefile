@@ -12,7 +12,7 @@ PORT ?= 8765
 SQLITE_DB ?= /opt/digit/data/digit_memory.db
 
 .DEFAULT_GOAL := help
-.PHONY: help build test native-test math-test language-test prose-test sqlite-test sqlite-export sqlite-learn prepare train generate learn serve status clean
+.PHONY: help build test native-test math-test language-test prose-test sqlite-test sqlite-export sqlite-learn sqlite-evaluate prepare train generate learn serve status clean
 help:
 	@echo 'make build'
 	@echo 'make test (native, mathematical, and language qualification; aggregate PASS/FAIL)'
@@ -20,7 +20,8 @@ help:
 	@echo 'make sqlite-export SQLITE_DB=/opt/digit/data/digit_memory.db (read-only; stdout)'
 	@echo 'make sqlite-test (synthetic database; does not access Digit)'
 	@echo 'make prose-test (synthetic prose training, held-out loss and generation diagnostic)'
-	@echo 'make sqlite-learn SQLITE_DB=... CHECKPOINT=new.stn STEPS=... (explicit training only)'
+	@echo 'make sqlite-learn SQLITE_DB=... CHECKPOINT=new.stn STEPS=... (train and evaluate that checkpoint)' 
+	@echo 'make sqlite-evaluate SQLITE_DB=... CHECKPOINT=existing.stn (evaluate existing model against DB)'
 	@echo 'make prepare DATA=digit_approved_learning.jsonl CORPUS=micro_corpus.txt'
 	@echo 'make learn DATA=digit_approved_learning.jsonl CHECKPOINT=llm.stn STEPS=5000'
 	@echo 'make generate CHECKPOINT=llm.stn PROMPT="The engineer"'
@@ -32,10 +33,16 @@ sqlite_corpus: sqlite_corpus.c
 sqlite-export: sqlite_corpus
 	@./sqlite_corpus '$(SQLITE_DB)'
 sqlite-learn: sqlite_corpus micro_llm
-	@tmp=$$(mktemp /tmp/stn-sqlite-corpus-XXXXXX) || exit 1; \
-	trap 'rm -f "$$tmp"' EXIT HUP INT TERM; \
-	./sqlite_corpus '$(SQLITE_DB)' > "$$tmp" && \
-	./micro_llm train "$$tmp" '$(CHECKPOINT)' '$(STEPS)'
+	@tmp=$(mktemp /tmp/stn-sqlite-corpus-XXXXXX) || exit 1; \
+	trap 'rm -f "$tmp"' EXIT HUP INT TERM; \
+	./sqlite_corpus '$(SQLITE_DB)' > "$tmp" && \
+	./micro_llm train "$tmp" '$(CHECKPOINT)' '$(STEPS)' && \
+	./micro_llm evaluate "$tmp" '$(CHECKPOINT)'
+sqlite-evaluate: sqlite_corpus micro_llm
+	@tmp=$(mktemp /tmp/stn-sqlite-corpus-XXXXXX) || exit 1; \
+	trap 'rm -f "$tmp"' EXIT HUP INT TERM; \
+	./sqlite_corpus '$(SQLITE_DB)' > "$tmp" && \
+	./micro_llm evaluate "$tmp" '$(CHECKPOINT)'
 micro_llm: micro_llm.c
 	$(CC) $(CFLAGS) micro_llm.c -lm -o micro_llm
 gru_learn: gru_learn.c json_fields.h
