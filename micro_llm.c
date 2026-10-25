@@ -623,7 +623,59 @@ static void audit_corpus(void){
  if(prose)
   puts("audit NOTE: unlabeled prose uses next-byte targets, not question-answer supervision.");
 }
+/* Evaluate the exact saved model against the same corpus record partition
+ * used by train(). Read-only: does not optimize or modify a checkpoint.
+ * Report train and held-out next-byte accuracy/loss separately. */
+static int evaluate_corpus(const char *path,const char *checkpoint){
+ if(!load_data(path))return 1;
+ size_t *starts=malloc((data_len+1)*sizeof(*starts));
+ if(!starts){free(data);return 1;}
+ size_t count=0;starts[count++]=0;
+ for(size_t i=1;i+1<data_len;i++)
+  if(data[i-1]=='\n'&&data[i]=='\n'&&data[i+1]!='\n')starts[count++]=i+1;
+ if(count<2){fputs("evaluation requires two or more records\n",stderr);free(starts);free(data);return 1;}
+ size_t training_count=count*9/10;
+ if(training_count<1)training_count=1;
+ init();
+ if(!restore(checkpoint)){free(model);free(starts);free(data);return 1;}
+ Cache *c=malloc(sizeof(*c));
+ if(!c){free(model);free(starts);free(data);return 1;}
+ for(int part=0;part<2;part++){
+  size_t lo=part?training_count:0,hi=part?count:training_count;
+  double loss=0;size_t correct=0,measured=0;
+  /* Stable deterministic evaluation budget spread across actual records.
+   * Every sampled byte is predicted from prior text only. */
+  const size_t budget=256;
+  for(size_t j=0;j<budget;j++){
+   size_t index=lo+(j%(hi-lo));
+   size_t begin=starts[index],end=index+1<count?starts[index+1]:data_len;
+   while(end>begin&&(data[end-1]=='\n'||data[end-1]=='\r'))end--;
+   if(end<=begin+1)continue;
+   size_t first=begin+1;
+   for(size_t p=begin;p+7<=end;p++)
+    if(!memcmp(data+p,"Answer:",7)){first=p+7;break;}
+   if(first>=end)continue;
+   size_t k=first+(j/(hi-lo))%(end-first);
+   size_t window=k-begin>T?k-T:begin;
+   int n=(int)(k-window);
+   if(n<1)continue;
+   supervision_start=n-1;
+   loss+=forward(data+window,n,0,c);
+   int best=0;
+   for(int b=1;b<V;b++)
+    if(c->prob[n-1][b]>c->prob[n-1][best])best=b;
+   correct+=(best==data[k]);measured++;
+  }
+  printf("checkpoint_evaluation partition=%s records=%zu sampled_targets=%zu next_byte_accuracy=%.5f mean_loss=%.5f\n",
+   part?"heldout":"training",hi-lo,measured,
+   measured?(double)correct/measured:0.0,measured?loss/measured:0.0);
+  if(!measured){free(c);free(model);free(starts);free(data);return 1;}
+ }
+ supervision_start=0;
+ free(c);free(model);free(starts);free(data);return 0;
+}
 int main(int argc,char **argv){
+ if(argc==4&&!strcmp(argv[1],"evaluate"))return evaluate_corpus(argv[2],argv[3]);
  if(argc==3&&!strcmp(argv[1],"inspect")){
   if(!load_data(argv[2]))return 1;
   audit_corpus();
