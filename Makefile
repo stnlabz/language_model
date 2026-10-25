@@ -13,7 +13,7 @@ SQLITE_DB ?= /opt/digit/data/digit_memory.db
 SQLITE_CHECKPOINT ?= sqlite-retrained.stn
 
 .DEFAULT_GOAL := help
-.PHONY: help build test native-test math-test language-test prose-test sqlite-test sqlite-export sqlite-learn sqlite-evaluate prepare train generate learn serve status clean
+.PHONY: FORCE help build test native-test math-test language-test prose-test sqlite-test sqlite-export sqlite-learn sqlite-evaluate prepare train generate learn serve status clean
 help:
 	@echo 'make build'
 	@echo 'make test (native, math, SQLite adapter and SQLite-checkpoint evaluation)'
@@ -33,7 +33,10 @@ help:
 # checkpoint and approved source data are not touched.
 build: micro_llm gru_learn llm_service sqlite_corpus
 	@if [ -d gru_runs ]; then find gru_runs -mindepth 1 -maxdepth 1 -exec rm -rf -- {} +; fi
-sqlite_corpus: sqlite_corpus.c
+# Rebuild native tools even if a non-executable tracked artifact has a newer timestamp.
+# Compiled binaries are local outputs, not trusted repository inputs.
+FORCE:
+sqlite_corpus: sqlite_corpus.c FORCE
 	$(CC) $(CFLAGS) sqlite_corpus.c -lsqlite3 -o sqlite_corpus
 sqlite-export: sqlite_corpus
 	@./sqlite_corpus '$(SQLITE_DB)'
@@ -41,7 +44,7 @@ sqlite-learn: sqlite_corpus micro_llm
 	@sh tests/sqlite_model_pipeline.sh '$(SQLITE_DB)' '$(CHECKPOINT)' '$(STEPS)' train
 sqlite-evaluate: sqlite_corpus micro_llm
 	@sh tests/sqlite_model_pipeline.sh '$(SQLITE_DB)' '$(CHECKPOINT)' '$(STEPS)' evaluate
-micro_llm: micro_llm.c
+micro_llm: micro_llm.c FORCE
 	$(CC) $(CFLAGS) micro_llm.c -lm -o micro_llm
 gru_learn: gru_learn.c json_fields.h
 	$(CC) $(CFLAGS) gru_learn.c -o gru_learn
