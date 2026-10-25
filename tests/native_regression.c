@@ -112,11 +112,55 @@ static void end_to_end(void){
  service_test(ckpt);
  unlink(src);unlink(bad);unlink(ckpt);rmdir(dir);
 }
+<<<<<<< HEAD
 /* Native model training and unfiltered deterministic qualification.
  * The shell runner builds C tools and keeps fixtures inside the repository. */
 static int language_probe(void){
  char *args[]={"/bin/sh","./tests/language_qualification.sh",NULL};
  return run("/bin/sh",args);
+=======
+/* Optional controlled English memorization qualification.
+ * Synthetic fixture only; never touches approved JSONL or real checkpoints.
+ * A successful pipeline is not treated as a passed language probe. */
+static int language_probe(void){
+ char dir[]="/tmp/stn-language-probe-XXXXXX";
+ if(!mkdtemp(dir)){perror("mkdtemp");return 1;}
+ char corpus[512],ckpt[512];
+ snprintf(corpus,sizeof(corpus),"%s/english.txt",dir);
+ snprintf(ckpt,sizeof(ckpt),"%s/probe.stn",dir);
+ FILE *f=fopen(corpus,"wb");
+ if(!f){perror(corpus);rmdir(dir);return 1;}
+ const char *pair="Question: What is an engineer? Answer: An engineer designs systems.\n\n";
+ for(int n=0;n<100;n++)if(fputs(pair,f)==EOF){fclose(f);unlink(corpus);rmdir(dir);return 1;}
+ if(fclose(f)){unlink(corpus);rmdir(dir);return 1;}
+ char *train_argv[]={"./micro_llm","train",corpus,ckpt,"800",NULL};
+ int status=run("./micro_llm",train_argv);
+ if(status!=0){fprintf(stderr,"language_probe: training FAILED (%d)\n",status);unlink(corpus);unlink(ckpt);rmdir(dir);return 1;}
+ int pipefd[2];if(pipe(pipefd)){perror("pipe");unlink(corpus);unlink(ckpt);rmdir(dir);return 1;}
+ pid_t pid=fork();
+ if(pid==0){
+  close(pipefd[0]);dup2(pipefd[1],STDOUT_FILENO);close(pipefd[1]);
+  execl("./micro_llm","./micro_llm","generate",ckpt,"Question: What is an engineer? Answer:","32","913",(char*)NULL);
+  _exit(127);
+ }
+ close(pipefd[1]);char output[256]={0};size_t used=0;
+ while(used<sizeof(output)-1){
+  ssize_t n=read(pipefd[0],output+used,sizeof(output)-1-used);
+  if(n<=0)break;used+=(size_t)n;
+ }
+ close(pipefd[0]);int child=0;
+ if(pid<0||waitpid(pid,&child,0)<0||!WIFEXITED(child)||WEXITSTATUS(child)!=0)status=1;
+ else{
+  output[used]=0;
+  printf("language_probe generated: %s",output);
+  if(strncmp(output," An engineer designs systems.",29)!=0){
+   fputs("language_probe: FAIL - English continuation not reproduced\n",stderr);
+   status=1;
+  }else{puts("language_probe: PASS - memorized controlled English continuation");status=0;}
+ }
+ unlink(corpus);unlink(ckpt);rmdir(dir);
+ return status!=0;
+>>>>>>> c4133d3ff93ffe32298ea20fe1abbadde5d7aa78
 }
 int main(int argc,char **argv){
  if(argc==2&&!strcmp(argv[1],"--language-probe"))return language_probe();
