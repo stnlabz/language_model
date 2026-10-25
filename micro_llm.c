@@ -437,7 +437,7 @@ static int train(const char *corpus,const char *output,int steps){
    size_t index=serial%training_count;
    size_t begin=starts[index];
    size_t end=index+1<count?starts[index+1]:data_len;
-   while(end>begin&&(data[end-1]=='\\n'||data[end-1]=='\\r'))end--;
+   while(end>begin&&(data[end-1]=='\n'||data[end-1]=='\r'))end--;
    if(end<=begin+1)continue;
    size_t first=begin+1;
    for(size_t p=begin;p+7<=end;p++)
