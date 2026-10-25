@@ -3,6 +3,8 @@
  * One decoder block, learned token/position embeddings, causal attention,
  * tanh feed-forward, tied output embedding. Analytic gradients, Adam.
  * Byte vocabulary avoids unknown tokens. No pretrained weights or services.
+ * v5 widens the representation and doubles context to cover more complete
+ * language spans; older checkpoints are rejected rather than misread.
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,13 +16,13 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #include <limits.h>
-#define D 48
-#define F 96
-#define T 96
+#define D 64
+#define F 128
+#define T 192
 #define V 256
 #define NPARAM (V*D+T*D+4*D*D+D*F+F*D+F+D)
 #define MAGIC 0x4d544c53u
-#define VERSION 4u
+#define VERSION 5u
 #define AT(a,b,stride) ((a)*(stride)+(b))
 static uint64_t seed=20261024;
 static uint64_t rng(void){seed^=seed>>12;seed^=seed<<25;seed^=seed>>27;return seed*2685821657736338717ULL;}
