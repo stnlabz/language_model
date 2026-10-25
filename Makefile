@@ -110,6 +110,10 @@ go:
 	@set -eu; \
 	$(MAKE) build; \
 	test -s '$(GO_SOURCE)' || { echo 'Missing or empty Digit queue: $(GO_SOURCE)' >&2; exit 1; }; \
+	if test -e 'word_gru.previous.stn' || test -L 'word_gru.previous.stn'; then \
+	  echo 'Existing rollback checkpoint word_gru.previous.stn must be preserved; refusing a second automatic promotion.' >&2; \
+	  echo 'Operator must explicitly decide how to retain or relocate that backup before another make go.' >&2; exit 1; \
+	fi; \
 	case '$(GO_SOURCE)' in gru_run/*|./gru_run/*) \
 	  echo 'GO_SOURCE must be outside gru_run' >&2; exit 1;; \
 	esac; \
@@ -133,7 +137,7 @@ go:
 	$(PYTHON) tools/migrate_digit_jsonl.py \
 	  --input '$(GO_DIR)/snapshot.jsonl' --output '$(GO_DIR)/dialogue_corpus.txt' --mode dialogue; \
 	printf '%s\n' 'NOTICE: Only explicitly approved non-structured exchanges enter answer-only supervision.'; \
-	printf '%s\n' 'NOTICE: Seven dialogue pairs cannot establish conversational qualification.'; \
+	printf '%s\n' 'NOTICE: Sparse dialogue examples cannot establish conversational qualification.'; \
 	$(MAKE) prepare-data DATA='$(GO_DIR)/corpus.txt' RUN='$(GO_DIR)/gru'; \
 	$(MAKE) train RUN='$(GO_DIR)/gru' CHECKPOINT='$(GO_DIR)/word_gru.stn' \
 	  SAMPLE='$(GO_DIR)/word_sample.txt' DIALOGUE='$(GO_DIR)/dialogue_corpus.txt' \
