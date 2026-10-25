@@ -362,7 +362,7 @@ static int train_aligned(const char *path,const char *output,int steps,const cha
  for(int step=1;step<=steps;step++){
   memset(g,0,sizeof(*g));
   size_t index=((size_t)step-1)%training.count;
-  double training_loss=record_pass(&training,&training.records[index],c,g,scratch);
+  (void)record_pass(&training,&training.records[index],c,g,scratch);
   float b1=1.f-powf(0.9f,(float)step),b2=1.f-powf(0.999f,(float)step);
   for(size_t i=0;i<parameters;i++){
    float d=fmaxf(-1.f,fminf(1.f,((float*)g)[i]));
@@ -371,11 +371,16 @@ static int train_aligned(const char *path,const char *output,int steps,const cha
    ((float*)model)[i]-=0.0007f*(m[i]/b1)/(sqrtf(v[i]/b2)+1e-8f);
   }
   if(step==1||step%100==0||step==steps){
-   double heldout_loss=0;
+   /* Evaluate both partitions after the same update. Record-level means
+    * use exactly the same target normalization for both partitions; the
+    * training metric must not be a single rotating record's loss. */
+   double training_loss=0,heldout_loss=0;
+   for(size_t j=0;j<training.count;j++)
+    training_loss+=record_pass(&training,&training.records[j],c,NULL,NULL);
    for(size_t j=0;j<validation.count;j++)
     heldout_loss+=record_pass(&validation,&validation.records[j],c,NULL,NULL);
    printf("step=%d train_loss=%.5f validation_loss=%.5f\n",
-          step,training_loss,heldout_loss/validation.count);
+          step,training_loss/training.count,heldout_loss/validation.count);
    fflush(stdout);
   }
  }
