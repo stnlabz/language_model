@@ -479,9 +479,9 @@ static int train(const char *corpus,const char *output,int steps){
  Cache *c=malloc(sizeof(*c));if(!c)return 1;
  size_t updates=0;
  for(int s=1;s<=steps;s++){
-  /* Spread complete training epochs across the optimizer-step budget.
-   * Steps are weight updates; epochs are complete record passes.
-   * The coverage bitmap tracks unique targets, not repeated visits. */
+  /* Spread complete epochs across reporting groups. Adam updates happen
+   * once per supervised record, not once per reporting group. The coverage
+   * bitmap tracks unique targets, not repeated visits. */
   double total=0.0;
   size_t batches=0,supervised_in_step=0;
   /* Every epoch visits all training records, with a deterministic
@@ -583,7 +583,7 @@ static int train(const char *corpus,const char *output,int steps){
   free(seen);free(starts);free(c);free(data);free(grad);free(moment);free(variance);free(model);
   return 1;
  }
- int ok=save(output,(uint64_t)steps);
+ int ok=save(output,(uint64_t)updates);
  free(seen);free(starts);free(c);free(data);free(grad);free(moment);free(variance);free(model);
  return ok?0:1;
 }
