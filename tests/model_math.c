@@ -3,8 +3,8 @@
 #include "../micro_llm.c"
 #undef main
 #include <stddef.h>
-static int checks(const char *checkpoint){
- init(); if(checkpoint && !restore(checkpoint))return 1; Cache *c=malloc(sizeof(*c)),*other=malloc(sizeof(*other));
+static int checks(const char *checkpoint,int mask){
+ init(); supervision_start=mask; printf("gradient supervision_start=%d\n",mask); if(checkpoint && !restore(checkpoint))return 1; Cache *c=malloc(sizeof(*c)),*other=malloc(sizeof(*other));
  Model *g=calloc(1,sizeof(*g));
  unsigned char tok[]="An engineer designs systems.";
  const int n=20; forward(tok,n,0,c); backward(tok,n,c,g);
@@ -28,11 +28,11 @@ static int checks(const char *checkpoint){
  for(int t=0;t<15;t++)for(int b=0;b<V;b++)if(c->prob[t][b]!=other->prob[t][b])failed++;
  for(int t=0;t<n;t++){double sum=0;for(int j=0;j<T;j++){if(j>t&&c->att[t][j]!=0)failed++;sum+=c->att[t][j];}if(fabs(sum-1)>1e-5)failed++;}
  printf("math qualification: %s failures=%d\n",failed?"FAIL":"PASS",failed);
- free(c);free(other);free(g);free(model);return failed!=0;
+ free(c);free(other);free(g);free(model);supervision_start=0;return failed!=0;
 }
 static int greedy(const char *path,const char *prompt,int count){
  init();if(!restore(path))return 1;Cache *c=malloc(sizeof(*c));
  unsigned char out[8192];size_t used=strlen(prompt);if(!used||used+count>sizeof(out))return 2;memcpy(out,prompt,used);
  for(int j=0;j<count;j++){int n=used<T?(int)used:T;forward(out+used-n,n,-1,c);int best=0;for(int b=1;b<V;b++)if(c->prob[n-1][b]>c->prob[n-1][best])best=b;out[used++]=(unsigned char)best;putchar(best);}putchar('\n');free(c);free(model);return 0;
 }
-int main(int argc,char **argv){if(argc==1)return checks(NULL);if(argc==3&&!strcmp(argv[1],"check"))return checks(argv[2]);if(argc==5&&!strcmp(argv[1],"greedy"))return greedy(argv[2],argv[3],atoi(argv[4]));return 2;}
+int main(int argc,char **argv){if(argc==1)return checks(NULL,0)+checks(NULL,7);if(argc==3&&!strcmp(argv[1],"check"))return checks(argv[2],0)+checks(argv[2],7);if(argc==5&&!strcmp(argv[1],"greedy"))return greedy(argv[2],argv[3],atoi(argv[4]));return 2;}
