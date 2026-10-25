@@ -87,8 +87,64 @@ static int sensitivity_probe(const size_t *starts,size_t count,Cache *c){
  return 0;
 }
 
+
+/* Corpus-only byte baselines. Counts come from the training partition;
+ * no held-out target contributes to their fitting. Laplace smoothing
+ * avoids zero probabilities and is reported as part of the method. */
+static int frequency_probe(const size_t *starts,size_t count,Cache *c){
+ size_t train_count=count*9/10;
+ if(train_count<1)train_count=1;
+ uint64_t uni[V]={0},bi[V][V]={{0}},prev_total[V]={0},total=0;
+ for(size_t i=0;i<train_count;i++){
+  size_t begin=starts[i],end=i+1<count?starts[i+1]:data_len;
+  while(end>begin&&(data[end-1]=='\n'||data[end-1]=='\r'||data[end-1]==0x1e))end--;
+  for(size_t k=begin+1;k<end;k++){
+   unsigned char prev=data[k-1],target=data[k];
+   uni[target]++;bi[prev][target]++;prev_total[prev]++;total++;
+  }
+ }
+ if(!total){fputs("no training bytes for frequency baseline\n",stderr);return 1;}
+ for(int part=0;part<2;part++){
+  size_t lo=part?train_count:0,hi=part?count:train_count;
+  size_t measured=0,model_correct=0,uni_correct=0,bi_correct=0;
+  double model_nll=0,uni_nll=0,bi_nll=0;
+  for(size_t j=0;j<256;j++){
+   size_t index=lo+(j*(hi-lo))/256;
+   size_t begin=starts[index],end=index+1<count?starts[index+1]:data_len;
+   while(end>begin&&(data[end-1]=='\n'||data[end-1]=='\r'||data[end-1]==0x1e))end--;
+   if(end<=begin+1)continue;
+   size_t first=begin+1;
+   for(size_t p=begin;p+7<=end;p++)if(!memcmp(data+p,"Answer:",7)){first=p+7;break;}
+   if(first>=end)continue;
+   size_t k=first+((j*17u)%(end-first));
+   size_t window=k-begin>(size_t)T?k-T:begin;
+   int n=(int)(k-window);
+   if(n<1)continue;
+   forward(data+window,n,-1,c);
+   int top=0,best_uni=0,best_bi=0;
+   unsigned char target=data[k],prev=data[k-1];
+   for(int b=1;b<V;b++){
+    if(c->prob[n-1][b]>c->prob[n-1][top])top=b;
+    if(uni[b]>uni[best_uni])best_uni=b;
+    if(bi[prev][b]>bi[prev][best_bi])best_bi=b;
+   }
+   double pu=((double)uni[target]+1)/((double)total+V);
+   double pb=((double)bi[prev][target]+1)/((double)prev_total[prev]+V);
+   model_nll-=log(fmax((double)c->prob[n-1][target],1e-30));
+   uni_nll-=log(pu);bi_nll-=log(pb);
+   model_correct+=(top==target);uni_correct+=(best_uni==target);bi_correct+=(best_bi==target);
+   measured++;
+  }
+  if(!measured){fputs("no targets measured\n",stderr);return 1;}
+  printf("frequency partition=%s measured=%zu model_nll=%.7f unigram_nll=%.7f bigram_nll=%.7f model_accuracy=%.7f unigram_accuracy=%.7f bigram_accuracy=%.7f\n",
+   part?"heldout":"training",measured,model_nll/measured,uni_nll/measured,bi_nll/measured,
+   (double)model_correct/measured,(double)uni_correct/measured,(double)bi_correct/measured);
+ }
+ return 0;
+}
+
 int main(int argc,char **argv){
- if(argc!=3 && !(argc==4 && !strcmp(argv[3],"sensitivity"))){fputs("usage: context_window_probe EXPORTED_CORPUS CHECKPOINT [sensitivity]\n",stderr);return 2;}
+ if(argc!=3 && !(argc==4 && (!strcmp(argv[3],"sensitivity") || !strcmp(argv[3],"frequency")))){fputs("usage: context_window_probe EXPORTED_CORPUS CHECKPOINT [sensitivity|frequency]\n",stderr);return 2;}
  if(!load_data(argv[1]))return 1;
  /* Same record delimiter precedence as train() and evaluate_corpus(). */
  size_t *starts=malloc((data_len+1)*sizeof(*starts));
@@ -106,7 +162,7 @@ int main(int argc,char **argv){
  if(!restore(argv[2])){free(model);free(starts);free(data);return 1;}
  Cache *c=malloc(sizeof(*c));
  if(!c){free(model);free(starts);free(data);return 1;}
- if(argc==4){int rc=sensitivity_probe(starts,count,c);free(c);free(model);free(starts);free(data);return rc;}
+ if(argc==4){int rc=!strcmp(argv[3],"frequency")?frequency_probe(starts,count,c):sensitivity_probe(starts,count,c);free(c);free(model);free(starts);free(data);return rc;}
  size_t training_count=count*9/10;
  if(training_count<1)training_count=1;
  puts("partition,record,target_offset,training_context,inference_context,training_nll,inference_nll,training_rank,inference_rank,training_best,inference_best,target");
