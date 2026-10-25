@@ -80,5 +80,14 @@ if cmp -s "$run/engineer.expected" "$run/variants-engineer.actual" &&
  printf 'PASS: controlled held-out paraphrases; artifacts=%s\n' "$run"
 else
  printf 'FAIL: controlled held-out paraphrases; artifacts=%s\n' "$run" >&2
+ # Diagnose whether degeneration is specific to greedy decoding or persists
+ # under independent sampling seeds. No output filtering or answer replacement.
+ for seed in 1 913 2026; do
+  "$run/micro_llm" generate "$run/variants.stn" "$(printf 'Question: Explain what an engineer does.\nAnswer:')" 29 "$seed" sample > "$run/engineer-sample-$seed.actual"
+  "$run/micro_llm" generate "$run/variants.stn" "$(printf 'Question: Describe the work of a gardener.\nAnswer:')" 25 "$seed" sample > "$run/gardener-sample-$seed.actual"
+  printf 'Sample seed %s engineer: ' "$seed"; cat "$run/engineer-sample-$seed.actual"
+  printf 'Sample seed %s gardener: ' "$seed"; cat "$run/gardener-sample-$seed.actual"
+ done
+ printf 'Sampled outputs are diagnostics only, not language qualification.\n'
  exit 1
 fi
