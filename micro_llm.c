@@ -354,16 +354,15 @@ static int train_aligned(const char *path,const char *output,int steps,const cha
  Cache *c=malloc(sizeof(*c));
  if(!g||!scratch||!m||!v||!c){corpus_free(&training);corpus_free(&validation);free(g);free(scratch);free(m);free(v);free(c);free(model);return 1;}
  size_t parameters=sizeof(*model)/sizeof(float);
+ /* Deterministic record-level stochastic updates avoid repeating a full
+  * training-corpus sweep on every optimizer step. record_pass still trains
+  * against every answer-byte target of the selected record with inference-
+  * equivalent context. Across each training.count steps, each record is
+  * selected exactly once. No held-out record participates in optimization. */
  for(int step=1;step<=steps;step++){
   memset(g,0,sizeof(*g));
-  double training_loss=0;
-  for(size_t j=0;j<training.count;j++){
-   Model *part=calloc(1,sizeof(*part));
-   if(!part){corpus_free(&training);corpus_free(&validation);free(g);free(scratch);free(m);free(v);free(c);free(model);return 1;}
-   training_loss+=record_pass(&training,&training.records[j],c,part,scratch);
-   for(size_t i=0;i<parameters;i++)((float*)g)[i]+=((float*)part)[i]/(float)training.count;
-   free(part);
-  }
+  size_t index=((size_t)step-1)%training.count;
+  double training_loss=record_pass(&training,&training.records[index],c,g,scratch);
   float b1=1.f-powf(0.9f,(float)step),b2=1.f-powf(0.999f,(float)step);
   for(size_t i=0;i<parameters;i++){
    float d=fmaxf(-1.f,fminf(1.f,((float*)g)[i]));
@@ -376,7 +375,7 @@ static int train_aligned(const char *path,const char *output,int steps,const cha
    for(size_t j=0;j<validation.count;j++)
     heldout_loss+=record_pass(&validation,&validation.records[j],c,NULL,NULL);
    printf("step=%d train_loss=%.5f validation_loss=%.5f\n",
-          step,training_loss/training.count,heldout_loss/validation.count);
+          step,training_loss,heldout_loss/validation.count);
    fflush(stdout);
   }
  }
