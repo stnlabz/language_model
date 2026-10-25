@@ -455,21 +455,27 @@ static int train(const char *corpus,const char *output,int steps){
    /* The model learns every next byte in each contiguous context window.
     * Overlapping input by the last target byte preserves next-byte
     * continuity without supervising the same target twice. */
-   for(size_t window=begin;window+1<end;){
-    int n=(int)((end-window-1)<T?(end-window-1):T);
+   /* Keep recent text as context when advancing through a long record.
+    * Disjoint T-byte windows restarted the context at every boundary, so
+    * targets after a boundary learned from too little preceding language.
+    * Supervise each target once, but retain up to half a context window
+    * from the preceding chunk when possible. */
+   size_t next=first;
+   while(next<end){
+    size_t window=next>begin+(size_t)(T/2)?next-(size_t)(T/2)-1:begin;
+    size_t available=end-window-1;
+    int n=(int)(available<(size_t)T?available:(size_t)T);
     if(n<1)break;
-    size_t target_begin=window+1>first?window+1:first;
-    if(target_begin<window+(size_t)n+1){
-     supervision_start=(int)(target_begin-window-1);
-     size_t targets=(size_t)(n-supervision_start);
-     total+=(double)forward(data+window,n,0,c)*(double)targets;
-     gradient_target_scale=(float)targets;
-     backward(data+window,n,c,(Model*)grad);
-     supervised_in_step+=targets;
-     for(size_t k=target_begin;k<=window+(size_t)n;k++)seen[k]=1;
-     batches++;
-    }
-    window+=(size_t)n;
+    supervision_start=(int)(next-window-1);
+    if(supervision_start<0||supervision_start>=n)break;
+    size_t targets=(size_t)(n-supervision_start);
+    total+=(double)forward(data+window,n,0,c)*(double)targets;
+    gradient_target_scale=(float)targets;
+    backward(data+window,n,c,(Model*)grad);
+    supervised_in_step+=targets;
+    for(size_t k=next;k<next+targets;k++)seen[k]=1;
+    batches++;
+    next+=targets;
    }
   }
   if(!batches){fputs("training step produced no supervised targets\n",stderr);return 1;}
