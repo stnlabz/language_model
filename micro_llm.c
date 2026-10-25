@@ -578,10 +578,11 @@ static int generate_legacy(const char *checkpoint,const char *prompt,int length,
  * for reproducible qualification; sampling retains temperature 0.4.
  * No character whitelist, word-state rules, or punctuation substitutions. */
 static int generate(const char *checkpoint,const char *prompt,int length,int requested_seed,int greedy){
- if(length<1||length>256)return 2;
+ if(length<1)return 2;
  init();if(!restore(checkpoint)){free(model);return 1;}
  seed=(uint64_t)(unsigned)requested_seed+1;
  size_t plen=strlen(prompt);if(plen==0||plen>4096){free(model);return 2;}
+ if((size_t)length>SIZE_MAX-plen){free(model);return 2;}
  size_t capacity=plen+(size_t)length;
  unsigned char *out=malloc(capacity);Cache *c=malloc(sizeof(*c));
  if(!out||!c){free(out);free(c);free(model);return 1;}
