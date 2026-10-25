@@ -85,3 +85,11 @@ The corrected Linux `make go` retains its existing approved JSONL snapshot and b
 The existing `word_gru.previous.stn` safeguard now runs **before** any costly training or cleanup. If a previous backup still exists, `make go` refuses to start. Preserve that file; the Operator must decide how to retain or move it before a future full run. The new dialogue file joins the explicit generated-file cleanup list; the original approved JSONL snapshot outside `gru_run` remains untouched.
 
 **Verification pending:** A native Linux `make go` run must confirm a nonzero `dialogue_vocabulary_reserved` and `dialogue_pairs_supervised`, consistent with the selected approved snapshot, plus valid checkpoint creation and separately judged inference samples. No build or training was performed by the assistant. Few genuine dialogue pairs cannot support general conversational qualification.
+
+## Linux repeated `make go` rollback rotation correction (2026-10-24)
+
+The first Linux `make go` backed up the current checkpoint to `word_gru.previous.stn`. An earlier protective edit caused a *second* `make go` to exit before preparing the data merely because that prior backup existed. This blocked normal repeated training and forced manual file relocation.
+
+The Makefile now permits successive operator-requested `make go` runs without any manual movement or deletion of checkpoints. Training and checkpoint saving complete first. Only at successful promotion time, if `word_gru.previous.stn` exists as a regular file, it is moved into a uniquely created directory under `checkpoint_backups/previous.XXXXXXXX/word_gru.stn`. Then the current root `word_gru.stn` becomes `word_gru.previous.stn`, and the newly trained checkpoint is moved to `word_gru.stn`. Any failure to archive the older rollback aborts promotion rather than overwriting it. Root checkpoint replacement retains existing rollback handling. Symlinks and nonregular archive locations are rejected.
+
+No source input, approved JSONL, running API, model process, or service is modified by this change. `make go` itself still runs training and promotes a checkpoint when explicitly invoked by the human Operator. **Native run unverified**; the code change was verified by source inspection only. This correction is for checkpoint rotation and does not qualify language quality.
