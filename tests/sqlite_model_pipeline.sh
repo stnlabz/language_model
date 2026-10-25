@@ -24,7 +24,7 @@ fi
 # Observe native model output, without supplying any canned answer.
 # The source prompt is extracted from the SQLite export, not a fixture.
 # A failed degeneration check is a language-test failure, never PASS.
-prompt=$(LC_ALL=C awk 'BEGIN { RS=""; ORS="" } NF { gsub(/[\r\n\t]/," "); print substr($0,1,80); exit }' "$temp")
+prompt=$(LC_ALL=C awk 'BEGIN { RS="\036"; ORS="\036" } NF { gsub(/[\r\n\t]/," "); print substr($0,1,80); exit }' "$temp")
 if [ -z "$prompt" ]; then
  echo "FAIL: no database-derived prompt available" >&2
  exit 1
@@ -35,7 +35,7 @@ echo "=== ACTUAL CHECKPOINT LANGUAGE GENERATION ==="
 printf 'checkpoint: %s\nsource_prompt: %s\n' "$checkpoint" "$prompt"
 # Use the length of the actual source record as the observation size.
 # There is no imposed 64/256-byte generation ceiling.
-output_bytes=$(LC_ALL=C awk 'BEGIN { RS="" } NF { print length($0); exit }' "$temp")
+output_bytes=$(LC_ALL=C awk 'BEGIN { RS="\036" } NF { print length($0); exit }' "$temp")
 if [ -z "$output_bytes" ] || [ "$output_bytes" -lt 1 ]; then
  echo "FAIL: no source-record length available" >&2
  exit 1
