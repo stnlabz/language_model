@@ -203,7 +203,7 @@ static int generate(const char *checkpoint,const char *prompt,int length,int req
  unsigned char *out=malloc(capacity);Cache *c=malloc(sizeof(*c));
  if(!out||!c){free(out);free(c);free(model);return 1;}
  memcpy(out,prompt,plen);size_t used=plen;
- int at_word=0;
+ int at_word=(plen>0&&prompt[plen-1]!=' ');
  for(int n=0;n<length;n++){
   int ctx=(int)(used<T?used:T);
   forward(out+used-ctx,ctx,-1,c);
@@ -215,7 +215,7 @@ static int generate(const char *checkpoint,const char *prompt,int length,int req
                b==' '||b=='.'||b==','||b==';'||b=='!'||b=='?'||
                b=='-'||b=='\''|| (b>='0'&&b<='9');
    if(!allowed)continue;
-   if(!at_word&&(b=='.'||b==','||b==';'||b=='!'||b=='?'||b=='-'))continue;
+   if(!at_word&&(b=='.'||b==','||b==';'||b=='!'||b=='?'||b=='-'||b==' '))continue;
    if(at_word&&b==' '&&out[used-1]==' ')continue;
    if(c->prob[b]>peak)peak=c->prob[b];
   }
@@ -224,7 +224,7 @@ static int generate(const char *checkpoint,const char *prompt,int length,int req
    int allowed=(b>='a'&&b<='z')||(b>='A'&&b<='Z')||
                b==' '||b=='.'||b==','||b==';'||b=='!'||b=='?'||
                b=='-'||b=='\''||(b>='0'&&b<='9');
-   if(!allowed||(!at_word&&(b=='.'||b==','||b==';'||b=='!'||b=='?'||b=='-')))continue;
+   if(!allowed||(!at_word&&(b=='.'||b==','||b==';'||b=='!'||b=='?'||b=='-'||b==' ')))continue;
    if(at_word&&b==' '&&out[used-1]==' ')continue;
    /* Avoid injecting letters with extremely weak model support. */
    if(c->prob[b]<peak*0.10f)continue;
