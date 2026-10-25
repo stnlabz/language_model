@@ -488,10 +488,10 @@ static void audit_corpus(void){
         records,qa,prose,short_records);
  printf("audit qa_bytes=%zu prose_bytes=%zu largest_record=%zu context=%d\n",
         qa_bytes,prose_bytes,largest,T);
- printf("audit long_records=%zu current_training_window_limit=%d\n",
+ printf("audit long_records=%zu model_context_plus_target=%d\n",
         clipped,T+1);
  if(clipped)
-  puts("audit WARNING: existing trainer samples only one initial/context-selected window per record per update; full-length prose coverage is not established.");
+  puts("audit NOTE: long prose records use random windows throughout their length; coverage over a finite training run is not guaranteed.");
  if(prose)
   puts("audit NOTE: unlabeled prose uses next-byte targets, not question-answer supervision.");
 }
