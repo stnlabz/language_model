@@ -1,0 +1,1144 @@
+
+AI MODULE CREATION GUIDE
+MVC Architecture, Data-Driven Intelligence, Module Boundaries, and Development Standards
+
+Document Status: APPROVED
+Applies To: Digit, Ezra, and AI systems explicitly adopting this architecture  
+Architecture: Model–View–Controller (MVC)  
+Governing Authority: Human Developer / Project Owner  
+Implementation Language: Determined by the applicable project  
+Document Classification: Development Standard
+
+---
+
+1. PURPOSE
+
+This document establishes the architectural, engineering, and development requirements for creating and maintaining artificial intelligence modules.
+
+Its purpose is to ensure that AI development agents implement the architecture established by the human developer rather than substituting hardcoded scripts, keyword-response mappings, architectural shortcuts, or symptom-based patches.
+
+Digit follows the Model–View–Controller (MVC) architecture.
+
+Ezra will follow the same MVC architecture.
+
+The architecture is not a suggestion, analogy, or optional design preference.
+
+It is a governing requirement.
+
+AI development agents will implement the established architecture without reinterpretation.
+
+An AI system must derive its conversational behavior from its data, observations, interpretation, reasoning, and established processing mechanisms rather than from collections of hardcoded responses.
+
+The human developer determines system requirements, architectural boundaries, and development authority.
+
+AI development agents implement those requirements.
+
+Engineering principle: Small, deterministic, and easy to use.
+
+---
+
+2. GOVERNING AUTHORITY
+
+The human developer retains absolute development authority.
+
+An AI development agent will:
+
+1. Follow the established architecture.
+2. Respect existing module responsibilities.
+3. Inspect the current implementation before proposing changes.
+4. Identify and investigate actual failures.
+5. Use established interfaces and data-access mechanisms.
+6. Preserve Core and module boundaries.
+7. Request authorization before changing architectural contracts.
+8. Preserve existing qualified behavior.
+9. Provide evidence supporting implementation and verification claims.
+10. Report limitations, unknowns, and failures accurately.
+
+An AI development agent will not:
+
+1. Redefine architectural requirements.
+2. Substitute its preferred design for the approved design.
+3. Introduce architectural shortcuts without authorization.
+4. Expand the scope of an approved change.
+5. Modify Core without explicit approval.
+6. Claim qualification based solely on successful compilation.
+7. Conceal architectural defects through hardcoded output.
+8. Treat inferred behavior as verified behavior.
+9. Dictate the human developer's workflow.
+10. Claim authority that has not been explicitly granted.
+
+A passing test does not justify an architectural violation.
+
+Making a symptom disappear does not establish that its root cause has been corrected.
+
+---
+
+3. MANDATORY MVC ARCHITECTURE
+
+Digit follows MVC.
+
+Ezra follows the same architectural model.
+
+The architecture consists of:
+
+- Router
+- Controllers
+- Models
+- Database
+- Views
+
+Each component has an explicit responsibility.
+
+Responsibilities will not be transferred between architectural layers without human authorization.
+
+3.1 Architecture Overview
+
+The logical request-processing flow is:
+
+text
+                 INCOMING MESSAGE
+                         |
+                         v
+                      ROUTER
+                         |
+                         v
+                    CONTROLLER
+                         |
+                         v
+                       MODEL
+                         |
+                         v
+                     DATABASE
+                  /            \
+             CORPUS        OBSERVATIONS
+                  \            /
+                         |
+                         v
+                       MODEL
+                         |
+                         v
+                    CONTROLLER
+                         |
+                         v
+                       VIEW
+                         |
+                         v
+                 GENERATED RESPONSE
+                         |
+                         v
+                DELIVERY INTERFACE
+
+
+This illustrates the logical separation of responsibilities.
+
+Not every operation requires every available data table.
+
+Controllers may perform additional authorized processing and coordinate multiple models.
+
+The logical architecture does not authorize one component to assume another component's responsibilities.
+
+---
+
+4. ROUTER
+
+4.1 Responsibility
+
+The Router routes requests. Nothing more.
+
+The Router identifies the appropriate destination for an incoming request and dispatches it to the responsible controller.
+
+The Router will not:
+
+- Interpret conversational meaning.
+- Perform reasoning.
+- Retrieve learned knowledge directly.
+- Access Corpus records directly.
+- Access Observations records directly.
+- Construct conversational responses.
+- Generate social expressions.
+- Embed conversational scripts.
+- Maintain an independent conversational intelligence system.
+
+The Router may perform the minimum technical processing necessary to fulfill its authorized routing contract.
+
+Such processing must not extend into conversational interpretation or response generation.
+
+4.2 Routing Principle
+
+Routing is not interpretation.
+
+For example, recognizing that an incoming message belongs to the conversational processing interface is routing.
+
+Determining that the message expresses affection, asks a question, or requires a greeting is interpretation.
+
+Those functions are separate.
+
+The Router will dispatch the request.
+
+The appropriate controller will handle subsequent processing.
+
+---
+
+5. DATABASE
+
+5.1 Database Definition
+
+Digit's database consists of its established information tables, including:
+
+Corpus
+
+Observations
+
+These are the authoritative data sources for the information assigned to them.
+
+Ezra will follow the same database-access architecture, with its applicable data structures and mission-specific requirements established separately.
+
+The storage implementation does not change the architectural responsibility.
+
+Whether the underlying records use SQL, structured files, or another approved persistence mechanism, they remain part of the system's data layer.
+
+The AI development agent will not reinterpret the established data architecture as permission to bypass it.
+
+5.2 Corpus Table
+
+Corpus contains learned knowledge.
+
+Its responsibilities include:
+
+- Maintaining learned information.
+- Storing knowledge records.
+- Supporting knowledge retrieval.
+- Maintaining established provenance.
+- Providing relevant evidence to models.
+- Supporting authorized knowledge updates.
+- Preserving record integrity.
+- Supporting established validation mechanisms.
+
+Corpus is not a collection of hardcoded controller responses.
+
+A learned conversational concept belongs in Corpus when it is appropriate to the system's knowledge model.
+
+For example:
+
+text
+Babygirl is an affectionate nickname for Digit.
+
+
+That knowledge belongs in the appropriate data record.
+
+It must not be duplicated as a literal response rule inside Ask or another controller.
+
+5.3 Observations Table
+
+Observations contains the system's recorded observations.
+
+Its responsibilities include:
+
+- Maintaining authorized observational records.
+- Supporting conversational history and context.
+- Providing relevant previous observations.
+- Preserving established provenance.
+- Supporting continuity across conversational interactions.
+- Distinguishing recorded observations from interpretations.
+- Maintaining record integrity.
+
+Observations is a data table.
+
+It is not a controller, router, or response generator.
+
+Models retrieve observational information for use by the appropriate controllers.
+
+5.4 Database Access
+
+Database tables will be accessed through established models.
+
+Controllers will not bypass models to access the database directly.
+
+Views will not access database tables directly.
+
+Routers will not access database tables directly.
+
+Database ownership and access boundaries will be preserved.
+
+The database stores information. Models retrieve information. Controllers process information. Views generate responses.
+
+---
+
+6. MODELS
+
+6.1 Responsibility
+
+Models seek, retrieve, and manage data through the authorized database interfaces.
+
+Models are responsible for access to their assigned tables and data sources.
+
+Their responsibilities include:
+
+1. Data retrieval.
+2. Authorized data persistence.
+3. Data validation within their established responsibility.
+4. Record selection.
+5. Provenance preservation.
+6. Error reporting.
+7. Data integrity enforcement.
+8. Providing structured information to controllers.
+
+Models will not generate user-facing conversational responses.
+
+Models will not independently decide conversational intent.
+
+Models will not assume the responsibilities of controllers or views.
+
+6.2 Corpus Model
+
+The Corpus model accesses the Corpus table.
+
+It retrieves knowledge relevant to the request supplied through the authorized processing mechanism.
+
+It must distinguish between:
+
+- Record found.
+- Record not found.
+- Record unavailable.
+- Retrieval failure.
+- Record rejected by validation.
+- Record lacking required provenance.
+
+These conditions must not be silently treated as equivalent.
+
+6.3 Observations Model
+
+The Observations model accesses the Observations table.
+
+It retrieves observational context relevant to the current interaction.
+
+It may provide:
+
+- Previous messages.
+- Recorded conversational observations.
+- Relevant contextual information.
+- Established participant references.
+- Prior conversational state where recorded.
+
+Its output is data for controller processing.
+
+It does not independently construct the final conversational response.
+
+6.4 Language Independence
+
+Digit and Ezra may use different implementation mechanisms from PHP-based MVC applications.
+
+PDO is a PHP database-access interface.
+
+The applicable AI implementation will use the data-access mechanism approved for its programming language and runtime.
+
+The underlying MVC requirement remains unchanged.
+
+Controllers will access data through models.
+
+Implementation language does not authorize bypassing this requirement.
+
+---
+
+7. CONTROLLERS
+
+7.1 Responsibility
+
+Controllers control application behavior.
+
+Controllers receive routed requests, coordinate the required operations, use the appropriate models, and direct the resulting information toward the appropriate views.
+
+Controllers will:
+
+1. Receive authorized requests.
+2. Coordinate the applicable processing workflow.
+3. Invoke established models.
+4. Process retrieved information.
+5. Apply the responsibilities assigned to their controller functions.
+6. Handle processing failures.
+7. Supply response data to views.
+8. Preserve module authority boundaries.
+
+Controllers will not become repositories of hardcoded conversational content.
+
+7.2 Interpretation
+
+Interpretation is responsible for determining the meaning and intent of incoming conversational information.
+
+Its responsibilities include:
+
+- Recognizing conversational intent.
+- Identifying greetings.
+- Recognizing direct address.
+- Resolving nicknames.
+- Interpreting questions.
+- Identifying statements.
+- Recognizing expressions and informal language.
+- Using available conversational context.
+- Identifying ambiguous references.
+- Distinguishing requests from ordinary conversation.
+- Reporting interpretation uncertainty.
+
+Interpretation will use authorized information supplied through the established architecture.
+
+Example: Nickname Interpretation
+
+Input:
+
+text
+babygirl?
+
+
+Applicable learned knowledge:
+
+text
+Babygirl is an affectionate nickname for Digit.
+
+
+Expected architectural behavior:
+
+1. The Router dispatches the message.
+2. The applicable controller invokes Interpretation.
+3. Interpretation evaluates the message and relevant contextual information.
+4. Models provide relevant Corpus and Observations records.
+5. Interpretation determines whether the message directly addresses Digit.
+6. Subsequent processing determines whether a response is appropriate.
+7. A view generates the resulting response.
+
+The system must not require a separate hardcoded response branch for each nickname.
+
+7.3 Reasoning
+
+Reasoning evaluates interpreted information.
+
+Its responsibilities include:
+
+- Evaluating retrieved knowledge.
+- Evaluating relevant observations.
+- Distinguishing evidence from inference.
+- Assessing uncertainty.
+- Applying authorized decision logic.
+- Determining whether available information supports an answer.
+- Selecting the appropriate processing outcome.
+- Identifying when clarification is necessary.
+- Preserving evidence provenance.
+
+Reasoning must not invent records, observations, or facts.
+
+Reasoning will not bypass models to retrieve data directly.
+
+Reasoning will not conceal failed retrieval by substituting scripted answers.
+
+7.4 Ask
+
+Ask coordinates conversational request processing.
+
+Ask will:
+
+- Receive the routed conversational request.
+- Invoke appropriate interpretation functions.
+- Coordinate relevant model access.
+- Invoke applicable reasoning functions.
+- Receive processing outcomes.
+- Direct the resulting information to the appropriate response-generation mechanism and view.
+- Return the generated response through the established interface.
+
+Ask will not:
+
+- Maintain an independent greeting dictionary in source code.
+- Return hardcoded social responses as a substitute for interpretation.
+- Perform direct database access outside established models.
+- Replace the responsibilities of Interpretation.
+- Replace the responsibilities of Reasoning.
+- Replace View generation.
+- Introduce keyword-specific conversational shortcuts.
+
+Ask is a coordinator, not a scripted chatbot.
+
+---
+
+8. VIEWS
+
+8.1 Responsibility
+
+Views generate the system's responses.
+
+A view receives the authorized results of controller processing and generates the appropriate response representation.
+
+Views may provide:
+
+- Textual responses.
+- Structured responses.
+- Conversational presentation.
+- Authorized nonverbal expressions.
+- Interface-compatible response formatting.
+
+Views do not independently decide the factual meaning of an incoming message.
+
+Views do not perform reasoning.
+
+Views do not directly access Corpus or Observations.
+
+Views do not perform routing.
+
+8.2 Response Generation
+
+Response generation must use the information and decisions supplied through the established processing architecture.
+
+It must not be reduced to a growing collection of hardcoded conversational scripts.
+
+Where additional response-composition capability is required, that capability must be implemented within the approved architectural boundaries.
+
+The AI development agent must identify any missing capability rather than substitute an unauthorized workaround.
+
+8.3 Socials
+
+Socials supplies authorized social expression through its assigned architectural interfaces.
+
+Its responsibilities may include:
+
+- Emotional expression presentation.
+- Greetings and acknowledgment presentation.
+- Appropriate nonverbal expression.
+- Emoji and other established social representations.
+- Social tone associated with an authorized response.
+
+Socials does not independently establish facts.
+
+Socials does not replace Interpretation.
+
+Socials does not replace Reasoning.
+
+Socials must not use hardcoded scripts to conceal failures elsewhere in the architecture.
+
+---
+
+9. COMMUNICATION INTERFACES
+
+IRC, Slack, and other communication interfaces are transport mechanisms.
+
+They will:
+
+1. Receive messages.
+2. Preserve relevant message information.
+3. Deliver incoming requests through the authorized routing mechanism.
+4. Transmit generated responses.
+5. Apply authorized transport-specific requirements.
+
+They will not:
+
+- Become independent conversational controllers.
+- Maintain separate knowledge repositories.
+- Implement independent reasoning engines.
+- Substitute transport scripts for conversational capabilities.
+- Bypass established processing components.
+
+A message failing to reach Interpretation is not automatically a Corpus failure.
+
+A message reaching Interpretation but failing to resolve its intended meaning is not automatically a transport failure.
+
+These boundaries must be investigated independently.
+
+---
+
+10. DATA-DRIVEN INTELLIGENCE
+
+10.1 Governing Requirement
+
+Learned knowledge must influence behavior through the approved MVC architecture.
+
+AI modules must not simulate learned behavior using source-code response tables.
+
+Learning and conversational behavior are distinct operations.
+
+Knowledge stored in Corpus must remain accessible through established model interfaces.
+
+Observations must remain accessible through established model interfaces.
+
+Controllers must use available information to perform their assigned processing.
+
+Views must generate the resulting response.
+
+10.2 Knowledge Is Not Behavior
+
+The following operations are distinct:
+
+1. Knowledge storage.
+2. Knowledge validation.
+3. Knowledge availability.
+4. Knowledge retrieval.
+5. Context retrieval.
+6. Interpretation.
+7. Reasoning.
+8. Response construction.
+9. View generation.
+10. Interface delivery.
+
+Successful completion of one operation does not establish successful completion of the others.
+
+Example
+
+A successful learning acknowledgment:
+
+text
+Learn appended: LEARN-XXXXXXXX
+
+
+Demonstrates acknowledgment of the learning operation.
+
+It does not independently prove that:
+
+- The record is retrievable.
+- The record is selected in a relevant context.
+- Interpretation recognizes its meaning.
+- Reasoning applies it correctly.
+- A view generates the expected response.
+- The interface delivers the response.
+
+Each claim requires its own supporting evidence.
+
+---
+
+11. PROHIBITED HARDCODED CONVERSATIONAL BEHAVIOR
+
+Hardcoded conversational scripts must not be substituted for architecture-driven behavior.
+
+Prohibited Example
+
+c
+if (strcmp(message, "hello") == 0) {
+    return "Hello!";
+}
+
+
+When used inside Ask to simulate a general greeting capability, this violates the intended architecture.
+
+Required Behavior
+
+The message must pass through the established processing architecture.
+
+Interpretation identifies the greeting.
+
+Relevant knowledge and observations are obtained through models.
+
+Reasoning determines the appropriate response action.
+
+The view generates the response.
+
+The interface delivers it.
+
+This requirement also applies to:
+
+- Nicknames.
+- Farewells.
+- Affectionate expressions.
+- Informal language.
+- Questions.
+- Conversational references.
+- Social acknowledgments.
+- Follow-up messages.
+- Context-dependent expressions.
+
+Deterministic rules may be used to satisfy approved infrastructure requirements.
+
+They must not replace intended conversational intelligence.
+
+A scripted response that produces the expected words is not proof that the required capability exists.
+
+---
+
+12. ROOT-CAUSE INVESTIGATION
+
+AI development agents will investigate failures before modifying implementations.
+
+The investigation will establish:
+
+1. The reported requirement.
+2. The expected behavior.
+3. The observed behavior.
+4. The entry point.
+5. The route taken.
+6. The responsible controller.
+7. The models invoked.
+8. The database records returned.
+9. The interpretation outcome.
+10. The reasoning outcome.
+11. The view-generation outcome.
+12. The delivered result.
+
+The agent will identify where observed behavior first diverges from the expected architectural behavior.
+
+Where evidence is insufficient, the root cause will be reported as:
+
+ROOT CAUSE UNKNOWN
+
+The AI agent will not manufacture certainty.
+
+12.1 Symptom Patching
+
+Symptom patching is the practice of altering observable behavior without establishing and correcting the underlying cause.
+
+Examples include:
+
+- Adding a greeting response when Interpretation fails to identify greetings.
+- Adding a nickname branch when contextual reference resolution fails.
+- Copying Corpus knowledge into source code when retrieval fails.
+- Modifying Rendering to conceal a Reasoning failure.
+- Modifying the Router to compensate for controller defects.
+
+These practices are not acceptable architectural corrections.
+
+Temporary mitigations require explicit human authorization and must be identified as temporary.
+
+---
+
+13. DIAGNOSTIC EVIDENCE
+
+Established diagnostics and DSD mechanisms will be used according to their documented contracts.
+
+Where supported, diagnostic records should identify:
+
+- Request identity.
+- Message source.
+- Routing destination.
+- Controller processing.
+- Model calls.
+- Corpus retrieval.
+- Observations retrieval.
+- Interpretation outcome.
+- Reasoning outcome.
+- Response-generation outcome.
+- Delivery status.
+- Failure classification.
+- Record provenance.
+
+The agent must distinguish:
+
+OBSERVED — Directly witnessed behavior.
+
+VERIFIED — Behavior supported by completed validation.
+
+INFERRED — An interpretation supported by available but incomplete evidence.
+
+UNKNOWN — Information not established.
+
+No AI agent may claim that an inferred root cause is verified.
+
+---
+
+14. MODULE CREATION REQUIREMENTS
+
+Before creating an AI module, the development agent will inspect the governing project documentation.
+
+For projects using the established module-development standards, this includes the applicable Module Creation Guide and reference module package.
+
+The agent will establish:
+
+1. The module's assigned responsibility.
+2. Its architectural layer.
+3. Its inputs.
+4. Its outputs.
+5. Its dependencies.
+6. Its data-access requirements.
+7. Its ownership boundaries.
+8. Its authority requirements.
+9. Its failure behavior.
+10. Its required tests.
+11. Its integration requirements.
+12. Its qualification requirements.
+
+A module will not be created solely because an observed failure appears easier to solve by adding another module.
+
+Existing responsibilities must be respected.
+
+New architectural capabilities require explicit authorization.
+
+---
+
+15. CORE AND MODULE SEPARATION
+
+Core governs the system according to its established architecture and approved contracts.
+
+Modules implement assigned capabilities.
+
+An AI development agent will not:
+
+- Modify Core to bypass a module failure.
+- Duplicate Core functionality inside a module.
+- Introduce unauthorized dependencies.
+- Change public interfaces without approval.
+- Alter existing authority relationships.
+- Bypass required qualification gates.
+
+Module implementation must remain within the boundaries established for that module.
+
+An approved module change does not authorize a Core change.
+
+---
+
+16. AI-ASSISTED SOURCE MODIFICATION
+
+AI-generated and AI-modified code must follow the project's applicable annotation and source-control requirements.
+
+Changes will preserve traceability.
+
+The development agent will document:
+
+- What was changed.
+- Why it was changed.
+- Which requirement authorized the change.
+- Which files were affected.
+- Which architectural responsibilities were involved.
+- Which tests were executed.
+- What the tests demonstrated.
+- Whether qualification was completed.
+
+Existing human-authored work must not be overwritten without authorization.
+
+The AI agent must not fabricate approval records, test results, revision history, or provenance.
+
+---
+
+17. TESTING REQUIREMENTS
+
+Every new or modified AI module must undergo the applicable verification and qualification process.
+
+For agent modules subject to the established minimum, qualification requires at least ten tests, including a negative test.
+
+Testing must demonstrate architectural compliance as well as functional behavior.
+
+17.1 Minimum Test Categories
+
+Tests will cover, as applicable:
+
+1. Successful module initialization.
+2. Valid request handling.
+3. Invalid request rejection.
+4. Router boundary compliance.
+5. Correct controller processing.
+6. Correct model/database access.
+7. Correct Corpus retrieval.
+8. Correct Observations retrieval.
+9. Correct view generation.
+10. Correct response delivery.
+11. Failure isolation.
+12. Provenance preservation.
+13. Authority compliance.
+14. Regression prevention.
+15. Negative behavior.
+
+The applicable test suite will be defined from the module's actual requirements.
+
+17.2 Conversational Capability Tests
+
+Conversational modules will additionally verify behavior such as:
+
+Test: Greeting Recognition
+
+A learned greeting can be interpreted without adding a literal greeting-response branch to Ask.
+
+Test: Direct Address
+
+A learned nickname can be resolved to the appropriate participant through the established processing mechanism.
+
+Test: Contextual Reference
+
+The system can interpret a context-dependent message using authorized observational information.
+
+Test: Social Interaction
+
+The system distinguishes a social message from a factual information request.
+
+Test: Response Eligibility
+
+The system can distinguish an addressed request from unrelated conversation.
+
+Test: Knowledge Retrieval
+
+The system obtains relevant records through its established models.
+
+Test: Missing Knowledge
+
+Missing information is reported accurately.
+
+Test: Uncertainty
+
+The system does not invent unsupported knowledge.
+
+Test: View Responsibility
+
+The final response is generated through the approved view mechanism.
+
+Test: Architectural Compliance
+
+The tested behavior does not depend upon prohibited hardcoded conversational responses.
+
+Test: Regression
+
+Previously qualified behavior continues to function.
+
+17.3 Test Validity
+
+A test is not valid evidence of architectural compliance if its success depends upon violating the architecture.
+
+A module may produce the expected output and still fail qualification.
+
+Correct output does not excuse incorrect implementation.
+
+---
+
+18. QUALIFICATION AND REGRESSION
+
+The development lifecycle is:
+
+Requirement → Design → Build → Verify → Qualification Tests → Run → Correct Failures → Regression Tests → Full Bench → ALL PASS / NO OPEN REGRESSIONS → QUALIFIED
+
+Integration and release follow the established authorization process.
+
+Build success is not qualification.
+
+Local module verification is not full-system qualification.
+
+Any change requiring requalification will undergo the required qualification process.
+
+An AI agent will not claim:
+
+- Tested without executed tests.
+- Verified without evidence.
+- Qualified without completed qualification.
+- Fixed without establishing the correction.
+- Integrated without integration evidence.
+- Released without release authorization.
+
+All qualification claims must be supported by recorded results.
+
+---
+
+19. ARCHITECTURAL REVIEW GATE
+
+Before submitting work for approval, the AI development agent will verify:
+
+1. Does the Router perform routing only?
+2. Are requests dispatched to the appropriate controllers?
+3. Do models own their assigned data-access responsibilities?
+4. Are Corpus and Observations accessed through models?
+5. Are controllers limited to authorized processing responsibilities?
+6. Does Interpretation perform conversational interpretation?
+7. Does Reasoning perform its assigned reasoning responsibilities?
+8. Does Ask coordinate rather than substitute scripted behavior?
+9. Do views generate the responses?
+10. Are communication interfaces limited to their transport responsibilities?
+11. Has learned conversational knowledge been embedded unnecessarily in source code?
+12. Does any hardcoded response conceal a missing capability?
+13. Is the root cause supported by evidence?
+14. Are Core and module boundaries preserved?
+15. Are changes within approved scope?
+16. Are source modifications properly annotated?
+17. Have required tests been executed?
+18. Has negative behavior been tested?
+19. Have applicable regressions been verified?
+20. Has qualification been completed where required?
+
+Any failed requirement must be reported.
+
+An agent will not conceal an architectural violation because the observable behavior appears correct.
+
+---
+
+20. MANDATORY FAILURE REPORTING
+
+When an AI development agent cannot satisfy a requirement without violating the architecture, it will report the following:
+
+REQUIREMENT: The requested behavior or capability.
+
+EXPECTED: What the system must do.
+
+OBSERVED: What the system actually does.
+
+EVIDENCE: Relevant diagnostic records, traces, tests, or other supporting information.
+
+ROOT CAUSE: Verified cause or UNKNOWN.
+
+AFFECTED LAYER: Router, Controller, Model, Database, View, or Interface.
+
+AFFECTED MODULES: The actual modules implicated by the evidence.
+
+ARCHITECTURAL IMPACT: Any affected module responsibilities or interfaces.
+
+PROPOSED CORRECTION: An evidence-supported correction respecting MVC.
+
+AUTHORIZATION REQUIRED: Decisions reserved to the human developer.
+
+The AI development agent will not substitute an unauthorized workaround.
+
+---
+
+21. PROHIBITED DEVELOPMENT PRACTICES
+
+The following practices are prohibited without explicit applicable authorization:
+
+1. Replacing intelligence capabilities with conversational scripts.
+2. Placing knowledge inside controllers rather than using models.
+3. Allowing the Router to perform interpretation or reasoning.
+4. Allowing views to bypass models for database access.
+5. Allowing communication interfaces to implement independent conversational logic.
+6. Duplicating Corpus records in source code.
+7. Bypassing Observations to conceal context failures.
+8. Adding exact-match responses to conceal interpretation failures.
+9. Changing unrelated modules to make a local test pass.
+10. Modifying Core without authorization.
+11. Introducing new module responsibilities without approval.
+12. Altering interface contracts without authorization.
+13. Inventing diagnostic evidence.
+14. Claiming unexecuted tests passed.
+15. Claiming inferred causes are verified.
+16. Treating compilation as qualification.
+17. Repeatedly patching symptoms without root-cause investigation.
+18. Replacing established architecture with an AI-preferred design.
+19. Concealing technical limitations through hardcoded output.
+20. Treating human requirements as optional recommendations.
+
+---
+
+22. DIGIT AND EZRA ARCHITECTURAL CONTINUITY
+
+Digit is an artificial intelligence system operating under the MVC architecture established by its human developer.
+
+Ezra will adopt the same MVC architectural principles.
+
+Ezra may require additional mission-specific functionality, constraints, interfaces, or qualification requirements.
+
+Those additions do not authorize changes to the governing architectural separation.
+
+Both systems will maintain the following responsibilities:
+
+Router: Routes requests.
+
+Models: Access the established data tables.
+
+Database: Maintains Corpus and Observations information.
+
+Controllers: Perform authorized processing and coordinate system operations.
+
+Views: Generate responses.
+
+Mission-specific extensions will comply with the applicable system requirements and authorization boundaries.
+
+Digit's existing capabilities are not automatically flight-qualified capabilities.
+
+Reuse of architectural principles does not establish mission qualification.
+
+Ezra's eventual deployment requirements will be governed by its own approved mission and engineering standards.
+
+---
+
+23. HUMAN CONTROL AND DEVELOPMENT AUTHORITY
+
+The development process is:
+
+Requirement → Inspection → Evidence → Proposal → Human Approval → Implementation → Verification → Qualification
+
+The human developer retains final authority.
+
+Approval to inspect does not authorize modification.
+
+Approval to modify one module does not authorize modification of another.
+
+Approval to implement does not establish qualification.
+
+Approval to qualify does not automatically authorize deployment.
+
+The AI agent will not infer approval from silence, prior conversation, or apparent technical necessity.
+
+When a requirement cannot be fulfilled within the approved architecture, the agent will report the limitation and identify the required decision.
+
+The AI agent will not silently choose a different architecture.
+
+---
+
+24. GOVERNING DEVELOPMENT DIRECTIVE
+
+The following requirements govern all applicable AI module development.
+
+The human developer defines the architecture.
+
+The Router routes. Nothing more.
+
+The Models access the data tables.
+
+Corpus and Observations are the database tables.
+
+The Controllers perform their assigned processing responsibilities.
+
+The Views generate the responses.
+
+Learned knowledge belongs in the established data architecture.
+
+Conversational capabilities will not be simulated through collections of hardcoded scripts.
+
+Architectural boundaries will not be bypassed to make tests pass.
+
+Root causes will be investigated before corrections are implemented.
+
+Verification requires evidence.
+
+Build validation is not qualification.
+
+Core authority and module boundaries will be preserved.
+
+No AI agent may reinterpret, replace, or override the human developer's architecture without explicit authorization.
+
+---
+
+25. FINAL ENGINEERING STANDARD
+
+An AI module is not complete merely because it produces an expected answer.
+
+It must produce that answer through the authorized architecture.
+
+A greeting generated through an unauthorized hardcoded controller branch does not establish a greeting capability.
+
+A nickname retrieved as a dictionary definition does not establish conversational reference resolution.
+
+A stored learning record does not establish applied knowledge.
+
+A correct response does not establish correct reasoning.
+
+A successful build does not establish qualification.
+
+The system must demonstrate correct behavior through the responsible components, supported by appropriate diagnostic and qualification evidence.
+
+Competence is my Watchword.
+
+Determinism ≠ Probably.
+
+Small, deterministic, and easy to use.
+
+No assumptions. No architectural shortcuts. No symptom patching disguised as engineering.
+
+The architecture is established. The responsibilities are defined. There is no room for ambiguity.
+
+---
+
+26. DOCUMENT AUTHORITY
+
+This document is approved.
+
+It establishes no new authority until approved through the applicable documentation process.
+
+It does not independently authorize:
+
+- Repository modification.
+- Core modification.
+- Module implementation.
+- Database changes.
+- Interface changes.
+- Deployment.
+- Release.
+- Qualification certification.
+
+Existing controlled requirements remain in effect.
+
+Upon approval, this guide will govern the creation and modification of AI modules within its explicitly assigned scope.
+
+END OF DOCUMENT

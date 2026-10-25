@@ -1,0 +1,2479 @@
+Observability is the ability to understand a system's internal state through information the system exposes.
+
+Observability supports diagnosis.
+
+Observability supports operations.
+
+Observability supports reliability.
+
+Observability supports performance analysis.
+
+Observability supports security investigation.
+
+Observability does not replace correctness.
+
+Observability does not replace testing.
+
+Observability does not replace validation.
+
+Observability does not replace monitoring.
+
+Monitoring and observability are related but different concepts.
+
+Monitoring evaluates known conditions through defined measurements and checks.
+
+Observability provides information that can help investigate both known and unexpected conditions.
+
+A monitoring system can report that latency exceeded a threshold.
+
+Observability data can help determine where the latency occurred.
+
+A monitoring system can report that a process stopped responding.
+
+Observability data can help reconstruct what happened before the failure.
+
+Logs are one observability signal.
+
+Metrics are one observability signal.
+
+Traces are one observability signal.
+
+Events are one observability signal.
+
+Health information is one observability signal.
+
+Audit records are one observability signal.
+
+No single signal answers every operational question.
+
+Logs record discrete events.
+
+A log entry should describe something that occurred.
+
+A log entry should identify when the event occurred.
+
+A log entry should identify the component where useful.
+
+A log entry should identify severity where severity is part of the logging model.
+
+A log entry should preserve relevant context.
+
+A log entry should not claim more than the component actually observed.
+
+Observed fact should be distinguished from inference.
+
+If a connection attempt timed out, record that the connection attempt timed out.
+
+Do not record that the remote machine is dead unless that fact was independently established.
+
+If authentication failed, record authentication failure.
+
+Do not automatically claim malicious activity.
+
+If a file cannot be opened, record the actual file operation failure.
+
+Do not invent the reason if the operating system did not establish it.
+
+Evidence should remain evidence.
+
+Inference should remain inference.
+
+Unknown should remain unknown.
+
+A useful log message identifies the operation.
+
+A useful log message identifies the result.
+
+A useful log message identifies the failure stage when failure occurs.
+
+A useful log message includes stable identifiers when available.
+
+A useful log message avoids unnecessary ambiguity.
+
+"Error occurred" is weak diagnostic information.
+
+"Configuration load failed: required field rpc_port missing" is stronger diagnostic information.
+
+"Connection failed" is less precise than identifying whether name resolution, socket creation, connection establishment, handshake, or protocol qualification failed.
+
+Failure stages should be explicit.
+
+Structured logging stores log information in defined fields.
+
+A structured log can include timestamp.
+
+A structured log can include severity.
+
+A structured log can include component.
+
+A structured log can include operation.
+
+A structured log can include result.
+
+A structured log can include request identifier.
+
+A structured log can include peer identifier.
+
+A structured log can include error code.
+
+A structured log can include duration.
+
+Structured logs can be easier to search and aggregate than arbitrary prose.
+
+Human-readable logs remain useful.
+
+Structured and human-readable output can coexist.
+
+Structure should not make logs incomprehensible to operators.
+
+Stable field names improve automated processing.
+
+Changing field meaning silently can break downstream analysis.
+
+Log schemas are interfaces when other systems depend on them.
+
+Version log schemas when compatibility requires it.
+
+A timestamp identifies when an event occurred according to the timestamp source.
+
+Timestamp precision should match requirements.
+
+Timestamp representation should be defined.
+
+UTC is commonly useful for distributed operational records.
+
+Local time can be useful for human operators.
+
+Distributed systems can have clock skew.
+
+Timestamps from different machines are not automatically perfectly ordered.
+
+Wall-clock time can change.
+
+Monotonic time should be used for elapsed-duration measurement where available.
+
+Wall-clock timestamps and monotonic durations solve different problems.
+
+A log timestamp establishes what the local clock reported.
+
+It does not prove the clock was correct.
+
+Sequence numbers can establish local ordering independently of wall-clock precision.
+
+Event identifiers can establish identity.
+
+Request identifiers can establish correlation.
+
+Correlation identifiers connect related operations.
+
+A request can receive a request identifier.
+
+Downstream operations can propagate that identifier.
+
+Logs from multiple components can then be associated with the same logical operation.
+
+Correlation does not establish causation by itself.
+
+Two events sharing a request identifier are related according to the identifier's semantics.
+
+They are not necessarily in a causal relationship unless the execution model establishes it.
+
+Identifiers should have defined scope.
+
+A request identifier can be unique within a process.
+
+A request identifier can be unique within a service.
+
+A request identifier can be globally unique according to its generation model.
+
+The scope should be understood.
+
+A trace represents the path of an operation through one or more components.
+
+A trace is commonly composed of spans.
+
+A span represents a measured portion of an operation.
+
+A span can represent a function.
+
+A span can represent a database request.
+
+A span can represent a network request.
+
+A span can represent a queue operation.
+
+A span can represent another meaningful execution boundary.
+
+A trace identifier associates spans belonging to the same trace.
+
+A span identifier identifies one span.
+
+A parent span can identify the operation that directly caused or contained another span according to the tracing model.
+
+Distributed tracing can reveal where end-to-end latency is spent.
+
+Distributed tracing can reveal dependency chains.
+
+Distributed tracing can reveal retries.
+
+Distributed tracing can reveal repeated remote calls.
+
+Distributed tracing can reveal missing or unexpectedly slow stages.
+
+Tracing adds overhead.
+
+Tracing every operation can be expensive.
+
+Sampling records only selected traces according to a sampling policy.
+
+Sampling reduces overhead.
+
+Sampling can omit rare events.
+
+Sampling policy should reflect diagnostic requirements.
+
+Security-critical audit events should not be omitted merely because ordinary performance traces are sampled.
+
+Tracing and auditing have different purposes.
+
+Metrics represent measured numerical properties.
+
+A counter accumulates occurrences.
+
+Request count can be a counter.
+
+Error count can be a counter.
+
+Bytes processed can be a counter.
+
+Completed jobs can be a counter.
+
+A counter generally increases until reset according to the metric system.
+
+A gauge represents a value that can increase or decrease.
+
+Current queue depth can be a gauge.
+
+Current connection count can be a gauge.
+
+Current memory use can be a gauge.
+
+Current worker count can be a gauge.
+
+A histogram records observations into a distribution.
+
+Latency can be recorded in a histogram.
+
+Message size can be recorded in a histogram.
+
+Operation duration can be recorded in a histogram.
+
+Histograms can support percentile estimation.
+
+A summary can represent selected statistical information according to the metrics system.
+
+Metric semantics should be defined.
+
+A number without semantics is weak evidence.
+
+"42" is not useful without knowing what was measured.
+
+Metric names should describe the measured property.
+
+Units should be explicit.
+
+Seconds and milliseconds should not be confused.
+
+Bytes and bits should not be confused.
+
+Rates and totals should not be confused.
+
+Current values and cumulative values should not be confused.
+
+Metric dimensions or labels distinguish categories of observations.
+
+A request metric can be labeled by operation.
+
+A request metric can be labeled by result.
+
+A request metric can be labeled by protocol version.
+
+A request metric can be labeled by component.
+
+Labels should remain bounded.
+
+High-cardinality labels can create excessive resource consumption.
+
+A request identifier should usually not become a metric label.
+
+A user identifier should usually not become a metric label.
+
+A unique error message should usually not become a metric label.
+
+Unbounded labels can create one metric series per unique value.
+
+Metrics systems can be overwhelmed by uncontrolled cardinality.
+
+Use logs or traces for highly specific identifiers.
+
+Use metrics for aggregation.
+
+Metrics answer questions about quantity and trend.
+
+Logs answer questions about discrete events.
+
+Traces answer questions about execution paths.
+
+These are complementary.
+
+A metric can show that errors increased.
+
+Logs can show individual error details.
+
+Traces can show where failing requests traveled.
+
+One should not be forced to perform every role.
+
+Events represent discrete state changes or occurrences.
+
+A service startup is an event.
+
+A service shutdown is an event.
+
+A configuration reload is an event.
+
+A module load is an event.
+
+A module rejection is an event.
+
+A peer connection is an event.
+
+A peer disconnection is an event.
+
+A state transition is an event.
+
+Events can be logged.
+
+Events can be emitted to monitoring systems.
+
+Events can be stored in audit records.
+
+Event semantics should be defined.
+
+An event should report what happened.
+
+An event should not silently become a command.
+
+"Module rejected" reports a fact.
+
+"Reject module" requests an action.
+
+Commands and events are different.
+
+Health information describes selected operational conditions.
+
+A health check should have defined scope.
+
+A process health check can determine whether the process responds.
+
+A dependency health check can determine whether a required dependency responds according to the check.
+
+A readiness check can determine whether required service can currently be provided.
+
+A liveness check can determine whether a process is sufficiently alive according to the liveness definition.
+
+Health checks should not claim broader health than they test.
+
+A TCP connection test establishes selected transport reachability.
+
+It does not establish application correctness.
+
+A successful application ping establishes selected application responsiveness.
+
+It does not establish every subsystem's health.
+
+An end-to-end test provides broader evidence.
+
+It still proves only the tested path.
+
+Health checks themselves consume resources.
+
+Health checks should not overload dependencies.
+
+Health checks should have timeouts.
+
+Health checks should handle dependency failure.
+
+Health checks should not cause recursive failure.
+
+A health endpoint that waits indefinitely on a failed dependency can become useless.
+
+Health information should distinguish required and optional dependencies.
+
+Failure of an optional dependency can produce degraded state.
+
+Failure of a required dependency can produce not-ready or failed state according to architecture.
+
+Operational state should be explicit.
+
+NORMAL can represent full required operation.
+
+DEGRADED can represent operation with one or more reduced capabilities.
+
+RECOVERING can represent restoration activity.
+
+FAILED can represent inability to perform required operation.
+
+Exact state names depend on the system.
+
+State names should have defined semantics.
+
+A state should identify why it exists.
+
+DEGRADED without a reason is weak diagnostic information.
+
+A component can have multiple degradation reasons.
+
+Operational state should not be inferred solely from one log line.
+
+The component should maintain actual state.
+
+Logs report state changes.
+
+Metrics can expose current state.
+
+Health endpoints can expose current state.
+
+The state itself remains authoritative according to architecture.
+
+Monitoring evaluates observability data against known conditions.
+
+A threshold compares a measurement with a defined boundary.
+
+CPU above a threshold can generate an alert.
+
+Queue depth above a threshold can generate an alert.
+
+Error rate above a threshold can generate an alert.
+
+Latency above an objective can generate an alert.
+
+Thresholds should correspond to meaningful operational conditions.
+
+An arbitrary threshold creates noise.
+
+A static threshold uses a fixed value.
+
+A dynamic threshold can depend on baseline behavior.
+
+Dynamic thresholds can detect unusual behavior.
+
+Dynamic thresholds can also produce false positives.
+
+Anomaly detection identifies behavior differing from an expected pattern according to its model.
+
+An anomaly is not automatically a defect.
+
+An anomaly is not automatically malicious.
+
+An anomaly is evidence that observed behavior differs from the model or baseline.
+
+Investigation determines meaning.
+
+Monitoring should not convert probability into certainty.
+
+An alert communicates a condition requiring awareness or action according to policy.
+
+An alert should be actionable where possible.
+
+An alert should identify affected component.
+
+An alert should identify observed condition.
+
+An alert should identify severity.
+
+An alert should identify time.
+
+An alert should identify relevant evidence.
+
+An alert should identify current state where known.
+
+An alert should not invent root cause.
+
+A warning can identify a condition that deserves awareness.
+
+An error can identify failed operation.
+
+A critical alert can identify severe impact.
+
+Severity definitions should be controlled.
+
+Severity should represent impact or urgency according to policy.
+
+Severity should not represent emotional language.
+
+Repeated identical alerts can overwhelm operators.
+
+Alert deduplication can group repeated conditions.
+
+Alert aggregation can combine related events.
+
+Rate limiting can prevent alert floods.
+
+Suppression can temporarily prevent known secondary alerts.
+
+Suppression should not erase evidence.
+
+Underlying events should remain recorded where required.
+
+An alert can be acknowledged.
+
+Acknowledgment means an operator or system has acknowledged the alert according to the alerting system.
+
+Acknowledgment does not mean the condition is resolved.
+
+Resolution should require evidence that the condition no longer exists according to policy.
+
+An incident can contain multiple alerts.
+
+Multiple alerts can share one underlying cause.
+
+One alert can also have multiple contributing causes.
+
+Alert count is not incident count.
+
+Incident correlation should use evidence.
+
+Do not group unrelated failures merely because they happened close together.
+
+Time correlation is useful evidence.
+
+Time correlation is not proof of causation.
+
+A deployment occurring immediately before failures is relevant evidence.
+
+The deployment should be investigated.
+
+It is not automatically the cause.
+
+A dependency failure occurring before downstream failures can indicate propagation.
+
+Trace and dependency evidence can strengthen the conclusion.
+
+Observability supports causal investigation.
+
+It does not automatically perform causal proof.
+
+Root cause is the underlying condition or conditions responsible for an observed failure according to the investigation.
+
+A symptom is an observed effect.
+
+High latency is a symptom.
+
+Queue growth is a symptom.
+
+Connection timeout is a symptom.
+
+The underlying cause can be resource saturation.
+
+The underlying cause can be dependency slowdown.
+
+The underlying cause can be lock contention.
+
+The underlying cause can be network loss.
+
+The underlying cause must be established through evidence.
+
+One incident can have multiple contributing factors.
+
+Do not force complex failures into one cause without evidence.
+
+Logs should preserve original error information.
+
+Wrapping an error can add context.
+
+Wrapping should not discard the original cause.
+
+An application can report "database operation failed" while preserving the underlying timeout or constraint error.
+
+Context and cause are both useful.
+
+Stack traces can identify execution paths.
+
+Stack traces can expose internal implementation.
+
+Stack traces can contain sensitive data depending on runtime.
+
+Production exposure should be controlled.
+
+Internal diagnostic storage can retain stack information according to policy.
+
+User-facing error messages should not expose unnecessary internals.
+
+Observability should not create information disclosure.
+
+Logs can contain sensitive information.
+
+Passwords should not be logged.
+
+Private keys should not be logged.
+
+Authentication tokens should not be logged unnecessarily.
+
+Session identifiers should be protected according to their security role.
+
+Personal data should be minimized according to system requirements.
+
+Secrets can appear in URLs.
+
+Secrets can appear in headers.
+
+Secrets can appear in command-line arguments.
+
+Secrets can appear in environment variables.
+
+Diagnostic capture should account for these sources.
+
+Redaction removes or obscures sensitive information.
+
+Redaction should occur before sensitive data reaches uncontrolled sinks where possible.
+
+A redaction failure can become a security incident.
+
+Do not rely entirely on operators remembering not to log secrets.
+
+Design logging interfaces to discourage secret exposure.
+
+Structured fields can mark sensitive values.
+
+Logging APIs can omit or redact selected fields.
+
+Observability data itself requires access control.
+
+Logs can reveal system architecture.
+
+Logs can reveal identifiers.
+
+Logs can reveal security events.
+
+Traces can reveal internal endpoints.
+
+Metrics can reveal workload patterns.
+
+Audit records can reveal privileged activity.
+
+Access should follow authorization policy.
+
+Observability storage should not automatically be public.
+
+Retention determines how long observability data is preserved.
+
+Retention should reflect operational requirements.
+
+Retention should reflect audit requirements.
+
+Retention should reflect storage capacity.
+
+Different data types can have different retention.
+
+Debug logs can have short retention.
+
+Audit records can require longer retention.
+
+Metrics can be aggregated over time.
+
+Traces can be sampled or expired.
+
+Retention policy should be explicit.
+
+Deletion policy should respect records that are required to remain permanent.
+
+Historical evidence should not be silently rewritten.
+
+If a record is corrected, preserve correction history where governance requires it.
+
+An audit trail records actions or state changes requiring historical accountability.
+
+Audit logs and diagnostic logs are different.
+
+Diagnostic logs help understand software behavior.
+
+Audit logs establish defined historical actions.
+
+Audit records can include actor identity.
+
+Audit records can include action.
+
+Audit records can include target.
+
+Audit records can include result.
+
+Audit records can include time.
+
+Audit records can include authorization context.
+
+Audit records should be protected against unauthorized modification.
+
+Audit records should not be silently deleted when permanent history is required.
+
+Audit records should distinguish attempted action from successful action.
+
+"User requested deletion" differs from "record deleted."
+
+"Module load attempted" differs from "module loaded."
+
+"Transaction submitted" differs from "transaction committed."
+
+Precise event semantics matter.
+
+Observability should preserve lifecycle stages.
+
+DISCOVERED is different from LOADED.
+
+LOADED is different from INITIALIZED.
+
+INITIALIZED is different from READY.
+
+SUBMITTED is different from ACCEPTED.
+
+ACCEPTED is different from PERSISTED.
+
+PERSISTED is different from COMMITTED.
+
+COMMITTED is different from APPLIED.
+
+CONNECTED is different from QUALIFIED.
+
+QUALIFIED is different from AUTHORIZED.
+
+AUTHENTICATED is different from AUTHORIZED.
+
+Do not collapse distinct stages into one success label.
+
+Stage-specific logging makes failures diagnosable.
+
+A module discovery system should report which directory was examined.
+
+It should report whether a manifest was found.
+
+It should report whether the manifest was valid.
+
+It should report whether the module was accepted.
+
+It should report whether initialization succeeded.
+
+If core continues after rejection, report that core continued.
+
+If the system becomes degraded, report degraded state.
+
+Do not report a rejected module as loaded.
+
+Do not report the entire core failed if the core continued.
+
+Observability should represent actual architecture.
+
+A protocol connection should expose stages.
+
+Name resolution.
+
+Transport connection.
+
+Handshake.
+
+Network identity validation.
+
+Version validation.
+
+Capability validation.
+
+Authentication where required.
+
+Authorization where required.
+
+Operational readiness.
+
+A failure should identify the stage.
+
+"Peer qualification failed at protocol version validation" is stronger than "peer unavailable."
+
+The peer can be reachable but incompatible.
+
+Precision improves recovery.
+
+Performance observability should measure latency.
+
+Performance observability should measure throughput.
+
+Performance observability should measure saturation.
+
+Performance observability should measure errors.
+
+Performance observability should measure queues.
+
+Performance observability should measure retries.
+
+Performance observability should measure timeouts.
+
+Performance observability should measure resource consumption.
+
+Measurements should correspond to useful questions.
+
+CPU utilization can show processor consumption.
+
+Memory utilization can show memory consumption.
+
+Storage utilization can show capacity consumption.
+
+Network throughput can show traffic volume.
+
+Connection count can show concurrency.
+
+Queue depth can show waiting work.
+
+None alone proves application health.
+
+Resource metrics and application metrics should be interpreted together.
+
+High CPU can be expected under useful load.
+
+Low CPU can occur during total dependency failure.
+
+High memory can be expected for a bounded cache.
+
+Low memory does not prove correctness.
+
+Metrics require context.
+
+A golden signal is a high-value measurement used to summarize important service behavior according to an operational model.
+
+Common categories include latency.
+
+Common categories include traffic.
+
+Common categories include errors.
+
+Common categories include saturation.
+
+These categories are useful but not universal law.
+
+Observe what matters to the system's mission.
+
+A worker system can care about completed work rate.
+
+A queue system can care about queue depth.
+
+A protocol service can care about qualified peers.
+
+A storage service can care about durable writes.
+
+A security system can care about rejected malicious or invalid input.
+
+Mission-specific metrics are often more meaningful than generic machine metrics.
+
+Progress should be observable.
+
+A system can be alive while making no useful progress.
+
+Completed operations can measure progress.
+
+Processed records can measure progress.
+
+Committed blocks can measure progress in a block-processing system.
+
+Accepted jobs can measure one stage.
+
+Completed jobs measure another stage.
+
+Choose the stage matching the claim.
+
+A counter increasing does not prove useful work if it counts attempts.
+
+Attempts and successes should be separate.
+
+Success and failure should be separate.
+
+Accepted and completed should be separate where they represent different states.
+
+Retries should be observable.
+
+A retry count can reveal unstable dependencies.
+
+A system that eventually succeeds after twenty retries is behaving differently from one succeeding on the first attempt.
+
+Final success should not erase retry evidence.
+
+Recovery should be observable.
+
+Record when recovery begins.
+
+Record why recovery began.
+
+Record recovery action.
+
+Record recovery result.
+
+Record verification result.
+
+Record when normal state is restored.
+
+A restart should be observable.
+
+A failover should be observable.
+
+A fallback should be observable.
+
+A degraded mode should be observable.
+
+Silent recovery can hide recurring defects.
+
+Automation should reduce operator burden without erasing evidence.
+
+Automatic actions should explain themselves.
+
+"Restarting worker because heartbeat progress threshold exceeded" is stronger than "restarting."
+
+The reason should correspond to actual policy.
+
+An automated system should not fabricate narrative explanations.
+
+Record the rule that triggered the action.
+
+Record the measurements used by the rule where practical.
+
+This supports later audit.
+
+Configuration changes should be observable.
+
+Record that configuration changed.
+
+Record which controlled configuration version became active where appropriate.
+
+Do not log secrets contained in configuration.
+
+Configuration reload success should be distinguished from configuration reload request.
+
+A reload can fail validation.
+
+A reload can partially fail if architecture permits partial application.
+
+Partial application should be explicit.
+
+Software version should be observable.
+
+Artifact identity should be observable.
+
+Build identity can be observable.
+
+Protocol version can be observable.
+
+Module version can be observable.
+
+Configuration version can be observable.
+
+These identifiers help correlate behavior with change.
+
+A version number identifies a logical version.
+
+A hash can identify exact bytes.
+
+A build identifier can identify one build.
+
+Do not confuse them.
+
+A log stating version 1.0 does not prove which exact artifact is running when multiple artifacts share that label.
+
+Exact identity can require a hash or build identifier.
+
+Observability should help answer what changed.
+
+Deployment time can be recorded.
+
+Artifact identity can be recorded.
+
+Configuration change time can be recorded.
+
+Module load time can be recorded.
+
+Dependency version can be recorded where useful.
+
+Change events can be correlated with incidents.
+
+Correlation should then be investigated.
+
+Observability data should be generated near the source of truth.
+
+A component knows whether its own validation succeeded.
+
+A database knows whether a transaction committed according to its interface.
+
+A protocol layer knows whether handshake validation succeeded.
+
+A controller knows whether an application request was accepted.
+
+Avoid reconstructing authoritative state solely from vague downstream symptoms.
+
+Emit evidence at meaningful boundaries.
+
+Boundary instrumentation is valuable.
+
+Record entry where useful.
+
+Record exit where useful.
+
+Record result.
+
+Record duration.
+
+Record identifiers.
+
+Do not log every function merely because instrumentation is possible.
+
+Excessive logs create noise.
+
+Excessive logs consume resources.
+
+Excessive logs make important evidence harder to find.
+
+Instrumentation should answer operational questions.
+
+Log levels can control verbosity.
+
+TRACE can represent highly detailed execution information.
+
+DEBUG can represent development or diagnostic information.
+
+INFO can represent normal significant operational events.
+
+WARN can represent unusual conditions not necessarily preventing operation.
+
+ERROR can represent failed operations.
+
+CRITICAL can represent severe system impact.
+
+Exact levels depend on the logging system.
+
+Level semantics should be consistent.
+
+An ERROR should not mean "something interesting happened."
+
+An INFO should not hide a failed required operation.
+
+Severity should reflect operational meaning.
+
+Debug logging can alter timing.
+
+Debug logging can alter storage use.
+
+Debug logging can expose additional information.
+
+Enabling debug mode can affect system behavior.
+
+Diagnostic changes should be considered during investigation.
+
+Heisenbugs are defects whose behavior changes when observed or instrumented.
+
+Timing-sensitive races can disappear under heavy logging.
+
+Instrumentation can affect scheduling.
+
+Absence of failure under debug logging does not prove the defect is gone.
+
+Use multiple evidence sources.
+
+Metrics can reveal behavior even when detailed logs alter timing.
+
+Sampling profilers can provide lower-overhead evidence.
+
+Core dumps can preserve crash state.
+
+Packet captures can preserve network evidence.
+
+Each technique has tradeoffs.
+
+A packet capture records observed network traffic at a capture point.
+
+It does not automatically show traffic that never reached that point.
+
+Capture location matters.
+
+Encrypted traffic cannot be interpreted as plaintext without appropriate keys or endpoint instrumentation.
+
+A packet capture can establish transport events.
+
+Application semantics require protocol interpretation.
+
+Operating-system telemetry can show process and resource behavior.
+
+Process CPU can show CPU use.
+
+Resident memory can show selected memory use.
+
+File descriptor counts can show resource consumption.
+
+Socket state can show network state.
+
+Disk counters can show I/O behavior.
+
+Kernel logs can show selected operating-system events.
+
+OS evidence should be correlated with application evidence.
+
+A process can report healthy while the operating system reports resource exhaustion.
+
+A process can report failure while the operating system itself is healthy.
+
+Different layers provide different evidence.
+
+Database observability can include query latency.
+
+Database observability can include connection count.
+
+Database observability can include lock waits.
+
+Database observability can include transaction rate.
+
+Database observability can include replication state.
+
+Database observability can include storage consumption.
+
+Application logs should not attempt to replace database evidence when database evidence is available.
+
+A slow application query can be investigated through query plans and database metrics.
+
+A database error returned to an application is evidence from the database interface.
+
+Preserve relevant error codes.
+
+Do not reduce every database error to "database failed."
+
+Network observability can include connection attempts.
+
+Network observability can include connection successes.
+
+Network observability can include disconnects.
+
+Network observability can include retransmissions.
+
+Network observability can include packet loss estimates.
+
+Network observability can include latency.
+
+Network observability can include DNS failures.
+
+Network observability can include protocol failures.
+
+Transport and protocol failures should remain distinct.
+
+A successful TCP connection followed by protocol rejection should not be counted as successful protocol qualification.
+
+Metrics should reflect correct stages.
+
+Security observability records security-relevant events.
+
+Authentication failures can be recorded.
+
+Authorization failures can be recorded.
+
+Integrity failures can be recorded.
+
+Invalid signatures can be recorded.
+
+Malformed protocol input can be recorded.
+
+Rate-limit events can be recorded.
+
+Unexpected privilege use can be recorded.
+
+Security telemetry should avoid exposing secrets.
+
+Security events should preserve sufficient evidence for investigation.
+
+A security event is not automatically a security incident.
+
+Repeated authentication failure can be user error.
+
+Malformed input can be software defect.
+
+Unusual traffic can be legitimate.
+
+Investigation determines significance.
+
+Detection logic should distinguish rule match from confirmed cause.
+
+A signature match means input matched the signature according to the detector.
+
+It does not automatically establish actor identity.
+
+It does not automatically establish intent.
+
+It does not automatically establish compromise.
+
+Precise language protects analytical integrity.
+
+Observability should distinguish source from attribution.
+
+An IP address identifies a network address observed in traffic.
+
+An IP geolocation result estimates location associated with address information according to the data source.
+
+It does not prove the physical location of a human actor.
+
+A hostname can identify a DNS name.
+
+It does not prove who controls the endpoint without additional evidence.
+
+A user-agent string is supplied by a client.
+
+It can be falsified.
+
+Claims supplied by remote participants should be treated as claims until independently established.
+
+Evidence confidence should reflect source quality.
+
+Direct system observation can be strong evidence for the observed event.
+
+Derived inference is weaker than direct observation for the inferred claim.
+
+Third-party enrichment adds external context.
+
+External context should be identified as external context.
+
+Do not silently convert enrichment into direct evidence.
+
+Observability pipelines move telemetry from producers to storage or analysis systems.
+
+The pipeline itself can fail.
+
+Logs can be dropped.
+
+Metrics can be delayed.
+
+Traces can be sampled.
+
+Collectors can crash.
+
+Storage can fill.
+
+Network delivery can fail.
+
+Absence of telemetry does not always mean absence of events.
+
+Telemetry reliability should be understood.
+
+Critical audit records can require stronger delivery guarantees than ordinary debug logs.
+
+Local buffering can preserve telemetry during temporary collector failure.
+
+Local buffering should be bounded.
+
+When buffers fill, behavior should be defined.
+
+Dropping debug logs can be acceptable according to policy.
+
+Dropping required audit records can be unacceptable.
+
+Telemetry priority should reflect requirements.
+
+Observability systems can become dependencies.
+
+Application correctness should not depend on a remote metrics service unless architecture explicitly requires it.
+
+A metrics collector failure should not normally stop unrelated application work.
+
+An audit subsystem can have stronger requirements.
+
+If policy requires audit before privileged action, audit failure can legitimately prevent that action.
+
+Required and optional telemetry should be distinguished.
+
+Telemetry export should have timeouts.
+
+Telemetry export should not block critical operations indefinitely unless required by policy.
+
+Asynchronous export can reduce application latency.
+
+Asynchronous export can lose buffered data during abrupt termination.
+
+Choose according to evidence requirements.
+
+Local durable audit storage can preserve records before remote export.
+
+Remote export can provide centralized analysis.
+
+Both can be used.
+
+A central observability system simplifies cross-component investigation.
+
+Centralization introduces a dependency and failure domain.
+
+Local logs remain useful during central-system outages.
+
+A system should retain enough local diagnostic capability to understand central telemetry failure where practical.
+
+Observability architecture should avoid circular dependency.
+
+If the application depends on the logging service and the logging service depends on the application, failure can become difficult to diagnose.
+
+Critical diagnostic paths should remain simple.
+
+Plain local logs can be valuable precisely because they have few dependencies.
+
+Complex observability platforms should not eliminate simple fallback evidence.
+
+Human-readable startup and fatal error output remains useful.
+
+Standard output can be captured by process supervisors.
+
+Standard error can carry diagnostic failure information.
+
+Exact conventions depend on deployment.
+
+File logs require rotation.
+
+Unbounded file logs can fill storage.
+
+Rotation can rename or replace files.
+
+Applications should handle rotation according to logging architecture.
+
+Retention should be bounded.
+
+Compression can reduce old-log storage.
+
+Compression consumes CPU.
+
+Archival can preserve long-term evidence.
+
+Do not delete permanent records through ordinary log rotation.
+
+Audit records and disposable debug logs should not share one uncontrolled retention policy.
+
+Log integrity can matter.
+
+Hashes can detect selected modification.
+
+Hash chains can make selected historical alteration detectable.
+
+Digital signatures can authenticate records according to key trust.
+
+Append-only storage can limit ordinary modification.
+
+Access controls can restrict writers.
+
+No one mechanism makes logs absolutely immutable.
+
+Claims should match guarantees.
+
+An audit record should identify the component producing it.
+
+Producer identity should be authenticated where multiple systems submit records to a central store and authenticity matters.
+
+A timestamp from an authenticated producer still reflects that producer's clock.
+
+Authentication does not establish clock correctness.
+
+Independent receipt time can provide additional evidence.
+
+Multiple timestamps can represent different events.
+
+Event time is when the producer says the event occurred.
+
+Ingest time is when telemetry infrastructure received it.
+
+Storage time is when it was persisted.
+
+These can differ.
+
+Do not treat them as identical.
+
+Delayed telemetry can arrive out of order.
+
+Sorting solely by ingest time can misrepresent event order.
+
+Sequence identifiers can help reconstruct order.
+
+Causal relationships can help reconstruct order.
+
+Distributed chronology can remain partially ordered.
+
+Unknown ordering should remain unknown.
+
+Observability data should preserve original values where forensic integrity matters.
+
+Derived fields can be added.
+
+Original evidence should not be silently replaced by enrichment.
+
+Normalization can make fields consistent.
+
+Normalization should preserve source meaning.
+
+A parser converting a timestamp should retain enough information to verify interpretation where required.
+
+A parser failure should not fabricate a default timestamp.
+
+Invalid telemetry should be marked invalid or rejected according to policy.
+
+Telemetry parsing is an input boundary.
+
+Logs from remote systems can contain malicious content.
+
+Escape control characters where required.
+
+Do not allow log content to inject fake log lines.
+
+Do not execute telemetry content.
+
+Treat externally supplied log fields as untrusted data.
+
+Log injection occurs when attacker-controlled content changes the apparent structure or meaning of logs.
+
+Structured logging can reduce selected log-injection risks.
+
+Proper escaping remains required.
+
+Newline characters in untrusted fields should not create fake independent records.
+
+Terminal control sequences can manipulate display.
+
+Diagnostic viewers should handle untrusted text safely.
+
+Observability interfaces are attack surfaces.
+
+Metrics endpoints can reveal internal information.
+
+Debug endpoints can reveal extensive state.
+
+Trace viewers can expose request data.
+
+Log search systems can contain sensitive history.
+
+Protect them.
+
+Debug functionality should not automatically be enabled in production.
+
+A debug endpoint can require authentication.
+
+A debug endpoint can be bound only to controlled interfaces.
+
+A debug endpoint can be disabled entirely.
+
+Operational convenience does not override security.
+
+Observability should support reproducibility.
+
+Record software version.
+
+Record relevant configuration identity.
+
+Record platform.
+
+Record protocol version.
+
+Record module identity.
+
+Record operation input identifiers where safe.
+
+Record dependency endpoints where appropriate.
+
+This context can help recreate conditions.
+
+Do not record sensitive complete input merely for reproducibility.
+
+Use safe identifiers or hashes where appropriate.
+
+A hash can identify exact content.
+
+A hash does not reveal content directly.
+
+A hash can still expose information when the input space is small or predictable.
+
+Do not treat hashes as automatic anonymization.
+
+Privacy and security requirements still apply.
+
+Observability can support deterministic systems.
+
+Record deterministic inputs.
+
+Record state transitions.
+
+Record accepted identifiers.
+
+Record rejection reasons.
+
+Record consensus-visible outcomes.
+
+Do not use observability data to alter deterministic results unless the architecture explicitly defines that behavior.
+
+Logging should not change consensus.
+
+Metrics should not change protocol semantics.
+
+Tracing should not change authoritative state.
+
+Instrumentation should observe.
+
+Instrumentation should not become hidden policy.
+
+A monitoring component can trigger authorized recovery actions when architecture defines that authority.
+
+Observation and action should remain conceptually distinct.
+
+A monitor can detect failure.
+
+A controller can decide recovery.
+
+One component can implement both roles, but the responsibilities should remain defined.
+
+Automatic remediation should record the observation that triggered it.
+
+Automatic remediation should record the policy rule applied.
+
+Automatic remediation should record the action.
+
+Automatic remediation should record the result.
+
+Automatic remediation should verify recovery.
+
+This creates an auditable chain from evidence to action.
+
+Observability should support state reconstruction.
+
+Given an incident, operators should be able to answer what happened.
+
+When did it begin?
+
+Which component first showed abnormal behavior?
+
+Which operations failed?
+
+Which dependencies were involved?
+
+What versions were running?
+
+What configuration was active?
+
+What recovery actions occurred?
+
+When was service restored?
+
+Which evidence supports the conclusion?
+
+Not every system requires perfect reconstruction.
+
+Critical systems can require stronger historical evidence.
+
+Retention and instrumentation should follow requirements.
+
+A timeline orders relevant incident events.
+
+Timeline entries should distinguish observed event time from inferred chronology.
+
+A timeline should preserve contradictory evidence until resolved.
+
+Do not delete inconvenient observations because they conflict with the current theory.
+
+Conflicting evidence can reveal incorrect assumptions.
+
+Investigation should adapt to evidence.
+
+An incident report should identify confirmed facts.
+
+An incident report should identify probable causes only when probability is explicitly appropriate to the report.
+
+An incident report should identify unresolved questions.
+
+An incident report should identify corrective actions.
+
+Do not present speculation as established fact.
+
+If evidence is insufficient, state that evidence is insufficient.
+
+Observability supports epistemic discipline.
+
+What was observed?
+
+What was measured?
+
+What was reported by another component?
+
+What was inferred?
+
+What was verified?
+
+What remains unknown?
+
+These distinctions improve engineering decisions.
+
+A system saying "I am healthy" is self-reported evidence.
+
+An external successful transaction is independent evidence of selected service behavior.
+
+A database reporting commit success is evidence according to the database contract.
+
+A file existing is evidence of file existence.
+
+It is not proof that file contents are valid.
+
+A process existing is evidence the process exists.
+
+It is not proof the process is making progress.
+
+A port listening is evidence a listener exists.
+
+It is not proof the intended application owns it unless identity is established.
+
+Evidence should match the claim.
+
+Observability should expose invariants where practical.
+
+If a queue must remain below a maximum, expose queue depth.
+
+If a peer must be qualified, expose qualification state.
+
+If a module must initialize, expose initialization result.
+
+If storage must remain writable, expose relevant storage failures.
+
+If consensus requires a defined state, expose current consensus state according to protocol.
+
+Do not expose internal values merely because they exist.
+
+Expose information useful for operation and verification.
+
+Cardinality should remain controlled.
+
+Volume should remain controlled.
+
+Cost should remain controlled.
+
+Observability has resource cost.
+
+Every log line consumes resources.
+
+Every metric consumes resources.
+
+Every trace consumes resources.
+
+Every audit record consumes resources.
+
+Observability should be sufficient, not infinite.
+
+A system producing terabytes of useless logs is not more observable merely because it produces more data.
+
+Signal-to-noise ratio matters.
+
+High-value events should be easy to find.
+
+Routine repetitive events can be aggregated.
+
+Repeated identical failures can be counted.
+
+Detailed samples can preserve examples.
+
+Critical unique failures should retain detail.
+
+Logging frequency can be rate limited.
+
+Rate limiting should not erase the fact that suppression occurred.
+
+A log system can report that repeated messages were suppressed.
+
+This preserves awareness of volume.
+
+Sampling can reduce repetitive events.
+
+Sampling should not be used for events requiring complete historical record.
+
+Different telemetry classes need different policies.
+
+A debug trace can be sampled.
+
+A security audit record can require complete capture.
+
+A performance metric can be aggregated.
+
+A fatal error can require complete capture.
+
+Classify telemetry by purpose.
+
+Observability should be designed during development.
+
+Adding logs after an incident can help future incidents.
+
+It cannot recreate evidence that was never recorded.
+
+Critical boundaries should be instrumented from the beginning.
+
+Startup should be observable.
+
+Shutdown should be observable.
+
+Configuration loading should be observable.
+
+Module discovery should be observable.
+
+Dependency qualification should be observable.
+
+Protocol establishment should be observable.
+
+Persistent state loading should be observable.
+
+State transitions should be observable.
+
+Recovery should be observable.
+
+Fatal failure should be observable.
+
+Normal high-frequency internal operations do not necessarily need individual logs.
+
+Metrics can summarize them.
+
+Trace sampling can inspect selected examples.
+
+Use the right instrument.
+
+Observability testing verifies telemetry behavior.
+
+Tests can verify expected log events.
+
+Tests can verify metrics increment.
+
+Tests can verify trace propagation.
+
+Tests can verify audit records.
+
+Tests can verify sensitive values are not logged.
+
+Tests can verify failure stages are reported correctly.
+
+Tests can verify degraded state is exposed.
+
+Tests can verify recovery events.
+
+Telemetry is part of system behavior when operations depend on it.
+
+Schema tests can protect structured logs.
+
+Metric-name tests can protect dashboards.
+
+Alert tests can verify thresholds.
+
+Synthetic failures can verify alert routing.
+
+An alert that has never been tested might not reach anyone.
+
+Monitoring infrastructure itself should be monitored according to requirements.
+
+If telemetry ingestion stops, operators should know when that matters.
+
+A flat line can mean stable behavior.
+
+A flat line can mean broken telemetry.
+
+Use heartbeat or freshness indicators where appropriate.
+
+Metric freshness can reveal collection failure.
+
+Log ingestion lag can reveal pipeline delay.
+
+Trace ingestion rate can reveal pipeline failure.
+
+Observability of observability can become recursive.
+
+Keep the design bounded.
+
+Critical telemetry health should be simple to determine.
+
+Dashboards visualize measurements.
+
+Dashboards should answer operational questions.
+
+A dashboard full of graphs without decisions is decoration.
+
+A service dashboard can show request rate.
+
+A service dashboard can show error rate.
+
+A service dashboard can show latency.
+
+A service dashboard can show saturation.
+
+A mission-specific dashboard can show mission-specific state.
+
+Dashboard values should identify units.
+
+Dashboard time ranges should be clear.
+
+Aggregation should be clear.
+
+A graph can hide individual failures.
+
+Logs and traces provide detail.
+
+A graph can show trends better than individual logs.
+
+Use both.
+
+Color should not be the only way to communicate state.
+
+Text labels improve clarity.
+
+Accessibility matters in operational interfaces.
+
+A green indicator should have defined meaning.
+
+Green should not merely mean the page loaded.
+
+Red should have defined meaning.
+
+Amber should have defined meaning.
+
+Status indicators should correspond to actual state.
+
+A status page communicates operational state to an audience.
+
+Internal and external status pages can expose different detail.
+
+External status should remain accurate without exposing sensitive internals.
+
+Do not claim all systems operational when known required capability is unavailable.
+
+Do not claim outage when only optional functionality is degraded.
+
+Status should reflect impact.
+
+Observability should support capacity planning.
+
+Historical metrics show growth.
+
+Storage growth can be projected.
+
+Connection growth can be projected.
+
+Traffic growth can be projected.
+
+Queue behavior can be analyzed.
+
+CPU trends can be analyzed.
+
+Memory trends can be analyzed.
+
+Forecasts are estimates.
+
+Forecasts are not guarantees.
+
+Capacity decisions should include headroom.
+
+Historical trends can change.
+
+Observe actual behavior after capacity changes.
+
+Observability supports performance regression detection.
+
+Compare latency before and after release.
+
+Compare throughput before and after release.
+
+Compare CPU cost per operation.
+
+Compare memory cost.
+
+Compare database queries.
+
+Compare network traffic.
+
+Normalize measurements when workload changes.
+
+A busier day naturally produces more total CPU.
+
+CPU per completed operation can provide different information.
+
+Metrics should be interpreted in context.
+
+Observability supports reliability regression detection.
+
+Compare restart rate.
+
+Compare failure rate.
+
+Compare retry rate.
+
+Compare timeout rate.
+
+Compare degraded-state duration.
+
+Compare recovery time.
+
+Compare dependency failure.
+
+A release that remains available but retries every request can still represent degradation.
+
+Final success alone can hide instability.
+
+Record intermediate failure.
+
+Observability supports security baselines.
+
+Normal authentication volume can be measured.
+
+Normal request patterns can be measured.
+
+Normal protocol rejection rates can be measured.
+
+Deviation can justify investigation.
+
+Baseline deviation is not proof of attack.
+
+Security conclusions require evidence.
+
+Observability should not become an oracle.
+
+A model can identify patterns.
+
+A rule can identify matches.
+
+A threshold can identify deviation.
+
+A human or authorized analytical process can evaluate evidence according to policy.
+
+Detection output should preserve why the detection occurred.
+
+Opaque "suspicious" labels are less useful than concrete matched conditions.
+
+Explainable detections improve investigation.
+
+A detector should identify input evidence.
+
+A detector should identify rule or model.
+
+A detector should identify result.
+
+A detector should identify confidence only when confidence has defined semantics.
+
+Do not invent numerical confidence merely to appear precise.
+
+If confidence cannot be calibrated, qualitative evidence can be better.
+
+Deterministic rules produce deterministic matches for the same defined input.
+
+Probabilistic systems produce scores or probabilities according to their models.
+
+A probability is not a determination.
+
+A score is not a fact.
+
+The distinction should remain explicit.
+
+Observability records should not silently rewrite detector output into confirmed conclusions.
+
+Preserve the original result.
+
+Later investigation can add disposition.
+
+A candidate finding can become confirmed.
+
+A candidate finding can become rejected.
+
+A candidate finding can remain unresolved.
+
+Lifecycle changes should preserve history.
+
+A resolved incident still occurred.
+
+A rejected hypothesis still existed historically.
+
+Historical state should not be rewritten to match current belief.
+
+Append corrections.
+
+Preserve provenance.
+
+Provenance identifies where information came from.
+
+A log has a producing component.
+
+A metric has an instrument.
+
+A trace has participating components.
+
+An external intelligence item has a source.
+
+A derived conclusion has supporting evidence.
+
+Provenance supports trust evaluation.
+
+Data without provenance is harder to assess.
+
+A source can be authoritative for one claim and not another.
+
+An operating system is authoritative for its reported error code according to its interface.
+
+A remote peer is authoritative for what it claims about itself only according to protocol trust rules.
+
+A remote peer's claim does not automatically establish external facts.
+
+Source authority should match the claim.
+
+Observability data can become stale.
+
+A dashboard showing last-known state should identify freshness.
+
+A cached health result should identify age where age matters.
+
+A peer status from ten minutes ago is not necessarily current status.
+
+Freshness is part of evidence.
+
+"Last observed healthy at 12:00" is different from "healthy now."
+
+Do not convert historical observation into current state without a freshness rule.
+
+Telemetry delays matter.
+
+An event can occur before it appears in a central system.
+
+A missing recent event can still be in transit.
+
+Incident timelines should account for ingestion delay.
+
+Local evidence can sometimes resolve uncertainty.
+
+Observability systems should preserve time source and receipt time where needed.
+
+Data quality affects observability.
+
+Missing metrics reduce confidence.
+
+Malformed logs reduce usefulness.
+
+Incorrect labels mislead analysis.
+
+Duplicate events can distort counts.
+
+Clock skew can distort timelines.
+
+Instrumentation defects are software defects.
+
+Test telemetry.
+
+Validate telemetry.
+
+Do not assume measurement is automatically correct.
+
+A metric can have a bug.
+
+A log can report the wrong value.
+
+A dashboard query can aggregate incorrectly.
+
+An alert can use the wrong threshold.
+
+Observability evidence should be cross-checked when conclusions are important.
+
+Independent signals can corroborate behavior.
+
+A latency metric and trace duration can corroborate.
+
+An application failure log and database error can corroborate.
+
+A process crash record and supervisor restart event can corroborate.
+
+Corroboration strengthens conclusions.
+
+Agreement between dependent signals is weaker than agreement between independent evidence.
+
+Two dashboards using the same broken metric are not independent evidence.
+
+Understand provenance.
+
+Observability should support bounded autonomy.
+
+An autonomous component can observe routine conditions.
+
+An autonomous component can handle conditions within delegated authority.
+
+An autonomous component can report what it did.
+
+An autonomous component should escalate conditions outside its authority.
+
+Observability enables that boundary.
+
+The component must know what occurred.
+
+The component must know what action it took.
+
+The component must know whether the action succeeded.
+
+The component must preserve an audit trail where required.
+
+Autonomy without observability reduces accountability.
+
+Observability without bounded authority does not make unsafe autonomy acceptable.
+
+Authority and evidence are separate requirements.
+
+A component should not take action merely because it observed something unusual unless policy authorizes the action.
+
+Observation is not authorization.
+
+Detection is not authorization.
+
+Prediction is not authorization.
+
+Capability is not authorization.
+
+Explicit boundaries matter.
+
+When diagnosing a system, begin with the reported symptom.
+
+Establish the affected operation.
+
+Establish the time window.
+
+Establish the affected components.
+
+Establish whether the failure is current.
+
+Check operational state.
+
+Check recent changes.
+
+Check error rate.
+
+Check latency.
+
+Check saturation.
+
+Check dependency health.
+
+Check relevant logs.
+
+Check relevant traces.
+
+Check protocol state.
+
+Check persistent state where required.
+
+Build a timeline.
+
+Separate fact from inference.
+
+Test hypotheses against evidence.
+
+Do not begin with a favorite explanation.
+
+When a service is unavailable, determine whether the process exists.
+
+Determine whether it is listening.
+
+Determine whether transport is reachable.
+
+Determine whether protocol qualification succeeds.
+
+Determine whether dependencies are available.
+
+Determine whether required state loaded.
+
+Determine whether authorization succeeds.
+
+Determine whether an end-to-end operation succeeds.
+
+Each stage narrows the problem.
+
+Do not call every failure a network failure.
+
+When a system is slow, determine where time is spent.
+
+Measure queue delay.
+
+Measure application execution.
+
+Measure database latency.
+
+Measure remote dependency latency.
+
+Measure serialization.
+
+Measure network transfer.
+
+Measure retries.
+
+Measure lock waits.
+
+Measure resource saturation.
+
+Do not optimize until the bottleneck is established.
+
+When a module fails, identify discovery.
+
+Identify manifest validation.
+
+Identify compatibility validation.
+
+Identify loading.
+
+Identify initialization.
+
+Identify registration.
+
+Identify execution.
+
+Report the exact failed stage.
+
+Do not modify unrelated module metadata merely because the module failed.
+
+Evidence should drive the correction.
+
+When a protocol fails, identify resolution.
+
+Identify connection.
+
+Identify framing.
+
+Identify handshake.
+
+Identify network identity.
+
+Identify version.
+
+Identify capability.
+
+Identify authentication.
+
+Identify authorization.
+
+Identify request validation.
+
+Identify operation acceptance.
+
+Identify persistence.
+
+Identify response.
+
+Do not collapse the entire sequence into "connection failed."
+
+When persistent state appears wrong, identify the authoritative source.
+
+Identify last known valid state.
+
+Identify recent writes.
+
+Identify transaction results.
+
+Identify storage errors.
+
+Identify recovery events.
+
+Identify replication state.
+
+Identify backup state.
+
+Do not overwrite evidence before understanding the failure.
+
+Preserve the suspect state when practical.
+
+Recovery and investigation can require different copies.
+
+When an incident ends, verify restoration.
+
+Verify required operations.
+
+Verify dependency state.
+
+Verify queues are recovering.
+
+Verify error rate returned to expected range.
+
+Verify latency returned to expected range.
+
+Verify degraded flags cleared for valid reasons.
+
+Verify no unresolved resource exhaustion remains.
+
+Do not close an incident merely because alerts stopped.
+
+Alerts can stop because telemetry failed.
+
+Verify actual service.
+
+Do not confuse logging with observability.
+
+Do not confuse monitoring with observability.
+
+Do not confuse metrics with truth.
+
+Do not confuse traces with complete history.
+
+Do not confuse a health check with complete system correctness.
+
+Do not confuse a green dashboard with proof.
+
+Do not confuse a flat graph with stability.
+
+Do not confuse missing telemetry with missing activity.
+
+Do not confuse a timeout with remote failure.
+
+Do not confuse a detector match with confirmed cause.
+
+Do not confuse an anomaly with an attack.
+
+Do not confuse an IP address with a human identity.
+
+Do not confuse geolocation with physical attribution.
+
+Do not confuse a remote claim with independently verified fact.
+
+Do not confuse event time with ingest time.
+
+Do not confuse sequence with wall-clock ordering.
+
+Do not confuse correlation with causation.
+
+Do not confuse symptom with root cause.
+
+Do not confuse severity with certainty.
+
+Do not confuse alert acknowledgment with incident resolution.
+
+Do not confuse restart with recovery.
+
+Do not confuse action with verified outcome.
+
+Do not confuse attempts with successes.
+
+Do not confuse accepted work with completed work.
+
+Do not confuse submitted work with committed work.
+
+Do not confuse connected peers with qualified peers.
+
+Do not confuse authenticated peers with authorized peers.
+
+Do not confuse loaded modules with initialized modules.
+
+Do not confuse version labels with exact artifact identity.
+
+Do not confuse hashes with authorization.
+
+Do not confuse signatures with correctness.
+
+Do not confuse old observations with current state.
+
+Do not confuse derived conclusions with source evidence.
+
+Do not confuse probability with determination.
+
+Do not confuse observability with authority.
+
+When instrumenting a system, start with boundaries.
+
+Instrument startup.
+
+Instrument configuration.
+
+Instrument dependencies.
+
+Instrument protocol establishment.
+
+Instrument state transitions.
+
+Instrument authoritative operations.
+
+Instrument persistence.
+
+Instrument failure.
+
+Instrument recovery.
+
+Instrument shutdown.
+
+Then add detail where evidence shows it is needed.
+
+When creating a log event, ask what happened.
+
+Ask which component observed it.
+
+Ask when it happened.
+
+Ask which operation it affected.
+
+Ask whether it succeeded.
+
+Ask what evidence supports the result.
+
+Ask whether any field is sensitive.
+
+Record only what is useful and permitted.
+
+When creating a metric, ask what question it answers.
+
+Define its unit.
+
+Define its type.
+
+Define its labels.
+
+Bound its cardinality.
+
+Define its interpretation.
+
+Do not create metrics merely because a value exists.
+
+When creating an alert, ask what action or awareness it requires.
+
+Define the condition.
+
+Define severity.
+
+Define the affected capability.
+
+Define evidence.
+
+Define recovery or escalation procedure where appropriate.
+
+Avoid alerts that no one can act upon.
+
+When investigating, preserve uncertainty until resolved.
+
+A good observability system makes it easier to say:
+
+This happened.
+
+This component observed it.
+
+This was the state at that time.
+
+This operation succeeded.
+
+This operation failed.
+
+This operation remains unconfirmed.
+
+This dependency was unavailable.
+
+This module was rejected at this stage.
+
+This peer connected but did not qualify.
+
+This state changed for this reason.
+
+This recovery action was taken.
+
+This verification succeeded.
+
+This evidence supports the conclusion.
+
+And when the evidence does not establish an answer:
+
+The available evidence does not determine the cause.
+
+That is a valid engineering result.
+
+Observability exists to make system behavior knowable.
+
+Its purpose is not to generate the most data.
+
+Its purpose is to generate sufficient trustworthy evidence to understand what the system did, what state it entered, why known decisions were made, and what remains unknown.

@@ -1,0 +1,158 @@
+20260806.1 — Change Request
+
+Root Document ID: 20260806.1
+Revision ID: NONE
+Previous Revision: NONE
+sha256: 016a3ad29ce736dc6866faceb912c9ee27d9e45c752706d4735e910039def967
+
+Status: Approved  
+Scope: All STN-LABZ Systems
+
+Purpose
+
+The Change Request (CR) process provides a standardized method for proposing, reviewing, approving, implementing, and preserving the history of changes to established STN-LABZ systems and controlled assets.
+
+A Change Request documents what is being changed, why the change is necessary, what may be affected, and who authorized the change.
+
+Policy
+
+A material change to an established STN-LABZ system or controlled asset will require an approved Change Request before implementation unless another approved policy establishes a more specific change process.
+
+A Change Request does not itself authorize activity outside existing organizational authority, policy, qualification requirements, or mission boundaries.
+
+Approval of a Change Request authorizes the described change to proceed within its approved scope.
+
+Applicability
+
+A Change Request may apply to changes involving:
+
+- System architecture.
+- Core behavior.
+- Module behavior.
+- Operational behavior.
+- Interfaces.
+- Security controls.
+- Data structures or persistent state.
+- Configuration baselines.
+- Approved dependencies.
+- Qualification requirements.
+- Controlled engineering processes.
+- Other established assets where the change materially affects approved behavior, operation, trust, or architecture.
+
+Routine maintenance that does not materially alter approved behavior may be performed without a Change Request unless otherwise required by applicable policy.
+
+Typographical corrections, formatting corrections, documentation cleanup, and other non-substantive editorial changes do not require a Change Request.
+
+A new module is governed by the Module Creation Request (MCR) process and will not use a Change Request as a substitute for an MCR.
+
+Change Request Format
+
+CHANGE REQUEST (CR)
+
+Identifier: CR-YYYY-MM-DD-XX  
+Date: YYYYMMDD  
+Requested By:  
+Project / System:  
+Affected Asset:  
+Status: Pending | Approved | Rejected
+
+Change
+
+What change is being requested?
+
+Current State
+
+What is the current approved or implemented state?
+
+Proposed State
+
+What will exist after the requested change is implemented?
+
+Reason
+
+Why is the change necessary?
+
+Scope
+
+What systems, components, modules, documents, interfaces, or other assets are included in the change?
+
+Out of Scope
+
+What is explicitly not included in the change?
+
+Impact
+
+Identify known or reasonably expected effects on:
+
+- Architecture.
+- Operations.
+- Security.
+- Compatibility.
+- Dependencies.
+- Qualification.
+- Documentation.
+- Other affected STN-LABZ assets.
+
+Items that cannot yet be determined will be identified as UNKNOWN.
+
+Dependencies
+
+Identify policies, modules, libraries, interfaces, systems, tools, or other assets required to implement the change.
+
+Qualification / Validation
+
+Identify testing, qualification, validation, or other evidence required before the changed asset may be considered acceptable for operational use.
+
+Existing qualification requirements remain applicable unless explicitly revised by authorized policy.
+
+Authority / References
+
+Identify the policies, requirements, incidents, engineering decisions, research, or other authority supporting the requested change.
+
+Implementation Record
+
+Implemented By:  
+Implementation Date:  
+Version / Commit:  
+Result: Pending | Completed | Failed | Reverted  
+Notes:
+
+Human Review
+
+Decision:  
+Reviewer:  
+Date: YYYYMMDD  
+Notes:
+
+Approval Boundary
+
+A Change Request remains Pending until reviewed by the appropriate human authority.
+
+A Rejected Change Request does not authorize implementation.
+
+An Approved Change Request authorizes only the change and scope described in the approved request.
+
+Material expansion beyond the approved scope requires additional human review and, when applicable, a new or revised Change Request.
+
+Implementation does not establish successful qualification.
+
+Qualification does not expand the authority granted by the Change Request.
+
+Historical Record
+
+Change Requests form part of the engineering history of the affected STN-LABZ asset.
+
+Approved, rejected, failed, and reverted Change Requests will be preserved according to applicable STN-LABZ engineering documentation requirements.
+
+A rejected or unsuccessful Change Request will not be removed merely because the proposed change was not adopted.
+
+References
+
+- STN-LABZ General Orders
+- 20260729.0 — Operational Authority
+- 20260729.6 — Engineering Documentation
+- 20260729.8 — Operational Doctrine
+- 20260731.2 — Drafting Standard
+- 20260801.1 — KISS Theory
+- 20260806.0 — Agent Modules
+- 20260810.1 — Module Creation Request

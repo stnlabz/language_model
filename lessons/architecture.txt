@@ -1,0 +1,2379 @@
+Software architecture describes the high-level structure of a software system.
+
+Architecture identifies major components.
+
+Architecture identifies responsibilities.
+
+Architecture identifies boundaries.
+
+Architecture identifies relationships between components.
+
+Architecture identifies how data and control move through the system.
+
+Architecture identifies important constraints.
+
+Architecture is not merely a directory structure.
+
+Architecture is not merely a diagram.
+
+Architecture is not merely a list of technologies.
+
+Architecture describes how parts of a system are organized to satisfy requirements.
+
+Implementation exists within architecture.
+
+Architecture guides implementation.
+
+Architecture should follow requirements.
+
+Architecture should not exist merely to imitate another system.
+
+A small system can have a simple architecture.
+
+A large system can require more architectural boundaries.
+
+Complexity should be justified by requirements.
+
+More layers do not automatically create better architecture.
+
+More modules do not automatically create better architecture.
+
+More services do not automatically create better architecture.
+
+More abstraction does not automatically create better architecture.
+
+Every abstraction has a cost.
+
+Every boundary has a cost.
+
+Every dependency has a cost.
+
+Every network boundary has a cost.
+
+Every persistent state boundary has a cost.
+
+Architecture should make necessary complexity manageable.
+
+Accidental complexity should be minimized.
+
+Essential complexity comes from the problem being solved.
+
+Accidental complexity comes from the chosen implementation or organization.
+
+Good architecture attempts to avoid unnecessary accidental complexity.
+
+Separation of concerns assigns different responsibilities to appropriate components.
+
+A component should have a clear responsibility.
+
+Responsibilities should not be mixed without reason.
+
+Presentation logic is different from persistence logic.
+
+Persistence logic is different from transport logic.
+
+Transport logic is different from protocol logic.
+
+Protocol logic is different from business logic.
+
+Business logic is different from platform adaptation.
+
+These responsibilities can interact without becoming the same responsibility.
+
+A boundary separates responsibilities.
+
+A boundary can be a function interface.
+
+A boundary can be a module interface.
+
+A boundary can be a process interface.
+
+A boundary can be a network protocol.
+
+A boundary can be a storage format.
+
+A boundary can be an organizational ownership boundary.
+
+Different boundaries have different costs.
+
+An in-process function boundary is generally cheaper than a network boundary.
+
+A network boundary introduces communication failure.
+
+A process boundary introduces serialization or IPC requirements.
+
+A persistence boundary introduces durability and recovery requirements.
+
+Do not introduce expensive boundaries without a requirement.
+
+An interface defines how components interact.
+
+An interface should expose what consumers need.
+
+An interface should avoid exposing unnecessary implementation details.
+
+A stable interface allows implementation to change without requiring every consumer to change.
+
+Encapsulation hides implementation details behind a controlled interface.
+
+Encapsulation reduces coupling.
+
+Encapsulation does not mean hiding behavior that consumers must understand.
+
+Interface semantics should remain explicit.
+
+A component can be internally complex while exposing a small interface.
+
+A small interface is easier to reason about.
+
+A small interface is easier to test.
+
+A small interface is easier to secure.
+
+A small interface is easier to maintain.
+
+A small interface can reduce accidental dependencies.
+
+Minimal interfaces should still provide required functionality.
+
+An abstraction represents a concept while hiding selected implementation details.
+
+An abstraction should simplify reasoning.
+
+An abstraction that makes behavior harder to understand can be counterproductive.
+
+Do not abstract merely to remove repeated syntax.
+
+Do not abstract before the common behavior is understood.
+
+Premature abstraction can encode incorrect assumptions.
+
+Duplication can sometimes be temporarily preferable to a bad abstraction.
+
+Repeated stable patterns can justify abstraction.
+
+An abstraction should represent a meaningful boundary.
+
+A dependency exists when one component relies on another.
+
+Dependencies should be explicit.
+
+Hidden dependencies make systems difficult to understand.
+
+Global state can create hidden dependencies.
+
+Environment variables can create hidden dependencies.
+
+Filesystem layout can create hidden dependencies.
+
+Implicit initialization order can create hidden dependencies.
+
+Network availability can create hidden dependencies.
+
+Time can create hidden dependencies.
+
+Architecture should identify important dependencies.
+
+Dependency direction affects maintainability.
+
+High-level policy should not unnecessarily depend on low-level implementation details.
+
+Low-level implementations can satisfy interfaces defined by higher-level requirements.
+
+Dependency inversion separates policy from implementation.
+
+Dependency inversion does not require a dependency-injection framework.
+
+An interface and explicit construction can be sufficient.
+
+Dependency injection means supplying a dependency rather than having a component secretly construct or locate it.
+
+Constructor injection is one technique.
+
+Function parameters are another technique.
+
+Explicit initialization is another technique.
+
+A service locator is another pattern but can hide dependencies when overused.
+
+The goal is clarity of dependency relationships.
+
+A module is a bounded unit of software responsibility.
+
+A module can contain code.
+
+A module can contain configuration.
+
+A module can expose an interface.
+
+A module can maintain private state.
+
+A module can depend on other modules according to architecture.
+
+Module boundaries should be meaningful.
+
+Splitting every function into a separate module does not improve architecture.
+
+Combining unrelated responsibilities into one module can create excessive coupling.
+
+Modules should be cohesive.
+
+Cohesion describes how closely related the responsibilities within a component are.
+
+High cohesion means a component's responsibilities belong together.
+
+Coupling describes dependencies between components.
+
+Lower unnecessary coupling generally improves change isolation.
+
+Zero coupling is not a realistic goal for cooperating software.
+
+Components must interact to accomplish work.
+
+The objective is controlled coupling.
+
+A component should depend on another component through the smallest appropriate contract.
+
+Internal implementation details should not become external dependencies accidentally.
+
+A public interface is a commitment.
+
+Changing a public interface can affect consumers.
+
+Internal interfaces can evolve more freely.
+
+Architecture should distinguish public from private boundaries.
+
+A module API defines operations available to module consumers.
+
+A module ABI defines binary interaction when modules communicate at the binary level.
+
+API and ABI are different.
+
+A stable source API does not guarantee a stable ABI.
+
+A plugin architecture allows separately developed components to extend a host through defined interfaces.
+
+A plugin is not automatically trusted.
+
+Discovery means finding a potential plugin.
+
+Loading means placing plugin code into the process.
+
+Qualification means establishing that the plugin satisfies required conditions.
+
+Initialization means allowing the plugin to establish operational state.
+
+These stages should not be confused.
+
+A discovered module should not automatically execute.
+
+A loaded module should not automatically receive unrestricted authority.
+
+A module contract should define required entry points.
+
+A module contract should define supported versions.
+
+A module contract should define ownership.
+
+A module contract should define lifecycle.
+
+A module contract should define failure behavior.
+
+A module contract should define capabilities where applicable.
+
+The host owns the host architecture.
+
+A module operates within the host contract.
+
+A module should not silently redefine host semantics.
+
+Extensions should remain bounded by their authority.
+
+A core component contains behavior considered foundational to the system architecture.
+
+Core should remain small when possible.
+
+Placing everything in core increases coupling.
+
+A feature does not belong in core merely because it is important.
+
+A feature belongs in core when its responsibility is foundational according to the architecture.
+
+Core stability can reduce system-wide regression risk.
+
+Core boundaries should be protected intentionally.
+
+Modules can provide optional behavior outside core.
+
+Optional behavior should not become an accidental core dependency.
+
+If core cannot operate without an optional module, that module is not operationally optional.
+
+Terminology should match actual dependency relationships.
+
+A layered architecture organizes responsibilities into conceptual layers.
+
+A presentation layer handles presentation concerns.
+
+An application layer can coordinate use cases.
+
+A domain or business layer can contain application rules.
+
+A persistence layer can manage stored data.
+
+Exact layers depend on the system.
+
+Layer names are not universal.
+
+A layer should not exist merely because a textbook lists it.
+
+Layering should simplify dependencies.
+
+A lower layer should not depend arbitrarily on higher-layer presentation details.
+
+Layer violations create hidden coupling.
+
+Strict layering permits interaction only through adjacent layers according to the architecture.
+
+Relaxed layering can permit selected direct dependencies.
+
+Neither is universally correct.
+
+The architecture should define permitted dependency directions.
+
+MVC stands for Model-View-Controller.
+
+MVC separates selected application responsibilities.
+
+A model represents or manages application data and related behavior according to the implementation.
+
+A view presents information.
+
+A controller handles input or coordinates application behavior.
+
+MVC implementations vary.
+
+MVC does not have one universal directory structure.
+
+MVC does not require one specific framework.
+
+MVC does not imply that every business rule belongs in a controller.
+
+Controllers can become excessively complex when they accumulate unrelated responsibilities.
+
+Views should not become hidden persistence layers.
+
+Models should not become arbitrary collections of unrelated functions.
+
+The useful property is separation of responsibility.
+
+A monolith deploys an application primarily as one unit.
+
+A monolith can contain well-separated internal modules.
+
+Monolith does not mean unstructured.
+
+A modular monolith combines one deployment unit with strong internal module boundaries.
+
+A modular monolith can be appropriate for many systems.
+
+Microservices divide a system into independently deployable networked services.
+
+Microservices introduce distributed-system complexity.
+
+Microservices introduce network failure.
+
+Microservices introduce service discovery.
+
+Microservices introduce deployment coordination.
+
+Microservices introduce observability requirements.
+
+Microservices introduce distributed data concerns.
+
+Microservices are not automatically more scalable.
+
+Microservices are not automatically more maintainable.
+
+A system should not become distributed without a requirement.
+
+A single process is easier to reason about than multiple communicating processes.
+
+A local function call is simpler than a remote call.
+
+A local transaction is simpler than a distributed transaction.
+
+Use distribution when its benefits justify its costs.
+
+A service-oriented architecture organizes functionality into services.
+
+Service boundaries should follow meaningful responsibilities.
+
+A service should own its behavior.
+
+A service should have a defined interface.
+
+Service boundaries should not be arbitrary file boundaries converted into network boundaries.
+
+Network boundaries should reflect operational requirements.
+
+A client-server architecture separates requesting participants from service-providing participants.
+
+A peer-to-peer architecture permits participants to communicate as peers according to protocol roles.
+
+Peer-to-peer does not imply identical authority.
+
+Topology and authority are different architectural concepts.
+
+Event-driven architecture coordinates components through events.
+
+An event reports that something occurred.
+
+An event should describe a fact according to its semantics.
+
+A command requests that something occur.
+
+A command and an event are different.
+
+"Create account" is command-like.
+
+"Account created" is event-like.
+
+Names should reflect semantics.
+
+Event-driven systems can reduce direct coupling.
+
+Event-driven systems introduce asynchronous behavior.
+
+Asynchronous behavior introduces ordering concerns.
+
+Asynchronous behavior introduces duplicate-delivery concerns.
+
+Asynchronous behavior introduces eventual consistency concerns.
+
+An event bus does not remove dependencies.
+
+It changes how dependencies are expressed.
+
+Consumers still depend on event schemas and semantics.
+
+Event contracts should be versioned and controlled.
+
+Publish-subscribe allows publishers to emit information without directly selecting every consumer.
+
+Subscribers receive information according to subscription rules.
+
+Publish-subscribe can improve extensibility.
+
+It can make execution paths harder to trace.
+
+Observability becomes important.
+
+Message-driven architecture uses messages to coordinate components.
+
+Messages should have explicit contracts.
+
+Queues should be bounded.
+
+Retry semantics should be defined.
+
+Failure behavior should be defined.
+
+Message delivery does not automatically mean processing succeeded.
+
+A pipeline architecture processes data through stages.
+
+Each stage performs a defined transformation or operation.
+
+Pipelines can simplify sequential processing.
+
+Stages should have clear input and output contracts.
+
+One stage should not depend on undocumented side effects from another stage.
+
+Pipeline failure behavior should be defined.
+
+A failed stage can stop the pipeline.
+
+A failed stage can reject one item.
+
+A failed stage can retry.
+
+The correct behavior depends on requirements.
+
+A state machine architecture models behavior through explicit states and transitions.
+
+State machines are useful when valid operations depend strongly on current state.
+
+Explicit state reduces ambiguous behavior.
+
+A state transition should have defined preconditions.
+
+A state transition should have defined effects.
+
+Invalid transitions should be rejected.
+
+State machines can exist within any larger architecture.
+
+Architecture patterns can be combined.
+
+A system can be a modular monolith using MVC and state machines.
+
+A service can use event-driven processing internally.
+
+A distributed system can contain layered services.
+
+Patterns are tools.
+
+Patterns are not exclusive identities.
+
+Architecture should describe actual behavior rather than collect pattern names.
+
+State ownership is an architectural decision.
+
+Every authoritative piece of mutable state should have defined ownership.
+
+Multiple uncontrolled writers create coordination problems.
+
+Single-writer ownership can simplify reasoning.
+
+Shared state requires synchronization.
+
+Distributed shared state requires distributed coordination.
+
+A cache should not become authoritative accidentally.
+
+A replica should not become authoritative accidentally.
+
+A view should not become authoritative accidentally.
+
+Authority should be explicit.
+
+Application state can be volatile.
+
+Application state can be persistent.
+
+Volatile state disappears when the process terminates.
+
+Persistent state survives according to its storage guarantees.
+
+Architecture should identify which state must survive restart.
+
+Required persistent state should not exist only in process memory.
+
+Disposable state should not be persisted without reason.
+
+Persistence has cost.
+
+Persistent state requires schema or format management.
+
+Persistent state requires migration or compatibility strategy.
+
+Persistent state requires recovery behavior.
+
+A database is an architectural dependency when application correctness depends on it.
+
+A filesystem can be an architectural dependency.
+
+A remote API can be an architectural dependency.
+
+A message broker can be an architectural dependency.
+
+A compiler or runtime can be an architectural dependency.
+
+Dependencies should be recognized rather than treated as invisible infrastructure.
+
+External dependencies can fail.
+
+Architecture should define behavior when required dependencies are unavailable.
+
+A dependency can be mandatory.
+
+A dependency can be optional.
+
+A mandatory dependency failure can make a capability unavailable.
+
+An optional dependency failure should not necessarily disable unrelated capabilities.
+
+Graceful degradation preserves available capabilities when selected dependencies fail.
+
+Degraded operation should be explicit.
+
+A degraded system should not pretend to be fully healthy.
+
+Health should represent required capabilities.
+
+A failure domain is a boundary within which one failure can affect multiple components.
+
+One process can be a failure domain.
+
+One machine can be a failure domain.
+
+One network can be a failure domain.
+
+One database can be a failure domain.
+
+One datacenter can be a failure domain.
+
+One software defect can create a shared failure domain across many machines.
+
+Redundancy should cross relevant failure domains.
+
+Running two processes on one machine does not protect against machine failure.
+
+Running two machines on one power source does not protect against power-source failure.
+
+Running multiple identical implementations can share software defects.
+
+Architecture should consider common-mode failure.
+
+Fault isolation prevents one failure from unnecessarily affecting unrelated components.
+
+Process boundaries can provide fault isolation.
+
+Module boundaries alone do not necessarily provide runtime isolation.
+
+A crash in one in-process module can terminate the host process.
+
+Memory corruption in one native module can corrupt host state.
+
+Isolation strength depends on the boundary.
+
+Stronger isolation generally has greater communication cost.
+
+Choose isolation according to risk.
+
+A sandbox restricts a component's capabilities.
+
+Sandboxing can limit filesystem access.
+
+Sandboxing can limit network access.
+
+Sandboxing can limit process access.
+
+Sandboxing can limit system calls.
+
+Sandboxing does not automatically establish component correctness.
+
+It limits potential effects according to the sandbox model.
+
+Least privilege gives components only the authority required for their responsibilities.
+
+A component that only reads configuration should not require write authority without reason.
+
+A component that does not use the network should not require network authority without reason.
+
+A module should not inherit broad authority merely because the host has it.
+
+Authority should follow responsibility.
+
+Trust boundaries identify where data or control crosses between different trust levels.
+
+External input crosses a trust boundary.
+
+Plugin input can cross a trust boundary.
+
+Network input crosses a trust boundary.
+
+File input can cross a trust boundary.
+
+Database content can cross a trust boundary.
+
+Previously stored data should not automatically be considered safe.
+
+Validation belongs at trust boundaries.
+
+Validation should occur before untrusted data affects authoritative state.
+
+Architecture should make trust boundaries visible.
+
+Security is architectural.
+
+Authentication architecture determines how identity is established.
+
+Authorization architecture determines how permissions are enforced.
+
+Key-management architecture determines how cryptographic keys are handled.
+
+Audit architecture determines how security-relevant actions are recorded.
+
+Security should not be added only at the user interface.
+
+Backend boundaries must enforce authority.
+
+A hidden endpoint remains an endpoint.
+
+A disabled button is not authorization.
+
+Architecture should enforce rules at authoritative boundaries.
+
+Platform independence is an architectural property.
+
+Platform independence means common required behavior does not depend on one platform's implementation details.
+
+Platform independence does not mean platform-specific code cannot exist.
+
+Platform-specific code can exist behind a controlled interface.
+
+The common layer defines required semantics.
+
+A Windows backend can implement those semantics using Windows APIs.
+
+A Linux backend can implement those semantics using Linux or POSIX APIs.
+
+The externally required result should remain equivalent where architecture requires it.
+
+Platform abstraction isolates platform-specific behavior.
+
+A platform interface should expose required capabilities.
+
+The common core should not need to know unnecessary platform details.
+
+Platform-specific implementation should not leak into common semantics.
+
+Compile-time selection can choose a platform backend.
+
+Runtime selection can choose a platform backend.
+
+The correct mechanism depends on deployment requirements.
+
+Platform detection should not become business logic.
+
+A platform backend is an implementation mechanism.
+
+The application mission remains common.
+
+Portability requires more than successful compilation.
+
+Equivalent source can behave differently when assumptions are platform dependent.
+
+Integer widths can differ.
+
+Path syntax can differ.
+
+Filesystem semantics can differ.
+
+Case sensitivity can differ.
+
+Socket behavior can differ.
+
+Thread scheduling can differ.
+
+Clock behavior can differ.
+
+Compiler behavior can differ.
+
+Architecture should isolate or explicitly define these differences.
+
+Protocol-visible and persistent formats should be platform neutral when cross-platform interoperability is required.
+
+Do not serialize native structures.
+
+Do not store native pointers.
+
+Do not rely on host byte order.
+
+Do not rely on compiler padding.
+
+Do not rely on local timezone.
+
+Do not rely on filesystem enumeration order.
+
+Deterministic systems require deterministic architecture at relevant boundaries.
+
+Determinism means defined inputs produce defined outputs according to system rules.
+
+Nondeterministic implementation details should not affect deterministic outputs.
+
+Thread scheduling should not affect consensus-visible state.
+
+Filesystem ordering should not affect canonical output.
+
+Hash-table iteration order should not affect serialized identity unless explicitly defined.
+
+Randomness should be controlled when deterministic output is required.
+
+Time should be an explicit input when time affects deterministic behavior.
+
+Environment should be an explicit input when environment affects behavior.
+
+Hidden inputs weaken determinism.
+
+Architecture should identify sources of nondeterminism.
+
+Configuration is an input.
+
+Configuration should have defined ownership.
+
+Configuration should have defined precedence.
+
+Configuration should have defined validation.
+
+Configuration should have defined defaults.
+
+Configuration should have defined reload behavior if dynamic reload is supported.
+
+Configuration errors should fail clearly.
+
+Silent fallback can hide defects.
+
+A default should be used only when the architecture defines a default.
+
+Missing required configuration should not be guessed.
+
+Configuration and runtime state are different.
+
+Configuration describes intended settings.
+
+Runtime state describes current operation.
+
+Changing runtime state does not necessarily change configuration.
+
+Changing configuration does not necessarily change an already running process unless reload behavior exists.
+
+Do not confuse them.
+
+Feature flags enable or disable behavior through configuration or control state.
+
+Feature flags can support staged rollout.
+
+Feature flags increase state combinations.
+
+Old flags should be removed when no longer needed.
+
+Permanent piles of feature flags create hidden architecture.
+
+A feature flag should not silently change security invariants.
+
+A feature flag should not silently create protocol incompatibility.
+
+Feature activation should respect architectural boundaries.
+
+Initialization establishes component state before normal operation.
+
+Initialization order should follow dependencies.
+
+A component should not be used before required dependencies are ready.
+
+Initialization failure should be explicit.
+
+Partial initialization should be cleaned up.
+
+A system should not report ready before required initialization succeeds.
+
+Startup success and readiness are different.
+
+A process can be running but not ready.
+
+Liveness and readiness are different.
+
+Liveness means the process is operating sufficiently to respond according to the liveness definition.
+
+Readiness means the component can perform required service according to readiness criteria.
+
+A healthy process can be temporarily not ready.
+
+Architecture should distinguish these states when operationally relevant.
+
+Shutdown is part of architecture.
+
+Components can need time to stop safely.
+
+A server can stop accepting new work.
+
+Existing work can complete.
+
+Persistent state can be flushed.
+
+Connections can be closed.
+
+Resources can be released.
+
+Shutdown should be bounded.
+
+A component can be forced to terminate.
+
+Correctness should not depend on graceful shutdown always occurring.
+
+Crash recovery should be considered where state matters.
+
+Restart is a normal operational event in many systems.
+
+A restart should not corrupt persistent state.
+
+A restart should not duplicate non-idempotent operations without defined handling.
+
+A restart should reconstruct required state from authoritative sources.
+
+A restart should not depend on stale process memory.
+
+Recovery architecture should define sources of truth.
+
+A source of truth is the authoritative source for defined information.
+
+Not every copy is a source of truth.
+
+A cache is normally not a source of truth.
+
+A replica can be authoritative only according to replication rules.
+
+A generated view is not normally a source of truth.
+
+Derived data can be reconstructed from authoritative data.
+
+Architecture should distinguish authoritative data from derived data.
+
+Duplicating authoritative state creates synchronization requirements.
+
+Avoid multiple sources of truth for the same fact unless the system defines reconciliation.
+
+A data flow describes how information moves through components.
+
+Data should be validated at appropriate boundaries.
+
+Data transformations should be explicit.
+
+Derived values should retain enough provenance where required.
+
+A component should not silently reinterpret data owned by another component.
+
+Contracts should define meaning.
+
+Control flow describes how execution responsibility moves.
+
+A controller can invoke a service.
+
+A service can invoke a repository.
+
+An event can trigger a handler.
+
+A scheduler can invoke a job.
+
+A network request can invoke a protocol handler.
+
+Architecture should make major control paths understandable.
+
+Hidden callbacks can complicate reasoning.
+
+Excessive indirection can obscure execution.
+
+Indirection is useful when it decouples meaningful responsibilities.
+
+Indirection is harmful when it only makes code harder to trace.
+
+Direct calls are not architecturally inferior when direct dependency is appropriate.
+
+Simple is a valid architectural property.
+
+A repository pattern abstracts persistence operations.
+
+A repository can separate application behavior from storage details.
+
+A repository is not required for every application.
+
+Adding a repository that merely renames every database operation can add little value.
+
+Abstractions should earn their existence.
+
+A controller coordinates requests according to its responsibility.
+
+A controller should not become an entire application.
+
+A service can contain reusable application behavior.
+
+A service should have a meaningful responsibility.
+
+A service class containing unrelated helper methods is not cohesive merely because it is called a service.
+
+Names do not create architecture.
+
+Behavior does.
+
+Utility modules can hold stateless reusable operations.
+
+Utility modules can become dumping grounds.
+
+If unrelated functions accumulate in one utility module, responsibilities should be reconsidered.
+
+Helpers should remain bounded.
+
+A manager class is not automatically good architecture.
+
+A factory creates objects according to defined construction logic.
+
+Factories can hide complex construction.
+
+Factories can select implementations.
+
+Factories are unnecessary when ordinary construction is simple.
+
+A singleton provides one globally accessible instance according to the pattern.
+
+Singletons can create hidden global dependencies.
+
+A singleton can be appropriate for selected process-wide resources.
+
+Do not use singleton merely to avoid passing dependencies.
+
+Global convenience can create architectural coupling.
+
+Immutability reduces possible state transitions.
+
+Immutable objects cannot be modified after construction according to their model.
+
+Immutable data can be easier to share safely.
+
+Not every object should be immutable.
+
+Mutable state is necessary for many systems.
+
+Mutable state should have clear ownership.
+
+Concurrency architecture determines how work executes simultaneously.
+
+Threads can share process memory.
+
+Processes have stronger memory isolation.
+
+Event loops multiplex operations.
+
+Worker pools bound concurrent work.
+
+Architecture should select a concurrency model based on workload.
+
+More threads do not automatically mean more performance.
+
+More workers consume more memory.
+
+Shared mutable state requires synchronization.
+
+Concurrency boundaries should align with state ownership where practical.
+
+A worker should not modify state owned exclusively by another worker without a defined coordination mechanism.
+
+Message passing can reduce shared-memory coupling.
+
+Message passing introduces message contracts.
+
+Locks can coordinate shared memory.
+
+Locks introduce blocking and deadlock risks.
+
+Architecture should choose the simplest correct coordination model.
+
+A scheduler decides when work runs.
+
+Scheduling policy can affect latency.
+
+Scheduling policy should not alter correctness.
+
+Critical correctness should not depend on one task always running immediately.
+
+Timing assumptions should be explicit.
+
+Real-time requirements are different from ordinary performance requirements.
+
+A real-time system requires operations to satisfy defined timing constraints.
+
+Fast average execution is not equivalent to real-time guarantees.
+
+Architecture must account for worst-case timing when real-time behavior is required.
+
+Performance is an architectural concern when requirements demand it.
+
+Performance should be measured.
+
+Optimization should target demonstrated bottlenecks.
+
+Architectural performance includes communication cost.
+
+Architectural performance includes serialization cost.
+
+Architectural performance includes storage cost.
+
+Architectural performance includes synchronization cost.
+
+Architectural performance includes algorithmic cost.
+
+Architectural performance includes cache behavior.
+
+Premature distribution can harm performance.
+
+Premature abstraction can harm performance.
+
+Premature optimization can harm maintainability.
+
+Correctness comes before unnecessary optimization.
+
+Performance requirements should still influence architecture early when they are genuine constraints.
+
+Scalability describes how a system behaves as workload or resources increase.
+
+Vertical scaling adds resources to one system.
+
+Horizontal scaling adds additional systems or workers.
+
+Horizontal scaling usually requires stronger coordination architecture.
+
+Stateless request handlers are easier to scale horizontally.
+
+Stateful services can also scale but require state coordination.
+
+Stateless does not mean the entire application has no state.
+
+It means the component does not depend on local session state that prevents interchangeable handling according to the architecture.
+
+State can live in shared or partitioned stores.
+
+Moving state out of a process creates dependencies.
+
+Scaling choices have costs.
+
+Reliability is the ability to perform required behavior consistently under defined conditions.
+
+Reliability should be designed.
+
+Retries can improve reliability for transient failures.
+
+Retries can also amplify failure.
+
+Timeouts prevent indefinite waits.
+
+Timeouts can create uncertain outcomes.
+
+Redundancy can improve availability.
+
+Redundancy can create consistency requirements.
+
+Reliability mechanisms should be matched to failure modes.
+
+Do not add a retry because an operation failed once without understanding whether retry is safe.
+
+Resilience is the ability to continue or recover under failures.
+
+Graceful degradation is one resilience strategy.
+
+Isolation is another.
+
+Redundancy is another.
+
+Backpressure is another.
+
+Circuit breaking is another.
+
+Persistence is another.
+
+No one pattern creates resilience universally.
+
+Architecture should define expected failures.
+
+Expected failures should have designed behavior.
+
+Unexpected failures should fail safely and observably.
+
+Observability is an architectural concern.
+
+Logs provide event records.
+
+Metrics provide measurements.
+
+Traces provide operation flow across boundaries.
+
+Health endpoints provide selected operational status.
+
+Audit records preserve defined historical evidence.
+
+These mechanisms have different purposes.
+
+Logs should not be the only state database.
+
+Metrics should not replace audit history.
+
+Audit history should not be rewritten to make current state appear cleaner.
+
+Historical events remain historical facts.
+
+Observability should respect component boundaries.
+
+Each component should identify itself.
+
+Distributed operations should have correlation identifiers where useful.
+
+Errors should identify the failed boundary.
+
+"Something failed" is weak evidence.
+
+"Protocol handshake rejected unsupported version" is stronger evidence.
+
+Architecture should make failures diagnosable.
+
+A system that cannot explain its state is difficult to operate safely.
+
+Error handling should follow responsibility.
+
+A low-level component can report a low-level failure.
+
+A higher-level component can translate it into application meaning.
+
+Translation should preserve useful cause information.
+
+Do not expose low-level secrets or internals unnecessarily.
+
+Do not discard evidence needed for diagnosis.
+
+Error messages should distinguish expected rejection from internal failure.
+
+A validation failure is not necessarily an exception.
+
+An unavailable dependency is not necessarily malformed input.
+
+Error taxonomy improves recovery.
+
+Exceptions are one error-propagation mechanism.
+
+Return codes are another.
+
+Result objects are another.
+
+Callbacks are another.
+
+Protocol error responses are another.
+
+No mechanism is universally superior.
+
+Use the mechanism appropriate to the language and architecture.
+
+Errors should not be silently ignored.
+
+Ignoring an error is a decision.
+
+That decision should be justified.
+
+A fallback is alternative behavior used when preferred behavior is unavailable.
+
+Fallbacks should preserve required correctness.
+
+A fallback that returns incorrect authoritative data is not resilience.
+
+A fallback can provide reduced functionality.
+
+Fallback behavior should be visible.
+
+Silent fallback can hide outages.
+
+Compatibility is an architectural concern.
+
+File formats can outlive code versions.
+
+Database schemas can outlive code versions.
+
+Network protocols can connect different versions.
+
+Module ABIs can connect separately built components.
+
+Architecture should define compatibility boundaries.
+
+Versioning should occur where compatibility requires it.
+
+Do not version every internal function unnecessarily.
+
+Do version persistent or external contracts when changes can affect independent consumers.
+
+Migration transforms persistent state from one representation to another.
+
+Migrations should be controlled.
+
+Migrations should preserve required data.
+
+Migration failure should have recovery procedures.
+
+A migration should not be confused with ordinary runtime behavior.
+
+Backward-compatible migrations can support rolling upgrades.
+
+Breaking migrations can require coordinated deployment.
+
+Deployment architecture matters when components update independently.
+
+A rolling deployment replaces instances gradually.
+
+Different versions can coexist temporarily.
+
+Protocols and storage formats must tolerate that coexistence if rolling deployment is required.
+
+An atomic deployment replaces a unit as one controlled change.
+
+Atomic deployment can simplify compatibility.
+
+It can increase interruption depending on infrastructure.
+
+Deployment strategy should match availability requirements.
+
+Build architecture determines how source becomes deployable artifacts.
+
+Build outputs should be reproducible where required.
+
+Modules should be built when modules are required runtime artifacts.
+
+A host executable without required module artifacts is not a complete build.
+
+Build documentation should include every required artifact.
+
+Artifact identity should be traceable.
+
+A hash can identify exact artifact bytes.
+
+A version identifies a logical release.
+
+Version and hash serve different purposes.
+
+Deployment should know which artifact is running.
+
+Architecture should not rely on operators guessing.
+
+Configuration deployment should be controlled separately from binary deployment where appropriate.
+
+A binary can be correct while configuration is wrong.
+
+Configuration can be correct while the binary is incompatible.
+
+Operational state is the combination of software, configuration, data, dependencies, and environment.
+
+Architecture exists in operation, not only in source code.
+
+A diagram showing redundant servers is meaningless if both depend on one unprotected database.
+
+A diagram showing modules is meaningless if every module modifies global state directly.
+
+A diagram showing layers is meaningless if dependencies bypass them everywhere.
+
+Architecture should describe reality.
+
+Architecture drift occurs when implementation diverges from intended architecture.
+
+Architecture drift can accumulate gradually.
+
+Code review can detect drift.
+
+Dependency analysis can detect drift.
+
+Tests can enforce selected boundaries.
+
+Documentation should be updated when architecture intentionally changes.
+
+Do not preserve an obsolete diagram merely because it is official-looking.
+
+Documentation should describe the current controlled architecture.
+
+Architectural decisions can be recorded.
+
+A decision record can state the problem.
+
+A decision record can state constraints.
+
+A decision record can state the selected approach.
+
+A decision record can state consequences.
+
+A decision record can preserve why a decision was made.
+
+Decision history prevents repeated debates based on forgotten context.
+
+A later decision can supersede an earlier decision.
+
+Superseding history should not erase earlier history.
+
+Architecture evolves.
+
+Evolution should be controlled.
+
+Refactoring changes internal structure while preserving required external behavior.
+
+Refactoring can improve architecture.
+
+Refactoring should not silently change protocol behavior.
+
+Refactoring should not silently change persistent format.
+
+Refactoring should not silently change authorization.
+
+External behavior should remain protected by tests.
+
+A rewrite replaces substantial implementation.
+
+A rewrite has high risk because existing behavior can contain undocumented requirements.
+
+Rewrite decisions should be justified.
+
+Old code being unattractive is not sufficient evidence that a rewrite is necessary.
+
+Incremental replacement can reduce risk.
+
+Legacy code means existing code that must be maintained.
+
+Legacy does not automatically mean bad.
+
+Old software can be stable.
+
+New software can be defective.
+
+Evaluate evidence.
+
+Technical debt represents future cost created by implementation decisions.
+
+Not every simple implementation is technical debt.
+
+A deliberately simple solution that satisfies requirements can be good engineering.
+
+Complexity introduced without requirement can itself be technical debt.
+
+Architecture should favor the smallest design that correctly satisfies current known requirements while leaving reasonable paths for change.
+
+Do not build hypothetical future systems without evidence they will be needed.
+
+Extensibility should be intentional.
+
+A plugin boundary can support expected extension.
+
+A stable protocol can support independent implementations.
+
+A configuration mechanism can support known variation.
+
+Excessive genericity can make current behavior harder to understand.
+
+"You might need it someday" is weak justification for complexity.
+
+YAGNI is a software design principle meaning You Aren't Gonna Need It.
+
+It warns against implementing speculative requirements.
+
+YAGNI does not mean ignore foreseeable requirements.
+
+Known requirements should be designed for.
+
+Speculative requirements should not dominate architecture.
+
+KISS is a design principle commonly expanded as Keep It Simple.
+
+Simplicity means avoiding unnecessary complexity.
+
+Simplicity does not mean omitting required behavior.
+
+A correct simple system is preferable to an unnecessarily complicated equivalent system.
+
+A simpler design is easier to test.
+
+A simpler design is easier to explain.
+
+A simpler design is easier to audit.
+
+A simpler design often has fewer failure modes.
+
+Simplicity should be deliberate.
+
+DRY is commonly expanded as Don't Repeat Yourself.
+
+DRY encourages avoiding duplicated knowledge.
+
+DRY does not require eliminating every repeated line of code.
+
+Two similar pieces of code can represent different responsibilities.
+
+Combining them prematurely can create coupling.
+
+Duplicate knowledge is more dangerous than duplicate syntax.
+
+Architectural principles should be interpreted according to purpose rather than slogans.
+
+SOLID is a group of object-oriented design principles.
+
+SOLID can guide selected object-oriented designs.
+
+SOLID is not a universal architecture law.
+
+Non-object-oriented systems can have excellent architecture.
+
+Patterns and principles are tools.
+
+Requirements remain primary.
+
+A design pattern describes a recurring solution structure.
+
+A pattern should be used when its problem exists.
+
+Do not introduce a pattern merely because its name is familiar.
+
+Pattern names can improve communication.
+
+Pattern names should not replace explanation.
+
+A factory that does nothing beyond calling a constructor may add unnecessary indirection.
+
+An adapter converts one interface into another.
+
+Adapters are useful at boundaries.
+
+A platform adapter can translate common operations to platform APIs.
+
+A protocol adapter can translate between protocol representation and internal representation.
+
+An adapter should not silently change semantics.
+
+A facade provides a simpler interface over a more complex subsystem.
+
+A facade can reduce coupling to subsystem details.
+
+A facade should not become a second implementation of the subsystem.
+
+A proxy represents another object or service.
+
+A proxy can provide remote access.
+
+A proxy can provide caching.
+
+A proxy can provide access control.
+
+A proxy should preserve the semantics expected by its interface.
+
+A decorator adds behavior around another component.
+
+Decorators can add logging.
+
+Decorators can add metrics.
+
+Decorators can add validation.
+
+Decorators can add caching.
+
+Added behavior should not unexpectedly change core semantics.
+
+Middleware processes operations along a request path.
+
+Middleware can authenticate.
+
+Middleware can log.
+
+Middleware can transform requests.
+
+Middleware ordering matters.
+
+One middleware can depend on work performed by earlier middleware.
+
+Middleware pipelines should have explicit ordering.
+
+Hidden middleware ordering dependencies create fragile architecture.
+
+Cross-cutting concerns affect multiple components.
+
+Logging is a cross-cutting concern.
+
+Metrics are a cross-cutting concern.
+
+Authentication can be cross-cutting.
+
+Tracing can be cross-cutting.
+
+Cross-cutting does not mean every component should implement the concern independently.
+
+Shared mechanisms can provide consistency.
+
+Shared mechanisms should not obscure local responsibility.
+
+A framework provides reusable architecture and execution structure.
+
+A library provides functionality called by application code.
+
+The distinction is often described through inversion of control.
+
+A framework commonly calls application code.
+
+Application code commonly calls a library.
+
+The boundary is not always absolute.
+
+Using a framework creates architectural dependency on framework behavior.
+
+Framework upgrades can affect application architecture.
+
+Do not let framework conventions replace understanding of system responsibilities.
+
+The framework is an implementation tool.
+
+The application's requirements remain authoritative.
+
+A domain model represents concepts important to the problem domain.
+
+Domain terminology should be consistent.
+
+One concept should not have many accidental names.
+
+Different concepts should not share one ambiguous name.
+
+Clear terminology improves architecture.
+
+Names establish mental boundaries.
+
+A misleading name creates incorrect assumptions.
+
+If a component validates data, call its responsibility validation rather than implying authorization.
+
+If a component discovers peers, do not call discovery admission.
+
+If a component stores a cache, do not call it authoritative state.
+
+Precise naming is engineering.
+
+Data ownership should follow domain ownership where practical.
+
+One component should not directly modify another component's internal persistence without a defined interface.
+
+Bypassing ownership creates hidden coupling.
+
+Shared databases can create coupling between otherwise separate services.
+
+Two services using the same tables are not fully independent merely because they have separate executables.
+
+Storage boundaries matter.
+
+A database schema can be an interface.
+
+Changing a schema can break consumers.
+
+Direct database access can bypass application validation.
+
+Architecture should define who may write which data.
+
+Read access and write access can have different boundaries.
+
+Command-query separation distinguishes operations that change state from operations that retrieve state.
+
+A command requests state change.
+
+A query requests information.
+
+Separating them can clarify behavior.
+
+Not every function must strictly follow command-query separation.
+
+The principle is useful when it makes side effects clear.
+
+A query that secretly modifies authoritative state is surprising.
+
+Side effects should be explicit.
+
+Idempotency is architectural when operations can be retried.
+
+An idempotent operation can be repeated without changing the intended final state beyond the first successful application according to its semantics.
+
+Distributed operations benefit from idempotency.
+
+Local initialization can benefit from idempotency.
+
+Deployment operations can benefit from idempotency.
+
+Idempotency should be designed where repeated execution is expected.
+
+Deterministic initialization is useful.
+
+Running initialization twice should not corrupt state.
+
+A migration should not accidentally repeat destructive actions.
+
+A module discovery pass should not duplicate module registration.
+
+Repeated configuration loading should not duplicate resources.
+
+Lifecycle operations should define repetition behavior.
+
+Resource ownership is architectural.
+
+Memory has ownership.
+
+Files have ownership.
+
+Sockets have ownership.
+
+Threads have ownership.
+
+Database connections have ownership.
+
+Locks have ownership.
+
+Temporary files have ownership.
+
+Cryptographic keys have ownership.
+
+Every acquired resource should have a defined release path.
+
+A component should not release resources owned by another component without contract.
+
+Ownership crossing module boundaries should be explicit.
+
+A host can own a module instance.
+
+A module can own its private resources.
+
+The host can request module shutdown.
+
+The module can release its resources.
+
+This is clearer than both independently freeing shared resources.
+
+Lifecycle boundaries reduce ambiguity.
+
+A subsystem is a collection of components providing a larger responsibility.
+
+Subsystem boundaries can reduce cognitive load.
+
+A subsystem should expose a controlled interface.
+
+Consumers should not depend on arbitrary subsystem internals.
+
+Internal refactoring should remain possible.
+
+A subsystem can contain its own layers.
+
+Architecture can be hierarchical.
+
+A system contains subsystems.
+
+Subsystems contain modules.
+
+Modules contain functions or classes.
+
+Not every level needs formal ceremony.
+
+Use enough structure to make responsibilities clear.
+
+Architecture should help a developer answer where behavior belongs.
+
+If a change has one obvious responsible component, boundaries are probably useful.
+
+If every change requires touching unrelated components, coupling can be excessive.
+
+If no one knows where new behavior belongs, responsibilities can be unclear.
+
+If the same rule is implemented independently in many places, authority can be fragmented.
+
+One authoritative implementation of important rules reduces disagreement.
+
+Do not duplicate security policy across many uncontrolled locations.
+
+Do not duplicate consensus rules across platform-specific backends.
+
+Do not duplicate protocol semantics independently unless implementations are intentionally separate and tested for equivalence.
+
+Centralize rules when one authority is required.
+
+Decentralize implementation where independent responsibility is useful.
+
+Centralization and decentralization are tools.
+
+Neither is universally superior.
+
+Centralized architecture can simplify authority.
+
+Centralized architecture can create bottlenecks or single points of failure.
+
+Decentralized architecture can improve resilience.
+
+Decentralized architecture can increase coordination complexity.
+
+Requirements determine the tradeoff.
+
+Architecture should distinguish control plane from execution plane where useful.
+
+A control plane determines configuration, coordination, or policy.
+
+An execution plane performs operational work.
+
+A control-plane failure should not necessarily corrupt already valid execution state.
+
+Execution components should not silently rewrite control policy.
+
+Exact boundaries depend on the system.
+
+Policy and mechanism should be distinguishable.
+
+Policy determines what is permitted or required.
+
+Mechanism determines how it is accomplished.
+
+One mechanism can implement multiple policies.
+
+One policy can be implemented through different platform mechanisms.
+
+Separating policy from mechanism improves portability.
+
+Platform-specific code should implement mechanism.
+
+Common architecture can define policy.
+
+Policy should not accidentally become dependent on one platform's API.
+
+A scheduler mechanism can differ between operating systems.
+
+The scheduling policy can remain common.
+
+A file-watching mechanism can differ.
+
+The event semantics can remain common.
+
+A networking implementation can differ.
+
+The protocol semantics can remain common.
+
+Architecture should preserve semantic equivalence.
+
+A boundary should validate assumptions.
+
+When data crosses from external input to internal representation, validate it.
+
+When data crosses from common code to platform code, validate interface requirements.
+
+When data crosses from a module to core, validate the module contract.
+
+When data crosses from volatile state to persistent state, validate persistence invariants.
+
+When data crosses from one trust domain to another, validate authority.
+
+Boundaries are natural enforcement points.
+
+Validation should happen once at the authoritative boundary where possible.
+
+Repeated defensive validation can still be appropriate across trust boundaries.
+
+Do not rely on user-interface validation alone.
+
+Do not rely on a previous network participant having validated data.
+
+Each authoritative boundary should enforce its own requirements.
+
+Architecture should minimize invalid states.
+
+Types can represent valid distinctions.
+
+State machines can restrict transitions.
+
+Separate functions can represent separate authority.
+
+Configuration schemas can reject invalid configuration.
+
+Database constraints can enforce persistent invariants.
+
+Protocol validation can reject invalid messages.
+
+Multiple layers can enforce different parts of correctness.
+
+Defense in depth can apply to correctness as well as security.
+
+A database constraint can protect an invariant even if application validation contains a defect.
+
+A protocol validator can protect application logic from malformed messages.
+
+An operating-system permission can limit damage if application authorization fails.
+
+Independent controls reduce reliance on one assumption.
+
+Controls should remain understandable.
+
+Redundant controls with contradictory rules create confusion.
+
+One policy should have consistent enforcement.
+
+Architecture should make testing boundaries possible.
+
+A module should be testable through its interface.
+
+A parser should be testable without a live network.
+
+A persistence component should be testable against controlled storage.
+
+A platform abstraction should be testable with known backend behavior.
+
+A state machine should be testable with explicit transitions.
+
+Testability is often evidence of clear boundaries.
+
+Testability should not force unnatural architecture.
+
+Production requirements remain primary.
+
+Mocks replace dependencies with controlled test implementations.
+
+Mocks can isolate behavior.
+
+Excessive mocking can test assumptions instead of real integration.
+
+Integration tests verify components working together.
+
+End-to-end tests verify complete paths.
+
+Architecture needs tests at multiple boundaries.
+
+Unit tests cannot prove integration.
+
+Integration tests cannot efficiently cover every internal edge case.
+
+End-to-end tests can be expensive.
+
+Use each level for appropriate evidence.
+
+Architectural invariants can be tested.
+
+A core can be tested to ensure optional modules are not required.
+
+A module loader can be tested to reject invalid modules.
+
+A platform layer can be tested for equivalent behavior.
+
+A protocol can be tested with shared vectors.
+
+A persistent format can be tested for compatibility.
+
+Tests can protect architecture against drift.
+
+Static dependency checks can enforce forbidden imports.
+
+Build boundaries can prevent one module from linking private internals.
+
+Filesystem permissions can enforce runtime ownership.
+
+Architecture can be enforced by tools where useful.
+
+Documentation alone does not enforce behavior.
+
+Tooling alone does not explain intent.
+
+Use both where appropriate.
+
+Architecture should remain understandable without requiring one original developer to explain it.
+
+Code should reveal responsibilities.
+
+Documentation should explain non-obvious constraints.
+
+Interfaces should communicate contracts.
+
+Names should communicate purpose.
+
+Build instructions should reproduce artifacts.
+
+Operational procedures should describe required state.
+
+Institutional knowledge should not exist only in one person's memory.
+
+A bus factor describes risk created when critical knowledge is concentrated in too few people.
+
+Documentation and simple architecture reduce that risk.
+
+Complex architecture increases training cost.
+
+A system that only its creator can safely modify has maintainability risk.
+
+Simplicity improves transferability.
+
+Architecture should support diagnosis.
+
+When an operation fails, identify the responsible boundary.
+
+Input validation failure belongs at validation.
+
+Protocol failure belongs at protocol handling.
+
+Persistence failure belongs at persistence.
+
+Platform failure belongs at platform implementation.
+
+Application rule rejection belongs at application policy.
+
+Clear boundaries make failures easier to classify.
+
+Do not report every failure as an internal error.
+
+Do not report every failure as a network error.
+
+Do not report every failure as user error.
+
+Preserve actual cause.
+
+A degraded architecture should isolate failure.
+
+If an optional reporting module fails, core processing can continue when reporting is genuinely optional.
+
+If an authoritative database fails, operations requiring that database should stop safely.
+
+If one peer fails, other peers can continue when the protocol permits it.
+
+If a platform backend cannot initialize, dependent capability should report unavailable.
+
+Do not invent fallback behavior that violates architecture.
+
+Fallbacks should be authorized by design.
+
+Architecture should define what cannot happen.
+
+A module cannot bypass core authority.
+
+An unauthenticated participant cannot perform privileged operations.
+
+A view cannot directly rewrite authoritative storage if the architecture forbids it.
+
+A platform backend cannot change consensus semantics.
+
+A cache cannot become source of truth.
+
+A failed validation cannot become accepted state.
+
+Negative constraints are useful architecture.
+
+Architectural authority should be explicit.
+
+Human governance determines project requirements.
+
+Software architecture implements those requirements.
+
+An automated component operates within delegated authority.
+
+A module operates within its defined interface.
+
+A subsystem does not expand its own authority merely because it can technically access more resources.
+
+Technical capability and authorized responsibility are different.
+
+Least authority reduces accidental behavior.
+
+Architecture should not confuse possibility with permission.
+
+Code can technically open a file.
+
+That does not mean the component owns the file.
+
+Code can technically call an endpoint.
+
+That does not mean the operation is authorized.
+
+Code can technically alter global state.
+
+That does not mean the architecture permits it.
+
+Boundaries define responsibility beyond raw technical capability.
+
+Architectural review should ask what problem is being solved.
+
+What are the requirements?
+
+What state exists?
+
+Who owns that state?
+
+Which components are authoritative?
+
+Which dependencies are required?
+
+Which dependencies are optional?
+
+Where are the trust boundaries?
+
+Where are the platform boundaries?
+
+Where are the persistence boundaries?
+
+Where are the network boundaries?
+
+What failures are expected?
+
+What happens when each dependency fails?
+
+What must survive restart?
+
+What must remain deterministic?
+
+What must remain compatible?
+
+What must remain secure?
+
+What must remain auditable?
+
+What must remain simple?
+
+Only then choose structure.
+
+Do not begin architecture by selecting fashionable technologies.
+
+A technology is an implementation choice.
+
+Requirements come first.
+
+Do not begin with microservices because the application might become large.
+
+Do not begin with a database because applications commonly have databases.
+
+Do not begin with a message broker because asynchronous systems sound scalable.
+
+Do not begin with containers because deployment exists.
+
+Choose mechanisms after identifying requirements.
+
+A plain file can be correct storage.
+
+A database can be correct storage.
+
+Memory can be correct storage.
+
+A network service can be correct storage.
+
+The required properties determine the answer.
+
+JSON can be sufficient for small structured state.
+
+A relational database can be appropriate for transactional relational state.
+
+A key-value store can be appropriate for simple keyed state.
+
+An append-only log can be appropriate for historical events.
+
+No storage technology is universally superior.
+
+Use the smallest mechanism that satisfies correctness, scale, durability, concurrency, and operational requirements.
+
+Architecture should resist unnecessary dependencies.
+
+Every third-party dependency introduces compatibility risk.
+
+Every dependency introduces update responsibility.
+
+Every dependency can introduce security exposure.
+
+Every dependency can become unavailable.
+
+Do not reimplement complex solved problems without reason.
+
+Do not import large dependencies for trivial functionality without reason.
+
+Evaluate both costs.
+
+Build versus buy is a tradeoff.
+
+External services reduce local implementation.
+
+External services create external dependency.
+
+Local implementation increases ownership.
+
+Local implementation can increase control.
+
+Requirements determine which matters more.
+
+Architecture should recognize operational ownership.
+
+Someone must deploy the system.
+
+Someone must update it.
+
+Someone must observe it.
+
+Someone must recover it.
+
+Someone must rotate credentials.
+
+Someone must handle storage growth.
+
+Someone must diagnose failure.
+
+A design that is elegant in source but impossible to operate is incomplete.
+
+Operational simplicity is architecture.
+
+Installation complexity is architecture.
+
+Upgrade complexity is architecture.
+
+Recovery complexity is architecture.
+
+Backup complexity is architecture.
+
+Architecture includes the system after compilation.
+
+A system's architecture includes code.
+
+A system's architecture includes runtime processes.
+
+A system's architecture includes persistent state.
+
+A system's architecture includes communication.
+
+A system's architecture includes dependencies.
+
+A system's architecture includes authority boundaries.
+
+A system's architecture includes operational lifecycle.
+
+Do not confuse source organization with complete architecture.
+
+Do not confuse directory layout with architecture.
+
+Do not confuse classes with components.
+
+Do not confuse components with processes.
+
+Do not confuse processes with services.
+
+Do not confuse services with machines.
+
+Do not confuse modules with microservices.
+
+Do not confuse interfaces with implementations.
+
+Do not confuse abstraction with complexity.
+
+Do not confuse indirection with decoupling.
+
+Do not confuse duplication with automatically bad design.
+
+Do not confuse reuse with automatically good design.
+
+Do not confuse framework convention with system requirement.
+
+Do not confuse design patterns with architecture requirements.
+
+Do not confuse layering with having many folders.
+
+Do not confuse MVC with one framework's MVC implementation.
+
+Do not confuse modularity with dynamic loading.
+
+Do not confuse dynamic loading with qualification.
+
+Do not confuse plugin discovery with plugin authority.
+
+Do not confuse core importance with permission to place every important feature in core.
+
+Do not confuse optional with required.
+
+Do not confuse local with trusted.
+
+Do not confuse reachable with authorized.
+
+Do not confuse cached state with authoritative state.
+
+Do not confuse replicated state with independent authority.
+
+Do not confuse volatile state with durable state.
+
+Do not confuse configuration with runtime state.
+
+Do not confuse running with ready.
+
+Do not confuse ready with healthy forever.
+
+Do not confuse retry with resilience.
+
+Do not confuse redundancy with independence.
+
+Do not confuse distribution with scalability.
+
+Do not confuse microservices with modernity.
+
+Do not confuse a monolith with poor architecture.
+
+Do not confuse platform-specific implementation with platform-dependent architecture.
+
+Do not confuse identical implementation with equivalent behavior.
+
+Do not confuse portability with successful compilation.
+
+Do not confuse abstraction with platform independence.
+
+Do not confuse security controls with architecture being secure.
+
+Do not confuse a diagram with evidence that implementation follows it.
+
+Do not confuse technical capability with architectural authority.
+
+When deciding where new behavior belongs, identify its responsibility.
+
+Identify who owns the relevant state.
+
+Identify which layer has authority.
+
+Identify whether the behavior is common or platform specific.
+
+Identify whether it is required or optional.
+
+Identify whether it affects external contracts.
+
+Identify whether it affects persistent formats.
+
+Identify whether it affects security boundaries.
+
+Identify whether it affects protocol behavior.
+
+Place the behavior at the narrowest correct boundary.
+
+When modifying architecture, preserve existing contracts unless change is intentional.
+
+Check module interfaces.
+
+Check protocol interfaces.
+
+Check persistent formats.
+
+Check configuration.
+
+Check build artifacts.
+
+Check deployment assumptions.
+
+Check security boundaries.
+
+Check platform behavior.
+
+Check tests.
+
+Do not let a local change silently become a system-wide semantic change.
+
+When architecture becomes difficult to understand, reduce unnecessary structure before adding more structure.
+
+Remove unused layers.
+
+Remove obsolete adapters.
+
+Remove dead feature flags.
+
+Remove abandoned interfaces.
+
+Remove unnecessary dependencies.
+
+Combine boundaries that no longer serve a purpose.
+
+Separate responsibilities that have become entangled.
+
+Refactoring can simplify architecture.
+
+Simple architecture is not primitive architecture.
+
+Simple architecture is architecture with unnecessary complexity removed.
+
+A good architecture makes correct behavior easier to implement.
+
+A good architecture makes invalid behavior harder to introduce.
+
+A good architecture makes ownership visible.
+
+A good architecture makes authority visible.
+
+A good architecture makes dependencies visible.
+
+A good architecture makes failure boundaries visible.
+
+A good architecture makes platform boundaries visible.
+
+A good architecture makes state boundaries visible.
+
+A good architecture makes change understandable.
+
+Architecture exists to serve the system's mission.
+
+The architecture should be no larger, no smaller, and no more complicated than the requirements demand.

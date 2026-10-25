@@ -1,0 +1,752 @@
+Linux is an operating system kernel.
+The Linux kernel manages hardware resources and provides operating-system services to user-space programs.
+A Linux distribution combines the Linux kernel with user-space software, libraries, utilities, configuration, and package management.
+Ubuntu is a Linux distribution.
+Debian is a Linux distribution.
+Fedora is a Linux distribution.
+Arch Linux is a Linux distribution.
+Linux and Ubuntu are not synonyms.
+Ubuntu uses the Linux kernel.
+The kernel and user space are different execution environments.
+Kernel space contains privileged kernel execution.
+User space contains ordinary application processes.
+Applications normally request kernel services through system calls.
+A system call provides a controlled interface from user space to the kernel.
+Programs should not assume that ordinary user-space code can directly access arbitrary kernel memory.
+A process is an executing program instance.
+A program file and a running process are different things.
+Multiple processes can execute the same program.
+Each process has a process identifier.
+A process identifier is commonly abbreviated PID.
+PID 1 has a special role as the initial user-space process within a Linux PID namespace.
+On many modern Linux distributions systemd runs as PID 1.
+A parent process can create child processes.
+A process has a parent process identifier.
+A parent process identifier is commonly abbreviated PPID.
+Processes have credentials.
+Process credentials include user identity information.
+Process credentials include group identity information.
+Linux users are identified internally by numeric user identifiers.
+A user identifier is commonly abbreviated UID.
+Linux groups are identified internally by numeric group identifiers.
+A group identifier is commonly abbreviated GID.
+User names provide human-readable mappings to UIDs.
+Group names provide human-readable mappings to GIDs.
+The root user conventionally has UID 0.
+UID 0 receives special privileges from the kernel.
+Running as root grants substantial authority.
+Applications should not run as root merely because doing so avoids permission problems.
+Least privilege means granting only the authority required for a task.
+A service should run under an appropriate dedicated account when practical.
+A dedicated service account can limit damage from compromise.
+Changing file permissions to make everything writable is not least privilege.
+Linux files have ownership.
+A file has an owning user.
+A file has an owning group.
+Traditional Unix file permissions contain read, write, and execute bits.
+Permissions are defined separately for owner, group, and other.
+The read permission is represented by r.
+The write permission is represented by w.
+The execute permission is represented by x.
+For a regular file, read permission permits reading file contents according to applicable access checks.
+For a regular file, write permission permits modifying file contents according to applicable access checks.
+For a regular file, execute permission permits execution when other requirements are satisfied.
+Directory permissions have different practical meanings from regular-file permissions.
+Read permission on a directory permits listing directory entries according to applicable access checks.
+Write permission on a directory permits creating, removing, or renaming entries according to applicable access checks.
+Execute permission on a directory permits traversing or searching the directory according to applicable access checks.
+Writing an existing file and creating a new file involve different permission checks.
+Deleting a file primarily depends on permissions on its containing directory rather than the file's own write bit.
+A process must be able to traverse parent directories to access a path.
+chmod changes traditional file mode permissions.
+chown changes file ownership.
+chgrp changes group ownership.
+chmod does not change the owning user.
+chown does not inherently change every permission bit.
+Numeric chmod modes encode permission bits.
+Permission value 4 represents read.
+Permission value 2 represents write.
+Permission value 1 represents execute.
+Permission values are combined for owner, group, and other.
+Mode 755 commonly means owner read-write-execute and group and other read-execute.
+Mode 644 commonly means owner read-write and group and other read-only.
+Mode 600 commonly means owner read-write with no group or other permissions.
+Mode 700 commonly means owner read-write-execute with no group or other permissions.
+Mode 777 grants read, write, and execute permissions broadly.
+chmod 777 should not be used as a generic solution to permission problems.
+World-writable files and directories increase security risk.
+Permissions should reflect actual required access.
+The setuid permission can cause an executable to run with the file owner's effective UID under applicable conditions.
+The setgid permission has special behavior for executable files and directories.
+On directories, setgid can cause new entries to inherit the directory's group.
+The sticky bit on a shared writable directory restricts removal or renaming of entries according to ownership rules.
+The /tmp directory commonly uses the sticky bit.
+umask influences permission bits removed from newly created files and directories.
+umask is not itself the final file permission.
+The creating program's requested mode and the umask together influence resulting traditional permissions.
+Access Control Lists can provide permissions beyond traditional owner-group-other mode bits.
+Linux ACLs are commonly manipulated with getfacl and setfacl.
+Traditional mode bits are not always the entire access-control story.
+Linux capabilities can grant selected privileged kernel operations without granting full root authority.
+Capabilities divide some traditional root privileges into smaller units.
+Granting a process one required capability can be safer than running the entire process as root.
+Capabilities should still be treated as privileged authority.
+Linux uses a hierarchical filesystem namespace.
+The root of the filesystem namespace is /.
+Absolute paths begin with /.
+Relative paths are interpreted relative to a process's current working directory.
+The current directory is represented by .
+The parent directory is represented by ..
+Path normalization matters for security.
+Untrusted paths can contain traversal components.
+Applications should not blindly concatenate untrusted strings into privileged filesystem paths.
+The Filesystem Hierarchy Standard describes common directory purposes on Linux systems.
+Not every Linux system follows every hierarchy convention identically.
+/etc commonly contains system configuration.
+/var commonly contains variable system data.
+/var/log commonly contains logs.
+/var/lib commonly contains persistent application state.
+/var/cache commonly contains application cache data.
+/run commonly contains runtime state.
+/tmp commonly contains temporary files.
+/usr commonly contains installed user-space programs and data.
+/usr/bin commonly contains executable programs.
+/usr/lib commonly contains libraries and supporting files.
+/usr/local commonly contains locally installed software outside distribution package management conventions.
+/opt commonly contains optional or self-contained application software.
+/home commonly contains user home directories.
+/root is commonly the root user's home directory.
+/dev exposes device nodes and related interfaces.
+/proc exposes a virtual filesystem containing process and kernel information.
+/sys exposes kernel device and subsystem information through sysfs.
+/boot commonly contains boot-related files.
+Filesystem hierarchy conventions communicate intent.
+Application-specific installation layouts can deliberately use /opt.
+Persistent application data should not be confused with temporary runtime data.
+Configuration and mutable runtime data should be distinguished when practical.
+Logs and configuration serve different purposes.
+Executable binaries and writable application state should be separated when practical.
+A regular file stores byte data.
+A directory maps names to filesystem objects.
+A symbolic link contains a pathname reference.
+A hard link creates another directory entry referring to the same inode where supported.
+A symbolic link and a hard link are different mechanisms.
+Removing one hard link does not remove file data while other hard links still reference the inode.
+A symbolic link can become dangling when its target no longer exists.
+Following symbolic links can have security implications.
+Privileged programs should handle untrusted symbolic links carefully.
+An inode stores filesystem metadata for an object in traditional Unix filesystem designs.
+A filename is stored in a directory entry rather than being the inode itself.
+Different filesystems implement details differently.
+A filesystem can be mounted into the filesystem namespace.
+mount attaches a filesystem at a mount point.
+umount detaches a mounted filesystem when conditions permit.
+A mount point is a directory where another filesystem becomes accessible.
+Different mount points can reside on different storage devices or filesystem types.
+Renaming a file within one filesystem can have different atomicity properties from moving data between filesystems.
+Atomic rename behavior should not be assumed across filesystem boundaries.
+Atomic file replacement is useful for durable configuration updates.
+A common pattern writes complete new content to a temporary file and renames it over the target.
+Durability can require additional synchronization beyond rename.
+fsync requests synchronization of file data or metadata according to its contract.
+A successful write system call does not necessarily mean data has reached persistent physical storage.
+Buffering and caching can delay physical storage.
+Durability requirements should be explicit.
+A file descriptor is a process-local integer referring to an open resource.
+Standard input conventionally uses file descriptor 0.
+Standard output conventionally uses file descriptor 1.
+Standard error conventionally uses file descriptor 2.
+Standard input is commonly abbreviated stdin.
+Standard output is commonly abbreviated stdout.
+Standard error is commonly abbreviated stderr.
+File descriptors can refer to regular files.
+File descriptors can refer to pipes.
+File descriptors can refer to sockets.
+File descriptors can refer to devices.
+File descriptors are finite process resources.
+A process that leaks file descriptors can eventually fail to open additional resources.
+Opening a file and closing a file are distinct lifecycle operations.
+close releases a file descriptor reference.
+A closed descriptor number can later be reused.
+Programs should not assume a descriptor number permanently identifies the same resource.
+Shell redirection changes where standard streams are connected.
+The > operator commonly redirects standard output to a file and truncates or creates it according to shell semantics.
+The >> operator commonly appends standard output.
+The < operator commonly redirects standard input.
+2> commonly redirects standard error in shells such as Bash.
+2>&1 commonly redirects standard error to the current destination of standard output according to shell evaluation order.
+A pipe connects the output of one process to the input of another.
+The | shell operator commonly creates a pipeline.
+A pipeline allows programs to compose through streams.
+Pipes carry bytes.
+A pipe is not a persistent file.
+A pipe has finite buffering.
+A writer can block when a pipe buffer is full and no reader drains it.
+A reader can observe end-of-file when all writing endpoints are closed.
+Named pipes are filesystem-visible FIFO objects.
+Anonymous pipes are commonly created between related processes.
+Inter-process communication is commonly abbreviated IPC.
+Linux IPC mechanisms include pipes.
+Linux IPC mechanisms include Unix domain sockets.
+Linux IPC mechanisms include network sockets.
+Linux IPC mechanisms include shared memory.
+Linux IPC mechanisms include signals.
+Linux IPC mechanisms can include message queues.
+Different IPC mechanisms provide different semantics.
+A socket is an endpoint for communication.
+An Internet socket can use IPv4.
+An Internet socket can use IPv6.
+A Unix domain socket provides local IPC through the Unix socket API.
+Unix domain sockets can be represented by filesystem paths or abstract namespace addresses on Linux.
+A Unix domain socket is not a TCP socket.
+TCP provides a reliable ordered byte stream.
+UDP provides datagram communication.
+TCP does not preserve application message boundaries.
+An application protocol over TCP must define framing.
+UDP preserves datagram boundaries.
+UDP does not provide TCP's reliable ordered delivery semantics.
+localhost commonly refers to the local host.
+127.0.0.1 is the IPv4 loopback address commonly used for localhost.
+::1 is the IPv6 loopback address.
+Binding a service to 127.0.0.1 restricts ordinary IPv4 network access to the local host.
+Binding to 0.0.0.0 generally means listening on all available IPv4 interfaces.
+Binding to :: can mean listening on IPv6 interfaces and can interact with IPv4 mapping according to system configuration.
+Listening on all interfaces exposes a service more broadly than listening on loopback.
+Network binding should match intended exposure.
+A port identifies a transport endpoint in combination with address and protocol.
+TCP port numbers and UDP port numbers are separate namespaces.
+A process must bind a listening socket before accepting applicable incoming connections.
+A successful bind does not prove the service protocol works correctly.
+A successful TCP connection does not prove application qualification.
+Application-level handshakes can validate protocol identity after transport connection.
+DNS resolves names according to DNS configuration.
+A hostname and an IP address are different identifiers.
+One hostname can resolve to multiple addresses.
+One address can host multiple services.
+DNS resolution can fail independently of TCP connection behavior.
+Network diagnosis should preserve failure layers.
+A DNS failure is not a TCP refusal.
+A TCP refusal is not an application protocol rejection.
+An application timeout is not automatically a DNS failure.
+Processes have an environment.
+Environment variables provide string key-value data inherited across process creation according to execution behavior.
+Environment variables can configure applications.
+Environment variables can contain secrets.
+Environment variables are not inherently secret storage.
+Processes with sufficient authority can sometimes inspect another process's environment.
+Secrets should be handled according to the actual threat model.
+PATH is an environment variable containing directories searched for executable commands.
+PATH order matters.
+Executing an unqualified command can run the first matching executable found through PATH.
+Privileged scripts should use controlled command resolution.
+A malicious PATH can cause an unintended executable to run.
+The current working directory is not universally or automatically part of PATH.
+HOME commonly identifies a user's home directory.
+USER commonly contains a user name in many environments but should not be treated as authoritative security identity.
+Process credentials from the operating system are authoritative for kernel permission checks.
+Shell variables and environment variables are different concepts.
+export marks a shell variable for inclusion in the environment of subsequently executed commands.
+A shell interprets command syntax.
+Bash is a shell.
+sh commonly identifies a POSIX-style shell interface but the implementation can vary.
+A shell and the Linux kernel are different components.
+Commands such as cd can be shell built-ins.
+Commands such as ls are commonly external executables.
+Shell syntax is not C syntax.
+Shell syntax is not PHP syntax.
+Shell syntax is not Linux kernel syntax.
+Quoting matters in shell commands.
+Single quotes prevent most shell interpretation inside the quoted text.
+Double quotes permit selected expansions.
+Unquoted variables can undergo word splitting and pathname expansion.
+Shell scripts should quote variable expansions when literal values are intended.
+Untrusted strings should not be concatenated into shell commands.
+Shell injection occurs when untrusted data changes intended command syntax.
+Executing a program with an argument array avoids many shell interpretation risks.
+A shell should not be invoked merely to execute a program when shell syntax is unnecessary.
+Command exit status communicates success or failure according to program convention.
+An exit status of zero conventionally indicates success.
+A nonzero exit status conventionally indicates some form of failure.
+The exact meaning of nonzero statuses is program-specific.
+A nonzero exit status does not universally mean the same error.
+The shell variable $? commonly contains the most recent foreground pipeline or command status according to shell rules.
+Exit status should be checked when command success matters.
+A process can terminate normally.
+A process can terminate because of a signal.
+A process can terminate because of an unrecoverable error.
+The shell can encode signal termination into reported status according to shell conventions.
+Signals provide asynchronous notifications to processes.
+SIGTERM requests process termination.
+SIGINT commonly represents an interactive interrupt.
+SIGKILL forces process termination by the kernel.
+SIGSTOP stops process execution.
+SIGCONT resumes a stopped process.
+SIGHUP historically indicates terminal hangup and is also used by many daemons to request configuration reload.
+SIGCHLD notifies a parent about child process state changes.
+SIGPIPE can occur when writing to a pipe or socket whose reading side is closed.
+SIGSEGV indicates an invalid memory access condition detected by the system.
+SIGABRT commonly indicates process abort.
+SIGTERM can be handled by a process.
+SIGINT can be handled by a process.
+SIGKILL cannot be caught, blocked, or ignored.
+SIGSTOP cannot be caught, blocked, or ignored.
+A graceful shutdown commonly begins with SIGTERM rather than SIGKILL.
+SIGKILL prevents an application from performing ordinary shutdown cleanup.
+SIGKILL should not be the first choice merely because termination is desired.
+A daemon is a process designed to run as a background service.
+Modern Linux services are commonly managed by systemd.
+systemd manages units.
+A service unit describes a managed service.
+Service unit files commonly use the .service suffix.
+systemctl controls systemd units.
+systemctl start starts a unit.
+systemctl stop stops a unit.
+systemctl restart stops and starts a unit.
+systemctl reload requests a supported configuration reload.
+systemctl status displays unit state information.
+systemctl enable configures a unit to start according to its installation relationships.
+systemctl disable removes corresponding automatic-start enablement links according to unit configuration.
+Starting and enabling are different operations.
+A service can be running without being enabled.
+A service can be enabled but currently stopped.
+systemctl daemon-reload causes systemd to reload unit definitions.
+daemon-reload does not necessarily restart a running service.
+Changing a unit file can require daemon-reload before systemd recognizes the new definition.
+Changing application configuration does not necessarily require daemon-reload unless systemd unit definitions changed.
+Service restart behavior should match the component whose configuration changed.
+A systemd service can run under a configured User.
+A systemd service can run under a configured Group.
+WorkingDirectory defines a service working directory when configured.
+ExecStart defines a command used to start a service.
+Environment can define service environment values.
+EnvironmentFile can load environment assignments according to systemd syntax.
+Restart controls automatic restart policy.
+RestartSec controls delay before applicable restart attempts.
+Automatic restart can improve resilience.
+An unbounded rapid restart loop can consume resources and flood logs.
+Restart policy should distinguish expected termination from failure when appropriate.
+systemd can impose resource and security restrictions.
+NoNewPrivileges can prevent gaining new privileges through exec mechanisms.
+ProtectSystem can restrict filesystem write access.
+ProtectHome can restrict home-directory access.
+PrivateTmp can provide a private temporary namespace.
+CapabilityBoundingSet can restrict capabilities.
+SystemCallFilter can restrict system calls according to configuration.
+Service hardening should preserve functionality actually required by the service.
+A service failing under hardening does not automatically mean the hardening feature is defective.
+Required access should be identified explicitly.
+Linux logs can come from multiple sources.
+systemd-journald collects journal records on many distributions.
+journalctl queries the systemd journal.
+journalctl -u can select records for a unit.
+journalctl -f follows new records.
+Application-specific logs can be stored in files.
+The journal and application log files can contain different information.
+Logs are evidence of recorded events.
+Logs are not necessarily complete evidence of everything that occurred.
+A missing log record does not prove an event did not occur unless logging guarantees establish that conclusion.
+Log timestamps should have defined timezone interpretation.
+UTC is useful for correlating events across systems.
+Log levels commonly include debug.
+Log levels commonly include informational.
+Log levels commonly include warning.
+Log levels commonly include error.
+Log levels can include critical or fatal states.
+Logging severity should reflect actual operational severity.
+A normal knowledge miss should not be logged as a catastrophic infrastructure failure.
+A module informational message should not automatically be an error.
+A rejected module can be recorded while the core continues operating.
+Degraded state and failed state are different conditions.
+A service can remain operational with reduced capability.
+An operational alert should describe the capability that failed.
+Logs should avoid unnecessary secrets.
+Passwords should not be logged.
+Private keys should not be logged.
+Authentication tokens should not be logged.
+Session identifiers should not be logged casually.
+Logs require access controls.
+Logs can consume disk space.
+Log rotation limits uncontrolled log growth.
+logrotate is commonly used to rotate file-based logs.
+Rotation can rename old logs.
+Rotation can compress old logs.
+Rotation can remove logs according to retention policy.
+Applications must handle rotation correctly if they keep log files open.
+Disk exhaustion can cause application failures.
+Disk space should be monitored for services that write persistent data.
+df reports filesystem space usage.
+du estimates space used by files and directories.
+df and du answer different questions.
+A filesystem can run out of free blocks.
+A filesystem can run out of free inodes.
+Available disk capacity is a finite resource.
+Memory is a finite resource.
+CPU time is a finite resource.
+File descriptors are finite resources.
+Process counts can be limited.
+Network sockets consume resources.
+Threads consume resources.
+Applications should place boundaries on resource consumption.
+The kernel scheduler allocates CPU execution among runnable tasks.
+A process can contain multiple threads.
+Threads within a process share an address space.
+Separate processes ordinarily have separate virtual address spaces.
+Threads and processes are different execution abstractions.
+A race condition occurs when behavior depends incorrectly on timing or ordering between concurrent operations.
+A mutex can protect shared state.
+A semaphore can coordinate access or counts.
+Atomic operations can provide indivisible updates for supported operations.
+Synchronization should match the data and concurrency model.
+Adding threads does not automatically improve performance.
+Concurrency and parallelism are related but different.
+Concurrency concerns multiple activities making progress over overlapping time.
+Parallelism concerns simultaneous execution.
+A single CPU core can execute concurrent tasks through scheduling.
+Multiple CPU cores can execute tasks in parallel.
+Linux uses virtual memory.
+Each process operates in a virtual address space.
+Virtual addresses are translated to physical memory mappings by the operating system and hardware.
+Processes do not ordinarily access each other's private memory directly.
+Memory protection isolates address spaces.
+A segmentation fault commonly results when a process performs an invalid memory access.
+A segmentation fault is a process failure.
+A segmentation fault is not an HTTP status.
+A segmentation fault is not a JSON parsing error.
+A segmentation fault is not a knowledge miss.
+Failure categories should preserve the layer that failed.
+Memory can be anonymous.
+Memory can be file-backed.
+Memory can be shared.
+mmap maps memory into a process address space.
+Memory mapping can map files.
+Memory mapping can create shared-memory regions.
+Virtual memory can exceed immediately available physical RAM through paging and other mechanisms.
+Swap provides disk-backed storage for certain memory pages according to kernel policy.
+Swap is much slower than RAM for ordinary access.
+High swap activity can indicate memory pressure.
+The kernel can invoke the Out-Of-Memory killer under severe memory pressure.
+The OOM killer can terminate processes to recover memory.
+A process disappearing because of OOM is different from a clean application exit.
+Kernel logs can provide evidence of OOM termination.
+dmesg displays kernel ring-buffer messages subject to permissions and system configuration.
+Kernel messages can describe hardware and driver events.
+Kernel messages can describe OOM activity.
+Kernel messages can describe filesystem errors.
+Application logs and kernel logs should both be examined when the failure layer is uncertain.
+The /proc filesystem exposes process and kernel state.
+Each process commonly has a directory under /proc named by PID.
+/proc/PID/status contains process status information.
+/proc/PID/cmdline exposes process command-line data according to permissions.
+/proc/PID/environ exposes process environment data according to permissions.
+/proc/PID/fd exposes file descriptor links according to permissions.
+/proc/meminfo exposes memory statistics.
+/proc/cpuinfo exposes CPU information.
+/proc/loadavg exposes load information.
+/proc is virtual rather than an ordinary persistent disk filesystem.
+Values in /proc represent live kernel state.
+The /sys filesystem exposes kernel objects and device information.
+/sys is virtual.
+/sys should not be treated as ordinary application storage.
+Linux devices can appear under /dev.
+/dev/null discards written data and returns end-of-file when read.
+/dev/zero produces zero bytes when read.
+/dev/random and /dev/urandom expose kernel random interfaces according to Linux semantics.
+Cryptographic randomness should use appropriate operating-system or cryptographic APIs.
+Randomness used for security should not come from predictable application generators.
+Linux supports shared libraries.
+Shared libraries allow executable code to be loaded and used by multiple programs.
+Shared library files commonly use the .so naming convention.
+.so commonly means shared object.
+A shared library and a loadable application module can use similar mechanisms but are not necessarily the same architectural concept.
+The dynamic linker loads required shared libraries.
+ldd can display shared-library dependencies for many dynamically linked executables.
+ldd should be used cautiously with untrusted executables because implementation and platform behavior can involve security concerns.
+The loader resolves dynamic symbols.
+An unresolved required symbol can prevent loading.
+ABI compatibility matters for native shared libraries.
+ABI stands for Application Binary Interface.
+An ABI defines binary-level compatibility requirements.
+An ABI can define calling conventions.
+An ABI can define data structure layouts.
+An ABI can define symbol expectations.
+An ABI can define type sizes.
+An ABI can define alignment.
+An ABI can define binary interface version requirements.
+API and ABI are different.
+Source compatibility and binary compatibility are different.
+A source-compatible change can still break an ABI.
+Changing a structure layout can break ABI compatibility.
+Changing an exported function signature can break ABI compatibility.
+Changing calling conventions can break ABI compatibility.
+A module host should validate the ABI version required by its module contract.
+The current ABI should come from the authoritative interface definition used by the running software.
+Historical README entries do not override the current interface declaration.
+A README can document ABI history.
+A header can define the current compile-time ABI contract.
+A manifest can declare module ABI compatibility according to architecture.
+The loader can validate ABI compatibility before activation.
+Discovery, manifest validation, qualification, loading, and activation are separate stages.
+A module directory being present does not mean the module is active.
+A valid shared object does not mean the module is qualified.
+A qualified module does not mean every operation it performs will succeed.
+A failed optional module should not automatically terminate an otherwise healthy core unless architecture requires it.
+A module loader should report the module that failed when its identity is known.
+A loader should not invent a module identity when the manifest could not establish one.
+Dynamic loading on Linux commonly uses dlopen.
+dlsym resolves symbols from a dynamically loaded object.
+dlclose releases a dynamic loader reference.
+dlerror reports dynamic loader errors.
+These functions are provided through the dynamic linking interface rather than ISO C itself.
+A successful dlopen does not prove module qualification.
+A successful dlsym does not prove ABI semantic compatibility.
+The host must validate its defined module contract.
+Linux executable files can use the ELF format.
+ELF stands for Executable and Linkable Format.
+ELF is commonly used for executables, shared libraries, and object files on Linux.
+ELF format details are distinct from application-level module contracts.
+A valid ELF file can still be the wrong architecture.
+A valid ELF file can still depend on unavailable libraries.
+A valid ELF file can still expose the wrong symbols.
+A valid ELF file can still implement an incompatible ABI.
+File-format validity and module validity are different.
+Linux supports multiple CPU architectures.
+Common Linux architectures include x86-64.
+Common Linux architectures include AArch64.
+A binary compiled for one architecture does not ordinarily execute natively on another architecture without an appropriate compatibility or emulation mechanism.
+Platform-independent source does not mean one binary runs natively on every CPU architecture.
+Platform-independent behavior means implementations preserve required semantics across supported platforms.
+Endianness can differ between architectures.
+Data type sizes can differ between ABIs.
+Structure padding can differ.
+Binary protocols should define field sizes explicitly.
+Binary protocols should define byte order explicitly.
+Binary protocols should not transmit raw native structures unless the protocol deliberately specifies and controls the representation.
+Network byte order is conventionally big-endian.
+Serialization separates in-memory representation from protocol representation.
+A platform-independent protocol should produce identical protocol meaning across supported platforms.
+Consensus-visible results should not depend accidentally on host byte order.
+Consensus-visible results should not depend accidentally on structure padding.
+Consensus-visible results should not depend accidentally on locale.
+Consensus-visible results should not depend accidentally on filesystem directory enumeration order.
+Directory enumeration order should not be treated as deterministic unless explicitly sorted.
+Filesystem metadata timestamps can vary.
+Wall-clock time can change.
+CLOCK_REALTIME represents wall-clock time.
+CLOCK_MONOTONIC provides monotonic time suitable for elapsed-time measurement according to Linux clock semantics.
+Elapsed durations should generally use a monotonic clock.
+Wall-clock timestamps should use a defined time representation.
+NTP can adjust system wall-clock time.
+A wall clock can move forward or backward.
+Timeout calculations based solely on wall-clock assumptions can be incorrect.
+Time zones affect human-readable local time.
+UTC avoids many cross-system timestamp ambiguities.
+Locale affects text formatting.
+Locale can affect sorting.
+Locale can affect numeric formatting.
+Locale can affect character classification.
+Machine protocols should not depend accidentally on user locale.
+Deterministic machine serialization should use explicit locale-independent rules.
+Linux process execution commonly uses exec-family system interfaces.
+exec replaces the current process image with another program when successful.
+fork creates a child process on systems supporting fork semantics.
+After fork, parent and child execute independently from the fork point with separate process identities.
+fork and exec are often combined to launch another program.
+system() invokes a shell command according to the C library contract.
+system() introduces shell interpretation.
+Direct exec-style argument passing is safer when shell syntax is unnecessary.
+A child process should have defined standard streams and inherited descriptors.
+File descriptors can be marked close-on-exec.
+Close-on-exec prevents selected descriptors from leaking into newly executed programs.
+Descriptor inheritance can accidentally expose resources to child processes.
+Privilege boundaries should account for inherited descriptors.
+Processes can change user or group credentials when permitted.
+Dropping privileges after privileged initialization can reduce attack surface.
+Privilege dropping must be implemented correctly.
+A process should not assume that changing only one credential field removes all privileged authority.
+Capabilities and supplementary groups can remain relevant.
+Linux namespaces isolate selected system resources.
+PID namespaces isolate process identifier views.
+Mount namespaces isolate filesystem mount views.
+Network namespaces isolate network stacks.
+User namespaces isolate user and group identifier mappings.
+IPC namespaces isolate certain IPC resources.
+UTS namespaces isolate hostname and domain-name views.
+Containers use Linux isolation mechanisms including namespaces and cgroups.
+A container is not a virtual machine merely because it provides an isolated environment.
+Containers share a host kernel unless another virtualization layer is involved.
+cgroups control and account for resource usage.
+cgroups can limit memory.
+cgroups can limit CPU allocation.
+cgroups can organize processes.
+systemd uses cgroups to manage services on many systems.
+A process inside a container can observe a different namespace view from the host.
+localhost inside a network namespace refers to that namespace's loopback interface.
+Filesystem paths inside a container can differ from host paths.
+Operational diagnosis should identify the namespace and environment being examined.
+Package managers install and maintain distribution software.
+APT is commonly used on Debian and Ubuntu systems.
+apt updates package metadata and installs or removes packages through configured repositories.
+apt update refreshes package index information.
+apt upgrade upgrades installed packages according to dependency and policy rules.
+Installing packages changes system state.
+Package installation should be deliberate on production systems.
+Distribution packages can receive security updates.
+Locally compiled software can fall outside normal package-manager update tracking.
+An application under /opt can require its own update lifecycle.
+System updates and application updates are different operational processes.
+Updating a shared library can affect applications depending on its ABI.
+ABI-compatible updates can preserve binary compatibility.
+ABI-breaking updates can require rebuilding dependent software.
+Backups protect persistent data.
+A backup should include data required to restore service.
+A backup does not need to include reproducible temporary files unless recovery requirements say otherwise.
+Configuration can be part of backup requirements.
+Private keys can be critical recovery material.
+Private-key backups require strong protection.
+A backup is not proven useful until restoration has been tested.
+Replication is not the same as backup.
+RAID is not the same as backup.
+Snapshots are not automatically equivalent to independent backups.
+Recovery requirements should define what must survive.
+Linux security includes discretionary access control.
+Traditional Unix permissions are discretionary access control.
+Linux can also use mandatory access control frameworks.
+AppArmor provides mandatory access-control mechanisms commonly used on Ubuntu.
+SELinux provides mandatory access-control mechanisms on many Linux distributions.
+AppArmor and SELinux are different systems.
+A process can have traditional file permissions yet still be denied by a mandatory access-control policy.
+A permission-denied error should not automatically be solved with chmod.
+Diagnosis should determine which access-control layer denied the operation.
+File ownership can be correct while AppArmor denies access.
+Traditional mode bits can deny access before another policy is relevant.
+systemd sandboxing can deny access.
+Filesystem mount options can deny execution or writes.
+Read-only mounts prevent writes regardless of ordinary writable mode bits.
+noexec mount options restrict direct execution according to mount semantics.
+nosuid affects setuid and setgid behavior.
+Access failures should be investigated at the actual enforcement layer.
+A web server commonly runs under a restricted service account.
+Apache HTTP Server commonly uses a dedicated account such as www-data on Debian-derived systems.
+The exact account depends on configuration and distribution.
+PHP executed through a web server runs with credentials determined by the web-server and PHP execution model.
+A PHP script cannot write a file merely because the interactive shell user can write it.
+The PHP process must have filesystem authority to perform the write.
+Giving the PHP process write access to an entire application tree is usually unnecessary.
+Writable directories should be limited to locations that actually require runtime modification.
+Executable application code should ordinarily not need to be writable by the web service account.
+Configuration files containing secrets should have restrictive permissions.
+Upload directories require careful execution policy.
+User-uploaded files should not automatically become executable server-side code.
+Web server and filesystem permissions together define important security boundaries.
+A process listening on a privileged port below 1024 traditionally requires appropriate privilege or capability.
+CAP_NET_BIND_SERVICE can permit binding low-numbered ports without full root authority.
+A reverse proxy can listen on public ports while an application listens on an unprivileged local port.
+This can reduce application privilege requirements.
+Firewall rules control network traffic.
+nftables is the modern Linux packet-filtering framework.
+iptables commands can operate through compatibility layers on modern systems.
+A firewall and application authorization solve different problems.
+A firewall can restrict which network traffic reaches a service.
+A firewall does not validate application-level permissions inside accepted requests.
+A listening socket does not imply firewall accessibility.
+A firewall rule permitting a port does not prove a service is listening.
+Network troubleshooting should check each layer.
+ss displays socket information.
+ss can show listening sockets.
+ip displays and configures network interfaces and routing information.
+ping tests ICMP reachability where permitted.
+Failure to receive ping replies does not prove a host is down because ICMP can be filtered.
+curl can make application-protocol requests including HTTP.
+curl successfully establishing HTTP communication provides stronger HTTP-layer evidence than ping.
+A port scanner finding an open TCP port does not prove the application protocol is correct.
+Protocol qualification should test protocol behavior.
+ps displays process information.
+top displays dynamic process and resource information.
+kill sends signals to processes.
+kill does not inherently mean SIGKILL.
+The kill command sends SIGTERM by default in common implementations when no signal is specified.
+kill -9 sends SIGKILL.
+grep searches input for matching patterns.
+tail displays the end of input or files.
+tail -f follows appended file content.
+head displays the beginning of input.
+cat concatenates and displays file contents.
+less provides interactive file viewing.
+find searches filesystem trees according to predicates.
+grep and find solve different search problems.
+grep searches content.
+find searches filesystem entries.
+wc can count lines, words, and bytes according to options.
+wc -l counts line delimiters according to its semantics.
+A line count does not necessarily equal a logical record count unless the file format defines one record per line.
+awk processes structured text records.
+sed performs stream-oriented text transformations.
+cut extracts fields or character ranges according to its options.
+sort sorts text lines.
+uniq identifies or removes adjacent duplicate lines according to options.
+uniq does not remove all duplicates unless equal lines are adjacent.
+sort followed by uniq is a common pattern when global duplicate grouping is intended.
+Text-processing commands operate on text representations.
+A successful grep match proves matching text was present in the searched input.
+A grep match does not prove the matched text is authoritative.
+A grep match in a README does not override a current interface declaration.
+A grep match in a historical log establishes that text was logged at that time.
+Historical logs describe historical events.
+Live configuration describes current configuration.
+Source headers can define compile-time contracts.
+Runtime state can differ from source if deployed binaries were built from different source.
+Determining current runtime behavior can require examining the running artifact and its configuration.
+Evidence should be classified according to what it actually establishes.
+The newest file is not automatically the most authoritative file.
+The largest version number found in text is not automatically the active version.
+A test mentioning an ABI version does not automatically define the ABI.
+A README mentioning an ABI history does not automatically define the current ABI.
+An authoritative interface header can define the compile-time ABI when the architecture assigns it that role.
+A running module loader can provide runtime evidence about the ABI it accepts.
+Build metadata can provide evidence about which source revision produced a binary.
+Source, build artifact, configuration, and runtime state are different layers.
+Correct diagnosis preserves those distinctions.
+A command succeeding means the command completed according to its own success criteria.
+It does not prove unrelated system properties.
+test -w checks whether the invoking context considers a path writable according to applicable access checks.
+A writable directory and a writable file are different conditions.
+A web server's service account can be tested explicitly when diagnosing write permissions.
+sudo -u can execute a command under another user's identity when authorized.
+Testing access as the actual service user provides stronger evidence than testing as an administrative shell user.
+sudo grants controlled privilege according to configuration.
+sudo is not part of the Linux kernel.
+sudo policy is commonly configured through sudoers.
+Administrative access should be used deliberately.
+Commands executed with sudo can modify protected system state.
+Copying commands without understanding their scope can damage a system.
+Production changes should be bounded and reversible where practical.
+Configuration should be backed up before risky modification when recovery requires it.
+A service should be tested after configuration changes.
+A configuration syntax check can detect some errors before restart.
+A successful syntax check does not prove runtime behavior is correct.
+A successful service start does not prove every feature works.
+A health test should exercise the capability it claims to validate.
+Operational state should be derived from actual capability.
+RUNNING means a process is running.
+READY means a service can perform its required operation according to readiness criteria.
+DEGRADED means some capability is impaired while the system remains operational according to defined state semantics.
+FAILED means the required operational capability is unavailable according to defined state semantics.
+These state names require explicit definitions in each system.
+A single warning should not automatically make a system failed.
+A single optional module failure can justify degraded state when that capability matters but the core remains functional.
+A required core dependency failure can justify failed or unavailable state.
+State reporting should describe reality rather than exaggerate it.
+Linux provides mechanisms.
+System architecture defines how those mechanisms are used.
+Correct Linux engineering depends on explicit ownership, permissions, lifecycle, boundaries, failure handling, and observable state.
+A small service can be more reliable than an unnecessarily complicated service.
+A deterministic service should minimize hidden state.
+A deterministic service should define configuration.
+A deterministic service should define startup behavior.
+A deterministic service should define shutdown behavior.
+A deterministic service should define failure behavior.
+A deterministic service should define persistent state.
+A deterministic service should define interfaces.
+A deterministic service should define resource limits.
+A deterministic service should produce enough evidence to diagnose its operational state.
+Linux provides the execution environment in which those engineering decisions operate.

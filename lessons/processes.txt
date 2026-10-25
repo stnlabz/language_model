@@ -1,0 +1,2017 @@
+A process is an executing instance of a program according to the operating system's process model.
+
+A program is stored code and associated data.
+
+A process is an active execution environment.
+
+The same program can have multiple processes.
+
+Two processes running the same program are not necessarily in the same state.
+
+A process can contain code.
+
+A process can contain memory.
+
+A process can contain threads.
+
+A process can contain open files.
+
+A process can contain network resources.
+
+A process can contain operating-system handles or descriptors.
+
+A process can contain environment information.
+
+A process can contain security credentials.
+
+Exact process resources depend on the operating system.
+
+A process has an identity assigned according to operating-system rules.
+
+On Unix-like systems, a process identifier is commonly called a PID.
+
+A PID identifies a process within the scope and lifetime defined by the operating system.
+
+A PID is not a permanent identity.
+
+PIDs can be reused.
+
+A PID observed at one time can refer to a different process later.
+
+Do not use a PID as permanent application identity.
+
+A process can have a parent process.
+
+A process can create child processes.
+
+Parent-child relationships describe process creation relationships according to the operating system.
+
+A child process is not automatically controlled forever by its original parent.
+
+Parent termination behavior depends on the operating system and process-management mechanism.
+
+A child process can outlive its parent on systems that permit it.
+
+A parent process can wait for child termination.
+
+A process can terminate normally.
+
+A process can terminate because of an error.
+
+A process can be terminated externally.
+
+A process can terminate because of an unhandled fault or exception.
+
+A process can terminate because the operating system ends it.
+
+Process termination reason should not be guessed.
+
+Use available exit status and operating-system evidence.
+
+An exit status communicates selected termination information according to program and operating-system conventions.
+
+An exit status of zero conventionally represents success on many systems.
+
+Nonzero exit statuses conventionally represent failure or another defined result.
+
+Exact exit-code meanings belong to the program's interface.
+
+Do not assume every nonzero value means the same failure.
+
+Do not assume process termination means the requested work failed.
+
+A program can complete required work and later encounter shutdown failure.
+
+Do not assume process survival means requested work succeeded.
+
+A process can remain alive after an operation fails.
+
+Operation result and process state are separate.
+
+A process that exists is not necessarily healthy.
+
+A process that exists is not necessarily responsive.
+
+A process that exists is not necessarily making progress.
+
+A process that exists is not necessarily listening on an expected port.
+
+A process that exists is not necessarily the intended process.
+
+A process that exists is not necessarily authorized.
+
+Process existence proves only the existence established by the observation mechanism.
+
+Health requires additional evidence.
+
+Progress requires additional evidence.
+
+Identity can require additional evidence.
+
+A process has an address space according to the operating-system memory model.
+
+Separate processes normally have separate virtual address spaces.
+
+One process cannot ordinarily access another process's memory without operating-system mechanisms and sufficient authority.
+
+Process isolation provides a security and reliability boundary.
+
+Process isolation is not absolute protection.
+
+Operating systems provide mechanisms for controlled inter-process access.
+
+Shared memory can intentionally expose memory between processes.
+
+Debugging facilities can permit process inspection.
+
+Privileged processes can have broader access.
+
+Operating-system defects can undermine isolation.
+
+Process isolation and thread isolation are different.
+
+Threads within one process commonly share the process address space.
+
+Separate processes commonly do not.
+
+A crash caused by one thread can terminate its entire process.
+
+A crash in one isolated process does not automatically terminate another process.
+
+This is one reason process boundaries can provide fault containment.
+
+Process boundaries have cost.
+
+Inter-process communication has overhead.
+
+Separate processes require explicit communication.
+
+Separate processes require explicit lifecycle management.
+
+Use process isolation when its benefits justify the complexity.
+
+A process can contain one thread.
+
+A process can contain multiple threads.
+
+A process is not the same thing as a thread.
+
+A thread represents an execution path within a process according to the operating system and runtime.
+
+Threads commonly share process resources.
+
+Processes commonly provide stronger resource separation.
+
+A process can exist while one of its threads is blocked.
+
+A process can exist while all useful worker threads are blocked.
+
+Therefore process existence does not establish useful progress.
+
+The operating system schedules executable work.
+
+Scheduling determines when execution contexts receive processor time according to operating-system policy.
+
+A runnable process is not guaranteed continuous processor access.
+
+Scheduling delays can occur.
+
+CPU contention can occur.
+
+Priority can affect scheduling.
+
+Exact scheduling behavior is platform dependent.
+
+Do not depend on precise scheduling timing for correctness.
+
+Sleeping is not synchronization.
+
+Waiting a guessed amount of time does not prove another process completed an operation.
+
+Use defined synchronization or communication mechanisms.
+
+A process has a working directory according to operating-system semantics.
+
+Relative paths can be interpreted relative to the working directory.
+
+The working directory can differ depending on how the process was launched.
+
+Interactive execution can use one working directory.
+
+A service manager can use another.
+
+A scheduled task can use another.
+
+A child process can inherit a working directory.
+
+Do not assume the executable's directory is the working directory.
+
+Do not assume the working directory is stable unless the program controls it.
+
+Critical file locations should use known paths or controlled base directories.
+
+A process can have environment variables.
+
+Environment variables provide named values to a process according to operating-system and runtime conventions.
+
+Environment variables are part of process context.
+
+Child processes can inherit environment information.
+
+A child can receive modified environment information.
+
+Environment variables are not automatically secret.
+
+Other privileged processes or diagnostic systems can expose them depending on the platform.
+
+Do not store sensitive information in environment variables without understanding the threat model.
+
+Environment variables are strings according to common process interfaces.
+
+Applications must parse values into required types.
+
+An environment variable containing "false" is still text until interpreted.
+
+An environment variable being present does not prove its value is valid.
+
+Validate configuration.
+
+Environment variables can differ between interactive shells and services.
+
+A program working from a shell can fail as a service because its environment differs.
+
+PATH is an environment mechanism commonly used to locate executable programs.
+
+Searching PATH can execute a different program than expected if path ordering or environment is uncontrolled.
+
+Security-sensitive execution should use controlled executable paths where appropriate.
+
+Do not assume a command name identifies one exact binary.
+
+Resolve or specify the intended executable according to security requirements.
+
+A process can have standard input.
+
+A process can have standard output.
+
+A process can have standard error.
+
+These are commonly called stdin, stdout, and stderr.
+
+Standard input provides an input stream.
+
+Standard output provides a normal output stream.
+
+Standard error provides a diagnostic output stream.
+
+Exact implementation differs by platform and runtime.
+
+These streams can be connected to a terminal.
+
+They can be connected to files.
+
+They can be connected to pipes.
+
+They can be connected to another process.
+
+They can be redirected.
+
+Do not assume stdout is visible to a human.
+
+Do not assume stderr is visible to a human.
+
+A service manager can capture both.
+
+A parent process can capture both.
+
+A pipeline can consume stdout.
+
+Diagnostic information should use the appropriate channel according to program interface.
+
+Machine-readable output and diagnostic output should not be mixed carelessly.
+
+If stdout is an API consumed by another program, unexpected diagnostics on stdout can break parsing.
+
+stderr can preserve diagnostics separately.
+
+Output buffering can delay visibility.
+
+A program can write output that remains buffered.
+
+Absence of immediately visible output does not prove the process did nothing.
+
+Flush semantics matter where immediate communication is required.
+
+Buffering can differ when output is connected to a terminal versus a pipe or file.
+
+Programs should not depend on accidental buffering behavior.
+
+A pipe is an inter-process communication mechanism.
+
+A pipe carries a byte stream or messages according to the platform and API.
+
+One process can write.
+
+Another process can read.
+
+Pipes can connect parent and child processes.
+
+Pipes can connect unrelated processes through named mechanisms where supported.
+
+A pipe is not persistent storage.
+
+Data in a pipe is generally transient.
+
+A pipe can block.
+
+A full pipe can cause a writer to wait.
+
+An empty pipe can cause a reader to wait.
+
+Failure to consume child output can therefore cause a child process to block.
+
+Parent processes that capture stdout and stderr should handle both streams correctly.
+
+Reading one stream while ignoring another can deadlock selected subprocess arrangements when the ignored stream fills.
+
+Use appropriate asynchronous or concurrent consumption where necessary.
+
+End-of-file on a pipe can indicate that writers have closed their ends according to pipe semantics.
+
+End-of-file does not automatically explain why the writer terminated.
+
+Check process status separately.
+
+Inter-process communication is commonly abbreviated IPC.
+
+IPC allows separate processes to exchange information.
+
+IPC can use pipes.
+
+IPC can use sockets.
+
+IPC can use shared memory.
+
+IPC can use message queues.
+
+IPC can use operating-system events.
+
+IPC can use signals.
+
+IPC can use files.
+
+IPC can use platform-specific mechanisms.
+
+Different IPC mechanisms provide different guarantees.
+
+Some provide byte streams.
+
+Some provide messages.
+
+Some provide shared state.
+
+Some provide notifications.
+
+Some provide request-response semantics.
+
+Choose according to requirements.
+
+Process boundaries require serialization when data cannot be shared directly.
+
+A pointer in one process normally has no useful meaning in another process.
+
+Do not transmit raw memory addresses as cross-process object identity.
+
+Use stable identifiers.
+
+Use defined serialized representations.
+
+Validate IPC input.
+
+A local process is not automatically trusted.
+
+Another local user can run processes.
+
+A compromised process can send malicious data.
+
+A plugin process can contain defects.
+
+IPC is an input boundary.
+
+Authenticate or authorize peers when required.
+
+Validate message size.
+
+Validate message type.
+
+Validate message structure.
+
+Validate protocol state.
+
+A local socket can provide IPC.
+
+A network socket can provide IPC across machines.
+
+Locality and trust are different concepts.
+
+A local connection is not automatically authorized.
+
+A remote connection is not automatically hostile.
+
+Authority should be established explicitly.
+
+A process can create another process.
+
+Process creation should specify the intended executable.
+
+Process creation should specify arguments.
+
+Process creation can specify environment.
+
+Process creation can specify working directory.
+
+Process creation can specify standard-stream handling.
+
+Process creation can specify security context according to platform capabilities.
+
+Arguments are data supplied to the child program.
+
+Arguments should not be constructed through unsafe command-string concatenation when a direct argument-vector interface is available.
+
+Shell execution and direct process execution are different.
+
+Direct execution launches an executable with defined arguments according to the process API.
+
+Shell execution asks a command interpreter to parse command text.
+
+Shell parsing introduces additional syntax.
+
+Shell metacharacters can alter meaning.
+
+Untrusted data embedded in shell commands can create command injection vulnerabilities.
+
+Prefer direct process APIs when shell features are unnecessary.
+
+If a shell is required, quote and validate according to that shell's exact rules.
+
+Different shells have different quoting rules.
+
+Do not assume Unix shell quoting applies to Windows command processing.
+
+Do not assume Windows quoting applies to Unix shells.
+
+Platform-specific command semantics belong behind appropriate platform boundaries.
+
+Arguments can contain spaces.
+
+Arguments can contain quotes.
+
+Arguments can contain special characters.
+
+Use process APIs that preserve argument boundaries.
+
+Do not build one flat command string unless the API specifically requires it and the quoting rules are correctly implemented.
+
+A process can inherit resources from its parent.
+
+Inherited resources can include open files.
+
+Inherited resources can include handles.
+
+Inherited resources can include sockets.
+
+Inherited resources can include environment.
+
+Exact inheritance is platform dependent.
+
+Unintended resource inheritance can create security problems.
+
+A child retaining a file or pipe handle can prevent expected closure.
+
+A child retaining a listening socket can affect restart behavior.
+
+Control inheritance explicitly where possible.
+
+Close resources not required by the child.
+
+The close-on-exec concept on Unix-like systems prevents selected descriptors from remaining open across execution of another program.
+
+Windows provides handle-inheritance controls.
+
+The mechanisms differ.
+
+The objective is the same: only intended resources should cross the process boundary.
+
+A child process should receive the minimum resources required.
+
+Least privilege applies to processes.
+
+A process should run with only the authority it needs.
+
+Administrative or root authority should not be used merely for convenience.
+
+A process with excessive privilege increases the impact of compromise or defect.
+
+Privilege can come from user identity.
+
+Privilege can come from groups.
+
+Privilege can come from capabilities.
+
+Privilege can come from tokens or platform-specific security mechanisms.
+
+Exact models differ.
+
+A process can drop privilege after performing required privileged initialization where the platform and design support it.
+
+Privilege reduction should be deliberate.
+
+Do not assume privilege can always be regained safely.
+
+Do not perform untrusted work with unnecessary privilege.
+
+A process identity and an application identity are different.
+
+Operating-system credentials identify the security context under which the process runs.
+
+Application credentials can identify a user, service, peer, or agent inside the application.
+
+One operating-system process can act for multiple authenticated application users.
+
+Do not confuse OS identity with application authorization.
+
+A daemon is traditionally a long-running background process on Unix-like systems.
+
+A service is a managed background program according to an operating-system service framework.
+
+Windows commonly uses Windows services.
+
+Linux systems commonly use service managers such as systemd.
+
+Exact service architecture depends on platform.
+
+A service manager can start a process.
+
+A service manager can stop a process.
+
+A service manager can restart a process.
+
+A service manager can capture logs.
+
+A service manager can configure environment.
+
+A service manager can configure working directory.
+
+A service manager can configure privileges.
+
+A service manager can monitor process termination.
+
+A service manager can enforce resource limits.
+
+A service manager does not automatically understand application health.
+
+A process being marked active by a service manager can mean only that the managed process remains running.
+
+Application-level health requires application-level evidence.
+
+Restart policy should distinguish expected termination from failure.
+
+A process intentionally exiting after completing one-shot work should not necessarily be restarted.
+
+A long-running service unexpectedly exiting can warrant restart.
+
+Restart loops can consume resources.
+
+Restart loops can hide persistent defects.
+
+Apply backoff where appropriate.
+
+Record restart reason.
+
+Record exit status.
+
+Record recurrence.
+
+Do not call repeated restart successful recovery merely because the process repeatedly starts.
+
+Recovery requires verification of useful operation.
+
+A watchdog observes selected process or application behavior.
+
+A watchdog can detect missed heartbeats.
+
+A watchdog can detect process termination.
+
+A watchdog can detect stalled progress when progress signals exist.
+
+A watchdog can trigger authorized recovery.
+
+A watchdog should distinguish process existence from progress.
+
+A heartbeat proves only what the heartbeat mechanism establishes.
+
+A thread can continue emitting heartbeats while critical work is deadlocked elsewhere.
+
+A heartbeat should represent meaningful health when possible.
+
+Progress counters can provide stronger evidence for selected workloads.
+
+A worker that completed no work for an expected interval can warrant investigation.
+
+Expected idle periods must be considered.
+
+No work can mean no workload.
+
+No work can also mean failure.
+
+Context matters.
+
+Signals are asynchronous notifications used by Unix-like systems for process control and other events.
+
+Different signals have different semantics.
+
+SIGTERM commonly requests termination.
+
+SIGKILL forcibly terminates a process and cannot ordinarily be handled or ignored.
+
+SIGINT commonly represents an interactive interrupt.
+
+SIGHUP has historical and application-specific uses.
+
+Exact signal behavior should follow platform and application definitions.
+
+A signal name does not guarantee the receiving program responds in a particular application-specific way unless that behavior is defined.
+
+Graceful shutdown allows a process to perform controlled termination.
+
+A graceful shutdown can stop accepting new work.
+
+A graceful shutdown can complete or cancel current work according to policy.
+
+A graceful shutdown can flush required state.
+
+A graceful shutdown can close connections.
+
+A graceful shutdown can release resources.
+
+A graceful shutdown can record final status.
+
+Graceful shutdown should be bounded.
+
+A process that refuses to terminate indefinitely can prevent recovery.
+
+Shutdown can use stages.
+
+Request graceful termination.
+
+Wait for a defined interval.
+
+Escalate according to policy if the process does not terminate.
+
+Forced termination should be a last resort where graceful termination is preferred.
+
+Forced termination can interrupt writes.
+
+Forced termination can leave temporary files.
+
+Forced termination can leave external operations unresolved.
+
+Forced termination can leave remote peers uncertain.
+
+Persistent state should be designed to tolerate abrupt process death.
+
+Atomic storage and transactions reduce damage.
+
+Recovery logic should inspect incomplete operations.
+
+Do not assume shutdown handlers always run.
+
+Power failure can prevent them.
+
+Process crashes can prevent them.
+
+Forced termination can prevent them.
+
+Critical correctness must not depend entirely on shutdown cleanup.
+
+Shutdown cleanup improves operation.
+
+Persistent integrity should survive its absence according to system requirements.
+
+A process can receive termination while handling an operation.
+
+The operation can have completed externally before local termination.
+
+After restart, the outcome can be uncertain.
+
+Use idempotency and reconciliation where required.
+
+Do not blindly repeat non-idempotent work.
+
+A child process can be synchronous from the parent's perspective.
+
+The parent starts the child and waits for completion.
+
+A child process can be asynchronous.
+
+The parent starts the child and continues other work.
+
+Asynchronous children require lifecycle tracking.
+
+Do not lose ownership of important child processes accidentally.
+
+Track process identifiers or handles according to platform semantics.
+
+Track expected operation.
+
+Track start time.
+
+Track completion.
+
+Track exit status.
+
+Release process handles when no longer required.
+
+On Unix-like systems, a terminated child can remain represented as a zombie until its parent collects its termination status.
+
+A zombie is not a running process.
+
+A zombie does not continue executing application code.
+
+It retains selected process-table information so the parent can obtain status.
+
+The parent should wait for children according to its process model.
+
+Accumulating zombies can exhaust process-table resources.
+
+An orphan process is a process whose original parent has terminated.
+
+Unix-like systems reparent orphaned processes according to operating-system rules.
+
+An orphan is not automatically defective.
+
+Some background-process designs intentionally outlive the launching process.
+
+Managed services should use proper service-management mechanisms instead of accidental orphaning.
+
+Do not confuse zombie and orphan.
+
+A zombie has terminated.
+
+An orphan can still be running.
+
+Windows process semantics differ and do not use Unix zombie terminology in the same way.
+
+Portable software should abstract process lifecycle rather than assuming Unix semantics everywhere.
+
+A process group can organize related processes on Unix-like systems.
+
+A session can organize process groups.
+
+Job-control mechanisms can manage groups of processes.
+
+Windows provides different mechanisms, including job objects for selected process grouping and lifecycle control.
+
+Process trees are useful operational views.
+
+Process trees do not necessarily represent every communication or ownership relationship.
+
+A child can communicate with unrelated processes.
+
+A service manager can supervise processes it did not directly create according to its mechanisms.
+
+Do not infer complete architecture from parent-child relationships alone.
+
+A process can spawn workers.
+
+A supervisor can manage workers.
+
+Workers can perform isolated tasks.
+
+A failed worker can be restarted without terminating the supervisor.
+
+This can improve fault containment.
+
+A worker pool maintains multiple worker processes.
+
+Worker pools can limit concurrency.
+
+Worker pools can isolate tasks.
+
+Worker pools consume additional memory.
+
+Worker startup has cost.
+
+Work distribution should be bounded.
+
+A queue feeding workers should have capacity policy.
+
+Unlimited worker creation can exhaust process resources.
+
+Unlimited concurrency is not scalability.
+
+Bound the number of processes according to system capacity and workload.
+
+Process creation consumes resources.
+
+Each process consumes address-space structures.
+
+Each process consumes kernel resources.
+
+Each process can consume file descriptors or handles.
+
+Each process can consume memory.
+
+Each process can consume CPU.
+
+Operating systems impose limits.
+
+Process creation can fail.
+
+Handle creation failure.
+
+Do not assume fork, spawn, or CreateProcess always succeeds.
+
+Resource exhaustion can prevent new processes.
+
+Security policy can prevent new processes.
+
+Executable lookup can fail.
+
+Executable loading can fail.
+
+Permission can fail.
+
+Architecture incompatibility can fail.
+
+Missing runtime dependencies can fail.
+
+Record the actual failure.
+
+Executable existence does not prove executability.
+
+A file can exist but lack execute permission.
+
+A file can exist but use an unsupported format.
+
+A file can exist but depend on unavailable libraries.
+
+A file can exist but be corrupted.
+
+A file can exist but be blocked by security policy.
+
+Validate the relevant execution stage.
+
+Dynamic loading occurs as part of process startup on many systems.
+
+Required shared libraries can be loaded.
+
+Symbols can be resolved.
+
+Runtime initialization can occur.
+
+Failure before application main logic can terminate the process.
+
+An application can therefore fail before its own logging system initializes.
+
+Capture operating-system and loader diagnostics.
+
+Early startup diagnostics should remain simple.
+
+A process image is the executable state loaded for a process according to operating-system terminology.
+
+On Unix-like systems, exec-family operations replace the current process image with another program while preserving selected process attributes according to the API.
+
+exec does not necessarily create a new PID.
+
+fork and exec are distinct operations.
+
+fork creates a new process according to Unix semantics.
+
+exec replaces a process image.
+
+Do not confuse them.
+
+Windows commonly uses process-creation APIs that create and load a new process through different mechanisms.
+
+Portable architecture should express the desired operation rather than forcing one platform's mechanism onto another.
+
+Process startup has stages.
+
+Request process creation.
+
+Resolve or identify executable.
+
+Create process resources.
+
+Load executable.
+
+Load required runtime components.
+
+Initialize runtime.
+
+Initialize application.
+
+Load configuration.
+
+Initialize dependencies.
+
+Enter ready state.
+
+Failure can occur at any stage.
+
+"Process failed to start" can therefore represent multiple distinct failures.
+
+Report the stage when known.
+
+A process becoming visible in a process list does not prove application initialization completed.
+
+Ready state should be explicit when readiness matters.
+
+A server can start as a process before binding its socket.
+
+A server can bind its socket before loading required data.
+
+A server can load data before becoming ready to accept requests.
+
+Readiness should represent the application's required service boundary.
+
+Do not equate PID creation with readiness.
+
+A readiness probe tests whether a process or service can perform required work according to the probe.
+
+A liveness probe tests whether a process should be considered alive according to the probe definition.
+
+Readiness and liveness are different.
+
+A process can be alive but not ready.
+
+A process can temporarily become not ready while recovering.
+
+Killing a process merely because one dependency is temporarily unavailable can create unnecessary restart loops.
+
+Probe design should reflect architecture.
+
+A process can enter degraded operation.
+
+The process remains alive.
+
+Some capabilities remain available.
+
+One or more optional or recoverable capabilities are unavailable.
+
+Degraded state should be explicit.
+
+Do not report full readiness when required functionality is unavailable.
+
+Do not terminate the entire process for every optional component failure unless policy requires it.
+
+Fault containment should match component criticality.
+
+Process supervision observes lifecycle.
+
+Supervision can start processes.
+
+Supervision can restart processes.
+
+Supervision can stop processes.
+
+Supervision can collect exit status.
+
+Supervision can enforce limits.
+
+Supervision should not fabricate application state.
+
+If a process remains running, supervision can report running.
+
+It should not automatically report the application healthy.
+
+If the process exits, supervision can report termination.
+
+It should not invent the cause without evidence.
+
+Exit status, signal information, logs, and operating-system events provide evidence.
+
+Process monitoring should record identity carefully.
+
+Because PIDs can be reused, a monitor should use additional identity where necessary.
+
+Process start time can distinguish reused PIDs.
+
+Operating-system process handles can provide stronger identity while valid.
+
+Executable identity can provide context.
+
+Application instance identifiers can provide logical identity.
+
+Use the mechanism appropriate to the claim.
+
+Killing by stale PID can terminate the wrong process if PID reuse occurs.
+
+Verify identity before destructive process control when the risk exists.
+
+Process control is an authority boundary.
+
+Ability to observe a process does not imply authority to terminate it.
+
+Ability to send a message does not imply authority to change its state.
+
+Operating-system permissions should restrict process control.
+
+Application policy can impose additional restrictions.
+
+Do not terminate processes merely because they appear unusual.
+
+Establish policy and evidence.
+
+Process names are not reliable unique identity.
+
+Multiple processes can share a name.
+
+Process names can sometimes be changed.
+
+Different executables can have similar names.
+
+Use stronger identifiers when correctness matters.
+
+Executable path can provide evidence.
+
+Executable hash can provide exact artifact identity.
+
+Signature validation can provide selected authenticity evidence.
+
+A path alone does not prove current bytes if the file can change after process start.
+
+Running-process image identity and current on-disk file identity can differ.
+
+A program can be replaced on disk while an existing process continues executing previously loaded code.
+
+Do not assume a running process automatically uses the current file contents.
+
+Restart can be required to load a new executable.
+
+Hot-loading mechanisms are separate.
+
+A process restart destroys volatile process state unless that state exists elsewhere.
+
+Memory state is lost.
+
+Open connections are normally lost unless explicitly transferred or inherited through supported mechanisms.
+
+Persistent state remains according to storage guarantees.
+
+A restart is not equivalent to resetting persistent state.
+
+A restart is not equivalent to reinstalling software.
+
+A restart is not equivalent to rebooting the operating system.
+
+Use precise terminology.
+
+Restart means stop and start the relevant process according to process-management semantics.
+
+Reload means update selected runtime state without necessarily terminating the process.
+
+A configuration reload can fail.
+
+A successful reload should be verified.
+
+Do not report reload success merely because a signal or command was sent.
+
+Request and outcome are different.
+
+A process can replace workers without replacing its supervisor.
+
+A server can perform graceful worker rotation.
+
+Old workers can finish existing requests.
+
+New workers can accept new requests.
+
+This can reduce downtime.
+
+The architecture must coordinate shared resources.
+
+Multiple generations of workers can temporarily coexist.
+
+Version identity should remain observable.
+
+A process can execute with resource limits.
+
+Limits can restrict memory.
+
+Limits can restrict CPU.
+
+Limits can restrict open files.
+
+Limits can restrict process count.
+
+Limits can restrict other operating-system resources.
+
+Exact mechanisms differ.
+
+A process hitting a limit can fail even when the machine has spare resources.
+
+Check process-specific limits.
+
+A file-descriptor or handle limit can prevent opening files or sockets.
+
+This can resemble network or storage failure.
+
+Observe resource exhaustion.
+
+A process can leak descriptors.
+
+A descriptor leak is analogous to a memory leak in resource ownership.
+
+Files remain open.
+
+Sockets remain open.
+
+Pipes remain open.
+
+Eventually new opens can fail.
+
+Close resources when ownership ends.
+
+RAII or structured cleanup can help where supported.
+
+Process termination causes the operating system to reclaim many process-owned resources.
+
+Process termination should not be used as ordinary resource cleanup when the process is intended to continue.
+
+Leaks remain defects even if eventual process exit reclaims them.
+
+External resources can survive process termination.
+
+Files remain.
+
+Database changes remain.
+
+Remote operations can remain.
+
+Child processes can remain depending on lifecycle rules.
+
+Cloud resources can remain.
+
+Locks external to the process can remain according to their mechanism.
+
+Do not assume process death cleans every side effect.
+
+OS-managed locks tied directly to process lifetime can be released automatically.
+
+Lock files can remain.
+
+Database leases can remain until timeout.
+
+Remote locks can remain according to protocol.
+
+Understand ownership.
+
+A process can crash while holding a mutex shared only among its threads.
+
+The entire process terminating removes that process's memory.
+
+A shared-memory or inter-process lock can have different crash semantics.
+
+Robust synchronization mechanisms can detect owner death where supported.
+
+Recovery should account for potentially inconsistent shared state.
+
+Do not assume releasing a lock after owner death makes protected state valid.
+
+The owner can have died halfway through modification.
+
+Validate state.
+
+Process communication can fail partially.
+
+A message can be written partially to a byte stream.
+
+A peer can disconnect mid-message.
+
+A child can terminate before replying.
+
+A parent can terminate before receiving a reply.
+
+Protocols should define framing.
+
+Protocols should define timeouts.
+
+Protocols should define retries.
+
+Protocols should define idempotency where required.
+
+Process locality does not eliminate distributed-style partial failure entirely.
+
+Separate processes can fail independently.
+
+One process can be alive while another is dead.
+
+One process can be blocked while another continues.
+
+IPC can be unavailable.
+
+Shared dependencies can fail.
+
+Reason about each boundary.
+
+Timeouts bound waiting.
+
+A timeout means the required event was not observed within the defined interval.
+
+A timeout does not prove the other process is dead.
+
+A child can still be running.
+
+A request can still complete later.
+
+A response can be delayed.
+
+Treat timeout according to protocol semantics.
+
+If timeout triggers termination, termination is a separate action.
+
+Verify process identity before terminating.
+
+Cancellation is a request to stop work according to an API or protocol.
+
+Cancellation does not necessarily mean work stopped immediately.
+
+Cancellation can race with completion.
+
+An operation can complete at the same time cancellation is requested.
+
+Final state should be determined from authoritative completion semantics.
+
+Do not report canceled solely because cancellation was requested.
+
+A subprocess result can include exit status.
+
+A subprocess result can include stdout.
+
+A subprocess result can include stderr.
+
+A subprocess result can include termination reason.
+
+A subprocess result can include duration.
+
+A subprocess result can include timeout state.
+
+Keep these dimensions separate.
+
+A command producing useful stdout can still exit with failure.
+
+A command producing no stdout can still succeed.
+
+stderr output does not automatically mean failure.
+
+Some programs write informational output to stderr.
+
+Exit semantics belong to the program interface.
+
+When automating another program, rely on its documented machine interface.
+
+Do not parse decorative human output when a structured interface exists.
+
+Human output can change.
+
+Structured output is easier to validate.
+
+A subprocess should not be granted interactive input accidentally if unattended operation is required.
+
+A program waiting for input can appear hung.
+
+Close or redirect stdin appropriately.
+
+Use noninteractive options where supported.
+
+Detect prompts when automation requires it.
+
+Do not send guessed responses to unknown prompts.
+
+Process execution can depend on locale.
+
+Locale can affect text output.
+
+Locale can affect number formatting.
+
+Locale can affect sorting.
+
+Locale can affect error messages.
+
+Automation parsing human-readable output can break across locales.
+
+Structured machine output reduces this risk.
+
+Set controlled locale where appropriate.
+
+Process execution can depend on current user.
+
+Home directories can differ.
+
+Configuration search paths can differ.
+
+Permissions can differ.
+
+Environment can differ.
+
+Interactive shell initialization can differ.
+
+Do not debug service behavior solely by running the same executable as a different user.
+
+Reproduce the actual execution context.
+
+A service account should have required directory permissions.
+
+It should not receive broad ownership of unrelated application code merely because one writable data directory is needed.
+
+Fix permissions at the narrowest required boundary.
+
+Process execution can depend on architecture.
+
+An executable built for one CPU architecture may not run on another.
+
+An executable built for one operating-system ABI may not run on another.
+
+Compatibility layers can exist.
+
+Do not assume compatibility without evidence.
+
+Process architecture can be observable.
+
+Executable format can be inspected.
+
+Loader errors can provide evidence.
+
+A process can run under virtualization or containerization.
+
+Container boundaries alter process namespace and resource views according to the container system.
+
+A PID inside a container can differ from its host PID.
+
+Process lists can differ between namespaces.
+
+A process seeing PID 1 inside a container is not necessarily the host's system process.
+
+Namespace scope matters.
+
+Containers commonly use processes as their execution units.
+
+A container is not the same as a process.
+
+A container can contain multiple processes.
+
+A container can impose filesystem, network, user, and process namespace boundaries.
+
+Container process semantics remain subject to the host kernel according to the container model.
+
+Do not confuse container isolation with virtual-machine isolation.
+
+A process namespace controls process visibility and identity according to supported operating systems.
+
+A user namespace can alter perceived user identifiers.
+
+A network namespace can alter network interfaces.
+
+A mount namespace can alter filesystem view.
+
+These mechanisms can make the same process appear differently from different observation points.
+
+Always identify observation scope.
+
+Process status from inside a container and from the host can both be correct within their scopes.
+
+Process management should preserve platform independence where required.
+
+Common logic can define:
+
+Start process.
+
+Stop process.
+
+Wait for process.
+
+Check process completion.
+
+Capture output.
+
+Send controlled termination request.
+
+Force termination when authorized.
+
+Query exit result.
+
+Platform implementations can use different operating-system APIs.
+
+The semantic result should remain consistent.
+
+Do not expose Unix signals as the only abstract process-control model if Windows must also be supported.
+
+Do not force Windows process handles into common application semantics.
+
+Define common intent.
+
+Bind platform-specific implementation beneath it.
+
+Platform abstraction should not pretend unsupported capabilities exist.
+
+If one platform cannot provide a required lifecycle guarantee, report the limitation.
+
+Do not silently weaken required behavior.
+
+Process control should be deterministic where possible.
+
+Given the same explicit executable, arguments, environment, working directory, and valid system state, process-launch configuration should be constructed consistently.
+
+Operating-system scheduling remains outside complete deterministic control.
+
+External program behavior can remain nondeterministic.
+
+Do not promise deterministic completion time.
+
+Determinism applies to controlled semantics, not uncontrollable timing.
+
+Process managers should avoid race conditions.
+
+A process can terminate immediately after launch.
+
+A process can terminate between status checks.
+
+A process can terminate before a monitor registers it.
+
+A PID can be reused after termination.
+
+Use operating-system handles or atomic lifecycle mechanisms where available.
+
+Do not use repeated process-list polling as the sole correctness mechanism when stronger APIs exist.
+
+Polling can be useful for observation.
+
+Polling intervals introduce detection delay.
+
+Polling can miss short-lived processes.
+
+Event-based process notifications can provide stronger lifecycle evidence where supported.
+
+A short-lived process can start and terminate between two polls.
+
+Absence from both snapshots does not prove it never existed.
+
+Audit or event data can provide historical evidence.
+
+Process creation should be observable where operationally meaningful.
+
+Record executable identity.
+
+Record logical operation.
+
+Record start result.
+
+Record process identifier or handle-derived identifier where appropriate.
+
+Record completion.
+
+Record exit status.
+
+Record timeout.
+
+Record forced termination.
+
+Do not log sensitive command arguments.
+
+Command arguments can contain passwords.
+
+Command arguments can contain tokens.
+
+Command arguments can be visible through process-inspection facilities.
+
+Avoid placing secrets in command-line arguments where safer mechanisms exist.
+
+Environment variables can also expose secrets.
+
+Standard input can sometimes provide sensitive data without command-line exposure.
+
+Dedicated credential mechanisms can be preferable.
+
+Choose according to platform and threat model.
+
+Process lists can expose command lines.
+
+Operational tools should account for this.
+
+A secret omitted from application logs can still leak through process metadata.
+
+Security must consider the operating-system interface.
+
+Process execution can be an attack boundary.
+
+Never execute untrusted input as code merely because it arrived through an authorized request.
+
+Validate requested operations.
+
+Use allowlists for executable operations where appropriate.
+
+Separate data from commands.
+
+Do not permit arbitrary executable paths unless explicitly required and authorized.
+
+Do not permit arbitrary arguments when only bounded operations are intended.
+
+A command runner is a powerful interface.
+
+Keep its authority narrow.
+
+Process creation can be sandboxed according to platform mechanisms.
+
+A sandbox restricts selected capabilities.
+
+A sandbox can restrict filesystem access.
+
+A sandbox can restrict network access.
+
+A sandbox can restrict system calls.
+
+A sandbox can restrict resource use.
+
+A sandbox can restrict privileges.
+
+Sandbox strength depends on implementation.
+
+A sandbox does not automatically make arbitrary code safe.
+
+Use defense in depth.
+
+Process isolation can contain selected plugin failures.
+
+Out-of-process modules cannot directly corrupt host memory through ordinary pointer errors.
+
+They can still consume CPU.
+
+They can still consume memory.
+
+They can still flood IPC.
+
+They can still send malformed messages.
+
+They can still misuse granted filesystem or network authority.
+
+Isolation should be combined with limits and validation.
+
+In-process modules provide lower communication overhead.
+
+Out-of-process modules provide stronger fault boundaries.
+
+Choose according to mission requirements.
+
+A process supervisor can enforce restart limits.
+
+A process supervisor can enforce memory limits.
+
+A process supervisor can enforce CPU limits.
+
+A process supervisor can enforce execution time.
+
+A process supervisor can enforce child-process policy.
+
+These controls can reduce blast radius.
+
+Limits should be high enough for legitimate operation.
+
+A limit-triggered termination should be reported accurately.
+
+"Process exceeded memory limit" is stronger than "process crashed."
+
+Evidence matters.
+
+An operating system can terminate a process because of memory pressure.
+
+Linux can invoke out-of-memory handling under selected conditions.
+
+Other systems have different mechanisms.
+
+Do not infer ordinary application crash if operating-system evidence shows resource enforcement.
+
+Check system logs where relevant.
+
+Process priority affects scheduling preference according to platform rules.
+
+Higher priority does not create more CPU capacity.
+
+Excessive priority can starve other work.
+
+Real-time scheduling has stronger implications.
+
+Do not use real-time priority merely to make a program "faster."
+
+Scheduling policy should reflect timing requirements.
+
+CPU affinity can restrict execution to selected processors.
+
+Affinity can support testing or specialized performance requirements.
+
+Affinity can reduce scheduling flexibility.
+
+Do not use affinity without a reason.
+
+Process affinity is not process identity.
+
+A process can migrate between processors unless restricted.
+
+Processor migration should not affect correct application semantics.
+
+Process resource usage should be measured.
+
+CPU time measures processor time consumed according to operating-system accounting.
+
+Wall-clock duration measures elapsed time.
+
+They are different.
+
+A process can use little CPU while waiting on I/O.
+
+A process can use high CPU while making useful progress.
+
+A process can use high CPU because of an infinite loop.
+
+CPU utilization alone does not establish health.
+
+Memory usage alone does not establish health.
+
+Thread count alone does not establish health.
+
+Open-handle count alone does not establish health.
+
+Interpret metrics together.
+
+A process stuck at zero CPU can be idle.
+
+A process stuck at zero CPU can be blocked.
+
+A process stuck at zero CPU can be deadlocked.
+
+Inspect workload and state.
+
+A process at one hundred percent of one CPU can be expected computation.
+
+It can also be runaway execution.
+
+Compare behavior to expected work.
+
+Progress is more meaningful than utilization alone.
+
+A process can expose health endpoints.
+
+A process can expose metrics.
+
+A process can emit logs.
+
+A process can emit heartbeats.
+
+A process can expose status through IPC.
+
+These are observability mechanisms.
+
+They should report actual state.
+
+A process should not claim READY before required initialization completes.
+
+A process should not claim STOPPED before termination completes.
+
+A process should not claim RECOVERED before verification succeeds.
+
+Lifecycle state should be explicit.
+
+A useful process lifecycle can include:
+
+CREATED.
+
+STARTING.
+
+INITIALIZING.
+
+READY.
+
+RUNNING.
+
+DEGRADED.
+
+STOPPING.
+
+STOPPED.
+
+FAILED.
+
+Exact states depend on architecture.
+
+Do not create states that have no operational meaning.
+
+State transitions should be defined.
+
+A process cannot meaningfully transition from STOPPED to RUNNING without a new process instance unless the abstraction represents a logical service rather than one OS process.
+
+Distinguish logical service state from individual process-instance state.
+
+A logical service can survive process replacement.
+
+An individual process cannot survive its own termination.
+
+Instance identifiers help distinguish generations.
+
+A service restart creates a new process instance.
+
+The logical service identity can remain the same.
+
+Process-specific telemetry should identify the instance.
+
+Otherwise logs from old and new generations can be confused.
+
+Start time plus instance identifier can help.
+
+A process can be upgraded by stopping the old executable and starting a new one.
+
+A process can be upgraded through rolling replacement.
+
+A process can support hot code loading.
+
+These are different mechanisms.
+
+Do not call every code change a restart.
+
+Upgrade state should preserve version identity.
+
+If old and new processes coexist, identify which version handled each operation where relevant.
+
+Rollback returns to a previous software version according to deployment policy.
+
+Rollback does not automatically restore previous persistent data.
+
+A new version can migrate data irreversibly.
+
+Process replacement and storage migration are separate.
+
+Plan them together when compatibility matters.
+
+A process can fail because persistent state is incompatible.
+
+That is not necessarily an executable-loading failure.
+
+Observe startup stage.
+
+A process can fail because configuration is invalid.
+
+That is not necessarily a binary defect.
+
+A process can fail because required network dependency is unavailable.
+
+That is not necessarily local process corruption.
+
+Failure classification matters.
+
+When a process fails to start, establish whether process creation succeeded.
+
+Establish whether executable loading succeeded.
+
+Establish whether runtime initialization succeeded.
+
+Establish whether application initialization began.
+
+Establish whether configuration loaded.
+
+Establish whether required state loaded.
+
+Establish whether dependencies qualified.
+
+Establish whether readiness was reached.
+
+Do not repeatedly restart without learning which stage fails.
+
+When a process stops unexpectedly, establish exit status.
+
+Establish termination reason.
+
+Establish recent logs.
+
+Establish operating-system events.
+
+Establish resource usage.
+
+Establish whether an external actor requested termination.
+
+Establish whether a supervisor enforced a limit.
+
+Establish whether a fault occurred.
+
+Do not invent cause from the final symptom.
+
+When a process appears hung, determine whether it is receiving CPU.
+
+Determine whether it is blocked on I/O.
+
+Determine whether it is waiting on synchronization.
+
+Determine whether it is waiting on another process.
+
+Determine whether it is waiting on a network operation.
+
+Determine whether it is waiting on user input.
+
+Determine whether it is making progress.
+
+Determine whether its output pipe is blocked.
+
+Determine whether a timeout exists.
+
+A process waiting legitimately is not hung.
+
+A process making no required progress beyond expected bounds can be stalled.
+
+Define expected behavior.
+
+When terminating a process, identify the correct process.
+
+Confirm authority.
+
+Request graceful termination where appropriate.
+
+Wait according to policy.
+
+Verify termination.
+
+Escalate to forced termination only when authorized and necessary.
+
+Record the result.
+
+Do not report termination merely because a signal or request was sent.
+
+When starting a process, identify the exact executable.
+
+Provide explicit arguments.
+
+Provide controlled environment.
+
+Provide controlled working directory.
+
+Configure resource inheritance.
+
+Configure standard streams.
+
+Apply required privileges.
+
+Start the process.
+
+Verify creation.
+
+Verify initialization when required.
+
+Verify readiness when required.
+
+Only then report the relevant success state.
+
+When supervising a process, distinguish:
+
+Not started.
+
+Starting.
+
+Running.
+
+Ready.
+
+Degraded.
+
+Stopping.
+
+Exited successfully.
+
+Exited with failure.
+
+Terminated externally.
+
+Timed out.
+
+Unresponsive.
+
+Unknown.
+
+These states should not be collapsed into running or stopped when the distinction matters.
+
+Unknown is a valid state when evidence is insufficient.
+
+Do not confuse a program with a process.
+
+Do not confuse a process with a thread.
+
+Do not confuse a process with a service.
+
+Do not confuse a process with a container.
+
+Do not confuse PID with permanent identity.
+
+Do not confuse process name with unique identity.
+
+Do not confuse process existence with health.
+
+Do not confuse process existence with readiness.
+
+Do not confuse process existence with progress.
+
+Do not confuse process creation with successful application initialization.
+
+Do not confuse socket binding with full readiness.
+
+Do not confuse running with useful operation.
+
+Do not confuse high CPU with failure.
+
+Do not confuse low CPU with health.
+
+Do not confuse timeout with process death.
+
+Do not confuse cancellation request with completed cancellation.
+
+Do not confuse termination request with termination.
+
+Do not confuse restart with recovery.
+
+Do not confuse restart with persistent-state reset.
+
+Do not confuse reload with restart.
+
+Do not confuse stderr output with failure.
+
+Do not confuse stdout output with success.
+
+Do not confuse exit status with complete causal explanation.
+
+Do not confuse child process with permanently subordinate process.
+
+Do not confuse zombie with running process.
+
+Do not confuse zombie with orphan.
+
+Do not confuse process isolation with authorization.
+
+Do not confuse local IPC with trusted IPC.
+
+Do not confuse environment variables with secure secret storage.
+
+Do not confuse command arguments with safe data merely because they are strings.
+
+Do not confuse shell execution with direct executable invocation.
+
+Do not confuse executable path with running artifact identity.
+
+Do not confuse process supervision with application health monitoring.
+
+Do not confuse capability to terminate with authority to terminate.
+
+Do not confuse observation with control.
+
+A reliable process design has explicit lifecycle.
+
+A reliable process design has explicit ownership.
+
+A reliable process design has bounded resource use.
+
+A reliable process design knows how children are collected.
+
+A reliable process design controls resource inheritance.
+
+A reliable process design handles process-creation failure.
+
+A reliable process design handles abrupt termination.
+
+A reliable process design distinguishes readiness from existence.
+
+A reliable process design uses explicit IPC.
+
+A reliable process design validates IPC input.
+
+A reliable process design handles timeouts without inventing conclusions.
+
+A reliable process design preserves exit evidence.
+
+A reliable process design does not depend on guessed timing.
+
+A reliable process design does not depend on shutdown handlers for persistent correctness.
+
+A reliable process design verifies recovery after restart.
+
+A process is an operating-system execution boundary.
+
+It provides identity for a running instance.
+
+It provides resource ownership.
+
+It provides memory isolation from other processes according to the operating-system model.
+
+It provides a lifecycle that can be observed and controlled.
+
+But a process being present proves very little about what the application inside it is actually accomplishing.
+
+To determine that, observe initialization, readiness, progress, operation results, dependencies, and state.
+
+If those signals do not establish useful operation, the correct conclusion is not "the process is healthy."
+
+The correct conclusion is that the process exists, and further evidence is required.

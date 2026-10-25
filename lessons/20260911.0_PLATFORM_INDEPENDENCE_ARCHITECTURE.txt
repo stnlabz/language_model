@@ -1,0 +1,1133 @@
+20260911.0 - Platform-Independent Autonomous Agent Core Architecture
+
+Root Document ID: 20260911.0
+Revision ID: NONE
+Previous Revision: NONE
+sha256: c93124de7fc84e1aee17fe0fa8dcfd98a55b0ce107718ba78413c086da7a8321
+
+Status: APPROVED
+Research Disposition: SUPPORTED FOR ENGINEERING VALIDATION
+Scope: Autonomous Agents / Systems Architecture / Platform Abstraction / Cross-Platform Engineering
+Approval Date: 20260911
+
+---
+
+1. Purpose
+
+This research evaluates platform-independent Agent Core architecture for STN-LABZ autonomous agents.
+
+The proposed architecture separates:
+
+- Agent Core semantics;
+- module capability;
+- mission assignment;
+- operating-system implementation;
+- processor-architecture implementation; and
+- hardware implementation.
+
+Platform independence does not mean independence from an execution platform.
+
+An operational autonomous agent necessarily executes through an operating system, processor architecture, hardware environment, or another defined execution environment.
+
+The engineering question is whether Agent Core semantics can remain independent of operating-system, processor-architecture, and hardware-specific mechanisms through defined platform boundaries while preserving deterministic behavior across qualified execution targets.
+
+This research concludes that the architecture is sufficiently supported to proceed to engineering validation.
+
+Promotion to STN-LABZ Doctrine remains dependent upon implementation and qualification evidence.
+
+---
+
+2. Research Question
+
+Primary research question:
+
+> Should STN-LABZ autonomous-agent Core implementations use a platform-independent architecture in which operating-system, processor-architecture, and hardware-specific mechanisms are isolated behind defined platform interfaces?
+
+Supporting research questions include:
+
+1. Which capabilities can be represented through a common platform interface without changing Agent Core semantics?
+2. Which capabilities require operating-system-specific implementations?
+3. Which capabilities require processor-specific implementations?
+4. Which capabilities require hardware-specific implementations?
+5. Can the STN-LABZ Module ABI preserve common lifecycle semantics across Windows and Linux?
+6. What qualification evidence is required for each supported execution target?
+7. What qualification boundary applies when only a platform implementation changes?
+8. What additional requirements apply to spacecraft-target Linux and ARM64 implementations?
+9. Which platform abstractions are genuinely required rather than introduced merely for portability?
+10. Can the resulting architecture remain consistent with established STN-LABZ KISS engineering principles?
+
+---
+
+3. Research Finding
+
+SUPPORTED FOR ENGINEERING VALIDATION
+
+Research establishes the proposed architecture as a technically credible engineering architecture candidate.
+
+External engineering evidence demonstrates established use of operating-system and hardware abstraction in portable embedded and flight-software architectures.
+
+NASA core Flight System provides directly relevant engineering precedent through an architecture separating common flight-software functionality from operating-system and platform-specific mechanisms.
+
+STN-LABZ engineering evidence further demonstrates common module lifecycle semantics through STN-LABZ Module ABI 1.4 on the existing Windows x86_64 reference implementation.
+
+The next evidentiary requirement is implementation across independently implemented execution targets.
+
+---
+
+4. Architectural Model
+
+The architecture under validation is:
+
+    General Orders
+          |
+          v
+      Agent Core
+          |
+          +-- Modules
+          |
+          +-- Mission
+          |
+          v
+    Platform Interface
+          |
+          +------------------+
+          |                  |
+          v                  v
+       Windows             Linux
+          |                  |
+          v                  v
+       x86_64          x86_64 / ARM64
+                             |
+                             v
+                          Hardware
+
+The operating system provides mechanisms.
+
+The processor executes those mechanisms.
+
+The hardware provides physical capability.
+
+Agent Core retains the common semantics governing the agent.
+
+---
+
+5. Platform Independence
+
+For STN-LABZ autonomous-agent architecture:
+
+> Platform independence means that Agent Core semantics remain independent of operating-system, processor-architecture, and hardware-specific mechanisms through defined platform boundaries.
+
+Platform-independent Core architecture therefore separates common agent semantics from execution-target implementation mechanisms.
+
+The complete deployed system remains dependent upon its defined execution target.
+
+---
+
+6. Terminology
+
+6.1 Platform-Independent Core
+
+Agent Core source and semantics do not directly depend upon a specific operating-system, processor, or hardware implementation except through defined platform interfaces.
+
+6.2 Platform Implementation
+
+Code providing operating-system-specific mechanisms required by Core or modules.
+
+Representative mechanisms include:
+
+- dynamic-library loading;
+- filesystem operations;
+- filesystem monitoring;
+- threads;
+- synchronization;
+- clocks;
+- networking;
+- persistent-storage synchronization;
+- serial I/O;
+- process integration.
+
+6.3 Processor Target
+
+The processor architecture against which software is built and executed.
+
+Examples include:
+
+- x86_64;
+- ARM64.
+
+6.4 Hardware Target
+
+The physical processing and device environment on which the system operates.
+
+6.5 Execution Target
+
+A specifically defined combination of:
+
+- operating system;
+- processor architecture;
+- applicable platform implementation;
+- toolchain; and
+- applicable hardware environment.
+
+Representative execution targets include:
+
+    Windows / x86_64
+    Linux / x86_64
+    Linux / ARM64
+
+Each execution target establishes its own implementation and qualification evidence.
+
+---
+
+7. External Engineering Evidence
+
+7.1 Flight-Software Architecture
+
+NASA core Flight System provides relevant external evidence for layered and portable flight-software architecture.
+
+The architecture separates common flight-software functionality from operating-system and platform-specific mechanisms.
+
+Conceptually:
+
+    Flight Applications
+            |
+            v
+    Core Flight Executive
+            |
+            v
+    Operating System Abstraction
+            |
+            v
+    Platform Support
+            |
+            v
+    Operating System / Hardware
+
+This demonstrates established engineering precedent for separating common software semantics from operating-system and hardware mechanisms through defined interfaces.
+
+7.2 Operating-System Abstraction
+
+External engineering precedent demonstrates that operating-system services may be represented through common semantic interfaces while native implementation remains platform-specific.
+
+The abstraction boundary provides a common contract through which required behavior can be requested.
+
+7.3 Hardware Abstraction
+
+Research supports distinguishing operating-system abstraction from hardware abstraction.
+
+Hardware-specific capability may require a separate architectural boundary rather than incorporation into a generic operating-system abstraction.
+
+This distinction is relevant to future spacecraft-target implementation.
+
+7.4 Portability Limits
+
+Execution environments may differ in:
+
+- process models;
+- memory access;
+- scheduling;
+- I/O;
+- device access;
+- synchronization;
+- persistence behavior;
+- timing; and
+- resource isolation.
+
+Each supported execution target therefore requires applicable implementation and qualification evidence.
+
+---
+
+8. Common Semantics and Platform Mechanisms
+
+Windows and Linux provide comparable classes of capability through different native mechanisms.
+
+The intended relationship is:
+
+    Agent Core Requirement
+            |
+            v
+    Platform Interface
+         /       \
+        v         v
+    Windows     Linux
+    Mechanism   Mechanism
+
+The common interface defines the behavior Core requires.
+
+The platform implementation determines how the target operating system provides that behavior.
+
+---
+
+9. Dynamic Module Loading
+
+Dynamic module loading provides a representative platform boundary.
+
+Windows and Linux use different native dynamic-loading mechanisms.
+
+The STN-LABZ Module ABI preserves common lifecycle semantics above those mechanisms.
+
+    Agent Core
+         |
+         v
+    STN-LABZ Module ABI
+         |
+         v
+    Platform Module Interface
+       /                 \
+      v                   v
+    Windows              Linux
+    DLL Loader           Shared-Object Loader
+
+Lifecycle semantics remain common.
+
+Loader mechanics remain platform-specific.
+
+---
+
+10. Filesystem Monitoring
+
+Windows and Linux provide different filesystem-event mechanisms.
+
+Where Agent Core requires a common semantic event, the platform interface will expose the required semantic information.
+
+Conceptually:
+
+    Core Requirement:
+    Deployment Tree Changed
+            |
+            v
+    Platform Notification Interface
+         /              \
+        v                v
+    Windows            Linux
+    Notification       Filesystem Events
+
+The interface will remain limited to the semantics required by Core.
+
+---
+
+11. Time
+
+Time requires explicit semantic separation.
+
+Applicable platform interfaces may distinguish:
+
+- monotonic elapsed time;
+- system or civil time; and
+- mission time where applicable.
+
+Required time semantics will be established before platform implementation.
+
+---
+
+12. Threading and Synchronization
+
+A common STN-LABZ platform interface will expose the threading and synchronization semantics required by Agent Core and applicable modules.
+
+The platform boundary will remain limited to required capability.
+
+Native implementation remains specific to the execution target.
+
+---
+
+13. Persistent Storage
+
+Persistent-storage behavior will be defined according to the semantic condition required when an operation reports success.
+
+Each supported execution target will implement and validate that required behavior using mechanisms appropriate to the target environment.
+
+---
+
+14. Core Boundary
+
+Agent Core contains behavior that defines and governs the agent.
+
+Representative Core responsibilities include:
+
+- General Orders implementation;
+- agent identity;
+- authority evaluation;
+- applicable policy enforcement;
+- mission state;
+- mission lifecycle;
+- mission transition control;
+- module governance;
+- STN-LABZ Module ABI host-side integration;
+- module lifecycle authority;
+- module activation authorization;
+- module-use coordination;
+- event handling;
+- audit representation;
+- deterministic fault routing;
+- escalation routing;
+- status aggregation;
+- command validation;
+- Core initialization;
+- Core shutdown; and
+- platform binding.
+
+Operating-system mechanisms remain behind defined platform boundaries where required by the architecture.
+> Platform binding within Agent Core will be limited to selection, attachment, and validation of the applicable platform interface. Target-specific implementation behavior will remain outside common Core semantics
+
+---
+
+15. Platform Boundary
+
+Representative platform responsibilities include:
+
+- dynamic module loading and unloading;
+- filesystem access;
+- filesystem monitoring;
+- threading;
+- synchronization;
+- monotonic time;
+- system time;
+- networking;
+- serial-device access;
+- persistent-storage synchronization;
+- process integration;
+- device interfaces;
+- operating-system event mechanisms;
+- watchdog integration; and
+- platform health information.
+
+The platform implementation supplies the mechanisms required by the common architecture.
+
+---
+
+16. Hardware Boundary
+
+Operating-system abstraction and hardware abstraction will remain separately identifiable where the distinction produces a smaller and clearer architecture.
+
+The candidate relationship is:
+
+    Agent Core
+         |
+         v
+    Module Capability
+         |
+         v
+    Platform Interface
+         |
+         v
+    Hardware / Device Interface
+         |
+         v
+    Physical Hardware
+
+Not every hardware interface belongs in the generic platform abstraction.
+
+The final hardware boundary will be established through Ezra and subsequent spacecraft-target engineering evidence.
+
+---
+
+17. STN-LABZ Module ABI Relationship
+
+The established STN-LABZ Module ABI defines common module lifecycle semantics.
+
+Platform implementations supply the mechanisms used for applicable dynamic-library operations.
+
+    Agent Core
+         |
+         v
+    STN-LABZ Module ABI
+         |
+         v
+    Platform Module Interface
+       /                 \
+      v                   v
+    Windows              Linux
+    DLL                  Shared Object
+
+The common lifecycle remains above the operating-system mechanism.
+
+---
+
+18. ABI Portability
+
+A common source-level ABI contract does not establish binary compatibility across operating systems or processor architectures.
+
+Windows x86_64, Linux x86_64, and Linux ARM64 may differ in:
+
+- object format;
+- calling convention;
+- symbol visibility;
+- alignment;
+- data representation;
+- compiler ABI;
+- dynamic-loader behavior; and
+- dependency resolution.
+
+Therefore:
+
+> STN-LABZ Module ABI semantic compatibility does not imply cross-target binary interchangeability.
+
+Each execution target uses module artifacts built and validated for that target unless later engineering evidence establishes another supported mechanism.
+
+---
+
+19. Processor Architecture
+
+Processor architecture remains independently identifiable from operating-system identity.
+
+Linux x86_64 and Linux ARM64 are separate execution targets.
+
+Processor differences may affect:
+
+- alignment;
+- atomic operations;
+- memory ordering;
+- compiler output;
+- processor intrinsics;
+- vector operations;
+- device memory;
+- DMA;
+- timer behavior;
+- watchdog behavior;
+- kernel configuration; and
+- hardware drivers.
+
+Each processor target requires applicable validation.
+
+---
+
+20. Platform Identification
+
+The proposed startup relationship is:
+
+    Core Startup
+         |
+         v
+    Establish Execution Target
+         |
+         v
+    Match Supported Platform
+         |
+         v
+    Bind Platform Implementation
+         |
+         v
+    Validate Required Capabilities
+         |
+         v
+    Continue Core Initialization
+
+Build-time target selection will establish facts available deterministically from the build.
+
+Runtime validation will establish required characteristics of the actual execution environment.
+
+---
+
+21. Platform Capability Validation
+
+Execution targets will provide the capabilities required by the applicable agent.
+
+Representative capabilities include:
+
+    Required Platform Capabilities
+          |
+          +-- module loading
+          +-- monotonic clock
+          +-- synchronization
+          +-- persistent storage
+          +-- required device access
+          +-- required networking
+          |
+          v
+    Capability Validation
+          |
+       PASS / FAIL
+
+Required semantics will be established before implementation of the applicable capability-validation mechanism.
+
+---
+
+22. Conditional Compilation
+
+Operating-system and processor-specific conditional compilation will remain within platform or target implementation code wherever technically practical.
+
+Limited compile-time selection at the platform-binding boundary is compatible with platform-independent Core architecture.
+
+Platform-specific branching appearing within common Core behavior will trigger evaluation of the platform boundary.
+
+---
+
+23. Qualification Boundary
+
+Existing STN-LABZ Core and module qualification requirements remain applicable.
+
+Execution targets require independent qualification evidence.
+
+    Windows x86_64 Qualification
+        !=
+    Linux x86_64 Qualification
+        !=
+    Linux ARM64 Qualification
+
+Qualification of one execution target does not establish qualification of another.
+
+---
+
+24. Qualification Model Under Validation
+
+Engineering validation will evaluate the relationship between common-code evidence and execution-target evidence.
+
+Conceptually:
+
+    Common Core Evidence
+            |
+            +-- Windows x86_64 Integration Evidence
+            |
+            +-- Linux x86_64 Integration Evidence
+            |
+            +-- Linux ARM64 Integration Evidence
+
+Engineering validation will determine the appropriate requalification boundary following changes isolated to a platform implementation.
+
+Potential models include:
+
+1. complete integrated requalification;
+2. affected-platform qualification plus defined integration regression; or
+3. another evidence-based boundary established through implementation and qualification experience.
+
+The final model will be derived from engineering evidence.
+
+---
+
+25. Ezra Engineering Validation
+
+Ezra is the initial engineering validation case for the architecture.
+
+The validation progression is:
+
+    Ezra Common Core
+          |
+          v
+    Windows x86_64
+          |
+          | Establish initial platform contract
+          | Establish common Core behavior
+          | Exercise STN-LABZ ABI integration
+          | Develop qualification evidence
+          v
+    Linux x86_64
+          |
+          | Validate operating-system independence
+          | Identify leaked Windows assumptions
+          | Validate common Core semantics
+          v
+    Linux ARM64
+          |
+          | Validate processor independence
+          | Identify architecture assumptions
+          | Establish ARM64 execution-target evidence
+          v
+    Spacecraft Target
+          |
+          | Hardware integration
+          | Spacecraft-specific validation
+          | Independent qualification
+          v
+    Operational Consideration
+
+Windows x86_64 is the initial development and validation environment.
+
+Linux x86_64 is the first cross-platform validation environment.
+
+Linux ARM64 is the planned processor and spacecraft-target development environment.
+
+Spacecraft deployment remains subject to spacecraft-target engineering and qualification.
+
+---
+
+26. Initial Ezra Repository Architecture
+
+The initial engineering structure proposed for validation is:
+
+    ezra/
+    |
+    +-- core/
+    |
+    +-- include/
+    |
+    +-- modules/
+    |
+    +-- missions/
+    |
+    +-- platforms/
+    |    |
+    |    +-- windows/
+    |    |
+    |    +-- linux/
+    |
+    +-- tests/
+    |
+    +-- docs/
+
+This structure provides explicit separation between common Core behavior and platform implementation.
+
+The exact repository structure remains subject to engineering validation.
+
+---
+
+27. Windows x86_64 Validation
+
+Initial execution target:
+
+    Windows / x86_64
+
+Initial architectural objective:
+
+> Demonstrate that Ezra Core semantics remain independent of the Windows implementation through a defined platform boundary suitable for subsequent Linux implementation.
+
+Windows development will establish the initial platform contract and provide the first Ezra implementation evidence.
+
+---
+
+28. Linux x86_64 Validation
+
+Linux x86_64 is the first cross-platform validation target.
+
+Validation will evaluate:
+
+- leaked Windows assumptions;
+- missing platform abstractions;
+- incorrectly generalized Windows semantics;
+- unnecessary abstractions;
+- Core behavior changed to accommodate Linux;
+- module-loader differences;
+- filesystem behavior differences;
+- timing differences;
+- synchronization differences;
+- persistence differences; and
+- build-system assumptions.
+
+The objective is preservation of common Core semantics across the independently implemented Linux platform boundary.
+
+---
+
+29. Linux ARM64 Validation
+
+Linux ARM64 follows successful Linux x86_64 validation.
+
+Validation will evaluate assumptions involving:
+
+- processor architecture;
+- alignment;
+- atomics;
+- memory ordering;
+- compiler ABI;
+- module artifacts;
+- hardware interfaces;
+- timer behavior; and
+- device access.
+
+Linux ARM64 will establish its own execution-target evidence.
+
+---
+
+30. Spacecraft Target
+
+Spacecraft deployment introduces an additional execution-target engineering boundary.
+
+Applicable requirements may include:
+
+- real-time behavior;
+- watchdogs;
+- boot behavior;
+- fault recovery;
+- persistent-storage characteristics;
+- radiation-tolerant hardware;
+- device drivers;
+- power-state behavior;
+- hardware timers;
+- bus interfaces;
+- process isolation;
+- resource limits;
+- deterministic scheduling; and
+- mission-specific availability requirements.
+
+These requirements will be evaluated as part of the applicable spacecraft execution target.
+
+---
+
+31. Architectural Risks
+
+Engineering validation will evaluate the following identified risks:
+
+1. abstraction becoming broader than actual engineering requirements;
+2. different platform semantics being incorrectly treated as equivalent;
+3. platform assumptions leaking into Core;
+4. processor assumptions leaking into Core;
+5. hardware assumptions leaking into Core;
+6. modules bypassing the platform boundary;
+7. conditional compilation spreading throughout common Core;
+8. platform interfaces reproducing native APIs rather than defining required semantics;
+9. binary ABI assumptions being transferred between incompatible execution targets;
+10. qualification evidence being incorrectly inherited between targets;
+11. terrestrial development behavior being assumed to represent spacecraft behavior; and
+12. platform abstraction creating unnecessary complexity contrary to established KISS engineering principles.
+
+---
+
+32. Engineering Validation Constraints
+
+Engineering validation will proceed under the following research-derived constraints:
+
+1. Define platform semantics before defining platform API names.
+2. Keep the platform interface as small as engineering requirements permit.
+3. Separate operating-system abstraction from hardware abstraction where the distinction is technically useful.
+4. Keep platform-specific conditional compilation outside common Core wherever practical.
+5. Treat STN-LABZ Module ABI lifecycle semantics as common while treating binary module artifacts as execution-target specific.
+6. Treat each operating-system and processor combination as an independently validated execution target.
+7. Validate required platform capabilities rather than relying only upon operating-system identification.
+8. Use Ezra Windows x86_64 as the initial implementation target.
+9. Use Linux x86_64 as the first portability validation before introducing ARM64.
+10. Treat Linux ARM64 spacecraft deployment as a separate qualification problem rather than a compilation problem.
+11. Preserve established Core, Module, Mission, and authority architecture.
+12. Require implementation and qualification evidence across independently implemented execution targets before evaluating promotion to doctrine.
+
+---
+
+33. Current Evidence State
+
+    External Engineering Precedent:
+    ESTABLISHED
+
+    STN-LABZ Windows x86_64 Reference Evidence:
+    AVAILABLE
+
+    Reference Agent:
+    DIGIT
+
+    STN-LABZ Module ABI 1.4 Reference Evidence:
+    AVAILABLE
+
+    Ezra Common Core:
+    NOT YET IMPLEMENTED
+
+    Ezra Windows x86_64 Platform:
+    NOT YET IMPLEMENTED
+
+    Common Platform Interface:
+    NOT YET IMPLEMENTED
+
+    Linux x86_64:
+    NOT YET ESTABLISHED
+
+    Linux ARM64:
+    NOT YET ESTABLISHED
+
+    Spacecraft Deployment:
+    NOT YET ESTABLISHED
+
+    Final Platform Qualification Model:
+    NOT YET ESTABLISHED
+
+    Doctrine:
+    NOT APPROVED — CANDIDATE PENDING ENGINEERING VALIDATION
+
+---
+
+34. Established Evidence
+
+34.1 External Engineering Evidence
+
+Research establishes external engineering precedent for:
+
+- operating-system abstraction;
+- hardware/platform abstraction;
+- layered flight-software architecture;
+- common semantics implemented through platform-specific mechanisms;
+- cross-platform flight-software frameworks; and
+- independent execution-target considerations.
+
+34.2 STN-LABZ Engineering Evidence
+
+Current STN-LABZ evidence establishes:
+
+- Agent Core governs module lifecycle;
+- modules are integral to Agent Core architecture;
+- STN-LABZ Module ABI 1.4 provides a common module lifecycle contract;
+- Digit provides Windows x86_64 reference evidence;
+- Digit has demonstrated ABI 1.4 module operation on Windows x86_64;
+- Digit has demonstrated Windows x86_64 live module replacement;
+- module replacement can preserve Agent Core operation;
+- replacement qualification and negative validation can occur without restarting Digit Core; and
+- reference evidence from one agent does not establish qualification for another agent.
+
+---
+
+35. Unknowns
+
+The following remain to be established through engineering validation:
+
+- final Ezra platform interface;
+- Ezra Windows x86_64 implementation;
+- Ezra Linux x86_64 implementation;
+- STN-LABZ cross-platform Core semantic equivalence;
+- Linux x86_64 qualification;
+- Linux ARM64 qualification;
+- cross-target module semantic equivalence;
+- spacecraft-target Linux suitability;
+- spacecraft hardware integration;
+- final platform capability-validation mechanism;
+- final platform qualification boundaries;
+- qualification scope following platform-only modification; and
+- final spacecraft execution architecture.
+
+---
+
+36. Research Conclusion
+
+SUPPORTED FOR ENGINEERING VALIDATION
+
+The proposed Platform-Independent Autonomous Agent Core Architecture is technically credible and supported by external engineering precedent and existing STN-LABZ reference evidence.
+
+External flight-software architecture provides relevant evidence that common software semantics can be separated from operating-system and hardware mechanisms through defined abstraction boundaries.
+
+STN-LABZ possesses Windows x86_64 reference evidence demonstrating common module lifecycle semantics through STN-LABZ Module ABI 1.4.
+
+Cross-platform Ezra implementation evidence has not yet been established.
+
+The next evidentiary requirement is implementation.
+
+Engineering validation will begin by establishing the Ezra Common Core and Windows x86_64 platform boundary.
+
+The resulting platform contract will then be implemented under Linux x86_64 while preserving Agent Core semantics.
+
+Linux ARM64 validation follows successful Linux x86_64 validation.
+
+The resulting implementation and qualification evidence will determine whether Platform-Independent Autonomous Agent Core Architecture is suitable for promotion to STN-LABZ Doctrine.
+
+---
+
+37. Authorized Next Action
+
+ENGINEERING VALIDATION
+
+Proceed with development of the Ezra platform-independent architecture using:
+
+    Ezra Common Core
+          |
+          v
+    Windows x86_64
+          |
+          v
+    Linux x86_64
+          |
+          v
+    Linux ARM64
+          |
+          v
+    Spacecraft Target
+
+Initial execution target:
+
+    Windows / x86_64
+
+Initial architectural objective:
+
+> Demonstrate that Ezra Core semantics remain independent of the Windows implementation through a defined platform boundary suitable for subsequent Linux implementation.
+
+Engineering evidence produced during this progression will determine the final research disposition and any subsequent doctrine proposal.
+
+---
+
+38. Doctrine Candidate
+
+Upon successful engineering validation, the following principle may be evaluated for promotion to STN-LABZ Doctrine:
+
+> STN-LABZ autonomous-agent Core implementations will remain platform-independent wherever technically practical. Operating-system, processor-architecture, and hardware-specific mechanisms will be isolated behind defined platform boundaries. Common interfaces will define required semantics rather than reproduce native operating-system APIs. Support or qualification of one execution target does not establish support or qualification of another execution target. Each supported target will establish applicable implementation and qualification evidence before operational use.
+
+Doctrine Status: NOT APPROVED — CANDIDATE PENDING ENGINEERING VALIDATION
+
+The candidate is preserved for evaluation against the engineering evidence produced by Ezra.
+
+---
+
+39. Policy and Doctrine Impact Assessment
+
+Successful engineering validation may require review of:
+
+- Agent Modules architecture;
+- Engineering Development Doctrine;
+- autonomous-agent architecture;
+- STN-LABZ Module ABI integration requirements;
+- execution-target qualification;
+- cross-platform qualification boundaries;
+- platform implementation boundaries; and
+- spacecraft-target qualification.
+
+Policy review will follow engineering evidence establishing the behavior requiring governance.
+
+---
+
+40. Policy Preparation
+
+If engineering validation reaches the evidence threshold for policy or doctrine review, the following questions will be evaluated.
+
+40.1 Platform Independence
+
+Determine whether platform-independent Agent Core architecture becomes a required architecture for future STN-LABZ autonomous agents.
+
+40.2 Platform Boundary
+
+Determine whether operating-system-specific mechanisms will remain behind defined platform interfaces where technically practical.
+
+40.3 Execution-Target Identity
+
+Determine whether each supported operating-system and processor combination requires explicit execution-target identity.
+
+40.4 Qualification Independence
+
+Determine the qualification relationship between:
+
+    Common Core
+        |
+        +-- Windows x86_64
+        |
+        +-- Linux x86_64
+        |
+        +-- Linux ARM64
+
+40.5 Platform Modification
+
+Determine the requalification boundary when:
+
+- common Core changes;
+- common ABI changes;
+- one platform implementation changes;
+- processor-specific implementation changes; or
+- hardware integration changes.
+
+40.6 Spacecraft Qualification
+
+Determine the qualification boundary applicable to spacecraft execution targets beyond generic operating-system and processor qualification.
+
+---
+
+41. External Research References
+
+External engineering sources evaluated during the architectural research phase include:
+
+- NASA core Flight System documentation concerning platform-independent flight-software architecture;
+- NASA Operating System Abstraction Layer documentation;
+- NASA Platform Support Package architecture;
+- NASA research concerning cFS operation under process-based operating systems;
+- Microsoft Windows dynamic-library loading documentation;
+- Microsoft Windows directory-change notification documentation;
+- Microsoft Windows high-resolution timing documentation;
+- POSIX dynamic-loading documentation;
+- POSIX threading and synchronization specifications;
+- Linux dynamic-loading documentation;
+- Linux filesystem-event monitoring documentation;
+- Linux/POSIX monotonic-clock documentation; and
+- Linux/POSIX persistent-storage synchronization documentation.
+
+---
+
+42. Related Controlled Documentation
+
+This research will be evaluated together with the current authorized revisions of applicable STN-LABZ controlled documentation.
+
+Governing / Applicable Policy and Doctrine
+
+- 20260730.2 - STN-LABZ General Orders
+- 20260729.6.R1 - Engineering Documentation
+- 20260729.8 - Operational Doctrine
+- 20260731.2 - Documentation Language Policy
+- 20260801.1 - KISS Theory
+- 20260806.0 - Agent Modules
+- 20260810.1 - Module Creation Request
+- 20260817.0 - Engineering Development Doctrine
+- 20260817.1 - STN-LABZ Trust Chain
+- 20260819.0 - AI-Assisted Controlled Documentation Policy
+
+Related Engineering Doctrine
+
+- 20260822.2.R0 - Autonomous Agent Module ABI and Hotload Doctrine, if approved and entered into the authoritative STN-LABZ policy index.
+
+Related Engineering Evidence
+
+- 20260818.0 - Agent Module Loading Architecture
+- 20260822.0 - STN-LABZ ABI 1.4 Migration Report - Digit
+- 20260822.0.R1 - STN-LABZ ABI 1.4 Agent Migration and Hotload Report
+
+The authoritative STN-LABZ policy index determines the current authorized revision and status of controlled documentation.
+
+Existing policy and doctrine remain authoritative for the requirements they own.
+
+---
+
+43. Research Disposition
+
+    Research Candidate:
+    PLATFORM-INDEPENDENT AUTONOMOUS AGENT CORE
+
+    Research Status:
+    APPROVED
+
+    Architectural Research:
+    COMPLETE
+
+    Research Finding:
+    SUPPORTED FOR ENGINEERING VALIDATION
+
+    External Engineering Precedent:
+    ESTABLISHED
+
+    STN-LABZ Reference Evidence:
+    AVAILABLE
+
+    Reference Agent:
+    DIGIT
+
+    STN-LABZ ABI:
+    1.4 REFERENCE EVIDENCE AVAILABLE
+
+    Ezra Engineering Validation:
+    AUTHORIZED — NOT YET STARTED
+
+    Windows x86_64:
+    INITIAL EZRA TARGET
+
+    Linux x86_64:
+    PLANNED CROSS-PLATFORM VALIDATION
+
+    Linux ARM64:
+    PLANNED PROCESSOR VALIDATION
+
+    Spacecraft Target:
+    FUTURE INDEPENDENT VALIDATION
+
+    Final Platform Qualification Model:
+    NOT YET ESTABLISHED
+
+    Doctrine:
+    NOT APPROVED — CANDIDATE PENDING ENGINEERING VALIDATION
+
+    Next Action:
+    ENGINEERING VALIDATION
+
+---
+
+44. Consensus
+Policies: APPROVED
+Lab: APPROVED
+Q&A: APPROVED
+Legal: APPROVED
+
+
+
+45. Research Approval
+
+Approved By: Ops Chief
+Date: 20260911
+Decision: APPROVED
+
+Approval applies to this research record, its research disposition, and progression to engineering validation.
+
+The Doctrine Candidate recorded in this document remains subject to subsequent evaluation following the required engineering evidence.
+
+END DOCUMENT

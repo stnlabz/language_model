@@ -1,0 +1,2127 @@
+A distributed system consists of multiple independent computing components that coordinate through communication.
+
+Distributed components can execute on different machines.
+
+Distributed components can execute in different processes.
+
+Distributed components do not share one reliable global execution state.
+
+Communication between distributed components can fail.
+
+Messages can be delayed.
+
+Messages can be lost.
+
+Messages can be duplicated.
+
+Messages can arrive out of order.
+
+Connections can be interrupted.
+
+A remote component can become unavailable.
+
+A remote component can become slow.
+
+A remote component can restart.
+
+A network path can fail while both endpoints remain operational.
+
+A distributed system must account for partial failure.
+
+Partial failure means some components can fail while other components continue operating.
+
+Partial failure distinguishes distributed systems from many single-process systems.
+
+A process can know directly that one of its local function calls returned.
+
+A process cannot always know whether a remote operation completed merely because communication failed.
+
+A timeout means the expected result was not received within the defined time.
+
+A timeout does not prove the remote component is dead.
+
+A timeout does not prove the request was never received.
+
+A timeout does not prove the requested operation failed.
+
+A timeout can leave the operation outcome unknown.
+
+Unknown is a legitimate distributed-system state.
+
+A client can send a request.
+
+The server can receive the request.
+
+The server can perform the operation.
+
+The server can send the response.
+
+The response can be lost.
+
+The client can time out.
+
+The client then knows that it did not receive confirmation.
+
+The client does not necessarily know whether the operation occurred.
+
+Retrying the request can duplicate the operation.
+
+Idempotency helps manage repeated requests.
+
+An idempotent operation produces the same intended state when repeated according to its defined semantics.
+
+Setting a value to a particular value can be idempotent.
+
+Incrementing a value is generally not idempotent.
+
+Creating the same payment twice is not equivalent to creating it once.
+
+Creating the same record twice is not equivalent to creating it once when uniqueness matters.
+
+Retries must consider operation semantics.
+
+An idempotency key can identify multiple attempts at the same logical operation.
+
+A server can record processed idempotency keys.
+
+A repeated request with the same idempotency key can return the established result rather than repeating the operation.
+
+Idempotency-key retention must be long enough for the retry model.
+
+An idempotency key is not automatically an authentication credential.
+
+An idempotency key should not grant authority.
+
+Retry behavior should be bounded.
+
+Infinite retry can create permanent resource consumption.
+
+Immediate synchronized retries can amplify an outage.
+
+Backoff increases delay between retries.
+
+Exponential backoff progressively increases retry delay.
+
+Jitter varies retry timing among clients.
+
+Jitter reduces synchronized retry storms.
+
+Retry storms occur when many clients repeatedly contact an unhealthy dependency.
+
+Retries can make an overloaded service less available.
+
+Retry is not automatically recovery.
+
+A permanent error should not normally be retried unchanged.
+
+Invalid input does not become valid through repetition.
+
+Unauthorized requests do not become authorized through repetition.
+
+Unsupported protocol versions do not become supported through repetition.
+
+Transient network failure can justify retry.
+
+Temporary resource exhaustion can justify retry.
+
+Retry policy should follow actual failure semantics.
+
+A network partition occurs when components that should communicate cannot communicate successfully.
+
+Components on both sides of a partition can remain operational.
+
+A network partition does not necessarily mean one side failed.
+
+Each side can continue making local observations.
+
+Those observations can differ.
+
+A distributed system must define what operations remain permitted during a partition.
+
+Some systems prefer availability during partitions.
+
+Some systems prefer consistency during partitions.
+
+Requirements determine the correct policy.
+
+CAP is a model concerning consistency, availability, and partition tolerance in distributed data systems.
+
+CAP does not mean a system simply chooses any two properties permanently.
+
+When a network partition occurs, a distributed system can face a tradeoff between providing a consistent response and providing an available response.
+
+Partition behavior must be defined.
+
+CAP terminology should not replace analysis of actual system requirements.
+
+Consistency has multiple meanings in distributed systems.
+
+Strong consistency provides behavior in which clients observe state according to the system's strong consistency model.
+
+Eventual consistency allows replicas to temporarily differ while converging when updates and communication stabilize according to the system design.
+
+Eventual consistency does not mean inconsistent forever.
+
+Eventual consistency does not specify one universal convergence time.
+
+A system can provide different consistency guarantees for different operations.
+
+Read-after-write consistency means a client can observe its completed write according to the defined model.
+
+Monotonic reads prevent a client from observing older state after it has already observed newer state according to the defined session model.
+
+Linearizability provides the appearance that operations occur atomically in an order consistent with real-time ordering.
+
+Sequential consistency requires operations to appear in one sequential order consistent with each participant's program order, without necessarily preserving real-time ordering.
+
+Linearizability and sequential consistency are different.
+
+Serializability concerns transaction execution behaving equivalently to some serial transaction order.
+
+Serializability and linearizability are different properties.
+
+Terminology should be used precisely.
+
+Replication maintains copies of data across multiple components.
+
+A replica stores a copy of data.
+
+Replication can improve availability.
+
+Replication can improve read capacity.
+
+Replication can improve geographic proximity.
+
+Replication introduces synchronization requirements.
+
+Replicas can temporarily disagree.
+
+Replication does not automatically provide consistency.
+
+Replication does not automatically provide backup.
+
+A mistaken update can replicate.
+
+A mistaken deletion can replicate.
+
+Logical corruption can replicate.
+
+Replication and backup solve different problems.
+
+A primary-replica architecture assigns authoritative writes to a primary node according to the replication model.
+
+Replicas receive changes from the primary.
+
+Terminology can include primary and replica.
+
+Other systems can use leader and follower terminology.
+
+The terminology does not itself determine behavior.
+
+Synchronous replication waits for defined replica acknowledgment before considering an operation committed.
+
+Asynchronous replication allows the authoritative node to acknowledge before all replicas receive the change.
+
+Synchronous replication can increase write latency.
+
+Synchronous replication can improve defined durability guarantees.
+
+Asynchronous replication can reduce write latency.
+
+Asynchronous replication permits replication lag.
+
+Replication lag means a replica has not yet applied the latest authoritative state.
+
+Reading from a lagging replica can return stale data.
+
+Stale data is not necessarily corrupted data.
+
+It can be valid older state.
+
+Applications should know whether stale reads are acceptable.
+
+A replicated system should define which state is authoritative.
+
+Authority should not be inferred merely from which replica responded fastest.
+
+Authority should not be inferred merely from which record has the largest timestamp.
+
+Authority belongs to the system protocol.
+
+Multi-primary replication allows multiple nodes to accept writes according to the replication model.
+
+Concurrent writes can conflict.
+
+Conflict resolution must be defined.
+
+Last-write-wins is one conflict-resolution strategy.
+
+Last-write-wins requires a defined ordering mechanism.
+
+Wall-clock timestamps can be unreliable for establishing causal ordering.
+
+Clock skew can cause an older event to appear newer.
+
+Conflict resolution can use versions.
+
+Conflict resolution can use logical clocks.
+
+Conflict resolution can use application-specific rules.
+
+Conflict resolution can require human intervention.
+
+There is no universal conflict-resolution rule.
+
+Data semantics determine the correct strategy.
+
+A leader is a node assigned special authority for defined operations during a term or epoch.
+
+Leader election selects a leader according to a protocol.
+
+Leader election is not simply choosing the first node that responds.
+
+Multiple nodes believing they are leader can create split-brain behavior.
+
+Split brain occurs when multiple components independently act as authoritative for the same responsibility when the system requires one authority.
+
+Split brain can cause conflicting writes.
+
+Split brain can cause duplicate actions.
+
+Split brain can violate invariants.
+
+Quorum mechanisms can reduce split-brain risk.
+
+A quorum is a required subset of participants whose agreement is sufficient for a defined operation.
+
+A majority quorum contains more than half of the eligible voting participants.
+
+Majority quorums have intersection properties useful for consensus protocols.
+
+Not every distributed system requires majority voting.
+
+Quorum size should follow the protocol.
+
+A quorum is not simply any convenient group of nodes.
+
+Membership determines which participants count.
+
+Membership changes must be controlled.
+
+Adding or removing voting members changes quorum mathematics.
+
+Consensus is the process of participants agreeing on a value or ordered state according to a protocol despite defined failures.
+
+Consensus is not ordinary voting.
+
+Consensus protocols define safety properties.
+
+Consensus protocols define progress properties.
+
+Consensus protocols define failure assumptions.
+
+Consensus protocols define membership.
+
+Consensus protocols define message behavior.
+
+Consensus protocols define leadership or proposal behavior where applicable.
+
+Consensus should not be improvised from intuition.
+
+Raft is a distributed consensus algorithm.
+
+Raft uses terms.
+
+Raft uses leader election.
+
+Raft uses replicated logs.
+
+Raft commits entries according to its quorum rules.
+
+Paxos is a family of consensus protocols.
+
+Raft and Paxos solve related consensus problems using different structures and terminology.
+
+Using the word consensus does not mean an implementation is Raft or Paxos.
+
+A custom consensus protocol must define its own correctness properties.
+
+A consensus protocol should define what participants agree upon.
+
+A consensus protocol should define when a decision becomes final.
+
+A consensus protocol should define how conflicting proposals are handled.
+
+A consensus protocol should define what happens when quorum is unavailable.
+
+A consensus protocol should define how membership changes.
+
+A consensus protocol should define how restarted participants recover state.
+
+A consensus protocol should define message validation.
+
+A consensus protocol should define identity and authority.
+
+Consensus safety means the protocol does not produce conflicting committed decisions under its defined assumptions.
+
+Consensus liveness means the protocol can eventually make progress under its defined assumptions.
+
+Safety and liveness are different.
+
+A system can preserve safety while becoming unavailable.
+
+A system can remain active while violating safety if designed incorrectly.
+
+When consensus cannot safely proceed, refusing to commit can be correct behavior.
+
+Unavailable is preferable to corrupted when the requirements prioritize correctness.
+
+A quorum failure should not be silently treated as consensus.
+
+No quorum means no quorum.
+
+Pending should remain pending when finality has not been established.
+
+Final should mean the defined finality rule has been satisfied.
+
+A distributed log is an ordered sequence of records replicated among participants according to a protocol.
+
+Log order can establish operation order.
+
+Replicated logs are used by many consensus systems.
+
+A log entry can be proposed.
+
+A log entry can be replicated.
+
+A log entry can be committed.
+
+A log entry can be applied.
+
+These states are not necessarily identical.
+
+Replication does not necessarily mean commitment.
+
+Commitment does not necessarily mean every node has applied the entry yet.
+
+Precise state names matter.
+
+A node should not report an entry as committed before the protocol's commitment criteria are satisfied.
+
+A node can lag behind committed state.
+
+A recovering node can replay committed log entries.
+
+Logs can support deterministic state-machine replication.
+
+State-machine replication applies the same ordered operations to multiple replicas.
+
+If every replica begins from equivalent state and applies identical deterministic operations in identical order, they can produce equivalent resulting state.
+
+Determinism is critical to state-machine replication.
+
+Consensus can agree on an operation sequence.
+
+Consensus cannot repair nondeterministic application semantics after agreement.
+
+If two nodes apply the same committed operation and produce different results, replicated state can diverge.
+
+Consensus-visible computation should therefore be deterministic.
+
+System time can introduce nondeterminism.
+
+Randomness can introduce nondeterminism.
+
+Unordered iteration can introduce nondeterminism.
+
+Platform-specific numeric behavior can introduce nondeterminism.
+
+External service responses can introduce nondeterminism.
+
+Filesystem state can introduce nondeterminism.
+
+Environment configuration can introduce nondeterminism.
+
+Consensus execution should not depend on uncontrolled local state.
+
+Required nondeterministic inputs should be converted into agreed deterministic inputs before consensus-visible execution where architecture requires it.
+
+Serialization must be deterministic when serialized bytes participate in hashes, signatures, identifiers, or consensus.
+
+Equivalent logical values can have multiple serialized representations unless canonicalization is defined.
+
+Canonical serialization defines one representation.
+
+Field order can matter to byte-level identity.
+
+Whitespace can matter to byte-level identity.
+
+Numeric encoding can matter.
+
+Character encoding can matter.
+
+Endianness can matter.
+
+Canonicalization rules should be explicit.
+
+Do not hash native memory structures as portable protocol objects.
+
+Native structures can contain padding.
+
+Native structures can differ by compiler.
+
+Native structures can differ by architecture.
+
+Serialize protocol fields explicitly.
+
+A distributed identifier should have defined uniqueness properties.
+
+A central authority can allocate identifiers.
+
+Random identifiers can provide probabilistic uniqueness.
+
+UUIDs can provide distributed identifier generation according to their version semantics.
+
+Content hashes can identify content.
+
+Sequence numbers can identify ordered events within a defined authority.
+
+No identifier scheme is universally correct.
+
+Identifier semantics should be explicit.
+
+A node identifier identifies a participant.
+
+Node identity should remain distinct from network location when architecture requires stable identity.
+
+An IP address is not necessarily a permanent node identity.
+
+A hostname is not necessarily a permanent node identity.
+
+Network addresses can change.
+
+One node can have multiple addresses.
+
+One address can later belong to another node.
+
+Cryptographic identities can bind identity to key possession according to the system's trust model.
+
+Identity does not automatically establish authority.
+
+An authenticated node can still lack permission to perform an operation.
+
+Authentication and authorization remain separate.
+
+Distributed systems need membership rules.
+
+Membership defines which nodes belong to a group.
+
+Static membership is configured explicitly.
+
+Dynamic membership changes during operation according to a protocol.
+
+Membership changes affect authority.
+
+Membership changes can affect quorum.
+
+Membership changes should not occur as an accidental side effect of network discovery.
+
+Discovery means locating possible peers.
+
+Discovery does not establish membership.
+
+Connection does not establish membership.
+
+Authentication does not necessarily establish membership.
+
+Membership does not necessarily establish voting authority.
+
+Qualification can occur between discovery and admission.
+
+Admission should follow defined policy.
+
+A peer is another participant reachable through the distributed protocol.
+
+Peer discovery can use configuration.
+
+Peer discovery can use DNS.
+
+Peer discovery can use seed nodes.
+
+Peer discovery can use gossip.
+
+Peer discovery can use a registry.
+
+Discovery mechanisms provide candidates.
+
+Candidates should be validated before trust.
+
+A peer should validate protocol identity.
+
+A peer should validate protocol version.
+
+A peer should validate network identity.
+
+A peer should validate required capabilities.
+
+A peer should validate authentication where required.
+
+A TCP connection succeeding does not establish peer qualification.
+
+A protocol handshake establishes defined communication properties.
+
+A handshake can exchange protocol version.
+
+A handshake can exchange network identifier.
+
+A handshake can exchange node identifier.
+
+A handshake can exchange capabilities.
+
+A handshake can authenticate participants.
+
+A handshake can reject incompatible peers.
+
+Handshake success should mean only the criteria actually checked.
+
+Do not report full qualification when only transport connectivity was established.
+
+Protocol versioning manages communication compatibility.
+
+A peer using an unsupported protocol version should be rejected or negotiated according to protocol rules.
+
+Silently interpreting unknown protocol messages as known messages is dangerous.
+
+Unknown message types should have defined behavior.
+
+Unsupported capabilities should have defined behavior.
+
+Backward compatibility should be explicit.
+
+Forward compatibility should be explicit.
+
+Message framing defines message boundaries.
+
+TCP provides a byte stream.
+
+TCP does not preserve application message boundaries.
+
+One send call does not guarantee one receive call.
+
+A message can arrive in fragments.
+
+Multiple messages can arrive in one receive buffer.
+
+Protocols over TCP must implement framing.
+
+Length-prefixed framing includes a message length.
+
+The receiver must validate length before allocating or reading unbounded data.
+
+A malicious length field can request excessive memory.
+
+Maximum message size should be bounded.
+
+A receiver should reject messages exceeding protocol limits.
+
+A receiver should reject truncated messages.
+
+A receiver should reject malformed messages.
+
+A receiver should reject invalid checksums where checksums are required.
+
+A receiver should reject invalid signatures where signatures are required.
+
+A receiver should not continue using unvalidated fields.
+
+UDP provides datagram semantics.
+
+UDP does not provide reliable delivery.
+
+UDP does not guarantee ordering.
+
+UDP does not guarantee duplicate suppression.
+
+Applications using UDP must implement any required reliability themselves.
+
+TCP provides reliable ordered byte-stream delivery between endpoints while the connection remains valid according to TCP semantics.
+
+TCP does not guarantee the remote application processed the bytes.
+
+Successful send does not establish application processing.
+
+Protocol acknowledgments establish higher-level facts according to their definitions.
+
+An ACK can mean message received.
+
+An ACK can mean message validated.
+
+An ACK can mean operation accepted.
+
+An ACK can mean operation committed.
+
+These are different.
+
+Define acknowledgment semantics.
+
+Do not use one acknowledgment to imply more than it proves.
+
+Sequence numbers can detect ordering and duplication.
+
+A sequence number belongs to a defined scope.
+
+A sequence number can be per connection.
+
+A sequence number can be per sender.
+
+A sequence number can be global within an authority.
+
+Wraparound behavior should be defined when sequence numbers have finite size.
+
+A duplicate message can be detected using identifiers or sequence state.
+
+Duplicate detection requires retention of enough history to recognize duplicates.
+
+Deduplication state can itself require persistence.
+
+Exactly-once delivery is difficult.
+
+A network can duplicate attempts.
+
+A client can retry.
+
+A server can crash after performing an operation but before recording acknowledgment state.
+
+Many systems use at-least-once delivery with idempotent processing.
+
+At-least-once delivery means a message can be delivered more than once.
+
+At-most-once delivery means a message is not intentionally delivered more than once but can be lost.
+
+Exactly-once effects require stronger coordination than simply labeling a transport exactly once.
+
+Distinguish message delivery from operation effect.
+
+A queue can provide durable messaging.
+
+Durable means messages survive defined failures according to the queue's guarantees.
+
+A durable queue is not automatically replicated.
+
+A replicated queue is not automatically immune to data loss.
+
+Read the actual durability guarantees.
+
+A message can be pending.
+
+A message can be claimed.
+
+A message can be acknowledged.
+
+A message can fail.
+
+A message can be retried.
+
+A message can be dead-lettered.
+
+Queue states should have defined meanings.
+
+Acknowledging a message should occur at the stage defined by the queue semantics.
+
+Acknowledging before durable processing can lose work.
+
+Acknowledging after processing can permit duplicate processing if the acknowledgment is lost.
+
+Idempotency helps resolve this tradeoff.
+
+A poison message is a message that repeatedly fails processing.
+
+Retrying a poison message forever can block useful work.
+
+Retry counts should be bounded.
+
+A dead-letter mechanism can isolate permanently failing messages.
+
+Dead-lettering should preserve evidence about failure.
+
+A distributed workflow can involve multiple services.
+
+One service can complete while another fails.
+
+A database transaction in one service does not automatically roll back work in another service.
+
+Distributed transactions coordinate changes across multiple participants.
+
+Two-phase commit is one distributed transaction protocol.
+
+Two-phase commit has a prepare phase.
+
+Two-phase commit has a commit phase.
+
+Two-phase commit can block under selected failures.
+
+Distributed transactions add operational complexity.
+
+Not every distributed workflow requires distributed transactions.
+
+A saga coordinates a sequence of local transactions with compensating actions according to the saga pattern.
+
+A compensating action attempts to offset an earlier completed action.
+
+Compensation is not identical to rollback.
+
+Some actions cannot be perfectly reversed.
+
+Sending an external message cannot necessarily be unsent.
+
+Physical actions cannot always be undone.
+
+Workflow design should reflect irreversible effects.
+
+The outbox pattern coordinates local database state with eventual message publication.
+
+An application writes business state and an outgoing event record in one local transaction.
+
+A separate publisher sends the event.
+
+The event can be retried.
+
+Consumers should handle duplicate delivery where applicable.
+
+The outbox pattern reduces the gap between database commit and message publication.
+
+It does not eliminate every distributed failure mode.
+
+The inbox pattern can record processed incoming message identifiers.
+
+This can support duplicate suppression.
+
+Retention policy determines how long duplicates can be recognized.
+
+Distributed state should have an owner.
+
+Single-writer ownership can simplify consistency.
+
+Multiple writers require coordination or conflict resolution.
+
+Ownership should be explicit.
+
+A cache is not automatically authoritative.
+
+A replica is not automatically authoritative.
+
+A client copy is not automatically authoritative.
+
+A local file is not automatically authoritative.
+
+The architecture defines authority.
+
+Authority should not be inferred from freshness alone.
+
+The newest timestamp is not always authoritative.
+
+A malicious or incorrect clock can produce a future timestamp.
+
+A stale authoritative value can be more authoritative than a newer unauthorized value.
+
+Authority and recency are different properties.
+
+Physical clocks measure time according to hardware and operating-system mechanisms.
+
+Distributed clocks are not perfectly synchronized.
+
+Clock skew is the difference between clock readings on different machines.
+
+Clock drift is change in clock error over time.
+
+NTP can synchronize clocks within practical limits.
+
+NTP does not create a perfectly shared global clock.
+
+Wall-clock time can move.
+
+Clock corrections can move wall time forward.
+
+Clock corrections can move wall time backward depending on synchronization behavior.
+
+Do not use wall-clock time alone for ordering events when strict causal ordering is required.
+
+Monotonic clocks are appropriate for measuring elapsed durations within one system.
+
+A monotonic clock does not normally provide a globally meaningful timestamp.
+
+Wall-clock timestamps and monotonic durations solve different problems.
+
+Logical clocks represent ordering without relying solely on physical time.
+
+Lamport clocks assign logical values that respect causal ordering according to Lamport-clock rules.
+
+If event A causally precedes event B, Lamport timestamps can preserve that ordering.
+
+The reverse inference does not necessarily hold.
+
+A smaller Lamport timestamp does not establish every possible causal relationship.
+
+Vector clocks can represent causal relationships among participants with greater detail.
+
+Vector clocks grow with the number of tracked participants.
+
+Logical clocks are protocol mechanisms.
+
+They do not replace human-readable timestamps where timestamps are required.
+
+Causality describes whether one event could have influenced another.
+
+If one operation produces a message and another operation receives that message, the send causally precedes the receive.
+
+Concurrent events have no established causal ordering under the model.
+
+Total order assigns every pair of events an order.
+
+Partial order does not require unrelated events to be ordered.
+
+Consensus protocols can establish a total order for selected operations.
+
+Not every distributed event requires total ordering.
+
+Global ordering is expensive.
+
+Require it only where semantics need it.
+
+Ordering should have a scope.
+
+Per-client ordering can be sufficient.
+
+Per-resource ordering can be sufficient.
+
+Per-partition ordering can be sufficient.
+
+Global ordering can be required for some state machines.
+
+Do not impose global serialization on independent operations without need.
+
+Partitioning divides data or workload among nodes.
+
+A partition can be called a shard.
+
+Sharding assigns subsets of data to different storage nodes.
+
+Sharding can increase capacity.
+
+Sharding introduces routing.
+
+Sharding introduces rebalancing.
+
+Sharding can complicate transactions.
+
+A shard key determines data placement according to the partitioning strategy.
+
+A poor shard key can create hotspots.
+
+A hotspot occurs when disproportionate workload targets one partition or node.
+
+Hash partitioning distributes keys according to a hash.
+
+Range partitioning assigns key ranges.
+
+Consistent hashing can reduce remapping when nodes change according to its algorithm.
+
+No partitioning strategy eliminates all imbalance.
+
+Measure actual workload.
+
+Replication and partitioning are different.
+
+Partitioning divides data.
+
+Replication copies data.
+
+A distributed database can use both.
+
+Rebalancing moves ownership or copies when topology changes.
+
+Rebalancing consumes resources.
+
+Rebalancing can affect latency.
+
+Rebalancing should preserve consistency guarantees.
+
+Do not treat node addition as free capacity immediately.
+
+Data can require transfer before the node is useful.
+
+A cluster is a group of cooperating nodes.
+
+Cluster membership should be explicit.
+
+Cluster health is not simply the sum of process health.
+
+A cluster can have all processes running while lacking quorum.
+
+A cluster can have quorum while one replica is unhealthy.
+
+A cluster can be operational in degraded state.
+
+Health should describe actual capability.
+
+A node can be alive.
+
+A node can be reachable.
+
+A node can be qualified.
+
+A node can be synchronized.
+
+A node can be voting.
+
+A node can be leader.
+
+These are different properties.
+
+Do not collapse them into one boolean without reason.
+
+Heartbeats are periodic messages used to indicate continuing communication or liveness according to protocol semantics.
+
+Missing one heartbeat does not necessarily mean a node failed.
+
+Network delay can delay heartbeats.
+
+Scheduling delay can delay heartbeats.
+
+System overload can delay heartbeats.
+
+Failure detectors operate with uncertainty.
+
+A failure detector can suspect a node.
+
+Suspected is not identical to proven dead.
+
+Distributed systems often cannot perfectly distinguish a failed node from an unreachable node.
+
+Failure detection thresholds trade detection speed against false suspicion.
+
+Very short timeouts detect failures quickly but can misclassify slow nodes.
+
+Very long timeouts reduce false suspicion but delay recovery.
+
+Choose thresholds according to requirements and observed network conditions.
+
+Health checks should be bounded.
+
+Health checks should not create significant load.
+
+A health check should test the capability it claims to test.
+
+TCP connect success proves a listener accepted or completed transport establishment according to the observed result.
+
+TCP connect success does not prove application protocol correctness.
+
+Protocol handshake success provides stronger evidence.
+
+Application operation success provides stronger evidence for that operation.
+
+Qualification should be staged.
+
+Service discovery locates available service instances.
+
+Discovery can use DNS.
+
+Discovery can use configuration.
+
+Discovery can use a registry.
+
+Discovery information can become stale.
+
+A discovered endpoint can disappear before use.
+
+Clients must still handle connection failure.
+
+Load balancing distributes work among service instances.
+
+Round-robin is one load-balancing strategy.
+
+Least-connections is another strategy.
+
+Weighted distribution can represent unequal capacity.
+
+Consistent hashing can preserve affinity for selected keys.
+
+Load balancing does not guarantee equal completion times.
+
+One request can be much more expensive than another.
+
+A load balancer can become a single point of failure if not made resilient according to requirements.
+
+A single point of failure is a component whose failure can make the required system unavailable.
+
+Removing every single point of failure increases complexity.
+
+Redundancy should follow availability requirements.
+
+Redundancy can itself fail.
+
+Two identical redundant systems can share the same defect.
+
+Shared dependencies can defeat redundancy.
+
+Common-mode failure affects multiple redundant components through one cause.
+
+Examples include shared power.
+
+Examples include shared network infrastructure.
+
+Examples include shared software defects.
+
+Examples include shared credentials.
+
+Examples include shared configuration.
+
+Redundancy should consider failure independence.
+
+Availability is commonly expressed as the proportion of time a service satisfies defined availability criteria.
+
+Availability requires a definition of successful service.
+
+A server returning incorrect responses is not meaningfully available for the affected operation.
+
+High availability requires architecture and operations.
+
+Replication alone does not create high availability.
+
+Failover moves responsibility from one component to another.
+
+Automatic failover should have defined authority rules.
+
+Failover can create split brain if both old and new owners act simultaneously.
+
+Fencing prevents stale owners from continuing protected operations.
+
+A fencing token can monotonically identify ownership epochs.
+
+A resource accepts operations only from the current valid ownership epoch according to the design.
+
+Fencing is stronger than merely asking the old owner to stop.
+
+The old owner can be partitioned and unable to receive the stop request.
+
+Leases provide temporary authority.
+
+A lease expires unless renewed.
+
+Clock assumptions matter to lease correctness.
+
+A node whose lease expired should stop acting under that lease.
+
+A partitioned node might not know immediately that another node obtained newer authority.
+
+Fencing can protect the shared resource from stale owners.
+
+Leader terms or epochs identify leadership generations.
+
+Messages from an older term can be rejected.
+
+Terms help prevent stale leaders from influencing current state.
+
+Monotonically increasing generations are useful for distinguishing newer authority.
+
+A generation number should come from the authority mechanism, not arbitrary local clocks.
+
+Snapshots capture system state at a defined point or logical position.
+
+Snapshots can accelerate recovery.
+
+A recovering node can load a snapshot and replay later log entries.
+
+Snapshot creation should correspond to a defined committed state.
+
+A snapshot should not silently include uncommitted state when protocol semantics forbid it.
+
+Snapshots require integrity validation.
+
+Snapshots can become corrupted.
+
+Snapshots can become incompatible with newer software versions.
+
+Snapshot format should be versioned where necessary.
+
+Persistent logs can grow indefinitely.
+
+Compaction reduces historical storage according to protocol requirements.
+
+Compaction must not remove information required for correctness or recovery.
+
+Log retention and audit retention are different requirements.
+
+A consensus log can be compacted while a separate audit system preserves required historical records.
+
+Do not delete governance or historical records merely because operational state no longer needs them.
+
+State and history are different.
+
+Checkpointing records recoverable progress.
+
+A checkpoint should identify exactly what state has been durably completed.
+
+Reporting a checkpoint before durable completion can cause skipped work after restart.
+
+Reporting it too late can cause repeated work.
+
+Repeated work should be safe where possible.
+
+Crash recovery should be designed.
+
+A node can terminate between any two operations.
+
+A node can terminate after writing data but before acknowledging it.
+
+A node can terminate after sending a message but before recording that it sent it.
+
+A node can terminate after receiving a message but before processing it.
+
+A node can terminate after processing but before acknowledging it.
+
+Each boundary can create duplicate or uncertain work.
+
+Persistent state should establish recovery facts.
+
+Write-ahead logging records intended or completed changes in an order supporting recovery according to the storage design.
+
+Durability should be established before reporting durable success.
+
+Buffering can delay physical persistence.
+
+A successful write system call does not universally mean bytes are safely persisted to nonvolatile media.
+
+Storage durability semantics depend on operating system, filesystem, hardware, and synchronization operations.
+
+Distributed durability adds replication semantics on top of local durability.
+
+Define what committed means.
+
+Committed can mean written to one process memory.
+
+Committed can mean written to local filesystem cache.
+
+Committed can mean persisted locally.
+
+Committed can mean replicated to quorum.
+
+These are very different guarantees.
+
+Use precise terminology.
+
+A distributed transaction identifier can correlate one logical operation across components.
+
+Correlation improves observability.
+
+Tracing records the path of requests through distributed components.
+
+A trace can contain spans.
+
+A span represents one timed operation within a trace.
+
+Trace identifiers associate related work.
+
+Span identifiers identify individual operations.
+
+Tracing does not establish correctness.
+
+Tracing provides evidence about execution.
+
+Distributed logs can be difficult to order using timestamps alone.
+
+Clock skew can make later causal events appear earlier in wall-clock logs.
+
+Correlation identifiers and causal context improve reconstruction.
+
+A timeline should distinguish observed local time from established causal order.
+
+Observability should include component identity.
+
+Observability should include operation identity.
+
+Observability should include result.
+
+Observability should include relevant latency.
+
+Observability should include retries where useful.
+
+Observability should include peer state transitions where useful.
+
+Do not log secrets merely to improve observability.
+
+Distributed failures require precise classification.
+
+Connection refused means something different from timeout.
+
+DNS failure means something different from protocol rejection.
+
+Protocol rejection means something different from authentication failure.
+
+Authentication failure means something different from authorization failure.
+
+Quorum failure means something different from storage failure.
+
+Replication lag means something different from corruption.
+
+Classify failures accurately.
+
+A cascading failure occurs when one component failure causes increased load or failure in other components.
+
+Retries can cause cascading failure.
+
+Shared resource exhaustion can cause cascading failure.
+
+Synchronous dependency chains can cause cascading failure.
+
+Circuit breakers can limit repeated calls to failing dependencies.
+
+Bulkheads can isolate resource pools.
+
+Backpressure can limit incoming work.
+
+Load shedding can reject excess work deliberately.
+
+Failing a bounded amount of work can preserve overall service.
+
+Load shedding should follow priority and policy.
+
+Do not silently discard important work.
+
+A bounded queue should define behavior when full.
+
+It can block producers.
+
+It can reject new work.
+
+It can drop selected work where permitted.
+
+It can persist overflow.
+
+The correct policy depends on workload semantics.
+
+Backpressure communicates that downstream capacity is exhausted.
+
+Ignoring backpressure can cause memory exhaustion.
+
+A distributed system should have bounded resources.
+
+Bound request size.
+
+Bound queue size.
+
+Bound retries.
+
+Bound connection count.
+
+Bound worker count.
+
+Bound message size.
+
+Bound history where policy permits compaction.
+
+Bound timeouts.
+
+Unbounded resource use becomes an availability risk.
+
+A service-level objective is commonly abbreviated SLO.
+
+An SLO defines a target level of service performance or reliability.
+
+An SLI is a Service Level Indicator.
+
+An SLI is a measured property used to evaluate service behavior.
+
+An SLA is a Service Level Agreement.
+
+An SLA is an agreement containing service commitments.
+
+SLI, SLO, and SLA are different concepts.
+
+Distributed-system design should follow actual service requirements.
+
+Do not build complex high-availability machinery for a system that does not require it.
+
+Do not omit redundancy where failure would violate required availability.
+
+Complexity should be proportional to requirements.
+
+Security boundaries exist between distributed nodes.
+
+Network location is not sufficient authentication.
+
+An internal network should not automatically be treated as fully trusted.
+
+Nodes should authenticate when the threat model requires it.
+
+Messages should be integrity protected when required.
+
+Confidentiality should be provided when required.
+
+Authorization should restrict node operations.
+
+A valid peer should not automatically have every capability.
+
+Protocol parsers should treat peer input as untrusted.
+
+Authenticated peers can be defective.
+
+Authenticated peers can be compromised.
+
+Validate protocol input regardless of expected peer behavior.
+
+Replay attacks repeat previously valid messages.
+
+Protocols should prevent harmful replay where required.
+
+Sequence numbers can help.
+
+Nonces can help.
+
+Timestamps can help when clock assumptions are acceptable.
+
+Persistent replay state can help.
+
+Signatures alone do not automatically prevent replay.
+
+A previously valid signed message remains cryptographically valid unless the protocol also establishes freshness or uniqueness.
+
+Message identity should be defined.
+
+A message hash can identify exact message bytes.
+
+A request ID can identify logical requests.
+
+A transaction ID can identify state transitions.
+
+Identifiers should not be reused ambiguously.
+
+Digital signatures can authenticate message origin and integrity according to the key trust model.
+
+A valid signature establishes only what the signing scheme and trusted key establish.
+
+It does not prove the content is authorized.
+
+It does not prove the content is current.
+
+It does not prove the content is factually correct.
+
+Authorization and protocol validation still apply.
+
+Distributed systems should reject malformed state transitions even when messages are correctly signed.
+
+Byzantine failure describes participants behaving arbitrarily, including sending conflicting or malicious information.
+
+Crash-fault-tolerant consensus assumes failures such as stopping or losing communication rather than arbitrary malicious behavior.
+
+Byzantine-fault-tolerant protocols handle stronger failure models according to their assumptions.
+
+A crash-fault-tolerant protocol should not be described as Byzantine tolerant unless it actually provides those guarantees.
+
+Failure assumptions are part of protocol correctness.
+
+The number of failures a protocol can tolerate depends on its design and membership size.
+
+Do not invent fault-tolerance thresholds.
+
+Derive them from the protocol.
+
+A majority-based crash-fault-tolerant consensus group generally requires a majority of voting members to make progress.
+
+Losing quorum prevents progress.
+
+Preventing progress can preserve safety.
+
+Restoring quorum should follow membership and recovery procedures.
+
+Do not create a fake quorum by simply lowering the required count during an outage unless the protocol explicitly defines a safe reconfiguration procedure.
+
+Membership is consensus state in many consensus systems.
+
+Reconfiguration therefore requires care.
+
+Joint consensus or equivalent mechanisms can safely transition membership in protocols that define them.
+
+Changing configuration files independently on nodes does not automatically create a coherent cluster membership change.
+
+Distributed configuration should have authority.
+
+Configuration drift occurs when nodes expected to share configuration differ.
+
+Configuration drift can create inconsistent behavior.
+
+Configuration hashes can help detect drift.
+
+Version reporting can help detect drift.
+
+Startup qualification can reject incompatible configuration.
+
+A node should not silently join a network with the wrong network identifier.
+
+A development network should not accidentally communicate with a production network.
+
+Network identifiers should be explicit.
+
+Genesis identifiers can distinguish independently initialized chains or replicated histories where that architecture uses genesis state.
+
+Protocol identity should be validated before exchanging authoritative state.
+
+A wrong-network peer is not a valid participant merely because its protocol syntax is correct.
+
+Capability negotiation allows nodes to identify supported optional features.
+
+A capability should have stable semantics.
+
+Unsupported capabilities should not be assumed.
+
+Optional capabilities should not change consensus-visible behavior unless the protocol defines how all required participants agree on the behavior.
+
+Consensus rules should not depend on which local optional module happens to be installed.
+
+Consensus-visible behavior must be common.
+
+Platform-specific implementations must produce identical consensus-visible results when platform independence is required.
+
+Different operating systems can use different system APIs.
+
+Different compilers can generate different machine code.
+
+Different hardware can execute differently internally.
+
+Those differences must not change protocol-required results.
+
+Serialization should be platform independent.
+
+Integer sizes should be explicit.
+
+Byte order should be explicit.
+
+String encoding should be explicit.
+
+Floating-point behavior should be avoided or tightly defined where exact cross-platform consensus requires it.
+
+Filesystem path syntax should not enter consensus-visible data unless normalized by protocol definition.
+
+Local timezones should not enter consensus-visible calculations.
+
+Environment-specific values should not enter consensus-visible calculations.
+
+Consensus should consume agreed protocol data.
+
+Consensus output should be deterministic.
+
+Distributed systems can use gossip protocols.
+
+Gossip disseminates information through peer-to-peer exchanges.
+
+Each node communicates selected information to other nodes.
+
+Information propagates through the network over time.
+
+Gossip can scale well.
+
+Gossip does not inherently provide immediate global consistency.
+
+Gossip can distribute membership information.
+
+Gossip can distribute state summaries.
+
+Gossip can distribute events.
+
+Gossip data should still be validated.
+
+A peer saying another peer exists does not establish that peer's trustworthiness.
+
+Peer reputation can influence connection decisions according to protocol policy.
+
+Reputation should not override cryptographic or consensus validation.
+
+Reputation is heuristic evidence.
+
+Consensus rules should remain deterministic where required.
+
+Probabilistic routing and deterministic validation can coexist.
+
+Discovery can be probabilistic.
+
+Acceptance can remain deterministic.
+
+Bloom filters provide probabilistic membership tests.
+
+Bloom filters can produce false positives.
+
+Traditional Bloom filters do not produce false negatives when used according to their model and without unsupported deletion behavior.
+
+A probabilistic data structure should not be used where false positives violate correctness unless a definitive validation follows.
+
+Probable is not determinate.
+
+Heuristics can guide work.
+
+Heuristics should not replace required proof.
+
+Caching can reduce distributed load.
+
+Caches can become stale.
+
+Cache invalidation can occur through expiration.
+
+Cache invalidation can occur through explicit events.
+
+Cache invalidation can occur through version checks.
+
+A cache miss should fall back to the authoritative source according to architecture.
+
+A cache hit should not be treated as authoritative if the cache is permitted to be stale.
+
+Negative caching stores the absence of a result.
+
+Negative caches can hide newly created data until expiration.
+
+Use negative caching only when its staleness is acceptable.
+
+Content delivery networks distribute cached content geographically.
+
+A CDN is not automatically an authoritative application datastore.
+
+Edge caches can return stale content according to cache policy.
+
+Distributed storage can use erasure coding.
+
+Erasure coding stores redundant encoded fragments allowing recovery from selected fragment loss.
+
+Erasure coding and replication are different redundancy techniques.
+
+Replication stores complete copies.
+
+Erasure coding stores encoded fragments.
+
+Tradeoffs include storage overhead, repair cost, and read complexity.
+
+Distributed-system testing should test failure.
+
+Happy-path testing is insufficient.
+
+Disconnect peers.
+
+Delay messages.
+
+Duplicate messages.
+
+Reorder messages where the transport or protocol can permit it.
+
+Restart nodes.
+
+Restart leaders.
+
+Fill queues.
+
+Exhaust connections.
+
+Introduce stale replicas.
+
+Remove quorum.
+
+Restore quorum.
+
+Test incompatible protocol versions.
+
+Test malformed messages.
+
+Test duplicate requests.
+
+Test replay.
+
+Test partial writes where applicable.
+
+Test recovery from persistent state.
+
+Test state convergence.
+
+Test deterministic results across supported platforms.
+
+A chaos test deliberately introduces failures to observe system behavior.
+
+Chaos testing should be controlled.
+
+Chaos testing should not be performed against critical production systems without explicit authorization and safeguards.
+
+Fault injection should test defined hypotheses.
+
+Random destruction without a hypothesis is not disciplined testing.
+
+A test should state what property is being evaluated.
+
+For consensus, test safety.
+
+For recovery, test durable state restoration.
+
+For replication, test convergence.
+
+For failover, test exclusive authority.
+
+For retries, test idempotency.
+
+For partitions, test defined availability and consistency behavior.
+
+For versioning, test compatibility.
+
+For platform independence, compare protocol-visible results.
+
+A distributed soak test runs the system for an extended period.
+
+Soak testing can reveal resource leaks.
+
+Soak testing can reveal reconnect problems.
+
+Soak testing can reveal accumulated queue growth.
+
+Soak testing can reveal state drift.
+
+Soak testing can reveal timing-dependent failures.
+
+A long-running test is useful only when relevant evidence is collected.
+
+Monitor connections.
+
+Monitor retries.
+
+Monitor memory.
+
+Monitor CPU.
+
+Monitor queue depth.
+
+Monitor replication state.
+
+Monitor consensus state.
+
+Monitor rejected messages.
+
+Monitor errors.
+
+Monitor state divergence.
+
+End-to-end testing follows an operation across all required distributed boundaries.
+
+A successful client submission is not end-to-end success if the operation must later be committed and applied.
+
+Define the final success condition.
+
+Observe each required stage.
+
+Submission can pass.
+
+Admission can pass.
+
+Replication can pass.
+
+Consensus can pass.
+
+Commit can pass.
+
+Application can pass.
+
+Notification can pass.
+
+Each stage is separate.
+
+Report exactly which stage failed.
+
+Distributed systems benefit from explicit state machines.
+
+Connections have states.
+
+Peers have states.
+
+Requests have states.
+
+Transactions have states.
+
+Consensus proposals have states.
+
+Jobs have states.
+
+Explicit states improve diagnosis.
+
+State transitions should be logged where operationally useful.
+
+Invalid transitions should be rejected.
+
+A reconnect should not silently duplicate logical state.
+
+Connection identity and logical peer identity are different.
+
+A peer can disconnect and reconnect.
+
+The new connection can represent the same logical peer.
+
+Persistent peer state should be keyed by stable identity where required, not transient socket identity.
+
+Connection churn is repeated connection and disconnection.
+
+Connection churn consumes resources.
+
+Connection churn can increase latency.
+
+Connection churn can fill logs.
+
+Connection churn can create duplicate handshakes.
+
+Connection churn can degrade user experience.
+
+Persistent connections can reduce repeated setup cost.
+
+Persistent connections require liveness detection and cleanup.
+
+Reconnect behavior should use bounded backoff.
+
+A healthy persistent connection should not be destroyed without reason.
+
+A connection pool can reuse network connections.
+
+Stale pooled connections must be detected.
+
+Pool capacity should be bounded.
+
+A pool can become exhausted.
+
+Leaked connections can exhaust the pool.
+
+Connection lifecycle is part of distributed-system reliability.
+
+DNS is a distributed naming system.
+
+DNS names can resolve to multiple addresses.
+
+DNS results can change.
+
+DNS responses can be cached.
+
+DNS TTL values influence caching.
+
+A hostname should not be assumed to map permanently to one machine.
+
+DNS failure is different from connection failure.
+
+Resolve failures precisely.
+
+Service names provide logical addressing.
+
+Logical names reduce hard-coded physical addresses.
+
+Configuration can provide failover endpoints.
+
+Failover order should be deterministic where required.
+
+Random endpoint selection can distribute load.
+
+Selection policy should be explicit.
+
+A fallback endpoint should not silently become authoritative merely because the preferred endpoint is unavailable.
+
+Authority and reachability are different.
+
+A distributed system should degrade explicitly.
+
+Healthy means defined required capabilities are operational.
+
+Degraded means the system remains operational with defined capability loss.
+
+Unavailable means required service cannot currently be provided.
+
+Unknown means sufficient evidence is unavailable.
+
+These states should not be collapsed unnecessarily.
+
+A degraded node can still serve safe operations.
+
+A node without quorum can potentially serve non-authoritative diagnostic information while refusing authoritative writes.
+
+Read behavior during quorum loss should follow protocol policy.
+
+Do not permit state-changing operations merely to appear available when authority cannot be established.
+
+Distributed systems should preserve evidence.
+
+Record peer transitions.
+
+Record leadership transitions.
+
+Record term or epoch changes.
+
+Record quorum loss.
+
+Record quorum restoration.
+
+Record rejected protocol messages.
+
+Record incompatible versions.
+
+Record committed state transitions.
+
+Record recovery events.
+
+Record repeated failures.
+
+Audit requirements can require permanent historical records.
+
+Operational logs can have bounded retention.
+
+Audit history and operational logs have different purposes.
+
+Do not erase historical facts merely because current state changed.
+
+A node that was previously leader remains historically the leader for that period even after leadership changes.
+
+History should not be rewritten to match present state.
+
+Recovery should reconstruct current state from valid persistent evidence.
+
+Recovery should not invent missing committed state.
+
+If required state cannot be established, report the uncertainty.
+
+Do not guess.
+
+A distributed system can be correct while unavailable.
+
+A distributed system can be available while incorrect.
+
+Correctness and availability are different.
+
+A distributed system can be fast while unsafe.
+
+Performance and safety are different.
+
+A distributed system can have many replicas while having poor durability.
+
+Replica count and durability guarantees are different.
+
+A distributed system can have encryption while having broken authorization.
+
+Transport security and authority are different.
+
+A distributed system can have consensus while application logic remains wrong.
+
+Consensus agrees on values.
+
+Consensus does not establish that the agreed application decision is factually correct unless correctness is encoded in validation rules.
+
+Consensus does not replace validation.
+
+Consensus does not replace authorization.
+
+Consensus does not replace deterministic execution.
+
+Consensus does not replace backups.
+
+Consensus does not replace monitoring.
+
+Consensus does not replace governance.
+
+Do not confuse a connection with trust.
+
+Do not confuse discovery with admission.
+
+Do not confuse authentication with authorization.
+
+Do not confuse replication with consensus.
+
+Do not confuse replication with backup.
+
+Do not confuse consensus with voting in general.
+
+Do not confuse quorum with every node.
+
+Do not confuse quorum with any arbitrary subset.
+
+Do not confuse leader with permanent owner.
+
+Do not confuse network address with identity.
+
+Do not confuse newest timestamp with authority.
+
+Do not confuse wall-clock order with causal order.
+
+Do not confuse timeout with confirmed failure.
+
+Do not confuse retry with recovery.
+
+Do not confuse receipt with completion.
+
+Do not confuse replication with commitment.
+
+Do not confuse commitment with application.
+
+Do not confuse queue acceptance with processing.
+
+Do not confuse asynchronous with unreliable.
+
+Do not confuse eventual consistency with permanent inconsistency.
+
+Do not confuse stale data with corrupted data.
+
+Do not confuse split brain with ordinary replication lag.
+
+Do not confuse a heartbeat with proof of complete health.
+
+Do not confuse process liveness with cluster health.
+
+Do not confuse all processes running with quorum.
+
+Do not confuse a majority of currently reachable nodes with a valid quorum unless membership defines them as voters.
+
+Do not confuse configuration discovery with consensus membership.
+
+Do not confuse message signatures with freshness.
+
+Do not confuse cryptographic validity with authorization.
+
+Do not confuse identical source code with identical protocol results.
+
+Do not confuse platform independence with identical platform implementation.
+
+Do not confuse nondeterministic scheduling with permission for nondeterministic consensus output.
+
+Do not confuse probabilistic evidence with deterministic validation.
+
+When designing a distributed operation, identify the authority.
+
+Identify the participants.
+
+Identify the protocol.
+
+Identify the persistent state.
+
+Identify the success condition.
+
+Identify the failure conditions.
+
+Identify what happens if a message is lost.
+
+Identify what happens if a message is duplicated.
+
+Identify what happens if a message is delayed.
+
+Identify what happens if a participant restarts.
+
+Identify what happens if the network partitions.
+
+Identify what happens if quorum is lost.
+
+Identify what happens if quorum returns.
+
+Identify what happens if two participants claim authority.
+
+Identify what happens if clocks disagree.
+
+Identify what happens if software versions differ.
+
+Identify what happens if persistent state is stale.
+
+Identify what happens if the operation is retried.
+
+Then test those conditions.
+
+When a distributed failure occurs, establish facts.
+
+Which node observed the failure?
+
+At what local time?
+
+Which peer was involved?
+
+Which connection was involved?
+
+Which protocol stage was active?
+
+Which request identifier was involved?
+
+Which state existed before the failure?
+
+Which state existed afterward?
+
+Was the operation submitted?
+
+Was it received?
+
+Was it validated?
+
+Was it accepted?
+
+Was it replicated?
+
+Was it committed?
+
+Was it applied?
+
+Was the response sent?
+
+Was the response received?
+
+Do not collapse these questions into "did it work?"
+
+Distributed systems require precise boundaries.
+
+Distributed systems require precise state.
+
+Distributed systems require precise authority.
+
+Distributed systems require precise failure semantics.
+
+Distributed systems require bounded retries.
+
+Distributed systems require deterministic validation.
+
+Distributed systems require evidence.
+
+Keep the protocol small.
+
+Keep messages bounded.
+
+Keep states explicit.
+
+Keep authority explicit.
+
+Keep membership explicit.
+
+Keep persistence explicit.
+
+Keep retries bounded.
+
+Keep failure visible.
+
+Keep consensus-visible behavior deterministic.
+
+Keep platform-specific implementation outside common protocol semantics.
+
+Do not add distribution merely because multiple machines are available.
+
+A single machine is simpler than a cluster.
+
+A single process is simpler than multiple services.
+
+Local communication is simpler than network communication.
+
+Distribution should solve a real requirement.
+
+Once distribution is required, design for partial failure from the beginning.
+
+The network is not guaranteed to deliver the result when expected.
+
+The remote machine is not guaranteed to remain available.
+
+The clocks are not guaranteed to agree.
+
+Messages are not guaranteed to arrive when expected.
+
+Participants are not guaranteed to observe state simultaneously.
+
+Correct distributed software does not pretend these conditions do not exist.
+
+It defines what happens when they do.
+
+A distributed system is coordinated independent computation under imperfect communication.
+
+Its correctness comes from explicit protocol, deterministic validation, controlled authority, persistent evidence, and defined behavior under failure.

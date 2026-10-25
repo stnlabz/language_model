@@ -1,0 +1,2852 @@
+Authorization is the process of determining whether an authenticated or otherwise identified principal is permitted to perform a requested action on a resource.
+
+Authorization answers:
+
+What is this principal allowed to do?
+
+Authorization does not establish identity.
+
+Authentication establishes identity.
+
+Authorization evaluates permissions.
+
+Keep them separate.
+
+A user can authenticate successfully and still be unauthorized.
+
+An unauthenticated requester can sometimes be authorized to access a public resource.
+
+Public access is an authorization decision.
+
+Do not require authentication merely to claim that authorization exists.
+
+Authorization requires a decision context.
+
+The context commonly includes:
+
+Principal.
+
+Action.
+
+Resource.
+
+Applicable policy.
+
+Relevant state.
+
+The authorization decision determines whether the requested operation is permitted.
+
+A useful authorization question is:
+
+May principal P perform action A on resource R under policy C?
+
+Every part matters.
+
+Changing the principal can change the result.
+
+Changing the action can change the result.
+
+Changing the resource can change the result.
+
+Changing applicable policy can change the result.
+
+Changing relevant state can change the result.
+
+Do not reduce authorization to a single boolean stored on the user account unless the system is genuinely that simple.
+
+A permission represents authority to perform a defined operation.
+
+Examples include:
+
+Read a document.
+
+Create a record.
+
+Modify a record.
+
+Delete a record.
+
+Publish content.
+
+Manage users.
+
+Change configuration.
+
+Execute an administrative operation.
+
+Permissions should describe actual authority.
+
+Do not use vague permission names when precise operations matter.
+
+A role is a collection or classification of authority according to a system's access-control model.
+
+Examples can include:
+
+User.
+
+Editor.
+
+Administrator.
+
+Operator.
+
+Auditor.
+
+Roles are application-defined.
+
+The name of a role does not inherently define its permissions.
+
+"Administrator" means only what the system's authorization policy says it means.
+
+Do not infer permissions from a role's English name.
+
+Role-Based Access Control is commonly abbreviated RBAC.
+
+RBAC assigns permissions to roles.
+
+Principals are assigned roles.
+
+Authorization can then determine whether one of the principal's roles contains the required permission.
+
+A simplified relationship is:
+
+Principal -> Role -> Permission.
+
+Real systems can include additional constraints.
+
+Do not confuse RBAC with authentication.
+
+RBAC assumes the principal has already been established or otherwise identified.
+
+A role should not be supplied by an untrusted client as authoritative input.
+
+The server determines the principal's roles from trusted authorization state.
+
+Never authorize because a form field says:
+
+role=admin
+
+Never authorize because a URL parameter says:
+
+admin=true
+
+Never authorize because JavaScript hides a button from ordinary users.
+
+Client-side state is not authorization authority.
+
+The server must make the authoritative authorization decision.
+
+Hiding a user-interface element can improve usability.
+
+It does not prevent direct requests.
+
+A user can construct HTTP requests manually.
+
+A user can modify HTML.
+
+A user can modify JavaScript.
+
+A user can call an API directly.
+
+Authorization must be enforced where the protected operation occurs.
+
+Do not rely on the interface to enforce permissions.
+
+Every protected server-side action should enforce the applicable authorization policy.
+
+A page can be protected.
+
+An API endpoint can be protected.
+
+A command can be protected.
+
+A database operation can be protected.
+
+A file operation can be protected.
+
+A message handler can be protected.
+
+A background job can be protected.
+
+Protection belongs at the authority boundary.
+
+Do not assume requests only arrive through the expected user interface.
+
+Authorization should normally occur after authentication when the resource requires an authenticated identity.
+
+A common request sequence is:
+
+Receive request.
+
+Validate request structure sufficiently to identify the intended operation.
+
+Authenticate the requester.
+
+Establish the principal.
+
+Determine the target resource.
+
+Evaluate authorization.
+
+If authorized, perform the operation.
+
+If unauthorized, reject the operation.
+
+Do not perform the protected state change before authorization completes.
+
+Authorization after execution is auditing, not prevention.
+
+A permission check should occur before the protected effect.
+
+Do not write to the database and then ask whether the user was allowed to do it.
+
+Do not delete the file and then evaluate the role.
+
+Do not transmit protected information before checking read authority.
+
+Authorization protects both state changes and information disclosure.
+
+Read access is authority.
+
+Write access is authority.
+
+Execute access is authority.
+
+Administrative access is authority.
+
+Do not focus only on destructive operations.
+
+Unauthorized reading can be a serious security failure.
+
+Least privilege means a principal receives only the authority required for its legitimate function.
+
+Do not grant broad administrative authority merely because it is easier to implement.
+
+Narrow authority reduces the impact of mistakes and compromise.
+
+A service that only reads records should not receive write permission.
+
+A user who only edits their own profile should not receive global user-management authority.
+
+A monitoring process should not receive configuration-changing authority unless required.
+
+Authority should match purpose.
+
+Default deny means access is denied unless policy explicitly permits it.
+
+This is a strong baseline for protected systems.
+
+Unknown permission should not become permission granted.
+
+Missing role should not become administrator.
+
+Missing policy should not become allow.
+
+Ambiguous authorization state should not silently grant access.
+
+When authority cannot be established, deny the protected operation.
+
+Fail closed.
+
+Do not confuse fail closed with crashing.
+
+The application can return a controlled denial.
+
+The application should remain stable.
+
+The protected operation simply does not occur.
+
+Authorization failure is a valid application state.
+
+Handle it deliberately.
+
+An allowlist defines what is permitted.
+
+A denylist defines what is prohibited.
+
+Authorization systems commonly benefit from explicit allowed operations.
+
+A denylist alone can fail when new operations are introduced and are not added to the list.
+
+Default-deny systems reduce that risk.
+
+Do not assume an operation is safe merely because it is not explicitly forbidden.
+
+Authorization policy should define the allowed authority.
+
+Access Control Lists are commonly abbreviated ACLs.
+
+An ACL associates resources or objects with access rules.
+
+An ACL can specify which principals or groups may perform which operations.
+
+For example:
+
+User A can read File X.
+
+Group B can read and modify File X.
+
+User C has no access to File X.
+
+ACLs are resource-oriented access-control structures.
+
+Do not confuse ACLs with filesystem permissions specifically.
+
+Filesystems can use ACLs.
+
+Applications can also implement ACLs.
+
+Discretionary Access Control is commonly abbreviated DAC.
+
+DAC commonly allows an object's owner or another authorized principal to control access according to system rules.
+
+Mandatory Access Control is commonly abbreviated MAC.
+
+MAC enforces access according to centrally defined security labels or policy.
+
+Do not confuse Mandatory Access Control with a network interface MAC address.
+
+They share an abbreviation.
+
+They are unrelated concepts.
+
+Attribute-Based Access Control is commonly abbreviated ABAC.
+
+ABAC evaluates attributes associated with subjects, resources, actions, and environment.
+
+Example attributes can include:
+
+Department.
+
+Resource classification.
+
+Employment status.
+
+Device state.
+
+Time.
+
+Operation type.
+
+ABAC can express policies more flexibly than simple roles.
+
+Flexibility also increases policy complexity.
+
+Do not add ABAC when a small role or ownership check solves the requirement.
+
+Authorization architecture should remain as simple as the actual requirements allow.
+
+Policy complexity creates failure opportunities.
+
+Ownership-based authorization allows operations according to a defined ownership relationship.
+
+For example:
+
+A user may modify their own profile.
+
+A user may read their own private document.
+
+A user may delete a resource they created if policy permits it.
+
+Ownership must be established from trusted server-side state.
+
+Do not accept:
+
+owner_id=<current user>
+
+from the client as proof of ownership.
+
+The server should load the resource.
+
+The server should determine its recorded owner.
+
+The server should compare that ownership with the authenticated principal according to policy.
+
+Client claims do not establish ownership.
+
+An object identifier identifies a resource.
+
+It does not authorize access to that resource.
+
+Knowing another user's resource ID does not grant permission to read it.
+
+This distinction is critical.
+
+Authorization must be evaluated after identifying the requested object.
+
+Insecure Direct Object Reference is commonly abbreviated IDOR.
+
+IDOR vulnerabilities occur when an application exposes object identifiers and fails to enforce appropriate authorization on access to those objects.
+
+For example:
+
+/documents/100
+
+/documents/101
+
+If User A is authorized for document 100 but can change the URL to 101 and receive User B's document without an authorization check, access control is broken.
+
+The problem is not that identifiers are sequential.
+
+Random identifiers can make discovery harder.
+
+They do not replace authorization.
+
+A UUID does not grant security merely because it is difficult to guess.
+
+If an unauthorized user obtains the UUID, the server must still reject access.
+
+Do not use unguessability as the only access-control mechanism for protected resources.
+
+Capability-based systems intentionally use possession of an unforgeable capability as authority.
+
+That is a specific authorization model.
+
+Do not accidentally create a capability system merely by assuming nobody will discover a URL.
+
+If possession is intended to grant authority, define the credential as a capability and protect it accordingly.
+
+If possession is not intended to grant authority, enforce ordinary authorization.
+
+Object-level authorization checks the requester's authority over the specific target object.
+
+Function-level authorization checks whether the principal may perform a type of operation.
+
+Both can be required.
+
+A user can have permission to edit documents generally while lacking permission to edit a particular document.
+
+Do not stop at function-level authorization when object ownership or scope matters.
+
+For example:
+
+Permission: edit_document.
+
+Resource: document 123.
+
+Policy can require both:
+
+Principal has edit_document permission.
+
+Principal is authorized for document 123.
+
+One does not imply the other.
+
+Administrative permission can intentionally override ordinary ownership restrictions.
+
+If so, encode that rule explicitly.
+
+Do not scatter undocumented administrator bypasses throughout the code.
+
+Centralize authorization policy where practical.
+
+Explicit policy is easier to review.
+
+An authorization rule should be understandable.
+
+For example:
+
+Allow update when the principal owns the record.
+
+Allow update when the principal has records.admin permission.
+
+Otherwise deny.
+
+This is clearer than:
+
+if ($user)
+
+where authentication is accidentally treated as universal authorization.
+
+Authenticated does not mean authorized.
+
+Roles can be hierarchical.
+
+An administrator role can include permissions from an editor role.
+
+An editor can include permissions from a viewer role.
+
+Role inheritance should be explicit.
+
+Do not infer hierarchy from role names.
+
+A role called "senior_editor" does not automatically inherit "editor" unless policy says so.
+
+Role hierarchies can simplify policy.
+
+They can also create hidden privilege expansion.
+
+Review inherited permissions.
+
+A role change can affect many permissions at once.
+
+Treat role assignment as a security-sensitive operation.
+
+Only authorized principals should assign privileged roles.
+
+Do not let users modify their own role fields unless explicitly permitted.
+
+Mass assignment can create authorization vulnerabilities.
+
+Suppose an account update accepts:
+
+name
+
+email
+
+role
+
+If ordinary users should only modify name and email, accepting role from the request can allow privilege escalation.
+
+Use explicit writable-field allowlists.
+
+Do not bind every request field directly into privileged models.
+
+Privilege escalation occurs when a principal gains authority beyond what policy permits.
+
+Vertical privilege escalation moves toward more privileged authority.
+
+For example:
+
+Ordinary user becomes administrator.
+
+Horizontal privilege escalation accesses another principal's resources at the same nominal privilege level.
+
+For example:
+
+User A accesses User B's private record.
+
+Both are authorization failures.
+
+Do not focus only on administrator escalation.
+
+Horizontal access-control failures are common and serious.
+
+Authorization boundaries should be tested for both.
+
+For every protected operation, test:
+
+Authorized principal succeeds.
+
+Unauthenticated requester behaves according to policy.
+
+Authenticated but unauthorized principal is denied.
+
+Wrong owner is denied.
+
+Wrong role is denied.
+
+Revoked authority is denied.
+
+Malformed or manipulated identifiers do not bypass checks.
+
+Negative authorization testing is essential.
+
+A test suite that verifies only successful authorized operations does not establish access-control enforcement.
+
+Try to violate the policy.
+
+Authorization tests should operate at the actual enforcement boundary.
+
+If the HTTP endpoint performs the check, test the endpoint.
+
+If the service layer performs the check, test the service layer.
+
+If both are expected to enforce independent boundaries, test both.
+
+Do not test only whether a button is hidden.
+
+UI tests are not sufficient evidence of server authorization.
+
+Middleware can enforce broad authorization rules.
+
+For example:
+
+Require authentication.
+
+Require administrator role.
+
+Require a named permission.
+
+Middleware is useful for route-level policy.
+
+Resource-specific authorization can still require application logic after loading the target resource.
+
+Do not force every authorization decision into routing middleware if the decision requires resource state unavailable there.
+
+Put checks where sufficient evidence exists.
+
+Authorization logic can be centralized in policy functions.
+
+For example:
+
+can_read_document(principal, document)
+
+can_edit_document(principal, document)
+
+can_delete_document(principal, document)
+
+can_manage_user(principal, target_user)
+
+Clear policy functions improve consistency.
+
+Do not duplicate slightly different authorization logic across many controllers.
+
+Duplicated policy drifts.
+
+One endpoint can be fixed while another remains vulnerable.
+
+Central policy reduces inconsistent enforcement.
+
+Centralization does not mean one enormous function.
+
+Keep policies bounded by resource or domain.
+
+Small explicit policy is easier to audit.
+
+Authorization checks should return a deterministic decision for the same relevant state.
+
+Allow.
+
+Deny.
+
+If the policy engine itself fails, protected operations should fail safely.
+
+Do not convert exceptions into allow.
+
+Do not use:
+
+try authorization
+catch -> continue
+
+for protected operations.
+
+Authorization infrastructure failure is not authorization success.
+
+Authorization can depend on current state.
+
+A user's role can change.
+
+A resource's owner can change.
+
+A contract can expire.
+
+A membership can become inactive.
+
+A permission can be revoked.
+
+Do not assume authority established yesterday remains valid forever.
+
+Evaluate current policy where required.
+
+Cached authorization can improve performance.
+
+Caching introduces staleness.
+
+If permissions are revoked, cached authorization can continue granting access until expiration unless invalidation exists.
+
+The acceptable delay must be defined.
+
+Do not cache authorization indefinitely merely for speed.
+
+Security state has freshness requirements.
+
+Authorization data can be versioned.
+
+A role or permission update can invalidate relevant caches.
+
+Session state can contain authorization information.
+
+If roles are copied into the session at login, role changes might not take effect until the session refreshes.
+
+That can be acceptable or unacceptable depending on policy.
+
+Know which model is being used.
+
+Do not claim immediate revocation if sessions retain stale authority.
+
+A safer design for highly sensitive operations can consult current authorization state.
+
+A lower-risk application can accept bounded session-cached permissions.
+
+Architecture should match requirements.
+
+Authorization tokens can contain scopes or roles.
+
+The verifier must validate the token before trusting those claims.
+
+A signed role claim can be trusted only according to the trusted issuer and validation policy.
+
+Do not trust:
+
+{"role":"admin"}
+
+because it arrived as JSON.
+
+Do not trust JWT claims before signature and claim validation.
+
+Cryptographic validation establishes that the trusted issuer made the claim.
+
+Authorization policy still determines what the claim means.
+
+A token containing:
+
+scope=documents.read
+
+does not automatically authorize:
+
+documents.delete
+
+Scope should be evaluated against the requested action.
+
+Do not treat possession of any valid token as permission for every endpoint.
+
+OAuth scopes are authorization constraints.
+
+They indicate permitted classes of access according to the authorization system.
+
+Scope names are application-defined.
+
+Do not infer universal meaning from a scope string.
+
+The resource server must interpret scopes according to its policy.
+
+Scopes can be narrower than the user's total authority.
+
+A user can have permission to perform an operation interactively while a delegated token lacks the required scope.
+
+Delegated authority should remain bounded.
+
+Do not silently expand token authority to match the full user account.
+
+Delegation means one principal or application acts with authority granted under defined constraints.
+
+The actor and delegating principal can be distinct.
+
+Preserve that distinction for audit.
+
+A service acting on behalf of a user should not automatically receive every permission held by that user.
+
+Grant only required delegated authority.
+
+Service-to-service authorization is still authorization.
+
+Authenticating Service A proves Service A's identity.
+
+The receiving service must decide what Service A may do.
+
+mTLS authentication does not automatically grant API authority.
+
+A valid client certificate can identify a service.
+
+Policy determines its permissions.
+
+Machine identities should follow least privilege.
+
+Do not grant every internal service administrative authority because it is "inside the network."
+
+Internal is not synonymous with authorized.
+
+Network segmentation can restrict reachability.
+
+Reachability is not application authorization.
+
+A firewall allowing a connection does not mean the application must accept every operation.
+
+Network authorization and application authorization operate at different layers.
+
+Both can exist.
+
+Do not rely solely on source IP for application privilege unless the architecture explicitly defines and accepts that trust boundary.
+
+Proxies complicate source identity.
+
+NAT complicates source identity.
+
+Shared hosts complicate source identity.
+
+Cryptographic service identities generally provide stronger evidence where required.
+
+Filesystem authorization controls which principals can access files.
+
+Common permission classes can include:
+
+Owner.
+
+Group.
+
+Others.
+
+Common operations can include:
+
+Read.
+
+Write.
+
+Execute.
+
+Filesystem semantics depend on the operating system and filesystem.
+
+Do not assume application RBAC and filesystem permissions are the same system.
+
+An application can authorize a user to download a file while the application process itself requires filesystem read authority.
+
+Both layers must permit the operation.
+
+The end user's identity might not exist at the filesystem layer.
+
+The application acts as its operating-system principal.
+
+This creates an important boundary.
+
+If the application process can read every file, application authorization must prevent users from requesting files they should not receive.
+
+Do not expose arbitrary filesystem paths from user input.
+
+Path traversal is not merely an authorization issue, but it can bypass intended resource boundaries.
+
+Normalize and constrain file access.
+
+Authorization should operate on known resources, not arbitrary paths supplied by clients.
+
+Database authorization can exist at the database account level.
+
+An application database account can have SELECT permission.
+
+It can have INSERT permission.
+
+It can have UPDATE permission.
+
+It can have DELETE permission.
+
+It can have schema-management authority.
+
+Grant only what the application requires.
+
+Do not run ordinary application queries using a database superuser without need.
+
+Database least privilege reduces impact.
+
+Application authorization is still required.
+
+A database account belonging to the web application commonly represents the application, not each web user.
+
+The database allowing a query does not prove the current application user should have requested it.
+
+The application must enforce user-level authorization.
+
+Multiple layers can enforce complementary policy.
+
+Defense in depth can be useful.
+
+Do not assume one layer replaces every other layer.
+
+Operating-system permission does not replace application authorization.
+
+Application authorization does not replace database credentials.
+
+Database authorization does not replace user-level ownership checks.
+
+Each protects its boundary.
+
+Administrative interfaces should have explicit authorization.
+
+Do not rely on obscure URLs.
+
+Do not rely on robots.txt.
+
+Do not rely on hidden navigation.
+
+Do not rely on nobody knowing the endpoint exists.
+
+Administrative endpoints are protected because authorization denies unauthorized principals.
+
+Secrecy of route names is not authorization.
+
+Changing:
+
+/admin
+
+to:
+
+/x7-secret-admin
+
+does not create meaningful access control.
+
+If an ordinary authenticated user can request the route successfully, the authorization policy is broken.
+
+Every administrative action should verify authority.
+
+Not merely the admin dashboard.
+
+For example:
+
+GET /admin
+
+might be protected while:
+
+POST /admin/delete-user
+
+is accidentally unprotected.
+
+Protect the operation itself.
+
+Navigation protection is not enough.
+
+HTTP methods do not establish authorization.
+
+GET.
+
+POST.
+
+PUT.
+
+PATCH.
+
+DELETE.
+
+Any method can require authorization.
+
+Do not assume POST is secure because it changes state.
+
+Do not assume GET is harmless because it usually reads.
+
+Apply policy according to operation semantics.
+
+CSRF protection is not authorization.
+
+A CSRF token can establish that a request originated from an expected application interaction according to the CSRF design.
+
+It does not establish that the user has permission to perform the action.
+
+A valid CSRF token from an ordinary user does not authorize administrator operations.
+
+Perform authorization separately.
+
+Likewise, authorization does not replace CSRF protection.
+
+An administrator can be authorized to delete a user.
+
+A forged cross-site request can still abuse the administrator's authenticated session.
+
+Both controls matter.
+
+Input validation is not authorization.
+
+A syntactically valid user ID can still refer to a resource the requester may not access.
+
+Validate the input.
+
+Then authorize access to the identified resource.
+
+Do not confuse valid format with valid authority.
+
+Business rules are not necessarily authorization.
+
+For example:
+
+An invoice cannot be modified after settlement.
+
+That rule applies even to an otherwise authorized user.
+
+Authorization can say the principal may edit invoices.
+
+Business state can say this particular invoice can no longer be edited.
+
+Both conditions must pass.
+
+Keep permission and domain validity distinct where useful.
+
+An authorization decision can include contextual conditions.
+
+For example:
+
+User has approve_payment permission.
+
+Payment amount is within user's approval limit.
+
+Payment belongs to user's assigned organizational scope.
+
+Payment is in a state eligible for approval.
+
+No required separation-of-duties rule is violated.
+
+Authorization can therefore be more than role lookup.
+
+Do not oversimplify when requirements genuinely include constraints.
+
+Separation of duties prevents one principal from controlling incompatible stages of a sensitive process.
+
+For example:
+
+The person requesting a transaction may not be permitted to approve the same transaction.
+
+This is an authorization rule based on relationships and state.
+
+A principal having general approval permission does not necessarily override separation-of-duties policy.
+
+Encode the constraint explicitly.
+
+Dual control can require multiple authorized principals for a sensitive action.
+
+One principal initiates.
+
+Another independently approves.
+
+The operation proceeds only when the required authorization conditions are satisfied.
+
+Do not implement dual control as two passwords belonging to the same person.
+
+The purpose is independent authority.
+
+Quorum authorization can require a defined number of authorized approvals.
+
+The system must verify each approving principal.
+
+It must prevent duplicate counting where policy requires distinct principals.
+
+It must verify each principal has approval authority.
+
+It must verify the threshold.
+
+Do not count raw approval records without validating who produced them.
+
+Cryptographic signatures can provide evidence that specific principals approved a record according to a signature scheme.
+
+Authorization policy determines whether those principals were allowed to approve.
+
+A valid signature does not itself grant authority.
+
+Identity evidence and authority are separate.
+
+For example:
+
+Signature valid from User A.
+
+User A lacks approval permission.
+
+Result:
+
+Cryptographic signature valid.
+
+Authorization denied.
+
+Do not convert cryptographic validity into organizational authority.
+
+Authority comes from policy.
+
+A principal can have authority temporarily.
+
+Temporary roles can have activation and expiration times.
+
+Delegated authority can expire.
+
+Emergency privilege can expire.
+
+Do not treat temporary permission as permanent.
+
+Time-based authorization should use trusted time sources according to system requirements.
+
+Clock errors can affect policy.
+
+Do not silently extend expired authority because local time is incorrect.
+
+Emergency privilege elevation is sometimes called break-glass access.
+
+It allows exceptional access under controlled conditions.
+
+Break-glass authority should be explicit.
+
+It should be audited.
+
+It should be limited.
+
+It should not become the ordinary administrative workflow.
+
+Emergency access is still authorization.
+
+The system intentionally grants exceptional authority under defined policy.
+
+Do not implement an undocumented bypass.
+
+Backdoors are not legitimate authorization mechanisms.
+
+Do not create hidden universal passwords.
+
+Do not create secret query parameters that disable permission checks.
+
+Do not create debug modes that grant administrative access in production.
+
+Testing shortcuts must not become production authority.
+
+Development environments can use simplified authorization where appropriate.
+
+Production must enforce production policy.
+
+Do not assume environment separation without evidence.
+
+A configuration error can expose development bypasses.
+
+Fail safely.
+
+Authorization configuration should have secure defaults.
+
+For example:
+
+Unknown role -> no permissions.
+
+Unknown permission -> denied.
+
+Unknown resource -> not accessible.
+
+Missing authorization configuration -> deny protected operation.
+
+Do not default unknown states to administrator.
+
+Permission naming should be explicit.
+
+Examples:
+
+users.read
+
+users.create
+
+users.update
+
+users.delete
+
+users.assign_role
+
+settings.read
+
+settings.update
+
+documents.publish
+
+Precise names make authority easier to reason about.
+
+Avoid a universal:
+
+admin=true
+
+when the system actually requires several independent authorities.
+
+A broad administrator role can still exist.
+
+It can aggregate named permissions.
+
+This preserves visibility into what authority actually means.
+
+Permission sets should be inspectable.
+
+An operator should be able to determine why a principal has a permission.
+
+For example:
+
+Principal -> Role A -> Permission X.
+
+Or:
+
+Principal -> Group B -> Role C -> Permission X.
+
+Or:
+
+Principal -> Resource ACL -> Permission X.
+
+Authorization provenance matters.
+
+Do not create permission systems where nobody can explain why access was granted.
+
+A decision can record:
+
+Principal.
+
+Requested action.
+
+Resource.
+
+Policy evaluated.
+
+Decision.
+
+Reason or matched rule.
+
+Timestamp.
+
+Relevant request identifier.
+
+This supports auditing.
+
+Do not log sensitive resource contents unnecessarily.
+
+Authorization logs should record security-relevant decisions without becoming a data leak.
+
+Successful high-risk authorization decisions can be logged.
+
+Denied operations can be logged.
+
+Repeated denials can indicate mistakes or probing.
+
+Do not automatically classify every denial as an attack.
+
+Users can click links they no longer have permission to access.
+
+Software can be stale.
+
+Investigate patterns.
+
+Audit logging is not authorization enforcement.
+
+A system that allows everything but logs it is not access-controlled.
+
+Prevention and evidence are different.
+
+Do not substitute observability for policy.
+
+Authorization changes should be auditable.
+
+Role assignment.
+
+Role removal.
+
+Permission changes.
+
+Group membership changes.
+
+Ownership transfer.
+
+Delegation.
+
+Revocation.
+
+Emergency elevation.
+
+These modify authority.
+
+Record them according to policy.
+
+Do not let privilege changes disappear without trace where accountability is required.
+
+Authority changes should themselves require authorization.
+
+The operation:
+
+assign administrator role
+
+requires permission.
+
+The target user's future authority is separate from the actor's current authority to make that assignment.
+
+Do not allow privilege creation recursively without policy.
+
+A role administrator can be limited to assigning only certain roles.
+
+For example:
+
+Manager can assign Viewer and Editor.
+
+Manager cannot assign Administrator.
+
+This prevents privilege escalation through role management.
+
+Do not assume permission to assign roles means permission to assign every role.
+
+A principal should not normally be able to grant authority greater than the authority the delegation policy permits.
+
+Delegation boundaries should be explicit.
+
+Otherwise a modest management permission can become a path to total control.
+
+Groups can simplify authorization.
+
+Users join groups.
+
+Groups receive roles or permissions.
+
+Group membership becomes security-sensitive.
+
+Do not treat group membership as harmless profile metadata.
+
+Adding a user to a privileged group grants authority.
+
+Nested groups can create complex inherited permissions.
+
+Be careful.
+
+A user can receive authority indirectly through multiple membership paths.
+
+Authorization evaluation should account for all defined inheritance.
+
+Auditing should be able to explain those paths.
+
+Complex nested structures can make least privilege difficult to maintain.
+
+Keep them bounded.
+
+Negative permissions or explicit deny rules can override allows in some authorization systems.
+
+If both allow and deny rules exist, precedence must be defined.
+
+Do not leave conflict resolution ambiguous.
+
+Possible policies include:
+
+Explicit deny wins.
+
+Most specific rule wins.
+
+Priority order.
+
+Policy-engine-defined combination.
+
+Whatever rule is chosen must be deterministic.
+
+Two implementations should not resolve the same policy differently.
+
+Authorization policy is security logic.
+
+Test conflict cases.
+
+Do not test only simple allow rules.
+
+A principal can have multiple roles.
+
+One role can allow an operation.
+
+Another can deny it if explicit denies exist.
+
+The combination algorithm determines the result.
+
+Do not assume role union semantics without defining them.
+
+Tenant isolation is an authorization boundary in multi-tenant systems.
+
+A user belonging to Tenant A should not access Tenant B resources unless explicitly authorized.
+
+Tenant identifiers supplied by the client are not proof of tenant membership.
+
+Establish tenant context from trusted identity and resource state.
+
+Every tenant-scoped query should preserve isolation.
+
+Do not rely on UI filtering.
+
+A missing tenant condition in one database query can expose another tenant's data.
+
+Authorization should constrain data retrieval itself where practical.
+
+Instead of:
+
+SELECT document WHERE id = ?
+
+then discovering afterward it belongs to another tenant,
+
+a system can query:
+
+SELECT document WHERE id = ? AND tenant_id = authorized_tenant
+
+This can reduce accidental exposure.
+
+The exact architecture can vary.
+
+The authorization rule must remain enforced.
+
+Do not return protected data and then filter it on the client.
+
+The client is not a trusted authorization boundary.
+
+Data minimization and authorization complement each other.
+
+Retrieve only what the principal is allowed to access where practical.
+
+Do not load an entire confidential dataset into browser JavaScript and hide unauthorized rows with CSS.
+
+Hidden data is still delivered data.
+
+Authorization must occur before disclosure.
+
+GraphQL authorization must apply to protected fields and objects.
+
+One top-level query authorization check can be insufficient if nested fields expose restricted resources.
+
+REST authorization must apply to each protected endpoint and object.
+
+RPC authorization must apply to each protected method.
+
+Protocol style does not eliminate access control.
+
+Background jobs can perform operations without an interactive user.
+
+The job itself has an execution identity or delegated authority context.
+
+Define it.
+
+Do not treat background execution as automatically privileged.
+
+A queued job created by User A should not necessarily gain unlimited authority when a worker executes it.
+
+Preserve relevant authorization context or re-evaluate authority according to system design.
+
+Queue messages are not inherently trusted.
+
+Authenticate or otherwise trust the producer boundary.
+
+Validate authorization context.
+
+Do not accept a message containing:
+
+is_admin=true
+
+as authority without a trusted source.
+
+Scheduled tasks can have system authority.
+
+Grant only what they require.
+
+A cleanup task may delete expired temporary files.
+
+It does not need user-management authority.
+
+Least privilege applies to automation.
+
+Command-line tools can require authorization.
+
+Operating-system user identity can provide the principal.
+
+Configuration can define permitted commands.
+
+Administrative CLI access should not automatically exist merely because the binary is installed.
+
+The surrounding operating-system permissions matter.
+
+A local executable can still enforce application-level authorization if required.
+
+API gateways can enforce coarse authorization.
+
+Backend services can enforce resource-specific authorization.
+
+Do not assume gateway checks make every backend endpoint safe if backends can be reached through other paths.
+
+Know the enforcement boundary.
+
+If the gateway is the sole authorization boundary, ensure bypass paths do not exist.
+
+Trust architecture must be explicit.
+
+Microservices can propagate identity and authorization context.
+
+A downstream service should know whether that context came from a trusted upstream.
+
+Do not accept identity headers from arbitrary callers.
+
+Service authentication can establish the upstream identity.
+
+Signed internal tokens can carry delegated context.
+
+Use defined mechanisms.
+
+Do not invent trust from network topology alone.
+
+Zero-trust architecture does not mean trusting nothing.
+
+It means trust decisions are explicit and continuously or appropriately evaluated according to the architecture.
+
+Authentication and authorization still require trust anchors.
+
+Avoid slogans.
+
+Define actual policy.
+
+Authorization can use resource labels.
+
+For example:
+
+public.
+
+internal.
+
+confidential.
+
+restricted.
+
+A user's clearance or role can be compared against resource classification according to policy.
+
+Labels themselves must be protected from unauthorized modification.
+
+If a user can relabel a restricted document as public, the classification system is ineffective.
+
+Metadata affecting authorization is security-sensitive.
+
+Protect:
+
+Owner IDs.
+
+Role assignments.
+
+Permission lists.
+
+Classification labels.
+
+Tenant IDs.
+
+Group membership.
+
+Delegation records.
+
+Approval state.
+
+Do not let ordinary update operations modify security metadata unintentionally.
+
+Mass-assignment protections matter.
+
+Authorization-sensitive fields should have explicit update paths.
+
+For example:
+
+Profile update can modify display_name.
+
+Role-management operation can modify role.
+
+Ownership-transfer operation can modify owner_id.
+
+Do not expose all fields through one generic update endpoint.
+
+Separate authority.
+
+Authorization can depend on resource state.
+
+For example:
+
+Draft can be edited by author.
+
+Published document can only be edited by editor.
+
+Archived document cannot be modified.
+
+Policy should use authoritative resource state.
+
+Do not trust a request parameter claiming:
+
+status=draft
+
+to decide whether editing is allowed.
+
+Load the current stored state.
+
+Then authorize the transition.
+
+State transitions themselves can require permissions.
+
+Creating a resource can establish ownership.
+
+Ownership assignment should be server-controlled according to policy.
+
+Do not allow a requester to create a resource owned by another user unless explicitly authorized.
+
+Default ownership can be the authenticated principal.
+
+Administrative creation can support another owner through a privileged operation.
+
+Authorization for create differs from authorization for update.
+
+There is no existing resource owner before creation in the ordinary case.
+
+Policy can evaluate:
+
+Principal.
+
+Resource type.
+
+Requested parent scope.
+
+Requested initial attributes.
+
+Do not force create authorization into an ownership check that assumes the resource already exists.
+
+Delete authority should be explicit.
+
+Read permission does not imply delete permission.
+
+Update permission does not imply delete permission.
+
+Create permission does not imply update permission.
+
+Permissions should not be inferred unless policy defines implication.
+
+CRUD operations are distinct:
+
+Create.
+
+Read.
+
+Update.
+
+Delete.
+
+A system can grant any subset.
+
+Do not bundle them accidentally.
+
+Some operations do not fit CRUD.
+
+Publish.
+
+Approve.
+
+Execute.
+
+Export.
+
+Assign.
+
+Transfer.
+
+Rotate.
+
+Revoke.
+
+Restore.
+
+Impersonate.
+
+These deserve explicit permissions where security significance differs.
+
+Do not reduce every action to update merely because it changes a database row.
+
+Semantic permissions improve control.
+
+Export can be more sensitive than ordinary read.
+
+A user authorized to view one record at a time might not be authorized to export the entire dataset.
+
+Bulk operations can require separate authority.
+
+Do not assume repeated individual read permission automatically grants bulk export authority.
+
+Search endpoints can leak unauthorized information.
+
+Counts can leak information.
+
+Autocomplete can leak names.
+
+Error messages can leak existence.
+
+Authorization applies to indirect disclosure too.
+
+Do not protect the detail page while leaving unrestricted search results exposing the same data.
+
+Metadata can be sensitive.
+
+Authorization policy should define what may be disclosed.
+
+Existence itself can be protected information.
+
+For example, an unauthorized requester might receive the same response for:
+
+Resource does not exist.
+
+Resource exists but access is denied.
+
+This can prevent resource enumeration.
+
+Whether to distinguish 404 and 403 externally is an application policy decision.
+
+Internally preserve the real reason where useful.
+
+Do not falsify internal evidence.
+
+The application can intentionally conceal resource existence from unauthorized clients while logging an authorization denial internally.
+
+External nondisclosure and internal truth can coexist.
+
+Authorization errors should not reveal confidential policy details unnecessarily.
+
+A response can say:
+
+Access denied.
+
+It does not need to reveal:
+
+You would have access if you joined privileged group X.
+
+Internal logs can preserve matched policy information.
+
+Keep security diagnostics appropriately scoped.
+
+Authorization decisions should not depend on mutable client-side UI state.
+
+A checkbox being checked does not create authority.
+
+A disabled button does not remove authority.
+
+A hidden field does not protect data.
+
+CSS is not authorization.
+
+JavaScript is not authorization.
+
+HTML is not authorization.
+
+The server is authoritative for server resources.
+
+Native applications are also untrusted clients from the server's perspective.
+
+A compiled binary can be modified.
+
+Requests can be reproduced.
+
+Do not trust the official client merely because it is compiled.
+
+Enforce authorization server-side.
+
+Signed client software can establish software provenance in selected systems.
+
+It still does not automatically authorize every request from that software.
+
+User and service authority remain separate.
+
+Authorization should be attached to principals, capabilities, or other explicit policy subjects.
+
+Not vague assumptions.
+
+License checks are not necessarily authorization.
+
+A license can permit product features.
+
+Security authorization can control user actions.
+
+They can interact.
+
+Do not conflate commercial entitlement with security identity unless the architecture explicitly models entitlement as an authorization attribute.
+
+Feature flags are not automatically authorization.
+
+A feature flag can enable functionality globally or for selected populations.
+
+If a feature exposes privileged operations, authorization is still required.
+
+Do not use feature flags as the only protection for sensitive endpoints.
+
+A disabled feature can be re-enabled accidentally.
+
+Security boundaries need security policy.
+
+Environment variables are not authorization decisions.
+
+A configuration such as:
+
+ENABLE_ADMIN=true
+
+can enable an administrative subsystem.
+
+It should not mean every requester is an administrator.
+
+Configuration determines system capability.
+
+Authorization determines who may use it.
+
+File existence is not authorization.
+
+Route existence is not authorization.
+
+Network reachability is not authorization.
+
+Authentication success is not authorization.
+
+Possession of an account is not universal authorization.
+
+Authorization must be evaluated against the requested operation.
+
+A superuser intentionally has broad authority.
+
+Superuser access should be rare.
+
+Do not use superuser credentials for ordinary operations.
+
+Broad authority increases consequences of compromise and mistakes.
+
+Prefer narrower roles for routine work.
+
+Root on Unix-like systems is an operating-system superuser.
+
+Administrator on Windows can possess broad system authority according to platform security.
+
+Application administrator is a separate concept.
+
+Being operating-system root does not automatically mean an application should treat a remote web account as application administrator.
+
+Different authority domains exist.
+
+Keep them separate.
+
+Database root is different from operating-system root.
+
+Application admin is different from database admin.
+
+Cloud account admin is different from local machine admin.
+
+Names can sound similar.
+
+Authority belongs to a specific system and scope.
+
+Always identify the scope.
+
+Authorization scope answers:
+
+Authority over what?
+
+A principal can be administrator of one project and ordinary user of another.
+
+A service can write to one database and read only another.
+
+A token can access one API but not another.
+
+Do not treat authority as global unless explicitly defined.
+
+Scope should be narrow.
+
+Resource namespaces can help.
+
+For example:
+
+project:17:read
+
+project:17:write
+
+project:22:read
+
+Authority can then be tied to specific resources.
+
+Do not build enormous permission strings without a defined grammar.
+
+Keep policy understandable.
+
+Hierarchical resources can inherit authority.
+
+For example:
+
+Organization.
+
+Project.
+
+Repository.
+
+Document.
+
+Permission at a parent can propagate to children according to policy.
+
+Inheritance must be explicit.
+
+Do not assume parent access automatically means child access.
+
+Some children can intentionally override inheritance.
+
+Conflict rules must be deterministic.
+
+Ownership transfer changes authorization relationships.
+
+The transfer itself should require authority.
+
+The new owner should be valid.
+
+The previous owner's permissions after transfer should be defined.
+
+Do not simply modify owner_id without considering resulting authority.
+
+Transfer is a security-sensitive operation.
+
+Deleting a user can affect resource ownership.
+
+Define what happens to owned resources.
+
+Transfer them.
+
+Archive them.
+
+Delete them according to policy.
+
+Assign them to a system owner.
+
+Do not leave orphaned resources accidentally public or inaccessible because ownership semantics were undefined.
+
+Authorization lifecycle follows organizational lifecycle.
+
+When a user leaves a role:
+
+Remove role.
+
+Revoke unnecessary credentials.
+
+Invalidate relevant sessions where required.
+
+Transfer owned resources where required.
+
+Remove group memberships.
+
+Revoke delegated authority.
+
+Do not rely on memory to clean up privilege manually.
+
+Automate where practical.
+
+Dormant accounts can retain authority.
+
+Disabling an account can stop authentication.
+
+Authorization assignments can remain recorded for historical or future restoration.
+
+Know the distinction.
+
+Disabled identity does not necessarily mean permission records disappeared.
+
+If the account is re-enabled, old authority can return unless reviewed.
+
+Privilege reviews can identify excessive or stale access.
+
+Review who has sensitive roles.
+
+Review group membership.
+
+Review service-account authority.
+
+Review unused credentials.
+
+Review delegation.
+
+Review emergency access.
+
+Authorization is not a set-and-forget configuration.
+
+Systems change.
+
+Least privilege can erode over time.
+
+Permission creep occurs when users accumulate authority as responsibilities change.
+
+Removing obsolete authority matters as much as granting new authority.
+
+Do not only add permissions.
+
+Revocation is part of authorization management.
+
+Revocation should have defined effect.
+
+Immediate.
+
+At next request.
+
+At next session refresh.
+
+At token expiration.
+
+At cache expiration.
+
+The system should know which behavior applies.
+
+Do not promise immediate access removal if architecture cannot provide it.
+
+Authorization decisions can be local or remote.
+
+A local policy engine evaluates policy in-process.
+
+A remote authorization service evaluates decisions centrally.
+
+Remote services introduce network dependency.
+
+If the authorization service is unavailable, protected operations should follow defined failure policy.
+
+Do not default to allow merely to preserve uptime.
+
+Security and availability tradeoffs must be explicit.
+
+Policy engines can return more than allow or deny.
+
+They can return obligations or contextual information according to design.
+
+The application must enforce any required obligations.
+
+Do not ignore part of the policy result.
+
+If the engine says:
+
+Allow only if response fields X and Y are redacted,
+
+returning the full resource violates policy.
+
+Authorization can govern data transformation.
+
+Field-level authorization controls access to specific fields.
+
+A user can read a record without being allowed to see every field.
+
+For example:
+
+Public profile name allowed.
+
+Private email denied.
+
+Administrative notes denied.
+
+Do not assume object read permission implies every field is readable.
+
+Field-level policy adds complexity.
+
+Use it only when required.
+
+Column-level database controls can complement application field authorization.
+
+Again, layers are separate.
+
+An API response should contain only authorized fields.
+
+Do not send sensitive fields and rely on the client to ignore them.
+
+Serialization occurs after authorization decisions where protected fields are involved.
+
+Authorization can govern actions on relationships.
+
+For example:
+
+Add member to group.
+
+Remove member from group.
+
+Assign user to project.
+
+Link account to organization.
+
+These operations alter future authority.
+
+Treat them as privileged operations where appropriate.
+
+Indirect privilege escalation can occur through seemingly harmless configuration.
+
+For example:
+
+User cannot assign themselves administrator.
+
+But user can change which group is mapped to administrator.
+
+Then user joins that group.
+
+The authorization model must consider authority-changing configuration.
+
+Protect policy itself.
+
+Who may modify authorization policy?
+
+That is one of the most sensitive authorization questions.
+
+Policy administrators can effectively grant authority.
+
+Restrict that capability.
+
+Audit it.
+
+Separate policy administration from ordinary application administration where requirements justify it.
+
+Authorization data should have integrity protection.
+
+If an attacker can modify the roles table directly, application authorization can be bypassed.
+
+Database security matters.
+
+Backups matter.
+
+Administrative tooling matters.
+
+Authorization depends on trustworthy policy state.
+
+Do not protect the login endpoint while leaving the permissions database writable by an untrusted process.
+
+Trust boundaries extend beneath the application.
+
+Configuration files containing access policy should have appropriate filesystem permissions.
+
+Source-controlled policy changes can require review.
+
+Dynamic policy changes can require administrative authorization.
+
+Choose according to system architecture.
+
+Policy deployment should be testable.
+
+A syntax error should not turn into allow-all.
+
+Fail closed.
+
+Validate policy before activation.
+
+Retain a known-good policy for rollback where appropriate.
+
+Do not destroy the active policy before validating its replacement.
+
+Authorization policies should be deterministic.
+
+The same principal, action, resource, policy state, and relevant context should produce the same decision.
+
+Do not use arbitrary randomness in authorization.
+
+Do not use an AI model's probability as the sole authority for protected operations.
+
+"Probably authorized" is not authorization.
+
+A model can assist policy analysis.
+
+A model can flag unusual access.
+
+A model can recommend review.
+
+The actual authorization decision should follow defined policy where determinism is required.
+
+Probable is not permitted.
+
+Permitted is a policy state.
+
+Behavioral similarity is not permission.
+
+Historical access does not automatically establish current authority.
+
+A user performed an operation yesterday.
+
+That does not prove they may perform it today.
+
+Evaluate current authority.
+
+Likewise, previous denial does not necessarily mean current denial if policy changed.
+
+Authorization uses current applicable state.
+
+Time-of-check to time-of-use issues can occur when authorization state changes between the permission check and the protected operation.
+
+For sensitive operations, the check and action may need transactional or otherwise coordinated semantics.
+
+Do not assume authority remains unchanged across an unbounded delay.
+
+For example:
+
+Check user can spend funds.
+
+Authority is revoked.
+
+Later execute transfer using old decision.
+
+This can violate policy.
+
+Bind authorization decisions to the operation appropriately.
+
+Database transactions can help when policy and resource state are stored together.
+
+Distributed systems can require other consistency mechanisms.
+
+There is no universal solution.
+
+Identify the race.
+
+Design according to the required guarantees.
+
+Authorization in distributed systems can be challenging because policy state is replicated.
+
+One node can know a permission was revoked while another has stale state.
+
+Define consistency requirements.
+
+Security-sensitive revocation can require stronger propagation guarantees.
+
+Do not claim instantaneous global revocation without evidence.
+
+Authorization events can be versioned.
+
+A request can carry policy version information where architecture requires it.
+
+Nodes can reject decisions based on obsolete state.
+
+This is one possible design.
+
+Do not add distributed complexity without need.
+
+Small systems should remain small.
+
+A single application with one database does not need a global policy mesh merely because such systems exist.
+
+Use the simplest model satisfying the requirements.
+
+For many applications:
+
+Authenticated principal.
+
+Named roles.
+
+Named permissions.
+
+Resource ownership.
+
+Explicit policy functions.
+
+Default deny.
+
+Server-side enforcement.
+
+Audit logs.
+
+That is enough.
+
+Complexity is not security.
+
+Clear policy is security.
+
+Authorization should be reviewable by humans.
+
+A reviewer should be able to answer:
+
+Who can perform this operation?
+
+Why?
+
+On which resources?
+
+Under which conditions?
+
+Where is the rule enforced?
+
+How can authority be revoked?
+
+If nobody can answer these questions, the authorization system is too opaque.
+
+Code review should examine authorization changes carefully.
+
+Adding a route can create a new authority surface.
+
+Adding an API method can create a new authority surface.
+
+Adding a role can create new privilege combinations.
+
+Changing ownership semantics can affect access.
+
+Do not treat authorization code as routine plumbing.
+
+Authorization tests should accompany new protected functionality.
+
+A new administrative endpoint without denial tests is incomplete.
+
+Test direct requests.
+
+Test altered object IDs.
+
+Test lower-privilege accounts.
+
+Test unauthenticated requests.
+
+Test stale or revoked authority where applicable.
+
+Do not assume framework annotations are correct without testing behavior.
+
+Framework authorization features can help.
+
+Use them consistently.
+
+Understand what they actually enforce.
+
+Do not add an annotation called Authorized and assume security without knowing its semantics.
+
+Evidence comes from behavior and implementation.
+
+Security reviews should trace protected operations from request to effect.
+
+Where is principal established?
+
+Where is permission checked?
+
+Which resource is checked?
+
+Can alternate paths reach the effect?
+
+Can background processing bypass the check?
+
+Can direct API calls bypass UI restrictions?
+
+Can another identifier select someone else's resource?
+
+Trace the actual path.
+
+Authorization bypass often hides in alternate paths.
+
+One endpoint checks permission.
+
+Another legacy endpoint performs the same operation without checking.
+
+One web interface is protected.
+
+One API is not.
+
+One bulk operation skips per-object checks.
+
+Inventory protected effects.
+
+Apply policy consistently.
+
+Versioned APIs need authorization too.
+
+Do not fix:
+
+/api/v2/users/delete
+
+while leaving:
+
+/api/v1/users/delete
+
+publicly reachable.
+
+Deprecated does not mean inaccessible.
+
+Remove obsolete paths or protect them.
+
+Internal APIs need authorization according to their trust boundary.
+
+"Internal" is not a permission.
+
+If only authenticated services may call an endpoint, enforce that.
+
+If only one service may perform an operation, authorize that service specifically.
+
+Do not grant every internal caller equal authority without need.
+
+Webhooks should authenticate their source according to the webhook protocol.
+
+Then authorize what that source is permitted to trigger.
+
+A valid webhook signature does not necessarily authorize arbitrary application operations.
+
+Process only defined event types.
+
+Validate resource scope.
+
+Keep authority bounded.
+
+Plugins and modules can introduce authorization surfaces.
+
+A module should not inherit unrestricted core authority merely because it is installed.
+
+Define module capabilities.
+
+Restrict access where architecture permits.
+
+Module administrative routes should enforce administrative policy.
+
+Do not trust extension code automatically when the extension model requires isolation.
+
+If plugins execute in the same process with full application privileges, that architectural fact should be recognized.
+
+Application-level authorization cannot magically sandbox code that already executes with equivalent process authority.
+
+Authorization controls requests and principals.
+
+Sandboxing controls code execution boundaries.
+
+Do not confuse them.
+
+Operating-system process privileges can constrain compromised applications.
+
+Run services with the minimum OS authority required.
+
+Application authorization protects application resources.
+
+OS authorization limits process capabilities.
+
+Both matter.
+
+Containers do not automatically create application authorization.
+
+A container boundary can isolate processes.
+
+It does not determine which application user may delete another user's record.
+
+Do not confuse deployment isolation with access control.
+
+Cryptographic keys can carry authority.
+
+A signing key can authorize software updates.
+
+A transaction key can authorize transactions.
+
+A certificate key can authenticate a service.
+
+Possession of a key can therefore imply specific authority according to system policy.
+
+Protect keys according to the authority they carry.
+
+Not all keys have equal consequences.
+
+A root signing key can carry far greater authority than a temporary session token.
+
+Security controls should reflect blast radius.
+
+Authority should be explicit in key usage.
+
+Do not use one master key for unrelated purposes.
+
+Key separation helps keep authority bounded.
+
+A key authorized to sign updates should not automatically authorize financial transactions.
+
+Cryptographic capability should match operational purpose.
+
+Authorization of software updates should verify:
+
+Trusted signer.
+
+Permitted artifact or channel.
+
+Applicable version policy.
+
+Integrity.
+
+Other required policy.
+
+A valid signature from an unrelated trusted key should not automatically authorize installation.
+
+Trust scope matters.
+
+Authorization in package systems can distinguish:
+
+Who may publish.
+
+Who may sign.
+
+Who may release.
+
+Who may install.
+
+These are different authorities.
+
+Do not collapse them because one person currently performs all roles.
+
+Design can preserve separation for future growth.
+
+Approval workflows are authorization systems.
+
+Submitting a change does not authorize deployment.
+
+Reviewing a change does not necessarily authorize release.
+
+Approving release does not necessarily authorize infrastructure access.
+
+Define each authority.
+
+Human organizational titles do not automatically become software permissions.
+
+Map them explicitly.
+
+Do not grant access because a title sounds senior.
+
+Policy determines authority.
+
+A principal can hold multiple organizational roles.
+
+Software authorization should evaluate the relevant role for the operation.
+
+Avoid vague hierarchy assumptions.
+
+Authority should be granted intentionally.
+
+Authorization can be conditional on qualification or certification if the system's policy defines that requirement.
+
+The system must use authoritative qualification state.
+
+A self-declared qualification is not evidence.
+
+Do not let a profile checkbox grant operational authority.
+
+Authorization can require multiple independent predicates.
+
+For example:
+
+Principal is authenticated.
+
+Principal holds required position.
+
+Principal holds required qualification.
+
+Principal has active assignment.
+
+Requested operation falls within assignment scope.
+
+All required conditions must be true.
+
+Do not collapse distinct governance states into one broad role if the policy requires separation.
+
+Eligibility is not authority.
+
+Qualification is not authority.
+
+Assignment is not authority.
+
+Authentication is not authority.
+
+Each can contribute to an authorization decision according to policy.
+
+A principal can be eligible for a role without currently holding it.
+
+A principal can be qualified without being assigned.
+
+A principal can be assigned without having unlimited authority.
+
+Do not infer access from adjacent states.
+
+Authorization should evaluate exactly what policy requires.
+
+Explicit relationships prevent privilege drift.
+
+If access requires:
+
+Position + Qualification + Active Assignment
+
+then all three must be established.
+
+Missing one means the access condition is not satisfied.
+
+Do not substitute probability.
+
+Do not infer missing qualification from position.
+
+Do not infer active assignment from employment.
+
+Do not infer permission from identity.
+
+Policy is policy.
+
+An authorization engine should not rewrite policy to make a request succeed.
+
+If the request is denied by policy, report denial.
+
+Do not search for a creative interpretation that grants access.
+
+The human-defined policy is authoritative.
+
+Software enforces it.
+
+Exceptions require an authorized exception mechanism.
+
+Do not create exceptions implicitly.
+
+An exception should identify:
+
+Who authorized it.
+
+What authority is granted.
+
+To whom.
+
+For what scope.
+
+For what duration if temporary.
+
+Under what conditions.
+
+This makes exceptional access reviewable.
+
+A verbal or external authorization can be represented in the system if policy permits.
+
+Until it is represented or otherwise verifiable according to the system, software should not invent it.
+
+No evidence of authority means no authority established.
+
+Authorization decisions should preserve evidence.
+
+For an allow decision, the system should be able to identify the policy basis.
+
+For a deny decision, it should be able to identify the missing or conflicting authority internally where practical.
+
+Do not produce arbitrary outcomes.
+
+Determinism matters.
+
+A reliable authorization system knows the principal.
+
+A reliable authorization system knows the requested action.
+
+A reliable authorization system knows the resource.
+
+A reliable authorization system knows the applicable policy.
+
+A reliable authorization system denies when required authority is absent.
+
+A reliable authorization system does not trust client-supplied roles.
+
+A reliable authorization system enforces policy server-side.
+
+A reliable authorization system protects read operations as well as writes.
+
+A reliable authorization system checks object-level access.
+
+A reliable authorization system follows least privilege.
+
+A reliable authorization system uses default deny for protected operations.
+
+A reliable authorization system makes privilege changes auditable.
+
+A reliable authorization system supports revocation.
+
+A reliable authorization system does not treat authentication as permission.
+
+A reliable authorization system does not use obscurity as access control.
+
+A reliable authorization system does not replace policy with probability.
+
+A reliable authorization system does not guess.
+
+Do not confuse authentication with authorization.
+
+Do not confuse authorization with identification.
+
+Do not confuse authorization with encryption.
+
+Do not confuse authorization with input validation.
+
+Do not confuse authorization with CSRF protection.
+
+Do not confuse authorization with auditing.
+
+Do not confuse authorization with UI visibility.
+
+Do not confuse authorization with route secrecy.
+
+Do not confuse authorization with network reachability.
+
+Do not confuse authorization with ownership claims supplied by clients.
+
+Do not confuse an object ID with authority over the object.
+
+Do not confuse an unpredictable identifier with permission.
+
+Do not confuse a role name with its actual permissions.
+
+Do not confuse a valid token with universal authority.
+
+Do not confuse a token scope with the user's entire authority.
+
+Do not confuse a valid signature with organizational authority.
+
+Do not confuse mTLS authentication with application permission.
+
+Do not confuse internal network location with authorization.
+
+Do not confuse root authority in one system with administrator authority in another.
+
+Do not confuse qualification with assignment.
+
+Do not confuse assignment with access.
+
+Do not confuse eligibility with permission.
+
+Do not confuse historical permission with current permission.
+
+Do not confuse policy-engine failure with allow.
+
+When implementing a protected endpoint:
+
+Authenticate the requester if authentication is required.
+
+Establish the trusted principal.
+
+Identify the requested action.
+
+Load or identify the target resource using validated input.
+
+Obtain current authorization state.
+
+Evaluate the applicable policy.
+
+If denied, perform no protected operation.
+
+Return the appropriate denial response.
+
+If allowed, perform only the authorized operation.
+
+Record security-relevant activity according to audit policy.
+
+Do not rely on the client to enforce any of these steps.
+
+When implementing ownership authorization:
+
+Establish the principal from trusted authentication state.
+
+Load the resource.
+
+Read the resource's authoritative owner identity.
+
+Compare it with the principal according to policy.
+
+Apply any explicitly defined administrative override.
+
+If neither condition permits access, deny.
+
+Do not accept ownership from request parameters.
+
+When implementing role-based authorization:
+
+Establish the principal.
+
+Load roles from trusted authorization state.
+
+Resolve role permissions according to defined inheritance.
+
+Determine the permission required by the operation.
+
+Evaluate whether the principal possesses that permission.
+
+Apply resource-specific constraints.
+
+Allow only if every required condition is satisfied.
+
+Do not authorize merely because the principal has some role.
+
+When implementing delegated authorization:
+
+Authenticate the actor.
+
+Validate the delegation credential or record.
+
+Identify the delegating principal.
+
+Identify the actor.
+
+Determine the delegated scope.
+
+Determine expiration and revocation state.
+
+Compare the requested action with delegated authority.
+
+Allow only within that authority.
+
+Preserve both actor and delegation context for audit.
+
+Do not silently elevate delegation to full account authority.
+
+When revoking authority:
+
+Identify the permission source.
+
+Remove or disable that source.
+
+Invalidate relevant caches.
+
+Invalidate sessions or tokens where policy requires.
+
+Ensure future authorization decisions observe the revocation within the defined timeframe.
+
+Record the change.
+
+Do not merely hide the feature from the user's interface.
+
+When investigating unauthorized access:
+
+Determine which principal was authenticated.
+
+Determine which credential established that identity.
+
+Determine which action was requested.
+
+Determine which resource was accessed.
+
+Determine which authorization rule was evaluated.
+
+Determine whether the authorization check occurred.
+
+Determine the result.
+
+Determine whether an alternate path bypassed the check.
+
+Determine whether policy state was stale.
+
+Determine whether privilege was changed.
+
+Determine what protected effect occurred.
+
+Use evidence.
+
+Do not assume authentication compromise when the actual defect was missing authorization.
+
+Do not assume authorization bypass when stolen valid credentials possessed legitimate authority.
+
+Distinguish the failure.
+
+When designing authorization, define:
+
+What principals exist?
+
+What resources exist?
+
+What actions exist?
+
+Which actions are protected?
+
+Which permissions exist?
+
+Which roles exist?
+
+How are permissions assigned?
+
+Does ownership matter?
+
+Does tenant scope matter?
+
+Does resource state matter?
+
+Does delegation exist?
+
+Does temporary authority exist?
+
+How is authority granted?
+
+Who may grant it?
+
+How is authority revoked?
+
+How quickly must revocation take effect?
+
+Where are checks enforced?
+
+How are decisions audited?
+
+What happens if authorization infrastructure fails?
+
+Then implement the smallest system that satisfies those requirements.
+
+Keep authorization small.
+
+Keep authorization deterministic.
+
+Keep permissions explicit.
+
+Keep roles understandable.
+
+Keep authority scoped.
+
+Keep privilege narrow.
+
+Keep policy server-side.
+
+Keep client claims untrusted.
+
+Keep authorization separate from authentication.
+
+Authorization answers one fundamental question:
+
+Is this principal permitted to perform this action on this resource under the applicable policy?
+
+If policy permits it, allow it.
+
+If policy denies it, deny it.
+
+If required authority is absent, deny it.
+
+If authority cannot be established, deny it.
+
+If the authorization mechanism fails, do not invent permission.
+
+If the principal merely appears likely to have authority, that is not authority.
+
+Permission must be established.
+
+Probable is not permitted.

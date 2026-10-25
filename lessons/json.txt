@@ -1,0 +1,519 @@
+JSON stands for JavaScript Object Notation.
+JSON is a text-based data interchange format.
+JSON is language-independent as a data interchange format.
+JSON syntax was derived from a subset of JavaScript object literal syntax.
+JSON and JavaScript are not the same thing.
+A JavaScript object is not automatically JSON.
+JSON text can be parsed into data structures in many programming languages.
+JSON can represent objects.
+JSON can represent arrays.
+JSON can represent strings.
+JSON can represent numbers.
+JSON can represent true.
+JSON can represent false.
+JSON can represent null.
+Standard JSON does not represent undefined.
+Standard JSON does not represent functions.
+Standard JSON does not represent comments.
+Standard JSON does not represent executable code.
+A JSON document contains one top-level JSON value.
+The top-level value can be an object.
+The top-level value can be an array.
+The top-level value can be a string.
+The top-level value can be a number.
+The top-level value can be true.
+The top-level value can be false.
+The top-level value can be null.
+A JSON object is enclosed in braces.
+A JSON array is enclosed in brackets.
+A JSON object contains name-value members.
+Object member names are strings.
+JSON object member names must use double quotation marks.
+A colon separates an object member name from its value.
+A comma separates members of an object.
+A JSON array contains an ordered sequence of values.
+A comma separates values in an array.
+JSON does not permit a trailing comma after the final object member according to standard JSON syntax.
+JSON does not permit a trailing comma after the final array element according to standard JSON syntax.
+JSON strings use double quotation marks.
+Single quotation marks do not delimit standard JSON strings.
+The empty JSON object is {}.
+The empty JSON array is [].
+An empty object and an empty array are different values.
+JSON whitespace can appear around structural characters where permitted.
+JSON whitespace includes space.
+JSON whitespace includes horizontal tab.
+JSON whitespace includes line feed.
+JSON whitespace includes carriage return.
+Whitespace inside a JSON string is part of the string.
+Whitespace outside strings generally does not change the represented data structure.
+JSON strings support escape sequences.
+\" represents a quotation mark inside a JSON string.
+\\ represents a backslash inside a JSON string.
+\/ can represent a slash inside a JSON string.
+\b represents backspace.
+\f represents form feed.
+\n represents line feed.
+\r represents carriage return.
+\t represents horizontal tab.
+\u followed by four hexadecimal digits represents a UTF-16 code unit escape.
+JSON text is defined for Unicode data.
+JSON exchanged between systems is commonly encoded as UTF-8.
+UTF-8 is the required encoding for JSON exchanged between systems that are not part of a closed ecosystem under current JSON interoperability specifications.
+A JSON parser converts JSON text into an implementation's data representation.
+A JSON serializer converts supported application data into JSON text.
+Parsing and serialization are different operations.
+Successful parsing proves that text satisfies the parser's accepted JSON syntax.
+Successful parsing does not prove that the data satisfies application requirements.
+Successful parsing does not prove that data is trustworthy.
+Successful parsing does not prove that data is authorized.
+Successful parsing does not prove that data is current.
+Successful parsing does not prove that data is true.
+Syntax validation and semantic validation are different.
+A JSON object can be syntactically valid while containing semantically invalid values.
+A JSON document can be syntactically valid while omitting fields required by an application.
+A JSON document can be syntactically valid while containing unexpected fields.
+A JSON document can be syntactically valid while containing values of the wrong application-defined type.
+Application validation should occur after parsing when data has application requirements.
+JSON numbers use decimal syntax defined by JSON.
+JSON does not define separate integer and floating-point data types.
+A JSON number is a JSON number regardless of whether its textual form contains a fractional component.
+Programming languages can map JSON numbers into different native numeric types.
+Numeric precision can be lost when a JSON number exceeds the exact numeric range of the receiving implementation.
+JavaScript commonly represents parsed JSON numbers using the Number type.
+JavaScript Number cannot exactly represent every possible integer.
+Large integer identifiers should not automatically be transported as JSON numbers when exact representation cannot be guaranteed by every participant.
+A string representation can preserve an exact large integer identifier when the protocol defines it as a string.
+Numeric representation should be defined by the protocol.
+JSON does not permit NaN as a numeric value.
+JSON does not permit Infinity as a numeric value.
+JSON does not permit -Infinity as a numeric value.
+JSON null is a literal value.
+JSON null and an absent object member are different states.
+The object {"value":null} contains a member named value.
+The object {} does not contain a member named value.
+An application can assign different meanings to missing and null values.
+A missing field can mean unspecified.
+A null field can mean explicitly empty or absent according to the application contract.
+Those meanings must be defined by the application.
+JSON Boolean values are lowercase true and false.
+TRUE is not the standard JSON true literal.
+FALSE is not the standard JSON false literal.
+Null is not the standard JSON null literal.
+NULL is not the standard JSON null literal.
+JSON literals are case-sensitive.
+Object member names are case-sensitive strings.
+"name" and "Name" are different member names.
+Applications should define exact field names.
+A producer and consumer must agree on field names.
+A producer and consumer must agree on value meanings.
+A producer and consumer must agree on required fields.
+A producer and consumer must agree on optional fields.
+A producer and consumer must agree on valid ranges.
+A producer and consumer must agree on versioning behavior.
+JSON provides syntax.
+JSON does not by itself provide the application contract.
+A schema can define additional structure and constraints.
+JSON Schema is a specification family for describing and validating JSON data.
+JSON Schema and JSON are different things.
+A JSON document does not require a JSON Schema merely to be valid JSON.
+A JSON Schema can define expected value types.
+A JSON Schema can define required properties.
+A JSON Schema can constrain string values.
+A JSON Schema can constrain numeric values.
+A JSON Schema can constrain array contents.
+A JSON Schema can constrain object properties.
+A JSON Schema can constrain enumerated values.
+A JSON Schema can define reusable subschemas.
+Schema validation provides stronger structural validation than syntax parsing alone.
+Schema validation does not establish that data is factually correct.
+Schema validation does not establish authorization.
+Schema validation does not establish provenance.
+Schema validation does not establish currentness.
+A value satisfying a schema can still contain malicious application data.
+Validation should match the actual application contract.
+A schema that accepts everything provides little structural assurance.
+A schema that rejects valid required evolution can create compatibility problems.
+JSON can be used for configuration.
+A JSON configuration file is data.
+A configuration file should be validated before trusted use.
+Missing configuration should be distinguished from invalid configuration.
+Invalid configuration should be distinguished from inaccessible configuration.
+An inaccessible configuration file is an I/O failure.
+Malformed JSON is a parsing failure.
+A valid JSON configuration with invalid values is a validation failure.
+A valid configuration referencing an unavailable service is an operational dependency failure.
+These failures are different.
+Error reporting should preserve the actual failure stage.
+A JSON parser error is not automatically a network error.
+A JSON parser error is not automatically a service-unavailable error.
+A missing field is not automatically a parser error.
+An unknown field is not automatically invalid unless the contract says it is invalid.
+A configuration version mismatch is not automatically malformed JSON.
+Layer boundaries matter.
+JSON is commonly used by HTTP APIs.
+application/json is the standard media type commonly used for JSON content.
+An HTTP response containing JSON should use an appropriate Content-Type.
+An HTTP request containing JSON should use an appropriate Content-Type.
+HTTP and JSON are separate protocols and formats.
+HTTP transports messages.
+JSON can represent application data within those messages.
+Valid JSON does not imply HTTP success.
+HTTP 404 can contain a valid JSON error body.
+HTTP 500 can contain a valid JSON error body.
+HTTP 503 can contain a valid JSON error body.
+HTTP 200 can contain invalid JSON if a broken server claims to return JSON but produces malformed content.
+The HTTP status should be evaluated independently from JSON parsing.
+A client should not discard HTTP status information merely because response-body parsing failed.
+A response can contain no body.
+A 204 response has no response content.
+Attempting to parse an empty response body as JSON can fail.
+An empty body and an empty JSON object are different.
+An empty body and an empty JSON array are different.
+{} is valid JSON.
+[] is valid JSON.
+An empty byte sequence is not a complete JSON value.
+A JSON API should define whether an empty collection is represented by [].
+A JSON API should define whether an empty object is represented by {}.
+A JSON API should define whether null is permitted.
+A JSON API should define whether fields can be omitted.
+Consistency makes clients easier to implement.
+JSON is commonly used between JavaScript and PHP applications.
+Browser JavaScript can serialize data using JSON.stringify.
+Browser JavaScript can parse JSON using JSON.parse.
+PHP can encode values as JSON using json_encode.
+PHP can decode JSON using json_decode.
+JavaScript JSON.stringify and PHP json_encode are implementation APIs rather than the JSON format itself.
+The APIs have language-specific behavior.
+JavaScript undefined has no direct JSON representation.
+JavaScript functions have no direct JSON representation.
+JavaScript BigInt has no ordinary direct JSON.stringify representation without custom handling.
+PHP resources do not have a general JSON data representation.
+Language-specific values may require deliberate conversion before JSON serialization.
+Serialization can fail.
+Serialization failure should be handled.
+Parsing can fail.
+Parsing failure should be handled.
+A serializer should not silently invent meanings for unsupported application values.
+A parser should not silently convert invalid JSON into trusted data.
+PHP associative arrays can be encoded as JSON objects or arrays depending on their structure and encoding behavior.
+PHP objects can be encoded according to PHP JSON encoding rules.
+PHP json_decode can return objects or associative arrays depending on arguments.
+The receiving PHP representation is not itself JSON after decoding.
+Once parsed, JSON text has become application data in the receiving language.
+A JavaScript object created by JSON.parse is a JavaScript value.
+A PHP array created by json_decode is a PHP value.
+A Go struct populated by JSON decoding is a Go value.
+A C structure populated by a JSON library is a C value.
+The source JSON representation and the in-memory representation are different layers.
+Go provides encoding/json.
+json.Marshal serializes supported Go values into JSON.
+json.Unmarshal parses JSON into a supplied Go value.
+Exported Go struct fields can participate in ordinary encoding/json serialization.
+Struct tags can control JSON field names and options.
+A Go struct tag such as json:"name" can map a field to a JSON property named name.
+A Go struct's memory layout is not JSON.
+Serializing a Go struct requires defined encoding behavior.
+C does not provide a JSON parser in the ISO C standard library.
+C applications can implement JSON handling or use an appropriate JSON library.
+C++ does not provide one universal JSON representation as part of the language itself.
+C++ applications can use appropriate JSON libraries.
+C# provides JSON facilities through .NET libraries.
+Programming-language JSON libraries can differ in edge-case behavior.
+A protocol should define interoperability requirements independently of one library.
+JSON objects are conceptually unordered collections of name-value pairs.
+Applications should not rely on object member order unless an additional application specification deliberately defines canonical ordering.
+JSON arrays are ordered.
+Array element order is semantically significant.
+The arrays [1,2] and [2,1] contain the same values in different orders.
+Those arrays are not equivalent when order matters.
+Object member order should not be used as an implicit priority system without an explicit higher-level contract.
+A JSON parser can preserve encountered member order as an implementation behavior.
+Preserving encountered order does not change the underlying JSON object model into an ordered semantic structure.
+Deterministic serialization requires deliberate canonicalization.
+Two serializers can represent the same logical JSON data using different insignificant whitespace.
+The texts {"a":1,"b":2} and { "a": 1, "b": 2 } represent equivalent object data.
+Byte-for-byte comparison of ordinary JSON text is not the same as semantic comparison of parsed JSON values.
+Whitespace differences change bytes without necessarily changing JSON meaning.
+Object member ordering can change bytes without necessarily changing JSON meaning.
+Escaping choices can change bytes while representing equivalent string values.
+Cryptographic hashing operates on bytes.
+Hashing two semantically equivalent but byte-different JSON documents produces different hashes under ordinary cryptographic hashing.
+A system requiring stable hashes over JSON must define a canonical representation.
+Canonicalization defines one deterministic representation for equivalent data according to a canonicalization specification.
+Canonical property ordering can be part of a canonical representation.
+Canonical number representation can be part of a canonical representation.
+Canonical string escaping can be part of a canonical representation.
+Canonical whitespace rules can be part of a canonical representation.
+Consensus-sensitive systems should not hash arbitrary serializer output unless serializer behavior is part of the consensus specification.
+Consensus-sensitive systems should not depend on map iteration order when constructing JSON.
+Deterministic systems should explicitly define serialization.
+Deterministic serialization should produce identical bytes for identical logical input under the defined protocol.
+JSON alone does not guarantee deterministic byte serialization.
+A digital signature signs bytes or a defined representation.
+Signing JSON requires agreement about exactly which bytes or canonical representation are signed.
+A verifier must reconstruct or receive the same signed representation.
+Reformatting signed JSON can invalidate a byte-level signature.
+Adding insignificant whitespace can invalidate a byte-level signature if raw JSON bytes are signed.
+Reordering object members can invalidate a raw-byte signature.
+A signature scheme should define the signed representation.
+A cryptographic hash does not authenticate data by itself.
+A digital signature can provide authenticity and integrity properties when correctly designed and verified.
+JSON does not provide cryptographic integrity.
+JSON does not provide encryption.
+JSON does not provide authentication.
+JSON does not provide authorization.
+JSON does not provide signatures.
+Those capabilities must be added by surrounding protocols or application mechanisms.
+JSON input is untrusted when it comes from an untrusted source.
+A JSON field containing HTML can cause XSS if later inserted into HTML unsafely.
+A JSON field containing SQL text can contribute to SQL injection if later concatenated into SQL.
+A JSON field containing a filesystem path can contribute to path traversal if used without validation.
+A JSON field containing a shell command fragment can contribute to command injection if used unsafely.
+JSON encoding does not sanitize data for other contexts.
+JSON escaping is not HTML escaping.
+JSON escaping is not SQL parameterization.
+JSON escaping is not shell escaping.
+Each output context requires appropriate handling.
+A value safely represented in JSON can still be dangerous when moved into another interpreter.
+Trust should not be inherited merely because parsing succeeded.
+Input validation should enforce type.
+Input validation should enforce length.
+Input validation should enforce range.
+Input validation should enforce permitted values.
+Input validation should enforce relationships between fields when required.
+Input validation should reject impossible or prohibited states.
+A string being valid UTF-8 does not mean the string is a valid username.
+A number being syntactically valid does not mean it is within an application's permitted range.
+An object containing a field does not mean the caller is permitted to set that field.
+Authorization should determine which fields or operations a caller may control.
+Mass assignment vulnerabilities can occur when applications blindly copy client-supplied object fields into privileged data models.
+A server should explicitly control which client-provided fields can modify protected state.
+A client-supplied role field should not grant administrative authority merely because the JSON parsed successfully.
+A client-supplied user identifier should not override authenticated identity unless the application contract explicitly permits it.
+Data and authority are different concepts.
+JSON can describe a requested action.
+JSON does not authorize the action.
+JSON can contain an identity claim.
+JSON does not prove the identity claim.
+JSON can contain a timestamp.
+JSON does not prove the timestamp is truthful.
+JSON can contain a hash.
+JSON does not prove the hash was correctly computed.
+JSON can contain a signature.
+JSON does not prove the signature is valid.
+Verification must be performed by the appropriate trusted mechanism.
+JSON can represent version information.
+A version field should have defined semantics.
+A schema version and an application version are different concepts.
+A protocol version and an ABI version are different concepts.
+A JSON field named version is ambiguous unless the contract defines what is being versioned.
+Historical versions can appear in JSON data without being current.
+A list containing "1.3", "1.4", and "1.5" does not establish that all versions are active.
+A history array describes history if the contract defines it as history.
+A current_version field can explicitly identify current state when the contract defines it as authoritative.
+Current state and historical state should be represented distinctly when that distinction matters.
+A parser should not infer current state merely from the last textual value unless the data contract defines ordering and current-state semantics.
+The largest numeric-looking version is not necessarily the active version.
+Semantic versions are structured identifiers.
+Semantic version ordering is not ordinary lexicographic string ordering.
+"1.10.0" can sort before "1.9.0" under naive string ordering even though semantic version precedence places 1.10.0 after 1.9.0.
+Version values should be interpreted according to their versioning scheme.
+JSON is often used for module manifests.
+A module manifest describes module metadata according to the host's contract.
+A manifest can identify a module.
+A manifest can identify a module version.
+A manifest can identify an interface version.
+A manifest can identify capabilities.
+A manifest can identify dependencies.
+The exact fields depend on the module system.
+A manifest file being valid JSON does not mean the module is valid.
+A host can reject a syntactically valid manifest because required fields are absent.
+A host can reject a syntactically valid manifest because a version is incompatible.
+A host can reject a syntactically valid manifest because a capability is unsupported.
+A host can reject a syntactically valid manifest because qualification fails.
+Manifest parsing, manifest validation, compatibility checking, qualification, loading, and activation are different lifecycle stages.
+An error should identify the stage that actually failed.
+A missing manifest is different from malformed JSON.
+Malformed JSON is different from an incompatible interface version.
+An incompatible interface version is different from failed module qualification.
+Failed module qualification is different from runtime module failure.
+Runtime module failure is different from a knowledge miss.
+Precise state distinctions improve diagnosis.
+JSON can be used for persistent data.
+Using JSON for persistence can be appropriate for small bounded datasets.
+A JSON file can be simpler than a database when relational queries, concurrency, and large-scale indexing are unnecessary.
+A database can be more appropriate when concurrent transactions, complex querying, indexing, or integrity relationships are required.
+JSON and databases solve different problems.
+A JSON file is not automatically a database.
+A collection of JSON files can form an application's datastore by design.
+File-based persistence requires handling concurrent access.
+Two writers can overwrite each other's changes without coordination.
+Partial writes can corrupt a file.
+Process termination during writing can leave incomplete data.
+Atomic file replacement can reduce partial-update risk.
+A common safe-update pattern writes a complete new file and then atomically replaces the previous file where the filesystem provides required rename semantics.
+Atomic replacement does not automatically provide multi-record transactions across several files.
+File locking can coordinate writers where supported and correctly implemented.
+A lock is useful only when all participating writers obey the locking protocol.
+Backups remain important for file-based persistence.
+JSON files should have defined ownership and permissions when they contain sensitive data.
+Secrets stored in JSON are still secrets.
+A filename extension does not protect sensitive data.
+A .json file can contain passwords, keys, tokens, or personal information.
+Sensitive JSON should be protected according to its contents.
+Public web roots should not expose private configuration JSON.
+Web server configuration should prevent unintended access to private files.
+Source-control repositories should not contain production secrets merely because those secrets are stored in JSON.
+A secret removed from the latest Git revision can remain in repository history.
+Secret rotation can be required after accidental disclosure.
+JSON configuration can refer to environment variables or external secret stores according to application design.
+Configuration and secrets do not have to use the same storage mechanism.
+JSON arrays can represent collections.
+An empty array can represent a valid collection containing zero items.
+Zero items is not an error by itself.
+A retrieval operation returning [] can mean the operation succeeded and found no matching items.
+A retrieval operation returning null can have a different defined meaning.
+A retrieval operation failing to execute should be represented separately from an empty successful result.
+A successful empty result and an unavailable service are different states.
+A successful empty result and malformed data are different states.
+A successful empty result and insufficient evidence are different states.
+Applications should preserve these distinctions.
+A knowledge corpus can use JSON to represent facts.
+A fact record can contain an identifier.
+A fact record can contain source information.
+A fact record can contain content.
+A fact record can contain timestamps.
+A fact record can contain classification metadata.
+The actual fields depend on the corpus contract.
+A fact record being syntactically valid does not establish the fact is correct.
+Provenance describes where information came from.
+Provenance can help determine authority.
+Source identity and content are separate pieces of information.
+A source can be authoritative for one question and irrelevant for another.
+Historical documentation can be valid evidence of history without being authoritative for current state.
+A JSON record describing old state should not override a current authoritative declaration merely because both parse successfully.
+Retrieval relevance and evidentiary authority are different.
+A search system can retrieve a JSON record because its text matches a query.
+Textual match does not prove that the record answers the question.
+Evidence selection should consider the actual meaning of fields.
+A field named history should be treated as historical information.
+A field named current can represent current information when the schema defines it that way.
+A field named deprecated can identify data that should not be treated as current according to the contract.
+A field named status can represent state when its permitted values are defined.
+Field names alone should not be assigned undocumented semantics.
+The schema or application contract defines meaning.
+JSON Pointer defines syntax for identifying a specific value within a JSON document.
+A JSON Pointer uses path-like tokens.
+JSON Pointer and filesystem paths are different.
+JSON Patch defines operations for modifying a JSON document.
+JSON Patch commonly uses the media type application/json-patch+json.
+JSON Patch operations include add.
+JSON Patch operations include remove.
+JSON Patch operations include replace.
+JSON Patch operations include move.
+JSON Patch operations include copy.
+JSON Patch operations include test.
+A JSON Patch document is not an arbitrary JSON object.
+Patch operations should be authorized.
+Allowing a client to patch arbitrary paths can expose protected fields.
+The test operation can support conditional modification.
+JSON Merge Patch provides another method for describing changes to JSON documents.
+JSON Patch and JSON Merge Patch have different semantics.
+An API should define which patch format it accepts.
+JSON Lines is a convention where separate JSON values are written one per line.
+JSON Lines is not one ordinary JSON array.
+A complete JSON Lines file can contain multiple top-level JSON values separated by lines.
+Standard JSON expects one top-level JSON value per JSON text.
+JSON Lines can be useful for streaming or append-oriented records.
+A consumer must know whether input is standard JSON or JSON Lines.
+NDJSON is another name commonly used for newline-delimited JSON.
+Streaming JSON requires framing.
+TCP does not preserve application message boundaries.
+Sending two JSON documents over TCP does not automatically tell the receiver where one ends and the next begins.
+A protocol can use length-prefix framing.
+A protocol can use newline-delimited JSON when its rules permit it.
+A protocol can use one JSON value per HTTP message.
+Framing and serialization are different responsibilities.
+JSON defines representation.
+The transport defines how bytes move.
+The application protocol defines what messages mean.
+A protocol using JSON over TCP must define framing.
+A protocol using JSON over HTTP can use HTTP message framing.
+A protocol using JSON over WebSocket can use WebSocket message boundaries.
+A parser should enforce reasonable resource limits for untrusted input.
+Extremely deep nesting can consume parser resources.
+Extremely large strings can consume memory.
+Extremely large arrays can consume memory.
+Extremely large objects can consume memory.
+A valid JSON document can still be operationally dangerous because of its size or structure.
+Input-size limits are security and reliability controls.
+Maximum nesting depth can be a security and reliability control.
+Maximum collection sizes can be security and reliability controls.
+Maximum string lengths can be security and reliability controls.
+Resource limits should be explicit.
+Rejecting oversized JSON is different from reporting malformed JSON.
+A request exceeding a permitted HTTP body size can produce HTTP 413.
+A valid but semantically prohibited JSON document can produce an application validation error.
+A malformed JSON request can produce HTTP 400 when the request cannot be parsed according to the endpoint contract.
+A syntactically valid JSON request with unsupported media semantics can produce another status according to the API contract.
+HTTP status selection should reflect the actual failure.
+JSON parsing should produce deterministic interpretation for the same valid input under the selected parser contract.
+Application validation should produce deterministic results for deterministic rules.
+Configuration loading should not silently guess missing critical values when guessing could change system behavior.
+Required configuration should be required.
+Optional configuration should have documented defaults.
+A default is part of system behavior.
+Defaults should not be invented differently on each run.
+Unknown configuration fields can indicate a spelling mistake.
+Strict configuration validation can reject unknown fields when that improves safety.
+Forward-compatible protocols can permit unknown fields when the contract requires extensibility.
+Strictness should match the purpose of the JSON document.
+Configuration and network protocols can require different unknown-field policies.
+Ignoring an unknown network field can support forward compatibility.
+Ignoring an unknown security-critical configuration field can conceal an operator error.
+Context matters.
+JSON objects can contain duplicate member names in textual input.
+Interoperable behavior with duplicate names is problematic because parsers can handle duplicates differently.
+Some parsers preserve the first duplicate.
+Some parsers preserve the last duplicate.
+Some parsers report duplicates.
+Some parsers expose all duplicates.
+Protocols requiring deterministic interpretation should prohibit duplicate object member names or define their handling.
+Security-sensitive JSON should not rely on ambiguous duplicate-name behavior.
+A validator and application parser should agree about duplicate-name handling.
+Parser differentials can create security vulnerabilities.
+Canonical JSON representations should not contain ambiguous duplicate members.
+JSON is simple by design.
+Simple syntax does not eliminate the need for a precise data contract.
+A small JSON document can carry important system state.
+A large JSON document can still represent a simple structure.
+File size does not determine authority.
+The source and contract determine authority.
+A README represented as JSON would still be documentation.
+A runtime manifest represented as JSON would still be a runtime manifest.
+A historical record represented as JSON would still be historical.
+Serialization format does not determine evidentiary priority.
+JSON should represent facts without changing their meaning.
+A serializer should not transform historical information into current state.
+A parser should not transform absence into certainty.
+A missing value means only what the contract defines it to mean.
+An empty array means only what the contract defines it to mean.
+null means only what the contract defines it to mean.
+A field named error should not automatically imply service unavailability.
+A field named evidence should not automatically imply that the evidence proves a conclusion.
+A field named answer should not automatically establish that the answer is correct.
+Meaning comes from the governing application contract and verified state.
+JSON is useful because it is small, readable, widely supported, and structurally explicit.
+JSON is appropriate when a simple structured interchange format satisfies the requirement.
+JSON should not be made more complicated than the data contract requires.
+Explicit fields are preferable to undocumented positional assumptions when clarity matters.
+Explicit version fields are preferable when consumers must distinguish incompatible formats.
+Explicit status fields are preferable when multiple states must remain distinguishable.
+Explicit error categories are preferable to forcing consumers to infer failure from prose.
+Explicit nullability rules are preferable to accidental behavior.
+Explicit limits are preferable to unbounded resource consumption.
+Explicit serialization rules are preferable when deterministic bytes matter.
+Explicit schema rules are preferable when structure must be validated.
+A valid JSON document is data.
+What that data means must be defined by the system using it.

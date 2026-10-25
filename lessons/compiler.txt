@@ -1,0 +1,1593 @@
+A compiler translates source code from one representation into another representation.
+
+Compilation commonly transforms human-readable source code into lower-level code.
+
+A compiler does not necessarily produce a complete executable directly.
+
+Compilation is one stage in a larger build process.
+
+A typical native build can include preprocessing.
+
+A typical native build can include compilation.
+
+A typical native build can include assembly.
+
+A typical native build can include linking.
+
+The exact build stages depend on the language and toolchain.
+
+A toolchain is a collection of tools used to transform source code into executable or distributable software.
+
+A toolchain can include a preprocessor.
+
+A toolchain can include a compiler.
+
+A toolchain can include an assembler.
+
+A toolchain can include a linker.
+
+A toolchain can include a librarian or archiver.
+
+A toolchain can include a debugger.
+
+A toolchain can include binary inspection tools.
+
+GCC is the GNU Compiler Collection.
+
+Clang is a compiler front end associated with the LLVM project.
+
+MSVC is Microsoft's C and C++ compiler toolchain.
+
+Different compilers can implement the same language standard.
+
+Different compilers can produce different machine code from equivalent source code.
+
+Equivalent machine code is not required for equivalent program behavior.
+
+Compiler choice can affect diagnostics.
+
+Compiler choice can affect optimization.
+
+Compiler choice can affect supported extensions.
+
+Compiler choice can affect ABI compatibility.
+
+Compiler choice can affect generated binaries.
+
+Source code is the human-maintained program representation supplied to the language toolchain.
+
+A source file normally contains program declarations and definitions according to its language.
+
+C source files commonly use the .c extension.
+
+C++ source files commonly use extensions such as .cpp, .cc, or .cxx.
+
+Header files commonly use .h or .hpp extensions.
+
+File extensions are conventions.
+
+The compiler mode and build configuration determine how a file is interpreted.
+
+A translation unit is the source presented to the compiler after preprocessing according to C and C++ terminology.
+
+A C translation unit commonly consists of one source file plus the contents introduced through preprocessing.
+
+Each C source file is normally compiled independently into an object file.
+
+The linker later combines required object files and libraries.
+
+A header file normally contains declarations and definitions intended for inclusion by source files.
+
+A header is not automatically a separately compiled program unit.
+
+The C preprocessor processes preprocessing directives.
+
+Preprocessor directives begin with # in ordinary C and C++ source syntax.
+
+#include requests inclusion of another file during preprocessing.
+
+#define defines a macro.
+
+#undef removes a macro definition.
+
+#if begins conditional preprocessing.
+
+#ifdef tests whether a macro is defined.
+
+#ifndef tests whether a macro is not defined.
+
+#else provides an alternative preprocessing branch.
+
+#elif provides an additional conditional branch.
+
+#endif terminates a preprocessing conditional.
+
+#error causes preprocessing to issue a diagnostic according to its use.
+
+#pragma provides implementation-defined or standardized pragma behavior depending on the pragma.
+
+Preprocessing occurs before ordinary C compilation.
+
+A macro performs preprocessing substitution.
+
+A macro is not a function.
+
+Function-like macros can resemble functions syntactically.
+
+Macro arguments can be evaluated in unexpected ways when macro definitions duplicate their arguments.
+
+A macro argument with side effects can be dangerous when referenced more than once by the macro expansion.
+
+Parenthesize macro parameters appropriately when macros form expressions.
+
+Parenthesize complete macro expressions appropriately.
+
+Macros do not obey ordinary function type checking in the same way functions do.
+
+Prefer functions when preprocessing behavior is not required and a function provides the needed semantics.
+
+Constants do not always require macros.
+
+Enumerations can represent integer constants.
+
+const-qualified objects can represent values that should not be modified through that object.
+
+Language features are often preferable to complex macros when they satisfy the requirement.
+
+Conditional compilation allows source to include or exclude code based on preprocessing conditions.
+
+Conditional compilation can support platform-specific implementation.
+
+Conditional compilation can support optional features.
+
+Conditional compilation can support compiler-specific behavior.
+
+Excessive conditional compilation can make code difficult to understand.
+
+Platform-specific behavior should remain bounded when architecture requires platform independence.
+
+Common behavior should remain common.
+
+Platform-specific implementations can exist behind defined interfaces.
+
+A header guard prevents repeated processing of header contents within a translation unit.
+
+A traditional header guard uses #ifndef, #define, and #endif.
+
+#pragma once is widely supported but historically implementation-specific.
+
+Header guards should use unique macro identifiers.
+
+Repeated inclusion can otherwise cause duplicate declarations or definitions where not permitted.
+
+A declaration introduces a name and describes an entity.
+
+A definition provides the entity according to language rules.
+
+A variable declaration can state that a variable exists elsewhere.
+
+A variable definition allocates or defines the object according to language semantics.
+
+A function declaration describes a function interface.
+
+A function definition provides the function body.
+
+Declaration and definition are different concepts.
+
+A declaration can occur multiple times where the language permits compatible redeclarations.
+
+An object or function requiring one definition must satisfy applicable language rules.
+
+extern can declare an object or function with external linkage according to C semantics.
+
+static has multiple meanings depending on context.
+
+At file scope in C, static can give an identifier internal linkage.
+
+Within a function, static gives an object static storage duration.
+
+Do not infer one meaning of static without considering context.
+
+Linkage determines whether declarations in different scopes or translation units refer to the same entity.
+
+External linkage allows an entity to be referenced across translation units according to language rules.
+
+Internal linkage restricts the entity to its translation unit.
+
+No linkage applies to selected local identifiers.
+
+Linkage is a language concept.
+
+Linking is a toolchain stage.
+
+They are related but not identical concepts.
+
+The compiler parses source code.
+
+Lexical analysis recognizes tokens.
+
+Tokens include identifiers.
+
+Tokens include keywords.
+
+Tokens include literals.
+
+Tokens include operators.
+
+Tokens include punctuation.
+
+Parsing analyzes token structure according to grammar.
+
+A parser can build an abstract syntax tree.
+
+An abstract syntax tree is commonly abbreviated AST.
+
+An AST represents program structure.
+
+An AST is not machine code.
+
+Semantic analysis checks meaning beyond grammar.
+
+Semantic analysis can include type checking.
+
+Semantic analysis can include name resolution.
+
+Semantic analysis can include constraint checking.
+
+Syntactically valid code can still contain semantic errors.
+
+A compiler diagnostic reports a detected condition.
+
+A compiler error normally prevents successful compilation.
+
+A compiler warning reports a condition that may deserve attention but does not necessarily prevent output.
+
+A warning is not automatically a defect.
+
+A warning should be examined.
+
+Do not suppress warnings merely to obtain a clean build.
+
+Fix the cause when the warning identifies a real problem.
+
+Suppress a warning only when the condition is understood and suppression is justified.
+
+Warning levels control categories or quantities of diagnostics according to the compiler.
+
+Different compilers have different warning options.
+
+Strict warning settings can reveal portability problems.
+
+Strict warning settings can reveal suspicious conversions.
+
+Strict warning settings can reveal unused values.
+
+Strict warning settings can reveal questionable control flow.
+
+Compiler warnings provide evidence.
+
+They do not replace testing.
+
+A compiler accepting source does not prove the source is correct.
+
+A compiler rejecting source does not necessarily mean the intended algorithm is wrong.
+
+The program can violate language syntax or semantics while the algorithmic idea remains valid.
+
+Compilation correctness and application correctness are different.
+
+Intermediate representation is commonly abbreviated IR.
+
+A compiler can translate source into an intermediate representation.
+
+An IR provides a form suitable for analysis and optimization.
+
+LLVM IR is one example of an intermediate representation.
+
+Not every compiler exposes its IR to ordinary users.
+
+The compiler can perform optimization.
+
+Optimization attempts to improve generated code while preserving required observable program behavior according to language rules.
+
+Optimization can reduce execution time.
+
+Optimization can reduce code size.
+
+Optimization can reduce memory operations.
+
+Optimization can eliminate unnecessary calculations.
+
+Optimization can rearrange operations where language semantics permit.
+
+Optimization levels control optimization strategy according to the compiler.
+
+GCC and Clang commonly provide options such as -O0, -O1, -O2, and -O3.
+
+Exact optimization behavior is compiler and version dependent.
+
+-O0 commonly minimizes optimization and is useful for straightforward debugging.
+
+-O2 commonly enables a broad set of optimizations.
+
+-O3 commonly enables additional aggressive optimizations.
+
+Higher optimization levels do not guarantee faster software.
+
+Optimization can increase code size.
+
+Optimization can expose undefined behavior that appeared harmless in an unoptimized build.
+
+Optimization does not create undefined behavior that valid language semantics forbid the compiler from exploiting.
+
+Incorrect programs can behave differently under optimization because their behavior was never properly defined.
+
+A program working at -O0 and failing at -O2 can indicate undefined behavior or another latent defect.
+
+Do not assume the optimizer is wrong without evidence.
+
+Inspect the program's language correctness.
+
+Debug builds and release builds can behave differently.
+
+Debug builds commonly include debugging information.
+
+Debug builds commonly use reduced optimization.
+
+Release builds commonly use optimization.
+
+These are project conventions rather than language requirements.
+
+A release should be tested using the configuration actually intended for release.
+
+Testing only debug builds does not prove the release build behaves correctly.
+
+The as-if rule allows compiler transformations when observable behavior remains as required by the language.
+
+Source-code instruction order is not necessarily machine instruction order.
+
+Compiler optimization can inline functions.
+
+Inlining replaces or integrates a function call with equivalent generated behavior according to optimization decisions.
+
+The inline keyword does not simply command the compiler to inline a function.
+
+inline also participates in language linkage and definition rules.
+
+The compiler can inline functions not marked inline.
+
+The compiler can decline to inline functions marked inline.
+
+Optimization decisions belong to the compiler.
+
+Constant folding evaluates constant expressions during compilation when permitted.
+
+Dead-code elimination removes code whose effects cannot affect required observable behavior.
+
+Common-subexpression elimination can avoid repeated equivalent calculations.
+
+Loop optimizations can transform iteration.
+
+Vectorization can use SIMD instructions for suitable operations.
+
+SIMD stands for Single Instruction, Multiple Data.
+
+Optimization should preserve defined program semantics.
+
+Undefined behavior gives the compiler broad freedom because the language imposes no required behavior for that execution.
+
+Undefined behavior is commonly abbreviated UB.
+
+Undefined behavior is not the same as an ordinary runtime error.
+
+Undefined behavior means the language standard imposes no requirements for that situation.
+
+Signed integer overflow is undefined behavior in C for ordinary signed integer arithmetic when the mathematical result is not representable.
+
+Unsigned integer arithmetic follows modular arithmetic according to C rules.
+
+Dereferencing an invalid pointer produces undefined behavior.
+
+Accessing outside valid array bounds can produce undefined behavior.
+
+Using an object after its lifetime ended can produce undefined behavior.
+
+Data races can produce undefined behavior under applicable C and C++ memory models.
+
+Undefined behavior should be removed rather than depended upon.
+
+Behavior observed from one compiler does not define undefined behavior.
+
+Behavior observed from one optimization level does not define undefined behavior.
+
+Behavior observed repeatedly does not make undefined behavior valid.
+
+Implementation-defined behavior is behavior where the implementation chooses among permitted possibilities and documents the choice.
+
+Unspecified behavior allows an implementation to choose among permitted possibilities without necessarily documenting the choice.
+
+Undefined behavior imposes no requirements.
+
+These categories are different.
+
+Portability requires understanding which behavior the language guarantees.
+
+Compiler extensions provide behavior beyond the language standard.
+
+Extensions can be useful.
+
+Extensions can reduce portability.
+
+If ISO C portability is required, compiler-specific extensions should be avoided or isolated.
+
+A compiler flag can select a language standard.
+
+For GCC and Clang, -std options select language modes.
+
+Examples include -std=c11.
+
+Examples include -std=c17.
+
+Examples include -std=c23 where supported.
+
+Compiler support for a standard can vary by version.
+
+Selecting a standard mode does not guarantee every optional feature exists on every platform.
+
+Language standard and platform API are different.
+
+ISO C defines the C language and standard library.
+
+POSIX defines additional operating-system interfaces.
+
+Windows defines platform-specific APIs.
+
+A program using POSIX functions is not strictly ISO C merely because the source is written in C.
+
+A program using Windows APIs is not strictly platform-independent C merely because it compiles with a C compiler.
+
+Separate language portability from platform portability.
+
+After compilation, an assembler can translate assembly language into machine-code object representation.
+
+A compiler can invoke the assembler automatically.
+
+Developers do not always invoke the assembler directly.
+
+Assembly language represents processor instructions and related directives.
+
+Machine code is encoded instructions executed by a processor.
+
+Assembly syntax depends on architecture and assembler conventions.
+
+x86-64 assembly differs from ARM64 assembly.
+
+Machine code compiled for one instruction-set architecture does not ordinarily execute directly on another architecture.
+
+Architecture targeting matters.
+
+A cross-compiler runs on one platform while generating code for another target.
+
+The host is the system running the toolchain.
+
+The target is the system for which output is generated.
+
+Host and target can be different.
+
+Cross-compilation is common for embedded systems.
+
+Cross-compilation is common for operating-system development.
+
+Cross-compilation is common when building for multiple architectures.
+
+A target triple can identify architecture, vendor, operating system, and ABI conventions according to the toolchain.
+
+Exact target-triple syntax depends on the toolchain.
+
+An object file contains compiled machine code and metadata that has not necessarily been fully linked into a final executable.
+
+Object files can contain sections.
+
+Object files can contain symbols.
+
+Object files can contain relocation information.
+
+Object files can contain debugging information.
+
+Object-file format depends on platform.
+
+ELF is a common executable and object format on Unix-like systems including Linux.
+
+PE is the Portable Executable format used by Windows.
+
+Mach-O is used by Apple operating systems.
+
+These formats are not interchangeable merely because they contain machine code.
+
+A symbol identifies a function, object, or other linkable entity according to object-file and language conventions.
+
+Symbols can be defined.
+
+Symbols can be undefined references awaiting resolution.
+
+Symbols can have visibility.
+
+The linker resolves references between object files and libraries.
+
+A linker combines compiled units into a final binary or another linked artifact.
+
+The linker can produce an executable.
+
+The linker can produce a shared library.
+
+The linker can report unresolved symbols.
+
+An undefined-reference linker error means required symbol resolution failed.
+
+A linker error is different from a compiler syntax error.
+
+If a function is declared and called but no required definition is linked, compilation can succeed while linking fails.
+
+Compilation and linking are separate stages.
+
+A duplicate-symbol error can occur when incompatible multiple definitions are linked.
+
+One-definition rules and linkage rules differ between C and C++ in details.
+
+Understand the language being compiled.
+
+Name mangling encodes information into symbol names according to ABI and compiler conventions.
+
+C++ commonly uses name mangling to represent overloaded functions and type information.
+
+C normally uses simpler external symbol naming conventions.
+
+extern "C" in C++ requests C language linkage for applicable declarations.
+
+extern "C" does not convert C++ code into C.
+
+It affects linkage conventions for declared entities according to C++ rules.
+
+C and C++ interoperability requires compatible interfaces.
+
+ABI stands for Application Binary Interface.
+
+An ABI defines binary-level conventions between compiled components.
+
+An ABI can define calling conventions.
+
+An ABI can define register usage.
+
+An ABI can define stack behavior.
+
+An ABI can define type layout.
+
+An ABI can define symbol conventions.
+
+An ABI can define binary object conventions.
+
+API and ABI are different.
+
+An API describes source-level or logical interaction.
+
+An ABI describes binary interaction.
+
+Two libraries can expose equivalent APIs while having incompatible ABIs.
+
+Changing a structure layout can break ABI compatibility.
+
+Changing calling conventions can break ABI compatibility.
+
+Changing compiler settings can affect ABI compatibility.
+
+C++ ABI compatibility can be particularly sensitive to compiler and library versions.
+
+Binary compatibility should be validated rather than assumed.
+
+A calling convention defines how function calls are performed at the binary level.
+
+Calling conventions can specify argument passing.
+
+Calling conventions can specify return-value passing.
+
+Calling conventions can specify register preservation.
+
+Calling conventions can specify stack cleanup.
+
+Caller and callee must agree.
+
+Calling-convention mismatch can corrupt execution.
+
+Function-pointer types should match the functions they reference.
+
+Casting incompatible function pointers does not necessarily make calls valid.
+
+A static library contains object code intended to be linked into another binary.
+
+On Unix-like toolchains, static libraries commonly use the .a extension.
+
+On Windows, static libraries commonly use the .lib extension.
+
+Static linking incorporates required library code into the linked output according to linker behavior.
+
+Static linking does not necessarily copy every byte of every library into the executable.
+
+The linker generally selects required objects or sections according to its capabilities.
+
+A shared library is loaded for use by programs at runtime or load time according to platform semantics.
+
+Linux shared libraries commonly use .so filenames.
+
+Windows shared libraries commonly use .dll filenames.
+
+Dynamic-link libraries on Windows are commonly called DLLs.
+
+A DLL can export functions.
+
+A DLL can export data.
+
+Consumers import exported symbols according to the ABI.
+
+A Windows import library can provide linker information for a DLL.
+
+An import library is not the DLL itself.
+
+The executable can link against an import library while the DLL supplies implementation at runtime.
+
+A program can also load a DLL dynamically at runtime.
+
+Windows provides APIs such as LoadLibrary for runtime DLL loading.
+
+Windows provides GetProcAddress for resolving exported function addresses.
+
+The equivalent concepts on POSIX systems commonly involve dlopen and dlsym.
+
+Runtime module loading allows optional components to be discovered and loaded without static linkage.
+
+Dynamic loading requires interface qualification.
+
+Loading a library successfully does not prove it implements the expected module contract.
+
+Required symbols should be resolved.
+
+Version compatibility should be checked.
+
+ABI compatibility should be checked where applicable.
+
+Module metadata should be validated according to the host architecture.
+
+A library file existing on disk does not make it a valid module.
+
+Discovery and qualification are different.
+
+A loader maps executable code and required libraries into a process.
+
+The operating-system loader participates when a program starts.
+
+The loader resolves dynamic dependencies according to platform rules.
+
+A missing shared library can prevent program startup.
+
+A wrong library version can prevent startup.
+
+A wrong architecture can prevent loading.
+
+A 32-bit library cannot ordinarily be loaded into a 64-bit process.
+
+A 64-bit library cannot ordinarily be loaded into a 32-bit process.
+
+Process architecture and module architecture must match.
+
+Dynamic library search paths affect which library is loaded.
+
+Search-path behavior can have security consequences.
+
+Do not load libraries from untrusted locations.
+
+Do not rely on ambiguous library search order when security matters.
+
+Use controlled paths and platform-recommended loading behavior.
+
+Dependency confusion can occur at binary loading boundaries as well as package-management boundaries.
+
+The exact artifact loaded matters.
+
+A linker script controls aspects of binary layout in toolchains that support linker scripts.
+
+Linker scripts are common in embedded development.
+
+Linker scripts are common in operating-system development.
+
+They can define memory regions.
+
+They can define section placement.
+
+They can define entry points.
+
+Ordinary application development often does not require custom linker scripts.
+
+Do not introduce linker complexity without a requirement.
+
+Sections organize object and executable content.
+
+A text section commonly contains executable code.
+
+A data section commonly contains initialized writable data.
+
+A BSS-like section commonly represents zero-initialized or uninitialized static-storage objects according to object format conventions.
+
+Read-only data can occupy a read-only section.
+
+Exact section names and semantics depend on object format and toolchain.
+
+Stack and heap are runtime memory concepts rather than ordinary executable-file sections in the same sense.
+
+The stack commonly stores function activation data and automatic objects according to ABI and compiler decisions.
+
+The heap provides dynamically allocated storage through runtime allocation mechanisms.
+
+The compiler does not simply place every local variable physically on the stack.
+
+Optimization can keep values in registers.
+
+Optimization can remove variables entirely.
+
+Source-level variables do not always correspond one-to-one with runtime memory locations.
+
+Debugging optimized code can therefore be more difficult.
+
+Debug information maps machine-level program state back toward source-level concepts.
+
+DWARF is a debugging-information format commonly used with ELF systems.
+
+PDB files are commonly used for debugging information in Microsoft toolchains.
+
+Debug symbols can contain function names.
+
+Debug symbols can contain source locations.
+
+Debug symbols can contain type information.
+
+Debug symbols can increase artifact size.
+
+Debug symbols do not normally change intended application semantics.
+
+Stripping removes selected symbol or debugging information from binaries.
+
+Stripping can reduce deployed binary size.
+
+Stripping can make postmortem debugging harder.
+
+Organizations can retain symbols separately from production binaries.
+
+Crash addresses can be symbolized using matching symbol information.
+
+Symbols must correspond to the exact binary build.
+
+Symbols from another build can produce incorrect diagnostic results.
+
+Build identity matters.
+
+A hash can identify exact build artifacts.
+
+A version number can identify a release family.
+
+A version number alone does not necessarily identify exact bytes.
+
+Reproducible build systems can improve artifact traceability.
+
+A map file can describe linker layout and symbols.
+
+Map files can help inspect binary size.
+
+Map files can help diagnose symbol placement.
+
+Map files can help diagnose linking.
+
+Binary inspection tools can examine compiled artifacts.
+
+nm can display symbols on many Unix-like toolchains.
+
+objdump can inspect object files and executables.
+
+readelf can inspect ELF structures.
+
+dumpbin can inspect Windows binary information in Microsoft toolchains.
+
+Tool availability depends on the environment.
+
+Inspection provides evidence about the actual binary.
+
+Do not guess whether a symbol was exported when the binary can be inspected.
+
+An exported symbol is made available to external binary consumers according to the platform.
+
+Not every function in a shared library needs to be exported.
+
+Smaller export surfaces reduce accidental coupling.
+
+Export only the interface required by consumers.
+
+Internal implementation functions should remain internal when possible.
+
+Symbol visibility can control exported interfaces.
+
+A module boundary should have a small stable ABI where long-term compatibility matters.
+
+C interfaces are commonly used for plugin ABIs because C linkage and data representations can be simpler than C++ ABI boundaries.
+
+Using C does not automatically guarantee ABI compatibility.
+
+Type sizes and calling conventions still matter.
+
+Define fixed-width protocol types where binary representation requires fixed widths.
+
+stdint.h provides integer types such as uint32_t when supported by the implementation.
+
+uint32_t exists only when the implementation provides an exact 32-bit unsigned integer type.
+
+Do not assume int is exactly 32 bits on every C implementation.
+
+sizeof determines object size in bytes according to C semantics.
+
+A C byte is CHAR_BIT bits.
+
+A C byte is not universally guaranteed to be eight bits.
+
+Many modern platforms use eight-bit bytes.
+
+Portable code should distinguish common platform behavior from language guarantees.
+
+Structure padding can add bytes between members.
+
+Structure padding can add bytes after members.
+
+Padding supports alignment requirements.
+
+sizeof a structure can therefore exceed the sum of member sizes.
+
+Do not serialize a native structure by writing its raw memory unless the format explicitly depends on that exact ABI and platform representation.
+
+Compiler, architecture, packing, alignment, and endianness can change raw structure representation.
+
+Serialize fields explicitly for portable formats.
+
+Alignment constrains where objects can be stored efficiently or legally according to the platform.
+
+Misaligned access can be slower.
+
+Misaligned access can fault on some architectures.
+
+The compiler normally handles alignment for ordinary objects.
+
+Manual binary parsing must respect alignment when converting raw byte buffers into typed objects.
+
+Copying bytes into properly aligned objects can be safer than casting arbitrary byte pointers.
+
+Strict aliasing rules constrain how stored objects can be accessed through different types in C and C++.
+
+Violating aliasing rules can create undefined behavior.
+
+Code that appears to work without optimization can fail after optimization when aliasing rules are violated.
+
+Use language-defined techniques for representation conversion.
+
+memcpy is commonly useful for moving object representation bytes without violating ordinary aliasing rules when used correctly.
+
+Endianness describes byte ordering for multibyte values.
+
+Little-endian stores the least significant byte at the lowest address.
+
+Big-endian stores the most significant byte at the lowest address.
+
+Network byte order traditionally uses big-endian representation.
+
+Native machine endianness should not be assumed in portable serialized formats.
+
+Define byte order explicitly.
+
+Convert when reading.
+
+Convert when writing.
+
+Compiler intrinsics expose implementation-specific operations or processor features.
+
+Intrinsics can provide efficient access to special instructions.
+
+Intrinsics reduce portability.
+
+Isolate architecture-specific optimization behind stable interfaces when portability matters.
+
+Inline assembly embeds assembly instructions within higher-level source where supported.
+
+Inline assembly is compiler and architecture specific.
+
+Inline assembly should be used only when requirements justify it.
+
+Compiler intrinsics are often easier for compilers to optimize than arbitrary inline assembly.
+
+Assembly is not automatically faster than optimized C.
+
+Modern compilers can generate highly optimized machine code.
+
+Measure before replacing portable code with architecture-specific code.
+
+Profile-guided optimization uses runtime profile information to guide compilation decisions.
+
+Link-time optimization allows optimization across translation-unit boundaries during linking or an integrated link stage.
+
+Link-time optimization is commonly abbreviated LTO.
+
+LTO can improve optimization opportunities.
+
+LTO can increase build time.
+
+LTO can complicate debugging or tooling.
+
+Use it when requirements and evidence justify it.
+
+Whole-program optimization can expose relationships unavailable during separate compilation.
+
+Separate compilation is valuable because one source file can be rebuilt without recompiling an entire project.
+
+Header changes can cause many dependent translation units to rebuild.
+
+Dependency tracking allows build systems to determine what needs rebuilding.
+
+Incorrect dependency tracking can create stale builds.
+
+A stale object file can contain code from an older source state.
+
+Clean builds help detect stale-artifact problems.
+
+If behavior appears impossible according to current source, verify that the executable actually contains the current build.
+
+Check timestamps where useful.
+
+Check hashes where useful.
+
+Perform a clean rebuild.
+
+Confirm which binary is being executed.
+
+Do not debug source that is not actually running.
+
+A build directory separates generated artifacts from source files.
+
+Out-of-tree builds can keep source trees clean.
+
+Generated files should have defined ownership.
+
+Do not manually edit generated artifacts when they will be overwritten by the build.
+
+Modify their authoritative source or generator.
+
+A build script records build commands.
+
+A build script improves repeatability.
+
+A build script should identify compiler options.
+
+A build script should identify source files.
+
+A build script should identify include paths.
+
+A build script should identify library paths.
+
+A build script should identify linked libraries.
+
+A build script should fail when required compilation fails.
+
+A build script should not report success after a failed compiler command.
+
+Exit status communicates command success or failure.
+
+Build automation should propagate failures.
+
+Continuing after a failed compilation can create misleading stale output.
+
+Delete or isolate stale output when appropriate.
+
+Never assume an existing executable was produced by the most recent failed build.
+
+Compiler command order matters.
+
+Library order can matter for some static linkers.
+
+Object and library dependencies should be expressed correctly.
+
+Do not randomly reorder linker arguments until a build succeeds without understanding why.
+
+Include paths tell the preprocessor where to search for headers.
+
+Library paths tell the linker where to search for libraries.
+
+Include paths and library paths are different.
+
+A header being found does not prove the required library will be found.
+
+A library being found does not prove the correct header was used.
+
+Header and binary versions should be compatible.
+
+Using headers from one library version and binaries from another can cause build or runtime defects.
+
+Package development files commonly provide headers and link-time metadata.
+
+Runtime packages can provide only shared libraries required to execute software.
+
+Building and running have different dependency requirements.
+
+A compiler can search default include directories.
+
+A linker can search default library directories.
+
+Environment variables can modify toolchain search behavior.
+
+Hidden environment configuration can make builds non-reproducible.
+
+Record required environment assumptions.
+
+Prefer explicit build configuration where practical.
+
+pkg-config can provide compiler and linker flags for installed libraries on systems using that mechanism.
+
+Build systems can query dependency metadata.
+
+Dependency discovery should fail clearly when required libraries are absent.
+
+Do not silently disable required functionality because a dependency was not found unless the build policy explicitly permits it.
+
+Optional dependencies should be clearly identified as optional.
+
+Feature detection can determine whether an environment supports a capability.
+
+Platform detection identifies the target environment.
+
+Feature detection is often more precise than assuming every system of one name has identical capabilities.
+
+Compiler predefined macros can identify implementation or target characteristics.
+
+Do not scatter platform checks throughout common logic without need.
+
+Centralize platform adaptation where architecture benefits from it.
+
+A platform abstraction provides a common interface over platform-specific implementations.
+
+The common interface defines required semantics.
+
+Each backend implements those semantics for its platform.
+
+Platform independence requires equivalent externally required behavior.
+
+Platform independence does not require identical source code for every operating system.
+
+Platform-specific implementation is compatible with platform-independent architecture when the differences remain behind controlled interfaces.
+
+The compiler selects or builds the appropriate implementation according to build or runtime architecture.
+
+Compile-time platform selection chooses implementation while building.
+
+Runtime platform selection chooses implementation while executing.
+
+These approaches solve different requirements.
+
+Do not hard-code one platform's behavior into common semantics.
+
+Compiler errors should be read from the first relevant diagnostic.
+
+One syntax error can cause many later diagnostics.
+
+Later errors can be consequences of an earlier parse failure.
+
+Fix the earliest root diagnostic and rebuild.
+
+Do not patch every cascading diagnostic independently.
+
+Linker errors should be interpreted according to symbol resolution.
+
+Undefined reference means a definition was not resolved.
+
+Multiple definition means more than one conflicting definition was found.
+
+Wrong architecture means the artifact cannot participate in the target link.
+
+Missing library means required link input could not be found.
+
+Inspect the exact linker command.
+
+Do not assume source correctness when the link configuration is wrong.
+
+Runtime loader errors occur after successful linking in dynamically linked systems.
+
+A binary can compile.
+
+A binary can link.
+
+The binary can still fail to start because a runtime dependency is missing.
+
+Build success and runtime dependency success are different.
+
+A dynamically loaded module can fail after application startup.
+
+Module discovery can succeed.
+
+File opening can succeed.
+
+Library loading can fail.
+
+Library loading can succeed.
+
+Symbol resolution can fail.
+
+Symbol resolution can succeed.
+
+Module qualification can fail.
+
+Qualification can succeed.
+
+Module initialization can fail.
+
+These are separate stages.
+
+Report the actual failed stage.
+
+Do not collapse every module-loading failure into "module missing."
+
+Hot loading means loading executable module code while the host remains running.
+
+Hot loading requires a stable host-module contract.
+
+The host should validate module metadata.
+
+The host should validate required exported symbols.
+
+The host should validate version compatibility.
+
+The host should validate ABI expectations.
+
+The host should reject incompatible modules.
+
+A rejected module should not execute merely because it was discovered.
+
+A module should not modify host behavior before qualification completes unless the architecture explicitly permits that behavior.
+
+Initialization should occur after required qualification.
+
+A module can expose an initialization function.
+
+A module can expose a shutdown function.
+
+A module can expose capability functions.
+
+Exact symbols belong to the module contract.
+
+The compiler does not define the application module contract.
+
+The application architecture defines it.
+
+Compiler visibility controls help implement that contract.
+
+Build metadata can embed version information.
+
+Build metadata can embed commit identifiers.
+
+Build metadata can embed target architecture.
+
+Build metadata can embed build timestamps.
+
+Embedding timestamps makes byte-for-byte reproducible builds more difficult unless controlled.
+
+Only embed metadata required by project policy.
+
+A build timestamp and runtime timestamp are different.
+
+A compiler version can be part of provenance.
+
+A toolchain version can affect output.
+
+Rebuilding identical source with a different compiler version can produce different binaries.
+
+Binary difference does not automatically mean semantic difference.
+
+Semantic equivalence does not automatically mean binary identity.
+
+Hashes establish byte identity.
+
+Tests establish selected behavioral evidence.
+
+Both can matter.
+
+A checksum verifies data integrity against an expected value.
+
+A cryptographic hash can identify an artifact.
+
+A digital signature can authenticate an artifact according to the signing trust model.
+
+Compilation does not authenticate source provenance.
+
+Successful linking does not authenticate a module.
+
+Executable format validity does not establish trust.
+
+Build pipelines can sign approved artifacts.
+
+Runtime loaders can verify signatures when architecture requires it.
+
+Trust policy is separate from compiler behavior.
+
+Compiler hardening options can add runtime protections.
+
+Stack-protection options can detect selected stack corruption.
+
+Position-independent executables can support address-space randomization.
+
+Control-flow protections can reduce selected exploitation techniques where supported.
+
+Fortification can add checks to selected library operations.
+
+Hardening does not repair logically unsafe code.
+
+Hardening adds defense layers.
+
+Security should exist in source design and build configuration.
+
+Compiler sanitizers instrument software for defect detection.
+
+AddressSanitizer detects selected memory-safety defects.
+
+UndefinedBehaviorSanitizer detects selected undefined behavior.
+
+ThreadSanitizer detects selected concurrency defects.
+
+MemorySanitizer detects selected use of uninitialized memory on supported platforms.
+
+Sanitizers are diagnostic tools.
+
+Sanitizer builds are not automatically appropriate as production builds.
+
+Sanitizers can change performance and memory behavior.
+
+A sanitizer finding is strong evidence requiring investigation.
+
+Absence of sanitizer findings does not prove absence of defects.
+
+Static analyzers inspect source or intermediate representations without ordinary execution.
+
+Compilers can provide static analysis.
+
+Dedicated analyzers can provide deeper analysis.
+
+Analysis tools can produce false positives.
+
+Analysis tools can miss defects.
+
+Review findings using evidence.
+
+Warnings should not be ignored merely because they are inconvenient.
+
+Cross-platform compilation should test each supported target.
+
+Compiling on Linux does not prove Windows compilation.
+
+Compiling on Windows does not prove Linux compilation.
+
+Compiling for x86-64 does not prove ARM64 compilation.
+
+A platform-independent source design still requires target validation.
+
+Different compilers expose assumptions.
+
+Using multiple compilers can reveal nonportable behavior.
+
+Strict compilation modes can reveal reliance on extensions.
+
+Continuous integration can build multiple targets automatically.
+
+Automated builds improve coverage.
+
+Automation does not replace understanding failures.
+
+A CI build succeeding does not prove local runtime conditions.
+
+A local build succeeding does not prove clean-environment reproducibility.
+
+Use clean environments when validating build dependencies.
+
+A compiler consumes defined inputs.
+
+Source files are inputs.
+
+Headers are inputs.
+
+Compiler flags are inputs.
+
+Preprocessor definitions are inputs.
+
+Toolchain version is input.
+
+Libraries are inputs.
+
+Linker flags are inputs.
+
+Target architecture is input.
+
+Environment can be input.
+
+Generated code can be input.
+
+A build artifact is the result of all relevant build inputs.
+
+Source code alone does not fully describe a build when other inputs affect output.
+
+Build configuration should therefore be controlled.
+
+Do not modify compiler flags casually when they affect semantics.
+
+Changing optimization can expose defects.
+
+Changing structure packing can break ABI.
+
+Changing runtime-library selection can change dependencies.
+
+Changing exception or RTTI settings can change C++ interfaces.
+
+Changing character-set settings can change Windows program behavior.
+
+Changing architecture changes binary compatibility.
+
+A compiler switch is part of engineering state.
+
+Warnings-as-errors policies can improve discipline.
+
+Warnings-as-errors can also cause builds to fail when a new compiler introduces new warnings.
+
+Toolchain upgrades should be controlled.
+
+Do not freeze obsolete toolchains merely to avoid fixing legitimate diagnostics.
+
+Do not upgrade production toolchains casually without validation.
+
+Toolchains are dependencies.
+
+A compiler can contain defects.
+
+A linker can contain defects.
+
+A standard library can contain defects.
+
+A toolchain defect is possible.
+
+It should not be the first explanation for ordinary application failure without evidence.
+
+Check source correctness.
+
+Check undefined behavior.
+
+Check configuration.
+
+Check ABI.
+
+Check dependencies.
+
+Check runtime environment.
+
+Then investigate toolchain defects when evidence points there.
+
+Disassembly translates machine code into assembly-like representation.
+
+Disassembly can show what instructions were actually generated.
+
+Disassembly is useful when source behavior and runtime behavior appear inconsistent.
+
+Disassembly can verify optimization.
+
+Disassembly can verify function presence.
+
+Disassembly can verify call targets.
+
+Disassembly can help analyze crashes.
+
+Do not begin with disassembly when source-level evidence already identifies the defect.
+
+Use the simplest diagnostic level that resolves the problem.
+
+A debugger can operate on compiled binaries.
+
+Debug symbols improve source-level debugging.
+
+Breakpoints pause execution at defined locations.
+
+Watchpoints detect selected memory accesses or changes where supported.
+
+Stack traces show active call frames.
+
+A stack trace is evidence about one execution state.
+
+A stack trace does not automatically identify root cause.
+
+The crash site can be downstream from earlier corruption.
+
+Memory corruption can occur long before detection.
+
+Inspect surrounding evidence.
+
+Core dumps preserve process state after selected crashes on Unix-like systems.
+
+Windows crash dumps preserve process state for postmortem analysis.
+
+Dump analysis should use matching binaries and symbols.
+
+Mismatched symbols can mislead diagnosis.
+
+Artifact retention supports postmortem debugging.
+
+A release process can retain exact binaries.
+
+A release process can retain matching symbols.
+
+A release process can retain build logs.
+
+A release process can retain hashes.
+
+A release process can retain source revision identifiers.
+
+These records improve reproducibility.
+
+Compilation should be deterministic where project requirements demand it.
+
+Absolute build paths can affect output.
+
+Timestamps can affect output.
+
+Randomized identifiers can affect output.
+
+Archive member ordering can affect output.
+
+Toolchain versions can affect output.
+
+Reproducible-build engineering controls these inputs.
+
+Reproducibility provides evidence that source and build instructions correspond to distributed artifacts.
+
+Reproducibility does not establish that the source is correct.
+
+Build provenance and behavioral correctness are different.
+
+The compiler is not an authority over project requirements.
+
+The compiler enforces language and toolchain rules.
+
+The linker enforces binary composition requirements.
+
+The loader enforces executable-loading requirements.
+
+The application enforces its own architecture and policy.
+
+Passing one layer does not establish success at another layer.
+
+A valid source file can fail to link.
+
+A linked executable can fail to load.
+
+A loaded executable can fail initialization.
+
+An initialized program can fail its operation.
+
+A completed operation can produce an incorrect result.
+
+Each stage requires its own evidence.
+
+Do not confuse preprocessing with compilation.
+
+Do not confuse compilation with linking.
+
+Do not confuse linking with loading.
+
+Do not confuse loading with initialization.
+
+Do not confuse a declaration with a definition.
+
+Do not confuse language linkage with the linker.
+
+Do not confuse API with ABI.
+
+Do not confuse a static library with a shared library.
+
+Do not confuse an import library with a DLL.
+
+Do not confuse a header with its library implementation.
+
+Do not confuse successful compilation with correct behavior.
+
+Do not confuse successful linking with runtime success.
+
+Do not confuse debug behavior with release behavior.
+
+Do not confuse compiler warnings with runtime errors.
+
+Do not confuse implementation-defined behavior with undefined behavior.
+
+Do not confuse unspecified behavior with undefined behavior.
+
+Do not confuse common platform behavior with language guarantees.
+
+Do not confuse compiler extensions with standard language features.
+
+Do not confuse source order with generated instruction order.
+
+Do not confuse source variables with fixed memory locations.
+
+Do not confuse optimization with permission to change defined behavior.
+
+Do not confuse observed undefined behavior with guaranteed behavior.
+
+Do not confuse binary identity with behavioral equivalence.
+
+Do not confuse behavioral equivalence with byte identity.
+
+Do not confuse version numbers with exact artifact identity.
+
+Do not confuse an existing binary with proof that the latest build succeeded.
+
+Do not confuse discovered modules with qualified modules.
+
+Do not confuse loaded modules with initialized modules.
+
+Do not confuse a symbol being present with the module being compatible.
+
+Do not confuse a compiler-supported feature with a project-authorized feature.
+
+When a build fails, identify the stage.
+
+If preprocessing fails, inspect preprocessing input and directives.
+
+If compilation fails, inspect source and compiler diagnostics.
+
+If assembly fails, inspect generated or supplied assembly and target configuration.
+
+If linking fails, inspect symbols, objects, libraries, architecture, and linker arguments.
+
+If loading fails, inspect runtime dependencies, binary architecture, and loader behavior.
+
+If initialization fails, inspect application and module initialization.
+
+Do not repair a later stage when evidence shows an earlier stage failed.
+
+When a binary behaves incorrectly, confirm the exact artifact.
+
+Confirm the source revision.
+
+Confirm the build configuration.
+
+Confirm the target.
+
+Confirm the dependencies.
+
+Confirm the runtime environment.
+
+Then investigate program behavior.
+
+Build evidence matters.
+
+Artifact identity matters.
+
+Language semantics matter.
+
+ABI boundaries matter.
+
+Platform boundaries matter.
+
+The toolchain transforms source into executable artifacts.
+
+The engineering task is to make that transformation controlled, reproducible, diagnosable, and compatible with the intended target.
+
+A compiler translates code.
+
+A linker connects compiled components.
+
+A loader places executable components into a running process.
+
+None of them determine whether the software fulfills its mission.
+
+That remains a property of the complete engineered system.

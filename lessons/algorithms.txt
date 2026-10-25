@@ -1,0 +1,1091 @@
+An algorithm is a finite procedure for solving a defined problem or performing a defined computation.
+An algorithm accepts defined input.
+An algorithm performs defined operations.
+An algorithm produces defined output or state.
+An algorithm should have a termination condition when termination is required.
+An algorithm is different from a programming language.
+The same algorithm can be implemented in different programming languages.
+The same algorithm can operate on different compatible data structures.
+An implementation is code realizing an algorithm.
+An algorithm can be described without writing executable code.
+Pseudocode describes algorithmic steps without requiring exact programming-language syntax.
+An algorithm should be understood before optimizing its implementation.
+Correctness is more important than apparent cleverness.
+A complicated algorithm is not automatically a better algorithm.
+A simple algorithm satisfying requirements is often preferable.
+Algorithm selection should follow requirements.
+Important requirements include correctness.
+Important requirements include determinism.
+Important requirements include execution time.
+Important requirements include memory use.
+Important requirements include input size.
+Important requirements include expected input distribution.
+Important requirements include failure behavior.
+Important requirements include portability.
+Important requirements include maintainability.
+Important requirements include security.
+An algorithm is deterministic when the same defined input and state produce the same defined result according to its specification.
+A deterministic algorithm can still depend on explicitly supplied time, state, or other input.
+An algorithm using random values is not necessarily deterministic unless the random sequence is controlled as defined input.
+A pseudorandom generator with the same algorithm, state, and seed can produce a reproducible sequence.
+Reproducibility and unpredictability are different properties.
+A cryptographically secure random generator has requirements beyond ordinary pseudorandom generation.
+Do not use an ordinary deterministic pseudorandom generator where cryptographic unpredictability is required.
+Deterministic systems should identify all inputs affecting results.
+Hidden inputs make behavior harder to reproduce.
+Current time can be a hidden input.
+Environment variables can be hidden inputs.
+Filesystem state can be hidden input.
+Network state can be hidden input.
+Global mutable state can be hidden input.
+Random generator state can be hidden input.
+Explicit dependencies improve reasoning.
+Algorithm correctness means the algorithm satisfies its defined specification for applicable inputs.
+A correct algorithm can still be implemented incorrectly.
+A correct implementation can still receive invalid input.
+Input validation and algorithm correctness are related but different.
+Preconditions describe conditions required before an operation.
+Postconditions describe conditions expected after an operation.
+An invariant is a condition maintained through defined portions of an algorithm.
+Preconditions should be validated at untrusted boundaries when required.
+Internal code can rely on validated preconditions according to its contract.
+A violated precondition should not silently become arbitrary behavior.
+Loop invariants help reason about iterative algorithms.
+A loop invariant remains true before or after defined loop iterations according to the proof model.
+Loop invariants can help establish algorithm correctness.
+Formal proof is one form of correctness evidence.
+Testing is another form of evidence.
+Testing cannot generally prove correctness for every possible input.
+Testing can demonstrate correctness for tested cases.
+Proof and testing provide different evidence.
+Complexity describes resource growth as input size changes.
+Time complexity describes computational work.
+Space complexity describes memory requirements.
+Big O notation describes an asymptotic upper-bound class.
+Big Omega notation describes an asymptotic lower-bound class.
+Big Theta notation describes a tight asymptotic bound.
+Software engineering commonly uses Big O informally when discussing algorithm growth.
+Complexity notation does not specify exact runtime.
+Hardware affects exact runtime.
+Compiler optimization affects exact runtime.
+Cache behavior affects exact runtime.
+Input distribution affects exact runtime.
+Implementation details affect exact runtime.
+Asymptotic analysis remains useful for understanding scaling.
+O(1) is constant asymptotic complexity.
+O(log n) is logarithmic asymptotic complexity.
+O(n) is linear asymptotic complexity.
+O(n log n) is linearithmic asymptotic complexity.
+O(n^2) is quadratic asymptotic complexity.
+O(2^n) is exponential asymptotic complexity.
+O(n!) is factorial asymptotic complexity.
+Exponential and factorial algorithms can become impractical quickly as input size grows.
+A slow-growing complexity class can outperform a faster-growing class only after some input size because constants matter.
+Do not choose algorithms using Big O notation alone when actual workload is small and bounded.
+A linear scan can be correct and efficient for a small collection.
+Building an elaborate index for five elements can add complexity without useful benefit.
+Expected scale matters.
+Worst-case complexity describes the most expensive applicable case according to the model.
+Best-case complexity describes the least expensive applicable case.
+Average-case complexity describes expected behavior under a defined input distribution.
+Amortized complexity distributes occasional expensive operations across a sequence.
+Worst case and average case should not be confused.
+Security-sensitive algorithms sometimes require attention to worst-case behavior.
+An attacker can deliberately supply inputs producing worst-case behavior when input is untrusted.
+Algorithmic complexity attacks exploit expensive processing behavior.
+Input limits can bound resource consumption.
+Algorithms operating on untrusted data should have bounded resource behavior where practical.
+A search algorithm locates data satisfying a criterion.
+Linear search examines elements sequentially.
+Linear search is commonly O(n).
+Linear search works on unsorted collections.
+Linear search can terminate early when a match is found.
+Linear search is simple.
+Linear search can be appropriate for small collections.
+Binary search repeatedly divides an ordered search interval.
+Binary search is commonly O(log n).
+Binary search requires an ordering compatible with the search criterion.
+Binary search normally requires efficient access to the middle position.
+An array is well suited to binary search.
+A linked list is generally less suited to ordinary binary search because locating the middle is not constant-time.
+Binary search is not correct merely because data happens to look mostly sorted.
+The ordering precondition must hold.
+If the input is unsorted, binary search can return incorrect results.
+Binary search commonly maintains low and high boundaries.
+Incorrect boundary handling can create off-by-one errors.
+Binary search should be tested with an empty collection.
+Binary search should be tested with one element.
+Binary search should be tested with the target at the beginning.
+Binary search should be tested with the target at the end.
+Binary search should be tested with the target in the middle.
+Binary search should be tested when the target is absent.
+Binary search should be tested with duplicate values according to its required behavior.
+Finding any matching duplicate differs from finding the first matching duplicate.
+Finding the first occurrence requires additional boundary logic.
+Finding the last occurrence requires additional boundary logic.
+Algorithm requirements should specify which result is required.
+Sorting arranges elements according to a comparison or ordering rule.
+A sorting algorithm receives a collection.
+A sorting algorithm produces an ordered arrangement.
+Sorting order can be ascending.
+Sorting order can be descending.
+Sorting order can use multiple keys.
+A comparator defines relative ordering.
+A comparator should be consistent.
+An invalid comparator can break sorting assumptions.
+Sorting integers numerically differs from sorting their textual representations lexicographically.
+The strings "10" and "2" have a different lexical order from numeric values 10 and 2.
+Data type and comparison semantics matter.
+A stable sorting algorithm preserves the relative order of elements that compare equal.
+An unstable sorting algorithm does not guarantee preservation of equal-element order.
+Stability matters when earlier ordering carries meaning.
+Sorting by a secondary key and then using a stable sort on a primary key can preserve secondary ordering according to the workflow.
+Explicit multi-key comparison is often clearer.
+Bubble sort repeatedly exchanges adjacent out-of-order elements.
+Bubble sort has poor asymptotic performance for large general inputs.
+Bubble sort is commonly O(n^2).
+Bubble sort is simple to understand.
+Simplicity for education does not make bubble sort the preferred general production sort.
+Selection sort repeatedly selects an extreme remaining element.
+Selection sort is commonly O(n^2).
+Selection sort performs relatively few swaps compared with some simple algorithms.
+Insertion sort builds a sorted prefix by inserting elements into appropriate positions.
+Insertion sort is commonly O(n^2) in the worst case.
+Insertion sort can perform well on small or nearly sorted collections.
+Insertion sort is often useful as part of hybrid sorting algorithms.
+Merge sort divides data into portions, sorts them, and merges the sorted results.
+Merge sort is commonly O(n log n).
+Merge sort can be stable.
+Traditional merge sort commonly requires additional storage for arrays.
+Merge sort works naturally with linked structures.
+Quicksort partitions elements around a selected pivot.
+Quicksort has average O(n log n) behavior under suitable conditions.
+Quicksort can degrade to O(n^2) in the worst case.
+Pivot selection affects behavior.
+Modern implementations can use strategies that reduce pathological behavior.
+Quicksort is not inherently stable.
+Heap sort uses a heap to order elements.
+Heap sort is commonly O(n log n).
+Heap sort can operate with bounded auxiliary storage depending on implementation.
+Heap sort is generally not stable.
+No sorting algorithm is universally best.
+Standard-library sorting implementations are usually preferable to hand-written sorting code unless requirements justify custom implementation.
+Library implementations are often highly tested and optimized.
+Understand library guarantees.
+Do not assume stability unless documented.
+Do not assume comparator behavior unless documented.
+A traversal algorithm visits elements of a data structure.
+Traversal order can affect results.
+Sequential traversal visits elements in sequence.
+Depth-first traversal explores one branch before returning.
+Breadth-first traversal explores by distance or level.
+Depth-first search is commonly abbreviated DFS.
+Breadth-first search is commonly abbreviated BFS.
+DFS can use a stack.
+Recursive DFS uses the call stack.
+Iterative DFS can use an explicit stack.
+BFS normally uses a queue.
+Traversal should track visited nodes when cycles are possible.
+Without visited tracking, a cyclic graph can cause repeated processing or infinite traversal.
+Visited state is usually represented using a set, map, or indexed marker structure.
+The chosen representation affects performance.
+DFS can determine reachability.
+BFS can determine reachability.
+BFS can find shortest paths by edge count in an unweighted graph.
+DFS does not generally guarantee shortest paths.
+Traversal algorithm choice should follow the question being asked.
+A graph path is a sequence of connected vertices or edges according to graph semantics.
+A shortest-path algorithm finds a path minimizing defined cost.
+Breadth-first search finds shortest paths in an unweighted graph when each edge has equal cost.
+Dijkstra's algorithm finds shortest paths from a source when edge weights satisfy its requirements.
+Dijkstra's algorithm requires nonnegative edge weights in its standard form.
+Using Dijkstra's algorithm with negative edges can produce incorrect results.
+Bellman-Ford can handle negative edge weights according to its defined model.
+Bellman-Ford can detect reachable negative-weight cycles.
+Different shortest-path algorithms have different preconditions.
+An algorithm should not be selected by name alone.
+Its assumptions must match the data.
+A* is a pathfinding algorithm using a heuristic.
+A* combines known path cost with estimated remaining cost.
+Heuristic properties affect correctness and efficiency.
+An admissible heuristic does not overestimate the remaining optimal cost according to the standard model.
+A consistent heuristic satisfies an additional triangle-like condition according to the model.
+A* can reduce explored state when the heuristic is informative.
+A poor heuristic can make A* behave similarly to less informed search.
+A wrong heuristic assumption can invalidate expected properties.
+Topological sorting orders vertices of a directed acyclic graph according to dependencies.
+A directed acyclic graph is commonly abbreviated DAG.
+A topological ordering places dependencies before dependents according to edge interpretation.
+A graph with a directed cycle has no valid topological ordering.
+Cycle detection should therefore be part of dependency-ordering logic.
+Build systems can use topological ordering.
+Module dependency loaders can use topological ordering.
+Task schedulers can use topological ordering.
+A dependency cycle should be reported as a cycle.
+It should not be disguised as a missing dependency.
+Precise failure classification matters in algorithms too.
+Recursion occurs when a function directly or indirectly calls itself.
+A recursive algorithm requires a base case.
+The base case stops recursive expansion.
+Without a reachable base case, recursion can continue until resources are exhausted.
+Recursive algorithms can naturally express tree traversal.
+Recursive algorithms can naturally express divide-and-conquer problems.
+Recursion consumes call-stack resources according to implementation.
+Deep recursion can overflow the call stack.
+An iterative algorithm can sometimes avoid recursion depth limits.
+Recursion and iteration can express many of the same computations.
+Choose according to clarity, limits, and environment.
+Tail recursion is recursion where the recursive call is the final operation according to the relevant definition.
+Some languages or compilers can optimize tail calls.
+Tail-call optimization should not be assumed unless the environment guarantees it.
+C does not guarantee tail-call optimization.
+An algorithm relying on unlimited tail recursion is therefore not portable merely because one compiler optimizes it.
+Divide-and-conquer algorithms divide a problem into smaller problems.
+They solve the smaller problems.
+They combine the results.
+Merge sort is a divide-and-conquer algorithm.
+Binary search repeatedly reduces the search space.
+Divide-and-conquer can reduce complexity when subproblems become substantially smaller.
+Recursive structure alone does not guarantee efficiency.
+Repeatedly solving the same subproblem can waste work.
+Dynamic programming solves problems by reusing results of overlapping subproblems.
+Memoization stores previously computed results.
+Memoization commonly uses a map or array.
+Top-down dynamic programming often uses recursion plus memoization.
+Bottom-up dynamic programming computes solutions from smaller states toward larger states.
+Dynamic programming can transform some exponential algorithms into polynomial algorithms.
+Dynamic programming is appropriate when the problem has suitable overlapping subproblems and optimal substructure.
+Not every problem benefits from dynamic programming.
+Caching arbitrary function results is not automatically dynamic programming.
+The recurrence or state relationship matters.
+A greedy algorithm makes a locally selected choice at each step.
+A greedy algorithm can be optimal for some problems.
+A greedy algorithm can be incorrect for other problems.
+Local optimality does not automatically imply global optimality.
+Greedy correctness requires properties of the specific problem.
+Do not use greedy reasoning merely because it is simple.
+Prove or establish that the greedy choice is valid for the problem.
+Backtracking explores candidate solutions and abandons candidates that cannot satisfy requirements.
+Backtracking is useful for constraint problems.
+Backtracking can have exponential complexity.
+Pruning eliminates branches known not to produce valid or better solutions.
+Good pruning can greatly reduce practical work.
+Incorrect pruning can eliminate valid solutions.
+Pruning rules must be correct.
+Brute force systematically examines possibilities.
+Brute force is sometimes the correct engineering solution for small bounded search spaces.
+Brute force is easy to understand.
+Brute force can provide a reference implementation for testing optimized algorithms.
+An optimized algorithm can be compared against brute force on small random inputs.
+This is useful differential testing.
+Do not reject brute force solely because it sounds unsophisticated.
+Bounded problems can make simple exhaustive search entirely practical.
+An algorithm should match scale.
+A state machine algorithm processes events according to current state.
+State determines which events are valid.
+An event can produce a transition.
+A transition can produce an action.
+Invalid transitions should have defined behavior.
+State-machine logic should not infer state solely from historical text.
+Current state should be represented explicitly.
+Historical transitions can explain how current state was reached.
+Current state and transition history are different data.
+An algorithm can replay history to derive current state when architecture explicitly uses event sourcing.
+If current state is stored directly, use the authoritative current state according to architecture.
+Do not unnecessarily reconstruct current state from prose history.
+A parser is an algorithm that transforms input representation into structured form.
+Parsing can have lexical stages.
+Parsing can have syntactic stages.
+Parsing can have semantic validation stages.
+The exact stages depend on the format.
+A parser should validate boundaries before reading.
+A parser should reject malformed input.
+A parser should not read beyond supplied data.
+A parser should not assume input is null-terminated unless the interface guarantees it.
+A parser should track input length.
+A parser should handle empty input according to specification.
+A parser should handle maximum-length input according to specification.
+A parser should handle truncated input.
+A parser should handle extra input according to specification.
+A parser should distinguish syntax failure from semantic failure when useful.
+A syntactically valid message can still contain invalid values.
+A syntactically valid module manifest can still declare an unsupported ABI.
+Parsing and qualification are different.
+A tokenizer divides input into tokens according to lexical rules.
+A token is a recognized unit of input.
+Whitespace can separate tokens according to grammar.
+Quoted text can preserve whitespace according to grammar.
+Escaping can alter how characters are interpreted.
+Tokenization rules should be deterministic.
+Ad hoc splitting on spaces is not a complete parser for formats allowing quoting or escaping.
+Use a parser appropriate to the grammar.
+A finite-state machine can implement lexical parsing.
+A regular expression can recognize many lexical patterns.
+Regular expressions are not the best tool for every grammar.
+Nested recursive structures often require parsing beyond simple regular-expression matching.
+Use the smallest parsing method satisfying the grammar.
+Hashing is an algorithmic transformation from input to a fixed-size digest according to the hash function.
+A cryptographic hash is deterministic.
+Identical input produces identical digest under the same hash algorithm.
+A small input change normally produces a substantially different cryptographic digest according to desired avalanche properties.
+A cryptographic hash is not encryption.
+Hashing does not require a decryption key.
+Hash collisions are theoretically possible because arbitrary input space maps into finite digest space.
+Cryptographic hash functions are designed to make useful collision attacks computationally difficult according to their security goals.
+A checksum and cryptographic hash have different security purposes.
+Checksums can detect accidental corruption.
+Cryptographic hashes can provide stronger integrity properties.
+Do not treat CRC as a cryptographic integrity mechanism.
+A message authentication code combines secret-key material with data to provide integrity and authenticity according to its construction.
+HMAC is a common keyed message-authentication construction.
+A digital signature uses asymmetric cryptography to provide authenticity and integrity evidence according to the signature scheme.
+Hashing, MACs, and signatures solve different problems.
+Algorithms should not be substituted merely because their outputs look like hashes.
+String matching locates patterns within text or sequences.
+A naive string search can compare the pattern at each possible position.
+More advanced algorithms can reduce repeated work.
+Knuth-Morris-Pratt is commonly abbreviated KMP.
+KMP uses information about the pattern to avoid redundant comparisons.
+Boyer-Moore uses pattern-based skipping strategies.
+Rabin-Karp uses hashing to locate candidate matches.
+For small strings, simple library search functions are often sufficient.
+Do not implement advanced string search merely to appear efficient.
+Measure requirements.
+Prefix matching differs from substring matching.
+Exact matching differs from approximate matching.
+Case-sensitive matching differs from case-insensitive matching.
+Unicode-aware matching can differ from byte matching.
+Matching semantics should be defined.
+Similarity is not equality.
+A similarity algorithm assigns a measure of resemblance according to its model.
+Similarity scores do not establish truth.
+Similarity scores do not establish source authority.
+Similarity scores do not establish current status.
+A highly similar source can be obsolete.
+A less textually similar source can be authoritative.
+Retrieval algorithms should separate relevance from authority.
+Ranking algorithms order candidates according to defined scoring rules.
+A ranking score can combine multiple signals.
+Signals can include textual relevance.
+Signals can include source authority.
+Signals can include recency.
+Signals can include current-state status.
+Signals can include exact terminology.
+Signals can include document type.
+Weights determine relative influence when weighted scoring is used.
+Weights should be tested.
+A ranking algorithm can be deterministic.
+A deterministic ranking algorithm should produce the same ranking from the same inputs and configuration.
+Tie-breaking should be explicit.
+Unspecified tie order can make results vary.
+Stable identifiers can provide deterministic final tie-breaking.
+A retrieval algorithm should first identify candidate information.
+Candidate information is not automatically selected evidence.
+Selection should apply question intent and source rules.
+A current-state question should prioritize current authoritative sources.
+A historical question should retrieve historical records.
+A comparison question should retrieve the relevant versions.
+An instructional question can retrieve explanatory sources.
+Intent affects retrieval.
+The word overlap alone does not determine intent.
+"What ABI do your modules use?" is a current-state question.
+"What ABI versions have your modules used?" is a historical question.
+"What changed between ABI 1.4 and ABI 1.5?" is a comparison question.
+An algorithm returning identical evidence for all three questions is ignoring important distinctions.
+Retrieval can be decomposed into stages.
+Normalize the query according to defined rules.
+Determine intent according to available evidence and rules.
+Generate candidates.
+Score candidates.
+Apply authority rules.
+Apply state or version filters.
+Select bounded evidence.
+Generate or return the answer.
+Each stage should have observable behavior for debugging.
+A failure in candidate generation differs from a failure in ranking.
+A failure in ranking differs from a failure in source authority.
+A failure in response generation differs from a retrieval failure.
+Algorithms should preserve failure categories.
+A fallback algorithm executes when the primary method cannot produce an acceptable result according to defined conditions.
+Fallback behavior should be explicit.
+A fallback should not silently invent information.
+A fallback should not override stronger evidence.
+A fallback should not transform infrastructure failure into a factual answer.
+A fallback should not transform an empty valid result into service failure.
+Fallback order matters.
+A fallback can introduce lower-confidence behavior.
+Confidence or evidence limitations should be preserved where relevant.
+A retry algorithm repeats an operation after selected failures.
+Retries should be bounded.
+Retry count should be bounded.
+Retry duration should be bounded.
+Retry conditions should be defined.
+Not every failure is retryable.
+A syntax error is not repaired by retrying the same input.
+An unsupported ABI is not repaired by reconnecting.
+Invalid credentials are not repaired by rapid repeated login attempts.
+A temporary timeout can justify retry according to policy.
+A temporary connection refusal can justify retry according to policy.
+Exponential backoff increases delay between attempts according to a growth rule.
+Jitter can vary retry timing to reduce synchronized retries.
+Retry algorithms should avoid creating retry storms.
+A retry storm occurs when many clients repeatedly retry and increase system load.
+Failure recovery algorithms should not amplify failure.
+Idempotency means repeated execution has the same intended externally observable effect according to the operation contract.
+An idempotent operation can often be retried more safely.
+A read operation is often idempotent.
+Setting a value to a specific value can be idempotent.
+Incrementing a value is not normally idempotent.
+Sending a payment is not automatically idempotent.
+Creating a record is not automatically idempotent.
+An idempotency key can identify repeated attempts at the same logical operation.
+Idempotency design is important for distributed retries.
+An algorithm should not assume a timed-out state-changing operation did not occur.
+The remote operation may have succeeded while the response was lost.
+Ambiguous completion requires defined handling.
+Consensus algorithms allow multiple participants to agree on state according to a defined fault model.
+Different consensus algorithms have different assumptions.
+Consensus does not mean every participant always agrees immediately.
+Consensus does not mean a majority vote is universally sufficient.
+Consensus rules must be defined by the system.
+Fault tolerance depends on the algorithm and threat model.
+Do not import assumptions from one consensus algorithm into another.
+Deterministic state-machine replication requires participants to produce identical results from identical ordered inputs.
+Nondeterministic execution can cause replicas to diverge.
+Consensus-visible calculations should therefore avoid uncontrolled platform differences.
+Integer behavior should be defined.
+Serialization should be defined.
+Ordering should be defined.
+Time use should be defined.
+Randomness should be defined.
+Platform-specific implementations should produce identical consensus-visible results when architecture requires it.
+A distributed algorithm must account for message delay.
+A distributed algorithm must account for message loss where applicable.
+A distributed algorithm must account for duplicate messages where applicable.
+A distributed algorithm must account for reordered messages where applicable.
+A distributed algorithm must account for peer failure according to its fault model.
+A network timeout does not prove a peer is permanently failed.
+A delayed response and a failed peer can appear identical before the timeout boundary.
+Distributed systems operate with incomplete observations.
+Algorithms should define how uncertainty is handled.
+A timeout is a policy decision about how long to wait.
+A timeout is not proof of what happened remotely.
+A leader-election algorithm selects a participant according to defined rules.
+Election rules should produce one accepted leader according to the algorithm's safety properties.
+Split-brain conditions occur when multiple participants behave as authoritative leaders inappropriately.
+Fencing can prevent stale leaders from performing protected operations.
+Distributed authority should not depend merely on who responds fastest unless the protocol defines that rule.
+A scheduler selects work for execution.
+A FIFO scheduler processes according to arrival order.
+A priority scheduler processes according to priority.
+A round-robin scheduler distributes opportunities cyclically.
+Fairness means work receives opportunity according to a defined fairness model.
+Fairness does not necessarily mean identical resource allocation.
+Starvation occurs when work waits indefinitely because other work continually receives service.
+Priority systems can cause starvation.
+Aging can increase waiting work's priority over time according to scheduler design.
+Scheduling policy should reflect system requirements.
+Load balancing distributes work among available workers.
+Round-robin load balancing cycles among targets.
+Least-connections load balancing selects according to active connection count.
+Hash-based routing can map keys consistently to targets.
+Consistent hashing reduces remapping when nodes change compared with simple modulo hashing under its model.
+Load-balancing algorithms make tradeoffs.
+Equal request count does not imply equal workload.
+One expensive request can cost more than many cheap requests.
+Metrics should represent the resource being balanced when practical.
+Rate limiting bounds operations over time.
+A fixed-window rate limiter counts operations in defined time windows.
+A sliding-window algorithm accounts for activity across a moving interval.
+A token bucket allows bounded bursts while enforcing average rate according to configuration.
+A leaky bucket smooths output according to its model.
+Rate limiting protects resources.
+Rate limiting is not authentication.
+Rate limiting is not authorization.
+An authenticated user can still exceed a rate limit.
+An unauthorized request should not become authorized merely because it is under the rate limit.
+Different controls solve different problems.
+Deduplication identifies repeated data or operations.
+Exact deduplication can compare stable identifiers.
+Content deduplication can compare cryptographic digests according to requirements.
+Similarity-based deduplication is probabilistic or heuristic according to method.
+Similar is not identical.
+A duplicate identifier should not automatically mean duplicate content unless the identifier contract guarantees that relationship.
+Deduplication rules should define identity.
+Canonicalization converts equivalent representations into a defined canonical representation.
+Canonicalization can simplify comparison.
+Canonicalization rules must be exact.
+Whitespace normalization can alter data when whitespace is meaningful.
+Case normalization can alter identifiers when case is meaningful.
+Unicode normalization can affect text comparison.
+Canonicalization should be applied only where the specification defines equivalence.
+Do not normalize away meaningful distinctions.
+Validation determines whether input satisfies defined rules.
+Validation can be syntactic.
+Validation can be semantic.
+Validation can be contextual.
+A syntactically valid date can still be outside an allowed operational range.
+A syntactically valid identifier can still refer to no known object.
+A syntactically valid signature field can still contain an invalid signature.
+Validation stages should remain distinct.
+Fail early when a prerequisite cannot be satisfied and policy permits.
+Do not continue expensive processing after definitive rejection when no later stage can change the result.
+Early rejection can reduce attack surface.
+Early rejection should still preserve required diagnostic evidence.
+Short-circuit evaluation stops evaluation once the result is determined according to operator semantics.
+Boolean AND can stop after a false operand in languages defining short-circuit behavior.
+Boolean OR can stop after a true operand.
+Do not rely on side effects in skipped expressions unless the language semantics and design deliberately require it.
+Clear code avoids unnecessary dependence on evaluation tricks.
+A numerical algorithm performs mathematical computation.
+Floating-point arithmetic has finite precision.
+Floating-point values cannot exactly represent every real number.
+Equality comparison of calculated floating-point values can therefore be inappropriate for some algorithms.
+Tolerance-based comparison can be appropriate when the numerical model permits it.
+Tolerance selection should follow the problem's scale and error requirements.
+Integers provide exact arithmetic within their representable range.
+Integer overflow behavior depends on language and type.
+Unsigned C arithmetic wraps modulo powers of two according to defined rules.
+Signed integer overflow in C is undefined behavior.
+Do not assume signed overflow wraps in portable C.
+Algorithms should validate arithmetic bounds where overflow matters.
+Overflow can become a security defect.
+Multiplication can overflow before a later bounds comparison.
+Check arithmetic safely.
+Size calculations require particular care.
+If count multiplied by element size overflows, an allocation can be smaller than intended.
+Subsequent writes can exceed the allocation.
+Validate multiplication bounds before allocation.
+Algorithm security includes arithmetic correctness.
+Constant-time algorithms avoid data-dependent timing differences for selected sensitive operations according to their design.
+Constant-time programming matters in some cryptographic contexts.
+Ordinary business logic does not need to become constant-time merely because timing exists.
+Use security properties where required.
+Do not claim an algorithm is constant-time without analysis appropriate to the implementation and platform.
+Cryptographic algorithms should use established implementations.
+Do not invent custom cryptography for production security.
+Algorithm names alone do not guarantee secure configuration.
+Key sizes matter.
+Modes matter.
+Nonce handling matters.
+Randomness matters.
+Protocol composition matters.
+Security algorithms should follow defined standards and requirements.
+Compression algorithms reduce representation size by exploiting redundancy.
+Lossless compression permits reconstruction of the original input.
+Lossy compression deliberately discards information according to its model.
+Source-code archives require lossless compression.
+Images or audio can use lossy compression when requirements permit.
+Compression is not encryption.
+Compressed data is not automatically confidential.
+Compression ratio depends on input.
+Already compressed or high-entropy data may compress poorly.
+A compression algorithm should enforce output and input limits when processing untrusted data.
+A decompression bomb is small compressed input expanding into extremely large output.
+Bound decompression according to resource policy.
+Encoding changes representation.
+Encoding is not encryption.
+Base64 is an encoding.
+Base64 does not provide confidentiality.
+Hexadecimal is an encoding.
+URL encoding is an encoding.
+HTML escaping is contextual output transformation.
+Hashing is not encoding.
+Encryption is not encoding.
+Compression is not encoding even though each transforms data.
+Algorithms should be named according to what they actually do.
+A checksum algorithm detects accidental changes according to its error-detection properties.
+CRC algorithms are commonly used for transmission or storage error detection.
+A checksum matching expected value provides integrity evidence against accidental corruption according to its model.
+It does not generally provide protection against an intentional attacker.
+Use cryptographic integrity mechanisms when adversarial modification matters.
+Serialization algorithms should be canonical when hashes or signatures depend on serialized bytes.
+Two semantically identical structures can serialize differently if field order or formatting is not defined.
+Hashing those representations produces different digests.
+Canonical serialization defines one byte representation for equivalent data according to the specification.
+Consensus systems require particularly careful canonicalization.
+All participants should hash the same bytes for the same logical object.
+Platform-dependent structure padding must not affect canonical data.
+Local pointer values must not affect canonical data.
+Local filesystem paths must not affect canonical data unless explicitly part of the protocol.
+Platform-specific line endings must not alter consensus-visible serialization.
+Deterministic algorithms require deterministic representation.
+A comparison algorithm determines relative order or equality according to defined semantics.
+String comparison can be bytewise.
+String comparison can be Unicode code-point based.
+String comparison can be locale-aware.
+String comparison can be case-sensitive.
+String comparison can be case-insensitive.
+These are different algorithms.
+Do not assume "alphabetical" has one universal meaning.
+Machine-critical identifiers should use explicitly defined comparison rules.
+Human display sorting can use locale-aware rules when appropriate.
+Identity comparison should not accidentally depend on user locale.
+An equality algorithm should define what makes two values the same.
+Object identity and object value equality are different.
+Two distinct objects can contain equal values.
+Two references can point to the same object.
+A hash table requires equality semantics appropriate to its keys.
+A deduplication algorithm requires identity semantics appropriate to its records.
+Ambiguous equality produces ambiguous behavior.
+A merge algorithm combines multiple ordered or versioned inputs according to rules.
+Merging two sorted sequences can be O(n + m).
+Version-control merging compares histories and content.
+Database merge or upsert behavior follows database-specific rules.
+Conflict resolution is part of merge semantics.
+A conflict should not be resolved arbitrarily.
+Conflict resolution should follow authority and intended state.
+"Newest wins" is one conflict-resolution algorithm.
+Newest wins is not universally correct.
+"Highest version wins" is one possible rule.
+Highest version wins is not universally correct.
+"Authoritative source wins" is another rule.
+The correct rule comes from system requirements.
+Timestamps alone do not establish authority.
+Version numbers alone do not establish authority.
+Frequency of occurrence does not establish authority.
+Algorithmic selection should encode actual governance rules.
+A voting algorithm counts choices according to defined eligibility and threshold rules.
+A majority means more than half of the applicable voting set according to its definition.
+A plurality means the largest number of votes even without majority.
+A supermajority requires a threshold greater than ordinary majority according to the governing rule.
+Quorum defines the participation required for a decision according to governance rules.
+Do not substitute one voting rule for another.
+Algorithms implement policy.
+They do not create policy.
+The human-defined governing rule determines the algorithm.
+An algorithm should faithfully implement the authorized rule.
+A policy change can require an algorithm change.
+An algorithm should not silently reinterpret policy because another rule appears more efficient.
+Execution authority and policy authority are different.
+Algorithms execute defined decisions.
+Algorithms do not acquire authority merely because they can execute them.
+A recommendation algorithm selects or ranks options.
+A recommendation is not a command.
+A recommendation algorithm can use evidence.
+A human can reject the recommendation.
+Algorithmic confidence does not create human authority.
+Automation should remain within its delegated scope.
+An algorithm operating outside its defined authority is an architectural defect even if its computation is technically correct.
+A decision procedure should identify conditions under which it cannot decide.
+Unknown can be a valid result.
+Insufficient evidence can be a valid result.
+Conflict can be a valid result.
+Unsupported input can be a valid result.
+Algorithms should not fabricate certainty to avoid returning unknown.
+A three-state result can distinguish yes, no, and unknown.
+A richer result can distinguish success, rejection, unavailable, malformed, unauthorized, and internal failure.
+Boolean results are insufficient when callers need to distinguish multiple states.
+Return structures should preserve meaningful information.
+Error codes are part of algorithm interfaces.
+An error code should identify a defined failure category.
+Zero is commonly used for success in C command-line and API conventions, but exact API contracts vary.
+Negative values can represent errors in some C interfaces.
+Positive values can represent errors in others.
+Never infer error semantics without the interface contract.
+Return-value conventions should be documented.
+A caller should check return values.
+Ignoring return values discards evidence.
+A function reporting failure should not have its output consumed as though success occurred.
+Error handling is part of the algorithm.
+Cleanup is part of the algorithm.
+Partial failure is part of the algorithm.
+A robust algorithm defines what happens when operations fail.
+If allocation fails, define behavior.
+If a file read fails, define behavior.
+If a network send is partial, define behavior.
+If a database transaction fails, define behavior.
+If a module rejects input, define behavior.
+Success paths alone do not define a complete algorithm.
+Resource cleanup should occur on failure paths.
+A failed algorithm should not leak memory.
+A failed algorithm should not leak file handles.
+A failed algorithm should not leave locks held.
+A failed algorithm should not leave corrupted state.
+Structured cleanup can simplify error handling.
+C code often uses a cleanup path to release acquired resources.
+The exact coding pattern should remain readable.
+Correct cleanup is more important than stylistic purity.
+Algorithms that modify state should consider atomicity.
+Atomicity means an operation appears complete or not applied according to the defined observer and mechanism.
+An atomic file replacement can prevent partial configuration state.
+A database transaction can provide atomicity for database changes.
+A mutex does not make persistent disk writes atomic.
+Different mechanisms provide atomicity at different layers.
+Identify the layer requiring atomic behavior.
+A compare-and-swap operation atomically compares a value and conditionally updates it according to hardware or language semantics.
+Compare-and-swap is commonly abbreviated CAS.
+CAS can support concurrent algorithms.
+CAS algorithms require careful memory-order reasoning.
+Do not use low-level atomic algorithms unnecessarily.
+A mutex is often simpler and safer.
+Algorithm sophistication should be justified by requirements.
+Memoization and caching should define invalidation.
+Cached results can become incorrect when input dependencies change.
+A pure function depends only on its explicit inputs and produces no externally visible side effects according to the functional model.
+Pure functions are easier to memoize.
+A function reading current time is not pure unless time is supplied as explicit input according to the model.
+A function reading a mutable global is not pure.
+A function performing network I/O is not pure.
+Pure components are easier to test deterministically.
+Not every function needs to be pure.
+Side effects are necessary for I/O and state changes.
+Separate calculation from side effects where useful.
+A pipeline processes data through ordered stages.
+Each stage consumes input and produces output.
+Pipelines make boundaries explicit.
+A failure should identify the stage where it occurred.
+A pipeline should not report final success when an earlier required stage failed.
+A later stage should not execute on invalid earlier output unless recovery rules explicitly permit it.
+Module discovery, validation, qualification, loading, initialization, and activation form a pipeline when architecture defines them that way.
+Lesson ingestion can form a pipeline.
+Locate lesson.
+Read lesson.
+Parse units.
+Validate units.
+Store units.
+Record provenance.
+Report counts.
+A failure in one stage should not be reported as failure in another stage.
+An ingestion algorithm should reconcile counts.
+Processed units should equal stored units plus rejected units when those are the only possible outcomes.
+If processed is 195, stored is 195, and rejected is 0, the arithmetic reconciles.
+This does not prove semantic quality.
+Counting and correctness are different.
+A retrieval pipeline can normalize a question.
+It can classify intent.
+It can search indexes.
+It can retrieve candidate facts.
+It can rank facts.
+It can filter by authority.
+It can construct bounded context.
+It can generate a response.
+It can validate response grounding according to architecture.
+Each stage should have a defined contract.
+A response generator should not answer from unrelated evidence merely because some context exists.
+An algorithm should optimize for the requested objective.
+If the objective is current ABI, historical ABI progression is secondary.
+If the objective is ABI history, historical progression is primary.
+If the objective is compatibility, supported-version rules are primary.
+The same data can support different algorithms depending on the question.
+Question interpretation is part of correct computation.
+A decision tree represents decisions through branches.
+Each internal decision evaluates a condition.
+Each branch represents an outcome.
+Leaves represent results or actions.
+Decision trees can make bounded policy logic explicit.
+Decision trees can become difficult to maintain when rules overlap heavily.
+Tables can sometimes represent policy more clearly.
+A lookup table maps defined input categories to defined output behavior.
+Lookup tables can replace long chains of conditionals when behavior is truly tabular.
+A table is not automatically clearer.
+Choose representation according to the rule structure.
+Rule ordering matters when multiple rules can match.
+First-match algorithms select the first applicable rule.
+Best-match algorithms select according to specificity or score.
+All-match algorithms apply every applicable rule.
+The intended semantics should be explicit.
+Firewall rules, routing rules, and policy rules can use different matching semantics.
+Never assume rule order is irrelevant.
+A fallback rule should normally appear after more specific rules in a first-match system.
+A default-deny algorithm rejects operations not explicitly permitted.
+A default-allow algorithm permits operations not explicitly rejected.
+Security-sensitive systems commonly benefit from default-deny behavior.
+The correct policy depends on system requirements.
+An algorithm should implement the chosen policy exactly.
+Access-control algorithms should evaluate identity.
+Access-control algorithms should evaluate required authority.
+Access-control algorithms can evaluate resource.
+Access-control algorithms can evaluate action.
+Access-control algorithms can evaluate contextual restrictions.
+Authentication should occur before relying on authenticated identity.
+Authorization should determine whether that identity can perform the operation.
+A successful authentication does not imply authorization.
+An authorization algorithm should not infer permission merely because a user exists.
+Permission should be explicit according to policy.
+Least privilege limits authority to what is required.
+Algorithmic shortcuts should not bypass authorization.
+Input from an authorized user can still be malformed.
+Authorization does not replace validation.
+Validation does not replace authorization.
+Different checks answer different questions.
+Scheduling algorithms can enforce bounded work.
+A bounded queue prevents unlimited queued tasks.
+When the queue is full, behavior should be defined.
+Rejecting new work is one option.
+Applying backpressure is another.
+Dropping selected work is another when policy permits.
+Unbounded queues can convert overload into memory exhaustion.
+Resource bounds are part of algorithm design.
+Maximum input size should be defined.
+Maximum collection size should be defined where required.
+Maximum recursion depth should be defined where required.
+Maximum retry count should be defined where required.
+Maximum message size should be defined.
+Maximum lesson size can be defined.
+Maximum response context can be defined.
+Bounds improve predictability.
+Bounds should derive from operational requirements.
+Arbitrary bounds can reject legitimate work.
+No bounds can permit resource exhaustion.
+Engineering selects appropriate limits.
+Algorithms should handle zero correctly.
+Zero elements is a valid collection size.
+Zero matches is a valid search result.
+Zero-byte input can be valid or invalid according to specification.
+Zero affected database rows can be valid.
+Zero active modules can be valid during startup or configuration.
+Zero is not automatically an error.
+Algorithms should handle one correctly.
+Single-element collections expose boundary errors.
+Algorithms should handle maximum supported values.
+Boundary cases should be deliberate.
+Empty state is still state.
+An empty list is not NULL.
+An empty string is not NULL.
+A zero-length buffer can have different semantics from no buffer.
+Absence and emptiness should remain distinct when the interface distinguishes them.
+A sentinel value is a special value representing control information.
+Sentinel values can terminate sequences.
+Sentinel values can represent absence.
+A sentinel value must not conflict with legitimate data.
+Using -1 as "not found" works only when -1 cannot be a valid result according to the interface.
+Structured result types can avoid sentinel ambiguity.
+In C, separate status and output parameters can distinguish success from returned data.
+Interfaces should make invalid states difficult to confuse.
+Algorithms should preserve provenance when provenance matters.
+If a fact came from lesson php.txt, record that source according to architecture.
+If a fact came from a current interface header, preserve that source.
+If a fact came from historical README text, preserve that historical role.
+Provenance enables later authority decisions.
+Discarding provenance during indexing can make later retrieval ambiguous.
+An index should not erase distinctions needed by selection algorithms.
+Information lost during preprocessing cannot always be reconstructed later.
+Normalization should therefore preserve required semantics.
+Lowercasing text can help case-insensitive retrieval.
+Lowercasing can destroy case-sensitive identifier distinctions.
+Removing punctuation can improve some searches.
+Removing punctuation can destroy operators such as == and ===.
+Tokenization should respect the domain.
+In programming knowledge, punctuation can carry critical meaning.
+The PHP operators == and === are different tokens.
+A tokenizer that strips '=' characters destroys the distinction.
+C operators == and = are different.
+C operators && and & are different.
+C operators || and | are different.
+C++ :: carries meaning.
+C# ?. carries meaning.
+Programming-language retrieval should preserve meaningful operators.
+General natural-language preprocessing can damage source-code knowledge.
+Algorithms should respect the structure of their input domain.
+Code-aware retrieval differs from ordinary prose retrieval.
+Exact token matching can be valuable for operators.
+Natural-language similarity can be valuable for explanations.
+Hybrid retrieval can combine exact and semantic signals.
+Exact matches should receive appropriate weight when the query contains precise technical tokens.
+A question containing "==" and "===" should retrieve material containing those operators when available.
+Retrieving generic "PHP is dynamically typed" is related but insufficient.
+The algorithm should recognize the distinguishing tokens.
+A current knowledge system should not answer an exact technical comparison with a generic neighboring fact when exact evidence exists.
+Ranking should reward direct answerability.
+Direct answerability means the evidence contains information needed to answer the question.
+Similarity alone is weaker.
+An algorithm can score evidence for terminology overlap.
+An algorithm can score evidence for source authority.
+An algorithm can score evidence for current status.
+An algorithm can score evidence for question-type fit.
+An algorithm can penalize historical sources for current-state questions.
+An algorithm can penalize unrelated broad sources when exact sources exist.
+The exact scoring method should be tested rather than assumed.
+Algorithms can fail while appearing reasonable.
+A plausible answer is not evidence of correct processing.
+A plausible ranking is not evidence of correct source selection.
+A successful return code is not evidence of semantic correctness.
+Test the actual requirement.
+An algorithm should expose enough state to debug incorrect decisions.
+For retrieval, useful diagnostics can include normalized query.
+Useful diagnostics can include detected intent.
+Useful diagnostics can include candidate sources.
+Useful diagnostics can include scores.
+Useful diagnostics can include authority classifications.
+Useful diagnostics can include selected evidence.
+Useful diagnostics can include rejection reasons.
+Diagnostics should remain bounded and secure.
+Observability should not expose secrets.
+Determinism improves debugging.
+If identical input produces different results, identify which state changed.
+Randomness can change.
+Corpus state can change.
+Configuration can change.
+Current time can change.
+Remote services can change.
+Thread scheduling can change.
+Unspecified iteration order can change.
+Make required dependencies explicit.
+A deterministic algorithm does not mean the surrounding world is deterministic.
+Capture the relevant world state when reproducibility matters.
+A test fixture can provide known algorithm input.
+A fixed random seed can provide reproducible pseudorandom behavior.
+A fixed corpus snapshot can provide reproducible retrieval.
+A known configuration can provide reproducible ranking.
+Reproducibility allows regression testing.
+Algorithm regressions occur when a change makes previously correct behavior incorrect.
+Preserve failing examples.
+Convert them into tests.
+A question previously answered incorrectly can become a regression test after repair.
+"What ABI do your modules use?" can test current-state source selection.
+"Explain the difference between == and === in PHP" can test exact technical retrieval.
+"What is PHP used for?" can test general factual retrieval.
+Questions with no supporting evidence can test bounded unknown behavior.
+Together these test different algorithm capabilities.
+Do not optimize one example by hard-coding its answer.
+A repair should generalize to the underlying class of problem.
+Hard-coding "ABI 1.5" answers one question.
+Teaching current-source precedence solves a broader retrieval problem.
+Hard-coding the PHP equality answer solves one question.
+Preserving operator tokens and improving direct-evidence ranking solves a broader technical retrieval problem.
+General repairs are preferable when evidence establishes a general defect.
+Generalization should remain bounded.
+Do not rewrite the entire retrieval architecture because one query failed.
+Identify the underlying mechanism first.
+Algorithms should be small enough to reason about.
+A function performing one coherent transformation is easier to test.
+A pipeline of clear stages is easier to debug than one opaque procedure.
+Abstraction should remove meaningful repetition.
+Abstraction should not hide critical behavior.
+Too little abstraction duplicates logic.
+Too much abstraction obscures control flow.
+The correct level depends on system complexity.
+Readable algorithms are maintainable algorithms.
+Clear variable names expose intent.
+Explicit conditions expose policy.
+Comments can explain why.
+Comments should not contradict code.
+Current code behavior should not be inferred from obsolete comments.
+Tests can protect intended behavior.
+Documentation can explain algorithm assumptions.
+Assertions can enforce invariants during development.
+Algorithm design should identify assumptions explicitly.
+Input is sorted.
+Input contains unique keys.
+Graph has no negative edges.
+Graph is acyclic.
+Collection is bounded.
+Pointer is valid.
+Buffer contains length bytes.
+Module ABI has already been validated.
+User has already been authenticated.
+These assumptions should come from contracts.
+If the caller cannot guarantee an assumption, the callee may need to validate it.
+Boundary ownership determines validation responsibility.
+Duplicating expensive validation everywhere can be unnecessary.
+Skipping required validation can be dangerous.
+Interfaces should state responsibilities.
+An algorithm can be correct locally while the system remains incorrect because interface assumptions disagree.
+Integration testing verifies assumptions across boundaries.
+Algorithm design and interface design are inseparable in modular systems.
+A module should receive data in a defined format.
+A module should return defined status.
+The host should interpret status according to the same contract.
+If module returns zero for success and host interprets zero as failure, each component can appear locally reasonable while integration fails.
+Shared definitions prevent semantic mismatch.
+ABI headers can define shared structures and constants.
+Protocol specifications can define shared serialization.
+Schema definitions can define shared data.
+Duplicated magic numbers increase mismatch risk.
+Use authoritative shared definitions where architecture permits.
+Magic numbers are unexplained literal values embedded in logic.
+Named constants communicate meaning.
+A timeout of 120000 milliseconds is clearer when represented by a named configuration or constant explaining its role.
+Named constants do not automatically make values correct.
+Values should derive from requirements.
+Algorithms should avoid hidden policy.
+If retry count is policy, expose it appropriately.
+If maximum lesson size is policy, expose it appropriately.
+If ABI compatibility is policy, encode it explicitly.
+Do not bury governance decisions inside unrelated algorithm tricks.
+Policy determines permitted behavior.
+Algorithms implement behavior.
+Data structures preserve required state.
+Interfaces connect components.
+Tests provide evidence.
+Debugging identifies causes when behavior diverges.
+These disciplines reinforce one another.
+An algorithm should terminate when termination is required.
+An infinite loop can be intentional for a service event loop.
+An intentional long-running loop should still have defined shutdown behavior where required.
+A server loop can wait for work indefinitely.
+That does not mean its internal operations should be unbounded.
+Each request should have bounded behavior according to requirements.
+Shutdown algorithms should stop accepting new work according to policy.
+Shutdown algorithms can allow active work to finish.
+Shutdown algorithms can cancel active work.
+Shutdown algorithms can persist required state.
+Shutdown behavior should be defined.
+Abrupt termination differs from graceful shutdown.
+Recovery should account for both where required.
+Algorithms operating on persistent state should consider crashes between steps.
+If step one succeeds and step two fails, what state remains?
+If that state is invalid, use transactional or atomic mechanisms.
+Write-ahead logging is one technique used by storage systems.
+Copy-on-write is another technique.
+Atomic rename is useful for file replacement on supporting filesystems.
+Database transactions provide another mechanism.
+Choose according to persistence layer.
+Algorithm design should consider failure at every externally visible step.
+Happy-path-only algorithms are incomplete for production systems.
+Security-sensitive algorithms should reject malformed lengths before allocation.
+They should reject unsupported versions before interpreting version-specific fields.
+They should verify signatures before trusting signed content according to protocol.
+They should verify authorization before state-changing actions.
+They should bound loops controlled by untrusted values.
+They should avoid integer overflow.
+They should avoid path traversal when constructing filesystem paths.
+They should avoid SQL injection when constructing queries.
+They should avoid command injection when invoking external programs.
+Security is partly algorithmic discipline at boundaries.
+A path normalization algorithm should not automatically imply authorization.
+A normalized path can still refer to a prohibited resource.
+Validation and authorization remain distinct.
+A signature verification algorithm establishes cryptographic validity according to keys and algorithm.
+Authorization establishes whether that signing identity is trusted for the action.
+A valid signature from an unauthorized key should still be rejected for an authorized-only operation.
+Cryptographic validity and authority are different.
+Algorithm outputs should communicate exactly what was established.
+"Signature valid" means cryptographic verification succeeded.
+"Signer authorized" requires a separate authority check.
+"Module loaded" means loading succeeded.
+"Module qualified" means qualification criteria succeeded.
+"Lesson ingested" means ingestion succeeded according to ingestion rules.
+"Question answered" does not automatically mean answer correct.
+Precise state labels reduce false conclusions.
+Algorithm engineering is disciplined transformation.
+Define the problem.
+Define inputs.
+Define outputs.
+Define assumptions.
+Define invariants.
+Define limits.
+Choose an appropriate data structure.
+Choose the simplest suitable algorithm.
+Analyze expected complexity.
+Implement clearly.
+Handle failures.
+Test boundaries.
+Test invalid input.
+Measure when performance matters.
+Debug using evidence.
+Optimize demonstrated bottlenecks.
+Preserve determinism where required.
+Preserve authority boundaries.
+Do not infer more than the evidence establishes.
+Do not confuse probability with determination.
+Do not confuse similarity with equality.
+Do not confuse history with current state.
+Do not confuse successful execution with correct results.
+Do not confuse algorithmic capability with authority.
+Small algorithms are easier to understand.
+Deterministic algorithms are easier to reproduce.
+Explicit algorithms are easier to test.
+Bounded algorithms are easier to operate safely.
+Correct algorithms should do exactly what their contract requires and no more.

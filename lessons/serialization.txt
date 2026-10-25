@@ -1,0 +1,2195 @@
+Serialization is the conversion of structured information into a representation suitable for storage or transmission.
+
+Deserialization is the reconstruction or interpretation of structured information from a serialized representation.
+
+Serialization converts state into representation.
+
+Deserialization converts representation into state.
+
+Serialization does not automatically preserve every property of an in-memory object.
+
+Only information represented by the serialization format can be reconstructed.
+
+A serialized representation can be textual.
+
+A serialized representation can be binary.
+
+A serialized representation can be self-describing.
+
+A serialized representation can depend on an external schema.
+
+A serialized representation can be human-readable.
+
+A serialized representation can be optimized for machines.
+
+No single serialization format is appropriate for every requirement.
+
+JSON is a serialization format.
+
+XML can be used as a serialization format.
+
+CSV can represent selected structured data.
+
+Protocol Buffers is a serialization system.
+
+MessagePack is a binary serialization format.
+
+CBOR is a binary serialization format.
+
+Custom binary formats can be serialization formats.
+
+A database record is not automatically a serialization format.
+
+A filesystem is not a serialization format.
+
+A network protocol is not necessarily a serialization format.
+
+These systems can contain or transport serialized data.
+
+Serialization format and transport are separate concerns.
+
+A JSON document can be stored in a file.
+
+The same JSON document can be transmitted through HTTP.
+
+The same JSON document can be sent through a socket.
+
+Changing the transport does not inherently change the JSON representation.
+
+Serialization format and storage location are separate concerns.
+
+A serialized object stored on disk remains serialized data.
+
+A serialized object sent across a network remains serialized data.
+
+A serialized object placed in memory remains serialized data if its representation remains encoded.
+
+Do not confuse location with representation.
+
+Serialization creates bytes or characters according to a defined format.
+
+The exact representation matters.
+
+If two systems must exchange serialized information, they must agree on the representation.
+
+They must agree on field meaning.
+
+They must agree on field types.
+
+They must agree on required fields.
+
+They must agree on optional fields.
+
+They must agree on encoding.
+
+They must agree on framing where multiple messages share a stream.
+
+They must agree on versioning rules where formats evolve.
+
+Syntax alone is insufficient.
+
+Two systems can parse the same document while interpreting its fields differently.
+
+Semantic agreement is required.
+
+A schema defines structure and constraints for serialized information according to the schema system.
+
+A schema can define field names.
+
+A schema can define field types.
+
+A schema can define required fields.
+
+A schema can define optional fields.
+
+A schema can define ranges.
+
+A schema can define allowed values.
+
+A schema can define nesting.
+
+A schema can define relationships.
+
+A schema can define version information.
+
+Not every serialization format requires a formal schema.
+
+Schema-less representation does not mean structure does not exist.
+
+The application still expects some structure.
+
+Undocumented structure is still a contract if software depends on it.
+
+Explicit contracts improve interoperability.
+
+A parser reads serialized representation according to format syntax.
+
+Successful parsing establishes syntactic acceptance according to that parser.
+
+Successful parsing does not prove semantic validity.
+
+A JSON parser can accept a document containing the wrong application fields.
+
+A binary decoder can decode a structurally valid message containing an invalid identifier.
+
+A parser can accept an unsupported protocol version.
+
+Parsing and validation are separate stages.
+
+Parse.
+
+Validate structure.
+
+Validate types.
+
+Validate ranges.
+
+Validate relationships.
+
+Validate application semantics.
+
+Only then accept the resulting state.
+
+Do not confuse parse success with application acceptance.
+
+Deserialization is an input boundary.
+
+Serialized input can be malformed.
+
+Serialized input can be incomplete.
+
+Serialized input can be malicious.
+
+Serialized input can be too large.
+
+Serialized input can contain excessive nesting.
+
+Serialized input can contain duplicate fields.
+
+Serialized input can contain unexpected fields.
+
+Serialized input can contain unsupported versions.
+
+Serialized input can contain valid syntax but invalid meaning.
+
+Treat serialized input as untrusted unless trust has been established separately.
+
+Even trusted sources can produce corrupted data.
+
+Validation remains useful.
+
+Deserialization should have explicit limits.
+
+Limit total input size where appropriate.
+
+Limit nesting depth.
+
+Limit collection size.
+
+Limit string length.
+
+Limit binary field length.
+
+Limit object count.
+
+Limit recursion.
+
+Limit allocation.
+
+A tiny encoded input can sometimes request or describe very large allocations.
+
+Validate sizes before allocating.
+
+Do not allocate directly from an untrusted length without checking limits.
+
+Integer overflow can occur during deserialization.
+
+A count multiplied by element size can overflow.
+
+An offset plus length can overflow.
+
+A length converted to a smaller integer type can truncate.
+
+Check arithmetic before memory access.
+
+A serialized length field describes representation state.
+
+It does not authorize memory consumption.
+
+Length validity and resource authorization are separate.
+
+Text serialization represents information using character sequences.
+
+Text must use an encoding.
+
+UTF-8 is commonly used.
+
+A format can require a specific encoding.
+
+If encoding is not defined, different systems can interpret the same bytes differently.
+
+Character encoding and serialization are separate layers.
+
+JSON defines structured textual representation.
+
+UTF-8 defines how selected text is represented as bytes.
+
+Do not confuse serialization with character encoding.
+
+Binary serialization represents structured information directly through defined byte layouts.
+
+Binary does not mean encrypted.
+
+Binary does not mean compressed.
+
+Binary does not mean secure.
+
+Binary means the representation is not fundamentally a human-readable textual syntax.
+
+A binary format must define byte interpretation.
+
+Multi-byte integers require defined byte order.
+
+Network protocols commonly define network byte order for selected values.
+
+Custom formats should explicitly define byte order.
+
+Do not serialize native integers by copying their memory representation unless the format explicitly defines that representation.
+
+Host byte order can differ between systems.
+
+Integer width can differ between types and platforms.
+
+Structure padding can differ.
+
+Alignment can differ.
+
+Compiler ABI can differ.
+
+Native memory representation is not automatically portable serialization.
+
+Do not write raw C structures to disk and call the result portable.
+
+A C structure can contain padding.
+
+Padding bytes can be indeterminate.
+
+Member layout can depend on compiler and ABI.
+
+Integer representation can differ.
+
+Pointer values are process-specific.
+
+A structure can change between software versions.
+
+Portable serialization defines each field independently of native structure layout.
+
+Serialize semantic values.
+
+Do not serialize implementation accidents.
+
+Pointers should not be serialized as object identity.
+
+A pointer identifies a memory location within an execution context.
+
+That address can be meaningless after process restart.
+
+That address can be meaningless in another process.
+
+That address can be meaningless on another machine.
+
+Stable object identifiers should be serialized instead.
+
+Identifiers can be numbers.
+
+Identifiers can be strings.
+
+Identifiers can be hashes.
+
+Identifiers can use another explicitly defined representation.
+
+Identity rules belong to the application or protocol.
+
+Serialization should preserve the defined identity representation.
+
+Serialization can be deterministic.
+
+Deterministic serialization produces the same canonical representation for the same semantic input according to defined rules.
+
+Not every serializer is deterministic by default.
+
+Map or object field order can vary.
+
+Whitespace can vary.
+
+Numeric formatting can vary.
+
+Unicode representation can vary.
+
+Optional-field handling can vary.
+
+Floating-point formatting can vary.
+
+Unknown-field handling can vary.
+
+If exact serialized bytes matter, canonicalization must be defined.
+
+Canonical serialization defines one accepted representation for a semantic value or defines the exact representation used for authoritative operations.
+
+Canonicalization can define field order.
+
+Canonicalization can define whitespace.
+
+Canonicalization can define numeric representation.
+
+Canonicalization can define string encoding.
+
+Canonicalization can define normalization.
+
+Canonicalization can define inclusion or omission of optional fields.
+
+Canonicalization can define ordering of collections where semantic ordering exists.
+
+Canonicalization can define byte order.
+
+Canonicalization can define version.
+
+A canonical representation should not depend on hash-table iteration order.
+
+A canonical representation should not depend on filesystem enumeration order.
+
+A canonical representation should not depend on pointer addresses.
+
+A canonical representation should not depend on process-specific state.
+
+A canonical representation should not depend on locale.
+
+A canonical representation should not depend on unspecified compiler behavior.
+
+Canonical serialization is important when serialized bytes are hashed.
+
+Canonical serialization is important when serialized bytes are signed.
+
+Canonical serialization is important when serialized bytes determine identifiers.
+
+Canonical serialization is important when multiple systems must independently produce identical bytes.
+
+If two semantically equivalent objects can serialize differently, their raw hashes can differ.
+
+Hashing requires clarity about what is hashed.
+
+Hash the canonical representation when the protocol defines canonical representation.
+
+Do not assume arbitrary serializer output is canonical.
+
+Digital signatures verify exact signed representation according to the signature scheme.
+
+Changing whitespace can change a signature if whitespace is part of the signed bytes.
+
+Changing field order can change a signature if order is part of the bytes.
+
+Re-serializing parsed data can therefore produce different bytes.
+
+Do not verify a signature over reconstructed bytes unless the protocol defines reconstruction and canonicalization.
+
+Preserve original signed bytes when required.
+
+Representation and semantic value are different.
+
+Two serialized documents can express equivalent application state.
+
+They can still contain different bytes.
+
+Byte equality and semantic equality are separate.
+
+Define which form of equality matters.
+
+A protocol can require byte equality.
+
+An application can require semantic equality.
+
+A cache can use canonical byte identity.
+
+A user interface can ignore formatting differences.
+
+Do not substitute one equality model for another.
+
+Serialization can include metadata.
+
+Metadata can include version.
+
+Metadata can include type.
+
+Metadata can include timestamp.
+
+Metadata can include identifier.
+
+Metadata can include length.
+
+Metadata can include checksum.
+
+Metadata can include feature flags.
+
+Metadata should exist because the format requires it.
+
+Do not add metadata merely because it might be useful someday.
+
+Every field becomes part of compatibility considerations.
+
+Format versioning allows representation to evolve.
+
+A version can identify the schema or protocol interpretation.
+
+Version numbers should have defined meaning.
+
+A parser should not silently interpret an unknown version as a known version.
+
+Unknown version means the implementation does not know the required interpretation unless compatibility rules explicitly say otherwise.
+
+Reject unsupported versions or handle them through defined compatibility behavior.
+
+Do not guess.
+
+Backward compatibility means a newer implementation can process selected older representations according to defined rules.
+
+Forward compatibility means an older implementation can tolerate or process selected newer representations according to defined rules.
+
+Compatibility is not automatic.
+
+It must be designed.
+
+Adding an optional field can be backward compatible if older implementations safely ignore unknown fields.
+
+That depends on the format and application rules.
+
+Removing a required field can break compatibility.
+
+Changing a field's meaning can break compatibility even if its syntax remains identical.
+
+Changing an integer from one unit to another breaks semantic compatibility.
+
+Renaming a field can break compatibility.
+
+Changing default behavior can break compatibility.
+
+Schema evolution should preserve meaning deliberately.
+
+Field names are part of a textual schema contract when the format uses named fields.
+
+Field numbers can be part of binary schema contracts.
+
+Do not reuse retired field identifiers for unrelated meaning.
+
+Old data can still contain them.
+
+Old software can still interpret them according to previous meaning.
+
+Permanent field identity prevents ambiguity.
+
+Optional fields require defined absence semantics.
+
+Absent can mean unknown.
+
+Absent can mean not applicable.
+
+Absent can mean default.
+
+Absent can mean intentionally omitted.
+
+These meanings are not interchangeable.
+
+Define them.
+
+Null is not automatically equivalent to absent.
+
+An empty string is not automatically equivalent to null.
+
+Zero is not automatically equivalent to absent.
+
+An empty array is not automatically equivalent to absent.
+
+Preserve distinctions required by the data model.
+
+Defaults can simplify compatibility.
+
+Defaults can also hide missing data.
+
+A parser applying a default should do so only when the schema defines that default.
+
+Do not invent a default because a field is missing.
+
+Missing required information should remain an error.
+
+Unknown values should remain unknown when the format permits unknown state.
+
+Do not convert uncertainty into false certainty during deserialization.
+
+Unknown fields require policy.
+
+A parser can reject unknown fields.
+
+A parser can ignore unknown fields.
+
+A parser can preserve unknown fields.
+
+The correct behavior depends on compatibility requirements.
+
+Rejecting unknown fields provides strictness.
+
+Ignoring unknown fields can support forward compatibility.
+
+Preserving unknown fields can allow read-modify-write operations without destroying data the current implementation does not understand.
+
+Choose explicitly.
+
+Silently discarding unknown fields can cause data loss.
+
+A newer system can add a field.
+
+An older system can load the object.
+
+If the older system saves the object without preserving the unknown field, the new information can disappear.
+
+This is a compatibility hazard.
+
+Round-trip preservation matters for selected formats.
+
+Round-trip serialization means data can be deserialized and serialized again while preserving required information.
+
+Byte-for-byte round-trip equality is stronger than semantic round-trip equality.
+
+Define which is required.
+
+A formatter can intentionally change whitespace while preserving semantics.
+
+That is semantic round-trip behavior, not byte preservation.
+
+If signatures or hashes depend on original bytes, semantic round-trip is insufficient.
+
+Numbers require defined representation.
+
+Integers should have defined range.
+
+Signedness should be defined.
+
+Overflow behavior should be rejected or otherwise explicitly defined.
+
+Do not assume every parser supports arbitrary integer precision.
+
+One implementation can represent a value that another cannot.
+
+Cross-language formats should choose interoperable ranges.
+
+JSON numbers do not inherently encode a language-specific integer type.
+
+A JSON parser can map numbers to different native types.
+
+Large integers can lose precision in environments using floating-point number representations.
+
+Identifiers requiring exact integer precision should account for this.
+
+A decimal identifier can sometimes be represented as a string to preserve exactness across environments.
+
+Use the representation defined by the protocol.
+
+Do not change type casually.
+
+Floating-point values require particular care.
+
+IEEE floating-point can represent values that textual formats handle differently.
+
+NaN can exist in native floating-point.
+
+Infinity can exist in native floating-point.
+
+Some serialization formats do not permit these values.
+
+Floating-point negative zero can exist.
+
+Different serializers can emit different decimal forms for the same binary value.
+
+Canonical floating-point serialization requires explicit rules.
+
+Do not use floating-point for values requiring exact decimal arithmetic unless the application design accounts for it.
+
+Money commonly requires exact decimal or integer-unit representation.
+
+Serialization should preserve the application's arithmetic model.
+
+Boolean values should remain booleans where the format supports them.
+
+Do not represent true as arbitrary strings unless the schema defines strings.
+
+"false" is a non-empty string.
+
+A programming language can treat it differently from boolean false.
+
+Type preservation prevents ambiguity.
+
+Strings are sequences of characters or code units according to the application and encoding model.
+
+Serialized strings should have defined character encoding.
+
+String length can mean bytes.
+
+String length can mean code units.
+
+String length can mean Unicode code points.
+
+String length can mean user-perceived characters.
+
+These are different.
+
+If a protocol length field counts bytes, count bytes.
+
+Do not substitute character count.
+
+Unicode normalization can cause visually identical text to have different byte representations.
+
+Canonical formats involving human text can require normalization.
+
+If normalization is not defined, do not silently normalize authoritative values.
+
+Normalization can change bytes.
+
+That matters for hashes and signatures.
+
+Binary data embedded in textual formats requires an encoding.
+
+Base64 is commonly used.
+
+Hexadecimal representation is commonly used.
+
+Base64 is encoding.
+
+Base64 is not encryption.
+
+Hexadecimal is encoding.
+
+Hexadecimal is not encryption.
+
+Encoded binary data remains recoverable by anyone who has the representation.
+
+Do not claim confidentiality from encoding.
+
+A checksum can detect selected accidental changes.
+
+A cryptographic hash can identify content according to the hash algorithm.
+
+Neither automatically provides authenticity.
+
+A message authentication code can provide integrity and authenticity under a shared secret according to its scheme.
+
+A digital signature can provide authenticity and integrity according to its scheme and trust model.
+
+Serialization itself provides none of these properties automatically.
+
+A serialized document can contain a checksum field.
+
+The checksum must define exactly which bytes or semantic fields are covered.
+
+Self-referential checksum fields require exclusion or defined placeholder behavior.
+
+Do not improvise hash coverage.
+
+A message can have framing.
+
+Framing determines where one serialized message ends and another begins.
+
+A file containing exactly one JSON document can rely on file boundaries.
+
+A stream containing multiple messages requires another boundary mechanism.
+
+Framing can use a length prefix.
+
+Framing can use delimiters.
+
+Framing can use fixed-size records.
+
+Framing can use format-specific structure.
+
+Framing and serialization are separate concerns.
+
+TCP provides a byte stream.
+
+TCP does not preserve application message boundaries.
+
+Sending one serialized message with one send operation does not guarantee one corresponding receive operation.
+
+A receiver must reconstruct framing.
+
+Do not treat network packet boundaries as serialized message boundaries unless the transport protocol explicitly provides that property.
+
+Length-prefixed framing commonly sends a message length followed by that many bytes.
+
+The length field must be validated before allocation.
+
+Set a maximum frame size.
+
+Reject impossible sizes.
+
+Handle incomplete frames.
+
+A receiver can receive only part of the length prefix.
+
+A receiver can receive the length prefix and only part of the payload.
+
+Buffer until the defined frame is complete.
+
+Do not parse incomplete frames as complete messages.
+
+Delimiter framing requires handling delimiters inside data.
+
+The serialization format can escape delimiters.
+
+The framing layer can use escaping.
+
+The format can forbid the delimiter.
+
+Rules must be explicit.
+
+Naive splitting can corrupt data.
+
+Newline-delimited JSON uses line boundaries as message framing under defined constraints.
+
+Embedded newlines inside JSON strings are escaped in valid JSON representation.
+
+Pretty-printed multi-line JSON is incompatible with naive one-object-per-line framing.
+
+Formatting and framing must agree.
+
+Serialization can be streamed.
+
+A streaming serializer emits representation incrementally.
+
+A streaming parser consumes representation incrementally.
+
+Streaming reduces memory requirements for large data.
+
+Streaming requires state across chunks.
+
+A token can span chunks.
+
+A multi-byte encoded character can span chunks.
+
+A length field can span chunks.
+
+Do not assume each input chunk contains complete syntax elements.
+
+Chunk boundaries are transport artifacts.
+
+They should not alter semantic interpretation.
+
+Streaming parsers should impose limits during processing.
+
+Waiting until the entire object is constructed can be too late to prevent resource exhaustion.
+
+Count nesting.
+
+Count elements.
+
+Count bytes.
+
+Reject excess early.
+
+Deserialization can instantiate application objects.
+
+Automatically constructing arbitrary object types from untrusted serialized data can be dangerous.
+
+Some serialization systems support type metadata capable of selecting classes or constructors.
+
+This can expose unsafe code paths.
+
+Do not deserialize untrusted input into arbitrary executable object graphs.
+
+Prefer simple data representations.
+
+Map validated data into application objects explicitly.
+
+Deserialization should not execute code merely because data names a type.
+
+Serialized data is data.
+
+Treating it as executable instruction requires explicit authorization and design.
+
+Native language object serialization can create compatibility and security problems.
+
+Language-specific serialization can encode class names.
+
+It can encode private implementation details.
+
+It can depend on runtime version.
+
+It can invoke hooks during deserialization.
+
+It can permit object-injection vulnerabilities.
+
+Do not use unsafe native object deserialization for untrusted input.
+
+Use constrained data formats with explicit schemas where security boundaries exist.
+
+Serialization should not bypass constructors or invariants without deliberate design.
+
+An object can require validation during creation.
+
+Restoring raw fields without enforcing invariants can create impossible state.
+
+Deserialization should establish valid domain objects.
+
+Invalid serialized state should be rejected.
+
+Persistence does not make invalid state acceptable.
+
+A serialized object can reference other objects.
+
+References require stable identity.
+
+Object graphs can contain cycles.
+
+Tree-oriented formats can require special representation for cycles.
+
+Duplicating referenced objects can change identity semantics.
+
+If two fields refer to the same object, serializing them independently can reconstruct two separate objects.
+
+If shared identity matters, serialize identifiers and reconstruct relationships.
+
+Do not assume structural duplication preserves reference identity.
+
+Cycles require explicit handling.
+
+Naive recursive serialization of cyclic structures can recurse forever.
+
+Detect cycles.
+
+Use reference identifiers.
+
+Reject cycles if the data model forbids them.
+
+The data model determines the correct behavior.
+
+Ordering matters only when the data model says it matters.
+
+A list is generally ordered.
+
+A set is generally unordered.
+
+A map can have unspecified semantic ordering.
+
+Do not accidentally assign semantic meaning to map iteration order.
+
+Canonical serialization can impose ordering solely to produce stable representation.
+
+That does not necessarily make the logical map ordered.
+
+Distinguish representation order from semantic order.
+
+Sets require canonical ordering if deterministic bytes are required.
+
+Sort elements according to defined canonical rules.
+
+Do not sort using locale-sensitive comparison unless the protocol explicitly requires it.
+
+Locale can differ between systems.
+
+Canonical ordering should use explicitly defined comparison.
+
+Timestamps require defined representation.
+
+A timestamp should specify its time basis.
+
+UTC can provide a common reference.
+
+Offsets can be represented where required.
+
+Local time without timezone information can be ambiguous.
+
+Daylight-saving transitions can create repeated or nonexistent local times.
+
+Serialization should not discard required timezone information.
+
+Unix timestamps represent time according to their defined epoch and unit.
+
+Milliseconds and seconds are not interchangeable.
+
+A timestamp value of 1700000000 means something very different if interpreted as milliseconds instead of seconds.
+
+Units belong to the schema.
+
+Durations are not timestamps.
+
+A duration describes an interval.
+
+A timestamp describes a point in a time system.
+
+Do not serialize one and interpret it as the other.
+
+Units should be explicit.
+
+Meters and feet are different.
+
+Bytes and bits are different.
+
+Seconds and milliseconds are different.
+
+Percent and fractional ratio are different.
+
+A numeric field without defined units is ambiguous.
+
+Serialization preserves values, not unstated assumptions.
+
+Enumerations represent values from a defined set.
+
+Serialized enumeration values can use names.
+
+Serialized enumeration values can use numeric codes.
+
+Numeric codes should not be reused for unrelated meanings.
+
+Unknown enumeration values require compatibility policy.
+
+Do not silently map unknown values to an arbitrary known value.
+
+Unknown should remain unknown or cause rejection according to schema.
+
+Bit fields can compact multiple flags.
+
+Bit assignments become protocol definitions.
+
+Reserved bits should have defined handling.
+
+A parser can require reserved bits to be zero.
+
+A newer protocol can assign them.
+
+Compatibility policy should define behavior.
+
+Do not assign undocumented meaning.
+
+Nullability should be explicit.
+
+A field can permit null.
+
+A field can forbid null.
+
+Null can have a defined semantic meaning.
+
+Do not assume every language's null-like value maps identically.
+
+Database NULL, JSON null, C null pointers, and application absence are related concepts but not identical abstractions.
+
+Map them deliberately.
+
+Serialization can preserve opaque data.
+
+Opaque fields are transported or stored without interpretation by an intermediate component.
+
+An intermediary should not modify opaque bytes.
+
+If an intermediary must preserve unknown extension data, store and retransmit it exactly according to protocol rules.
+
+Do not parse and regenerate opaque signed content unnecessarily.
+
+Extensions allow formats to evolve.
+
+Extension fields should have namespaces or identifiers preventing collision where necessary.
+
+Extension behavior should not change core semantics unexpectedly.
+
+Critical validation cannot be bypassed merely because data appears in an extension.
+
+Version negotiation and serialization version are related but distinct.
+
+A protocol can negotiate a version before exchanging messages.
+
+Messages can also carry version fields.
+
+Do not assume one automatically replaces the other.
+
+The protocol defines which version controls interpretation.
+
+Serialization errors should identify the stage.
+
+Input could not be decoded.
+
+Syntax was invalid.
+
+Required field was missing.
+
+Field type was wrong.
+
+Value was outside allowed range.
+
+Relationship was invalid.
+
+Version was unsupported.
+
+Message exceeded size limit.
+
+Checksum failed.
+
+Signature failed.
+
+Semantic validation failed.
+
+These are distinct failures.
+
+Do not collapse every failure into "invalid data" internally when more precise evidence is available.
+
+Public error detail can be limited according to security policy.
+
+Internal diagnostics should preserve useful cause.
+
+A parser should fail safely.
+
+Malformed input should not crash the process.
+
+Malformed input should not access memory outside bounds.
+
+Malformed input should not cause uncontrolled allocation.
+
+Malformed input should not leave partially accepted authoritative state.
+
+Malformed input should not bypass validation.
+
+Reject the object.
+
+Preserve existing valid state where appropriate.
+
+A partially parsed object should not become active state before validation completes.
+
+Parse into temporary state.
+
+Validate temporary state.
+
+Only then publish or commit it.
+
+This mirrors safe file update principles.
+
+Deserialization can be transactional at the application level.
+
+If a message contains multiple related changes, either all can be validated and applied or the protocol can define partial application.
+
+Do not accidentally apply the first half before discovering the second half is invalid unless partial application is explicitly allowed.
+
+Validate first when atomic semantics are required.
+
+Serialization can be used for persistent state.
+
+Persistent serialized data can outlive the software version that created it.
+
+Therefore persistence formats require stronger compatibility planning than temporary internal messages.
+
+A temporary IPC format can change when all communicating processes upgrade together.
+
+A long-lived file format can remain for years.
+
+Design according to expected lifetime.
+
+Never assume old persisted data disappears merely because the software changed.
+
+Migration converts old representation or semantics into a newer form.
+
+Migration should identify source version.
+
+Migration should validate source data.
+
+Migration should produce defined target data.
+
+Migration should preserve required information.
+
+Migration should fail rather than fabricate missing required information.
+
+Migration should be testable.
+
+Migration should be recoverable where required.
+
+A migration can be destructive.
+
+Back up authoritative state before destructive migration when policy requires it.
+
+Do not overwrite the only known-good representation until the new representation is validated.
+
+A migration should not silently reinterpret values whose meaning changed.
+
+Explicit transformation is required.
+
+Schema migration and data migration are related but distinct.
+
+Changing a schema definition does not automatically transform existing serialized records.
+
+Existing bytes remain existing bytes until converted or interpreted through compatibility rules.
+
+Serialization format versions should be documented.
+
+A version should correspond to actual interpretation rules.
+
+Do not increment versions randomly.
+
+Do not avoid version changes when interpretation genuinely becomes incompatible.
+
+Version numbers communicate compatibility boundaries.
+
+Semantic versioning for software and serialization schema versioning are not automatically the same thing.
+
+Software version 2.0 can still read schema version 1.
+
+Software version 1.5 can introduce schema version 3.
+
+Define them independently when necessary.
+
+Serialization should be reproducible when used in deterministic systems.
+
+Given identical semantic state and identical format version, deterministic serialization should produce identical bytes.
+
+This requires explicit handling of unordered collections.
+
+This requires explicit numeric formatting.
+
+This requires explicit text encoding.
+
+This requires explicit optional-field rules.
+
+This requires explicit timestamp representation.
+
+This requires excluding nondeterministic metadata unless that metadata is itself defined input.
+
+Current time should not be inserted into canonical serialization unless the timestamp is part of the authoritative state.
+
+Random identifiers should not be generated during serialization unless generation is part of the defined operation.
+
+Serialization should represent state.
+
+It should not unexpectedly mutate state.
+
+A serializer should not assign new identifiers merely because an object is being written unless the design explicitly defines that behavior.
+
+A serializer should not change timestamps merely because data is being read.
+
+Reading should not become writing accidentally.
+
+Pure serialization is easier to reason about.
+
+Serialization performance can matter.
+
+Text formats can require more bytes.
+
+Binary formats can be smaller.
+
+Compression can reduce representation size.
+
+Compression consumes CPU.
+
+Schema-based binary formats can decode efficiently.
+
+Human-readable formats can simplify diagnostics.
+
+Choose based on actual requirements.
+
+Do not select binary merely because it sounds faster.
+
+Measure.
+
+Do not select text merely because it is easier to inspect if bandwidth or parsing constraints make it unsuitable.
+
+Tradeoffs are contextual.
+
+Serialization size should be bounded.
+
+A serializer should not produce unbounded output from bounded state unexpectedly.
+
+Recursive structures can expand dramatically.
+
+Repeated references can be duplicated.
+
+Compression and serialization interact.
+
+Compress after serialization according to the protocol when compression is required.
+
+Compression format is a separate layer.
+
+Encryption and serialization interact.
+
+Serialize according to the protocol.
+
+Encrypt the defined bytes according to the security design.
+
+Encryption does not replace validation.
+
+Decrypted input still requires parsing and semantic validation.
+
+Authenticated encryption can establish integrity and confidentiality of ciphertext according to its scheme.
+
+It does not establish that application fields are semantically valid.
+
+Security layers and data validation are separate.
+
+Signing and serialization require exact byte definition.
+
+Define what is serialized.
+
+Define canonicalization.
+
+Define what fields are included.
+
+Define whether the signature field itself is excluded.
+
+Define version.
+
+Then sign the resulting bytes.
+
+Verification must reproduce or preserve exactly the same signed representation according to protocol.
+
+Do not sign ambiguous representations.
+
+A signature over ambiguous serialization can allow semantically equivalent but byte-different representations to fail verification.
+
+Worse, inconsistent parsers can interpret the same representation differently.
+
+Canonicalization reduces ambiguity.
+
+Parser differentials occur when two implementations interpret the same serialized bytes differently.
+
+One parser can accept duplicate keys by keeping the first.
+
+Another can keep the last.
+
+Another can reject duplicates.
+
+This can create security vulnerabilities.
+
+Formats used across trust boundaries should define ambiguous cases.
+
+Implementations should use compatible parsing rules.
+
+Duplicate object keys require policy.
+
+JSON syntax permits object member names according to its specification, while application handling of duplicates can vary among parsers.
+
+Security-sensitive schemas can reject duplicate field names.
+
+Do not allow one validation layer to inspect one value while another layer uses a different duplicate value.
+
+Consistency matters.
+
+Unknown trailing bytes require policy in binary formats.
+
+A decoder can require complete input consumption.
+
+A decoder can permit extension data.
+
+Do not silently ignore arbitrary trailing bytes unless the format defines them.
+
+Trailing data can hide malformed or malicious content.
+
+Length-delimited structures help establish boundaries.
+
+A binary parser should verify that every field lies within the message boundary.
+
+Offsets should be validated.
+
+Lengths should be validated.
+
+Integer arithmetic should be validated.
+
+Nested structures should remain within parent bounds.
+
+Never trust internal offsets merely because the outer message parsed.
+
+A malformed offset can point outside the message.
+
+Self-describing formats include type or field information in the representation.
+
+Schema-driven formats can omit repeated names and rely on external definitions.
+
+Self-description improves inspectability and flexibility.
+
+External schemas can improve compactness and strictness.
+
+Neither model is inherently safer.
+
+Safety depends on validation and implementation.
+
+A schema registry can distribute schema definitions.
+
+Schema identity must be stable.
+
+A message referencing schema 42 requires all participants to agree what schema 42 means.
+
+Do not silently replace a schema definition under an existing immutable identifier.
+
+Version or identify new schema separately.
+
+Content-addressed schema identifiers can bind identity to exact bytes.
+
+Human-readable schema names can remain aliases.
+
+Identity and display names should not be confused.
+
+Serialization can support optional extensions.
+
+Extensions should not alter required base interpretation unless the protocol defines negotiation.
+
+A receiver should not execute an extension it does not understand.
+
+Unknown extension does not mean permission to guess.
+
+Reject or ignore according to protocol.
+
+Feature negotiation can establish whether optional serialized fields are meaningful.
+
+Sending unsupported required features should fail clearly.
+
+Serialization libraries are implementation tools.
+
+A library's defaults are not automatically the application's protocol.
+
+Default date formatting can change.
+
+Default field naming can change.
+
+Default omission of null fields can change.
+
+Default map ordering can change.
+
+Default numeric handling can differ.
+
+Configure required behavior explicitly.
+
+Library upgrades can alter serialization output.
+
+If serialized bytes are authoritative, test exact output across upgrades.
+
+Golden test vectors can preserve expected representation.
+
+A golden vector defines known input and expected serialized bytes.
+
+Test serialization against it.
+
+Test deserialization against it.
+
+Test invalid inputs.
+
+Test boundary values.
+
+Test unsupported versions.
+
+Test missing required fields.
+
+Test unknown fields according to policy.
+
+Test maximum sizes.
+
+Test canonical ordering.
+
+Test Unicode behavior where relevant.
+
+Test integer limits.
+
+Test corrupted messages.
+
+Test truncated messages.
+
+Cross-language serialization should use shared test vectors.
+
+One implementation producing valid output is not enough.
+
+Every supported implementation should produce and consume the required representation.
+
+If deterministic bytes are required, compare bytes across implementations.
+
+If only semantic compatibility is required, compare reconstructed semantic values according to defined rules.
+
+Round-trip tests are useful.
+
+Serialize an object.
+
+Deserialize it.
+
+Compare required semantic state.
+
+But round-trip tests alone can hide paired bugs.
+
+A serializer and deserializer can share the same incorrect assumption and still round-trip successfully.
+
+Use independent golden vectors.
+
+Use specification-derived examples.
+
+Cross-implementation tests provide stronger evidence.
+
+Fuzzing is useful for deserializers.
+
+Fuzz malformed lengths.
+
+Fuzz nesting.
+
+Fuzz unexpected types.
+
+Fuzz truncated input.
+
+Fuzz duplicate fields.
+
+Fuzz invalid encoding.
+
+Fuzz extreme numbers.
+
+Fuzz unknown versions.
+
+A parser should reject malformed input safely.
+
+Successful fuzzing does not prove correctness.
+
+It adds evidence.
+
+Serialization failures should not corrupt authoritative state.
+
+If persistent state cannot be deserialized, preserve the original bytes for investigation where policy allows.
+
+Do not overwrite corrupted input with defaults automatically.
+
+Automatic replacement destroys evidence.
+
+Recovery should be explicit.
+
+A backup or previous valid generation can be used according to recovery policy.
+
+Report that recovery occurred.
+
+Do not pretend corrupted state never existed.
+
+Serialized historical records can require immutability.
+
+If records are permanent, schema evolution should preserve the ability to interpret older records.
+
+Do not rewrite history merely to make old records match new schemas unless governance explicitly requires migration and preserves provenance.
+
+An old record can remain in its original version.
+
+Readers can interpret it according to that version.
+
+This preserves historical evidence.
+
+Derived views can normalize old records for current presentation without altering original bytes.
+
+Source record and derived representation are different.
+
+Serialization can therefore support append-only systems.
+
+Each record can carry version information.
+
+Each record can be validated independently.
+
+Later software can maintain decoders for historical versions.
+
+Removing old decoders can make old records unreadable.
+
+Retention policy should include interpretation capability.
+
+A serialized audit record should contain enough defined information to interpret its event.
+
+Do not depend entirely on transient external state if historical interpretation requires that state.
+
+At the same time, avoid duplicating unnecessary information.
+
+Balance permanence and normalization according to system requirements.
+
+Serialization can expose sensitive information.
+
+A serialized object can contain passwords.
+
+A serialized object can contain tokens.
+
+A serialized object can contain private keys.
+
+A serialized object can contain personal information.
+
+Do not serialize secrets unnecessarily.
+
+Do not log serialized objects blindly.
+
+Do not include sensitive fields merely because the serializer can access them.
+
+Use explicit field selection.
+
+Debug dumps can become data leaks.
+
+Redaction should occur before untrusted output.
+
+A serializer can accidentally expose internal fields.
+
+Reflection-based serializers can include fields not intended for external consumers.
+
+Explicit schemas reduce accidental exposure.
+
+Private implementation state should remain private unless the protocol requires it.
+
+A serialized API response is part of an external contract.
+
+Changing field names can break consumers.
+
+Changing types can break consumers.
+
+Changing nullability can break consumers.
+
+Changing ordering can break consumers if they incorrectly rely on it, though protocols should define whether order matters.
+
+Changing undocumented behavior can still break real clients.
+
+Version external contracts deliberately.
+
+A serializer should not leak memory addresses.
+
+Memory addresses reveal implementation details.
+
+They are unstable.
+
+They can weaken security mitigations.
+
+Use logical identifiers.
+
+Error serialization should also have a schema.
+
+An error can contain a code.
+
+An error can contain a human-readable message.
+
+An error can contain structured details.
+
+Machine consumers should rely on stable error codes or structured fields rather than parsing prose.
+
+Human-readable messages can change.
+
+Do not make prose the protocol when structured semantics are required.
+
+Serialization can be nested.
+
+One serialized format can contain another encoded format.
+
+A JSON object can contain Base64-encoded binary protocol data.
+
+A binary envelope can contain JSON payload.
+
+Each layer should be identified.
+
+Each layer should have limits.
+
+Each layer should be validated.
+
+Nested serialization increases complexity.
+
+Use it only when architecture requires it.
+
+Double serialization can occur accidentally.
+
+A JSON string can contain text that is itself JSON.
+
+Consumers then need two parsing stages.
+
+This is different from a nested JSON object.
+
+Do not encode structured data as a string when native structured representation is available without a reason.
+
+Repeated escaping makes data harder to validate.
+
+Serialization boundaries should be explicit in architecture.
+
+Internal function calls can pass native structures.
+
+Process boundaries commonly require serialization.
+
+Network boundaries require representation.
+
+Persistent storage requires representation.
+
+Plugin boundaries can require representation depending on architecture.
+
+Not every internal object needs serialization.
+
+Do not serialize merely to move data between two functions in the same process unless the architecture benefits from the boundary.
+
+Serialization has cost.
+
+Parsing has cost.
+
+Allocation has cost.
+
+Validation has cost.
+
+Keep boundaries meaningful.
+
+A serialization format can serve as a stable interface between components written in different languages.
+
+The representation should avoid language-specific assumptions.
+
+Do not expose C pointer semantics.
+
+Do not expose PHP dynamic-type quirks.
+
+Do not expose Go implementation-specific map ordering.
+
+Do not expose C++ object layout.
+
+Do not expose C# runtime object identity.
+
+Define language-neutral values.
+
+Each implementation maps them to native types.
+
+Cross-language compatibility requires range agreement.
+
+A C uint64 value can exceed exact integer precision in some other environments.
+
+A language with arbitrary-precision integers can accept values another cannot.
+
+A language can distinguish signed and unsigned values differently.
+
+Choose protocol ranges all supported implementations can handle or define explicit conversion rules.
+
+Do not discover these differences after deployment.
+
+Serialization can be used for configuration.
+
+Configuration files should have schemas.
+
+Unknown configuration keys can indicate typing mistakes.
+
+Strict rejection can catch mistakes.
+
+Forward compatibility can favor unknown-key tolerance.
+
+Choose according to configuration lifecycle.
+
+For local operator configuration, rejecting unknown keys often prevents silent misconfiguration.
+
+For extensible distributed messages, unknown-field tolerance can be useful.
+
+Context matters.
+
+A configuration parser should distinguish missing field from malformed field.
+
+If a port is absent and has a defined default, apply the default.
+
+If a port is present but contains invalid text, reject it.
+
+Do not silently replace invalid explicit configuration with a default.
+
+Explicit invalid input is evidence of a configuration problem.
+
+Serialization can represent state snapshots.
+
+A snapshot captures state at a defined logical point.
+
+Snapshot creation should define consistency.
+
+Serializing a live mutable object graph without synchronization can produce internally inconsistent state.
+
+One field can be read before an update.
+
+Another can be read after the update.
+
+The resulting snapshot can represent no real state that ever existed.
+
+Use locking, immutable state, versioning, copy-on-write, or another consistency mechanism where snapshot consistency matters.
+
+Serialization itself does not create consistency.
+
+A serializer reading shared mutable state needs concurrency rules.
+
+Do not hold global locks longer than necessary.
+
+One strategy is to capture a stable logical snapshot and serialize it after releasing critical locks.
+
+Exact design depends on data size and consistency requirements.
+
+Serialization can represent event records.
+
+An event should describe something that occurred according to event semantics.
+
+Do not rewrite an event because current state changed.
+
+Current state and historical event are separate.
+
+Event schema evolution should preserve historical interpretation.
+
+Derived current state can be rebuilt from events where the architecture defines event sourcing.
+
+Event sourcing is not required merely because serialization exists.
+
+Do not introduce it without need.
+
+Serialization can represent commands.
+
+A command requests an action.
+
+A command is not proof the action occurred.
+
+A serialized request and serialized result should remain distinct.
+
+"START" means a request to start.
+
+It does not mean started.
+
+A successful response can establish defined completion.
+
+Do not encode requested state as observed state.
+
+Serialization can represent observations.
+
+An observation should contain what was actually observed.
+
+If state is unknown, serialize unknown according to the schema.
+
+Do not serialize guessed values as observations.
+
+Serialization preserves information only if the schema can represent it.
+
+If the data model distinguishes UNKNOWN from FALSE, a boolean alone is insufficient.
+
+Choose a representation capable of expressing every required state.
+
+Tri-state values can represent true, false, and unknown.
+
+Enumerations can represent richer states.
+
+Do not force richer state into a simpler type and lose meaning.
+
+Serialization should preserve distinctions important to authority.
+
+Requested.
+
+Accepted.
+
+Committed.
+
+Applied.
+
+Verified.
+
+Failed.
+
+Unknown.
+
+These are different states.
+
+A serialized workflow record should not collapse them unless the workflow intentionally does.
+
+Serialized status fields should have defined transitions where they represent state machines.
+
+A parser can validate whether a status value exists.
+
+Application logic validates whether the transition is permitted.
+
+Serialization validation and workflow validation are separate.
+
+A valid string "APPROVED" does not prove the actor was authorized to approve.
+
+Authorization is separate.
+
+Serialization does not grant authority.
+
+Possession of valid serialized data does not prove permission to act on it.
+
+Authentication, authorization, and policy remain separate layers.
+
+A correctly signed message can still request an unauthorized operation.
+
+Signature proves selected origin or integrity according to trust model.
+
+Authorization determines whether the operation is allowed.
+
+Validate both.
+
+Serialization can preserve provenance fields.
+
+Provenance can record source.
+
+Provenance can record version.
+
+Provenance can record timestamp.
+
+Provenance can record identifier.
+
+These fields are claims unless independently authenticated or established by trusted processing.
+
+A serialized field saying "trusted": true does not make the message trusted.
+
+Trust comes from the system evaluating the message.
+
+Never let untrusted input assign its own trust level.
+
+Serialized role fields do not automatically grant roles.
+
+Serialized permission fields do not automatically grant permissions.
+
+Serialized path fields do not automatically authorize filesystem access.
+
+Serialized command fields do not automatically authorize process execution.
+
+Data is not authority.
+
+A parser should not make authorization decisions solely from user-controlled fields.
+
+Serialization can support checksummed records.
+
+If corruption is detected, reject the corrupted record.
+
+Do not repair unknown bytes by guessing.
+
+If redundant information allows deterministic correction according to the format, apply only the defined correction algorithm.
+
+Record that correction occurred where operationally meaningful.
+
+Guessing is not recovery.
+
+Binary formats can include magic values.
+
+A magic value helps identify format.
+
+A magic value does not prove the entire file is valid.
+
+A random or malicious file can contain the same prefix.
+
+Continue validation.
+
+Version fields commonly follow magic identifiers.
+
+Length fields can establish boundaries.
+
+Checksums can detect corruption.
+
+Each adds evidence.
+
+None replaces semantic validation.
+
+A file extension can suggest serialization format.
+
+Content should establish actual format where required.
+
+A `.json` extension does not make invalid bytes JSON.
+
+A magic value can provide stronger format detection for binary formats.
+
+Still validate the full structure.
+
+Serialization should have one authoritative specification when interoperability matters.
+
+Code is not the only specification.
+
+Examples are not the full specification.
+
+One implementation's accidental behavior should not silently become protocol law unless intentionally adopted.
+
+Document field semantics.
+
+Document ranges.
+
+Document ordering.
+
+Document versioning.
+
+Document error handling.
+
+Document canonicalization where required.
+
+Document compatibility.
+
+Test implementations against the same contract.
+
+If specification and implementation disagree, identify the discrepancy.
+
+Do not silently reinterpret the specification to match one implementation.
+
+Resolve through the project's authority and change process.
+
+Serialization code should be small where possible.
+
+A simple fixed schema can be safer than a highly generic object serializer.
+
+Generic serializers offer convenience.
+
+Convenience can hide representation decisions.
+
+Critical formats benefit from explicit encoding and decoding.
+
+Explicit code makes field handling visible.
+
+Explicit validation makes acceptance visible.
+
+Do not build a custom serialization framework when a standard format satisfies requirements.
+
+Custom formats require specification.
+
+Custom formats require parsers.
+
+Custom formats require testing.
+
+Custom formats require compatibility planning.
+
+Use custom formats when requirements justify them.
+
+Simple systems should remain simple.
+
+Serialization should be deterministic where deterministic systems require it.
+
+Serialization should be bounded where untrusted data is involved.
+
+Serialization should be versioned where data can outlive one implementation.
+
+Serialization should be explicit where authority depends on exact bytes.
+
+Serialization should be validated before state changes.
+
+Serialization should preserve unknown state rather than invent certainty.
+
+Serialization should not execute data.
+
+Serialization should not grant authority.
+
+Serialization should not leak implementation-specific memory state.
+
+Serialization should not depend on accidental iteration order.
+
+Serialization should not depend on locale.
+
+Serialization should not depend on native structure layout.
+
+Serialization should not depend on pointer values.
+
+Serialization should not depend on one compiler's ABI.
+
+Serialization should not depend on one operating system's byte order.
+
+Do not confuse serialization with encryption.
+
+Do not confuse serialization with compression.
+
+Do not confuse serialization with hashing.
+
+Do not confuse serialization with storage.
+
+Do not confuse serialization with transport.
+
+Do not confuse serialization with framing.
+
+Do not confuse serialization with character encoding.
+
+Do not confuse serialization with authentication.
+
+Do not confuse serialization with authorization.
+
+Do not confuse serialization with validation.
+
+Do not confuse parsing with semantic acceptance.
+
+Do not confuse valid syntax with valid state.
+
+Do not confuse a schema with authorization policy.
+
+Do not confuse field presence with field truth.
+
+Do not confuse null with absent.
+
+Do not confuse zero with absent.
+
+Do not confuse empty with absent.
+
+Do not confuse unknown with false.
+
+Do not confuse default with observed value.
+
+Do not confuse binary with secure.
+
+Do not confuse Base64 with encryption.
+
+Do not confuse a checksum with authenticity.
+
+Do not confuse a hash with authorization.
+
+Do not confuse signed data with authorized action.
+
+Do not confuse byte equality with semantic equality.
+
+Do not confuse semantic equality with canonical byte equality.
+
+Do not confuse native object layout with portable representation.
+
+Do not confuse pointer identity with persistent identity.
+
+Do not confuse map iteration order with defined order.
+
+Do not confuse successful round-trip testing with proof of specification correctness.
+
+Do not confuse old data with invalid data merely because a newer schema exists.
+
+Do not confuse migration with deletion of historical representation.
+
+Do not confuse message receipt with operation completion.
+
+Do not confuse a serialized command with an executed command.
+
+Do not confuse a serialized status claim with independently established state.
+
+When designing a serialized format, determine what information must be represented.
+
+Determine the type of each field.
+
+Determine the valid range.
+
+Determine required and optional fields.
+
+Determine absence semantics.
+
+Determine ordering semantics.
+
+Determine text encoding.
+
+Determine byte order for binary values.
+
+Determine maximum sizes.
+
+Determine nesting limits.
+
+Determine versioning.
+
+Determine compatibility behavior.
+
+Determine unknown-field behavior.
+
+Determine canonicalization if exact bytes matter.
+
+Determine integrity or authentication requirements separately.
+
+Then choose the smallest representation satisfying those requirements.
+
+When serializing authoritative state, validate the state before encoding it.
+
+Use the defined schema version.
+
+Use defined field ordering where required.
+
+Use defined numeric representation.
+
+Use defined character encoding.
+
+Use defined canonicalization.
+
+Do not add nondeterministic information accidentally.
+
+Produce the complete representation.
+
+Validate output against known requirements where appropriate.
+
+Only then publish or persist it.
+
+When deserializing data, establish the input boundary.
+
+Enforce maximum size.
+
+Decode according to the specified format.
+
+Reject malformed syntax.
+
+Reject unsupported version.
+
+Validate required fields.
+
+Validate types.
+
+Validate ranges.
+
+Validate relationships.
+
+Validate application semantics.
+
+Validate authentication or signatures where required.
+
+Validate authorization separately.
+
+Only then commit the resulting state.
+
+When serialized data cannot be interpreted, do not invent missing meaning.
+
+Preserve the original representation where required for investigation.
+
+Report the exact failure stage.
+
+Use a previous valid state or recovery source only according to defined policy.
+
+Do not silently replace unknown data with fabricated defaults.
+
+When evolving a format, preserve existing field meaning where compatibility requires it.
+
+Add new optional information according to compatibility rules.
+
+Do not reuse old field identifiers.
+
+Do not silently change units.
+
+Do not silently change null semantics.
+
+Do not silently change default semantics.
+
+Do not silently change canonical ordering.
+
+Increment or change format version when interpretation becomes incompatible.
+
+Maintain decoders for retained historical data where required.
+
+When deterministic representation matters, create test vectors.
+
+Give every implementation the same semantic input.
+
+Require the same canonical bytes.
+
+Test edge values.
+
+Test empty values.
+
+Test maximum values.
+
+Test Unicode.
+
+Test ordering.
+
+Test optional fields.
+
+Test unknown fields.
+
+Test old versions.
+
+Test malformed representations.
+
+Determinism should be demonstrated by evidence.
+
+When exact bytes do not matter, test semantic interoperability instead.
+
+One implementation serializes.
+
+Another deserializes.
+
+Compare semantic state.
+
+Reverse the direction.
+
+Test every supported implementation.
+
+Do not assume two libraries implementing the same general format implement the same application schema.
+
+Serialization is the boundary between structured meaning and representation.
+
+The representation must be defined strongly enough that another implementation can recover the same intended meaning.
+
+The serializer should not guess.
+
+The deserializer should not guess.
+
+The protocol should not depend on accidental implementation behavior.
+
+If the representation does not contain enough information to establish a fact, that fact is not present.
+
+If the parser does not support the representation's version, the meaning is not known.
+
+If validation fails, the state is not accepted.
+
+And if exact bytes determine identity, consensus, hashing, or signatures, there must be one defined canonical representation rather than several representations that are merely probably equivalent.

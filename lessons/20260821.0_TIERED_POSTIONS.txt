@@ -1,0 +1,532 @@
+20260821.0 - STN-LABZ Tiered Position Framework
+
+Root Document ID: 20260821.0
+Revision ID:       NONE
+Previous Revision: NONE
+sha256: 939702c9dbd95b9989bf71b88ef56fd7b1eccf866812b2579b4bd555c4fddb70
+
+Status: Approved  
+
+---
+
+1. Purpose
+
+This policy establishes the STN-LABZ Tiered Position Framework governing organizational positions, position tiers, qualification eligibility, mission assignment, and access to controlled operational systems.
+
+STN-LABZ will separate employment, organizational position, qualification, mission assignment, and operational access into distinct authority boundaries.
+
+The framework is based on the principle:
+
+> Employment ≠ Position ≠ Qualification ≠ Mission Assignment ≠ Access
+
+No individual receives operational access solely because they are employed by STN-LABZ, occupy a particular position, hold a certification, or have previously performed work within an operational domain.
+
+Operational access exists only when all required authority conditions are simultaneously satisfied.
+
+---
+
+2. Scope
+
+This policy applies to:
+
+- STN-LABZ employees;
+- contractors where explicitly authorized;
+- controlled organizational positions;
+- certification and qualification programs;
+- Mission Control;
+- Digit;
+- Ezra;
+- Rictus Intelligence;
+- Sentinel;
+- future STN-LABZ controlled operational systems;
+- mission-specific information;
+- mission-specific tools;
+- mission-specific infrastructure; and
+- access authorization associated with controlled operations.
+
+This policy governs eligibility and access relationships.
+
+Individual position requirements, certification requirements, system qualification requirements, and mission requirements may be defined by subordinate controlled documents.
+
+---
+
+3. Organizational Authority Model
+
+STN-LABZ will maintain the following authority progression:
+
+    EMPLOYMENT
+        ↓
+    POSITION
+        ↓
+    POSITION TIER
+        ↓
+    SYSTEM ELIGIBILITY
+        ↓
+    CERTIFICATION / QUALIFICATION
+        ↓
+    MISSION ASSIGNMENT
+        ↓
+    MISSION-SPECIFIC ACCESS
+        ↓
+    AUTHORIZED OPERATION
+
+Each stage is independently required where applicable.
+
+Passing one stage does not imply satisfaction of any subsequent stage.
+
+---
+
+4. Employment
+
+Employment establishes an individual's organizational relationship with STN-LABZ.
+
+Employment alone does not:
+
+- establish qualification;
+- grant certification;
+- establish mission authority;
+- grant controlled-system access;
+- authorize access to mission information;
+- authorize operational actions; or
+- establish eligibility for every STN-LABZ system.
+
+An active employee with no authorized mission assignment may possess no operational access.
+
+---
+
+5. Positions
+
+A Position is a defined organizational role within STN-LABZ.
+
+An employee may be hired, appointed, or transferred into a Position according to applicable organizational requirements.
+
+Each controlled Position will define its organizational responsibilities and its Position Tier.
+
+Position assignment establishes organizational placement.
+
+It does not independently grant operational access.
+
+---
+
+6. Position Tiers
+
+Every controlled STN-LABZ Position will be assigned a Position Tier.
+
+Position Tier establishes the maximum class of operational responsibility for which the Position may be considered.
+
+Position Tier may determine eligibility for:
+
+- controlled systems;
+- sensitive operational functions;
+- specialized qualifications;
+- mission assignments;
+- command responsibilities;
+- intelligence functions;
+- security functions;
+- engineering functions; and
+- space operations.
+
+A Position Tier establishes eligibility for consideration.
+
+It does not establish authorization.
+
+> Position Tier determines eligibility for consideration. It does not grant access.
+
+---
+
+7. System Eligibility
+
+Controlled STN-LABZ systems and operational domains may establish a minimum Position Tier.
+
+An employee whose Position Tier is below the required tier is not eligible for mission assignment granting access to that system.
+
+Meeting or exceeding the minimum Position Tier does not automatically grant access.
+
+Eligibility only permits the employee to proceed to applicable certification, qualification, mission-assignment, and authorization requirements.
+
+---
+
+8. Qualification and Certification
+
+Qualification establishes demonstrated competency to perform a defined function.
+
+Certification may form part of qualification where required by the applicable Position, system, mission, or operational function.
+
+Qualification requirements may include:
+
+- technical competency;
+- certification;
+- system-specific training;
+- operational procedures;
+- policy knowledge;
+- security requirements;
+- demonstrated proficiency;
+- successful practical evaluation;
+- required qualification testing; and
+- other documented competency requirements.
+
+Qualification does not establish operational need.
+
+Qualification therefore does not independently grant access.
+
+> Qualification demonstrates competency. It does not grant access.
+
+---
+
+9. Mission Assignment
+
+Mission assignment establishes the operational need for an employee to perform defined work.
+
+Mission assignment is a required authority boundary for controlled operational access.
+
+An employee will not receive operational access merely because the employee:
+
+- works for STN-LABZ;
+- holds a sufficiently high Position Tier;
+- possesses the required certifications;
+- has completed qualification;
+- previously held access; or
+- previously participated in a related mission.
+
+An active mission assignment must exist.
+
+> No active mission assignment means no mission access.
+
+---
+
+10. Mission-Specific Access
+
+Access granted pursuant to a mission assignment will be limited to the systems, information, functions, tools, and resources required by that mission.
+
+Mission access will not automatically extend to unrelated systems or missions.
+
+An employee authorized for one mission may remain unauthorized for another mission involving the same system.
+
+An employee holding a high-tier Position will not receive general access to all lower-tier operational domains.
+
+Access remains mission-specific.
+
+---
+
+11. Access Authorization Requirements
+
+Operational access to a controlled STN-LABZ system requires all applicable conditions to be satisfied.
+
+At minimum:
+
+1. the employee status is active;
+2. the employee occupies an active Position;
+3. the Position Tier satisfies the minimum system eligibility requirement;
+4. all required certifications are valid;
+5. all required qualifications are current;
+6. an active mission assignment exists;
+7. the mission assignment requires the requested system or resource;
+8. the requested access falls within the employee's assigned mission authority; and
+9. no suspension, restriction, or other controlling condition prohibits access.
+
+Failure of any required condition results in denial.
+
+---
+
+12. Fail-Closed Access Decision
+
+STN-LABZ operational access will be evaluated using a fail-closed model.
+
+    IF employee status is not active
+        DENY
+
+    IF position status is not active
+        DENY
+
+    IF position tier does not satisfy system eligibility
+        DENY
+
+    IF required certification is missing or invalid
+        DENY
+
+    IF required qualification is missing or invalid
+        DENY
+
+    IF active mission assignment does not exist
+        DENY
+
+    IF requested system is outside mission authority
+        DENY
+
+    IF requested resource is outside mission scope
+        DENY
+
+    ALLOW only the access explicitly authorized by the active mission
+
+Missing, conflicting, ambiguous, or unverifiable authority information will not be interpreted as authorization.
+
+Access will remain denied until authority is established.
+
+---
+
+13. Controlled Operational Domains
+
+13.1 Mission Control
+
+Mission Control is the human command and operational authority domain of STN-LABZ.
+
+Mission Control positions may be authorized to perform functions including:
+
+- mission assignment;
+- operational direction;
+- mission approval;
+- access authorization;
+- qualification review;
+- escalation handling;
+- mission suspension;
+- mission termination; and
+- release of operational authority.
+
+Mission Control authority will remain bounded by the Position, Position Tier, assigned responsibilities, and applicable policy.
+
+Mission Control does not imply unrestricted access to every operational system.
+
+13.2 Digit
+
+Digit is a controlled STN-LABZ engineering intelligence operational domain.
+
+Eligibility for Digit access will require an applicable Position Tier.
+
+Operational Digit access additionally requires:
+
+- applicable certifications;
+- applicable engineering or operational qualification;
+- an active Digit-related mission assignment; and
+- mission authority requiring Digit access.
+
+An employee qualified to work with Digit but not assigned to a Digit mission will have no Digit operational access.
+
+13.3 Ezra
+
+Ezra is a controlled STN-LABZ space operations domain.
+
+Eligibility for Ezra access will require an applicable Position Tier.
+
+Operational Ezra access additionally requires:
+
+- applicable space-systems certification;
+- applicable technical qualification;
+- mission-specific qualification where required;
+- an active Ezra or space mission assignment; and
+- mission authority requiring Ezra access.
+
+Ezra access will remain limited to the assigned mission.
+
+13.4 Rictus Intelligence
+
+Rictus Intelligence is a controlled STN-LABZ intelligence and communications operational domain.
+
+Eligibility for Rictus Intelligence access will require an applicable Position Tier.
+
+Operational Rictus Intelligence access additionally requires:
+
+- applicable intelligence or communications qualification;
+- applicable certifications;
+- an active Rictus-related mission assignment; and
+- mission authority requiring access.
+
+Access to Rictus Intelligence does not independently authorize access to Digit, Ezra, Sentinel, or unrelated intelligence missions.
+
+13.5 Sentinel
+
+Sentinel is a controlled STN-LABZ cybersecurity and defensive operations domain.
+
+Eligibility for Sentinel access will require an applicable Position Tier.
+
+Operational Sentinel access additionally requires:
+
+- applicable security certification;
+- applicable defensive-operations qualification;
+- an active Sentinel-related mission assignment; and
+- mission authority requiring Sentinel access.
+
+Sentinel access will remain bounded to the assigned defensive mission and authorized systems.
+
+---
+
+14. Multiple Positions
+
+An employee may occupy multiple authorized Positions where organizational requirements permit.
+
+Each Position retains its own:
+
+- Position Tier;
+- qualification requirements;
+- certification requirements;
+- system eligibility;
+- mission eligibility; and
+- authority boundaries.
+
+Holding multiple Positions does not combine their authorities into unrestricted access.
+
+Access will be evaluated according to the Position and mission under which the employee is currently operating.
+
+---
+
+15. Position Definition Requirements
+
+Every controlled STN-LABZ Position will define at minimum:
+
+- Position ID
+- Position Name
+- Position Tier
+- Position Type
+- Operational Domain
+- Reports To
+- Position Purpose
+- Responsibilities
+- Required Certifications
+- Required Qualifications
+- Eligible Systems
+- Mission Eligibility
+- Mission Authority
+- Access Limitations
+- Escalation Authority
+- Status
+
+Additional requirements may be established where necessary.
+
+---
+
+16. Position Tier and System Mapping
+
+Position tiers and controlled-system eligibility will be defined in a subordinate controlled document.
+
+That document will establish the Position Tier structure and identify the minimum tier eligible for consideration for controlled domains including:
+
+- Mission Control;
+- Digit;
+- Ezra;
+- Rictus Intelligence; and
+- Sentinel.
+
+System eligibility tables will not themselves grant access.
+
+---
+
+17. Access Removal
+
+Operational access will be removed when any required authorization condition ceases to exist.
+
+Conditions requiring access removal include:
+
+- mission completion;
+- mission cancellation;
+- mission reassignment;
+- withdrawal of mission authority;
+- employment suspension;
+- employment termination;
+- Position suspension;
+- Position reassignment;
+- certification suspension;
+- certification expiration;
+- certification revocation;
+- qualification expiration;
+- qualification withdrawal; or
+- loss of any other required authorization condition.
+
+Access removal does not alter historical records documenting previously authorized activity.
+
+---
+
+18. Historical Authority
+
+Previous authorization does not establish current authorization.
+
+Prior mission assignment, prior system access, prior qualification, or prior operational responsibility will not be used as evidence of current access authority.
+
+Historical records will remain available for audit and organizational history according to applicable STN-LABZ record-control requirements.
+
+---
+
+19. Separation of Eligibility and Authority
+
+STN-LABZ will maintain an explicit distinction between eligibility and authority.
+
+Position Tier
+
+Defines whether an employee may be considered for a controlled operational responsibility.
+
+Qualification
+
+Demonstrates whether the employee is competent to perform the required function.
+
+Mission Assignment
+
+Establishes whether STN-LABZ currently requires the employee to perform that function.
+
+Access Authorization
+
+Defines the exact resources required to execute the authorized mission.
+
+These conditions are cumulative.
+
+None substitutes for another.
+
+---
+
+20. General Orders Alignment
+
+This framework supports the STN-LABZ General Orders:
+
+1. Remain at your assigned mission.
+2. Follow established policies and authorized instructions.
+3. Report anything outside your authority to the appropriate next level of authority.
+
+Mission assignment establishes the operational boundary within which authorized activity occurs.
+
+Requests or conditions outside that mission boundary will be treated as outside existing authority unless separately authorized.
+
+---
+
+21. Authority Principle
+
+STN-LABZ will grant controlled operational access through explicit authority rather than organizational assumption.
+
+The governing principles of this framework are:
+
+> Employment does not grant access.
+
+> Position does not grant access.
+
+> Position Tier determines eligibility for consideration. It does not grant access.
+
+> Qualification demonstrates competency. It does not grant access.
+
+> Mission assignment establishes operational need.
+
+> Access exists only where eligibility, qualification, mission assignment, and authorization agree.
+
+---
+
+22. References
+
+- STN-LABZ General Orders — Foundational operational authority governing assigned mission, authorized instructions, and escalation outside authority.
+- 20260806.0 — Agent Modules — Defines core governance, controlled module authority, qualification requirements, and operational boundaries for STN-LABZ autonomous-agent systems.
+- 20260805.0 — Rictus: Mission Assignment — Governs the assigned mission and operational responsibilities of Rictus.
+- Human-Controlled Intelligence-to-Corpus Pipeline — 20260817 Engineering Report — Establishes reviewed human-authority boundaries, component separation, operational boundaries, and controlled handoffs within STN-LABZ systems.
+- 20260819.0 — AI-Assisted Controlled Documentation Policy — Governs AI-assisted creation, revision, review, normalization, and maintenance of STN-LABZ controlled documentation.
+
+---
+
+23. Subordinate Documents
+
+The following controlled documents are anticipated under this policy:
+
+- STN-LABZ Position Tier Definitions
+- STN-LABZ Position Registry
+- STN-LABZ Certification Framework
+- STN-LABZ Qualification Framework
+- STN-LABZ Mission Assignment Standard
+- STN-LABZ Access Authorization Standard
+
+Individual controlled operational domains may establish additional subordinate Position, qualification, certification, mission, and access requirements.
+
+---
+
+END OF DOCUMENT

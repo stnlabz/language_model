@@ -1,0 +1,794 @@
+Go is a general-purpose programming language.
+Go is a compiled programming language.
+Go is statically typed.
+Go is case-sensitive.
+Go is designed to support simple and maintainable software.
+Go is commonly used for servers, command-line tools, network services, infrastructure software, and distributed systems.
+Go source files use the .go filename extension.
+Go source code is organized into packages.
+Every Go source file begins with a package declaration after permitted introductory comments.
+A package groups related Go declarations.
+The package name main defines an executable program when it contains the required main function.
+Execution of an ordinary Go executable begins with the main function in package main.
+A Go library uses a package name other than main according to its design.
+The go command provides standard tooling for building, testing, formatting, and managing Go code.
+go build compiles Go packages and their dependencies.
+go run compiles and runs a Go program.
+go test runs tests for selected Go packages.
+go fmt formats Go source code.
+gofmt provides standardized Go source formatting.
+go vet examines Go code for certain suspicious constructs.
+A successful build does not prove that a Go program is correct.
+A successful test does not prove that every possible defect is absent.
+Go modules provide dependency and version management.
+A go.mod file defines a Go module.
+A Go module has a module path.
+A Go module can contain multiple packages.
+A package and a module are different concepts.
+The go directive in go.mod identifies the Go language version associated with module semantics according to Go tooling rules.
+Dependencies can be recorded in go.mod.
+Checksums for downloaded module content can be recorded in go.sum.
+go mod tidy updates module requirements and sums according to packages used by the module.
+Imports make functionality from other packages available to a Go source file.
+The import declaration specifies imported packages.
+Unused imports are compile-time errors.
+Unused local variables are compile-time errors.
+An identifier names a program entity.
+Identifiers beginning with an uppercase letter are exported from their package when applicable.
+Identifiers beginning with a lowercase letter are not exported from their package.
+Exported identifiers form part of a package's accessible API.
+Go does not use public and private keywords for ordinary package-level visibility.
+Package visibility is determined by identifier capitalization.
+A variable stores a value of a particular type.
+The var keyword declares variables.
+The := syntax provides short variable declaration inside functions where permitted.
+Short variable declaration infers types from assigned expressions.
+A variable declared with := remains statically typed.
+Go does not use := as a general assignment operator in every context.
+The = operator performs assignment.
+Constants are declared with the const keyword.
+Constants can be typed or untyped.
+Untyped constants can participate in conversions according to Go constant rules.
+The zero value is the default value of a variable when no explicit initialization supplies another value.
+The zero value of an integer type is zero.
+The zero value of bool is false.
+The zero value of a string is the empty string.
+The zero value of a pointer is nil.
+The zero value of a slice is nil.
+The zero value of a map is nil.
+The zero value of a channel is nil.
+A useful Go type can often be designed so its zero value is meaningful.
+bool is Go's Boolean type.
+string represents an immutable sequence of bytes conventionally containing UTF-8 encoded text.
+A Go string can contain arbitrary bytes.
+A Go string is immutable.
+len applied to a string returns its length in bytes.
+The number of bytes in a UTF-8 string is not necessarily the number of Unicode characters perceived by a user.
+A rune is an alias for int32.
+A rune commonly represents a Unicode code point.
+A byte is an alias for uint8.
+int is a signed integer type whose size is implementation dependent within Go's requirements.
+uint is an unsigned integer type whose size is implementation dependent within Go's requirements.
+int8 is a signed 8-bit integer.
+uint8 is an unsigned 8-bit integer.
+int16 is a signed 16-bit integer.
+uint16 is an unsigned 16-bit integer.
+int32 is a signed 32-bit integer.
+uint32 is an unsigned 32-bit integer.
+int64 is a signed 64-bit integer.
+uint64 is an unsigned 64-bit integer.
+uintptr is an unsigned integer type large enough to hold the bit pattern of a pointer according to its defined use.
+float32 is an IEEE-754 32-bit floating-point type.
+float64 is an IEEE-754 64-bit floating-point type.
+complex64 represents complex numbers with float32 components.
+complex128 represents complex numbers with float64 components.
+Go requires explicit conversions in many places where some languages perform implicit numeric conversions.
+The syntax T(x) converts x to type T when the conversion is permitted.
+A conversion and a type assertion are different operations.
+Go arrays have fixed length.
+An array's length is part of its type.
+[4]int and [8]int are different types.
+Array indexing begins at zero.
+Accessing an array or slice outside its valid bounds causes a runtime panic.
+An array value contains its elements.
+Assigning an array value copies the array.
+A slice describes a portion of an underlying array.
+A slice has a length.
+A slice has a capacity.
+len reports a slice's current length.
+cap reports a slice's current capacity.
+The zero value of a slice is nil.
+A nil slice has length zero.
+A non-nil empty slice can also have length zero.
+A nil slice and a non-nil empty slice are not identical states.
+The append function appends values to a slice.
+append can allocate a new underlying array.
+Code must use the slice value returned by append.
+Appending to one slice can affect another slice when both share an underlying array and no reallocation separates them.
+Slices can share underlying storage.
+A subslice can keep an underlying array reachable.
+copy copies elements between slices.
+The number of elements copied by copy is bounded by the source and destination lengths.
+A map stores key-value associations.
+Map keys must be comparable.
+The make function can initialize a map.
+A nil map can be read from.
+Writing to a nil map causes a runtime panic.
+Reading a missing map key returns the value type's zero value.
+The comma-ok form can distinguish a missing map key from a stored zero value.
+Map iteration order is not specified.
+A program must not depend on map iteration order for deterministic protocol behavior.
+A map is not safe for unsynchronized concurrent read and write access.
+A struct groups named fields into a single type.
+The struct keyword defines structure types.
+Struct fields can have different types.
+A struct value contains its fields.
+Assigning a struct normally copies its value.
+A pointer can refer to a struct.
+The . operator accesses struct fields and methods.
+Go permits convenient field selection through pointers to structs.
+Go has pointers.
+The & operator obtains an address where permitted.
+The * operator dereferences a pointer.
+The zero value of a pointer is nil.
+Dereferencing a nil pointer causes a runtime panic.
+Go does not support ordinary pointer arithmetic.
+The unsafe package provides operations that bypass some normal Go type and memory protections.
+Use of unsafe reduces portability and safety guarantees.
+unsafe should be bounded and justified when required.
+A function is declared with the func keyword.
+A function can accept parameters.
+A function can return values.
+A Go function can return multiple values.
+Multiple return values are commonly used to return a result and an error.
+A function's signature describes its parameters and results.
+Function arguments are passed by value.
+Passing a pointer passes the pointer value by value.
+Passing a slice passes a slice descriptor by value.
+Passing a map passes a map value referring to runtime-managed map state.
+Passing a channel passes a channel value.
+A variadic function accepts a variable number of trailing arguments.
+A variadic parameter uses ... before its element type.
+Functions are values in Go.
+A function value can be assigned to a variable.
+A function can be passed as an argument.
+A function can be returned from another function.
+A closure is a function value that references variables from an enclosing scope.
+Captured variables can remain reachable while a closure requires them.
+Methods associate functions with named receiver types according to Go rules.
+A method declaration includes a receiver.
+A value receiver receives a copy of the receiver value.
+A pointer receiver receives a pointer to the receiver value.
+Pointer receivers can modify the referenced receiver.
+Method sets determine which methods belong to value and pointer types for interface satisfaction and calls.
+A type does not need to explicitly declare that it implements an interface.
+Go interfaces are satisfied implicitly.
+An interface defines a set of methods and type constraints according to its context.
+A value implements an ordinary interface when its method set satisfies the interface's required methods.
+Implicit interface satisfaction reduces direct coupling between an interface and its implementations.
+Small interfaces are commonly easier to satisfy and compose.
+The empty interface interface{} can hold values of any type.
+any is an alias for interface{}.
+Using any sacrifices some compile-time knowledge about the contained dynamic value.
+A type assertion extracts or tests the dynamic value held by an interface.
+The syntax value.(T) performs a type assertion.
+A failed single-result type assertion causes a panic.
+The comma-ok form of a type assertion reports whether the assertion succeeded without panicking.
+A type switch selects behavior according to the dynamic type held by an interface.
+An interface value conceptually contains dynamic type and dynamic value information.
+An interface holding a typed nil pointer is not necessarily itself a nil interface.
+Nil interface behavior should be understood when designing error and interface APIs.
+The error type is a built-in interface used to represent errors.
+An error value is nil when no error is being reported by ordinary convention.
+Functions commonly return an error as their final result.
+Callers should inspect errors when failure matters.
+Errors are ordinary values in Go.
+Go does not use exceptions for ordinary error handling.
+The errors package provides standard error utilities.
+errors.New creates a basic error value.
+fmt.Errorf can format an error.
+fmt.Errorf with %w can wrap an error.
+errors.Is tests whether an error matches a target through supported wrapping behavior.
+errors.As searches an error chain for an assignable error type.
+Wrapped errors can preserve causal information.
+Error messages should provide useful context.
+Error messages should not expose unnecessary secrets.
+An ignored error can hide operational failure.
+A function should return errors according to its interface contract.
+A caller should not convert every error into a generic service failure without understanding the error.
+Different failure conditions should remain distinguishable when system behavior depends on them.
+panic stops ordinary execution of the current goroutine and begins panicking.
+Deferred functions execute while a panic unwinds the goroutine's stack.
+recover can regain control of a panicking goroutine when called in an appropriate deferred function.
+panic is not a replacement for ordinary error returns.
+Panic is commonly reserved for conditions where normal execution cannot reasonably continue or for programmer errors according to system design.
+Recovering from a panic does not automatically make corrupted application state valid.
+The defer statement schedules a function call to execute when the surrounding function returns.
+Deferred calls execute in last-in-first-out order.
+Arguments to a deferred function call are evaluated when the defer statement executes.
+defer is commonly used for cleanup.
+A file can be closed with a deferred Close call after successful opening.
+A mutex can be unlocked using defer after successful locking when the control flow makes that appropriate.
+Deferred cleanup should only be registered after the resource has actually been acquired.
+Go has garbage-collected memory management.
+The runtime automatically reclaims unreachable managed memory.
+Garbage collection does not eliminate the need to close files.
+Garbage collection does not eliminate the need to close network connections.
+Garbage collection does not eliminate the need to release locks.
+Garbage collection does not automatically manage every external resource.
+Resource ownership should remain explicit.
+Keeping references to unneeded objects can prevent their memory from being reclaimed.
+Memory leaks can occur logically when programs retain objects that are no longer needed.
+The new function allocates storage for a value and returns a pointer to its zero value.
+The make function initializes slices, maps, and channels.
+new and make serve different purposes.
+Go performs escape analysis to determine whether certain values require heap allocation.
+Whether a local value is placed on the stack or heap is generally an implementation decision rather than part of the source-level semantic contract.
+Programs should not rely on implementation-specific stack placement for ordinary correctness.
+Go supports concurrency as a core language feature.
+A goroutine is a lightweight concurrent function execution managed by the Go runtime.
+The go statement starts a function call in a new goroutine.
+A goroutine is not the same abstraction as an operating-system thread.
+The Go runtime schedules goroutines onto execution resources.
+Creating a goroutine does not guarantee that it immediately executes.
+Concurrent execution does not imply parallel execution.
+Parallel execution and concurrency are related but distinct concepts.
+A channel communicates values between goroutines.
+Channels have an element type.
+The make function creates channels.
+An unbuffered channel has no value buffer.
+A send on an unbuffered channel synchronizes with a corresponding receive.
+A buffered channel can hold a bounded number of values without an immediate corresponding receive.
+Channel capacity is specified when a buffered channel is created.
+Sending to a full buffered channel blocks until space becomes available or another control mechanism intervenes.
+Receiving from an empty open channel blocks until a value becomes available or another control mechanism intervenes.
+Receiving from a closed channel returns remaining buffered values before returning the element type's zero value with a false receive status after the buffer is drained.
+The comma-ok receive form can determine whether a channel is closed and drained.
+Sending on a closed channel causes a panic.
+Closing an already closed channel causes a panic.
+Receiving from a nil channel blocks indefinitely.
+Sending to a nil channel blocks indefinitely.
+Closing a nil channel causes a panic.
+The sender is commonly responsible for closing a channel when closure is required.
+A channel does not need to be closed merely because no more values happen to be sent if receivers do not depend on closure.
+The close function indicates that no more values will be sent on a channel.
+A for range loop can receive values from a channel until it is closed and drained.
+The select statement waits on multiple channel operations.
+A select can include a default case.
+A select with a default case can perform a non-blocking channel operation.
+When multiple select cases are ready, one ready communication is selected according to Go's selection rules.
+A nil channel can be used to disable a select case dynamically.
+Channels are one synchronization mechanism.
+Mutexes are another synchronization mechanism.
+sync.Mutex provides mutual exclusion.
+A Mutex must not be copied after first use.
+Lock acquires a mutex.
+Unlock releases a mutex.
+sync.RWMutex supports shared read locking and exclusive write locking.
+sync.WaitGroup can wait for a collection of goroutines to finish.
+WaitGroup usage must obey its synchronization contract.
+sync.Once executes an associated function at most once.
+sync.Cond provides condition-variable behavior.
+sync.Map provides a concurrent map specialized for particular use cases.
+An ordinary map with explicit locking is often clearer when sync.Map's specialized behavior is unnecessary.
+The sync/atomic package provides low-level atomic memory operations.
+Atomic operations and mutexes solve different synchronization problems.
+Shared mutable data requires synchronization when accessed concurrently.
+A data race occurs when concurrent accesses violate Go's memory synchronization requirements.
+Data races can produce incorrect behavior.
+The Go race detector can identify many data races during instrumented executions.
+The -race option enables race detection on supported platforms and commands.
+A race-detector run cannot prove that every possible data race is absent.
+Concurrency should be introduced when it serves the system rather than merely because goroutines are inexpensive.
+Unbounded goroutine creation can exhaust memory or other resources.
+Goroutine lifetimes should be controlled.
+A goroutine that waits forever when it should terminate is a goroutine leak.
+Cancellation allows concurrent operations to stop when their work is no longer required.
+The context package carries deadlines, cancellation signals, and request-scoped values across API boundaries.
+context.Context is commonly passed as the first parameter to functions that participate in request-scoped cancellation.
+A Context should not normally be stored in a struct merely for convenience.
+Context cancellation is cooperative.
+A cancelled context does not forcibly terminate arbitrary code.
+Context deadlines can bound how long operations are permitted to wait.
+Context values should be used for request-scoped data rather than as a substitute for ordinary function parameters.
+A function accepting Context should propagate cancellation to applicable subordinate operations.
+Ignoring cancellation can leave unnecessary work running.
+Go supports generic programming.
+Type parameters allow functions and types to operate over sets of types.
+A generic declaration defines one or more type parameters.
+Type constraints define the permitted type arguments.
+The any constraint permits any type.
+The comparable constraint permits types whose values can be compared using == and != according to Go rules.
+Generic programming should be used when it makes an abstraction clearer or removes meaningful duplication.
+Generics do not require every reusable function to become generic.
+Interfaces and generics solve overlapping but different abstraction problems.
+The == operator compares values when their types are comparable.
+The != operator tests inequality for comparable values.
+Slices are not generally comparable with == except against nil.
+Maps are not generally comparable with == except against nil.
+Functions are not generally comparable with == except against nil.
+Arrays are comparable when their element type is comparable.
+Structs are comparable when all their fields are comparable.
+Interface values can be compared when their dynamic values are comparable.
+Comparing interface values containing non-comparable dynamic values can panic.
+Go does not have an === operator.
+Go equality semantics are not PHP equality semantics.
+Go equality semantics are not JavaScript equality semantics.
+Programming operators must be interpreted according to the language being discussed.
+The logical AND operator is &&.
+The logical OR operator is ||.
+The logical NOT operator is !.
+The bitwise AND operator is &.
+The bitwise OR operator is |.
+The bitwise XOR operator is ^.
+The bit-clear operator is &^.
+The left shift operator is <<.
+The right shift operator is >>.
+&& and || use short-circuit evaluation.
+Assignment and equality are different operations.
+= performs assignment.
+== performs equality comparison where permitted.
+:= declares at least one new variable in an applicable local scope while assigning values.
+++ increments a variable according to Go statement rules.
+-- decrements a variable according to Go statement rules.
+Go does not provide prefix increment or decrement expressions.
+x++ is a statement in Go, not a general expression.
+Go does not provide a ternary ?: operator.
+Conditional logic uses constructs such as if or switch.
+The if statement conditionally executes code.
+An if statement can include a short initialization statement.
+The switch statement selects among cases.
+Go switch cases do not fall through by default.
+The fallthrough statement explicitly requests applicable fallthrough behavior.
+A switch can omit its expression and operate as a sequence of Boolean cases.
+A type switch selects behavior according to dynamic types.
+The for statement is Go's looping construct.
+Go does not have a separate while keyword.
+A for loop with only a condition serves the role commonly called a while loop in other languages.
+A for statement with no condition can represent an indefinite loop.
+The range form iterates over supported values.
+Range behavior depends on the type being ranged over.
+Ranging over a map does not provide a defined deterministic iteration order.
+Ranging over a string decodes UTF-8 sequences into rune values and byte indexes.
+Ranging over a slice provides indexes and element values.
+Loop variables have language-version-specific semantics that should be understood when captured by closures.
+The break statement exits an applicable loop, switch, or select.
+The continue statement advances an applicable loop.
+Labels can identify statements for break, continue, and goto according to Go rules.
+goto exists in Go but is constrained by language rules.
+Clear structured control flow is generally preferable when goto is unnecessary.
+Go supports composition through struct fields and interfaces.
+Go does not provide class-based inheritance.
+Go does not have classes.
+Go does not require classes for object-oriented design techniques.
+Methods can be associated with named types.
+Interfaces provide behavioral abstraction.
+Embedding can promote fields and methods from embedded members.
+Embedding is not identical to class inheritance.
+An embedded field is still part of a containing struct's composition.
+Interface embedding combines interface method sets and constraints according to interface rules.
+A type can satisfy multiple interfaces without declaring them explicitly.
+This allows interfaces to be defined by consumers where appropriate.
+Package APIs should expose required behavior without exposing unnecessary implementation details.
+Small interfaces can reduce coupling.
+Large interfaces require implementations to provide more behavior.
+The io.Reader interface represents values that can read bytes.
+The io.Writer interface represents values that can write bytes.
+io.Reader defines a Read method.
+io.Writer defines a Write method.
+Many Go libraries compose behavior using io.Reader and io.Writer.
+An interface can make testing easier by allowing alternate implementations.
+An interface should normally represent required behavior rather than being created automatically for every concrete type.
+Go uses explicit error values instead of exception-based ordinary error handling.
+Errors should be handled near the level where meaningful action can be taken.
+Adding context to an error can make operational diagnosis easier.
+Wrapping an error can preserve its underlying identity.
+A generic message that discards the underlying error can make diagnosis harder.
+Error paths should be tested.
+Negative tests verify behavior under invalid or failure conditions.
+The testing package provides Go's standard testing support.
+Test source files conventionally end with _test.go.
+Test functions conventionally begin with Test.
+Benchmark functions conventionally begin with Benchmark.
+Example functions can provide executable documentation tests.
+go test runs package tests.
+Table-driven tests represent multiple test cases as data consumed by one test function.
+Table-driven tests are a common Go testing pattern.
+Subtests can be created using t.Run.
+Tests should be deterministic when testing deterministic behavior.
+Tests should not depend unnecessarily on execution order.
+Tests using external networks can fail for reasons unrelated to local program logic.
+Unit tests should isolate external dependencies when isolation is part of the test's purpose.
+Integration tests intentionally test component interactions.
+A regression test protects behavior that previously failed.
+A passing test establishes only what the test actually exercised.
+Coverage measures which code was exercised according to the selected coverage mechanism.
+High coverage does not prove correctness.
+Go's standard library provides extensive functionality.
+The fmt package provides formatted input and output.
+The strings package provides string operations.
+The bytes package provides operations on byte slices.
+The strconv package converts strings and basic values.
+The unicode package provides Unicode character properties.
+The unicode/utf8 package provides UTF-8 operations.
+The os package provides operating-system functionality.
+The io package provides basic I/O interfaces and utilities.
+The bufio package provides buffered I/O.
+The path package manipulates slash-separated paths.
+The path/filepath package manipulates filesystem paths according to target operating-system conventions.
+The net package provides network I/O.
+The net/http package provides HTTP client and server functionality.
+The encoding/json package provides JSON encoding and decoding.
+The encoding/binary package provides translation between byte sequences and fixed-size values.
+The crypto packages provide cryptographic primitives and protocols.
+The database/sql package provides a generic interface around SQL databases and drivers.
+The log package provides basic logging.
+The log/slog package provides structured logging in applicable Go versions.
+The time package provides time and duration functionality.
+The context package provides cancellation and request-scoped context propagation.
+The errors package provides error creation and inspection.
+The flag package provides command-line flag parsing.
+The regexp package provides regular-expression functionality.
+The sort package provides sorting functionality.
+The slices package provides generic slice operations in applicable Go versions.
+The maps package provides generic map operations in applicable Go versions.
+The standard library does not provide a driver for every external database.
+database/sql requires an appropriate database driver.
+Opening a database handle does not necessarily establish a physical database connection immediately.
+sql.DB represents a database handle and connection pool abstraction.
+A sql.DB is designed to be long-lived and shared according to its contract.
+DB.Close releases resources associated with a database handle.
+Query parameters should be passed using the database driver's parameter mechanism.
+SQL queries should not be built by concatenating untrusted data values.
+Parameterized SQL helps prevent SQL injection when correctly used for data values.
+SQL identifiers cannot always be supplied as ordinary query parameters.
+Dynamic identifiers require explicit validation or safe construction according to the database and driver.
+Rows returned by a database query should be closed when required.
+rows.Err should be checked after row iteration.
+Transactions group database operations according to database transaction semantics.
+A transaction can be committed.
+A transaction can be rolled back.
+A failed transaction operation should be handled explicitly.
+Database errors should not automatically be translated into one generic failure if callers require more precise behavior.
+Go can interact with MySQL using an appropriate Go database driver.
+Go can interact with MariaDB using an appropriate compatible driver.
+Go can interact with PostgreSQL using an appropriate driver.
+Go can interact with SQLite using an appropriate driver.
+Database support comes from packages and drivers rather than the Go language itself.
+Go is widely used for network services.
+TCP provides a reliable ordered byte stream.
+TCP does not preserve application message boundaries.
+An application protocol using TCP must define message framing.
+A single Write call does not guarantee that the peer receives one corresponding Read.
+A Read can return fewer bytes than the caller ultimately needs.
+Network code must handle partial reads and writes according to the interfaces it uses.
+io.ReadFull can read exactly a requested number of bytes or report an error.
+Connections can fail or close at any time.
+Network operations can block.
+Deadlines can bound network waiting.
+net.Conn provides methods for setting deadlines.
+A server should handle malformed network input without trusting it.
+Network input is untrusted unless an established protocol and validation prove otherwise.
+A listener accepts incoming network connections.
+net.Listen can create network listeners.
+A TCP listener bound to 127.0.0.1 is ordinarily reachable only through the local IPv4 loopback interface.
+A TCP listener bound to 0.0.0.0 can accept connections on applicable local IPv4 interfaces when allowed by the operating system and network configuration.
+Ports identify transport-layer endpoints.
+Binding to a port can fail.
+Accepting a connection can fail.
+Reading from a connection can fail.
+Writing to a connection can fail.
+Closing a connection can fail.
+Network failure is a normal condition that software must handle.
+The net/http package implements HTTP client and server facilities.
+http.Handler defines behavior that serves HTTP requests.
+The ServeHTTP method handles an HTTP request.
+http.HandlerFunc adapts a function to the Handler interface.
+http.Server represents an HTTP server.
+An HTTP server should define timeouts appropriate to its environment.
+Unbounded HTTP timeouts can permit connections to consume resources indefinitely.
+http.Client sends HTTP requests.
+An http.Client should generally be reused rather than created unnecessarily for every request.
+An http.Client with no timeout can wait indefinitely in some circumstances.
+HTTP status codes should describe the actual HTTP result.
+HTTP status 200 indicates successful handling according to HTTP semantics.
+HTTP status 400 indicates a bad request.
+HTTP status 401 indicates that authentication is required or has failed according to HTTP semantics.
+HTTP status 403 indicates that the server understood the request but refuses to authorize it.
+HTTP status 404 indicates that a requested resource was not found.
+HTTP status 500 indicates an internal server error.
+HTTP status 503 indicates service unavailable.
+A 503 response should represent actual service unavailability.
+Lacking information to answer a question is not by itself service unavailability.
+An internal dependency failure can make a service unavailable when that dependency is required to perform the requested operation.
+Error reporting should distinguish unavailable service from unavailable knowledge.
+HTTP handlers should not expose internal secrets through error responses.
+Request bodies have finite resource costs.
+Servers processing untrusted request bodies should apply appropriate size limits.
+Request data should be validated before trusted use.
+HTTP headers are untrusted input.
+URL parameters are untrusted input.
+Form values are untrusted input.
+JSON request bodies are untrusted input.
+Authentication and authorization must be enforced by trusted server-side behavior.
+Hiding a client-side control does not enforce authorization.
+Go can encode and decode JSON.
+json.Marshal encodes supported Go values as JSON.
+json.Unmarshal decodes JSON into a supplied Go value.
+JSON field mapping can be controlled with struct tags.
+A struct tag attaches string metadata to a struct field.
+The encoding/json package recognizes json struct tags.
+A json tag can define a field name.
+A json tag can request omission of certain empty values using applicable options.
+Only exported struct fields are ordinarily visible to encoding/json.
+Successful JSON decoding does not mean the data is trusted.
+Decoded input must still be validated.
+Unknown JSON fields can be rejected when a decoder is configured accordingly.
+JSON numbers require deliberate handling when exact numeric representation matters.
+Protocol definitions should specify numeric ranges and representation.
+A Go struct's in-memory layout is not a portable network serialization format.
+Writing raw struct memory to a network does not define a portable protocol.
+Structure padding and architecture details can affect memory representation.
+Pointers are not meaningful portable serialized values.
+Slices contain runtime representation details and are not raw portable protocol structures.
+Maps do not have deterministic iteration order.
+Explicit serialization should define protocol bytes independently of in-memory Go representation.
+encoding/binary can encode fixed-size numeric values using an explicit byte order.
+binary.BigEndian represents big-endian byte order.
+binary.LittleEndian represents little-endian byte order.
+Network protocols should define byte order explicitly.
+Deterministic serialization should produce the same defined bytes for the same logical value.
+Consensus-sensitive systems should not serialize maps by unspecified iteration order.
+Consensus-sensitive systems should not rely on platform-dependent integer sizes.
+Fixed-width integer types are preferable when a protocol requires exact integer widths.
+Consensus-sensitive systems should define overflow behavior.
+Consensus-sensitive systems should define ordering.
+Consensus-sensitive systems should define string encoding.
+Consensus-sensitive systems should define timestamp representation.
+Consensus-sensitive systems should avoid dependence on unspecified behavior.
+Go's defined semantics help portability, but application-level determinism still requires deliberate protocol design.
+Floating-point values can be inappropriate for some deterministic financial or consensus calculations.
+Integer or fixed-point representations can provide explicitly defined behavior when their ranges and scaling are specified.
+The time package represents durations and times.
+time.Duration represents an elapsed duration in nanoseconds.
+time.Time represents an instant with associated time information.
+Time zones should be handled explicitly when system behavior depends on them.
+UTC is commonly used for interoperable timestamps.
+A protocol should define its timestamp format.
+Wall-clock time can change.
+Monotonic clock readings embedded in applicable time.Time values can support elapsed-time measurement within a process.
+Serialized time values do not preserve Go's internal monotonic clock reading.
+Timeout logic and calendar-time logic solve different problems.
+Go can access files through os and related packages.
+os.Open opens a file for reading.
+os.Create creates or truncates a file according to its contract.
+os.ReadFile reads an entire file into memory.
+os.WriteFile writes data to a file.
+Reading an entire untrusted file can consume substantial memory.
+Large inputs should be bounded or streamed where appropriate.
+File operations can fail.
+Filesystem permissions can prevent access.
+A path valid on one operating system might not have identical meaning on another.
+path/filepath provides operating-system-aware filesystem path operations.
+filepath.Join combines filesystem path elements.
+filepath.Clean lexically cleans a filesystem path.
+Cleaning a path does not by itself authorize access to the resulting target.
+Untrusted paths require boundary and authorization checks.
+Directory traversal can occur when untrusted path input escapes an intended root.
+Symbolic links can affect filesystem boundary assumptions.
+Filesystem security requires more than checking whether a string begins with an expected prefix.
+Temporary files can be created with os.CreateTemp.
+Temporary directories can be created with os.MkdirTemp.
+Temporary resources should be removed when no longer required according to application policy.
+File permissions should be selected according to the sensitivity of stored data.
+Go supports cross-compilation for many supported target combinations.
+GOOS identifies a target operating system to Go tooling.
+GOARCH identifies a target architecture to Go tooling.
+A program compiling for multiple targets does not prove that its runtime behavior is platform independent.
+Platform-specific files can use filename suffixes recognized by Go tooling.
+Build constraints can select files for particular build conditions.
+Platform-specific implementation can exist behind a common package interface.
+Platform-specific behavior should not alter protocol-defined results when platform-independent results are required.
+The runtime.GOOS value identifies the target operating system at runtime.
+The runtime.GOARCH value identifies the target architecture.
+Cross-platform code should avoid unnecessary assumptions about path syntax.
+Cross-platform code should avoid assumptions about integer size when exact widths matter.
+Cross-platform code should avoid assumptions about byte order when protocols define an order.
+Cross-platform code should isolate operating-system-specific APIs.
+Go's standard library provides many cross-platform abstractions but cannot erase every operating-system difference.
+Go can call C code using cgo.
+cgo enables interoperability between Go and C.
+cgo is not required for ordinary pure-Go programs.
+Using cgo introduces native compiler and platform dependencies.
+cgo can complicate cross-compilation.
+Calls across the Go and C boundary have additional rules and costs.
+Go pointers passed to C must obey cgo pointer rules.
+C memory and Go memory have different ownership considerations.
+A C allocation is not automatically managed by Go's garbage collector.
+C resources must be released according to the C interface contract.
+A stable C ABI can provide a language-neutral native boundary.
+Go itself does not define one universal dynamic-library plugin ABI across all platforms.
+The plugin standard-library package provides dynamic loading on supported systems with significant compatibility constraints.
+The plugin package is not supported on every operating system.
+Go plugins require closely compatible toolchains and dependencies.
+A general cross-platform module system should not assume Go's plugin package is universally available.
+A process boundary can provide stronger language and ABI separation than in-process dynamic loading.
+Protocols can connect components written in different programming languages.
+An ABI and a network protocol are different contracts.
+An ABI defines binary interaction inside compatible process environments.
+A protocol defines communication representation and behavior between components.
+A stable protocol can allow a Go component to communicate with components written in C, C++, C#, PHP, or other languages.
+Protocol compatibility requires defined serialization and behavior rather than shared source language.
+Security-sensitive input must be validated.
+Input validation checks whether data satisfies defined requirements.
+Validation and sanitization are different operations.
+Output encoding depends on the destination context.
+HTML output requires HTML-appropriate encoding.
+SQL data should use parameterized query facilities.
+Shell commands should not be assembled by blindly concatenating untrusted input.
+File paths derived from users require boundary validation.
+Authentication determines identity.
+Authorization determines permitted actions.
+Authentication and authorization are different responsibilities.
+Authorization must be enforced by trusted service behavior.
+Passwords should not be stored as plaintext.
+Passwords should use an appropriate password-hashing algorithm.
+Cryptographic operations should use established cryptographic libraries.
+The crypto/rand package provides cryptographically secure random bytes according to its contract.
+The math/rand package is not a substitute for cryptographic randomness.
+Cryptographic keys require appropriate generation, storage, access control, and lifecycle management.
+TLS protects network traffic between endpoints when correctly configured.
+The crypto/tls package provides TLS functionality.
+TLS does not make unsafe application logic automatically secure.
+HTTPS is HTTP transported over TLS.
+A server should validate TLS configuration according to its security requirements.
+Certificates establish properties according to the trust model and validation performed.
+Go's memory safety protections reduce some classes of memory errors compared with unrestricted pointer arithmetic.
+Go does not eliminate all security vulnerabilities.
+Data races remain possible.
+Logic errors remain possible.
+Injection vulnerabilities remain possible.
+Authorization failures remain possible.
+Resource exhaustion remains possible.
+Unbounded allocations remain possible.
+Unbounded goroutines remain possible.
+Deadlocks remain possible.
+Denial-of-service vulnerabilities remain possible.
+Security requires deliberate system design.
+A context timeout can help bound external operations.
+Input-size limits can help bound resource consumption.
+Worker limits can help bound concurrency.
+Connection limits can help bound service resource use.
+Backpressure prevents producers from indefinitely overwhelming consumers.
+Buffered channels provide finite queues, not unlimited capacity.
+A bounded system should define what happens when capacity is reached.
+Dropping work, blocking producers, rejecting requests, and applying backpressure are distinct policies.
+The correct capacity policy depends on the system's contract.
+Go encourages explicit dependencies through ordinary values and interfaces.
+Package-level global mutable state can make testing and reasoning harder.
+Initialization behavior can be provided by init functions.
+An init function runs automatically during package initialization.
+A package can contain multiple init functions according to Go rules.
+init functions cannot be called directly.
+Excessive hidden initialization can make startup behavior difficult to reason about.
+Explicit initialization is easier to control when failure must be reported.
+An init function cannot return an error.
+Operations that can fail and require operator handling are often better represented by explicit initialization functions.
+Package initialization order follows Go's defined dependency rules.
+Import cycles are not permitted.
+A package cannot directly or indirectly import itself.
+Avoiding import cycles encourages directional package dependencies.
+Packages should have bounded responsibilities.
+Package names should be short and descriptive.
+A package's exported API should be smaller than its internal implementation when practical.
+Internal packages can restrict imports to permitted portions of a module or repository tree.
+A directory named internal has special import restrictions under Go tooling rules.
+The cmd directory is a common project convention for executable commands but is not a language requirement.
+The internal directory behavior is enforced by Go tooling.
+Project layout conventions are not all language rules.
+Go does not require a src directory for modern module-based projects.
+Go does not require object-oriented directory structures.
+Simple project layouts are preferable when additional hierarchy provides no useful boundary.
+Build automation should remain repeatable.
+go build resolves and compiles package dependencies according to module configuration.
+go test can build test binaries automatically.
+The -count option can control test caching behavior in applicable go test usage.
+The -run option selects tests by name pattern.
+Benchmarks can measure performance under controlled test conditions.
+Benchmark results depend on hardware, environment, workload, and compiler/runtime versions.
+Optimization should be based on measured requirements rather than assumption.
+pprof provides profiling support for Go programs.
+Profiles can identify CPU and memory behavior.
+A profile describes observed execution and does not prove all possible performance behavior.
+Allocations can create garbage-collection work.
+Reducing unnecessary allocations can improve some workloads.
+Avoiding every allocation is not automatically a useful optimization.
+Clear code should not be sacrificed without evidence that complexity is justified.
+Go interfaces can introduce allocation or dynamic dispatch costs in some circumstances, but performance should be measured rather than guessed.
+Compiler optimizations can change across Go versions.
+Application correctness should not depend on an optimization occurring.
+Go binaries commonly contain substantial runtime support.
+A Go executable can often be deployed as a single native binary when its dependencies and build mode permit.
+Pure-Go static-looking deployment does not mean the program has no operating-system dependencies.
+DNS resolution behavior can vary according to build configuration and platform.
+cgo can introduce dynamic native library dependencies.
+Deployment requirements should be verified from the actual build.
+Environment variables can configure Go applications.
+os.Getenv reads an environment variable.
+os.LookupEnv distinguishes an unset variable from a variable set to an empty string.
+Environment variables are not automatically secret.
+Secrets require appropriate access control regardless of configuration mechanism.
+Command-line arguments are available through os.Args.
+Command-line arguments can be visible to other system facilities depending on the operating environment.
+Sensitive secrets should not automatically be placed on command lines.
+The flag package provides basic command-line option parsing.
+Configuration should have defined precedence when multiple sources can provide values.
+Configuration parsing should reject invalid critical values rather than silently inventing unsafe defaults.
+Defaults should be deliberate.
+Operational errors should be observable.
+Logs provide evidence about application events.
+Logs should not contain unnecessary secrets.
+Structured logs can make machine processing easier.
+A log entry should distinguish informational operation from warning and failure conditions.
+Logging an error does not handle the error by itself.
+Returning an error and logging an error are separate actions.
+Logging the same error repeatedly at multiple layers can create noisy duplicate records.
+The layer responsible for operational reporting should be defined.
+Graceful shutdown allows a service to stop accepting new work and finish or cancel active work according to policy.
+Operating-system signals can request process termination.
+os/signal provides signal handling facilities.
+signal.NotifyContext can connect operating-system signals to Context cancellation in applicable Go versions.
+A server should release listeners and other resources during controlled shutdown.
+http.Server.Shutdown performs graceful HTTP shutdown according to its contract.
+Shutdown should have a bounded deadline when indefinite waiting is unacceptable.
+A service should not claim successful startup before required initialization has succeeded.
+A service should report degraded operation according to actual capability rather than generic failure wording.
+An unavailable optional dependency does not necessarily make every service capability unavailable.
+A required dependency failure can prevent the dependent capability from operating.
+System status should reflect actual system state.
+A dispatcher coordinates work among components according to defined responsibilities.
+A dispatcher should distinguish routing failure from execution failure.
+A dispatcher should preserve useful error information returned by downstream components.
+A dispatcher should not transform every downstream failure into one generic error.
+A module should have a bounded responsibility.
+A module should expose a defined interface.
+A module should not depend on undocumented internals of another module.
+Coordination between modules should occur through defined contracts.
+A module's successful qualification establishes only the conditions tested by qualification.
+Hot loading a module does not prove every runtime operation will succeed.
+Module discovery, qualification, activation, dispatch, and execution are distinct lifecycle stages.
+Failures should identify the lifecycle stage in which they occurred.
+A system that continues after a nonfatal module failure should report degraded capability accurately.
+A system should not claim total service unavailability when only one bounded capability failed.
+A response should be grounded in available information.
+A short correct response is preferable to an elaborate unsupported response.
+A system should distinguish not knowing an answer from being technically unavailable.
+A knowledge retrieval miss is not inherently an HTTP service failure.
+A reasoning failure is not inherently a network failure.
+A persistence failure is not inherently a knowledge failure.
+Errors should describe the subsystem and operation that actually failed.
+Fallback behavior should not invent unsupported technical claims.
+Retrieved information should be ranked according to the actual question rather than merely broad topic overlap.
+Programming-language operators are meaningful retrieval terms.
+The meaning of == depends on the programming language.
+Go uses == for equality on comparable values.
+Go does not use ===.
+PHP defines == and === with different comparison semantics.
+C and C++ use == but do not use === as an equality operator.
+C# uses == but does not use === as an equality operator.
+A question about an operator should retain enough language context to avoid mixing semantics from different languages.
+Knowledge about multiple languages should remain distinguishable by language.
+A technical answer should not borrow semantics from another programming language merely because the syntax looks similar.
+Go favors explicit control flow and explicit error handling.
+Go favors composition through packages, structs, and interfaces rather than class inheritance.
+Go provides garbage collection but still requires explicit management of external resources.
+Go provides goroutines and channels but concurrency still requires deliberate lifecycle and synchronization design.
+Go provides a substantial standard library for networking and systems software.
+Go supports cross-platform compilation but cross-platform behavior still requires deliberate engineering.
+Go can interoperate with C, but native interoperability introduces additional ownership and portability constraints.
+Go can build small command-line programs as well as long-running network services.
+Go can provide predictable systems when interfaces, concurrency, serialization, and error behavior are explicitly defined.
+Simple Go code is preferable to unnecessary abstraction when both satisfy the same requirements.
+Readable Go code is preferable to clever code that obscures behavior.
+Deterministic behavior requires explicit control of inputs, state, ordering, serialization, and external dependencies.
+Correctness is more important than merely producing output.

@@ -1,0 +1,446 @@
+20260822.4 - STN-LABZ Repository Visibility and Public Access Policy
+
+Root Document ID: 20260822.4
+Revision ID: NONE
+Previous Revision: NONE
+sha256: 252cbb609744996c6145d571eb5b7083dca52368a8cb73a3269421ca63258be1
+
+Status: Approved
+Scope: Organization-wide
+Applicability: STN-LABZ Source Repositories and Repository-Hosted Development Assets
+
+1. Purpose
+
+This policy establishes STN-LABZ requirements governing repository visibility and public repository access.
+
+Repository visibility is an explicit organizational decision.
+
+The governing rule is:
+
+Private is the default.
+
+Public visibility exists only through an explicit, authorized STN-LABZ designation.
+
+Nothing else establishes public repository status.
+
+2. Repository Visibility
+
+Every STN-LABZ repository will be classified as private unless STN-LABZ explicitly authorizes public visibility.
+
+The default relationship is:
+
+    STN-LABZ Repository
+            |
+            v
+          PRIVATE
+
+Public classification requires:
+
+    STN-LABZ Repository
+            |
+            v
+    Explicit Authorized
+    Public Designation
+            |
+            v
+          PUBLIC
+
+Public status will not be inferred from circumstances.
+
+3. Organizational Determination
+
+Repository visibility will be determined according to applicable STN-LABZ requirements and organizational purpose.
+
+Applicable considerations may include:
+
+- organizational purpose;
+- operational role;
+- intellectual property;
+- development requirements;
+- security requirements;
+- distribution model;
+- collaboration requirements;
+- publication purpose;
+- contractual requirements;
+- licensing;
+- product requirements; and
+- other applicable STN-LABZ considerations.
+
+The existence of one or more such considerations does not independently establish public status.
+
+Public repository visibility requires explicit authorization.
+
+4. Repository Visibility and Software Distribution
+
+Repository visibility and software distribution are separate organizational decisions.
+
+Software may be publicly distributed while its source repository remains private.
+
+Public availability of any of the following does not establish public repository status:
+
+- software;
+- executables;
+- binaries;
+- installers;
+- packages;
+- releases;
+- libraries;
+- modules;
+- documentation;
+- specifications;
+- interfaces;
+- APIs;
+- demonstrations;
+- downloads;
+- services;
+- products; or
+- other distributed materials.
+
+The governing relationship is:
+
+    Software Distribution
+            !=
+    Repository Visibility
+
+Public distribution does not authorize public source access.
+
+Private repository classification does not prohibit authorized public distribution.
+
+5. Repository Visibility and Licensing
+
+Repository visibility and software licensing are separate matters.
+
+A license does not independently establish repository visibility.
+
+Repository visibility does not independently establish software licensing.
+
+The governing relationship is:
+
+    Repository Visibility
+            !=
+        Licensing
+
+Neither will be inferred from the other.
+
+Applicable licensing decisions remain governed by their established authority.
+
+6. Reusable and Shared Components
+
+Technical reuse does not establish public repository status.
+
+A component does not become public merely because it is:
+
+- reusable;
+- generic;
+- portable;
+- platform-independent;
+- architecture-agnostic;
+- interoperable;
+- shared;
+- modular;
+- standardized; or
+- usable by multiple STN-LABZ systems.
+
+Repository visibility remains an explicit organizational classification.
+
+7. Extracted Components
+
+Extraction of functionality from an existing private system does not change the repository classification of the extracted functionality.
+
+This applies when functionality is extracted or developed as an independent:
+
+- library;
+- module;
+- ABI implementation;
+- framework;
+- service;
+- interface;
+- shared component;
+- utility;
+- tool;
+- subsystem; or
+- other reusable engineering component.
+
+The resulting component remains private unless explicitly designated public through an authorized STN-LABZ decision.
+
+The governing relationship is:
+
+    Private Source
+          |
+          v
+    Function Extracted
+          |
+          v
+    Reusable Component
+          |
+          v
+        PRIVATE
+
+A subsequent explicit public designation may change that classification.
+
+Reuse itself does not.
+
+8. Development and Release State
+
+Repository visibility will not change automatically as a consequence of development or release state.
+
+The following conditions do not independently establish public repository status:
+
+- development milestone;
+- prototype completion;
+- successful build;
+- successful testing;
+- qualification;
+- release-candidate status;
+- production status;
+- operational deployment;
+- software release;
+- product release;
+- customer availability;
+- user availability;
+- publication of documentation;
+- publication on an STN-LABZ-controlled domain; or
+- public availability of related artifacts.
+
+Repository classification remains in effect until an authorized visibility decision changes it.
+
+9. Related Repository Visibility
+
+The visibility of one repository does not establish the visibility of another repository.
+
+Public visibility of a related repository does not make another repository public.
+
+Private visibility of a related repository does not independently determine another repository's classification.
+
+Repository visibility will be established for the applicable repository through authorized STN-LABZ determination.
+
+Relationships such as shared purpose, shared code, common architecture, common product family, dependency, interoperability, or common ownership do not transfer repository visibility.
+
+10. Historical Visibility
+
+Repository visibility may be changed by STN-LABZ according to organizational requirements.
+
+Previous public visibility does not establish a permanent requirement for continued public visibility.
+
+Previous private visibility does not prevent a later authorized public designation.
+
+The current authorized repository classification governs.
+
+Historical state does not independently establish current repository visibility.
+
+11. Authority
+
+Repository visibility is established only through authorized STN-LABZ action.
+
+Authority to make a repository public will not be inferred from:
+
+- repository access;
+- administrative access;
+- development access;
+- hosting-platform permissions;
+- technical capability;
+- contributor status;
+- developer status;
+- system permissions;
+- automation capability;
+- integration capability;
+- repository ownership mechanisms;
+- industry convention;
+- open-source convention;
+- historical practice;
+- related repository visibility;
+- public interfaces;
+- public documentation;
+- public software distribution;
+- product availability; or
+- hosting-platform defaults.
+
+Technical capability to change repository visibility does not establish organizational authorization to do so.
+
+12. Automated Systems and Integrations
+
+Automated systems, agents, development tools, deployment systems, integrations, hosting services, and other automated processes will preserve the authorized repository classification.
+
+Automation will not infer public designation.
+
+An automated process will change a repository from private to public only when executing an explicitly authorized STN-LABZ repository-visibility decision through an approved process.
+
+Absence of a verified public designation retains private classification.
+
+13. Unknown or Ambiguous Classification
+
+When explicit public designation is absent, the repository is private.
+
+When repository visibility authority is ambiguous, the repository is private.
+
+When public designation cannot be verified, the repository is private.
+
+When applicable repository-classification information is incomplete, the repository is private.
+
+The deterministic resolution is:
+
+    Explicit Authorized Public Designation
+                    |
+                 YES / NO
+                 /      \
+                v        v
+             PUBLIC    PRIVATE
+
+There is no inferred public state.
+
+14. Private-to-Public Transition
+
+A transition from private to public will be deliberate and authorized.
+
+Before repository visibility is changed to public, the applicable release or publication process will verify that the repository is suitable for public exposure.
+
+Applicable review will consider the repository content and established STN-LABZ requirements relevant to publication.
+
+Public visibility will be applied only after the applicable authorization and publication requirements have been satisfied.
+
+The transition is:
+
+    PRIVATE
+       |
+       v
+    Public Exposure Review
+       |
+       v
+    Explicit Authorization
+       |
+       v
+    Visibility Change
+       |
+       v
+    PUBLIC
+
+Failure to complete the required transition leaves the repository private.
+
+15. Public-to-Private Transition
+
+STN-LABZ retains authority to change a public repository to private when organizational requirements establish that change.
+
+Prior public designation does not prevent subsequent private classification.
+
+A public-to-private transition will be performed through an authorized STN-LABZ repository-visibility decision.
+
+The current authorized classification governs after the transition.
+
+16. Repository Classification Model
+
+This policy governs repository visibility by classification and principle.
+
+The policy will not require maintenance of an enumerated list of individual repositories.
+
+Repository-specific visibility decisions will be maintained through the applicable organizational, repository, publication, or administrative records.
+
+This policy therefore remains applicable to current and future STN-LABZ:
+
+- projects;
+- products;
+- agents;
+- modules;
+- libraries;
+- frameworks;
+- infrastructure;
+- services;
+- applications;
+- tools; and
+- other source repositories.
+
+17. Hosting Platforms
+
+Hosting-platform behavior does not establish STN-LABZ repository policy.
+
+Platform defaults, recommendations, workflows, terminology, conventions, features, or technical capabilities will not override the repository classification established by STN-LABZ.
+
+Use of a public repository-hosting service does not imply that an STN-LABZ repository is intended for public visibility.
+
+STN-LABZ repository classification governs regardless of the hosting platform used.
+
+18. Public Interfaces
+
+A public interface does not establish public source status.
+
+Publication or availability of an:
+
+- API;
+- ABI;
+- protocol;
+- file format;
+- schema;
+- specification;
+- command interface;
+- interoperability contract;
+- SDK interface;
+- documentation set; or
+- other externally usable interface
+
+does not independently authorize public access to the repository containing its implementation.
+
+Interface publication and implementation-source visibility remain separate organizational decisions.
+
+19. Repository Requirements
+
+Public and private STN-LABZ repositories remain subject to applicable repository engineering requirements.
+
+Public designation changes repository visibility.
+
+It does not independently waive or replace requirements governing:
+
+- repository structure;
+- documentation;
+- source-control integrity;
+- qualification evidence;
+- security;
+- licensing;
+- controlled information;
+- engineering records; or
+- repository maintenance.
+
+Applicable requirements remain governed by their controlling policies.
+
+20. Enforcement
+
+An STN-LABZ repository will remain private until explicit authorized evidence establishes public designation.
+
+A repository will not be made public based upon inference, convention, technical capability, product availability, related repository status, development state, or software distribution.
+
+An unauthorized public visibility change will be treated as a repository-classification violation and handled according to applicable STN-LABZ procedures.
+
+Repository visibility will be restored to the authorized classification when a discrepancy is identified.
+
+21. Core Rule
+
+The controlling rule for STN-LABZ repository visibility is:
+
+> Private is the default. Public visibility exists only through an explicit, authorized STN-LABZ designation. Nothing else establishes public repository status.
+
+This rule applies regardless of:
+
+- what the repository contains;
+- how reusable its contents are;
+- whether its software is publicly distributed;
+- whether related repositories are public;
+- whether its interfaces are public;
+- whether its software has reached release or production;
+- what visibility a hosting platform recommends or defaults to; or
+- whether a party possesses the technical capability to change its visibility.
+
+22. Human Review
+
+Decision: Approved 
+Reviewer: P. Mei 
+Date: 20260822
+
+References
+
+- 20260730.2 - STN-LABZ General Orders
+- 20260729.6 - Engineering Documentation
+- 20260731.2 - Documentation Language Policy
+- 20260801.1 - KISS Theory
+- 20260815.1 - GitHub Repository Requirements
+- 20260817.1 - STN-LABZ Trust Chain
+- 20260819.0 - AI-Assisted Controlled Documentation Policy
+
+END DOCUMENT

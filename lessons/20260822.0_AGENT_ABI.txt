@@ -1,0 +1,710 @@
+20260822.2.R0 - Autonomous Agent Module ABI and Hotload Doctrine
+
+Root Document ID: 20260822.2
+Revision ID:       NONE
+Previous Revision: NONE
+sha256: 73a87c149492ededeaad1d2ab720d17399e231207a6d0801e908d78656535652
+
+Status: Approved
+
+---
+
+1. Purpose
+
+This doctrine establishes the common STN-LABZ engineering principles governing autonomous-agent module lifecycle architecture, use of the STN-LABZ Module ABI, dynamically loaded modules, and live module replacement.
+
+This doctrine is derived from established STN-LABZ agent-module architecture and runtime engineering evidence produced during migration to STN-LABZ ABI 1.4.
+
+This doctrine defines durable engineering relationships.
+
+Implementation-specific behavior remains governed by the applicable project architecture, requirements, qualification evidence, and related controlled documentation.
+
+---
+
+2. Governing Architecture
+
+STN-LABZ autonomous agents use the following architectural relationship:
+
+    Agent Core
+        |
+        +-- STN-LABZ Module ABI
+        |       |
+        |       +-- discovery
+        |       +-- verification
+        |       +-- qualification
+        |       +-- activation authorization
+        |       +-- activation
+        |       +-- stop
+        |       +-- unregister
+        |       +-- replacement lifecycle
+        |       +-- communication
+        |
+        +-- agent-specific Core behavior
+        +-- host/platform integration
+
+    Modules
+        |
+        +-- consume the common ABI contract
+        +-- provide lifecycle callbacks
+        +-- provide required qualification behavior
+        +-- retain module-specific capability
+
+The common ABI defines the shared lifecycle boundary between an Agent Core and its modules.
+
+The common ABI does not replace an agent's mission-specific Core behavior or a module's defined capability.
+
+---
+
+3. Core and Module Ownership
+
+The owning Agent Core controls the host side of the module lifecycle.
+
+Core owns:
+
+- module discovery;
+- module verification;
+- qualification control;
+- activation authorization;
+- activation;
+- lifecycle state;
+- stop processing;
+- unregistration;
+- safe module-use coordination;
+- platform loading and unloading integration;
+- lifecycle reporting and audit integration.
+
+Modules consume the ABI contract.
+
+Modules provide their descriptor, lifecycle callbacks, qualification behavior, and module-specific capability.
+
+Doctrine
+
+Modules consume the ABI contract. The owning Core owns the host-side lifecycle integration and authority.
+
+Core-side registry and lifecycle implementation will not be duplicated inside module DLLs.
+
+---
+
+4. Common ABI Boundary
+
+Generic lifecycle functionality common to STN-LABZ autonomous agents belongs at the common ABI boundary.
+
+Agent-specific and module-specific capability remains outside that boundary.
+
+The architectural distinction is:
+
+    STN-LABZ ABI
+        |
+        +-- generic module lifecycle
+
+    Module-Specific Interface
+        |
+        +-- defined module capability
+
+A capability does not become part of the common ABI merely because that capability is implemented in a dynamically loaded module.
+
+The common ABI remains limited to functionality that is genuinely common to module lifecycle operation across applicable STN-LABZ systems.
+
+---
+
+5. Common Module Contract
+
+Modules using the common STN-LABZ Module ABI expose the established ABI descriptor contract applicable to the ABI revision used by the owning Core.
+
+For STN-LABZ ABI 1.4, the standard descriptor entry point is:
+
+    stnlabz_module_get_descriptor()
+
+A module that does not provide the required ABI contract is not treated as compatible merely because the dynamic library can be located or loaded by the operating system.
+
+Compatibility is established through the defined ABI.
+
+---
+
+6. Module Lifecycle
+
+The common module lifecycle provides controlled progression through applicable module states.
+
+STN-LABZ ABI 1.4 establishes the operational lifecycle:
+
+    DISCOVERED
+        |
+        v
+    UNVERIFIED
+        |
+        v
+    TESTING
+        |
+        v
+    QUALIFIED
+        |
+        v
+    ACTIVE
+        |
+        v
+    STOPPED
+        |
+        v
+    UNREGISTERED
+
+FAILED and QUARANTINED remain failure or isolation states according to applicable module requirements.
+
+Lifecycle transitions are controlled by Core.
+
+Filesystem presence, successful dynamic-library loading, or availability of a module descriptor does not independently establish qualification, authorization, or activation.
+
+---
+
+7. Qualification
+
+Use of the common ABI does not bypass established STN-LABZ qualification requirements.
+
+A module candidate must satisfy applicable qualification requirements before activation.
+
+A successful build is not qualification.
+
+Mandatory negative validation remains applicable according to established module qualification requirements.
+
+Qualification applies to the specific module revision evaluated.
+
+A modified or replacement module revision does not inherit qualification from an earlier revision.
+
+Qualification remains a Core-controlled lifecycle function.
+
+---
+
+8. Dynamic Loading
+
+Dynamic loading changes how module capability is deployed.
+
+It does not create a separate authority, qualification, or lifecycle system.
+
+The owning Core detects or receives the candidate module and processes the candidate through the established lifecycle.
+
+    Deployment Event
+          |
+          v
+    Agent Core
+          |
+          v
+    Common ABI Lifecycle
+          |
+          v
+    Module State
+
+Dynamic loading provides deployment capability.
+
+Core lifecycle processing determines whether that capability is permitted to operate.
+
+---
+
+9. New Module Introduction
+
+A previously unknown module introduced while an agent is operational may be processed without requiring Agent Core restart when the host architecture supports live module loading.
+
+The candidate follows the applicable lifecycle:
+
+    Candidate Detected
+          |
+          v
+    Identity / Configuration Validation
+          |
+          v
+    Descriptor Validation
+          |
+          v
+    Discovery
+          |
+          v
+    Verification
+          |
+          v
+    Qualification
+          |
+          v
+    Mandatory Negative Validation
+          |
+          v
+    Activation Authorization
+          |
+          v
+    ACTIVE
+
+Failure at an applicable required stage prevents activation.
+
+The presence of a DLL in the module deployment tree does not establish authority to activate it.
+
+Established Module Creation Request requirements remain independently authoritative for creation of new STN-LABZ modules.
+
+---
+
+10. Existing Module Replacement
+
+An existing ACTIVE module may be replaced while Agent Core remains operational when the architecture supports controlled hot replacement.
+
+A replacement is not performed merely because a newer artifact exists.
+
+The replacement candidate is evaluated before the current ACTIVE revision is disturbed.
+
+The established relationship is:
+
+    ACTIVE Revision
+          |
+          | Replacement Candidate
+          |
+          v
+    Candidate Preflight
+          |
+       PASS Required
+          |
+          v
+    Gate New Calls
+          |
+          v
+    Drain Existing Calls
+          |
+          v
+    QUIESCENT
+          |
+          v
+    STOPPED
+          |
+          v
+    UNREGISTERED
+          |
+          v
+    Old Library Unload
+          |
+          v
+    Replacement Installation / Load
+          |
+          v
+    Verification
+          |
+          v
+    Qualification
+          |
+          v
+    Negative Validation
+          |
+          v
+    Activation Authorization
+          |
+          v
+    ACTIVE
+
+The affected module crosses the controlled replacement boundary.
+
+Agent Core does not inherently require restart solely because an independently replaceable module is being changed.
+
+---
+
+11. Candidate Preflight
+
+A working ACTIVE module is not disturbed solely because a replacement artifact has appeared.
+
+Where hot replacement is supported, the replacement candidate establishes applicable preflight requirements before Core stops the currently ACTIVE revision.
+
+Applicable preflight includes, where required:
+
+- candidate loadability;
+- required ABI descriptor export;
+- module identity;
+- declared version;
+- ABI compatibility;
+- verification;
+- qualification;
+- mandatory negative validation.
+
+Doctrine
+
+Do not sacrifice a working ACTIVE module merely because a newer file appeared.
+
+Filesystem arrival creates a candidate.
+
+It does not create authority.
+
+A candidate that fails required preflight is rejected without unnecessarily disturbing the existing ACTIVE revision.
+
+---
+
+12. Quiescence
+
+A dynamically loaded module is not unloaded while execution remains inside that module.
+
+The owning Core provides the applicable safe-use coordination required to establish a quiescent replacement boundary.
+
+    Replacement Pending
+            |
+            v
+    Prevent New Calls
+            |
+            v
+    Existing Calls Complete
+            |
+            v
+    QUIESCENT
+            |
+            v
+    Stop
+            |
+            v
+    Unregister
+            |
+            v
+    Unload
+
+Only the affected module requires the applicable quiescent boundary.
+
+Other Core functions and unaffected modules may continue operating according to their architecture and authority.
+
+---
+
+13. STOPPED State
+
+STOPPED represents a module that has completed its applicable stop processing while remaining known to the Core registry.
+
+A STOPPED module is not ACTIVE.
+
+Stopping a module clears activation authority.
+
+Under ABI 1.4, qualification evidence for the same unchanged loaded revision may remain associated with the module after STOP.
+
+Reactivation requires explicit activation authorization.
+
+STOPPED and UNREGISTERED represent different lifecycle conditions and are not interchangeable.
+
+---
+
+14. UNREGISTERED State
+
+UNREGISTERED represents the terminal Core-owned removal transition for the live registry record.
+
+Core records the applicable unregister transition before removing the live registry record.
+
+After the required unregister boundary has completed, the platform loader may unload the corresponding dynamic library.
+
+Core will not report an unloaded module as ACTIVE.
+
+Removal of the live registry record will not erase the audit evidence establishing the lifecycle transition.
+
+---
+
+15. Replacement Revision
+
+A replacement binary or module revision is a new lifecycle candidate.
+
+The replacement re-enters the applicable:
+
+    discovery
+        |
+    verification
+        |
+    qualification
+        |
+    negative validation
+        |
+    activation authorization
+        |
+    activation
+
+The replacement does not inherit active state or qualification merely because:
+
+- the module ID is unchanged;
+- the previous revision qualified;
+- the previous revision was ACTIVE;
+- the candidate exists in the expected module location;
+- the candidate successfully loads as a dynamic library.
+
+Each replacement revision establishes its own applicable evidence.
+
+---
+
+16. Platform Boundary
+
+Filesystem discovery, directory monitoring, Windows DLL loading, POSIX shared-library loading, and equivalent platform mechanisms remain host/platform integration concerns.
+
+The common ABI defines the module lifecycle relationship.
+
+Platform mechanisms implement environment-specific actions required to support that relationship.
+
+Platform implementation does not create a competing lifecycle authority.
+
+The common lifecycle architecture remains platform-independent even when a specific implementation uses Windows DLLs.
+
+---
+
+17. Module Code and Module-Owned Data
+
+Module code and module-owned runtime data are separate engineering concerns.
+
+A module-code change is processed through the applicable ABI module lifecycle.
+
+A module-owned data change is processed through the module's defined and qualified data-handling behavior.
+
+Conceptually:
+
+    Module Code Change
+            |
+            v
+    ABI Module Lifecycle
+            |
+            v
+    Module Replacement
+
+
+    Module-Owned Data Change
+            |
+            v
+    Module-Owned Processing
+            |
+            v
+    Validated Runtime State
+
+A data change does not inherently require module replacement.
+
+A module replacement does not create a second mechanism for managing data owned by that module.
+
+Specific module-owned data-refresh mechanisms must be established and qualified by the applicable module before operational use.
+
+---
+
+18. Failure Behavior
+
+Module loading and replacement remain fail-closed according to applicable requirements.
+
+Conditions preventing lifecycle progression may include:
+
+- missing required ABI entry point;
+- incompatible ABI;
+- invalid module identity;
+- verification failure;
+- qualification failure;
+- mandatory negative-validation failure;
+- activation authorization failure;
+- stop failure;
+- unregister failure;
+- failure to establish required quiescence;
+- replacement load failure;
+- replacement activation failure.
+
+A failed candidate is not represented as ACTIVE unless all applicable activation requirements have completed successfully.
+
+Failure handling preserves the actual observed state rather than manufacturing a successful lifecycle condition.
+
+---
+
+19. Reporting and Audit
+
+Live module lifecycle changes are operationally significant.
+
+Applicable agent reporting and audit evidence permits reconstruction of lifecycle transitions where required.
+
+Relevant evidence may include:
+
+- module identity;
+- previous revision or version;
+- candidate revision or version;
+- candidate detection;
+- preflight result;
+- quiescence;
+- stop result;
+- unregister result;
+- library unload;
+- replacement installation;
+- verification;
+- qualification;
+- negative validation;
+- activation;
+- final disposition.
+
+Detailed reporting and audit requirements remain governed by applicable controlled documentation and agent architecture.
+
+Hot replacement will not become an invisible background mutation of an operational agent.
+
+---
+
+20. Agent Independence
+
+Successful ABI migration or hot replacement by one STN-LABZ agent provides reference engineering evidence.
+
+It does not establish qualification for another agent.
+
+Each Agent Core independently implements, builds, verifies, qualifies, and validates its integration before claiming equivalent operational status.
+
+Reference implementations demonstrate feasibility.
+
+They do not transfer qualification.
+
+---
+
+21. Engineering Direction
+
+STN-LABZ autonomous-agent architecture favors:
+
+    Stable Agent Core
+            +
+    Common Module Lifecycle ABI
+            +
+    Qualified Dynamic Modules
+            +
+    Mission-Specific Capability
+
+Generic lifecycle machinery will not be independently duplicated inside each autonomous-agent project where the common STN-LABZ ABI already owns that behavior.
+
+Agent-specific architecture remains where capability is genuinely agent-specific.
+
+Module-specific architecture remains where capability is genuinely module-specific.
+
+Common lifecycle engineering remains at the shared ABI boundary.
+
+---
+
+22. Doctrine Principles
+
+The following engineering principles summarize this doctrine:
+
+1. Core governs modules.
+2. Modules consume the common lifecycle contract.
+3. Common lifecycle behavior belongs to the common ABI.
+4. Agent-specific and module-specific capability remains outside the common lifecycle ABI.
+5. Dynamic loading provides capability; Core determines whether that capability operates.
+6. Filesystem presence does not establish qualification, authorization, or activation.
+7. A successful build is not qualification.
+8. A replacement revision does not inherit qualification.
+9. A working ACTIVE revision is preserved when a replacement candidate fails preflight.
+10. Code still executing is not unloaded.
+11. Core does not report an unloaded module as ACTIVE.
+12. Module-code replacement and module-owned data updates remain separate engineering mechanisms.
+13. Reference evidence from one agent does not qualify another agent.
+
+---
+
+23. Evidence Basis
+
+This doctrine is derived from established STN-LABZ engineering research and implementation evidence.
+
+20260818.0 - Agent Module Loading Architecture
+
+The research architecture notice established dynamically loaded modules as the engineering direction for future STN-LABZ autonomous agents while preserving the established Core-to-Module authority relationship.
+
+It established that dynamic loading changes deployment capability but does not independently establish authorization, qualification, or activation.
+
+20260822.0.R1 - STN-LABZ ABI 1.4 Agent Migration and Hotload Report
+
+The agent-neutral migration and hotload report established the common ABI 1.4 lifecycle architecture and documented runtime hot-replacement evidence using Digit as the first reference agent.
+
+The demonstrated replacement established:
+
+- watcher detection;
+- candidate preflight;
+- qualification before replacement;
+- mandatory negative validation;
+- safe call draining;
+- module quiescence;
+- STOPPED;
+- UNREGISTERED;
+- DLL unload;
+- replacement installation;
+- replacement verification;
+- replacement qualification;
+- replacement activation;
+- continued Agent Core operation.
+
+20260822.0 - STN-LABZ ABI 1.4 Migration Report - Digit
+
+The Digit migration report established successful migration from agent-specific lifecycle interfaces to the common STN-LABZ ABI 1.4 while preserving module-specific capability and Core-controlled qualification.
+
+Digit provides the first working reference implementation.
+
+Digit's successful migration does not establish qualification for another agent.
+
+20260822.1 - STN-LABZ Agent SQLite Live Corpus Refresh Report
+
+The SQLite live corpus refresh research established the architectural distinction between module-code replacement and module-owned data refresh.
+
+At the time of this doctrine's creation, the SQLite live corpus refresh implementation remains pending runtime qualification.
+
+Therefore, this doctrine adopts only the established architectural distinction:
+
+Module code changes use the applicable ABI lifecycle. Module-owned data changes use the module's defined and qualified data-handling mechanism.
+
+The SQLite implementation details remain engineering evidence pending qualification and are not established as universal autonomous-agent implementation requirements by this doctrine.
+
+---
+
+24. Related Controlled Documentation
+
+This doctrine operates under and should be interpreted together with the current authorized revisions of applicable STN-LABZ controlled documentation, including:
+
+- 20260730.2 - STN-LABZ General Orders
+- 20260729.6 - Engineering Documentation
+- 20260729.8 - Operational Doctrine
+- 20260731.2 - Documentation Language Policy
+- 20260801.1 - KISS Theory
+- 20260806.0 - Agent Modules
+- 20260810.1 - Module Creation Request
+- 20260817.0 - Engineering Development Doctrine
+- 20260817.1 - STN-LABZ Trust Chain
+- 20260819.1 - AI-Assisted Controlled Documentation Policy
+
+The authoritative policy index determines the current authorized revision of referenced controlled documentation.
+
+This doctrine references those authorities rather than reproducing requirements already owned by them.
+
+Where another controlled document is authoritative for a requirement, that document remains authoritative.
+
+---
+
+25. Doctrine Boundary
+
+This doctrine establishes common autonomous-agent module lifecycle and hotload engineering principles.
+
+It does not independently establish:
+
+- agent mission;
+- module mission;
+- Module Creation Request authority;
+- Core qualification test-count requirements;
+- module qualification test-count requirements;
+- Trust Chain requirements;
+- engineering documentation requirements;
+- agent-specific service interfaces;
+- module-specific service interfaces;
+- platform-specific loader implementation;
+- specific watcher timing;
+- deployment filenames;
+- deployment directories;
+- module-owned runtime-data implementation;
+- module-specific recovery behavior.
+
+Those subjects remain governed by their applicable controlled documentation, engineering requirements, qualified implementations, and project architecture.
+
+---
+
+26. Doctrine Statement
+
+STN-LABZ autonomous agents use a common module lifecycle architecture in which the owning Agent Core controls module lifecycle through the established STN-LABZ Module ABI while modules retain their defined capability.
+
+Dynamic loading and hot replacement extend that lifecycle without creating a competing lifecycle authority.
+
+Replacement candidates are evaluated before working ACTIVE revisions are disturbed.
+
+Modules reach a safe quiescent boundary before unload.
+
+Replacement revisions establish their own qualification evidence before activation.
+
+Module-code changes and module-owned data changes remain separate engineering mechanisms.
+
+Common lifecycle behavior belongs to the common ABI.
+
+Agent-specific and module-specific capability remains at its proper architectural boundary.
+
+---
+
+27. Human Review
+
+Decision: Approved 
+Reviewer: P. Mei
+Date:  20260822
+Notes: Required for Agent Engineering.

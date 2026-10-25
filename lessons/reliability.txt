@@ -1,0 +1,2367 @@
+Reliability is the ability of a system to perform its required functions correctly under defined conditions for a defined period of time.
+
+Reliability is not the absence of observed failure.
+
+Reliability is not the same as availability.
+
+Reliability is not the same as performance.
+
+Reliability is not the same as durability.
+
+Reliability is not the same as resilience.
+
+Reliability is not the same as correctness.
+
+These properties can interact.
+
+Correctness describes whether behavior satisfies defined requirements.
+
+Reliability describes whether required correct behavior continues under defined operating conditions.
+
+Availability describes whether a system is able to provide a required service when needed according to the availability definition.
+
+Durability describes whether accepted persistent data survives according to the durability guarantee.
+
+Resilience describes the ability to withstand, adapt to, or recover from failures.
+
+A system can be available while returning incorrect results.
+
+That system is available according to a narrow reachability definition but not reliable according to a correctness requirement.
+
+A system can be reliable when running but have poor availability because startup frequently fails.
+
+A system can be available but non-durable if acknowledged data is lost after restart.
+
+Terms should be defined before claims are made.
+
+A failure occurs when a system does not provide required behavior.
+
+A fault is a condition that can cause a failure.
+
+An error is an incorrect internal state that can result from a fault.
+
+Terminology varies between engineering disciplines.
+
+Use the terminology defined by the system or governing specification.
+
+Do not rely on ambiguous use of the word error.
+
+Failures can originate in software.
+
+Failures can originate in hardware.
+
+Failures can originate in configuration.
+
+Failures can originate in storage.
+
+Failures can originate in networks.
+
+Failures can originate in dependencies.
+
+Failures can originate in resource exhaustion.
+
+Failures can originate in invalid input.
+
+Failures can originate in operator action.
+
+Failures can originate in environmental conditions.
+
+Failures can originate from incorrect assumptions.
+
+Reliability engineering begins by identifying possible failure modes.
+
+A failure mode describes a way in which a component or system can fail.
+
+A process can crash.
+
+A process can hang.
+
+A process can deadlock.
+
+A process can livelock.
+
+A process can return incorrect data.
+
+A process can reject valid work.
+
+A process can accept invalid work.
+
+A dependency can become unavailable.
+
+A dependency can become slow.
+
+A dependency can return malformed data.
+
+A network connection can fail.
+
+A network connection can stall.
+
+A message can be delayed.
+
+A message can be duplicated.
+
+A message can be reordered where the transport permits it.
+
+A storage device can become full.
+
+A storage operation can fail.
+
+Persistent data can become corrupted.
+
+Memory allocation can fail.
+
+Configuration can be invalid.
+
+Credentials can expire.
+
+A certificate can expire.
+
+A clock can be wrong.
+
+A machine can restart.
+
+Power can fail.
+
+Reliability design should consider relevant failure modes rather than assuming normal operation.
+
+Failure should be expected at appropriate boundaries.
+
+Network calls can fail.
+
+Storage operations can fail.
+
+Memory allocation can fail.
+
+Process creation can fail.
+
+Thread creation can fail.
+
+File access can fail.
+
+Name resolution can fail.
+
+Authentication can fail.
+
+Authorization can fail.
+
+Dependencies can fail.
+
+A system should define behavior for expected failures.
+
+Failure handling should preserve required invariants.
+
+A failed operation should not leave authoritative state partially modified unless partial modification is explicitly permitted.
+
+A failed transaction should not be reported as successful.
+
+A failed validation should not become accepted state.
+
+A failed authentication should not create authenticated authority.
+
+A failed persistence operation should not be reported as durable.
+
+Failure handling is part of correctness.
+
+A failure can be transient.
+
+A failure can be permanent.
+
+A transient failure can disappear without changing the request.
+
+A permanent failure requires some state, configuration, software, or environmental change before success becomes possible.
+
+Temporary network interruption can be transient.
+
+Resource contention can be transient.
+
+A malformed request is normally permanent for that exact request.
+
+Unsupported protocol version is normally permanent until one participant changes.
+
+Invalid credentials are normally permanent until credentials change.
+
+Failure classification matters because recovery differs.
+
+Retrying a permanent failure wastes resources.
+
+Retrying a transient failure can succeed.
+
+Not every transient failure should be retried automatically.
+
+Retry safety depends on operation semantics.
+
+An idempotent operation can be repeated without changing the intended final state beyond the first successful application according to its semantics.
+
+Idempotency is useful for recovery.
+
+A read operation is often idempotent.
+
+Setting a value to a fixed value can be idempotent.
+
+Incrementing a value is generally not idempotent.
+
+Creating an external effect can be non-idempotent.
+
+Retries must account for uncertain outcomes.
+
+If a request is sent and the connection fails before the response arrives, the requester might not know whether the remote operation occurred.
+
+No response does not prove no execution.
+
+A timeout does not prove failure.
+
+A disconnect does not prove rollback.
+
+Unknown outcome should remain unknown until evidence resolves it.
+
+Do not convert uncertainty into certainty for convenience.
+
+Request identifiers can support deduplication.
+
+Idempotency keys can allow repeated submissions to represent one logical operation.
+
+Deduplication state must be retained long enough to cover expected retries.
+
+Deduplication itself must be reliable.
+
+If deduplication state is lost, duplicate effects can become possible.
+
+Exactly-once effect is a strong guarantee.
+
+Exactly-once effect requires a defined failure model and coordination mechanism.
+
+A unique identifier alone does not provide exactly-once behavior.
+
+At-most-once behavior attempts to avoid duplicate execution.
+
+At-most-once behavior can lose operations.
+
+At-least-once behavior retries until processing succeeds according to its model.
+
+At-least-once behavior can produce duplicate delivery.
+
+Consumers of at-least-once delivery should tolerate duplicates where required.
+
+Delivery semantics should be explicit.
+
+Retries should be bounded.
+
+Unlimited retries can create infinite work.
+
+Unlimited retries can prevent failure from becoming visible.
+
+Unlimited retries can overload a recovering dependency.
+
+Retry count should be limited.
+
+Retry duration should be limited.
+
+Retry conditions should be defined.
+
+Backoff delays repeated attempts.
+
+Exponential backoff increases delay between attempts.
+
+Jitter varies retry timing.
+
+Jitter can reduce synchronized retry storms.
+
+A retry storm occurs when many clients repeatedly retry a failing dependency.
+
+Retry storms can prevent recovery.
+
+Recovery logic should not amplify failure.
+
+A circuit breaker temporarily stops attempts to a dependency after defined failure conditions.
+
+Circuit breakers can reduce repeated load on a failing dependency.
+
+A circuit breaker can have closed state.
+
+A circuit breaker can have open state.
+
+A circuit breaker can have half-open or probing state.
+
+Exact state semantics depend on implementation.
+
+Circuit breakers are not a replacement for correct timeout handling.
+
+Circuit breakers are not a replacement for capacity planning.
+
+Circuit breakers are not a replacement for fixing a failed dependency.
+
+They are one containment mechanism.
+
+Timeouts bound waiting.
+
+Every remote operation should have appropriate timeout behavior where indefinite waiting is unacceptable.
+
+Connect timeout bounds connection establishment.
+
+Read timeout bounds selected waiting for incoming data.
+
+Write timeout bounds selected waiting for outgoing progress.
+
+Request timeout bounds an application operation.
+
+Idle timeout bounds inactivity.
+
+Timeout values should match operation expectations.
+
+One timeout value is not necessarily correct for every stage.
+
+A timeout should produce a defined state.
+
+Resources associated with timed-out operations should be cleaned up.
+
+Timeout does not automatically cancel remote work.
+
+Cancellation semantics must be defined separately.
+
+A cancellation request can race with operation completion.
+
+Cancellation acknowledgment can have specific semantics.
+
+Do not claim an operation did not occur merely because cancellation was requested.
+
+Graceful degradation allows a system to preserve available capabilities when selected capabilities fail.
+
+A system can disable optional functionality while preserving required core functionality.
+
+A reporting subsystem failure need not stop unrelated processing if reporting is truly optional.
+
+A required persistence subsystem failure can require rejecting operations that need persistence.
+
+Degradation should follow architecture.
+
+Do not invent degraded behavior during failure.
+
+Degraded state should be visible.
+
+A degraded system should not report full health.
+
+Health should reflect required capabilities.
+
+A system can be operational.
+
+A system can be degraded.
+
+A system can be unavailable.
+
+A system can be recovering.
+
+Operational state names should have defined meanings.
+
+A process running does not prove the service is healthy.
+
+A service accepting TCP connections does not prove application operations succeed.
+
+A successful health endpoint does not prove every subsystem works unless the health definition includes those subsystems.
+
+Health checks should test what they claim to test.
+
+Liveness determines whether a component is sufficiently alive according to the liveness definition.
+
+Readiness determines whether a component is prepared to perform required work according to readiness criteria.
+
+Liveness and readiness are different.
+
+A process can be alive but not ready.
+
+A process can be temporarily not ready while recovering.
+
+Restarting a merely unready process can make recovery worse.
+
+Health checks should not create failure loops.
+
+A watchdog observes progress or health and can trigger defined recovery.
+
+A watchdog should monitor meaningful progress.
+
+A process consuming CPU is not necessarily making progress.
+
+A process responding to one trivial ping is not necessarily performing its mission.
+
+Watchdog criteria should correspond to required operation.
+
+A watchdog can restart a failed process.
+
+Restart is not always the correct recovery.
+
+Restart can destroy diagnostic evidence.
+
+Restart can repeat non-idempotent initialization.
+
+Restart can amplify persistent corruption.
+
+Restart policy should match the failure.
+
+Automatic restart is useful for selected transient process failures.
+
+Automatic restart should be bounded.
+
+Repeated crash-restart loops should become visible.
+
+A crash loop occurs when a component repeatedly starts and fails.
+
+Crash loops consume resources.
+
+Crash loops can flood logs.
+
+Crash loops can repeatedly affect dependencies.
+
+Backoff can reduce restart frequency.
+
+After repeated failures, escalation can be appropriate according to system policy.
+
+Failure should not be hidden indefinitely by automation.
+
+Automation should reduce routine recovery work while preserving evidence.
+
+Recovery actions should be logged.
+
+Recovery attempts should be counted.
+
+Recovery outcomes should be recorded.
+
+Operators should be able to determine what occurred.
+
+Observability supports reliability.
+
+Logs record events.
+
+Metrics record measurements.
+
+Traces record operation paths.
+
+Audit records preserve defined historical actions.
+
+Alerts notify about conditions requiring awareness or action.
+
+Each serves a different purpose.
+
+An alert should represent a meaningful condition.
+
+Alerting on every minor transient event can create alert fatigue.
+
+Alert fatigue reduces attention to important events.
+
+Alerts should correspond to operational significance.
+
+A transient failure successfully handled within policy can be recorded without necessarily requiring immediate intervention.
+
+Repeated or escalating failure can justify an alert.
+
+Thresholds should be defined.
+
+Alerts should contain evidence.
+
+An alert should identify the affected component.
+
+An alert should identify the failure stage.
+
+An alert should identify observed symptoms.
+
+An alert should identify current operational state where known.
+
+An alert should not invent a root cause.
+
+Observed fact and suspected cause should be distinguished.
+
+"Database connection timed out" is observed behavior.
+
+"Database server is dead" requires additional evidence.
+
+"Remote peer did not respond before timeout" is observed behavior.
+
+"Remote peer rejected the request" is not established without a rejection response.
+
+Reliability reporting should preserve uncertainty.
+
+Mean Time Between Failures is commonly abbreviated MTBF.
+
+MTBF describes average operating time between failures according to the measurement model.
+
+Mean Time To Repair is commonly abbreviated MTTR.
+
+MTTR describes average time required to restore service according to the measurement model.
+
+Definitions can vary.
+
+Metrics should state exactly what is measured.
+
+An average can hide distribution.
+
+A service with acceptable average recovery can still have rare extremely long outages.
+
+Percentiles can be useful for recovery time.
+
+Availability can be expressed as the proportion of time a service meets its availability definition.
+
+Availability percentages depend on measurement period.
+
+Availability percentages depend on what counts as available.
+
+A reachable server returning incorrect results should not count as available if correct results are part of the service definition.
+
+Availability objectives should define successful service.
+
+A Service Level Indicator is a measurement of service behavior.
+
+A Service Level Objective defines a target for an indicator over a period.
+
+Terminology can vary by organization.
+
+An SLO can include availability.
+
+An SLO can include latency.
+
+An SLO can include correctness.
+
+An SLO should correspond to meaningful service behavior.
+
+Reliability should not be reduced to uptime alone.
+
+A system continuously running while corrupting data is not reliable.
+
+A system continuously running while rejecting every request is not reliable.
+
+A system continuously running in an infinite loop is not reliable.
+
+Useful correct work matters.
+
+Redundancy duplicates selected capabilities to tolerate failure.
+
+Redundancy can improve availability.
+
+Redundancy does not automatically improve correctness.
+
+Two identical components can contain the same defect.
+
+Two redundant components can depend on the same failing resource.
+
+Redundancy should cross relevant failure domains.
+
+Two processes on one machine do not protect against machine failure.
+
+Two machines on one power circuit do not protect against circuit failure.
+
+Two services using one database do not protect against database failure.
+
+Two replicas running identical defective software do not protect against that software defect.
+
+Common-mode failure affects multiple supposedly redundant components through a shared cause.
+
+Reliability design should identify common-mode failure.
+
+Shared dependencies create common-mode risk.
+
+Shared configuration can create common-mode risk.
+
+Shared credentials can create common-mode risk.
+
+Shared software defects can create common-mode risk.
+
+Shared network infrastructure can create common-mode risk.
+
+Shared storage can create common-mode risk.
+
+Redundancy should be evaluated against actual failure modes.
+
+Active-active redundancy allows multiple instances to serve work concurrently according to architecture.
+
+Active-passive redundancy keeps one or more standby instances available for failover.
+
+Neither model is universally superior.
+
+Active-active can improve capacity.
+
+Active-active can increase coordination complexity.
+
+Active-passive can simplify state ownership.
+
+Active-passive can leave standby resources idle.
+
+Requirements determine the design.
+
+Failover transfers work from a failed or unhealthy component to another component.
+
+Failover should have defined qualification criteria.
+
+A backup component should not receive authoritative work merely because the primary disappeared.
+
+The backup should be sufficiently qualified according to architecture.
+
+Failover can be automatic.
+
+Failover can be manual.
+
+Automatic failover reduces response time.
+
+Automatic failover can make incorrect decisions if failure detection is wrong.
+
+Manual failover provides human control.
+
+Manual failover can increase outage duration.
+
+Choose according to risk.
+
+Failure detection is imperfect in distributed systems.
+
+A silent participant can be failed.
+
+A silent participant can be slow.
+
+A silent participant can be partitioned.
+
+A silent participant can be overloaded.
+
+A silent participant can be unreachable only from one observer.
+
+Timeout-based failure detection produces suspicion.
+
+Suspicion is not absolute proof.
+
+Architecture should account for uncertain failure.
+
+Split-brain occurs when multiple components independently believe they hold authority that should be exclusive.
+
+Split-brain can cause conflicting writes.
+
+Leader election alone does not automatically prevent stale leaders from acting.
+
+Terms, epochs, leases, quorum rules, or fencing can help according to the system design.
+
+Authority must remain deterministic.
+
+A stale component should not retain authority merely because it has not yet learned that authority changed.
+
+Fencing tokens can distinguish generations of authority.
+
+A newer fencing token can invalidate operations from an older authority according to storage or protocol rules.
+
+Fencing is useful where stale actors can continue operating after lease or leadership loss.
+
+A lease grants temporary authority.
+
+Leases depend on defined timing assumptions.
+
+Lease expiration should be explicit.
+
+Renewal should be explicit.
+
+Failure to renew should remove authority according to protocol rules.
+
+Clock behavior matters when leases use time.
+
+Clock assumptions should be documented.
+
+Quorum systems require a defined number or proportion of participants for selected decisions.
+
+Quorum can reduce split-brain risk.
+
+Quorum reduces availability when too few participants are reachable.
+
+Consistency and availability tradeoffs depend on architecture and failure model.
+
+Do not claim a quorum guarantee without defining membership and decision rules.
+
+Membership changes affect quorum.
+
+Membership should be controlled.
+
+Consensus is not equivalent to majority voting in every system.
+
+Consensus protocols define specific rules for agreement despite selected failures.
+
+Consensus guarantees depend on assumptions.
+
+A system should not claim consensus merely because multiple nodes agree during one test.
+
+Consensus requires protocol-defined safety and liveness properties.
+
+Replication copies state to multiple locations.
+
+Replication can improve availability.
+
+Replication can improve read capacity.
+
+Replication can improve disaster tolerance.
+
+Replication introduces consistency requirements.
+
+Replication lag means replicas can temporarily differ.
+
+A replica can be stale.
+
+A stale replica should not be treated as current authoritative state when current state is required.
+
+Replication success should have defined acknowledgment semantics.
+
+An acknowledgment can mean data reached one replica.
+
+An acknowledgment can mean data reached a quorum.
+
+An acknowledgment can mean data was durably persisted.
+
+An acknowledgment can mean something else.
+
+Know the contract.
+
+Backups and replicas are different.
+
+A replica can copy corruption immediately.
+
+A replica can copy accidental deletion.
+
+A replica can copy malicious modification.
+
+A backup preserves recoverable historical state according to backup policy.
+
+Replication is not a substitute for backup.
+
+Backup is not a substitute for availability.
+
+Both can be required.
+
+Backups should be tested.
+
+An untested backup is evidence that a backup artifact exists.
+
+It is not evidence that restoration works.
+
+Restore testing validates recoverability.
+
+Recovery Time Objective is commonly abbreviated RTO.
+
+RTO describes the targeted time to restore service after a defined disruption.
+
+Recovery Point Objective is commonly abbreviated RPO.
+
+RPO describes the targeted maximum amount of data loss measured in time according to the recovery model.
+
+RTO and RPO are objectives.
+
+Actual recovery should be measured.
+
+A zero RPO is a strong requirement.
+
+A zero RTO is a strong requirement.
+
+Do not claim either without architecture supporting it.
+
+Disaster recovery addresses recovery from major failures.
+
+A disaster can affect an entire machine.
+
+A disaster can affect an entire site.
+
+A disaster can affect storage.
+
+A disaster can affect credentials.
+
+A disaster can affect software distribution.
+
+A disaster can affect network infrastructure.
+
+Disaster recovery plans should identify authoritative recovery sources.
+
+Recovery procedures should be documented.
+
+Recovery procedures should be tested.
+
+A plan never exercised can contain undiscovered assumptions.
+
+Restore order can matter.
+
+Dependencies should be restored before components requiring them.
+
+Identity and credentials can be required before network services.
+
+Persistent state can be required before application services.
+
+Application services can require protocol qualification before accepting work.
+
+Recovery should follow dependencies.
+
+Startup is a reliability boundary.
+
+Initialization can fail.
+
+Configuration can be missing.
+
+Persistent data can be invalid.
+
+A dependency can be unavailable.
+
+A port can already be in use.
+
+Permissions can be wrong.
+
+Required modules can be unavailable.
+
+Startup should validate required conditions.
+
+A process should not report ready before required initialization succeeds.
+
+Partial initialization should be cleaned up.
+
+Resources acquired before failure should be released.
+
+Temporary files should be cleaned according to policy.
+
+Locks should not remain stale indefinitely.
+
+Initialization should be idempotent where repeated startup is expected.
+
+Restart should not duplicate initialization effects.
+
+A service should be able to restart after an unexpected termination where reliability requirements demand it.
+
+Persistent state should remain valid after abrupt termination according to its durability model.
+
+Atomic operations help preserve state.
+
+An atomic operation appears to occur completely or not at all according to its defined boundary.
+
+Atomic file replacement can prevent readers from observing partially written files.
+
+A common pattern is to write a new file, flush as required, and rename or replace it atomically where the platform guarantees appropriate semantics.
+
+Exact filesystem guarantees are platform dependent.
+
+Do not assume every rename has identical durability semantics.
+
+Persistent reliability requires understanding the platform.
+
+Database transactions provide atomicity according to database guarantees.
+
+Transactions can group related state changes.
+
+A transaction commit has defined semantics.
+
+Application acknowledgment should correspond to the required durability boundary.
+
+Do not report success before required state is committed.
+
+Write-ahead logging records information needed for recovery before selected state changes according to the storage design.
+
+Journaling filesystems record selected metadata or data changes according to filesystem design.
+
+These mechanisms can improve crash recovery.
+
+They do not eliminate every failure mode.
+
+Storage corruption remains possible.
+
+Hardware failure remains possible.
+
+Software defects remain possible.
+
+Backups remain important.
+
+Checksums can detect selected corruption.
+
+Checksums do not repair corruption.
+
+Cryptographic hashes can identify exact content.
+
+Hashes do not automatically provide recovery.
+
+Redundant copies can provide recovery if at least one valid copy remains.
+
+Validation should occur before corrupted data becomes authoritative.
+
+Persistent formats should include enough structure to detect invalid state where appropriate.
+
+Version fields can identify format compatibility.
+
+Length fields can detect truncation when validated.
+
+Checksums can detect selected accidental corruption.
+
+Signatures can establish authenticity where required.
+
+No one mechanism proves complete correctness.
+
+Corruption handling should be defined.
+
+A corrupted optional cache can be discarded and rebuilt if the cache is truly derived.
+
+Corrupted authoritative state cannot simply be discarded without a recovery source.
+
+Know which data is authoritative.
+
+Derived state should be reconstructable where architecture requires it.
+
+Caches should not become irreplaceable state accidentally.
+
+Temporary state should not become permanent authority accidentally.
+
+State ownership determines recovery.
+
+A state machine can improve reliability by restricting invalid transitions.
+
+Explicit states make recovery behavior clearer.
+
+A component can enter recovering state.
+
+A component can enter degraded state.
+
+A component can enter failed state.
+
+Transitions should be defined.
+
+A failed component should not silently return to operational state without required qualification.
+
+Recovery completion should be established through evidence.
+
+"Restart succeeded" does not necessarily mean service is restored.
+
+Readiness should be tested.
+
+Dependencies should be qualified.
+
+Required state should be validated.
+
+Then operational status can be restored.
+
+Reliability requires containment.
+
+One component failure should not corrupt unrelated components.
+
+Process isolation can contain crashes.
+
+Memory isolation can contain memory corruption.
+
+Permission boundaries can contain unauthorized effects.
+
+Module boundaries can contain responsibility but do not necessarily provide runtime isolation.
+
+A native in-process module can crash its host.
+
+A plugin architecture should account for plugin failure.
+
+If plugin failure must not terminate core operation, stronger isolation can be required.
+
+If plugin performance is allowed to affect core operation, that is an architectural decision.
+
+Optional modules should fail independently where practical.
+
+A module rejected during discovery should not necessarily stop the entire core if policy permits core continuation.
+
+The resulting state can be degraded.
+
+The rejection reason should be explicit.
+
+The failed module should not be partially initialized.
+
+Core continuation should not imply the module is healthy.
+
+Failure isolation should preserve accurate operational state.
+
+A dependency graph helps identify failure propagation.
+
+If component A requires B, failure of B can affect A.
+
+If C does not require B, C can potentially continue.
+
+Architecture should not turn every dependency failure into total system failure unnecessarily.
+
+Mandatory dependencies should be distinguished from optional dependencies.
+
+A required dependency being unavailable should prevent operations requiring it.
+
+An optional dependency being unavailable should not necessarily prevent unrelated operations.
+
+Optional means optional in actual behavior.
+
+A component that cannot function without another component has a required dependency.
+
+Fallback dependencies can provide alternate capability.
+
+Fallback should be qualified.
+
+Fallback should satisfy required semantics.
+
+A fallback returning stale or weaker data should be labeled according to actual behavior.
+
+Fallback should not silently weaken security.
+
+Fallback should not silently weaken durability.
+
+Fallback should not silently change authoritative rules.
+
+Reliability does not justify incorrect behavior.
+
+A degraded correct result is better than a fully featured incorrect result.
+
+Fail-safe behavior preserves safety when failure occurs.
+
+Fail-secure behavior preserves security properties when failure occurs.
+
+Fail-open allows operation when a control fails.
+
+Fail-closed denies operation when required authority cannot be established.
+
+The correct behavior depends on the requirement.
+
+Security authorization commonly requires fail-closed behavior.
+
+Availability-oriented systems can use fail-open behavior for selected non-security controls.
+
+The choice should be explicit.
+
+Do not accidentally fail open because an exception was ignored.
+
+Exception handling should not convert unknown state into success.
+
+A catch-all handler that returns success can hide failure.
+
+A catch-all handler can preserve process uptime while destroying reliability.
+
+Handle errors according to semantics.
+
+Unexpected exceptions should be logged.
+
+Unexpected exceptions should preserve diagnostic information.
+
+Sensitive information should not be exposed.
+
+Failure should propagate to the correct boundary.
+
+A low-level storage error can become an application-level unavailable result.
+
+The original cause should remain available for diagnosis.
+
+Error translation should not erase evidence.
+
+Error codes should distinguish important failure classes.
+
+Retryable failure should be distinguishable from invalid request.
+
+Unavailable should be distinguishable from unauthorized.
+
+Conflict should be distinguishable from internal corruption.
+
+Precise failure classification enables correct recovery.
+
+Resource leaks reduce reliability over time.
+
+Memory leaks consume memory.
+
+File descriptor leaks consume descriptor capacity.
+
+Socket leaks consume connection resources.
+
+Thread leaks consume scheduling and memory resources.
+
+Lock leaks can block progress.
+
+Temporary-file leaks consume storage.
+
+Long-running tests can expose leaks.
+
+Soak testing is useful for reliability.
+
+A system that survives ten requests can still fail after ten million requests.
+
+Resource usage should stabilize under stable workload where architecture expects it.
+
+Monotonic growth can indicate retained state or leaks.
+
+Not all growth is a leak.
+
+Caches can intentionally grow to a bound.
+
+Connection pools can grow to a configured size.
+
+Indexes can grow with persistent data.
+
+Understand expected growth.
+
+Resource exhaustion should produce controlled failure.
+
+Memory allocation failure should not cause unsafe memory access.
+
+File descriptor exhaustion should not corrupt state.
+
+Storage-full conditions should not silently truncate authoritative data.
+
+Thread creation failure should not be ignored.
+
+Queue-full conditions should follow defined policy.
+
+Disk-full handling is especially important for persistent systems.
+
+A write can partially succeed.
+
+A log can fail to append.
+
+A database can reject further writes.
+
+A temporary file can consume remaining space.
+
+Systems should reserve enough information to diagnose storage exhaustion where practical.
+
+Log systems should not consume all storage without bounds.
+
+Log rotation can limit storage usage.
+
+Retention policy should define how long logs are kept.
+
+Audit requirements can impose minimum retention.
+
+Deleting required evidence to preserve application space can violate requirements.
+
+Storage allocation should account for both operational data and evidence.
+
+Backpressure improves reliability under load.
+
+Without backpressure, incoming work can exceed processing capacity.
+
+Queues can grow.
+
+Memory can exhaust.
+
+Latency can become unbounded.
+
+Dependencies can be overwhelmed.
+
+Bounded queues establish finite resource usage.
+
+When a queue is full, behavior should be defined.
+
+Block.
+
+Reject.
+
+Drop selected optional work.
+
+Apply backpressure upstream.
+
+Do not silently lose required authoritative work.
+
+Overload is a failure condition.
+
+A system should have defined overload behavior.
+
+Graceful overload behavior can preserve important work.
+
+Admission control can reject excess new work.
+
+Rate limiting can constrain clients.
+
+Priority can protect critical operations.
+
+Load shedding can discard optional work.
+
+These mechanisms should preserve system invariants.
+
+Reliability under overload can matter more than maximum benchmark throughput.
+
+A system operating at slightly lower throughput but remaining stable can be preferable to a system that reaches a higher peak and collapses.
+
+Capacity headroom supports reliability.
+
+Operating continuously at saturation leaves little room for workload variation.
+
+Headroom can absorb bursts.
+
+Headroom can absorb failover load.
+
+Headroom can absorb maintenance activity.
+
+Headroom can absorb background recovery work.
+
+Capacity planning should include failure scenarios.
+
+If one of two instances fails, the remaining instance may need to handle increased load.
+
+If it cannot, redundancy does not preserve service under that failure.
+
+Failover capacity should be tested.
+
+Dependencies should also have failover capacity.
+
+A database can become the bottleneck after application failover.
+
+A network link can become the bottleneck.
+
+Reliability is end-to-end.
+
+A highly reliable component does not make the entire system reliable when another required component is fragile.
+
+End-to-end reliability is constrained by required dependencies.
+
+Adding dependencies can reduce overall reliability if each dependency introduces independent failure probability.
+
+Dependencies should earn their place.
+
+A simple local operation can be more reliable than an unnecessary remote dependency.
+
+Distribution introduces failure modes.
+
+Networks partition.
+
+Messages delay.
+
+Processes restart independently.
+
+Clocks differ.
+
+State diverges.
+
+Distributed architecture should be used when requirements justify it.
+
+A distributed system requires explicit failure handling.
+
+A remote call is not a local call.
+
+Remote calls can time out.
+
+Remote calls can execute despite timeout.
+
+Remote calls can be duplicated by retry.
+
+Remote calls can return stale information.
+
+Remote calls can fail midway through workflows.
+
+Distributed workflows require compensation or recovery when atomic transactions are unavailable.
+
+A saga coordinates a sequence of local operations with defined compensating actions according to one distributed transaction pattern.
+
+Compensation is not always a perfect inverse.
+
+Sending an email cannot truly be unsent.
+
+External effects can be irreversible.
+
+Architecture should identify irreversible operations.
+
+Perform irreversible effects only after required validation and authority.
+
+Order operations to reduce unrecoverable partial state.
+
+If payment succeeds and account creation fails, recovery is required.
+
+If account creation succeeds and payment fails, recovery is required.
+
+The correct order depends on business semantics.
+
+Reliability includes recovery from partial workflows.
+
+A reconciliation process compares expected and observed state.
+
+Reconciliation can repair or report divergence.
+
+Reconciliation should use authoritative rules.
+
+Reconciliation should not silently rewrite history.
+
+Historical events should remain historical facts.
+
+Current state can be corrected without pretending prior incorrect state never existed.
+
+Audit trails support reconciliation.
+
+Periodic reconciliation can detect failures missed during real-time processing.
+
+Reconciliation is especially useful when external systems are involved.
+
+External systems can succeed while responses are lost.
+
+Later observation can establish actual state.
+
+Reliable systems use evidence to resolve uncertain outcomes.
+
+Do not repeat irreversible operations merely because confirmation was lost.
+
+Query state where possible.
+
+Use stable operation identifiers.
+
+Reconcile before duplicating effects.
+
+Clock reliability matters.
+
+Wall clocks can change.
+
+Network time synchronization can adjust clocks.
+
+Machines can have clock skew.
+
+Daylight-saving changes affect local civil time.
+
+Time zones affect representation.
+
+Elapsed time should use monotonic clocks where available.
+
+Persistent timestamps should use a defined representation.
+
+Protocol time should use defined semantics.
+
+Do not use local wall-clock ordering as a universal distributed ordering guarantee.
+
+Two machines can disagree about current wall time.
+
+Logical clocks or sequence numbers can provide ordering according to protocol requirements.
+
+Time-based expiration requires clock assumptions.
+
+Credential expiration depends on time.
+
+Certificate validity depends on time.
+
+Lease validity can depend on time.
+
+Large clock error can create reliability failures.
+
+Monitor clock synchronization where time is operationally important.
+
+Randomness can affect reliability.
+
+Random identifiers can collide with some probability.
+
+Identifier design should make collision risk acceptable for requirements.
+
+Cryptographic random generation can fail.
+
+Entropy sources can be unavailable in unusual environments.
+
+Do not silently replace required secure randomness with weak randomness.
+
+Randomized retry jitter should not affect authoritative semantics.
+
+Randomness used in deterministic systems should be controlled where deterministic output is required.
+
+Configuration reliability matters.
+
+Invalid configuration can prevent startup.
+
+Incorrect configuration can create dangerous behavior.
+
+Configuration should be validated.
+
+Required values should be required.
+
+Unknown values should be rejected where ambiguity is unsafe.
+
+Defaults should be explicit.
+
+Silent guessing can hide deployment defects.
+
+Configuration changes should be auditable where operationally important.
+
+A known-good configuration can support rollback.
+
+Configuration and software compatibility should be tested.
+
+A new binary can require new configuration.
+
+Old configuration can contain deprecated fields.
+
+Version compatibility should be explicit.
+
+Deployment is a reliability event.
+
+Every deployment changes running state.
+
+Deployment can introduce defects.
+
+Deployment can change dependencies.
+
+Deployment can change configuration.
+
+Deployment can change persistent formats.
+
+Deployment should be controlled.
+
+A deployment should identify the artifact.
+
+A deployment should identify configuration.
+
+A deployment should identify migration requirements.
+
+A deployment should define rollback where rollback is possible.
+
+Rollback is not always possible.
+
+A database migration can make old software incompatible.
+
+A protocol activation can make old software incompatible.
+
+An irreversible external action cannot be rolled back through software deployment.
+
+Deployment planning should identify irreversible steps.
+
+Rolling deployment updates instances gradually.
+
+Rolling deployment requires temporary compatibility between versions when versions coexist.
+
+Blue-green deployment maintains separate old and new environments and switches traffic according to deployment design.
+
+Canary deployment exposes a limited portion of workload to a new version before broader rollout.
+
+These strategies can reduce deployment risk.
+
+They also add operational complexity.
+
+Use the simplest deployment strategy satisfying requirements.
+
+A canary does not prove universal correctness.
+
+A canary provides evidence from limited exposure.
+
+Monitoring should determine whether expansion is justified.
+
+Rollback criteria should be defined.
+
+Do not wait for complete failure when clear regression evidence exists.
+
+Feature flags can isolate selected new behavior.
+
+Feature flags can support rollback without binary replacement.
+
+Feature flags create additional state combinations.
+
+A disabled feature should truly be disabled.
+
+A stale feature flag should not remain indefinitely without purpose.
+
+Feature flag failure should not bypass security or correctness.
+
+Compatibility supports reliable upgrades.
+
+Network protocols should define mixed-version behavior.
+
+Persistent formats should define version handling.
+
+Module interfaces should define compatibility.
+
+APIs should define compatibility.
+
+A rolling upgrade cannot be reliable if old and new participants interpret the same data differently without coordination.
+
+Version negotiation can establish compatible behavior.
+
+Unsupported versions should fail clearly.
+
+Silent misinterpretation is worse than explicit incompatibility.
+
+Reliability favors deterministic rejection over ambiguous operation.
+
+Validation prevents invalid state from spreading.
+
+Validate input.
+
+Validate persistent state when loaded.
+
+Validate protocol messages.
+
+Validate configuration.
+
+Validate module manifests.
+
+Validate dependency responses where required.
+
+Validation failure should stop unsafe processing.
+
+Do not continue with guessed state when correctness requires known state.
+
+Corrupted state should be quarantined or rejected according to architecture.
+
+Quarantine separates suspicious or invalid data from active authoritative state.
+
+Quarantine should preserve evidence.
+
+Quarantine should not silently delete historical evidence.
+
+Recovery can later inspect or replace invalid state according to policy.
+
+Reliability and auditability reinforce each other.
+
+If failures cannot be reconstructed, improvement becomes difficult.
+
+Structured logs improve diagnosis.
+
+Stable error identifiers improve correlation.
+
+Operation identifiers improve tracing.
+
+Timestamps improve chronology when clocks are sufficiently reliable.
+
+Component identity improves attribution.
+
+Version information improves regression analysis.
+
+Diagnostic evidence should be captured before destructive recovery where practical.
+
+Restarting immediately can erase volatile evidence.
+
+Core dumps can preserve process state according to platform and security policy.
+
+Crash reports can preserve stack information.
+
+Sensitive information should be protected.
+
+Reliability evidence should not create security exposure.
+
+Postmortem analysis examines failures after an incident.
+
+A useful postmortem identifies what happened.
+
+A useful postmortem identifies impact.
+
+A useful postmortem identifies contributing conditions.
+
+A useful postmortem identifies evidence.
+
+A useful postmortem identifies corrective actions.
+
+A postmortem should distinguish evidence from inference.
+
+The goal is system improvement.
+
+Blaming a person does not identify a technical control.
+
+Human actions occur within system design.
+
+Reliable systems make dangerous mistakes harder.
+
+Validation can catch incorrect input.
+
+Confirmation can protect destructive operations.
+
+Access control can limit effects.
+
+Automation can remove repetitive manual steps.
+
+Documentation can reduce ambiguity.
+
+Simple procedures reduce operational error.
+
+Humans remain authoritative where governance assigns authority.
+
+Automation should operate within delegated boundaries.
+
+An automated recovery action should not expand its own authority.
+
+A watchdog authorized to restart a service is not automatically authorized to rewrite configuration.
+
+A monitoring component authorized to observe state is not automatically authorized to modify state.
+
+A failover controller authorized to select a qualified standby is not automatically authorized to admit an unqualified participant.
+
+Reliability mechanisms must respect authority.
+
+Automation without boundaries can turn a local failure into a larger failure.
+
+Reliable automation should be deterministic where practical.
+
+Given the same defined state and same defined event, the recovery decision should follow defined policy.
+
+Hidden heuristics can make recovery difficult to audit.
+
+Probabilistic guesses should not replace required evidence.
+
+If required state is unknown, report unknown.
+
+If authority is uncertain, do not invent authority.
+
+If recovery cannot safely continue, escalate according to policy.
+
+A system should know when it cannot safely proceed.
+
+Failing clearly can be more reliable than continuing incorrectly.
+
+Fail-fast behavior detects invalid conditions early and stops the affected operation.
+
+Fail-fast does not necessarily mean terminating the entire process.
+
+The appropriate failure boundary matters.
+
+An invalid request can fail the request.
+
+A failed optional module can fail the module.
+
+A corrupted authoritative database can require broader shutdown.
+
+Match failure scope to affected invariants.
+
+Blast radius describes how much of a system is affected by a failure.
+
+Architecture should minimize unnecessary blast radius.
+
+A defective optional feature should not disable unrelated core functionality.
+
+A malformed client request should not crash the server.
+
+One failed worker should not corrupt every worker.
+
+One tenant should not exhaust all shared resources where isolation requirements exist.
+
+Bulkheads isolate resource pools or components to contain failure.
+
+Separate worker pools can prevent one workload from consuming every worker.
+
+Separate connection pools can protect dependencies.
+
+Separate processes can isolate crashes.
+
+Bulkheads have resource cost.
+
+Use them where failure isolation justifies the cost.
+
+Rate limits can create isolation between clients.
+
+Per-client limits can prevent one client from consuming all capacity.
+
+Global limits protect total capacity.
+
+Both can be needed.
+
+Resource quotas bound consumption.
+
+Memory quotas can limit one workload.
+
+Storage quotas can limit one tenant.
+
+CPU quotas can limit processing.
+
+Connection quotas can limit concurrency.
+
+Quotas should not make required operations impossible.
+
+Reliability controls should reflect legitimate workload.
+
+Fault injection deliberately introduces controlled failures for testing.
+
+A test can terminate a process.
+
+A test can delay a dependency.
+
+A test can reject network connections.
+
+A test can simulate disk-full conditions.
+
+A test can corrupt test data.
+
+A test can force timeout.
+
+Fault injection validates recovery behavior.
+
+Fault injection should occur in controlled environments unless production experimentation is explicitly designed and authorized.
+
+Failure testing should not endanger authoritative production state casually.
+
+Chaos engineering studies system behavior under controlled disruptive conditions.
+
+Chaos engineering is not random destruction.
+
+Experiments should have hypotheses.
+
+Experiments should have boundaries.
+
+Experiments should have abort conditions.
+
+Experiments should have observability.
+
+Experiments should respect operational authority.
+
+Small controlled tests can reveal hidden dependencies.
+
+Reliability testing should include negative cases.
+
+What happens if the file is missing?
+
+What happens if the file is unreadable?
+
+What happens if the file is malformed?
+
+What happens if the network disappears?
+
+What happens if a response is truncated?
+
+What happens if a dependency is slow?
+
+What happens if storage is full?
+
+What happens if the process restarts halfway through?
+
+What happens if the same request arrives twice?
+
+What happens if messages arrive out of order?
+
+What happens if time moves unexpectedly?
+
+What happens if a module fails initialization?
+
+What happens if configuration is invalid?
+
+Negative tests establish behavior outside the happy path.
+
+A happy-path test proves only the tested happy path.
+
+Reliability requires broader evidence.
+
+Unit tests can validate local failure handling.
+
+Integration tests can validate dependency failure behavior.
+
+End-to-end tests can validate complete recovery workflows.
+
+Soak tests can validate long-running stability.
+
+Load tests can validate overload behavior.
+
+Fault-injection tests can validate resilience.
+
+Restore tests can validate backups.
+
+Failover tests can validate redundancy.
+
+No one test type proves reliability.
+
+Repeated successful tests increase evidence within tested conditions.
+
+Testing cannot prove absence of every defect.
+
+Reliability claims should match evidence.
+
+A system tested for one hour should not be claimed reliable for years solely from that test.
+
+A system tested under one workload should not be claimed reliable under arbitrary workload.
+
+Evidence has scope.
+
+Production operation provides additional evidence.
+
+Incident history provides evidence.
+
+Absence of incidents can indicate reliability.
+
+Absence of incidents can also indicate low exposure.
+
+Consider workload and duration.
+
+Reliability improves through feedback.
+
+Observe failures.
+
+Classify failures.
+
+Identify causes.
+
+Correct defects.
+
+Add tests.
+
+Improve detection.
+
+Improve recovery.
+
+Reduce recurrence.
+
+Preserve lessons.
+
+Do not repeatedly rediscover the same failure.
+
+Known failure modes should become test cases where practical.
+
+Regression tests preserve fixes.
+
+A regression occurs when previously working required behavior becomes defective.
+
+Regression tests verify corrected behavior remains correct.
+
+Reliability benefits from stable baselines.
+
+Change introduces risk.
+
+Unnecessary change introduces unnecessary risk.
+
+This does not mean software should never change.
+
+It means change should have purpose and validation.
+
+Small changes can be easier to review.
+
+Small changes can be easier to test.
+
+Small changes can be easier to roll back.
+
+Large changes can be justified when requirements demand them.
+
+Change size alone does not determine quality.
+
+Controlled change improves reliability.
+
+Version control preserves source history.
+
+Release artifacts should be identifiable.
+
+Configuration should be identifiable.
+
+Persistent schema versions should be identifiable.
+
+Operators should know what is running.
+
+Unknown deployed state makes diagnosis harder.
+
+Reproducible builds can improve confidence that an artifact corresponds to source.
+
+Hashes can identify exact artifact bytes.
+
+Signatures can establish artifact authenticity according to the signing trust model.
+
+Version labels identify releases.
+
+These mechanisms support different properties.
+
+A version does not prove artifact integrity.
+
+A hash does not prove who authorized an artifact.
+
+A signature does not prove the software is correct.
+
+Do not overstate evidence.
+
+Dependency reliability matters.
+
+Third-party libraries can contain defects.
+
+Operating systems can contain defects.
+
+External APIs can change.
+
+Remote services can become unavailable.
+
+Dependency versions should be controlled.
+
+Compatibility should be tested.
+
+Critical dependencies should have failure behavior.
+
+Optional dependencies should remain optional.
+
+A dependency should not silently become mandatory through implementation drift.
+
+External API limits can cause failure.
+
+Rate limits can reject requests.
+
+Quotas can be exhausted.
+
+Credentials can expire.
+
+Endpoints can change.
+
+Contracts can change.
+
+External dependency behavior should be monitored.
+
+Do not assume a remote service will remain unchanged forever.
+
+A local cache can reduce dependence on a remote service for selected data.
+
+A local fallback can improve resilience if semantics permit it.
+
+A fallback should not fabricate current information.
+
+Stale information should be identified as stale where freshness matters.
+
+Unknown current state should remain unknown.
+
+Reliability requires honest state reporting.
+
+If a subsystem is unavailable, report unavailable.
+
+If a subsystem is degraded, report degraded.
+
+If data is stale, report stale.
+
+If an outcome is unconfirmed, report unconfirmed.
+
+If state is recovering, report recovering.
+
+Do not report healthy because the process has not crashed.
+
+Do not report success because no exception was observed.
+
+Do not report failure because no response was observed.
+
+Evidence determines state.
+
+Reliability should preserve deterministic semantics.
+
+Platform differences should not change authoritative behavior where platform independence is required.
+
+Recovery on Windows and recovery on Linux can use different mechanisms.
+
+The resulting required state should be equivalent.
+
+Platform adapters can implement platform-specific restart.
+
+Platform adapters can implement platform-specific storage synchronization.
+
+Platform adapters can implement platform-specific service control.
+
+Common reliability policy should remain common where architecture requires it.
+
+Do not put consensus or application policy inside platform-specific recovery code.
+
+Platform mechanism and common policy should remain separated.
+
+Filesystem guarantees differ between platforms.
+
+Service management differs between platforms.
+
+Signal behavior differs between platforms.
+
+Socket error reporting differs between platforms.
+
+Clock APIs differ between platforms.
+
+Reliability implementations should respect actual platform semantics.
+
+Do not assume POSIX behavior on every platform.
+
+Do not assume Windows behavior on every platform.
+
+Abstract only the behavior that can be represented correctly.
+
+When exact semantics differ, document the difference.
+
+Portable code should fail clearly when a required capability is unavailable.
+
+Silent emulation can be dangerous if semantics differ.
+
+A capability check can establish whether required functionality exists.
+
+Qualification should occur before reliance.
+
+Reliability depends on knowing what the environment can actually provide.
+
+Startup validation can verify required directories.
+
+Startup validation can verify required permissions.
+
+Startup validation can verify required ports.
+
+Startup validation can verify required storage.
+
+Startup validation can verify required modules.
+
+Startup validation can verify configuration.
+
+Startup validation can verify dependency compatibility.
+
+Fail before accepting work when required foundations are absent.
+
+Partial operation should be entered only when degraded operation is explicitly supported.
+
+Recovery state should not accept operations it cannot safely perform.
+
+Maintenance state can temporarily restrict operations.
+
+Read-only state can preserve reads while writes are unsafe.
+
+Read-only operation should be explicit.
+
+A failed write should not be converted into a successful read-only operation without telling the caller.
+
+State transitions should be observable.
+
+Operational state can be represented as NORMAL.
+
+Operational state can be represented as DEGRADED.
+
+Operational state can be represented as RECOVERING.
+
+Operational state can be represented as FAILED.
+
+Exact state names depend on the system.
+
+Each state should have defined entry conditions.
+
+Each state should have defined permitted operations.
+
+Each state should have defined exit conditions.
+
+Do not use status labels without semantics.
+
+A DEGRADED state should identify what capability is degraded.
+
+A system can have multiple independent degradation conditions.
+
+One failed optional module can degrade one capability.
+
+A failed required dependency can degrade or stop multiple capabilities.
+
+State aggregation should reflect actual impact.
+
+One warning should not automatically mean total failure.
+
+One core invariant violation can justify total failure.
+
+Severity should correspond to consequence.
+
+Warning indicates a condition requiring awareness according to system policy.
+
+Error indicates a failed operation or condition according to system policy.
+
+Critical indicates severe impact according to system policy.
+
+Severity labels should be defined.
+
+Do not use dramatic severity for ordinary events.
+
+Do not hide severe events as informational logs.
+
+Consistent severity improves operations.
+
+Alert identifiers can correlate related evidence.
+
+Incident identifiers can group related events.
+
+Request identifiers can correlate operations.
+
+Component identifiers can identify origin.
+
+Stable identifiers improve diagnosis.
+
+Identifiers should not contain secrets.
+
+Incident records should preserve chronology.
+
+The first observed symptom is not necessarily the root cause.
+
+Later evidence can change understanding.
+
+Historical records should preserve what was known at each stage.
+
+Corrections can be appended.
+
+Do not rewrite history to make the final explanation appear obvious from the beginning.
+
+Reliability analysis should distinguish cause from symptom.
+
+A timeout is a symptom.
+
+A saturated connection pool can be a cause.
+
+The pool saturation can itself be caused by a slow database.
+
+The slow database can be caused by storage latency.
+
+Root-cause analysis follows evidence through dependencies.
+
+There can be multiple contributing causes.
+
+Do not force every incident into one simplistic root cause.
+
+Corrective actions should address demonstrated causes or reduce demonstrated impact.
+
+Adding retries to a timeout problem can worsen overload.
+
+Increasing timeout can hide a slow dependency.
+
+Restarting a service can clear symptoms without correcting the cause.
+
+A workaround and a fix are different.
+
+A workaround restores operation without necessarily removing the underlying defect.
+
+A fix corrects the defect.
+
+Both can be valid.
+
+Label them accurately.
+
+Temporary mitigations should not silently become permanent architecture.
+
+Technical debt created during incident recovery should be tracked according to project process.
+
+Emergency changes should later receive normal validation.
+
+Reliability procedures should account for human operation.
+
+Commands should be clear.
+
+Destructive commands should be difficult to execute accidentally.
+
+Defaults should be safe.
+
+Status output should be understandable.
+
+Recovery tools should report what they changed.
+
+Automation should support operators rather than conceal state.
+
+A recovery tool should not say "fixed" when it merely attempted repair.
+
+Report attempted action.
+
+Report observed result.
+
+Verification establishes whether recovery succeeded.
+
+An action without verification is incomplete evidence.
+
+If a service is restarted, verify readiness.
+
+If a file is restored, verify integrity.
+
+If a peer is replaced, verify qualification.
+
+If a database is recovered, verify required invariants.
+
+If a module is reloaded, verify initialization.
+
+Recovery ends when required service is demonstrated, not merely when a command exits successfully.
+
+A command returning zero indicates success according to that command's contract.
+
+It does not prove the entire system recovered.
+
+Interpret evidence at the correct scope.
+
+A process exit code is local evidence.
+
+A protocol response is protocol evidence.
+
+A health check is health-check evidence.
+
+An end-to-end transaction is stronger evidence for end-to-end service.
+
+Use the test matching the claim.
+
+Reliability claims should be bounded.
+
+"This operation succeeded" is stronger than "the system is perfect."
+
+"This service passed its readiness check" is stronger than "every dependency is healthy forever."
+
+"This backup restored successfully in this test" is stronger than "data can never be lost."
+
+Precise claims are more useful than absolute claims.
+
+No nontrivial system is immune to failure.
+
+Engineering reduces known risk.
+
+Engineering detects failure.
+
+Engineering limits impact.
+
+Engineering supports recovery.
+
+Engineering preserves evidence.
+
+Reliability is achieved through these controls, not through confidence.
+
+Do not confuse uptime with reliability.
+
+Do not confuse reachability with health.
+
+Do not confuse liveness with readiness.
+
+Do not confuse readiness with permanent health.
+
+Do not confuse redundancy with independence.
+
+Do not confuse replication with backup.
+
+Do not confuse backup creation with proven restoration.
+
+Do not confuse restart with recovery.
+
+Do not confuse retry with success.
+
+Do not confuse timeout with rejection.
+
+Do not confuse no response with no execution.
+
+Do not confuse acknowledgment with durability.
+
+Do not confuse persistence with correctness.
+
+Do not confuse durability with availability.
+
+Do not confuse availability with correctness.
+
+Do not confuse failover with qualification.
+
+Do not confuse standby with healthy standby.
+
+Do not confuse majority with consensus unless protocol rules establish it.
+
+Do not confuse synchronization with authority.
+
+Do not confuse a replica with source of truth.
+
+Do not confuse stale data with current data.
+
+Do not confuse cache with authoritative storage.
+
+Do not confuse automation with authority.
+
+Do not confuse technical capability with permission.
+
+Do not confuse graceful degradation with silent incorrect behavior.
+
+Do not confuse failure containment with failure elimination.
+
+Do not confuse error handling with ignoring errors.
+
+Do not confuse exception suppression with resilience.
+
+Do not confuse a crash loop with recovery.
+
+Do not confuse activity with progress.
+
+Do not confuse CPU consumption with useful work.
+
+Do not confuse monitoring with prevention.
+
+Do not confuse an alert with a diagnosis.
+
+Do not confuse correlation with causation.
+
+Do not confuse a symptom with a root cause.
+
+Do not confuse a workaround with a fix.
+
+Do not confuse one successful test with a reliability guarantee.
+
+Do not confuse a healthy component with a healthy system.
+
+Do not confuse historical success with future certainty.
+
+When designing reliable software, identify required behavior.
+
+Identify authoritative state.
+
+Identify dependencies.
+
+Identify failure domains.
+
+Identify failure modes.
+
+Identify recovery mechanisms.
+
+Identify retry semantics.
+
+Identify timeout semantics.
+
+Identify persistence guarantees.
+
+Identify backup requirements.
+
+Identify failover requirements.
+
+Identify operational states.
+
+Identify observability requirements.
+
+Identify authority boundaries.
+
+Then implement the smallest mechanisms that satisfy those requirements.
+
+When an operation fails, preserve evidence.
+
+Classify the failure.
+
+Determine whether the outcome is known.
+
+Determine whether retry is safe.
+
+Determine whether degradation is allowed.
+
+Determine whether the affected component can recover locally.
+
+Determine whether broader state is affected.
+
+Escalate only when required by policy or authority.
+
+Do not invent certainty.
+
+When a dependency fails, stop relying on unavailable guarantees.
+
+If current data cannot be obtained, do not fabricate current data.
+
+If persistence cannot be guaranteed, do not claim persistence.
+
+If authentication cannot be completed, do not grant authenticated authority.
+
+If qualification cannot be completed, do not treat the participant as qualified.
+
+If recovery cannot be verified, do not report recovery complete.
+
+When restoring service, verify each required boundary.
+
+Verify configuration.
+
+Verify persistent state.
+
+Verify dependencies.
+
+Verify protocol compatibility.
+
+Verify required modules.
+
+Verify authority.
+
+Verify readiness.
+
+Verify an end-to-end operation where appropriate.
+
+Then restore normal operational state.
+
+When reliability problems recur, do not normalize them.
+
+Repeated failure is evidence.
+
+Measure frequency.
+
+Measure impact.
+
+Find common conditions.
+
+Find shared dependencies.
+
+Test hypotheses.
+
+Correct the demonstrated cause.
+
+Add regression tests.
+
+Improve detection where necessary.
+
+Improve containment where necessary.
+
+Improve recovery where necessary.
+
+Reliability engineering turns failure into evidence and evidence into better system behavior.
+
+Reliable systems do not depend on everything always working.
+
+Reliable systems define what happens when things do not work.
+
+They preserve correctness where possible.
+
+They contain failure.
+
+They recover through controlled mechanisms.
+
+They report their actual state.
+
+They preserve evidence.
+
+They do not guess.
+
+They do not claim success without verification.
+
+Reliability is demonstrated through continued correct behavior, controlled failure, and verified recovery.

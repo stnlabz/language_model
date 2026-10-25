@@ -1,0 +1,73 @@
+20260806.0 — Agent Modules
+
+Root Document ID: 20260806.0
+Revision ID: 20260806.0.R3
+Previous Revision: 20260806.0.R2
+sha256: 0b1f9376458f445fcabe9bef6814a5fb1c45e3907264cba07e770bfe13d42752
+
+Status: Approved  
+Project: STN-LABZ  
+Topic: Agent Modules
+
+Purpose
+
+Modules developed for STN-LABZ autonomous and non-autonomous agents will meet and maintain established module qualification requirements before activation.
+
+Each module will include internal bench qualification tests.
+
+The governing agent's Core will control execution of the required module qualification process.
+
+Qualification
+
+Every module will include a minimum of 10 mandatory internal qualification tests.
+
+The agent's Core will execute the required qualification tests when a new module is discovered and before that module is permitted to activate.
+
+At least one required qualification test will provide negative validation by demonstrating that the module correctly rejects, fails, or safely handles a defined invalid condition.
+
+Modules do not inherit trust from the agent's Core or from another module.
+
+A module will not:
+
+- Opt out of required qualification.
+- Negotiate required qualification tests.
+- Waive required qualification tests.
+- Suppress required tests or results.
+- Override qualification results.
+- Independently declare itself qualified.
+
+Material changes affecting a module's qualified behavior will require applicable qualification testing to be executed again before the changed module is considered qualified for operational use.
+
+Module States
+
+Module lifecycle states are:
+
+- DISCOVERED
+- UNVERIFIED
+- TESTING
+- QUALIFIED
+- ACTIVE
+- FAILED
+- QUARANTINED
+
+Discovery does not imply qualification or activation.
+
+Qualification does not itself grant authority beyond the module's approved mission and scope.
+
+A module in the QUARANTINED state will not be considered ACTIVE or QUALIFIED for operational use.
+
+Qualification Authority
+
+Module qualification is a Core governance responsibility.
+
+The governing agent's Core executes the mandatory qualification process and determines qualification status according to established STN-LABZ requirements.
+
+The module being tested is not the authority that determines whether it is trusted.
+
+References
+
+- STN-LABZ General Orders
+- 20260729.0.R0 — Operational Authority
+- 20260729.5 — Unknown State Doctrine
+- 20260801.1 — KISS Theory
+- 20260810.1 — Module Creation Request

@@ -1,0 +1,296 @@
+20260821.3 - Sentinel Platform Separation Policy
+
+Root Document ID: 20260821.3
+Revision ID: NONE
+Previous Revision: NONE
+sha256: a66a69c30eed02a53fc02db513a05da606333a5c2e33b6b3b30f9da9883733bd
+
+Status: Approved
+Scope: Sentinel
+
+1. Purpose
+
+This policy establishes the platform and implementation boundaries governing STN-LABZ Sentinel systems.
+
+Sentinel implementations may share established Sentinel-family requirements, security behavior, engineering lessons, and operational principles while remaining independently engineered for their respective operating environments.
+
+Platform implementation, source code, and qualification are specific to the implementation in which they exist.
+
+2. Scope
+
+This policy applies to:
+
+- Sentinel-Daemon;
+- Sentinel Desktop;
+- Sentinel Core and service components;
+- Sentinel modules;
+- Sentinel platform-specific interfaces;
+- Sentinel operator interfaces;
+- supporting Sentinel components; and
+- future Sentinel implementations.
+
+3. Sentinel Family
+
+Sentinel is the STN-LABZ system family governing applicable host protection and security functions.
+
+Individual Sentinel implementations may implement common Sentinel-family behavior according to their assigned mission, requirements, and operating environment.
+
+Common Sentinel-family behavior does not require common platform implementation.
+
+The governing relationship is:
+
+Sentinel
+        ↓
+Sentinel-Family Requirements and Behavior
+        ↓
+Platform-Specific Implementation
+        ↓
+Platform-Specific Qualification
+
+A proven behavior in an existing Sentinel implementation may provide engineering evidence for establishing or implementing equivalent Sentinel-family behavior elsewhere.
+
+The implementation remains specific to the target platform.
+
+4. Platform Separation
+
+Sentinel implementations targeting materially different operating environments will remain independently engineered implementations.
+
+Operating-system integration will remain within the implementation responsible for that operating environment.
+
+Platform mechanisms will be selected according to the requirements and capabilities of the target platform.
+
+An existing Sentinel implementation will not be converted into another platform's implementation for the purpose of reusing its codebase.
+
+5. Sentinel-Daemon
+
+Sentinel-Daemon remains an independent Sentinel implementation for its supported operating environment.
+
+Sentinel-Daemon will not be ported to Windows as the basis for Sentinel Desktop.
+
+The previously contemplated Sentinel-Daemon Windows port is:
+
+CANCELLED
+
+Sentinel-Daemon remains an active Sentinel-family implementation independent of Sentinel Desktop.
+
+Its development, maintenance, qualification, and release lifecycle remain governed by its applicable requirements.
+
+6. Sentinel Desktop
+
+Sentinel Desktop supersedes the previously contemplated Sentinel-Daemon Windows port.
+
+Sentinel Desktop will be independently engineered for Windows.
+
+Sentinel Desktop will not be produced through direct copying, translation, or platform conversion of the Sentinel-Daemon codebase.
+
+Established Sentinel-family behavior demonstrated by Sentinel-Daemon may be reviewed and independently implemented within Sentinel Desktop when applicable to the Sentinel Desktop mission and requirements.
+
+The resulting Windows implementation will use mechanisms appropriate to Windows and the approved Sentinel Desktop architecture.
+
+7. Behavioral Reference
+
+Existing Sentinel implementations may be reviewed to identify applicable:
+
+- security behavior;
+- deterministic evaluation behavior;
+- integrity behavior;
+- persistent-state behavior;
+- failure handling;
+- recovery behavior;
+- enforcement behavior;
+- logging and audit behavior;
+- qualification lessons; and
+- operational evidence.
+
+This review provides behavioral and engineering reference for Sentinel-family development.
+
+Source implementation remains platform-specific.
+
+A mechanism used to produce a behavior on one platform does not become the required mechanism for another platform solely because it exists in an established Sentinel implementation.
+
+8. Platform-Specific Implementation
+
+Platform integration will use mechanisms appropriate to the operating environment being protected.
+
+Sentinel-Daemon may use operating-system facilities appropriate to its supported environment.
+
+Sentinel Desktop may use Windows facilities appropriate to Windows.
+
+Platform-specific mechanisms implement Sentinel requirements within the applicable environment.
+
+They do not independently redefine Sentinel-family requirements.
+
+9. Sentinel Desktop Core and Service
+
+Sentinel Desktop will maintain a Core architecture responsible for its Sentinel security functions.
+
+The Sentinel Desktop Core governs its modules as an integral part of the Core architecture.
+
+The Windows service provides the persistent operational execution environment required for Sentinel Desktop protection.
+
+Security behavior, policy evaluation, corpus processing, integrity decisions, authority decisions, state management, and enforcement will reside within the applicable Core/service architecture.
+
+Sentinel protection provided by the service will continue independently of the graphical operator interface.
+
+10. Sentinel Desktop Operator Interface
+
+The Sentinel Desktop graphical interface is an operator interface to established Core/service functions and state.
+
+The interface may:
+
+- request established Core/service operations;
+- display Core/service state;
+- display activity;
+- display policy and corpus state;
+- display security-provider state;
+- expose applicable settings; and
+- display actual Core-reported processing progress.
+
+The graphical interface will not become the Sentinel security engine.
+
+Security and authority logic will not be implemented exclusively within graphical-interface event handlers.
+
+Closing or terminating the graphical interface will not terminate Sentinel protection provided by the service.
+
+11. Module Boundary
+
+Modules are part of the applicable Sentinel Core architecture.
+
+A module developed for one Sentinel implementation is not automatically a module of another Sentinel implementation.
+
+Module applicability will be established according to the requirements and architecture of the target Sentinel implementation.
+
+Where equivalent module capability is required across platforms, the capability may be independently implemented according to the applicable platform architecture.
+
+Module qualification remains specific to the implementation and revision qualified.
+
+12. Qualification Independence
+
+Each Sentinel implementation will independently qualify within its applicable architecture and operating environment.
+
+Qualification of Sentinel-Daemon does not establish qualification of Sentinel Desktop.
+
+Qualification of Sentinel Desktop does not establish qualification of Sentinel-Daemon.
+
+Qualification evidence from one Sentinel implementation may inform:
+
+- requirement development;
+- qualification design;
+- regression design;
+- failure-case development; and
+- engineering review.
+
+It does not substitute for qualification of another implementation.
+
+Equivalent behavior implemented independently remains subject to qualification in the implementation under test.
+
+13. Change Applicability
+
+Changes remain specific to the implementation in which they are made unless the change establishes or modifies an applicable Sentinel-family requirement.
+
+A Sentinel-Daemon implementation change does not automatically require a Sentinel Desktop implementation change.
+
+A Sentinel Desktop implementation change does not automatically require a Sentinel-Daemon implementation change.
+
+When engineering evidence identifies a condition applicable to Sentinel-family behavior, applicability to other Sentinel implementations will be evaluated against their respective mission and requirements.
+
+Platform-specific changes remain platform-specific.
+
+14. Required Separation
+
+The controlling relationship is:
+
+Sentinel-Family Requirement
+        ↓
+Applicable Sentinel Implementation
+        ↓
+Platform-Specific Engineering
+        ↓
+Independent Build and Verification
+        ↓
+Independent Qualification
+
+Accordingly:
+
+Shared requirement does not require shared implementation.
+
+Shared behavior does not establish shared qualification.
+
+Platform implementation does not independently establish Sentinel-family doctrine.
+
+15. Prohibited Implementation Relationships
+
+Sentinel development will not:
+
+- use the Sentinel-Daemon codebase as the Windows implementation of Sentinel Desktop;
+- port Sentinel-Daemon to Windows as the basis of Sentinel Desktop;
+- treat Linux-specific implementation mechanisms as mandatory Sentinel Desktop architecture;
+- treat Windows-specific implementation mechanisms as mandatory Sentinel-Daemon architecture;
+- inherit qualification from another Sentinel implementation;
+- treat qualification of equivalent behavior elsewhere as qualification of the current implementation;
+- place Sentinel Desktop security or authority logic exclusively within graphical-interface event handlers; or
+- require the Sentinel Desktop graphical interface to remain active for the Sentinel service to provide protection.
+
+16. Supersession Determination
+
+The previously planned Sentinel-Daemon Windows port is:
+
+CANCELLED
+
+Sentinel Desktop supersedes that planned Windows port.
+
+This determination applies to the planned Windows port.
+
+It does not supersede, deprecate, suspend, or terminate Sentinel-Daemon.
+
+The resulting project relationship is:
+
+Sentinel
+    │
+    ├── Sentinel-Daemon
+    │       └── Existing supported environment
+    │
+    └── Sentinel Desktop
+            └── Windows
+
+Sentinel-Daemon and Sentinel Desktop remain independently engineered members of the Sentinel family.
+
+17. Engineering Application
+
+When developing Sentinel Desktop, engineers may examine Sentinel-Daemon to determine how an established Sentinel capability behaves.
+
+The engineering question is:
+
+What proven Sentinel behavior is applicable to Sentinel Desktop?
+
+The engineering question is not:
+
+How do we port this Sentinel-Daemon code to Windows?
+
+Once applicable behavior is identified, Sentinel Desktop will implement that behavior according to its own requirements, architecture, Windows platform boundaries, and qualification requirements.
+
+18. Policy Control
+
+Development inconsistent with this policy will not proceed as an authorized Sentinel implementation.
+
+A proposed change to the platform-separation requirements established by this policy requires review and revision of the applicable controlling policy before implementation proceeds.
+
+19. Human Review
+
+Decision: Approved
+Reviewer: P. Mei
+Date: 20260821
+
+References
+
+- 20260730.2 — STN-LABZ General Orders
+- 20260729.6 — Engineering Documentation
+- 20260729.8 — Operational Doctrine
+- 20260801.1 — KISS Theory
+- 20260806.0 — Agent Modules
+- 20260817.0 — Engineering Development Doctrine
+- 20260819.0 — AI-Assisted Controlled Documentation Policy
+- STN-LABZ Sentinel-Daemon
+- STN-LABZ Sentinel Desktop
+
+END DOCUMENT

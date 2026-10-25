@@ -1,0 +1,2047 @@
+A protocol defines rules governing communication between participants.
+
+A protocol defines how participants interpret exchanged information.
+
+A protocol can define message structure.
+
+A protocol can define message meaning.
+
+A protocol can define valid message sequences.
+
+A protocol can define participant roles.
+
+A protocol can define state transitions.
+
+A protocol can define error behavior.
+
+A protocol can define compatibility requirements.
+
+A protocol can define security requirements.
+
+A protocol is more than a message format.
+
+A message format describes representation.
+
+A protocol describes interaction.
+
+Two implementations can use identical message encoding while implementing different protocol semantics.
+
+Two implementations can implement equivalent protocol semantics using different internal code.
+
+Interoperability depends on externally required protocol behavior.
+
+Internal implementation does not need to be identical.
+
+A protocol participant is an entity communicating according to the protocol.
+
+Participants can be clients.
+
+Participants can be servers.
+
+Participants can be peers.
+
+Participants can have symmetric roles.
+
+Participants can have asymmetric roles.
+
+Roles determine which operations a participant is permitted or expected to perform.
+
+Transport and protocol are different layers.
+
+TCP can carry an application protocol.
+
+UDP can carry an application protocol.
+
+A local socket can carry an application protocol.
+
+Shared memory can carry protocol-like messages.
+
+A serial connection can carry a protocol.
+
+The transport moves information.
+
+The protocol defines what that information means.
+
+Transport connectivity does not establish protocol compatibility.
+
+A successful TCP connection proves that transport establishment succeeded according to the observed connection.
+
+It does not prove that the remote endpoint speaks the expected application protocol.
+
+It does not prove that the remote endpoint uses a compatible protocol version.
+
+It does not prove that the remote endpoint belongs to the expected network.
+
+It does not prove that the remote endpoint is authorized.
+
+Protocol qualification requires protocol-level evidence.
+
+A protocol message has defined semantics.
+
+Message semantics describe what a message means.
+
+Message syntax describes how the message is represented.
+
+Valid syntax does not guarantee valid semantics.
+
+A syntactically valid message can contain an invalid state transition.
+
+A syntactically valid message can contain an unauthorized operation.
+
+A syntactically valid message can contain contradictory fields.
+
+A syntactically valid message can contain values outside permitted ranges.
+
+Validation must include semantics where required.
+
+A protocol should define message boundaries.
+
+Message framing determines where one message ends and another begins.
+
+TCP is a byte stream.
+
+TCP does not preserve application message boundaries.
+
+One send operation can be received through multiple receive operations.
+
+Multiple send operations can be returned through one receive operation.
+
+Application protocols using TCP must implement framing.
+
+A fixed-length protocol uses messages of predetermined size.
+
+A length-prefixed protocol includes information describing message length.
+
+A delimiter-based protocol separates messages using defined delimiters.
+
+A self-describing encoding can indicate structural boundaries.
+
+Each framing method has requirements.
+
+A receiver should not assume one network receive equals one complete protocol message.
+
+A receiver should accumulate bytes until a complete frame exists.
+
+A receiver should preserve excess bytes belonging to subsequent frames.
+
+A receiver should reject invalid framing.
+
+Length fields must be validated.
+
+A length must not exceed the protocol maximum.
+
+A length must not cause arithmetic overflow.
+
+A length must not cause unbounded allocation.
+
+A message claiming an impossible length should be rejected.
+
+A truncated message should be rejected or treated as incomplete according to protocol state.
+
+A zero-length message should have defined semantics if it is permitted.
+
+Do not invent semantics for lengths the protocol does not define.
+
+Maximum message size should be explicit.
+
+Bounded messages protect memory.
+
+Bounded messages protect processing time.
+
+Bounded messages simplify validation.
+
+Unbounded protocol input is a resource-exhaustion risk.
+
+Protocol fields should have defined types.
+
+Protocol fields should have defined sizes where binary representation requires them.
+
+Protocol fields should have defined byte order.
+
+Protocol fields should have defined encoding.
+
+Protocol fields should have defined valid ranges.
+
+Protocol fields should have defined optionality.
+
+Protocol fields should have defined default behavior if defaults exist.
+
+Do not infer field meaning from implementation convenience.
+
+The protocol definition is authoritative for protocol behavior.
+
+Binary protocols encode messages as bytes according to a defined layout.
+
+Text protocols encode messages using textual representations.
+
+Binary protocols are not inherently more secure than text protocols.
+
+Text protocols are not inherently easier to validate correctly.
+
+Security depends on implementation and protocol design.
+
+A binary protocol should not serialize native structures directly unless native representation is explicitly the protocol format.
+
+Native structures can contain padding.
+
+Native structures can depend on compiler ABI.
+
+Native structures can depend on architecture.
+
+Native structures can depend on endianness.
+
+Protocol serialization should be explicit.
+
+Canonical serialization produces one defined byte representation for equivalent logical protocol data.
+
+Canonical serialization matters when bytes are hashed.
+
+Canonical serialization matters when bytes are signed.
+
+Canonical serialization matters when bytes determine identifiers.
+
+Canonical serialization matters when consensus depends on exact representation.
+
+If multiple byte representations are valid for the same logical value, signatures and hashes can differ.
+
+Canonicalization should therefore be defined before cryptographic operations where exact bytes matter.
+
+A protocol state machine represents valid protocol states and transitions.
+
+A connection can begin in an initial state.
+
+A handshake can move it into a negotiating state.
+
+Successful qualification can move it into a ready state.
+
+A shutdown request can move it into a closing state.
+
+Connection termination can move it into a closed state.
+
+Exact states depend on the protocol.
+
+State names should describe actual protocol conditions.
+
+Messages valid in one state can be invalid in another.
+
+A data message received before required handshake completion can be rejected.
+
+An authentication response received before an authentication challenge can be invalid.
+
+A commit acknowledgment received when no operation is pending can be invalid.
+
+State validation prevents messages from being interpreted outside their intended context.
+
+Protocol state should be explicit.
+
+Implicit state hidden across unrelated variables makes validation difficult.
+
+A state transition should have defined preconditions.
+
+A state transition should have defined effects.
+
+A state transition should have defined failure behavior.
+
+Invalid transitions should be rejected.
+
+A rejected transition should not partially modify authoritative state unless the protocol explicitly defines such behavior.
+
+Protocol parsers and protocol state machines solve different problems.
+
+The parser converts bytes into structured candidate messages.
+
+The state machine determines whether the candidate message is valid in the current protocol state.
+
+Parsing success does not establish protocol acceptance.
+
+Protocol acceptance does not automatically establish authorization.
+
+Authorization is another decision boundary.
+
+A handshake is an initial protocol exchange used to establish required communication properties.
+
+A handshake can establish protocol identity.
+
+A handshake can establish protocol version.
+
+A handshake can establish network identity.
+
+A handshake can establish participant identity.
+
+A handshake can negotiate capabilities.
+
+A handshake can establish cryptographic state.
+
+A handshake can authenticate participants.
+
+Not every handshake performs every function.
+
+Handshake success means only that the handshake's defined criteria succeeded.
+
+Do not claim authentication if the handshake did not authenticate.
+
+Do not claim authorization if the handshake only authenticated.
+
+Do not claim compatibility if required capabilities were not checked.
+
+Qualification should report what was actually established.
+
+Protocol magic values can identify expected message families.
+
+A magic value can help detect incorrect input.
+
+A magic value is not authentication.
+
+Anyone who knows the value can reproduce it.
+
+Network identifiers distinguish protocol networks.
+
+A network identifier can prevent accidental cross-network communication.
+
+A network identifier is not necessarily a secret.
+
+A genesis identifier can distinguish independently initialized histories where a protocol uses genesis state.
+
+A version field identifies protocol version according to the protocol's versioning scheme.
+
+Version numbers require defined semantics.
+
+Version 2 is not automatically compatible with version 1.
+
+A larger version number is not automatically better.
+
+A participant should know which versions it supports.
+
+Unsupported versions should be rejected or negotiated according to protocol rules.
+
+Version negotiation allows participants to select a mutually supported version.
+
+Negotiation should not silently downgrade security properties when downgrade resistance is required.
+
+A downgrade attack attempts to cause participants to use weaker protocol behavior than they otherwise support.
+
+Version negotiation should therefore be authenticated or protected where the threat model requires it.
+
+Backward compatibility means a newer implementation can interact with defined older behavior according to compatibility policy.
+
+Forward compatibility means an older implementation can tolerate defined newer information according to compatibility policy.
+
+Backward compatibility and forward compatibility are different.
+
+Unknown fields can be ignored only when the protocol permits them to be ignored.
+
+Unknown fields can be critical.
+
+Unknown message types can be rejected.
+
+Unknown message types can be ignored.
+
+Unknown message types can be forwarded.
+
+The protocol must define the behavior.
+
+Silently guessing how to handle unknown messages creates interoperability risk.
+
+Capabilities describe optional participant functionality.
+
+Capability negotiation allows participants to identify supported features.
+
+A capability should have defined semantics.
+
+A capability should have a stable identifier.
+
+A capability should not be assumed merely because a protocol version commonly includes it.
+
+Validate advertised capabilities.
+
+An advertised capability does not prove the participant will perform it correctly.
+
+Capability advertisement establishes a claim.
+
+Successful use provides stronger evidence.
+
+Required capabilities can be qualification criteria.
+
+Optional capabilities should not become accidental requirements.
+
+A protocol extension adds behavior beyond an earlier protocol definition.
+
+Extensions should preserve compatibility according to the protocol's rules.
+
+An extension should have a defined identifier.
+
+An extension should define when it can be used.
+
+An extension should define what happens when a peer does not support it.
+
+Extensions should not silently change existing field meaning.
+
+Changing existing semantics without a version or capability boundary can break interoperability.
+
+Protocol evolution should preserve determinism where deterministic interpretation is required.
+
+The same valid message under the same protocol version should have the same defined meaning.
+
+Implementation-specific interpretation should not alter protocol semantics.
+
+A request asks another participant to perform or provide something according to protocol semantics.
+
+A response reports the defined result of a request.
+
+Not every protocol is request-response.
+
+Some protocols are event-driven.
+
+Some protocols use streaming.
+
+Some protocols use publish-subscribe.
+
+Some protocols use asynchronous notifications.
+
+Some protocols combine these patterns.
+
+Request identifiers associate responses with requests.
+
+A request identifier should be unique within its defined scope.
+
+The scope can be one connection.
+
+The scope can be one participant.
+
+The scope can be one session.
+
+The scope can be globally unique according to the protocol.
+
+The scope must be defined.
+
+A response should identify the request it answers when multiple requests can be outstanding.
+
+Without correlation, concurrent request-response traffic can become ambiguous.
+
+A protocol can allow only one outstanding request.
+
+That simplifies correlation.
+
+It can reduce concurrency.
+
+Protocol complexity should match requirements.
+
+Sequence numbers establish order within a defined scope.
+
+Sequence numbers can detect missing messages.
+
+Sequence numbers can detect duplicates.
+
+Sequence numbers can detect reordering.
+
+Sequence numbers do not automatically provide authentication.
+
+Sequence numbers can wrap.
+
+Wrap behavior should be defined.
+
+Comparison rules near wraparound should be defined.
+
+Do not use naive integer comparison when sequence arithmetic requires modular behavior.
+
+Message identifiers and sequence numbers are different.
+
+A message identifier identifies a message.
+
+A sequence number establishes ordering.
+
+One field can serve both purposes only if the protocol defines it that way.
+
+A nonce is a value intended for limited or unique use according to a protocol.
+
+Nonces can prevent selected replay attacks.
+
+Nonces can associate challenges and responses.
+
+Nonce uniqueness requirements depend on the cryptographic construction.
+
+A nonce is not necessarily secret.
+
+A nonce should not be reused when the cryptographic protocol forbids reuse.
+
+A timestamp can provide freshness information.
+
+A timestamp depends on clock assumptions.
+
+Clock skew must be considered.
+
+A timestamp alone does not prove uniqueness.
+
+A timestamp alone does not prove authenticity.
+
+A signed timestamp can establish that the signer signed that timestamp.
+
+It does not prove the signer's clock was correct.
+
+Replay protection should use mechanisms appropriate to the protocol.
+
+A checksum detects selected accidental corruption.
+
+A checksum is not normally cryptographic authentication.
+
+An attacker can recompute an ordinary checksum after changing data.
+
+A cryptographic message authentication code provides integrity and authentication according to its key model.
+
+A digital signature provides integrity and signer authentication according to the signature and trust model.
+
+Cryptographic validity does not establish protocol validity.
+
+A correctly signed malformed message should still be rejected.
+
+A correctly signed unauthorized operation should still be rejected.
+
+A correctly signed stale message can still be a replay.
+
+Protocol validation remains necessary after cryptographic validation.
+
+Authentication establishes identity or credential validity according to an authentication mechanism.
+
+Authorization determines whether an authenticated or otherwise identified participant may perform an operation.
+
+Authentication and authorization are different.
+
+A participant can be authenticated but unauthorized.
+
+A protocol should define authorization boundaries for privileged operations.
+
+Network location should not substitute for authorization unless explicitly justified by the trust model.
+
+An ACK is an acknowledgment.
+
+ACK semantics must be defined.
+
+An ACK can mean bytes were received.
+
+An ACK can mean a message was parsed.
+
+An ACK can mean a message was validated.
+
+An ACK can mean an operation was accepted.
+
+An ACK can mean an operation was persisted.
+
+An ACK can mean an operation was committed.
+
+An ACK can mean an operation was applied.
+
+These are different facts.
+
+Do not interpret an ACK as stronger evidence than its definition provides.
+
+A NACK is a negative acknowledgment.
+
+A NACK reports rejection or failure according to protocol semantics.
+
+A NACK should include a defined reason when useful and safe.
+
+Error codes should have stable meanings.
+
+Error codes should distinguish important failure classes.
+
+Malformed request is different from unauthorized request.
+
+Unsupported operation is different from temporary unavailability.
+
+Version mismatch is different from internal failure.
+
+Not found is different from forbidden when the protocol permits that distinction.
+
+Error reporting should provide enough information for correct handling.
+
+Error reporting should not disclose sensitive internal information unnecessarily.
+
+A protocol error means communication violated protocol expectations.
+
+An application error means the protocol exchange was valid but the requested application operation failed.
+
+Transport errors, protocol errors, and application errors are different.
+
+A timeout is a protocol or application waiting condition depending on context.
+
+Timeouts should be bounded.
+
+A timeout should define which operation timed out.
+
+Connect timeout differs from read timeout.
+
+Handshake timeout differs from request timeout.
+
+Idle timeout differs from operation timeout.
+
+One generic timeout value can be inappropriate for every stage.
+
+Timeout expiration does not prove the remote operation failed.
+
+The remote participant can receive and complete a request while the response is delayed or lost.
+
+Operations with uncertain outcomes require defined recovery behavior.
+
+Retries should consider idempotency.
+
+An idempotent protocol operation can be repeated without changing the intended final state beyond the first successful application according to its semantics.
+
+Read operations are often idempotent.
+
+Setting a field to a fixed value can be idempotent.
+
+Increment operations are generally not idempotent.
+
+Creating a unique external action can be non-idempotent.
+
+Protocol retries should not duplicate non-idempotent effects.
+
+Request identifiers or idempotency keys can allow a receiver to recognize repeated logical operations.
+
+Deduplication requires state.
+
+Deduplication state requires retention.
+
+Retention duration should cover expected retry behavior.
+
+A retry using a new identifier can appear to be a new operation.
+
+Retry policy and identifier policy must agree.
+
+At-most-once processing attempts to avoid duplicate effects but can lose operations under failures.
+
+At-least-once processing retries operations and can produce duplicate delivery.
+
+Exactly-once effect requires coordination beyond ordinary network delivery.
+
+Do not claim exactly-once semantics merely because each message has an identifier.
+
+Exactly-once semantics must define the failure model and durable state supporting the guarantee.
+
+Protocol participants can disconnect.
+
+A disconnect can occur normally.
+
+A disconnect can occur because of transport failure.
+
+A disconnect can occur because of timeout.
+
+A disconnect can occur because of protocol rejection.
+
+A disconnect can occur because of local shutdown.
+
+Reason codes can preserve diagnostic evidence.
+
+Reconnect is a new transport event.
+
+Reconnect does not necessarily represent a new logical participant.
+
+Stable participant identity should remain separate from connection identity where required.
+
+A connection can have a connection identifier.
+
+A peer can have a peer identifier.
+
+A session can have a session identifier.
+
+These identifiers describe different lifetimes.
+
+Do not use socket descriptors as persistent peer identity.
+
+Socket descriptors are local operating-system resources.
+
+They can be reused.
+
+A protocol session can survive transport reconnection if the protocol explicitly supports resumption.
+
+Session resumption requires defined state.
+
+A resumed session should not accidentally inherit authority from an unrelated previous connection.
+
+Session tokens should be validated.
+
+Expired sessions should be rejected.
+
+Connection state should be cleaned up after termination.
+
+Stale state can create resource leaks.
+
+Stale state can create authorization errors.
+
+Stale state can cause duplicate operations.
+
+Protocol shutdown should be defined where graceful closure matters.
+
+One participant can announce intent to close.
+
+Pending messages can be completed.
+
+The peer can acknowledge closure.
+
+The transport can then close.
+
+Unexpected transport termination must still be handled.
+
+Graceful shutdown is not guaranteed.
+
+Protocol correctness cannot depend entirely on receiving a final goodbye message.
+
+Network processes can crash.
+
+Power can fail.
+
+Connections can disappear.
+
+Persistent protocol state should survive failure where required.
+
+Volatile connection state should be reconstructable or disposable.
+
+Keep persistent and transient protocol state separate.
+
+A parser consumes untrusted bytes.
+
+Parsing should be bounded.
+
+Parsing should validate lengths before copying.
+
+Parsing should validate offsets before access.
+
+Parsing should validate counts before allocation.
+
+Parsing should validate integer conversions.
+
+Parsing should validate required fields.
+
+Parsing should reject truncated input.
+
+Parsing should reject impossible encodings.
+
+Parsing should not read beyond the received frame.
+
+Parsing should not trust null termination unless the protocol guarantees it.
+
+Binary data can contain zero bytes.
+
+Strings should have explicit encoding.
+
+UTF-8 is a common protocol string encoding.
+
+ASCII is sufficient for selected restricted protocol fields.
+
+Encoding should be defined.
+
+A byte sequence invalid under the required encoding should be rejected or handled according to protocol rules.
+
+Normalization can matter for identifiers.
+
+Two visually identical Unicode strings can have different byte representations.
+
+If identifiers are compared textually, normalization policy should be defined where relevant.
+
+Protocol identifiers should avoid unnecessary textual ambiguity.
+
+Numeric fields require defined ranges.
+
+Signedness matters.
+
+A negative length should not become a large unsigned length through conversion.
+
+Integer multiplication can overflow.
+
+Integer addition can overflow.
+
+Offset plus length must be validated safely.
+
+Never validate an overflowed result as though the arithmetic itself were trustworthy.
+
+Variable-length integer encodings should have maximum encoded lengths.
+
+Malformed variable-length values should not cause infinite loops.
+
+Recursive message structures should have depth limits.
+
+Nested data can exhaust stack or memory.
+
+Compression can create decompression bombs.
+
+A small compressed message can expand into enormous output.
+
+Define decompressed-size limits.
+
+Validate before allocating excessive memory.
+
+Protocol input is a resource-consumption surface.
+
+CPU time should be bounded where practical.
+
+Memory should be bounded.
+
+Connection count should be bounded.
+
+Pending requests should be bounded.
+
+Authentication attempts should be bounded.
+
+Parser work should be proportional to acceptable input size.
+
+Attackers can send valid-looking expensive messages.
+
+Semantic validation can itself require resource controls.
+
+Rate limiting restricts operations over time according to policy.
+
+Rate limiting can protect services.
+
+Rate limiting is not authentication.
+
+Rate limiting is not authorization.
+
+Rate limiting is not protocol validation.
+
+Different controls solve different problems.
+
+A malformed-message limit can disconnect abusive peers.
+
+Repeated authentication failures can trigger temporary restrictions.
+
+Policy should distinguish malicious behavior from ordinary transient errors.
+
+Do not permanently condemn a participant merely because one packet was corrupted unless policy requires it.
+
+Protocol implementations should fail safely.
+
+Malformed input should not crash the process.
+
+Unknown input should not invoke undefined behavior.
+
+Rejected input should not partially mutate authoritative state.
+
+Failed authentication should not create an authenticated session.
+
+Failed authorization should not execute the requested operation.
+
+Failed validation should stop processing before unsafe effects.
+
+Fail closed where authority cannot be established.
+
+Protocol logging should record useful evidence.
+
+Record connection establishment.
+
+Record connection termination.
+
+Record handshake result.
+
+Record negotiated version.
+
+Record peer identity where appropriate.
+
+Record protocol rejection reasons.
+
+Record malformed-message events.
+
+Record authorization failures where appropriate.
+
+Record request identifiers where useful.
+
+Record state transitions where useful.
+
+Do not log secrets.
+
+Do not log private keys.
+
+Do not log passwords.
+
+Do not log authentication tokens unnecessarily.
+
+Do not log complete sensitive payloads merely because debugging is easier.
+
+Protocol logs should distinguish local and remote events.
+
+"Connection failed" is less useful than a defined failure stage.
+
+DNS resolution failure differs from TCP connect failure.
+
+TCP connect failure differs from handshake failure.
+
+Handshake failure differs from version rejection.
+
+Version rejection differs from authentication failure.
+
+Authentication failure differs from authorization failure.
+
+Authorization failure differs from operation failure.
+
+Report the stage that failed.
+
+A protocol invariant is a condition that must always hold for valid protocol state.
+
+An invariant can require one active leader per term according to a protocol.
+
+An invariant can require message length to remain within limits.
+
+An invariant can require request identifiers not to be reused within a session.
+
+An invariant can require authentication before privileged operations.
+
+An invariant can require monotonically increasing sequence numbers.
+
+Invariants should be enforced at boundaries.
+
+Assertions can detect internal invariant violations during development.
+
+Untrusted input should not be allowed to trigger unsafe assumptions.
+
+A protocol implementation should not assert that peer-controlled data is valid and then terminate when it is not.
+
+Validate external data.
+
+Reserve assertions primarily for internal conditions that should be impossible if the implementation is correct.
+
+Protocol state should not be inferred from log text.
+
+State should exist explicitly in the implementation.
+
+Logs describe state.
+
+Logs are not normally the authoritative state machine.
+
+A protocol implementation can be table-driven.
+
+A table can map message types and states to handlers.
+
+A protocol implementation can use explicit switch statements.
+
+A protocol implementation can use generated parsers.
+
+Implementation style is secondary to correctness and clarity.
+
+Small protocols can benefit from straightforward code.
+
+Do not introduce a framework merely because the communication is called a protocol.
+
+Protocol code should be deterministic where protocol semantics require deterministic behavior.
+
+Given the same valid state and same valid message, the resulting protocol state should be defined.
+
+Local randomness should not alter consensus-visible results unless randomness itself is part of agreed protocol input.
+
+Local clock differences should not alter deterministic validation unless time rules explicitly account for them.
+
+Platform differences should not alter protocol interpretation.
+
+Windows and Linux implementations should agree on message semantics.
+
+Different compilers should agree on protocol semantics.
+
+Different CPU architectures should agree on protocol semantics.
+
+Explicit serialization supports this requirement.
+
+Protocol numbers should not use native integer representation directly.
+
+Define widths.
+
+Define byte order.
+
+Define signedness.
+
+Define overflow behavior.
+
+Floating-point values should be avoided in exact deterministic protocols unless representation and arithmetic semantics are explicitly defined.
+
+Different floating-point implementations can produce subtle differences.
+
+Fixed-point or integer representations can provide more predictable exact semantics where appropriate.
+
+A protocol can use text decimal representation when exact parsing rules are defined.
+
+Deterministic parsing requires one defined interpretation.
+
+Whitespace handling should be defined for text protocols.
+
+Case sensitivity should be defined.
+
+Line endings should be defined.
+
+Maximum line length should be defined.
+
+Empty lines should have defined meaning.
+
+Duplicate fields should have defined behavior.
+
+Field ordering should have defined behavior.
+
+Do not accept ambiguous messages differently across implementations.
+
+Ambiguity creates interoperability and security defects.
+
+Protocol specifications should use normative language consistently.
+
+Required behavior should be distinguishable from optional behavior.
+
+Optional behavior should not alter required interpretation.
+
+A specification should define invalid behavior.
+
+Defining only successful examples is insufficient.
+
+Implementers need to know what to reject.
+
+A protocol should define malformed messages.
+
+A protocol should define unsupported messages.
+
+A protocol should define unauthorized messages.
+
+A protocol should define out-of-state messages.
+
+A protocol should define duplicate messages where relevant.
+
+A protocol should define stale messages where relevant.
+
+A protocol should define timeout behavior.
+
+A protocol should define disconnect behavior.
+
+A protocol should define restart behavior where persistent state exists.
+
+Negative behavior is part of the protocol.
+
+A test vector provides known input and expected output.
+
+Test vectors can validate serialization.
+
+Test vectors can validate parsing.
+
+Test vectors can validate cryptographic calculations.
+
+Test vectors can validate identifiers.
+
+Test vectors can validate deterministic state transitions.
+
+Cross-platform implementations should run identical test vectors where applicable.
+
+Equivalent results across implementations provide interoperability evidence.
+
+Unit tests can validate message encoding.
+
+Unit tests can validate message decoding.
+
+Unit tests can validate state transitions.
+
+Unit tests can validate error cases.
+
+Integration tests can validate interaction between participants.
+
+End-to-end tests can validate complete operations.
+
+Fuzz testing provides varied or malformed input to discover parser and state-machine defects.
+
+Protocol parsers are strong fuzzing targets.
+
+Fuzzing should test arbitrary bytes.
+
+Fuzzing should test valid messages with mutated fields.
+
+Fuzzing should test extreme lengths.
+
+Fuzzing should test truncation.
+
+Fuzzing should test duplicate fields.
+
+Fuzzing should test unexpected message ordering.
+
+Fuzzing should test repeated messages.
+
+Fuzzing should test unknown versions.
+
+Fuzzing should test unsupported capabilities.
+
+A parser surviving fuzzing does not prove protocol correctness.
+
+Fuzzing provides evidence against selected defect classes.
+
+Compatibility testing should involve different implementation versions.
+
+New client with old server.
+
+Old client with new server.
+
+New peer with old peer.
+
+Mixed capability sets.
+
+Unsupported versions.
+
+Missing optional fields.
+
+Unknown optional fields.
+
+Compatibility should be demonstrated rather than assumed.
+
+Protocol version changes should be justified by semantic changes.
+
+Changing internal implementation does not necessarily require a protocol version change.
+
+Changing message meaning can require a protocol version change.
+
+Changing required fields can require a protocol version change.
+
+Changing validation rules can require a version or activation mechanism when older participants would disagree.
+
+Adding ignorable optional metadata might not require a version change if the protocol explicitly permits it.
+
+Version policy should be defined.
+
+A wire protocol is the representation and interaction observed across the communication boundary.
+
+Internal APIs are not necessarily part of the wire protocol.
+
+Changing internal function names should not change wire compatibility.
+
+Refactoring internal code should not alter protocol semantics unintentionally.
+
+Protocol regression tests protect external behavior during refactoring.
+
+Golden test vectors can preserve expected bytes.
+
+Golden vectors should be intentionally updated only when protocol behavior changes.
+
+Unexpected byte changes should be investigated.
+
+Protocol identifiers should be stable once externally relied upon.
+
+Reusing an old message type number for new semantics creates ambiguity.
+
+Deprecated identifiers should not be repurposed casually.
+
+Reserved ranges can provide room for future extensions.
+
+Experimental message types can be separated from stable message types.
+
+Experimental behavior should not accidentally enter stable consensus semantics.
+
+A protocol can have control-plane messages.
+
+A protocol can have data-plane messages.
+
+Control-plane messages manage communication or topology.
+
+Data-plane messages carry operational data.
+
+The distinction depends on architecture.
+
+Control messages should not automatically receive unrestricted authority.
+
+A control-plane parser remains an untrusted-input boundary.
+
+Heartbeat messages indicate liveness according to protocol semantics.
+
+Receiving a heartbeat proves the sender produced that heartbeat and communication succeeded sufficiently for receipt.
+
+It does not prove every subsystem on the sender is healthy.
+
+Heartbeat absence can indicate failure.
+
+Heartbeat absence can indicate delay.
+
+Heartbeat absence can indicate congestion.
+
+Heartbeat absence can indicate scheduling problems.
+
+A heartbeat timeout produces suspicion according to the failure detector.
+
+Suspicion is not metaphysical proof that a machine is dead.
+
+Health checks should test the capability they claim to represent.
+
+A ping message can establish protocol responsiveness.
+
+A status message can report application state.
+
+A qualification request can test compatibility.
+
+These are different.
+
+Status information supplied by a peer is a claim unless independently verifiable.
+
+A peer saying "healthy" does not make it healthy.
+
+Observed successful behavior provides additional evidence.
+
+Peer-reported height, version, role, or capability should be validated where protocol correctness depends on it.
+
+A protocol can define authoritative responses.
+
+Authority derives from protocol rules.
+
+Authority does not derive merely from being first to respond.
+
+Authority does not derive merely from low latency.
+
+Authority does not derive merely from a familiar hostname.
+
+A protocol endpoint should be qualified before authoritative operations when qualification is required.
+
+Discovery finds candidates.
+
+Transport connects candidates.
+
+Handshake identifies candidates.
+
+Validation qualifies candidates.
+
+Authorization permits operations.
+
+These are separate stages.
+
+A peer can pass discovery and fail connection.
+
+A peer can connect and fail handshake.
+
+A peer can pass handshake syntax and fail network identity.
+
+A peer can pass identity and fail version compatibility.
+
+A peer can pass compatibility and fail authentication.
+
+A peer can authenticate and fail authorization.
+
+A peer can be authorized for one operation and unauthorized for another.
+
+Do not collapse qualification into a single assumption.
+
+A protocol can use client-server architecture.
+
+The client initiates defined operations.
+
+The server provides defined services.
+
+A protocol can use peer-to-peer architecture.
+
+Peers can both initiate and receive defined operations.
+
+Peer-to-peer does not mean every peer has identical authority.
+
+Roles can still exist.
+
+Capabilities can still differ.
+
+Voting rights can still differ.
+
+Peer-to-peer topology and governance authority are different.
+
+A protocol can use publish-subscribe architecture.
+
+Publishers emit messages to topics or channels.
+
+Subscribers receive selected messages.
+
+Delivery guarantees must be defined.
+
+Ordering guarantees must be defined.
+
+Retention guarantees must be defined.
+
+Subscription state must be defined.
+
+A subscriber reconnecting can miss events unless replay or durable subscription is supported.
+
+A protocol can use streaming.
+
+Streaming transfers a sequence of data over time.
+
+Stream termination should be defined.
+
+Backpressure should be defined.
+
+Partial stream failure should be defined.
+
+Resumption should be defined if supported.
+
+A stream being established does not prove every future item will arrive.
+
+A protocol can multiplex multiple logical streams over one transport connection.
+
+Each stream needs identification.
+
+Flow control can be per stream.
+
+Errors can be per stream.
+
+Connection-level errors can affect every stream.
+
+Multiplexing reduces connection overhead.
+
+Multiplexing can increase protocol complexity.
+
+Use it only when requirements justify it.
+
+Flow control limits how quickly a sender transmits relative to receiver capacity.
+
+Transport protocols such as TCP provide transport-level flow control.
+
+Application-level flow control can still be required.
+
+A receiver can accept network bytes faster than it can process application messages.
+
+Bounded application queues protect memory.
+
+Backpressure should propagate where possible.
+
+Dropping messages should follow protocol semantics.
+
+Do not silently discard authoritative messages because a queue is full unless the protocol explicitly permits loss.
+
+Priority can determine processing order.
+
+Priority should have bounded semantics.
+
+Low-priority traffic should not be starved indefinitely unless policy permits it.
+
+High-priority traffic should not bypass security validation.
+
+Priority affects scheduling, not validity.
+
+A protocol can support cancellation.
+
+Cancellation requests should identify the operation being cancelled.
+
+Cancellation can race with completion.
+
+The operation can complete immediately before cancellation is processed.
+
+The protocol should define resulting state.
+
+Cancellation acknowledgment can mean cancellation was accepted.
+
+It does not necessarily mean no effect occurred before cancellation.
+
+Distributed cancellation has uncertainty like other remote operations.
+
+A protocol can support transactions.
+
+Transaction boundaries should be explicit.
+
+Begin, prepare, commit, abort, or equivalent messages should have defined semantics.
+
+A transaction identifier should associate transaction messages.
+
+A participant should reject operations for unknown or completed transactions according to protocol rules.
+
+Timeout cleanup should not silently violate transaction guarantees.
+
+A protocol can support leases.
+
+A lease grants temporary authority according to defined rules.
+
+Lease duration should be explicit.
+
+Renewal should be explicit.
+
+Expiration should be explicit.
+
+Clock assumptions should be explicit.
+
+A stale lease holder should not retain authority beyond protocol rules.
+
+Fencing can prevent stale holders from modifying protected resources.
+
+A protocol can support epochs or terms.
+
+An epoch distinguishes generations of authority or state.
+
+Messages from obsolete epochs can be rejected.
+
+Epoch values should be monotonically managed according to protocol rules.
+
+Local restart should not arbitrarily reset an epoch if persistence is required.
+
+Persistent protocol counters must survive restart when correctness depends on them.
+
+Protocol restart behavior matters.
+
+A participant can restart with no session state.
+
+A participant can restore persistent state.
+
+A participant can rejoin a cluster.
+
+A participant can need resynchronization.
+
+The protocol should define which state survives restart.
+
+Never assume remote participants remember volatile state after restart.
+
+A connection lost during restart should be treated according to reconnection semantics.
+
+A restarted peer can reuse the same stable identity if the identity persists.
+
+A new identity should be treated as new when protocol rules require it.
+
+State synchronization transfers state between participants.
+
+Synchronization should identify the state version or position.
+
+A snapshot can provide baseline state.
+
+Incremental messages can provide changes after the snapshot.
+
+Synchronization should detect incompatible histories.
+
+Synchronization should not blindly overwrite authoritative state from an unqualified peer.
+
+State transfer requires validation.
+
+Checksums can detect corruption.
+
+Hashes can identify exact content.
+
+Signatures can authenticate approved state where the architecture uses them.
+
+Consensus can establish authoritative state where the architecture uses consensus.
+
+The protocol should define which mechanism determines acceptance.
+
+A protocol can contain administrative operations.
+
+Administrative operations should have stronger authorization where required.
+
+Administrative messages should not be enabled merely because a peer is local.
+
+Localhost is a network location.
+
+Localhost is not an identity.
+
+Processes on the same machine can still be unauthorized.
+
+A local protocol endpoint should validate authority according to its threat model.
+
+Protocol security should be layered.
+
+Transport encryption can protect communication confidentiality.
+
+Authentication can establish identity.
+
+Authorization can restrict operations.
+
+Message validation can protect state.
+
+Replay protection can protect freshness.
+
+Rate limits can protect resources.
+
+Audit logging can preserve evidence.
+
+No one layer replaces all others.
+
+TLS can provide encrypted and authenticated transport according to configuration.
+
+TLS does not define application authorization.
+
+TLS does not validate application message semantics.
+
+A valid TLS connection can carry malicious application messages.
+
+Application protocol validation remains necessary.
+
+Plaintext protocols expose message contents to observers with network visibility.
+
+Whether encryption is required depends on the threat model and environment.
+
+Do not assume private networks are automatically safe.
+
+Do not add cryptography without defining key management.
+
+Security mechanisms without key lifecycle design can create false confidence.
+
+Protocol keys can require generation.
+
+Protocol keys can require storage.
+
+Protocol keys can require distribution.
+
+Protocol keys can require rotation.
+
+Protocol keys can require revocation.
+
+Protocol keys can require recovery procedures.
+
+The protocol should not transmit private keys as ordinary messages.
+
+Secrets should not appear in diagnostic messages.
+
+Protocol error responses can become information leaks.
+
+An authentication failure does not need to reveal which credential component was correct.
+
+A parser error does not need to expose process memory.
+
+A server error does not need to expose internal paths.
+
+Return enough information for legitimate diagnosis without exposing unnecessary internals.
+
+Protocol denial-of-service resistance begins with cheap rejection.
+
+Validate fixed headers before expensive operations where possible.
+
+Validate lengths before allocation.
+
+Validate network identity before expensive state transfer.
+
+Validate basic syntax before cryptographic work where safe.
+
+Authenticate before expensive privileged operations where architecture permits.
+
+Bound work per unauthenticated connection.
+
+Attackers can open many connections.
+
+Connection establishment consumes resources.
+
+Handshake state consumes resources.
+
+Half-open or idle connections consume resources.
+
+Idle timeouts can reclaim resources.
+
+Connection limits can protect services.
+
+Limits should account for legitimate workload.
+
+Protocol resource policy should be measurable.
+
+Observe active connections.
+
+Observe pending handshakes.
+
+Observe rejected messages.
+
+Observe message sizes.
+
+Observe processing latency.
+
+Observe retry rates.
+
+Observe timeout rates.
+
+Observe version distribution.
+
+Observe capability distribution.
+
+Observability can reveal protocol degradation before complete failure.
+
+Metrics should not become protocol authority.
+
+Metrics describe behavior.
+
+The protocol state determines behavior.
+
+A protocol implementation should be testable without a real network where possible.
+
+Serialization can be tested independently.
+
+Parsing can be tested independently.
+
+State transitions can be tested independently.
+
+Transport adapters can be tested separately.
+
+Separating protocol semantics from socket operations improves testing.
+
+The network layer should deliver bytes.
+
+The protocol layer should interpret bytes.
+
+The application layer should perform authorized operations.
+
+Exact architecture can vary, but responsibilities should remain clear.
+
+Protocol code should avoid hidden global state.
+
+Explicit connection context improves reasoning.
+
+A connection context can contain negotiated version.
+
+A connection context can contain peer identity.
+
+A connection context can contain protocol state.
+
+A connection context can contain capabilities.
+
+A connection context can contain pending request information.
+
+Connection context should be destroyed when no longer valid.
+
+Persistent peer state should not be accidentally destroyed merely because one connection closes if the protocol defines persistent peer state.
+
+Transient and persistent state should be distinguished.
+
+Protocol implementations should handle partial reads.
+
+Protocol implementations should handle partial writes.
+
+A send function can report fewer bytes written than requested.
+
+A receive function can return fewer bytes than a complete frame.
+
+Correct code loops according to transport semantics.
+
+A zero-byte receive has defined meaning depending on API and transport.
+
+For TCP, orderly peer closure is commonly indicated by a zero-length successful receive according to socket API semantics.
+
+Errors should be interpreted using the platform API.
+
+Do not treat every short read as failure.
+
+Do not treat every short write as fatal.
+
+Do not treat every socket error as permanent.
+
+Classify errors.
+
+Nonblocking I/O allows operations to report that progress cannot currently be made without waiting.
+
+This is not necessarily failure.
+
+Event loops monitor readiness.
+
+Readiness does not guarantee an entire protocol message is available.
+
+Write readiness does not guarantee an unlimited write will complete.
+
+Protocol buffering remains necessary.
+
+Blocking I/O can simplify code.
+
+Blocking I/O can tie up threads.
+
+Nonblocking I/O can scale many connections.
+
+Nonblocking I/O increases state-management complexity.
+
+Choose based on requirements.
+
+Asynchronous programming does not change protocol semantics.
+
+A message valid in blocking implementation remains valid in asynchronous implementation.
+
+Concurrency architecture should not alter wire behavior.
+
+Race conditions can alter implementation state.
+
+Protocol state transitions should therefore be synchronized when multiple execution contexts can access them.
+
+One connection can be owned by one event loop or worker.
+
+Alternatively, shared connection state requires synchronization.
+
+Keep ownership simple where possible.
+
+A protocol parser should not call arbitrary application behavior before full validation.
+
+Parse.
+
+Validate structure.
+
+Validate state.
+
+Validate identity where required.
+
+Validate authorization.
+
+Then execute the operation.
+
+The exact order can vary where cryptographic framing requires earlier authentication, but each required boundary should be explicit.
+
+Validation should not have hidden side effects.
+
+A validation function should not commit state merely because it examined a message unless its contract explicitly includes that transition.
+
+Separation improves reasoning.
+
+Protocol messages should be immutable after validation where practical.
+
+Changing a validated message before execution can invalidate assumptions.
+
+If transformation is required, validate the transformed representation as required.
+
+Protocol data should retain provenance where useful.
+
+Know which peer supplied it.
+
+Know which request produced it.
+
+Know which version interpreted it.
+
+Know whether it was authenticated.
+
+Know whether it was authorized.
+
+Know whether it was committed.
+
+Do not lose critical evidence as data crosses layers.
+
+A protocol implementation should preserve unknown state as unknown.
+
+If no response was received, do not report rejection unless rejection was observed.
+
+If the connection disappeared after submission, do not report that the operation definitely failed unless the protocol can establish that fact.
+
+If commitment cannot be established, report unconfirmed or pending according to the application's state model.
+
+Unknown is better than invented certainty.
+
+A protocol should distinguish temporary from permanent failures where clients need different behavior.
+
+Temporary unavailable can justify retry.
+
+Permanent invalid request should not.
+
+Rate limited can justify delayed retry.
+
+Unsupported version requires compatibility action.
+
+Unauthorized requires authority correction.
+
+Conflict can require state refresh.
+
+Precise errors produce correct recovery.
+
+Recovery behavior belongs to the protocol contract when interoperability depends on it.
+
+A client should not invent retry behavior that can violate server semantics.
+
+A server should not rely on clients never retrying unless the protocol forbids retries and safely handles violations.
+
+Robust protocols anticipate imperfect participants.
+
+Protocol conformance means an implementation follows required protocol behavior.
+
+Conformance testing evaluates implementation behavior against the specification.
+
+Interoperability testing evaluates whether independent implementations communicate correctly.
+
+An implementation can pass its own tests while failing interoperability.
+
+Independent implementations can reveal ambiguous specifications.
+
+If two reasonable implementations interpret the specification differently, the specification can require clarification.
+
+Specifications should remove ambiguity rather than declaring one implementation correct by habit.
+
+Reference implementations can demonstrate behavior.
+
+A reference implementation is not automatically the specification unless governance explicitly defines it as such.
+
+Code can contain defects.
+
+The written protocol can contain defects.
+
+Tests can contain defects.
+
+Use controlled authority for resolving conflicts among them.
+
+Protocol documentation should identify version.
+
+Protocol documentation should identify message definitions.
+
+Protocol documentation should identify state transitions.
+
+Protocol documentation should identify limits.
+
+Protocol documentation should identify error behavior.
+
+Protocol documentation should identify security requirements.
+
+Protocol documentation should identify compatibility rules.
+
+Protocol documentation should identify persistent state requirements.
+
+Protocol documentation should identify authority boundaries.
+
+A protocol diagram can illustrate flow.
+
+A diagram does not replace precise definitions.
+
+Examples help implementation.
+
+Examples do not define every edge case.
+
+Normative rules should cover behavior beyond examples.
+
+Do not confuse syntax with semantics.
+
+Do not confuse serialization with protocol.
+
+Do not confuse transport with protocol.
+
+Do not confuse connectivity with qualification.
+
+Do not confuse handshake with authentication unless authentication is part of the handshake.
+
+Do not confuse authentication with authorization.
+
+Do not confuse version with capability.
+
+Do not confuse capability advertisement with successful capability execution.
+
+Do not confuse ACK with commit unless ACK explicitly means commit.
+
+Do not confuse send success with remote receipt.
+
+Do not confuse remote receipt with validation.
+
+Do not confuse validation with acceptance.
+
+Do not confuse acceptance with persistence.
+
+Do not confuse persistence with consensus commitment.
+
+Do not confuse commitment with application.
+
+Do not confuse timeout with rejection.
+
+Do not confuse disconnect with confirmed remote failure.
+
+Do not confuse retry with idempotency.
+
+Do not confuse unique request identifiers with exactly-once effects.
+
+Do not confuse checksum with authentication.
+
+Do not confuse signature validity with authorization.
+
+Do not confuse encryption with protocol correctness.
+
+Do not confuse localhost with trusted identity.
+
+Do not confuse peer discovery with peer admission.
+
+Do not confuse peer identity with connection identity.
+
+Do not confuse socket identity with participant identity.
+
+Do not confuse heartbeat with complete health.
+
+Do not confuse a status claim with independently verified state.
+
+Do not confuse newer version numbers with compatibility.
+
+Do not confuse unknown messages with invalid messages unless the protocol defines them as invalid.
+
+Do not confuse optional fields with fields that can always be ignored.
+
+Do not confuse malformed input with unsupported valid input.
+
+Do not confuse application failure with protocol failure.
+
+Do not confuse graceful shutdown with guaranteed shutdown.
+
+Do not confuse internal refactoring with permission to change wire semantics.
+
+Do not confuse implementation convenience with protocol authority.
+
+When implementing a protocol, begin with the contract.
+
+Define roles.
+
+Define transport assumptions.
+
+Define framing.
+
+Define message types.
+
+Define fields.
+
+Define encoding.
+
+Define byte order.
+
+Define limits.
+
+Define versions.
+
+Define capabilities.
+
+Define states.
+
+Define valid transitions.
+
+Define invalid transitions.
+
+Define request correlation.
+
+Define ordering.
+
+Define duplicate behavior.
+
+Define timeout behavior.
+
+Define retry behavior.
+
+Define authentication.
+
+Define authorization.
+
+Define error behavior.
+
+Define shutdown.
+
+Define restart behavior.
+
+Define compatibility.
+
+Define security boundaries.
+
+Then implement.
+
+When receiving a message, establish frame validity.
+
+Establish structural validity.
+
+Establish protocol version.
+
+Establish current state.
+
+Establish message validity for that state.
+
+Establish identity where required.
+
+Establish freshness where required.
+
+Establish authorization where required.
+
+Establish semantic validity.
+
+Only then perform authoritative effects.
+
+When sending a message, use the negotiated protocol.
+
+Use canonical encoding where required.
+
+Respect size limits.
+
+Use correct request identifiers.
+
+Use correct sequence state.
+
+Preserve required authentication.
+
+Preserve required ordering.
+
+Record enough state to interpret the response.
+
+Do not send protocol messages that the current state forbids.
+
+When diagnosing a protocol failure, identify the exact boundary.
+
+Did name resolution succeed?
+
+Did transport connect?
+
+Did framing succeed?
+
+Did the handshake succeed?
+
+Did network identity match?
+
+Did version negotiation succeed?
+
+Did capability qualification succeed?
+
+Did authentication succeed?
+
+Did authorization succeed?
+
+Did parsing succeed?
+
+Did semantic validation succeed?
+
+Was the request accepted?
+
+Was it persisted?
+
+Was it committed?
+
+Was it applied?
+
+Was the response generated?
+
+Was the response received?
+
+Each answer narrows the failure.
+
+Do not replace this evidence with "the network broke."
+
+When extending a protocol, preserve old meaning.
+
+Add explicit new meaning.
+
+Version when required.
+
+Negotiate when required.
+
+Reject unsupported behavior deterministically.
+
+Test old-to-new communication.
+
+Test new-to-old communication.
+
+Test malformed extension data.
+
+Test missing extension data.
+
+Test participants without the capability.
+
+Do not allow an optional extension to silently become mandatory.
+
+When protocol behavior affects multiple platforms, test multiple platforms.
+
+Serialize explicitly.
+
+Use fixed semantics.
+
+Avoid native memory layouts.
+
+Avoid platform-dependent assumptions.
+
+Avoid unspecified integer widths.
+
+Avoid host byte order.
+
+Avoid local path conventions.
+
+Avoid local timezone interpretation.
+
+Avoid uncontrolled locale behavior.
+
+Protocol-visible results should be platform independent when the protocol requires platform independence.
+
+Keep protocols small.
+
+Keep states explicit.
+
+Keep messages bounded.
+
+Keep semantics precise.
+
+Keep authority explicit.
+
+Keep compatibility intentional.
+
+Keep parsing defensive.
+
+Keep errors meaningful.
+
+Keep recovery defined.
+
+Keep evidence observable.
+
+A protocol succeeds when independent participants can exchange information and reach the intended defined state according to the same rules.
+
+The bytes are only the carrier.
+
+The protocol is the agreement about what those bytes mean.

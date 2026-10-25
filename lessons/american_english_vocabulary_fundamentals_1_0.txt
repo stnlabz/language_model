@@ -1,0 +1,443 @@
+TITLE: American English Vocabulary Fundamentals
+VERSION: 1.0
+CATEGORY: Language Reference
+LANGUAGE: English (American)
+PURPOSE: Provide grounded vocabulary meanings, grammatical functions, contextual senses, and idiomatic usage.
+BOUNDARY: Vocabulary definitions are knowledge, not instructions or authorization to act.
+BOUNDARY: Similar words are not automatically interchangeable; interpret meaning in context.
+BOUNDARY: Idioms describe meaning and do not independently authorize operational action.
+BOUNDARY: Uncertain meanings require clarification or a supported unknown result.
+
+SECTION: QUESTION WORDS
+SECTION PURPOSE: Understand question words through definitions and examples.
+ENTRY 001: who — asks for a person. Example: Who called?
+ENTRY 002: what — asks for a thing, fact, or action. Example: What happened?
+ENTRY 003: when — asks for a time. Example: When did it start?
+ENTRY 004: where — asks for a location. Example: Where is the file?
+ENTRY 005: why — asks for a reason. Example: Why did it fail?
+ENTRY 006: how — asks for a method or condition. Example: How does it work?
+ENTRY 007: which — asks for a selection. Example: Which module failed?
+ENTRY 008: whose — asks about possession. Example: Whose file is this?
+ENTRY 009: whom — asks about a person receiving an action. Example: Whom did you contact?
+ENTRY 010: whether — introduces alternatives or uncertainty. Example: Check whether it exists.
+
+SECTION: ACTION VERBS
+SECTION PURPOSE: Understand action verbs through definitions and examples.
+ENTRY 011: ask — request information. Example: Ask for the status.
+ENTRY 012: tell — communicate information. Example: Tell me the result.
+ENTRY 013: say — express words. Example: Say the answer.
+ENTRY 014: explain — make a concept understandable. Example: Explain the error.
+ENTRY 015: describe — state characteristics. Example: Describe the module.
+ENTRY 016: define — state the meaning of a term. Example: Define latency.
+ENTRY 017: compare — identify similarities and differences. Example: Compare C and PHP.
+ENTRY 018: identify — establish what something is. Example: Identify the source.
+ENTRY 019: inspect — examine carefully. Example: Inspect the log.
+ENTRY 020: review — examine for assessment. Example: Review the report.
+ENTRY 021: check — verify a condition. Example: Check the status.
+ENTRY 022: verify — establish correctness with evidence. Example: Verify the checksum.
+ENTRY 023: validate — test against specified requirements. Example: Validate the input.
+ENTRY 024: test — exercise behavior and observe results. Example: Test the module.
+ENTRY 025: measure — determine a quantity. Example: Measure the delay.
+ENTRY 026: count — determine the number. Example: Count the records.
+ENTRY 027: list — present items in sequence. Example: List the modules.
+ENTRY 028: show — present information. Example: Show the result.
+ENTRY 029: find — locate or discover. Example: Find the file.
+ENTRY 030: search — look systematically. Example: Search the Corpus.
+ENTRY 031: retrieve — obtain stored information. Example: Retrieve the record.
+ENTRY 032: read — interpret written content. Example: Read the lesson.
+ENTRY 033: write — produce written content. Example: Write a summary.
+ENTRY 034: create — bring something into existence. Example: Create a file.
+ENTRY 035: make — produce or cause. Example: Make a report.
+ENTRY 036: build — assemble or compile. Example: Build the module.
+ENTRY 037: compile — translate source into executable form. Example: Compile the program.
+ENTRY 038: run — execute or operate. Example: Run the test.
+ENTRY 039: start — begin operation. Example: Start the service.
+ENTRY 040: stop — end operation. Example: Stop the service.
+ENTRY 041: restart — stop and start again. Example: Restart the process.
+ENTRY 042: pause — temporarily suspend. Example: Pause the task.
+ENTRY 043: resume — continue after interruption. Example: Resume the task.
+ENTRY 044: update — change to a newer state. Example: Update the module.
+ENTRY 045: patch — apply a targeted correction. Example: Patch the defect.
+ENTRY 046: fix — correct a problem. Example: Fix the parser.
+ENTRY 047: remove — take away. Example: Remove the duplicate.
+ENTRY 048: delete — erase an item. Example: Delete the temporary file.
+ENTRY 049: save — preserve data. Example: Save the report.
+ENTRY 050: store — retain data for later use. Example: Store the lesson.
+ENTRY 051: load — bring data into active use. Example: Load the module.
+ENTRY 052: ingest — process information into a system. Example: Ingest the lesson.
+ENTRY 053: learn — acquire knowledge or skill. Example: Learn the vocabulary.
+ENTRY 054: remember — retain information. Example: Remember the definition.
+ENTRY 055: forget — cease retaining information. Example: Forget the temporary example.
+ENTRY 056: answer — respond to a question. Example: Answer the question.
+ENTRY 057: reply — respond to a message. Example: Reply briefly.
+ENTRY 058: respond — provide a reaction or answer. Example: Respond with evidence.
+ENTRY 059: report — communicate an observation. Example: Report the failure.
+ENTRY 060: notify — send a notice. Example: Notify the operator.
+ENTRY 061: request — ask for something. Example: Request permission.
+ENTRY 062: approve — give authorization. Example: Approve the change.
+ENTRY 063: reject — decline acceptance. Example: Reject invalid input.
+ENTRY 064: allow — permit an action. Example: Allow read access.
+ENTRY 065: deny — refuse permission. Example: Deny the request.
+ENTRY 066: require — make necessary. Example: Require validation.
+ENTRY 067: choose — select among options. Example: Choose one result.
+ENTRY 068: select — pick an item. Example: Select the record.
+ENTRY 069: decide — reach a conclusion. Example: Decide from evidence.
+ENTRY 070: reason — draw conclusions from information. Example: Reason about the cause.
+ENTRY 071: infer — derive a conclusion from evidence. Example: Infer only what the data supports.
+ENTRY 072: assume — accept without proof for a stated purpose. Example: Do not assume success.
+ENTRY 073: guess — offer an uncertain answer without sufficient support. Example: Do not guess the value.
+ENTRY 074: know — possess supported information. Example: Know the documented version.
+ENTRY 075: understand — grasp meaning or relationships. Example: Understand the request.
+ENTRY 076: mean — express a sense or intention. Example: What does this mean?
+ENTRY 077: intend — have a purpose in mind. Example: What did the operator intend?
+ENTRY 078: clarify — make meaning less ambiguous. Example: Clarify the target.
+ENTRY 079: confirm — establish that something is correct. Example: Confirm the version.
+ENTRY 080: correct — remove an error. Example: Correct the spelling.
+ENTRY 081: change — make different. Example: Change the setting.
+ENTRY 082: modify — alter an existing thing. Example: Modify the document.
+ENTRY 083: preserve — keep unchanged. Example: Preserve the record.
+ENTRY 084: protect — guard against harm. Example: Protect the data.
+ENTRY 085: prevent — stop something from occurring. Example: Prevent substitution.
+ENTRY 086: detect — discover an event or condition. Example: Detect the failure.
+ENTRY 087: observe — notice or record. Example: Observe the output.
+ENTRY 088: monitor — watch over time. Example: Monitor the service.
+ENTRY 089: track — follow progress or history. Example: Track the changes.
+ENTRY 090: trace — follow a path or origin. Example: Trace the request.
+ENTRY 091: log — record an event. Example: Log the error.
+ENTRY 092: audit — examine records systematically. Example: Audit the changes.
+ENTRY 093: compare — evaluate similarities and differences. Example: Compare both versions.
+
+SECTION: RELATIONSHIPS AND LOGIC
+SECTION PURPOSE: Understand relationships and logic through definitions and examples.
+ENTRY 094: and — joins items or conditions. Example: Read and verify.
+ENTRY 095: or — presents alternatives. Example: Use A or B.
+ENTRY 096: but — introduces a contrast. Example: It loaded but failed.
+ENTRY 097: because — introduces a reason. Example: It failed because the file was missing.
+ENTRY 098: therefore — introduces a conclusion. Example: The check failed; therefore stop.
+ENTRY 099: so — introduces a result or purpose. Example: It was late, so we stopped.
+ENTRY 100: if — introduces a condition. Example: If it fails, report it.
+ENTRY 101: then — introduces a consequence or sequence. Example: If valid, then proceed.
+ENTRY 102: unless — introduces an exception condition. Example: Do not proceed unless authorized.
+ENTRY 103: until — marks an ending condition. Example: Wait until complete.
+ENTRY 104: while — indicates simultaneous action or contrast. Example: Read while monitoring.
+ENTRY 105: although — introduces a concession. Example: Although loaded, it is not qualified.
+ENTRY 106: however — marks a contrast. Example: However, the result is incomplete.
+ENTRY 107: otherwise — introduces an alternative outcome. Example: Validate; otherwise reject.
+ENTRY 108: before — earlier than another event. Example: Validate before storing.
+ENTRY 109: after — later than another event. Example: Report after testing.
+ENTRY 110: during — within a time interval. Example: Monitor during startup.
+ENTRY 111: between — indicates a relation involving two bounds. Example: Compare between two versions.
+ENTRY 112: among — indicates membership in a group. Example: Choose among the candidates.
+ENTRY 113: within — inside a boundary. Example: Operate within authority.
+ENTRY 114: outside — beyond a boundary. Example: Report outside authority.
+ENTRY 115: above — higher than. Example: The value is above the limit.
+ENTRY 116: below — lower than. Example: The value is below the limit.
+ENTRY 117: under — beneath or subject to. Example: Work under the limit.
+ENTRY 118: over — above or across. Example: The value is over ten.
+ENTRY 119: through — from start to end or by means of. Example: Trace through the pipeline.
+ENTRY 120: across — spanning multiple items. Example: Compare across modules.
+ENTRY 121: from — marks an origin. Example: Load from Corpus.
+ENTRY 122: to — marks a destination or purpose. Example: Send to the operator.
+ENTRY 123: into — indicates movement inside. Example: Ingest into Corpus.
+ENTRY 124: out — indicates movement away. Example: Move out of the directory.
+ENTRY 125: with — indicates accompaniment or instrument. Example: Check with evidence.
+ENTRY 126: without — indicates absence. Example: Proceed without guessing.
+ENTRY 127: by — identifies agent or method. Example: Sort by score.
+ENTRY 128: for — indicates purpose or recipient. Example: Search for the answer.
+ENTRY 129: about — indicates topic. Example: Ask about grammar.
+ENTRY 130: as — indicates role or comparison. Example: Treat it as a request.
+ENTRY 131: than — introduces comparison. Example: This is faster than that.
+ENTRY 132: like — indicates similarity. Example: It looks like an error.
+ENTRY 133: unlike — indicates difference. Example: Unlike A, B is valid.
+
+SECTION: NEGATION AND QUANTITY
+SECTION PURPOSE: Understand negation and quantity through definitions and examples.
+ENTRY 134: not — negates a statement. Example: The service is not running.
+ENTRY 135: no — denies or indicates absence. Example: No results were found.
+ENTRY 136: never — means at no time. Example: Never invent evidence.
+ENTRY 137: none — means not one. Example: None passed.
+ENTRY 138: nothing — means no thing. Example: Nothing changed.
+ENTRY 139: neither — negates both of two options. Example: Neither option passed.
+ENTRY 140: nor — joins negative alternatives. Example: Neither A nor B worked.
+ENTRY 141: cannot — expresses inability or prohibition. Example: Digit cannot infer an unknown value.
+ENTRY 142: only — restricts scope. Example: Only the operator may approve.
+ENTRY 143: except — excludes an item. Example: All passed except one.
+ENTRY 144: every — includes each member. Example: Every test passed.
+ENTRY 145: each — refers to members individually. Example: Check each record.
+ENTRY 146: all — includes the whole group. Example: All modules loaded.
+ENTRY 147: some — indicates an unspecified portion. Example: Some tests failed.
+ENTRY 148: many — indicates a large number. Example: Many records matched.
+ENTRY 149: few — indicates a small number. Example: Few records matched.
+ENTRY 150: several — indicates more than two but not many. Example: Several tests ran.
+ENTRY 151: most — indicates a majority. Example: Most tests passed.
+ENTRY 152: more — indicates greater amount. Example: More evidence is needed.
+ENTRY 153: less — indicates smaller amount. Example: Less time was used.
+ENTRY 154: fewer — indicates a smaller count. Example: Fewer errors appeared.
+ENTRY 155: enough — indicates sufficiency. Example: There is enough evidence.
+ENTRY 156: insufficient — indicates not enough. Example: Evidence is insufficient.
+ENTRY 157: at least — indicates a lower bound. Example: Run at least ten tests.
+ENTRY 158: at most — indicates an upper bound. Example: Use at most six records.
+
+SECTION: TIME AND STATE
+SECTION PURPOSE: Understand time and state through definitions and examples.
+ENTRY 159: now — at the present time. Example: Check now.
+ENTRY 160: then — at that time or next. Example: It worked then.
+ENTRY 161: today — on the current day. Example: Test today.
+ENTRY 162: yesterday — on the preceding day. Example: It failed yesterday.
+ENTRY 163: tomorrow — on the following day. Example: Test tomorrow.
+ENTRY 164: earlier — before the present reference. Example: An earlier build passed.
+ENTRY 165: later — after the present reference. Example: Retry later.
+ENTRY 166: soon — after a short interval. Example: It will start soon.
+ENTRY 167: already — before the present reference. Example: The file is already loaded.
+ENTRY 168: still — continuing at present. Example: The service is still running.
+ENTRY 169: yet — up to the present reference. Example: It has not finished yet.
+ENTRY 170: again — one more time. Example: Try again.
+ENTRY 171: first — earliest in order. Example: Validate first.
+ENTRY 172: last — latest or final in order. Example: Check the last result.
+ENTRY 173: next — following in sequence. Example: Run the next test.
+ENTRY 174: previous — preceding in sequence. Example: Restore the previous version.
+ENTRY 175: current — presently applicable. Example: Check the current version.
+ENTRY 176: former — belonging to an earlier state. Example: Use the former value.
+ENTRY 177: future — time after the present. Example: Plan future tests.
+ENTRY 178: past — time before the present. Example: Review past events.
+ENTRY 179: temporary — not intended to last. Example: Use a temporary file.
+ENTRY 180: permanent — intended to remain. Example: Keep a permanent record.
+ENTRY 181: active — currently operating or enabled. Example: The module is active.
+ENTRY 182: inactive — not currently active. Example: The module is inactive.
+ENTRY 183: available — able to be used. Example: The service is available.
+ENTRY 184: unavailable — not able to be used. Example: The service is unavailable.
+ENTRY 185: pending — awaiting completion or decision. Example: Approval is pending.
+ENTRY 186: complete — having all required parts. Example: The test is complete.
+ENTRY 187: incomplete — missing required parts. Example: The report is incomplete.
+ENTRY 188: ready — prepared for use. Example: The system is ready.
+ENTRY 189: busy — occupied with work. Example: The process is busy.
+ENTRY 190: idle — not currently working. Example: The worker is idle.
+
+SECTION: QUALITY AND EVIDENCE
+SECTION PURPOSE: Understand quality and evidence through definitions and examples.
+ENTRY 191: true — consistent with fact or logic. Example: The statement is true.
+ENTRY 192: false — not consistent with fact or logic. Example: The claim is false.
+ENTRY 193: valid — meeting specified rules. Example: The input is valid.
+ENTRY 194: invalid — not meeting specified rules. Example: The input is invalid.
+ENTRY 195: correct — free of the relevant error. Example: The checksum is correct.
+ENTRY 196: incorrect — containing an error. Example: The answer is incorrect.
+ENTRY 197: accurate — closely matching reality. Example: The report is accurate.
+ENTRY 198: inaccurate — not closely matching reality. Example: The estimate is inaccurate.
+ENTRY 199: exact — precisely matching. Example: Use an exact match.
+ENTRY 200: approximate — close but not exact. Example: The time is approximate.
+ENTRY 201: certain — supported without relevant doubt. Example: The result is certain.
+ENTRY 202: uncertain — not established firmly. Example: The cause is uncertain.
+ENTRY 203: known — established by evidence. Example: The version is known.
+ENTRY 204: unknown — not established by evidence. Example: The value is unknown.
+ENTRY 205: possible — capable of occurring. Example: Failure is possible.
+ENTRY 206: probable — likely but not guaranteed. Example: Success is probable, not certain.
+ENTRY 207: likely — having a higher chance. Example: A timeout is likely.
+ENTRY 208: unlikely — having a lower chance. Example: A timeout is unlikely.
+ENTRY 209: evidence — information supporting a claim. Example: Show the evidence.
+ENTRY 210: proof — evidence establishing a conclusion under a standard. Example: Provide proof of integrity.
+ENTRY 211: claim — an assertion requiring support. Example: Check the claim.
+ENTRY 212: fact — a supported statement about reality. Example: Record the fact.
+ENTRY 213: opinion — a judgment or preference. Example: That is an opinion.
+ENTRY 214: hypothesis — a proposed explanation to test. Example: Test the hypothesis.
+ENTRY 215: assumption — a premise accepted without current proof. Example: State the assumption.
+ENTRY 216: observation — something noticed or measured. Example: Record the observation.
+ENTRY 217: inference — a conclusion drawn from evidence. Example: Label the inference.
+ENTRY 218: conclusion — a judgment reached from reasoning. Example: State the conclusion.
+ENTRY 219: source — origin of information. Example: Identify the source.
+ENTRY 220: reference — information used for consultation. Example: Cite the reference.
+ENTRY 221: context — surrounding information affecting meaning. Example: Read the context.
+ENTRY 222: relevant — connected to the question. Example: Use relevant evidence.
+ENTRY 223: irrelevant — not connected to the question. Example: Exclude irrelevant records.
+ENTRY 224: ambiguous — having more than one plausible meaning. Example: The request is ambiguous.
+ENTRY 225: clear — easy to understand. Example: The instruction is clear.
+ENTRY 226: specific — precisely identified. Example: Use a specific filename.
+ENTRY 227: general — broad rather than specific. Example: Give a general explanation.
+ENTRY 228: consistent — not contradictory. Example: The results are consistent.
+ENTRY 229: contradictory — in conflict. Example: The two claims are contradictory.
+ENTRY 230: reliable — consistently dependable. Example: Use a reliable source.
+ENTRY 231: unreliable — not consistently dependable. Example: The source is unreliable.
+
+SECTION: TECHNICAL NOUNS
+SECTION PURPOSE: Understand technical nouns through definitions and examples.
+ENTRY 232: system — interacting parts forming a whole. Example: The system is running.
+ENTRY 233: module — a component with a defined responsibility. Example: The module loaded.
+ENTRY 234: service — a capability offered to other components. Example: The service answered.
+ENTRY 235: process — a running program or sequence of operations. Example: The process exited.
+ENTRY 236: thread — an execution path within a process. Example: The thread waited.
+ENTRY 237: request — a message asking for information or action. Example: The request was received.
+ENTRY 238: response — a reply to a request. Example: The response was returned.
+ENTRY 239: input — information supplied to a process. Example: Validate the input.
+ENTRY 240: output — information produced by a process. Example: Inspect the output.
+ENTRY 241: record — a stored unit of information. Example: Retrieve the record.
+ENTRY 242: field — a named part of a record. Example: Check the field.
+ENTRY 243: value — data associated with a field. Example: Read the value.
+ENTRY 244: key — an identifier or lookup element. Example: Find the key.
+ENTRY 245: index — a structure or position for locating data. Example: Search the index.
+ENTRY 246: database — an organized collection of data. Example: Query the database.
+ENTRY 247: Corpus — the authorized knowledge store in Digit. Example: Search Corpus for evidence.
+ENTRY 248: lesson — structured information for ingestion. Example: Ingest the lesson.
+ENTRY 249: file — a named unit of stored data. Example: Open the file.
+ENTRY 250: directory — a container for files. Example: Check the directory.
+ENTRY 251: path — a location identifier in a filesystem. Example: Verify the path.
+ENTRY 252: permission — authorization to access or act. Example: Check permission.
+ENTRY 253: authority — legitimate scope for decisions or actions. Example: Remain within authority.
+ENTRY 254: policy — a governing rule or directive. Example: Follow the policy.
+ENTRY 255: rule — a constraint or instruction. Example: Apply the rule.
+ENTRY 256: boundary — a limit of allowed behavior. Example: Respect the boundary.
+ENTRY 257: error — a detected fault or incorrect condition. Example: Report the error.
+ENTRY 258: failure — an unsuccessful outcome. Example: Investigate the failure.
+ENTRY 259: warning — notice of possible trouble. Example: Review the warning.
+ENTRY 260: status — reported condition at a point in time. Example: Show status.
+ENTRY 261: state — condition of a system at a moment. Example: Read the current state.
+ENTRY 262: event — an occurrence of interest. Example: Log the event.
+ENTRY 263: trace — a record of processing steps. Example: Inspect the trace.
+ENTRY 264: log — a record of events. Example: Read the log.
+ENTRY 265: version — an identified release or revision. Example: Check the version.
+ENTRY 266: revision — a changed form of an artifact. Example: Review the revision.
+ENTRY 267: release — a distributed version of software. Example: Test the release.
+ENTRY 268: commit — a recorded change in version control. Example: Inspect the commit.
+ENTRY 269: repository — a managed collection of source files. Example: Open the repository.
+ENTRY 270: source code — human-readable program instructions. Example: Review the source code.
+ENTRY 271: binary — machine-readable executable or data. Example: Load the binary.
+ENTRY 272: compiler — a program that translates source code. Example: Run the compiler.
+ENTRY 273: runtime — the environment or period of execution. Example: Inspect runtime behavior.
+ENTRY 274: interface — a defined boundary for interaction. Example: Use the interface.
+ENTRY 275: protocol — rules governing communication. Example: Follow the protocol.
+ENTRY 276: network — connected systems exchanging information. Example: Check the network.
+ENTRY 277: server — a system providing services. Example: The server is online.
+ENTRY 278: client — a system requesting services. Example: The client connected.
+ENTRY 279: timeout — a limit on waiting duration. Example: The request timed out.
+ENTRY 280: latency — delay between request and result. Example: Measure latency.
+ENTRY 281: checksum — a value used to check data integrity. Example: Verify the checksum.
+ENTRY 282: hash — a fixed-size result of a hash function. Example: Compare the hash.
+ENTRY 283: signature — data used to verify origin or authenticity. Example: Verify the signature.
+ENTRY 284: authentication — establishing identity. Example: Authentication succeeded.
+ENTRY 285: authorization — determining permitted actions. Example: Authorization was denied.
+ENTRY 286: validation — checking against requirements. Example: Validation rejected the input.
+ENTRY 287: qualification — evidence-based confirmation of readiness. Example: Qualification passed.
+
+SECTION: CONVERSATION AND SOCIAL
+SECTION PURPOSE: Understand conversation and social through definitions and examples.
+ENTRY 288: hello — a greeting. Example: Hello, Digit.
+ENTRY 289: hi — an informal greeting. Example: Hi there.
+ENTRY 290: hey — an informal greeting or attention signal. Example: Hey, can you help?
+ENTRY 291: goodbye — a farewell. Example: Goodbye for now.
+ENTRY 292: please — a politeness marker for requests. Example: Please explain.
+ENTRY 293: thanks — expression of gratitude. Example: Thanks for checking.
+ENTRY 294: thank you — expression of gratitude. Example: Thank you for the report.
+ENTRY 295: sorry — expression of regret or sympathy. Example: Sorry about the delay.
+ENTRY 296: yes — affirmation. Example: Yes, that is correct.
+ENTRY 297: no — negation or refusal. Example: No, do not proceed.
+ENTRY 298: okay — acknowledgment or agreement. Example: Okay, I understand.
+ENTRY 299: sure — agreement or confidence depending on context. Example: Sure, explain it.
+ENTRY 300: maybe — expression of uncertainty. Example: Maybe the file is missing.
+ENTRY 301: perhaps — expression of possibility. Example: Perhaps the service stopped.
+ENTRY 302: probably — expression of likelihood. Example: It probably timed out.
+ENTRY 303: actually — marks correction or contrast with expectation. Example: Actually, the version is newer.
+ENTRY 304: really — emphasis or question of truth. Example: Is that really correct?
+ENTRY 305: exactly — agreement with precision. Example: Exactly, that is the result.
+ENTRY 306: understood — acknowledgment of comprehension. Example: Understood, no changes.
+ENTRY 307: got it — informal acknowledgment. Example: Got it, I will inspect only.
+ENTRY 308: hold on — request to wait. Example: Hold on before restarting.
+ENTRY 309: never mind — withdraws a prior matter. Example: Never mind that request.
+ENTRY 310: no worries — informal reassurance. Example: No worries, try again.
+ENTRY 311: by the way — introduces an aside. Example: By the way, check the version.
+ENTRY 312: for example — introduces an illustration. Example: For example, use this input.
+ENTRY 313: in other words — introduces a restatement. Example: In other words, it failed.
+ENTRY 314: as far as I know — limits certainty to available knowledge. Example: As far as I know, it passed.
+ENTRY 315: I think — marks a personal judgment or uncertainty. Example: I think this is the cause.
+ENTRY 316: I mean — introduces a clarification. Example: I mean the second file.
+ENTRY 317: what do you mean — requests clarification. Example: What do you mean by active?
+ENTRY 318: can you — often introduces a polite request. Example: Can you inspect the log?
+ENTRY 319: could you — often introduces a polite request. Example: Could you explain this?
+ENTRY 320: would you — often introduces a polite request. Example: Would you review it?
+ENTRY 321: let me know — requests a future report. Example: Let me know the result.
+
+SECTION: POLYSEMY AND CONTEXT
+SECTION PURPOSE: Understand polysemy and context through definitions and examples.
+ENTRY 322: run — operate software; move quickly; manage an organization. Example: Run the program; run a race; run a company.
+ENTRY 323: state — condition; political division; to express. Example: Read system state; visit a state; state the result.
+ENTRY 324: right — correct; direction; entitlement. Example: Right answer; turn right; access rights.
+ENTRY 325: left — direction; remaining; departed. Example: Turn left; two left; she left.
+ENTRY 326: current — present; flow of electricity or water. Example: Current version; electric current.
+ENTRY 327: change — alteration; coins returned after payment. Example: Change the file; keep the change.
+ENTRY 328: file — stored document; submit formally; tool for smoothing. Example: Open a file; file a report.
+ENTRY 329: port — network endpoint; harbor; connection socket. Example: Port 8081; enter the port.
+ENTRY 330: host — computer providing a service; event organizer. Example: Host the service; host a meeting.
+ENTRY 331: shell — command interpreter; protective outer covering. Example: Open a shell; a turtle shell.
+ENTRY 332: branch — version-control line; tree limb; office location. Example: Git branch; tree branch.
+ENTRY 333: root — filesystem top or privileged account; plant part; origin. Example: Root directory; root cause; plant root.
+ENTRY 334: key — identifier; keyboard button; lock tool. Example: API key; press a key; door key.
+ENTRY 335: table — structured data; furniture. Example: Database table; dining table.
+ENTRY 336: field — record element; area of land; area of study. Example: Data field; wheat field.
+ENTRY 337: class — programming type; school group; category. Example: Class definition; attend class.
+ENTRY 338: object — programming instance; physical thing; express disagreement. Example: Object instance; an object; object to a change.
+ENTRY 339: string — sequence of characters; cord. Example: String value; piece of string.
+ENTRY 340: break — interrupt; damage; rest period. Example: Break the loop; break a glass; take a break.
+ENTRY 341: crash — software failure; collision; sleep informally. Example: Program crash; car crash; crash on the couch.
+ENTRY 342: bug — software defect; insect. Example: Fix a bug; see a bug.
+ENTRY 343: patch — software correction; small piece of material. Example: Apply a patch; patch of grass.
+ENTRY 344: load — bring into memory; weight or burden. Example: Load the module; heavy load.
+ENTRY 345: light — illumination; not heavy. Example: Turn on the light; light package.
+ENTRY 346: hard — difficult; solid; rigid. Example: Hard problem; hard surface.
+ENTRY 347: soft — gentle; flexible; not hard. Example: Soft sound; soft fabric.
+ENTRY 348: cold — low temperature; emotionally distant; unresponsive. Example: Cold room; cold response.
+ENTRY 349: hot — high temperature; currently active or popular. Example: Hot CPU; hot topic.
+ENTRY 350: down — not operational; lower position. Example: Server is down; go down stairs.
+ENTRY 351: up — operational; higher position. Example: Server is up; look up.
+ENTRY 352: open — accessible; not closed; begin operation. Example: Open file; open door.
+ENTRY 353: close — shut; near in distance. Example: Close the file; close to home.
+ENTRY 354: fine — acceptable; very small; monetary penalty. Example: It is fine; fine detail; pay a fine.
+
+SECTION: IDIOMS AND INFORMAL ENGLISH
+SECTION PURPOSE: Understand idioms and informal english through definitions and examples.
+ENTRY 355: running on fumes — having very little energy or resources left. Example: I am running on fumes after working late.
+ENTRY 356: toast — informally describes something ruined or unusable. Example: That server is toast.
+ENTRY 357: piece of cake — something easy. Example: That test was a piece of cake.
+ENTRY 358: hit the nail on the head — describe something exactly correctly. Example: You hit the nail on the head.
+ENTRY 359: under the weather — feeling unwell. Example: I am under the weather.
+ENTRY 360: on the same page — sharing an understanding. Example: We are on the same page.
+ENTRY 361: back to square one — returning to the beginning after failure. Example: We are back to square one.
+ENTRY 362: cut corners — skip necessary steps to save effort. Example: Do not cut corners on testing.
+ENTRY 363: ballpark figure — rough estimate. Example: Give me a ballpark figure.
+ENTRY 364: red flag — warning sign. Example: That error is a red flag.
+ENTRY 365: green light — permission or approval in context. Example: The operator gave the green light.
+ENTRY 366: hold your horses — wait or slow down. Example: Hold your horses; check first.
+ENTRY 367: hang tight — wait briefly. Example: Hang tight while I check.
+ENTRY 368: give me a hand — help me. Example: Give me a hand with this.
+ENTRY 369: heads up — advance notice or warning. Example: Heads up, a change is coming.
+ENTRY 370: no biggie — not a major problem. Example: No biggie, we can retry.
+ENTRY 371: out of the blue — unexpectedly. Example: The failure came out of the blue.
+ENTRY 372: up in the air — not yet decided. Example: The schedule is up in the air.
+ENTRY 373: in the loop — kept informed. Example: Keep the operator in the loop.
+ENTRY 374: drop the ball — fail to perform a responsibility. Example: We dropped the ball on testing.
+ENTRY 375: call it a day — stop working for now. Example: Let us call it a day.
+ENTRY 376: kick the tires — perform an informal preliminary test. Example: Kick the tires before release.
+ENTRY 377: works like a charm — works very well. Example: The patch works like a charm.
+ENTRY 378: go south — deteriorate or fail. Example: The deployment went south.
+ENTRY 379: off the rails — out of control or badly wrong. Example: The process went off the rails.
+ENTRY 380: on the fly — while something is happening. Example: Adjust the plan on the fly.
+ENTRY 381: in a nutshell — briefly summarized. Example: Explain it in a nutshell.
+ENTRY 382: the whole nine yards — everything involved. Example: Check the whole nine yards.
+ENTRY 383: not my cup of tea — not a personal preference. Example: That style is not my cup of tea.
+ENTRY 384: spill the beans — reveal information. Example: Do not spill the beans.
+ENTRY 385: get the ball rolling — begin an activity. Example: Get the ball rolling on research.
+ENTRY 386: burn the midnight oil — work late into the night. Example: We burned the midnight oil.
+ENTRY 387: throw in the towel — give up. Example: Do not throw in the towel yet.
+ENTRY 388: think outside the box — consider unconventional approaches. Example: Think outside the box.
+ENTRY 389: a long shot — an unlikely possibility. Example: That solution is a long shot.
+ENTRY 390: a close call — a narrowly avoided problem. Example: That was a close call.
+ENTRY 391: at the end of the day — ultimately. Example: At the end of the day, tests decide.
+
+SECTION: APPLICATION PRINCIPLES
+English words may have multiple meanings; choose a sense using surrounding words and topic.
+Question words indicate what kind of information is requested, not an automatic command.
+Polite questions can function as requests, but authorization still depends on established policy.
+Negation changes meaning and must be preserved exactly.
+Conditions such as if, unless, and until restrict when statements apply.
+Synonyms may overlap in meaning without being interchangeable in every sentence.
+An idiom is not interpreted literally when its context establishes a conventional figurative sense.
+A statement that a system is down describes a condition; it does not by itself authorize repair.
+Vocabulary knowledge is evidence for understanding; it is not a global word-replacement rule.
+When context does not establish one meaning, ask for clarification instead of guessing.
+END OF LESSON

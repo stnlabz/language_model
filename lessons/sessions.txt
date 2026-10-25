@@ -1,0 +1,2669 @@
+A session is a mechanism for preserving state across otherwise separate interactions.
+
+HTTP is stateless at the protocol level.
+
+One HTTP request does not inherently remember a previous HTTP request.
+
+Applications frequently require continuity.
+
+A user can authenticate during one request.
+
+Later requests can need to know that the same established session is still active.
+
+A shopping cart can persist across requests.
+
+Application preferences can persist across requests.
+
+Temporary workflow state can persist across requests.
+
+Sessions provide one way to maintain this continuity.
+
+Do not confuse a session with authentication.
+
+A session can carry authenticated state.
+
+A session can also exist for an unauthenticated user.
+
+Authentication establishes identity.
+
+A session preserves state.
+
+Authorization determines what the established principal may do.
+
+These are separate responsibilities.
+
+A typical server-side session uses two components:
+
+A session identifier held by the client.
+
+Session state held by the server.
+
+The client sends the session identifier with subsequent requests.
+
+The server uses that identifier to locate the associated session state.
+
+The session identifier is a reference.
+
+It does not need to contain the complete session state.
+
+A simplified flow is:
+
+Client makes request.
+
+Server creates session.
+
+Server generates session identifier.
+
+Server stores session state associated with that identifier.
+
+Server sends the identifier to the client.
+
+Client returns the identifier on later requests.
+
+Server locates the session.
+
+Server validates the session.
+
+Server uses the session state.
+
+Do not trust a session identifier merely because the client supplied one.
+
+The server must determine whether it corresponds to a valid active session.
+
+A session identifier should be unpredictable.
+
+Use a cryptographically secure random source.
+
+Do not generate session identifiers from sequential numbers.
+
+Do not generate session identifiers from user IDs.
+
+Do not generate session identifiers from timestamps.
+
+Do not generate session identifiers from predictable counters.
+
+Do not create a session identifier by concatenating public values.
+
+An attacker who can predict another session identifier can potentially impersonate that session.
+
+Session identifiers are credentials when possession grants access to session state.
+
+Treat them as secrets.
+
+Do not log full session identifiers.
+
+Do not expose them unnecessarily.
+
+Do not place them in URLs unless a protocol explicitly requires it and the risks are understood.
+
+URLs commonly appear in:
+
+Browser history.
+
+Server logs.
+
+Proxy logs.
+
+Analytics systems.
+
+Referrer information.
+
+Screenshots.
+
+Copied links.
+
+Session identifiers should normally be transmitted using mechanisms intended for credentials.
+
+Web applications commonly use cookies.
+
+A cookie is data associated with HTTP requests according to browser cookie rules.
+
+A session cookie can contain a session identifier.
+
+The browser can automatically send the cookie with matching requests.
+
+The cookie itself does not make the session secure.
+
+Its contents and attributes matter.
+
+A session cookie commonly looks conceptually like:
+
+session=<random identifier>
+
+The identifier maps to server-side state.
+
+Do not put plaintext passwords into session cookies.
+
+Do not put private keys into session cookies.
+
+Do not put unnecessary secrets into session cookies.
+
+A cookie can have a Secure attribute.
+
+Secure instructs compatible browsers to send the cookie only over secure transport according to browser rules.
+
+Use Secure for session credentials when HTTPS is required.
+
+Do not expose an authenticated session over plaintext HTTP.
+
+A cookie can have an HttpOnly attribute.
+
+HttpOnly prevents ordinary client-side JavaScript from reading the cookie according to browser behavior.
+
+This can reduce direct session-cookie theft through some script-based attacks.
+
+HttpOnly does not prevent every consequence of cross-site scripting.
+
+A malicious script can potentially perform requests using the user's existing session even when it cannot read the cookie.
+
+Prevent script injection.
+
+Do not treat HttpOnly as complete XSS protection.
+
+A cookie can have a SameSite attribute.
+
+SameSite controls selected cross-site cookie behavior.
+
+Common values include:
+
+Strict.
+
+Lax.
+
+None.
+
+Their exact behavior depends on browser rules and request context.
+
+SameSite can reduce selected cross-site request attacks.
+
+It does not replace complete CSRF analysis.
+
+When SameSite=None is used, browsers commonly require Secure.
+
+Use cookie settings appropriate to the application's actual cross-site requirements.
+
+Do not weaken cookie policy merely to make an integration work without understanding why.
+
+Cookie Domain controls which hosts can receive a cookie according to browser rules.
+
+Avoid unnecessarily broad cookie domains.
+
+A cookie scoped to an entire parent domain can be exposed to more subdomains than required.
+
+Keep session-cookie scope narrow.
+
+Cookie Path restricts cookie transmission according to URL path matching.
+
+Path can reduce unnecessary exposure.
+
+Path is not a strong security boundary against malicious code within the same origin.
+
+Do not rely on cookie Path as the sole authorization mechanism.
+
+Cookie expiration controls persistence.
+
+A session cookie can expire when the browser session ends according to browser behavior.
+
+A persistent cookie can contain an explicit expiration or maximum age.
+
+Cookie persistence and server-side session lifetime are separate.
+
+Deleting the cookie does not necessarily destroy server-side session state.
+
+Expiring server-side session state does not necessarily immediately remove the cookie from the browser.
+
+The server must validate the session on every request where it is used.
+
+If the server-side session is expired, the request must not regain authority merely because the browser still has the identifier.
+
+Server state is authoritative for server-side sessions.
+
+A session can have a creation time.
+
+A session can have a last-activity time.
+
+A session can have an absolute expiration time.
+
+A session can have an idle expiration time.
+
+These values have different meanings.
+
+Absolute expiration limits total session lifetime.
+
+Idle expiration limits how long the session can remain unused.
+
+A session can use both.
+
+For example:
+
+Absolute lifetime: eight hours.
+
+Idle lifetime: thirty minutes.
+
+The session ends when either applicable limit is reached.
+
+Exact durations depend on application requirements.
+
+Do not invent arbitrary session durations without considering risk and usability.
+
+High-risk administrative sessions can require shorter lifetimes.
+
+Low-risk applications can use different policies.
+
+Session expiration should be enforced by the server.
+
+Do not rely solely on browser cookie expiration.
+
+A copied session identifier can exist outside the original browser.
+
+Server-side expiration limits its validity.
+
+A session can be invalidated before expiration.
+
+Logout is a common reason.
+
+Credential change can be another reason.
+
+Account disabling can be another reason.
+
+Security incident response can be another reason.
+
+Administrative revocation can be another reason.
+
+Session invalidation should make future use of that session fail.
+
+Do not merely hide the application interface after logout.
+
+Destroy or invalidate the authentication state.
+
+A logout operation for a server-side session commonly does the following:
+
+Identify the current session.
+
+Invalidate or delete its server-side state.
+
+Expire the client cookie.
+
+Return the user to an unauthenticated state.
+
+The server-side invalidation is the critical authority change.
+
+Cookie deletion cleans up the client state.
+
+If the cookie is deleted but the server session remains active, a copied identifier can still be usable.
+
+Do not equate client cleanup with server invalidation.
+
+A system can support logging out one session.
+
+A system can support logging out all sessions.
+
+These are different operations.
+
+Logout current session invalidates one session.
+
+Logout all sessions invalidates every applicable session associated with the account.
+
+To support global logout, the system needs enough server-side state or revocation information to identify those sessions.
+
+Do not claim global logout if old tokens remain valid independently.
+
+Session rotation replaces one session identifier with another.
+
+Rotation is important when authentication state changes.
+
+For example:
+
+Anonymous session exists.
+
+User logs in successfully.
+
+Application rotates the session identifier.
+
+Authenticated state becomes associated with the new identifier.
+
+The old identifier is invalidated or otherwise prevented from representing the authenticated session.
+
+This helps prevent session fixation.
+
+Session fixation occurs when an attacker establishes or predicts a session identifier and causes a victim to authenticate using that same identifier.
+
+If the application continues using it after login, the attacker can potentially use the known identifier to access the authenticated session.
+
+Rotate session identifiers when privilege state changes.
+
+Login is a common rotation point.
+
+Privilege elevation can be another rotation point.
+
+Sensitive reauthentication can be another rotation point.
+
+Do not retain an externally supplied or previously exposed identifier after authentication without considering fixation.
+
+Session rotation should preserve only state that is intended to survive.
+
+For example:
+
+Shopping cart contents may survive login.
+
+Authentication state should be newly established.
+
+Temporary security-sensitive state should be reviewed.
+
+Do not blindly copy every anonymous-session field into an authenticated session.
+
+Untrusted pre-authentication state can become dangerous after privilege elevation.
+
+A session can contain:
+
+Authenticated principal identifier.
+
+Authentication time.
+
+Authentication method.
+
+Session creation time.
+
+Last activity time.
+
+CSRF-related state.
+
+Temporary workflow state.
+
+Selected application preferences.
+
+Other bounded state.
+
+Store only what is required.
+
+Do not turn the session into an uncontrolled dumping ground.
+
+Session state is security-sensitive.
+
+If an attacker can modify server-side session state, they can potentially change identity or authority information.
+
+Protect the session store.
+
+Do not let clients directly modify trusted server-side session fields.
+
+For example:
+
+authenticated_user_id
+
+role
+
+authentication_level
+
+must come from trusted application logic.
+
+Do not copy client request parameters directly into trusted session authority fields.
+
+A request containing:
+
+role=administrator
+
+does not become trustworthy because the value is stored in the session.
+
+Untrusted input remains untrusted.
+
+Sessions can be stored in memory.
+
+Sessions can be stored in files.
+
+Sessions can be stored in databases.
+
+Sessions can be stored in distributed caches.
+
+Sessions can be stored using other server-side mechanisms.
+
+Each storage mechanism has operational and security properties.
+
+In-memory sessions are fast.
+
+They can disappear when the process restarts.
+
+They can be difficult to share across multiple application instances without additional architecture.
+
+File-backed sessions are simple.
+
+Filesystem permissions matter.
+
+Concurrent access matters.
+
+Cleanup matters.
+
+Database-backed sessions can persist across processes and servers.
+
+Database availability matters.
+
+Query cost matters.
+
+Cleanup matters.
+
+Distributed cache sessions can support multiple application instances.
+
+Cache availability matters.
+
+Eviction behavior matters.
+
+Replication behavior matters.
+
+Do not select a session store merely because it is fashionable.
+
+Use the smallest mechanism that satisfies requirements.
+
+A single-server application does not automatically need a distributed session cluster.
+
+A multi-server application must ensure a request can access the required session state.
+
+One approach is shared session storage.
+
+Another approach is request affinity.
+
+Another approach is self-contained client tokens.
+
+These are different architectures.
+
+Do not mix their assumptions.
+
+Request affinity is sometimes called sticky sessions.
+
+A load balancer routes a client repeatedly to the same application instance.
+
+This can allow instance-local session state.
+
+If that instance fails, the session can be lost unless state is replicated elsewhere.
+
+Sticky routing is an infrastructure technique.
+
+It is not session security.
+
+Shared session storage allows multiple application instances to access the same session state.
+
+This can simplify failover.
+
+It introduces a shared dependency.
+
+Protect access to the session store.
+
+Only authorized application components should read or modify session state.
+
+Do not expose a session database directly to clients.
+
+Session records should have bounded lifetimes.
+
+Expired records should be removed or marked unusable.
+
+Otherwise the session store can grow indefinitely.
+
+Cleanup can occur:
+
+On access.
+
+Periodically.
+
+Through database expiration.
+
+Through cache TTL.
+
+Through scheduled maintenance.
+
+The exact mechanism depends on storage.
+
+Expiration must still be enforced even if physical cleanup is delayed.
+
+An expired session record remaining in storage must not become valid merely because cleanup has not run yet.
+
+Logical validity and physical deletion are separate.
+
+Session IDs can be stored in a database as hashes rather than plaintext when the design permits.
+
+If an attacker obtains the session database, plaintext active session identifiers can potentially be used directly.
+
+Hashing session tokens can reduce this risk.
+
+The client possesses the random token.
+
+The server hashes the presented token.
+
+The server looks up the hash.
+
+This resembles API-token verification.
+
+Do not confuse session-token hashing with password hashing.
+
+High-entropy random session tokens do not require deliberately slow password hashing.
+
+A normal secure cryptographic hash can be appropriate for random tokens according to design.
+
+Passwords are low-entropy human secrets.
+
+Random session tokens should have high entropy.
+
+Different threat models require different primitives.
+
+Do not apply expensive password hashing blindly to every random session token.
+
+Session identifiers need sufficient entropy.
+
+Entropy makes guessing infeasible.
+
+Length alone is not enough if generation is predictable.
+
+A 128-character sequential identifier is still predictable.
+
+Use cryptographically secure randomness.
+
+Encoding does not create entropy.
+
+Hex.
+
+Base64.
+
+Base64url.
+
+These represent bytes.
+
+They do not make weak random data strong.
+
+Generate strong random bytes first.
+
+Then encode them safely.
+
+Session identifiers should avoid characters that cause transport ambiguity.
+
+Use an established framework's session generation when it provides a secure implementation.
+
+Do not invent a custom token format without need.
+
+Framework session systems should be configured correctly.
+
+Defaults can differ.
+
+Check:
+
+Cookie name.
+
+Secure.
+
+HttpOnly.
+
+SameSite.
+
+Lifetime.
+
+Storage.
+
+Rotation behavior.
+
+Garbage collection.
+
+Domain.
+
+Path.
+
+Do not assume framework defaults match production security requirements.
+
+A framework can manage session lifecycle.
+
+Understand what its session regeneration function actually does.
+
+Some APIs create a new ID while retaining old state.
+
+Some invalidate the old ID.
+
+Some require explicit destruction.
+
+Use documented behavior.
+
+Do not guess.
+
+PHP provides built-in session support.
+
+A PHP application can call session_start() to initialize or resume a session according to configuration.
+
+PHP commonly obtains a session identifier from a cookie.
+
+PHP loads the associated session state.
+
+The application can access session data through $_SESSION.
+
+For example:
+
+$_SESSION['user_id']
+
+can hold an authenticated user identifier after successful authentication.
+
+Do not set it before authentication succeeds.
+
+PHP session configuration controls security behavior.
+
+Relevant settings can include cookie security attributes and session identifier behavior.
+
+Use current documented PHP configuration.
+
+Do not assume all PHP deployments have identical defaults.
+
+PHP session IDs should be regenerated after successful login.
+
+session_regenerate_id() participates in that process.
+
+Use it according to PHP's documented semantics.
+
+Do not manually invent replacement IDs when the runtime provides secure session handling.
+
+A PHP logout can require:
+
+Starting the session.
+
+Clearing application session state.
+
+Invalidating the session record.
+
+Expiring the session cookie.
+
+Exact implementation depends on configuration.
+
+Do not merely unset one user variable if other authenticated state remains.
+
+Clear the complete security-relevant session state.
+
+Session destruction should not accidentally destroy unrelated server state outside the intended session.
+
+Understand framework and language behavior.
+
+Do not use global destructive operations casually.
+
+Sessions can exist in non-PHP systems.
+
+The principles remain similar.
+
+Generate secure identifiers.
+
+Protect transport.
+
+Validate server-side state.
+
+Rotate after authentication.
+
+Expire sessions.
+
+Support invalidation.
+
+Keep authority explicit.
+
+Do not make security depend on one programming language.
+
+Client-side storage is different from server-side sessions.
+
+Browsers provide mechanisms such as:
+
+Cookies.
+
+localStorage.
+
+sessionStorage.
+
+These have different access and transmission behavior.
+
+localStorage values are accessible to JavaScript running in the origin.
+
+They are not automatically attached to HTTP requests.
+
+sessionStorage is also script-accessible and is scoped according to browser session rules.
+
+Do not assume sessionStorage is equivalent to a server session because the names are similar.
+
+They are different concepts.
+
+Browser storage containing bearer credentials can be exposed through script execution.
+
+Cookie-based credentials with HttpOnly can reduce direct script access.
+
+Architecture determines the appropriate mechanism.
+
+There is no universal rule that every token must always be stored in one specific browser mechanism.
+
+Analyze the threat model.
+
+Do not store credentials casually.
+
+A server-side session and a JSON Web Token are not the same thing.
+
+A server-side session commonly stores state on the server and gives the client an opaque identifier.
+
+A self-contained JWT can carry claims inside the token.
+
+The server can validate the token cryptographically without loading ordinary session state.
+
+Both can represent authenticated continuity.
+
+Their lifecycle properties differ.
+
+Do not call every authentication token a session ID.
+
+A JWT can be used within a session architecture.
+
+A session can be implemented without JWT.
+
+JWT is a token format.
+
+Session is an application-state concept.
+
+Stateless token authentication is not truly state-free in every operational sense.
+
+Keys must exist.
+
+Accounts have state.
+
+Permissions can change.
+
+Revocation can be required.
+
+Security events can require invalidation.
+
+Do not use "stateless" to pretend lifecycle problems disappeared.
+
+Self-contained tokens can make immediate revocation more difficult.
+
+A token can remain cryptographically valid until expiration.
+
+If immediate revocation is required, the system needs a mechanism such as:
+
+Short token lifetime.
+
+Revocation records.
+
+Token introspection.
+
+Account version checks.
+
+Signing-key changes.
+
+Another defined invalidation strategy.
+
+Do not promise session revocation that the architecture cannot enforce.
+
+Server-side sessions make individual invalidation straightforward because the server controls the session record.
+
+They require session storage.
+
+This is a tradeoff.
+
+Do not choose token architecture solely to avoid one database lookup without measuring whether that lookup is actually a problem.
+
+Simple systems benefit from simple sessions.
+
+Performance optimization should follow evidence.
+
+Session state can become stale.
+
+Suppose the session contains:
+
+role=editor
+
+The administrator changes the user's role to viewer.
+
+If the application trusts the old session role until logout, the user can retain editor authority longer than intended.
+
+This is an authorization freshness issue.
+
+Possible approaches include:
+
+Load current role on each request.
+
+Invalidate sessions when role changes.
+
+Store a permission version and compare it.
+
+Use short session lifetimes.
+
+Refresh session authority periodically.
+
+Choose according to requirements.
+
+Do not assume session-cached authorization is current.
+
+Authentication state can also become stale.
+
+An account can be disabled while sessions remain active.
+
+A password can be changed while sessions remain active.
+
+A credential can be revoked while sessions remain active.
+
+Policy should define whether those events invalidate sessions.
+
+Implement that behavior explicitly.
+
+Do not assume password change automatically invalidates sessions unless the system does it.
+
+A session can store an authentication timestamp.
+
+Sensitive operations can require recent authentication.
+
+For example:
+
+User logged in six hours ago.
+
+User requests a high-risk security change.
+
+Application requires reauthentication.
+
+After successful reauthentication, the session records a new authentication time or elevated assurance state according to policy.
+
+Do not infer recent authentication from recent activity.
+
+Clicking pages for six hours is not the same as proving the credential again.
+
+Session activity and authentication age are separate.
+
+A session can have an authentication assurance level.
+
+For example:
+
+Password authenticated.
+
+Password plus additional factor authenticated.
+
+Hardware authenticator verified.
+
+Exact levels are application-defined.
+
+Authorization can require a minimum assurance level for sensitive operations.
+
+Do not let the client set the assurance level.
+
+It must derive from completed authentication.
+
+Step-up authentication can temporarily elevate session assurance.
+
+Define how long that elevation lasts.
+
+Do not leave elevated state permanent accidentally.
+
+Privilege elevation should have a lifecycle.
+
+Session state can represent impersonation.
+
+If an administrator intentionally impersonates another user, preserve:
+
+Actual authenticated administrator identity.
+
+Effective user identity.
+
+Impersonation start time.
+
+Applicable authorization.
+
+Do not overwrite the actor identity and lose accountability.
+
+A session can carry both actor and effective principal.
+
+Audit logs should distinguish them.
+
+Do not let ordinary users create impersonation state.
+
+Impersonation is a privileged operation.
+
+Session hijacking occurs when an attacker obtains a valid session credential and uses it.
+
+Possible exposure paths include:
+
+Network interception without proper transport protection.
+
+Cross-site scripting.
+
+Malware.
+
+Browser compromise.
+
+Logs.
+
+URLs.
+
+Debug output.
+
+Database compromise if tokens are stored plaintext.
+
+Accidental sharing.
+
+Insecure backups.
+
+Protect the credential throughout its lifecycle.
+
+TLS protects session cookies in transit when correctly used.
+
+TLS does not protect a token after it has been logged to a file.
+
+TLS does not prevent malicious script executing in the application origin.
+
+TLS does not protect a compromised endpoint.
+
+Use layered controls.
+
+Session binding attempts to associate a session with additional context.
+
+Examples can include:
+
+Device information.
+
+Network characteristics.
+
+Client properties.
+
+Binding can detect some anomalies.
+
+It can also break legitimate sessions because these properties change.
+
+IP addresses can change.
+
+Mobile users can move networks.
+
+User-Agent strings can change.
+
+Proxies can alter characteristics.
+
+Do not treat unstable metadata as cryptographic identity.
+
+A changed IP address does not prove session theft.
+
+An unchanged IP address does not prove session legitimacy.
+
+Context can inform security policy.
+
+It should not be mistaken for deterministic identity evidence.
+
+If strong session binding is required, use mechanisms designed for cryptographic binding.
+
+Do not invent certainty from browser fingerprints.
+
+Browser fingerprinting is probabilistic and privacy-sensitive.
+
+It is not equivalent to a session credential.
+
+A session nonce can be used for particular operations.
+
+Do not confuse general session IDs with one-time nonces.
+
+A session identifier can be reusable throughout a session.
+
+A nonce is commonly intended to provide uniqueness or freshness for a particular protocol operation.
+
+Different purposes.
+
+CSRF tokens can be associated with sessions.
+
+A CSRF token helps verify that state-changing requests came through an expected interaction according to the application's CSRF model.
+
+It does not authenticate the user independently.
+
+The session establishes the user context.
+
+The CSRF mechanism protects request integrity against selected cross-site attacks.
+
+Do not use the session ID itself as a visible CSRF token.
+
+Exposing the session credential defeats its confidentiality.
+
+Generate separate CSRF state.
+
+CSRF tokens should be unpredictable where the mechanism requires unpredictability.
+
+They should be validated server-side.
+
+Do not merely include a hidden field and fail to verify it.
+
+A token that is never checked provides no protection.
+
+SameSite cookies can complement CSRF tokens.
+
+Origin or Referer validation can complement CSRF defenses according to design.
+
+Do not assume one mechanism is universally sufficient.
+
+Session management interacts with CSRF but is not the same problem.
+
+Concurrent sessions can be allowed.
+
+A user can be logged in from multiple devices.
+
+Policy should define whether this is permitted.
+
+Possible models include:
+
+Unlimited active sessions.
+
+Limited number of sessions.
+
+One session per device.
+
+One active session total.
+
+User-managed session list.
+
+Do not accidentally enforce one model while claiming another.
+
+If only one session is permitted, new login can invalidate the old session.
+
+If multiple sessions are permitted, logout current should not necessarily log out every device.
+
+Define behavior.
+
+Session management interfaces can show users:
+
+Creation time.
+
+Last activity.
+
+Approximate client information.
+
+Session name or device label.
+
+Current session indicator.
+
+Ability to revoke another session.
+
+Do not expose the session token itself.
+
+Metadata is enough for management.
+
+Session metadata can be imperfect.
+
+A User-Agent string does not prove a physical device identity.
+
+An IP address does not prove location.
+
+Present such information as context, not certainty.
+
+Do not tell users a session definitely came from a particular person based only on metadata.
+
+Session revocation should be authenticated and authorized.
+
+A user can revoke their own sessions.
+
+An administrator can revoke another user's sessions if policy permits.
+
+Do not allow arbitrary session IDs supplied by users to revoke unrelated sessions without authorization.
+
+Session administration is a protected operation.
+
+A session store can contain personally sensitive metadata.
+
+Protect it.
+
+Do not collect more metadata than required.
+
+Session security does not justify unlimited surveillance.
+
+Keep state purpose-bound.
+
+Sessions should have unique identifiers.
+
+Do not reuse an expired session identifier for a new user.
+
+Do not recycle identifiers.
+
+Generate a new random value.
+
+Identifier reuse can create confusing or dangerous associations.
+
+A session record should clearly identify its lifecycle state.
+
+For example:
+
+Active.
+
+Expired.
+
+Revoked.
+
+Logged out.
+
+Depending on architecture, deleted records can represent invalid sessions.
+
+If historical records are required for audit, preserve history separately from active credentials.
+
+Do not preserve usable session secrets merely for historical reporting.
+
+Audit records can store a fingerprint or identifier that cannot be replayed.
+
+Separate operational credential data from historical evidence.
+
+Session creation is a security event when authentication is involved.
+
+Record appropriate information.
+
+Do not record the secret token.
+
+A log can include:
+
+Session record identifier that is not the bearer secret.
+
+User identifier.
+
+Authentication mechanism.
+
+Creation time.
+
+Source metadata where policy permits.
+
+Expiration.
+
+Revocation event.
+
+Keep credentials out of logs.
+
+Session identifiers can accidentally enter logs through headers.
+
+Web servers and reverse proxies can log Cookie headers if configured badly.
+
+Application debug logging can dump request headers.
+
+Redact session cookies.
+
+Do not enable broad header logging in production without reviewing secrets.
+
+Error reports can contain session state.
+
+Do not dump $_SESSION or equivalent structures into public error pages.
+
+Session state can contain user identifiers and security metadata.
+
+Development diagnostics should remain controlled.
+
+Production error handling should not disclose internal session data.
+
+Session stores require access control.
+
+The application process needs appropriate access.
+
+Unrelated processes should not.
+
+For file sessions, filesystem ownership and permissions matter.
+
+For database sessions, database credentials and table permissions matter.
+
+For cache sessions, network and authentication configuration matter.
+
+Do not expose Redis or another cache publicly merely because it stores "temporary" data.
+
+Temporary credentials are still credentials.
+
+Backups of session stores can contain active credentials.
+
+If sessions are short-lived, old backups may contain expired tokens.
+
+A fresh backup can contain usable sessions.
+
+Protect backups.
+
+Consider whether session data needs to be backed up at all.
+
+Many applications can safely lose active sessions and require users to authenticate again.
+
+Avoid backing up ephemeral secrets without a requirement.
+
+Availability and confidentiality can pull in different directions.
+
+If the session store is lost, users can often log in again.
+
+If the session store is stolen, active sessions can be hijacked.
+
+Design accordingly.
+
+Do not persist ephemeral authority longer than necessary merely to avoid inconvenience.
+
+Session replication introduces consistency issues.
+
+A session revoked on one node must not remain accepted indefinitely on another node.
+
+Define replication behavior.
+
+If strong revocation is required, stale replicas can be a security problem.
+
+Do not claim immediate revocation in an eventually consistent architecture without a mechanism to provide it.
+
+Clock synchronization affects session expiration.
+
+Nodes with significantly different clocks can disagree about whether a session is valid.
+
+Use reliable system time.
+
+Define whether expiration uses wall-clock timestamps, monotonic timing, or other mechanisms according to architecture.
+
+Do not solve clock errors by extending session validity arbitrarily.
+
+Correct the clock problem.
+
+Session state updates can race.
+
+Two simultaneous requests can read and modify the same session.
+
+One update can overwrite another.
+
+Frameworks can lock sessions.
+
+Databases can use transactions.
+
+Applications can minimize mutable session state.
+
+Understand concurrency behavior.
+
+Do not store rapidly changing application data in a session if concurrent updates make it unreliable.
+
+A session is not necessarily a general-purpose database.
+
+Persistent business data belongs in durable application storage when appropriate.
+
+A shopping cart can be session-backed temporarily.
+
+An order should normally become durable business state.
+
+A session ending should not accidentally erase completed business records.
+
+Distinguish temporary interaction state from durable domain state.
+
+Session data should not become the sole record of important transactions.
+
+Sessions expire.
+
+Browsers close.
+
+Servers restart.
+
+Users clear cookies.
+
+Design durable operations accordingly.
+
+Flash messages are temporary session state commonly used to display a message on the next request.
+
+For example:
+
+Record saved successfully.
+
+The message is stored.
+
+The next request reads it.
+
+Then it is removed.
+
+Flash state is temporary.
+
+Do not use flash messages for critical audit records.
+
+They are presentation state.
+
+Wizard workflows can use sessions.
+
+For example:
+
+Step 1 collects data.
+
+Step 2 collects more data.
+
+Step 3 confirms.
+
+The session can preserve temporary workflow state.
+
+Validate all final data before committing the operation.
+
+Do not assume earlier validation remains sufficient if state can change.
+
+Authorization should be checked again at the protected effect where required.
+
+A session containing a previously authorized resource ID does not guarantee the user still has access to that resource.
+
+Authority can change.
+
+Session state is not permanent authorization proof.
+
+Re-evaluate authorization.
+
+Sessions can carry locale or theme preferences.
+
+These are low-risk values.
+
+Do not give every session field the same security significance.
+
+Classify state.
+
+Identity and authorization fields require stronger integrity guarantees than presentation preferences.
+
+Still validate values before using them in sensitive contexts.
+
+A theme name should not become an arbitrary filesystem path.
+
+Input validation remains necessary.
+
+Session serialization converts session state into a storable representation.
+
+Only deserialize data from trusted session storage according to the serialization mechanism.
+
+Unsafe deserialization can create severe vulnerabilities.
+
+Do not allow clients to submit arbitrary serialized objects that the server treats as trusted session state.
+
+Use safe formats and bounded data structures.
+
+If session data is stored client-side, integrity protection is required for trusted fields.
+
+A client can modify unsigned client-side state.
+
+Signing can detect modification.
+
+Encryption can provide confidentiality.
+
+Signing and encryption solve different problems.
+
+Do not confuse them.
+
+A signed client-side session can be readable but tamper-evident.
+
+An encrypted session can hide contents.
+
+Encryption without proper integrity protection can still be unsafe depending on the scheme.
+
+Use established authenticated encryption or framework mechanisms.
+
+Do not design custom cryptographic session formats.
+
+A signed session cookie can contain state.
+
+The server verifies the signature before trusting the contents.
+
+The signing key becomes critical authentication infrastructure.
+
+Protect it.
+
+If the signing key is compromised, attackers can potentially forge sessions.
+
+Rotate keys according to defined policy.
+
+Key rotation can require accepting old and new keys during a transition.
+
+Define the transition.
+
+Do not leave old signing keys trusted indefinitely without reason.
+
+Client-side session state increases cookie size.
+
+Browsers impose cookie size limits.
+
+Large cookies are transmitted repeatedly.
+
+Do not store large datasets in cookies.
+
+Use server-side storage for substantial session data.
+
+Cookie size is not merely storage overhead.
+
+Cookies can be sent with many requests.
+
+Excessive session cookies waste bandwidth.
+
+Keep them small.
+
+Do not store complete user records in session cookies merely to avoid a database query.
+
+Store stable identifiers and load current data when appropriate.
+
+This also reduces stale state.
+
+Session IDs should not encode user information unnecessarily.
+
+For example:
+
+session=user42-20261001-admin
+
+reveals metadata and can become predictable.
+
+Use opaque random identifiers.
+
+The server can map the identifier to state.
+
+Opacity reduces accidental information disclosure.
+
+Opaque does not mean secure if the random value is weak.
+
+Both unpredictability and secrecy matter.
+
+Session cookie names do not need to reveal implementation details.
+
+Names such as:
+
+PHPSESSID
+
+can reveal platform information, although hiding the name is not a primary security control.
+
+Changing the name can reduce unnecessary disclosure.
+
+Do not mistake renaming for actual security.
+
+Security comes from correct session handling.
+
+Sessions can cross subdomains if configured.
+
+For example:
+
+app.example.com
+
+admin.example.com
+
+can potentially share cookies under a parent-domain configuration.
+
+This can be useful.
+
+It expands the trust boundary.
+
+A vulnerable sibling subdomain can create risk depending on cookie configuration and browser behavior.
+
+Keep session domains as narrow as practical.
+
+Do not share high-privilege administrative sessions across unrelated subdomains.
+
+Separate security domains where appropriate.
+
+Administrative interfaces can use separate session cookies.
+
+This can isolate privilege state.
+
+For example:
+
+Ordinary user session.
+
+Administrative session requiring stronger authentication.
+
+Exact design depends on requirements.
+
+Do not automatically elevate an ordinary session merely because the same user has an administrator account.
+
+Explicit privilege transition can reduce risk.
+
+Sessions can be bound to application areas through separate cookie names and paths.
+
+Again, browser path is not a complete security boundary.
+
+Server authorization remains authoritative.
+
+Session architecture should complement authorization, not replace it.
+
+A session can identify:
+
+user_id=17
+
+Authorization then asks:
+
+May user 17 perform this operation?
+
+Do not store:
+
+authorized=true
+
+and use it forever for every action.
+
+Authorization is contextual.
+
+The session establishes continuity.
+
+The policy establishes permission.
+
+Session authentication can fail.
+
+Possible reasons include:
+
+Missing session credential.
+
+Unknown session identifier.
+
+Expired session.
+
+Revoked session.
+
+Malformed session identifier.
+
+Invalid client-side signature.
+
+Account disabled according to policy.
+
+Session assurance insufficient.
+
+Session store unavailable.
+
+These are different states.
+
+Do not report all internal failures as "wrong password."
+
+No password may have been submitted.
+
+Use precise internal classification.
+
+User-facing behavior can remain simple.
+
+For example:
+
+Your session has expired. Please sign in again.
+
+Internal logs can preserve the exact reason.
+
+Do not expose sensitive implementation details unnecessarily.
+
+If the session store is unavailable, the server cannot validate a server-side session.
+
+Do not assume the session is valid because validation failed due to infrastructure.
+
+For protected operations, fail safely.
+
+The appropriate response can indicate temporary service failure.
+
+Do not convert session-store outage into anonymous administrator access.
+
+Absence of validation is not successful validation.
+
+Session recovery after server restart depends on storage.
+
+Memory-only sessions can disappear.
+
+Users authenticate again.
+
+Persistent session stores can survive restart.
+
+Both behaviors can be valid.
+
+Define the intended model.
+
+Do not add persistence merely because session loss feels inconvenient.
+
+Security simplicity can favor requiring reauthentication after certain failures.
+
+Remember-me functionality extends authentication continuity beyond an ordinary session.
+
+A remember-me token is a long-lived credential.
+
+It should not simply be a session ID with an enormous expiration.
+
+Treat persistent login credentials separately.
+
+They require secure random generation.
+
+They require revocation.
+
+They require rotation or replacement strategy.
+
+They require protected storage.
+
+They can establish a new session after validation.
+
+Do not store the user's password in a remember-me cookie.
+
+Do not store a reversible password substitute.
+
+A persistent token can identify a device credential.
+
+When validated, the server can create a new short-lived session.
+
+This keeps ordinary session lifecycle separate from long-term login persistence.
+
+A remember-me token should be revocable independently.
+
+Users can revoke remembered devices.
+
+Password changes can revoke persistent tokens according to policy.
+
+Account compromise response can revoke all persistent tokens.
+
+Do not forget long-lived credentials during incident containment.
+
+Persistent tokens can be stored server-side using hashed secret values.
+
+The client receives the secret.
+
+The server stores a verifier.
+
+This limits direct replay if the database alone is exposed.
+
+Use high-entropy random tokens.
+
+Do not use human passwords as persistent browser tokens.
+
+Session timeout warnings can improve usability.
+
+A client can warn that a session is nearing expiration.
+
+The server remains authoritative.
+
+Client-side countdowns can become inaccurate.
+
+Do not extend session validity merely because JavaScript believes time remains.
+
+The next server request determines actual validity.
+
+Activity-based expiration should define what counts as activity.
+
+Any request?
+
+Only authenticated requests?
+
+Only meaningful user actions?
+
+Background polling?
+
+WebSocket traffic?
+
+If automatic polling refreshes idle timeout forever, the session may never become idle.
+
+Define semantics.
+
+Do not let background requests accidentally defeat inactivity expiration.
+
+Sensitive systems can distinguish human interaction from automatic traffic.
+
+This requires deliberate design.
+
+Do not infer human presence merely because the browser sends requests.
+
+WebSocket connections can maintain session-related state.
+
+Authentication commonly occurs during connection establishment or through protocol messages.
+
+Authorization still applies to messages and subscriptions.
+
+A connection authenticated once can remain open while permissions change.
+
+Define whether authorization is re-evaluated.
+
+Do not assume a long-lived connection preserves authority forever.
+
+Revocation should affect long-lived connections according to policy.
+
+The server may need to disconnect them or reject future protected operations.
+
+Server-Sent Events and other long-lived responses have similar concerns.
+
+Session expiration during an active stream should have defined behavior.
+
+Do not leave permanent authenticated connections accidentally.
+
+Mobile and desktop applications can maintain sessions using tokens rather than browser cookies.
+
+The same principles apply:
+
+Protect credentials.
+
+Use secure transport.
+
+Store credentials using appropriate platform facilities.
+
+Expire them.
+
+Rotate them.
+
+Revoke them.
+
+Do not embed permanent credentials directly into application binaries.
+
+A compiled secret distributed to every client is not a per-user secret.
+
+Attackers can extract it.
+
+Client applications are not trusted secret vaults.
+
+Platform secure storage can reduce exposure.
+
+It does not make credential theft impossible.
+
+Use it according to platform guidance.
+
+Do not print tokens to debug consoles.
+
+Command-line applications can store session tokens.
+
+File permissions matter.
+
+Environment variables can leak.
+
+Shell history can leak command-line arguments.
+
+Do not pass sensitive session tokens as command-line arguments unnecessarily.
+
+Process listings can expose arguments.
+
+Use protected input or configuration mechanisms appropriate to the platform.
+
+Sessions between services can exist.
+
+A service can obtain a short-lived token and reuse it across multiple requests.
+
+That is session-like continuity.
+
+Do not force browser cookie concepts onto machine-to-machine protocols.
+
+Use the protocol's credential mechanism.
+
+The lifecycle principles remain.
+
+Create.
+
+Validate.
+
+Use.
+
+Expire.
+
+Rotate.
+
+Revoke.
+
+Audit.
+
+A session should have one clear owner or principal context.
+
+Do not allow one session to drift between unrelated authenticated identities without rotation.
+
+If User A logs out and User B logs in using the same browser, create or rotate into a new authenticated session.
+
+Do not retain User A's sensitive state.
+
+Cross-account contamination can leak information.
+
+Clear account-specific session state during identity changes.
+
+Shopping carts or other intentionally transferable anonymous state can be handled explicitly.
+
+Do not copy security state accidentally.
+
+Session data from a previous authenticated user should not remain visible to the next user on a shared device.
+
+Logout should clear sensitive client and server state according to design.
+
+Browser caching can also expose pages after logout.
+
+Cache-control is separate from session invalidation.
+
+A logged-out session can be invalid while the browser still displays a cached page.
+
+Sensitive responses can require appropriate cache headers.
+
+Do not confuse cached display with active authorization.
+
+Attempting a protected operation after logout should fail even if an old page remains visible.
+
+Server enforcement is authoritative.
+
+Back-button behavior is not proof of session validity.
+
+Sessions interact with caches.
+
+Shared HTTP caches must not serve one user's private response to another user.
+
+Use appropriate cache-control and variation rules.
+
+Do not cache personalized authenticated responses publicly unless explicitly designed and safely keyed.
+
+Session security can be defeated by response-cache misconfiguration.
+
+Authorization can be correct at the application while a proxy leaks the result.
+
+Understand the complete delivery path.
+
+CDNs can cache content.
+
+Private session-bound content should follow suitable caching policy.
+
+Do not assume HTTPS alone prevents cache leakage.
+
+Caching and transport are separate.
+
+Session state should not be embedded into public static resources.
+
+Avoid generating JavaScript files containing reusable session credentials.
+
+Avoid putting credentials into HTML where unnecessary.
+
+HttpOnly cookies exist specifically to keep selected credentials out of script-accessible document state.
+
+Use security boundaries intentionally.
+
+Cross-origin requests can interact with sessions.
+
+CORS controls whether browser scripts from another origin can access selected responses.
+
+CORS is not authentication.
+
+CORS is not authorization.
+
+Credentialed cross-origin requests require deliberate configuration.
+
+Do not use:
+
+Access-Control-Allow-Origin: *
+
+with credential assumptions that contradict browser rules.
+
+Understand the actual CORS model.
+
+Do not reflect arbitrary Origin values while allowing credentials unless the application intentionally trusts those origins.
+
+Cross-origin trust expands the session attack surface.
+
+Keep trusted origins explicit.
+
+Session cookies can be sent automatically by browsers.
+
+This convenience is why CSRF matters.
+
+Bearer tokens manually placed in Authorization headers have different browser behavior.
+
+Different architectures have different threat profiles.
+
+Do not claim one is universally secure and the other universally insecure.
+
+Evaluate actual implementation.
+
+Session fixation is different from session hijacking.
+
+Fixation causes the victim to use an identifier known to the attacker.
+
+Hijacking steals or obtains an identifier already associated with the victim.
+
+Rotation helps prevent fixation.
+
+Credential protection helps prevent hijacking.
+
+Keep the threats distinct.
+
+Session replay occurs when a valid captured session credential is reused.
+
+Ordinary bearer-style sessions permit reuse during their valid lifetime.
+
+TLS reduces network capture.
+
+Expiration reduces replay duration.
+
+Revocation can stop future replay.
+
+Additional cryptographic binding can provide stronger properties where required.
+
+Do not claim a random session ID alone prevents replay.
+
+If stolen, a bearer session ID can be replayed.
+
+Session concurrency detection can identify unusual simultaneous use.
+
+It is a detection mechanism unless policy actively blocks it.
+
+Do not state that detection prevents theft.
+
+Evidence of simultaneous use can trigger revocation or reauthentication.
+
+Be precise.
+
+Session security events can include:
+
+New authenticated session.
+
+Session rotation.
+
+Session expiration.
+
+Session revocation.
+
+Logout.
+
+Global logout.
+
+Persistent-token use.
+
+New device credential.
+
+Suspicious concurrent use.
+
+Authentication assurance change.
+
+Impersonation start.
+
+Impersonation end.
+
+Record what policy requires.
+
+Do not log secret credentials.
+
+Session management should be testable.
+
+Test session creation.
+
+Test identifier randomness through implementation review and appropriate testing.
+
+Test login rotation.
+
+Test old identifier rejection after rotation where expected.
+
+Test logout.
+
+Test old identifier rejection after logout.
+
+Test expiration.
+
+Test idle timeout.
+
+Test absolute timeout.
+
+Test account disabling.
+
+Test privilege changes.
+
+Test concurrent sessions.
+
+Test global logout.
+
+Test malformed identifiers.
+
+Test missing identifiers.
+
+Test CSRF behavior where applicable.
+
+Test cookie attributes.
+
+Test secure transport behavior.
+
+Negative tests matter.
+
+A successful login test alone does not establish session security.
+
+Attempt to reuse old sessions.
+
+Attempt to use another user's session.
+
+Attempt to modify client-side state.
+
+Attempt to access protected routes after logout.
+
+Attempt to bypass rotation.
+
+Attempt to use expired state.
+
+Verify rejection.
+
+Do not test with real production session tokens in public logs or bug reports.
+
+Use controlled test credentials.
+
+Revoke them afterward if necessary.
+
+Screenshots can expose cookies or tokens.
+
+Review artifacts before sharing.
+
+Session identifiers appearing in incident reports should be redacted or fingerprinted.
+
+A fingerprint can be a one-way digest or abbreviated identifier sufficient to correlate events without exposing the reusable secret.
+
+Do not invent a reversible "redaction."
+
+Replacing only the first few characters can leave most of the token exposed.
+
+Redact properly.
+
+Session incident response can include:
+
+Identify affected sessions.
+
+Invalidate them.
+
+Invalidate related persistent tokens where required.
+
+Determine how credentials were exposed.
+
+Correct the exposure path.
+
+Require reauthentication.
+
+Rotate relevant signing keys if infrastructure keys were compromised.
+
+Review subsequent actions performed by affected sessions.
+
+Preserve evidence.
+
+Do not merely change the user's password and assume every stolen session is invalid unless policy implements that relationship.
+
+Session compromise and password compromise are different.
+
+A stolen session can bypass password entry.
+
+Changing the password may not affect it.
+
+Explicitly revoke sessions when needed.
+
+Likewise, a stolen password can create new sessions.
+
+Revoking current sessions without changing a compromised password can allow the attacker to log in again.
+
+Contain the actual compromised credential.
+
+Evidence matters.
+
+Do not assume the credential type.
+
+Session IDs should not be accepted from multiple ambiguous locations unless required.
+
+For example, accepting the same session ID from:
+
+Cookie.
+
+Query string.
+
+POST field.
+
+Custom header.
+
+can increase attack surface and precedence confusion.
+
+Choose the intended transport.
+
+Reject or ignore unintended sources.
+
+Do not let a query parameter override a secure cookie.
+
+Session parsing should be strict.
+
+Malformed identifiers should not cause crashes.
+
+Oversized identifiers should not cause excessive resource use.
+
+Validate length and encoding.
+
+Reject invalid input.
+
+Do not normalize malformed credentials into valid ones unexpectedly.
+
+Session lookup should not reveal whether arbitrary session IDs exist through detailed public errors.
+
+An attacker should not receive unnecessary session enumeration information.
+
+Return controlled failure.
+
+Internal logs can preserve detail.
+
+Rate limiting can apply to session-validation abuse where needed.
+
+Strong random identifiers should already make guessing infeasible.
+
+Rate limiting does not replace entropy.
+
+Do not use short predictable session IDs and hope rate limiting makes them safe.
+
+Generate secure identifiers first.
+
+Sessions can be renewed periodically.
+
+Renewal can rotate the identifier while preserving authenticated continuity.
+
+This limits the lifetime of one credential value.
+
+Define how overlapping requests behave during rotation.
+
+If the old ID is invalidated immediately, concurrent requests using it can fail.
+
+If a grace period exists, it temporarily accepts both identifiers.
+
+Tradeoffs should be explicit.
+
+Do not accidentally leave every previous identifier valid forever.
+
+Session rotation without old-token invalidation does not meaningfully reduce replay exposure.
+
+Track lifecycle.
+
+Session versioning can invalidate groups of sessions.
+
+For example, an account can have:
+
+session_version=5
+
+Each session records version 5.
+
+A global logout increments the account version to 6.
+
+Old sessions fail because their version no longer matches.
+
+This is one possible design.
+
+It can simplify broad invalidation.
+
+Do not introduce it unless useful.
+
+Simple session-record deletion may be enough.
+
+A session can reference current account state rather than duplicate it.
+
+This reduces stale identity data.
+
+For example, store:
+
+user_id=42
+
+Then load user 42 when needed.
+
+Do not store every account field in the session unless required.
+
+Duplication creates synchronization problems.
+
+Some stable values can be cached.
+
+Know which values can change security decisions.
+
+Security-sensitive values deserve freshness.
+
+Sessions should not silently survive account deletion unless policy explicitly supports historical identity states.
+
+A session referencing a nonexistent account should fail authentication or otherwise become invalid according to policy.
+
+Do not create a ghost authenticated principal.
+
+Unknown account is not authenticated account.
+
+Session principal identifiers should use stable internal identifiers.
+
+Display names can change.
+
+Email addresses can change.
+
+Usernames can sometimes change.
+
+A stable account ID reduces ambiguity.
+
+Do not identify session ownership solely by mutable display data.
+
+Session identifiers and account identifiers are different.
+
+Session ID identifies one session.
+
+Account ID identifies the principal account.
+
+One account can have multiple sessions.
+
+Do not use account ID as the session ID.
+
+That would make sessions predictable and prevent independent lifecycle management.
+
+Session data should have a schema.
+
+Even simple systems benefit from known fields.
+
+For example:
+
+session_id_hash
+
+user_id
+
+created_at
+
+last_seen_at
+
+expires_at
+
+revoked_at
+
+authentication_time
+
+authentication_method
+
+Do not add fields without understanding their purpose.
+
+A schema makes lifecycle explicit.
+
+Nullable fields should have defined meaning.
+
+revoked_at = NULL can mean not revoked.
+
+Do not create ambiguous magic values such as:
+
+revoked_at = 0
+
+unless consistently defined.
+
+Time representation should be consistent.
+
+Use one defined timezone or timestamp representation internally.
+
+Do not compare local-time strings from different zones casually.
+
+Session expiration depends on correct time comparison.
+
+Store timestamps in a consistent machine-readable format.
+
+Display can convert to local time later.
+
+Do not use human-formatted date strings as security logic if robust timestamp types are available.
+
+Session cleanup should not delete active sessions because of timezone mistakes.
+
+Test boundary conditions.
+
+Exactly at expiration.
+
+One second before expiration.
+
+One second after expiration.
+
+Policy should define whether expiration comparison is:
+
+now >= expires_at
+
+or another explicit rule.
+
+Avoid ambiguous edge behavior.
+
+A deterministic system defines it.
+
+Session state transitions can be modeled explicitly:
+
+Created.
+
+Anonymous active.
+
+Authenticated active.
+
+Elevated active.
+
+Expired.
+
+Revoked.
+
+Logged out.
+
+Not every application needs every state.
+
+Use only required states.
+
+Transitions should be controlled.
+
+Anonymous -> Authenticated requires successful authentication.
+
+Authenticated -> Elevated requires required additional authentication or authorization.
+
+Active -> Revoked requires a revocation event.
+
+Active -> Expired follows lifetime policy.
+
+Do not allow arbitrary state jumps from client input.
+
+State machines can make complex session logic easier to reason about.
+
+Simple applications can use simpler logic.
+
+Do not overengineer.
+
+A session is not evidence that every request was made by the human user personally.
+
+Once established, requests carrying the valid session credential are treated as acting within that session according to policy.
+
+Malware or CSRF can cause requests.
+
+An attacker can steal the credential.
+
+Automation can use the session.
+
+Do not claim human intent merely from session validity.
+
+For highly sensitive actions, require additional confirmation where policy requires it.
+
+Recent authentication.
+
+Additional factor.
+
+Explicit approval.
+
+Transaction signing.
+
+Choose according to risk.
+
+Session continuity is convenience and state management.
+
+It should not erase security boundaries.
+
+Do not make an authenticated session immortal.
+
+Do not make session credentials predictable.
+
+Do not make logout cosmetic.
+
+Do not trust session state supplied by the client without integrity validation.
+
+Do not allow stale authorization indefinitely.
+
+Do not expose tokens in logs.
+
+Do not place tokens in URLs.
+
+Do not confuse cookies with sessions.
+
+Do not confuse sessions with authentication.
+
+Do not confuse sessions with authorization.
+
+Do not confuse sessionStorage with server sessions.
+
+Do not confuse JWT with sessions generally.
+
+Do not confuse Base64 encoding with credential protection.
+
+Do not confuse cookie expiration with server invalidation.
+
+Do not confuse browser closure with guaranteed logout.
+
+Do not confuse client cleanup with credential revocation.
+
+Do not confuse IP address with session identity.
+
+Do not confuse User-Agent with device identity.
+
+Do not confuse recent activity with recent authentication.
+
+Do not confuse a valid session with user intent.
+
+Do not confuse a hidden button with session security.
+
+Do not confuse CSRF protection with session authentication.
+
+Do not confuse TLS with protection of credentials at rest.
+
+Do not confuse session rotation with session invalidation.
+
+Do not confuse an opaque token with an automatically secure token.
+
+Do not confuse long token length with strong randomness.
+
+Do not confuse an active database record with a valid session if it is expired or revoked.
+
+When creating a session:
+
+Generate a cryptographically secure random identifier.
+
+Store only required session state.
+
+Set creation and expiration information.
+
+Send the identifier through the intended protected mechanism.
+
+Use appropriate cookie attributes when cookies are used.
+
+Do not place the identifier in logs or URLs.
+
+When authenticating an existing anonymous session:
+
+Verify the user's authentication evidence.
+
+Do not modify authentication state until verification succeeds.
+
+Rotate the session identifier.
+
+Invalidate the previous identifier according to policy.
+
+Associate the authenticated principal with the new session.
+
+Set authentication time and method.
+
+Preserve only explicitly intended pre-authentication state.
+
+Return the new session credential securely.
+
+When validating a session:
+
+Obtain the credential from the intended source.
+
+Validate its format.
+
+Locate or cryptographically validate the corresponding session.
+
+Confirm it is active.
+
+Confirm it is not expired.
+
+Confirm it is not revoked.
+
+Confirm the associated principal remains valid according to policy.
+
+Establish request authentication context.
+
+Then perform authorization for the requested operation.
+
+Do not treat session validation as universal authorization.
+
+When using a session for authorization:
+
+Read the established principal.
+
+Obtain current authorization information according to policy.
+
+Identify the requested action.
+
+Identify the resource.
+
+Evaluate authorization.
+
+Do not assume that because the session is valid the operation is permitted.
+
+When rotating a session:
+
+Generate a new secure identifier.
+
+Associate the intended state with the new identifier.
+
+Prevent the old identifier from continuing to represent the privileged session according to policy.
+
+Update the client credential.
+
+Handle concurrent requests according to defined behavior.
+
+Do not leave old identifiers valid indefinitely.
+
+When expiring a session:
+
+Mark it invalid or remove it from active state.
+
+Reject future use.
+
+Expire the client cookie where applicable.
+
+Do not depend solely on the browser to forget the credential.
+
+When logging out:
+
+Identify the current session.
+
+Invalidate it server-side.
+
+Clear security-relevant session state.
+
+Expire the client credential.
+
+Return the requester to unauthenticated state.
+
+Do not merely redirect to the login page.
+
+When logging out all sessions:
+
+Identify every applicable active session or invalidate them through a global revocation mechanism.
+
+Invalidate persistent login credentials where policy requires.
+
+Ensure old sessions fail future validation.
+
+Preserve only non-secret historical audit information where required.
+
+Do not claim global logout while leaving valid sessions active.
+
+When a password changes:
+
+Apply the defined session policy.
+
+Keep current session if explicitly allowed.
+
+Revoke other sessions if policy requires.
+
+Revoke every session if policy requires.
+
+Revoke persistent credentials if policy requires.
+
+Do not invent behavior.
+
+Implement the declared policy.
+
+When an account is disabled:
+
+Prevent new authentication.
+
+Invalidate existing sessions according to policy.
+
+Ensure protected requests do not continue merely because the browser holds an old cookie.
+
+Do not let stale session state override authoritative account state.
+
+When session storage fails:
+
+Do not fabricate session state.
+
+Do not guess the user identity.
+
+Do not grant protected authority.
+
+Return a controlled failure.
+
+Preserve diagnostic evidence without exposing credentials.
+
+Fail safely.
+
+When investigating a session incident:
+
+Identify the session record without exposing its bearer secret.
+
+Identify the associated principal.
+
+Identify creation time.
+
+Identify authentication mechanism.
+
+Identify expiration.
+
+Identify revocation state.
+
+Identify relevant source metadata.
+
+Identify requests performed using the session.
+
+Determine whether the session was fixed, stolen, replayed, or legitimately used based on evidence.
+
+Do not speculate beyond the evidence.
+
+When designing session management, define:
+
+Why does the application need sessions?
+
+Can sessions exist before authentication?
+
+What identifies a session?
+
+How is the identifier generated?
+
+Where is session state stored?
+
+How is the credential transported?
+
+Which cookie attributes apply?
+
+When is the identifier rotated?
+
+What is the idle lifetime?
+
+What is the absolute lifetime?
+
+How does logout work?
+
+How does global logout work?
+
+What events revoke sessions?
+
+How do authorization changes affect existing sessions?
+
+How are persistent logins handled?
+
+How are concurrent sessions handled?
+
+How is session state audited?
+
+How does the system behave if the session store fails?
+
+Only then implement the mechanism.
+
+Keep sessions small.
+
+Keep session state bounded.
+
+Keep identifiers random.
+
+Keep credentials secret.
+
+Keep transport protected.
+
+Keep expiration explicit.
+
+Keep revocation explicit.
+
+Keep authentication state authoritative.
+
+Keep authorization separate.
+
+Keep lifecycle deterministic.
+
+A reliable session system does not guess which user a request belongs to.
+
+A reliable session system validates the presented session credential.
+
+A reliable session system rejects unknown sessions.
+
+A reliable session system rejects expired sessions.
+
+A reliable session system rejects revoked sessions.
+
+A reliable session system rotates identifiers when security state changes according to policy.
+
+A reliable session system invalidates sessions on logout.
+
+A reliable session system does not expose session credentials in logs.
+
+A reliable session system does not trust client-modified authority state.
+
+A reliable session system does not preserve stale privilege without defined policy.
+
+A reliable session system does not convert storage failure into authenticated access.
+
+A reliable session system does not treat possession of a valid session as permission for every operation.
+
+A session answers:
+
+Which established application state belongs to this presented session credential?
+
+Authentication can answer:
+
+Which principal is associated with this session?
+
+Authorization then answers:
+
+What may that principal do?
+
+Keep those questions separate.
+
+If the session credential is valid, load the associated state.
+
+If the session credential is unknown, do not invent state.
+
+If the session is expired, reject it.
+
+If the session is revoked, reject it.
+
+If the session store cannot establish the session, do not guess.
+
+Continuity comes from validated state.
+
+Authority still comes from policy.

@@ -1,0 +1,838 @@
+Software testing evaluates whether software behaves according to defined expectations.
+A test provides evidence about behavior under tested conditions.
+A passing test does not prove that software has no defects.
+A failing test provides evidence that an expected condition was not satisfied.
+Testing and debugging are different activities.
+Testing discovers or demonstrates behavior.
+Debugging investigates the cause of incorrect behavior.
+Verification asks whether a system satisfies specified requirements.
+Validation asks whether the resulting system satisfies its intended use and requirements.
+Testing can contribute evidence to verification and validation.
+A test should have a defined purpose.
+A test should have defined inputs.
+A test should have defined expected results.
+A test should have observable results.
+A test without a meaningful expected result provides weak evidence.
+A test should distinguish success from failure.
+A test should not silently convert failure into success.
+A test should not report success merely because execution completed.
+Execution completion and correctness are different.
+A program compiling successfully does not prove that it works correctly.
+A program linking successfully does not prove that it works correctly.
+A program starting successfully does not prove that it works correctly.
+A module loading successfully does not prove that the module works correctly.
+A network connection succeeding does not prove that the protocol works correctly.
+An HTTP response being received does not prove that the requested operation succeeded.
+A database connection succeeding does not prove that a query is correct.
+A query executing successfully does not prove that its result is correct.
+A function returning a value does not prove that the value is correct.
+Each claim requires evidence appropriate to that claim.
+A test case is a defined set of conditions used to evaluate behavior.
+A test suite is a collection of test cases.
+A test runner executes tests and reports results.
+A test fixture establishes state required by a test.
+A test oracle determines the expected result against which observed behavior is compared.
+A deterministic test produces the same expected result when executed under the same defined conditions.
+Nondeterministic tests are harder to diagnose.
+A flaky test passes and fails inconsistently without an intentional change to the tested behavior.
+Flaky tests reduce confidence in test results.
+A flaky test should be investigated.
+Repeatedly rerunning a flaky test until it passes does not repair the underlying problem.
+A test should fail for the behavior it is intended to test.
+A test failing because of unrelated infrastructure provides weaker evidence about the target behavior.
+Test environments should control relevant dependencies where practical.
+Tests should minimize irrelevant dependencies.
+A unit test evaluates a small unit of software behavior.
+A unit is commonly a function, method, class, module component, or similarly bounded piece of behavior.
+A unit test should isolate the behavior being evaluated where practical.
+A unit test does not necessarily require complete system startup.
+A unit test can test valid input.
+A unit test can test invalid input.
+A unit test can test boundary conditions.
+A unit test can test error handling.
+A unit test can test state transitions.
+A unit test can test deterministic transformations.
+Unit tests are useful for fast local feedback.
+Unit tests do not replace integration tests.
+An integration test evaluates interactions between components.
+An integration test can test an application and database together.
+An integration test can test a host and module together.
+An integration test can test a client and server together.
+An integration test can test a parser and storage layer together.
+Integration testing can discover problems that isolated unit tests cannot.
+Correct components can interact incorrectly.
+Interface assumptions can disagree.
+Serialization can disagree.
+Version expectations can disagree.
+Error propagation can disagree.
+Integration tests evaluate these boundaries.
+A system test evaluates a complete or substantially complete system.
+A system test can exercise behavior through public interfaces.
+A system test can include multiple services.
+A system test can include networking.
+A system test can include persistent storage.
+A system test can include platform-specific behavior.
+System tests provide broader behavioral evidence.
+System tests can be slower and harder to diagnose than unit tests.
+Different test levels answer different questions.
+An end-to-end test evaluates a complete operational path.
+An end-to-end test begins from an external or high-level entry point and verifies the resulting system behavior.
+An end-to-end test can verify a request from client through server to persistence and back.
+An end-to-end test can verify a module from discovery through activation and behavior.
+An end-to-end test can verify a transaction from submission through final acceptance.
+An end-to-end test should verify the actual result rather than only intermediate logs.
+An intermediate success message is not proof of final success.
+A smoke test checks a small set of essential functionality.
+A smoke test determines whether a build is sufficiently functional for deeper testing.
+A smoke test is intentionally limited.
+Passing a smoke test does not mean every feature works.
+A sanity test checks focused behavior after a change or repair.
+Terminology around smoke and sanity testing can vary.
+The important property is the defined scope of the test.
+A regression test checks that previously working behavior remains correct after changes.
+A regression occurs when a change breaks behavior that previously worked.
+A defect repair should often receive a regression test.
+A regression test preserves evidence of the expected repaired behavior.
+Without a regression test, the same defect can return unnoticed.
+A regression suite should include important historical failures.
+Historical defects can become future test cases.
+Testing can preserve lessons learned from failures.
+Positive testing verifies accepted or expected behavior.
+Negative testing verifies rejection of invalid, prohibited, unsupported, or unauthorized behavior.
+Both positive and negative tests are important.
+A parser should be tested with valid input.
+A parser should be tested with malformed input.
+Authentication should be tested with valid credentials.
+Authentication should be tested with invalid credentials.
+Authorization should be tested with sufficient authority.
+Authorization should be tested with insufficient authority.
+A module loader should be tested with a compatible module.
+A module loader should be tested with an incompatible module.
+A protocol should be tested with supported messages.
+A protocol should be tested with unsupported messages.
+A protocol should be tested with malformed messages.
+Security boundaries require negative testing.
+A system that accepts valid input correctly but also accepts prohibited input is not correct.
+Boundary testing evaluates values at and around defined limits.
+If a buffer permits 256 bytes, useful tests can include 0 bytes.
+Useful tests can include 1 byte.
+Useful tests can include 255 bytes.
+Useful tests can include 256 bytes.
+Useful tests can include 257 bytes.
+The exact boundaries depend on the requirement.
+Off-by-one errors commonly occur near boundaries.
+Numeric limits should be tested.
+String-length limits should be tested.
+Collection-size limits should be tested.
+Message-size limits should be tested.
+Timeout boundaries should be tested.
+Date boundaries should be tested where relevant.
+Version boundaries should be tested.
+Boundary tests should derive from actual defined constraints.
+Equivalence partitioning groups inputs expected to behave similarly.
+Representative values can be selected from each partition.
+Valid and invalid partitions should both be considered.
+Equivalence partitioning reduces redundant testing while preserving useful coverage.
+It does not prove that every value in a partition behaves identically.
+Property testing checks general properties over many generated inputs.
+A property describes behavior that should remain true across a class of inputs.
+Sorting output should preserve the input elements according to the sorting contract.
+Serialization followed by deserialization can preserve values according to the format contract.
+A hash function should produce the same result for identical input.
+A parser should reject input exceeding defined maximum size.
+Property-based testing can explore cases humans did not manually enumerate.
+Generated tests still require meaningful properties.
+Random input without meaningful assertions provides limited evidence.
+Fuzz testing supplies generated or mutated input to discover failures.
+Fuzzing is especially useful for parsers.
+Fuzzing is useful for network protocol handlers.
+Fuzzing is useful for file readers.
+Fuzzing is useful for memory-unsafe software.
+A fuzzer can discover crashes.
+A fuzzer can discover hangs.
+A fuzzer can discover assertion failures.
+A fuzzer can discover memory errors when combined with instrumentation.
+A fuzzing crash should preserve the triggering input.
+The triggering input should be minimized where useful.
+A reproducible fuzz failure can become a regression test.
+A crash does not automatically prove exploitability.
+A crash does prove that execution reached an incorrect or unsupported state when crashing is outside the specification.
+Static analysis examines software without executing its full runtime behavior.
+Static analysis can identify suspicious code patterns.
+Static analysis can identify some memory errors.
+Static analysis can identify some type errors.
+Static analysis can identify some security defects.
+Static analysis findings require interpretation.
+A static analysis warning is not automatically a confirmed defect.
+Absence of static analysis warnings does not prove correctness.
+Dynamic analysis evaluates executing software.
+Dynamic analysis can observe memory behavior.
+Dynamic analysis can observe resource behavior.
+Dynamic analysis can observe timing behavior.
+Dynamic analysis can observe actual input-output behavior.
+Static and dynamic analysis provide different evidence.
+Code review is a form of human or assisted examination.
+Code review can identify logic errors.
+Code review can identify unclear assumptions.
+Code review can identify security problems.
+Code review can identify maintainability problems.
+Code review does not replace execution testing.
+Execution testing does not replace review.
+Different methods detect different classes of defects.
+Test coverage measures which code or conditions were exercised according to the selected coverage metric.
+Line coverage measures executed source lines.
+Statement coverage measures executed statements according to tooling.
+Branch coverage measures decision outcomes.
+Function coverage measures executed functions.
+Condition coverage measures evaluated condition outcomes according to tooling.
+Coverage is evidence about execution.
+Coverage is not evidence that assertions were correct.
+One hundred percent line coverage does not prove correctness.
+One hundred percent branch coverage does not prove correctness.
+A test can execute code without meaningfully verifying it.
+Coverage should identify untested areas.
+Coverage should not become the sole definition of test quality.
+Assertions define expected conditions.
+An assertion should express a meaningful requirement.
+assert(actual == expected) checks equality according to the language and type semantics.
+An assertion that always evaluates true provides no useful evidence.
+An assertion against the wrong expected value can make incorrect behavior appear correct.
+Expected values should derive from requirements.
+A test should not derive its expected result using the same defective algorithm being tested when independent verification is required.
+Independent test oracles provide stronger evidence.
+Golden files contain known expected output.
+Golden-file tests compare generated output against approved expected output.
+Golden files are useful for deterministic structured output.
+Golden files can become difficult to review when extremely large.
+Updating a golden file merely because a test failed can hide a regression.
+Expected output should be changed only when the intended behavior actually changed.
+Snapshot testing similarly records expected output for comparison.
+Snapshot updates should be reviewed.
+Tests should not train developers to approve changes blindly.
+A mock replaces a dependency with controlled behavior for testing.
+A stub provides predetermined responses.
+A fake provides a simplified working implementation of a dependency.
+Terminology can vary between testing frameworks.
+Test doubles allow controlled dependency behavior.
+Mocks can verify interactions.
+Mocks can make tests too dependent on implementation details when overused.
+A unit test should normally verify externally meaningful unit behavior rather than every internal function call.
+Changing internal implementation should not require rewriting unrelated tests when behavior remains unchanged.
+Tests should protect contracts rather than accidental implementation details.
+An interface contract defines expected behavior between components.
+Contract tests verify that implementations satisfy interface expectations.
+A module ABI is an interface contract.
+ABI compatibility can be tested.
+A module declaring ABI 1.5 can be tested against a host requiring ABI 1.5.
+A module declaring ABI 1.4 should be rejected when the host requires ABI 1.5 and no compatibility mechanism permits it.
+The test should verify the actual rejection behavior.
+A README mentioning ABI 1.4 should not alter an ABI compatibility test.
+Documentation text is not the runtime ABI contract unless architecture explicitly makes it so.
+Tests should use the authoritative interface definition.
+A module qualification test can verify manifest presence.
+A module qualification test can verify manifest syntax.
+A module qualification test can verify module name.
+A module qualification test can verify version.
+A module qualification test can verify ABI version.
+A module qualification test can verify required exports.
+A module qualification test can verify loading.
+A module qualification test can verify activation.
+Each stage should be tested independently where practical.
+A module loading test should not report qualification success before qualification actually completes.
+A module activation test should not report activation before initialization succeeds.
+A hot-load test should verify the module is usable after loading.
+A log line saying HOTLOAD_ACTIVE is evidence that the system reported activation.
+A functional test should additionally verify the module performs its intended function.
+Logs and behavior provide complementary evidence.
+A test should not accept a log message as proof of behavior when actual behavior can be checked directly.
+A module can log success and still malfunction.
+A module can function correctly while logging incorrectly.
+Both conditions can be tested separately.
+API testing evaluates defined program interfaces.
+An API test should verify valid requests.
+An API test should verify invalid requests.
+An API test should verify response structure.
+An API test should verify error structure.
+An API test should verify authorization.
+An API test should verify boundary conditions.
+An API test should verify protocol version handling where applicable.
+HTTP API tests should verify appropriate status codes.
+HTTP 200 indicates successful HTTP-level handling according to server response.
+HTTP 200 does not automatically mean application data is correct.
+HTTP 400 indicates a client request problem according to HTTP application behavior.
+HTTP 401 commonly indicates authentication is required or failed according to the application's HTTP authentication semantics.
+HTTP 403 commonly indicates the request is understood but not permitted.
+HTTP 404 commonly indicates the requested resource was not found.
+HTTP 500 indicates a server-side error condition.
+Tests should verify both status and relevant response content.
+Returning HTTP 200 with an error hidden in arbitrary text can make automated testing harder.
+Interfaces should expose machine-readable success and failure states where appropriate.
+Database tests should distinguish connectivity from query behavior.
+A database connectivity test verifies that a connection can be established.
+A database authentication test verifies that credentials are accepted.
+A database authorization test verifies that required operations are permitted.
+A query test verifies SQL behavior.
+A constraint test verifies integrity rules.
+A transaction test verifies commit and rollback behavior.
+A database returning zero rows can be a passing test when zero rows are expected.
+A test expecting zero rows should not fail merely because no records were returned.
+An empty result and an execution error are different test outcomes.
+Database tests should clean up their test data.
+Test data should not contaminate production data.
+Tests should not run destructive operations against production databases unless explicitly designed and authorized for that environment.
+A test database should be isolated where practical.
+Test fixtures should create known state.
+Tests should not depend unnecessarily on unknown preexisting database contents.
+A test should not pass merely because an unrelated record happens to exist.
+Known initial state makes tests reproducible.
+Network testing should distinguish layers.
+A DNS test verifies name resolution.
+A TCP test verifies transport connectivity.
+A TLS test verifies TLS behavior.
+A protocol handshake test verifies application protocol compatibility.
+A functional request test verifies actual service behavior.
+Ping does not prove application health.
+A successful TCP connect does not prove protocol health.
+A successful protocol handshake does not prove every operation works.
+Tests should verify the layer relevant to the requirement.
+Timeout behavior should be tested.
+Connection-refusal behavior should be tested.
+Unexpected peer closure should be tested.
+Partial reads should be tested.
+Partial writes should be handled according to API semantics.
+Malformed network messages should be tested.
+Oversized network messages should be tested.
+Wrong protocol versions should be tested.
+Wrong network identifiers should be tested.
+Wrong peer identity should be tested when identity validation exists.
+Reconnect behavior should be tested.
+Retry limits should be tested.
+Backoff behavior should be tested when required.
+A reconnect test should verify that temporary failure can recover.
+A reconnect test should also verify that permanent failure does not create uncontrolled retry loops.
+Testing failure behavior is as important as testing normal operation.
+Filesystem testing should verify successful reads.
+Filesystem testing should verify successful writes where authorized.
+Filesystem testing should verify missing files.
+Filesystem testing should verify permission denial.
+Filesystem testing should verify malformed files.
+Filesystem testing should verify maximum supported file sizes.
+Filesystem testing should verify path handling.
+A writable directory should be tested using the identity that actually performs the write.
+Root being able to write does not prove a web-service user can write.
+The interactive developer account being able to write does not prove the service account can write.
+Permissions should be tested under the operational identity.
+A test executed under the wrong identity can produce misleading results.
+Platform testing verifies behavior on supported operating systems or environments.
+Code compiling on Windows does not prove it compiles on Linux.
+Code compiling on Linux does not prove it compiles on Windows.
+Platform-independent architecture requires platform-specific implementation testing.
+The same protocol input should produce equivalent protocol-visible results across supported platforms where the specification requires equivalence.
+Serialization should be tested across platforms.
+Integer widths should be tested.
+Byte order should be tested.
+File-path assumptions should be tested.
+Line endings should be tested where relevant.
+Socket behavior should be tested.
+Filesystem permissions should be tested according to platform semantics.
+Platform abstraction should be tested at its boundary.
+Common code should not silently depend on one platform's implementation behavior.
+Cross-platform tests provide evidence that abstraction actually works.
+Compilation testing verifies that source can be compiled under defined conditions.
+A build test should begin from known source state.
+A clean build removes dependence on stale build artifacts.
+Incremental builds are useful during development.
+A clean build provides stronger evidence of build reproducibility.
+A build succeeding because an old object file remained is not evidence that current source compiles completely.
+Build directories should be cleaned when clean-build evidence is required.
+Compiler warnings should be reviewed.
+A warning-free build can be a test requirement.
+A warning-free build does not prove correctness.
+Different compilers can identify different problems.
+Testing with multiple compilers can improve portability evidence.
+Compiler optimization can expose undefined behavior differently.
+Debug and release builds should both be tested when their behavior can differ.
+Undefined behavior can appear to work in one build and fail in another.
+Sanitizers instrument programs to detect classes of runtime errors.
+AddressSanitizer can detect many memory errors.
+UndefinedBehaviorSanitizer can detect many forms of undefined behavior.
+ThreadSanitizer can detect many data races.
+Sanitizer availability depends on compiler and platform.
+Sanitizers are testing tools.
+A sanitizer not reporting an error does not prove absence of all memory defects.
+A sanitizer finding should be investigated.
+Memory leak detectors can identify unreleased allocations.
+Leak testing should account for deliberate process-lifetime allocations when architecture permits them.
+A leak growing with repeated operations is especially important.
+Resource testing should include memory.
+Resource testing should include file descriptors.
+Resource testing should include sockets.
+Resource testing should include threads.
+Resource testing should include handles on platforms that use them.
+A long-running service should be tested over time.
+A soak test runs a system for an extended period.
+Soak testing can reveal leaks.
+Soak testing can reveal cumulative state errors.
+Soak testing can reveal reconnect problems.
+Soak testing can reveal timing-dependent failures.
+Soak testing can reveal performance degradation.
+A soak test should record enough metrics and logs to diagnose failures.
+Running for a long time without observing relevant state provides weaker evidence.
+A soak test should have defined success criteria.
+Load testing evaluates behavior under expected or elevated workload.
+Stress testing pushes a system toward or beyond expected capacity.
+Load and stress testing are related but different.
+A load test can verify normal operational capacity.
+A stress test can identify failure thresholds.
+A stress test should observe how the system fails.
+Graceful degradation is preferable to uncontrolled corruption.
+Resource exhaustion should not produce invalid persistent state.
+A server reaching capacity should reject or defer work according to defined behavior.
+Performance testing measures timing and throughput characteristics.
+Performance tests require controlled conditions for meaningful comparisons.
+One fast execution does not prove performance.
+One slow execution does not prove a regression.
+Repeated measurements provide stronger evidence.
+Baseline measurements allow comparison over time.
+Performance regression testing detects meaningful degradation.
+Performance requirements should specify acceptable thresholds.
+A benchmark is not necessarily a correctness test.
+Fast incorrect software is still incorrect.
+Correctness should not be sacrificed silently for benchmark results.
+Concurrency testing evaluates behavior when operations occur simultaneously.
+Race conditions may not appear during single-threaded tests.
+Concurrent tests can repeat operations to increase the chance of exposing races.
+A passing concurrency test does not prove absence of races.
+Thread sanitizers and formal reasoning can provide additional evidence.
+Shared state should be tested under contention.
+Database transactions should be tested under concurrent access.
+File creation should be tested under concurrent access when races matter.
+Identity generation should be tested for concurrent invocation if multiple processes can invoke it.
+Two simultaneous identity-generation operations should not silently create inconsistent identities when architecture requires one identity.
+Atomic operations can simplify concurrency correctness.
+Concurrency tests should verify final state.
+Merely surviving concurrent execution is not enough when state can become incorrect.
+State-machine testing verifies permitted transitions.
+A system can have states such as INITIALIZING.
+A system can have states such as ACTIVE.
+A system can have states such as DEGRADED.
+A system can have states such as FAILED.
+The exact states depend on architecture.
+Tests should verify valid transitions.
+Tests should verify prohibited transitions.
+A component should not report ACTIVE before required qualification.
+A failed component should not silently report NORMAL.
+Recovery transitions should be tested.
+Repeated recovery should be tested when relevant.
+State should match actual capability.
+A log message is not the state itself unless the architecture explicitly defines logs as the authoritative state store.
+Error testing should verify specific failure categories.
+A missing file should produce the defined missing-file behavior.
+An unreadable file should produce the defined permission or access behavior.
+An invalid manifest should produce manifest validation failure.
+An ABI mismatch should produce ABI mismatch.
+A timeout should produce timeout.
+A DNS failure should produce DNS failure.
+A connection refusal should produce connection refusal.
+A malformed response should produce malformed-response failure.
+An empty result should remain an empty result.
+A knowledge miss should remain a knowledge miss.
+Specific failures should not collapse unnecessarily into "internal service unavailable."
+Generic errors destroy diagnostic information.
+Tests should verify error preservation.
+Tests should verify that user-facing errors remain bounded when security requires it.
+Internal logs can preserve more detailed diagnostics.
+A test should verify both external and internal behavior when the distinction matters.
+Security testing verifies security requirements.
+Authentication tests verify identity mechanisms.
+Authorization tests verify authority boundaries.
+Input tests verify validation.
+Injection tests verify that data cannot become unintended instructions.
+CSRF tests verify state-changing request protection where applicable.
+XSS tests verify output handling where applicable.
+Signature tests verify cryptographic validation.
+Tamper tests modify signed or hashed data and verify rejection.
+Privilege tests verify insufficiently privileged identities cannot perform protected actions.
+Security testing should include successful authorized behavior.
+A security mechanism that blocks everyone is not necessarily correct.
+Correct security permits authorized operations and rejects unauthorized operations.
+A negative security test should verify rejection.
+A positive security test should verify permitted behavior.
+Security tests should not weaken production security controls merely to make tests pass.
+A failing security test should lead to investigation.
+Removing the security check is not a repair unless requirements explicitly changed.
+Compatibility testing verifies interaction with supported versions.
+Backward compatibility means newer software supports defined older interfaces or data according to policy.
+Forward compatibility means older or current software can tolerate defined newer information according to policy.
+Compatibility should be specified.
+Compatibility should not be guessed.
+An ABI test should use explicit supported ABI values.
+A protocol compatibility test should use explicit protocol versions.
+A file-format compatibility test should use defined format versions.
+A historical version appearing in documentation does not automatically mean it remains supported.
+Support status should come from current policy or interface definition.
+Testing should distinguish historical existence from current compatibility.
+A module ABI history of 1.3, 1.4, and 1.5 does not mean a host using ABI 1.5 must accept modules built for all three.
+If current policy requires exact ABI 1.5, compatibility testing should verify 1.5 is accepted and unsupported versions are rejected.
+Current requirements govern current tests.
+Historical requirements remain useful for testing historical releases.
+Release testing evaluates a candidate build before release.
+A release candidate is a build considered potentially suitable for release.
+A release candidate should have an identifiable version.
+A release candidate should have an identifiable source revision.
+A release candidate should be tested as the actual artifact intended for distribution.
+Testing source code alone does not test packaging.
+Testing an unpackaged executable does not test the installer.
+Testing the installer does not automatically test every installed feature.
+Installation testing should verify installation.
+Installation testing should verify required files.
+Installation testing should verify permissions.
+Installation testing should verify configuration.
+Installation testing should verify startup.
+Installation testing should verify uninstallation when supported.
+Upgrade testing should verify transitions from supported previous versions.
+A fresh installation and an upgrade can behave differently.
+Upgrade tests should preserve required user data.
+Upgrade tests should preserve required configuration.
+Upgrade tests should apply required migrations.
+Upgrade tests should reject incompatible states according to policy.
+Rollback testing should verify supported rollback procedures.
+Rollback can require data migration.
+Rollback can be impossible after irreversible schema changes.
+Rollback support should be defined rather than assumed.
+A test plan describes intended testing scope.
+A test plan can identify features.
+A test plan can identify risks.
+A test plan can identify environments.
+A test plan can identify test levels.
+A test plan can identify acceptance criteria.
+A test plan can identify exclusions.
+A test plan should not claim unperformed testing.
+A test report records observed test results.
+A test report should identify what was tested.
+A test report should identify the tested version.
+A test report should identify the environment when relevant.
+A test report should identify passes.
+A test report should identify failures.
+A test report should identify blocked tests.
+A test report should identify skipped tests.
+Skipped is not passed.
+Blocked is not passed.
+Not executed is not passed.
+Unknown is not passed.
+A test result should represent what actually happened.
+A failed test should not be converted to passed because the failure is inconvenient.
+A known defect can be documented.
+A known defect does not become correct behavior merely because it is known.
+Expected failure is a special test classification used by some frameworks.
+Expected failure means the failure is anticipated.
+Expected failure does not mean the defect is repaired.
+When the defect is repaired, the expected-failure designation should be reconsidered.
+Test automation executes repeatable tests using software.
+Automation reduces repetitive manual work.
+Automation improves consistency.
+Automation does not make incorrect tests correct.
+Automated tests require maintenance.
+A test suite can become stale.
+A stale test can enforce obsolete behavior.
+Requirements changes can require test changes.
+Tests should not be changed merely because implementation disagrees with them.
+First determine whether requirements changed or implementation is wrong.
+The source of truth for expected behavior should be identified.
+Tests encode expectations.
+Tests do not create authority merely by existing.
+A test can be wrong.
+A requirement can be wrong or obsolete.
+An implementation can be wrong.
+Evidence and governing requirements should resolve the discrepancy.
+Test-first development writes tests before implementation according to a development method.
+Test-driven development is commonly abbreviated TDD.
+TDD uses a cycle commonly described as red, green, refactor.
+A failing test is written for required behavior.
+Implementation is added until the test passes.
+Code is then improved while preserving behavior.
+TDD is one development method.
+TDD is not required for software to be correct.
+Tests written after implementation can still be valuable.
+The important requirement is meaningful verification.
+Manual testing is testing performed through human interaction or observation.
+Manual testing is useful for exploratory behavior.
+Manual testing is useful for interfaces.
+Manual testing is useful for unexpected workflows.
+Manual testing can discover issues automated tests did not anticipate.
+Manual testing can be inconsistent.
+Important repeatable findings should often become automated regression tests.
+Exploratory testing investigates software without restricting every action to predefined cases.
+Exploratory testing uses tester judgment.
+Exploratory testing can discover unexpected interactions.
+Exploratory testing should still record meaningful defects and reproduction steps.
+A defect report should describe observed behavior.
+A defect report should describe expected behavior.
+A defect report should include reproduction steps when known.
+A defect report should identify environment when relevant.
+A defect report should include logs or evidence when useful.
+A defect report should avoid unsupported conclusions about root cause.
+Observed failure and root cause are different.
+"The application returned HTTP 500" is an observation.
+"The database caused the failure" is a hypothesis until evidence supports it.
+Debugging establishes cause.
+Testing establishes reproducible behavior.
+A minimal reproduction reduces a failure to the smallest practical conditions that still demonstrate it.
+Minimal reproductions simplify debugging.
+Removing unrelated components can identify boundaries.
+If a failure remains without the network, the network is less likely to be necessary to reproduce it.
+If a failure disappears when a module is removed, the module or its interaction becomes relevant evidence.
+Changing one variable at a time improves causal reasoning.
+Changing many variables simultaneously makes conclusions weaker.
+Tests should control variables.
+A baseline is a known reference state.
+A baseline can be a known-good build.
+A baseline can be a known-good configuration.
+A baseline can be expected performance.
+Comparing against a baseline can reveal regressions.
+A baseline should be identified precisely.
+"Yesterday's build" is less precise than a version or commit identifier.
+Reproducibility requires identifying inputs.
+Source revision matters.
+Compiler version can matter.
+Build flags can matter.
+Dependency versions can matter.
+Operating system can matter.
+Configuration can matter.
+Environment variables can matter.
+Database schema can matter.
+Test data can matter.
+Time can matter.
+Random seeds can matter.
+A reproducible test should control or record relevant variables.
+Randomized tests should record the random seed when possible.
+A recorded seed can reproduce a failure.
+Time-dependent tests should control time where practical.
+Tests should not unnecessarily depend on the wall clock.
+Sleeping for arbitrary durations can make tests slow and flaky.
+Synchronization should observe the condition being waited for when possible.
+A test waiting for a service should verify readiness rather than merely sleeping five seconds.
+Five seconds can be too short on one machine.
+Five seconds can be unnecessarily long on another machine.
+Condition-based waiting is generally more deterministic.
+Timeouts should still bound waiting.
+A test that can wait forever can hang an entire test suite.
+Every asynchronous test should have a defined termination condition.
+Failure injection deliberately causes failures to test recovery behavior.
+A dependency can be made unavailable.
+A network connection can be interrupted.
+A file can be made unreadable.
+A disk-full condition can be simulated where practical.
+A malformed message can be supplied.
+A timeout can be induced.
+Failure injection verifies that error paths actually work.
+Error paths often receive less normal execution than success paths.
+Untested error handling can itself contain defects.
+Recovery testing verifies behavior after failure.
+A service can reconnect.
+A module can recover according to architecture.
+A temporary dependency can return.
+A transaction can retry where permitted.
+A failed operation can remain failed when retry would be unsafe.
+Recovery should preserve state integrity.
+A system recovering availability while corrupting data has not recovered correctly.
+Data integrity should be checked after recovery.
+Crash testing evaluates abrupt process termination.
+Persistent systems should recover according to their durability model.
+A partially written file should not silently become accepted valid state.
+Atomic file replacement can be tested by interrupting writes.
+Database transaction durability can be tested according to database guarantees.
+Crash consistency matters when state persists across restarts.
+Restart testing verifies initialization from existing state.
+A program working only from a fresh empty directory is not enough when normal operation resumes saved state.
+Saved-state loading should be tested.
+Corrupted saved state should be tested.
+Missing saved state should be tested.
+Incompatible saved state should be tested.
+Current saved state should be tested.
+State migrations should be tested.
+Persistence should not depend on accidental memory state from the previous process.
+A cold start begins without previously initialized runtime memory.
+A warm restart can reuse persistent state but not process memory unless architecture explicitly provides it.
+Restart behavior should be deterministic according to persistent inputs.
+Data-ingestion testing verifies parsing and storage behavior.
+An ingestion test should verify accepted units.
+An ingestion test should verify rejected units.
+An ingestion test should verify stored units.
+Counts should reconcile according to ingestion rules.
+If 195 units were processed, 195 stored, and 0 rejected, the counts are internally consistent.
+That count does not prove every stored unit is semantically correct.
+Content retrieval should be tested separately.
+Successful ingestion does not prove successful retrieval.
+Successful retrieval does not prove correct reasoning over retrieved content.
+Ingestion, storage, retrieval, ranking, and response generation are separate stages.
+Each stage can be tested independently.
+A lesson ingestion test can verify the lesson file exists.
+A lesson ingestion test can verify the file is readable.
+A lesson ingestion test can verify parsing.
+A lesson ingestion test can verify unit count.
+A lesson ingestion test can verify storage.
+A lesson ingestion test can verify source metadata.
+A retrieval test can query known facts from the lesson.
+A retrieval test should verify the expected fact is returned.
+A reasoning test can ask a question requiring combination of multiple stored facts.
+A reasoning test should distinguish retrieval failure from reasoning failure.
+If the correct source facts were retrieved but the answer was wrong, retrieval succeeded and reasoning failed.
+If irrelevant facts were retrieved, retrieval or ranking may have failed.
+If no facts were retrieved despite matching stored facts, retrieval failed.
+If a downstream service was unavailable, infrastructure failed.
+These are different failure categories.
+A response should not claim lack of knowledge when knowledge exists but retrieval failed.
+A response should not claim internal service failure when retrieval returned a valid empty result unless another service actually failed.
+A response should not answer an unrelated fact merely because that fact has high retrieval similarity.
+Question intent matters.
+Tests can evaluate relevance.
+A relevance test supplies a question with a known target concept.
+The expected retrieval should contain evidence directly related to that concept.
+Retrieving a fact about sessions for a question about equality operators is a relevance failure.
+Returning "PHP is dynamically typed" to a question asking the difference between == and === is insufficient even though the fact is related to PHP typing.
+Related is not the same as responsive.
+A correct answer must address the question asked.
+Answer testing should evaluate factual correctness.
+Answer testing should evaluate relevance.
+Answer testing should evaluate completeness according to expected scope.
+Answer testing should evaluate unsupported claims.
+A concise answer can be correct.
+A long answer can be wrong.
+Answer length is not a correctness metric.
+A system should prefer a supported narrow answer over an unsupported elaborate answer.
+No speculation means claims should be grounded in available evidence.
+When evidence supports only a partial answer, the answer should remain partial.
+Tests can deliberately ask questions not covered by available knowledge.
+The expected behavior can be a bounded statement that available information is insufficient.
+Inventing an answer should fail such a test.
+Knowledge boundaries should be tested.
+Source precedence should be tested.
+If current authoritative source says ABI 1.5 and historical documentation mentions ABI 1.4, a current-state question should produce ABI 1.5.
+If asked for ABI history, historical versions can be returned.
+If asked what changed between 1.4 and 1.5, the system should require evidence describing the change.
+The same corpus can support different answers depending on question intent.
+Retrieval should not treat every matching source as equally authoritative.
+Current state and historical state should be distinguishable.
+A test can contain intentionally conflicting sources.
+The expected answer should follow defined source-authority rules.
+Conflicting evidence should not be silently merged into nonsense.
+If no authority rule resolves a conflict, the conflict should be reported.
+Testing retrieval with conflict cases is important.
+Testing retrieval only with clean unambiguous facts hides ranking problems.
+Duplicate facts should be tested.
+Repeated identical evidence should not necessarily increase truth value.
+Ten copies of an incorrect statement do not make it correct.
+Source authority is not determined only by occurrence count.
+A retrieval system should avoid treating duplication as independent confirmation when duplicates share the same origin.
+Testing should include duplicate sources where relevant.
+Testing should include stale documentation.
+Testing should include current source.
+Testing should include historical records.
+Testing should include irrelevant high-similarity text.
+Testing should include exact terminology.
+Testing should include paraphrased questions.
+Testing should include questions requiring two related facts.
+Testing should include questions requiring refusal to speculate.
+A knowledge system should be tested like any other engineered system.
+Its inputs are questions and source material.
+Its outputs are retrieved evidence and responses.
+Its internal stages should be observable enough to diagnose failures.
+A wrong answer should be traceable.
+Which sources were retrieved?
+Which source was ranked highest?
+Which facts were selected?
+Which module produced the response?
+Which service failed?
+Which fallback was used?
+What error category occurred?
+Observability improves testing.
+Observability should not expose secrets unnecessarily.
+Audit logs can support test diagnosis.
+Logs should use stable event names where tests depend on them.
+Tests should avoid depending on decorative log wording when structured events are available.
+Machine tests should prefer machine-readable state.
+Human-readable logs can change without behavioral change.
+Stable interfaces make tests more durable.
+Tests should not become coupled to irrelevant formatting.
+Exact formatting should be tested when formatting itself is part of the contract.
+Protocol bytes require exact tests.
+JSON schema can require exact fields.
+Human prose often allows variation.
+The assertion should match the requirement.
+A test that is too strict can reject valid behavior.
+A test that is too loose can accept invalid behavior.
+Test precision should match specification precision.
+Qualification is stronger than mere execution.
+A component can execute without being qualified.
+Qualification testing verifies required evidence before declaring a component approved for operation.
+A qualification suite should have explicit criteria.
+All required tests should pass before qualification is GREEN when policy requires all tests.
+A skipped required test should not count as a pass.
+An unexecuted required test should not count as a pass.
+A known failure should not count as a pass.
+Qualification status should derive from actual test results.
+A GREEN status should mean defined qualification criteria were satisfied.
+A RED status should mean defined qualification criteria were not satisfied according to policy.
+Additional states can represent pending or incomplete qualification.
+Status definitions should be explicit.
+Testing is evidence generation.
+Qualification is a decision based on required evidence.
+Testing and qualification are related but not identical.
+A test runner should return a nonzero process exit status when required tests fail according to conventional command-line automation.
+A successful process exit status should represent success according to the tool's contract.
+Automation can use exit status to stop failed builds.
+Ignoring failed exit status can allow defective builds to continue.
+Build pipelines should fail when required stages fail.
+Optional stages should be explicitly optional.
+Warnings should not silently become failures unless policy defines them as failures.
+Failures should not silently become warnings merely to keep a pipeline green.
+Test evidence should remain factual.
+"PASS" means the tested expectation was satisfied.
+"FAIL" means the tested expectation was not satisfied.
+"SKIP" means the test was intentionally not executed.
+"BLOCKED" means required conditions prevented execution.
+"ERROR" can mean the test itself could not complete according to framework definitions.
+"UNKNOWN" means the result cannot be determined.
+These states should not be conflated.
+A test report can include duration.
+A test report can include failure messages.
+A test report can include source revision.
+A test report can include platform.
+A test report can include compiler.
+A test report can include dependency versions.
+A test report can include configuration.
+Enough context should be preserved to reproduce important failures.
+Testing should begin with requirements.
+Testing should identify observable behavior.
+Testing should exercise normal behavior.
+Testing should exercise boundaries.
+Testing should exercise invalid behavior.
+Testing should exercise failure behavior.
+Testing should exercise recovery where recovery is required.
+Testing should verify state after operations.
+Testing should preserve reproducible failures.
+Testing should convert repaired defects into regression tests where useful.
+Testing should distinguish layers.
+Testing should distinguish evidence from inference.
+Testing should never redefine failure as success merely because failure is inconvenient.
+A system that cannot be tested is difficult to trust.
+A system with deterministic interfaces is easier to test.
+A system with bounded behavior is easier to test.
+A system with explicit errors is easier to test.
+A system with small components is easier to test.
+A system with clear authority boundaries is easier to test.
+A system with observable state is easier to test.
+A system with reproducible builds is easier to test.
+A system with stable protocols is easier to test.
+A system with explicit versioning is easier to test.
+A system with preserved history is easier to debug after testing discovers a regression.
+Testing does not create correctness.
+Testing creates evidence about correctness.
+Evidence should support the exact claim being made.
+If a test proves a module loaded, say the module loaded.
+If a test proves a function returned the expected value, say the function returned the expected value.
+If a test proves 195 lesson units were stored, say 195 lesson units were stored.
+Do not expand that evidence into claims the test did not establish.
+If there is no test for a claim, do not claim the test proved it.
+Precise testing produces precise engineering knowledge.

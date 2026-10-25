@@ -1,0 +1,49 @@
+20260801.4 — Network Isolation
+
+Root Document ID: 20260801.4
+Revision ID: NONE
+Previous Revision: NONE
+sha256: 738f9f1ca25ede19ddd4c4001987f89b131341f4562568ae426a98c6633358e4
+
+Project: Digit  
+Status: Approved  
+Scope: Policy
+
+Summary
+
+Digit will remain permanently isolated from the public Internet.
+
+Digit's operational mission is limited exclusively to assisting STN-LABZ engineering. Therefore, unrestricted public Internet access is unnecessary and prohibited.
+
+Authorized Knowledge Sources
+
+Digit's trusted knowledge sources will consist only of resources approved by STN-LABZ, including, but not limited to:
+
+- STN-LABZ Intranet
+- Engineering policies
+- Engineering doctrine
+- Architecture documentation
+- Source repositories
+- Changelogs
+- Engineering journals
+- Approved technical references
+- Build and test artifacts
+
+All external information will be obtained, reviewed, and selectively approved by a qualified human engineer before incorporation into an authorized STN-LABZ knowledge source.
+
+Digit will not independently browse, retrieve, or consume information from the public Internet.
+
+Mission Determines Capability
+
+Digit's operational knowledge domain will remain limited to STN-LABZ-approved engineering information and other information explicitly authorized by STN-LABZ.
+
+Network capability will remain bounded by Digit's assigned mission.
+
+Rationale
+
+This policy supports deterministic behavior, reproducible engineering decisions, protection against prompt injection and malicious external sources, and the principle that human engineers remain responsible for introducing new information into the STN-LABZ engineering environment.
+
+References
+
+- STN-LABZ General Orders
+- 20260730.1 — Digit: Authorized Knowledge

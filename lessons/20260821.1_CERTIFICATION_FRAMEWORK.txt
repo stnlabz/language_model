@@ -1,0 +1,631 @@
+STN-LABZ Certification Framework
+
+Root Document ID: 20260821.1
+Revision ID:       NONE
+Previous Revision: NONE
+sha256: 55541e6b1ca4c87be8ce7d1a7775583c82238a3051ee54c009679165ea9e3089
+
+Status: Approved  
+Scope: Policies
+---
+
+1. Purpose
+
+This policy establishes the STN-LABZ Certification Framework governing certification as evidence of demonstrated competency for defined organizational positions, operational domains, systems, and mission functions.
+
+Certification supports the STN-LABZ Tiered Position Framework by establishing whether an employee has demonstrated the competency required for consideration for particular positions and missions.
+
+Certification does not itself constitute a mission assignment.
+
+Certification does not itself provide operational access.
+
+Within STN-LABZ:
+
+> Mission Assignment = Access
+
+Certification is therefore a prerequisite where required, not an access mechanism.
+
+---
+
+2. Scope
+
+This policy applies to STN-LABZ certifications associated with:
+
+- organizational positions;
+- Position Tiers;
+- Mission Control;
+- Digit;
+- Ezra;
+- Rictus Intelligence;
+- Sentinel;
+- engineering functions;
+- intelligence functions;
+- cybersecurity functions;
+- space operations;
+- system-specific functions;
+- mission-specific competencies; and
+- future controlled operational domains requiring demonstrated competency.
+
+Individual certifications will be defined by subordinate certification standards.
+
+---
+
+3. Certification Role
+
+Certification establishes that an individual has demonstrated competency against a defined STN-LABZ certification standard.
+
+Certification may establish eligibility for:
+
+- assignment to a defined Position;
+- advancement to a Position requiring the certification;
+- qualification for specific mission functions;
+- consideration for missions involving controlled operational systems; and
+- specialized responsibilities defined by applicable STN-LABZ documentation.
+
+Certification establishes competency.
+
+Mission assignment establishes access.
+
+The relationship is:
+
+    EMPLOYMENT
+        ↓
+    POSITION
+        ↓
+    POSITION TIER
+        ↓
+    REQUIRED CERTIFICATION / QUALIFICATION
+        ↓
+    MISSION ASSIGNMENT
+        =
+    MISSION ACCESS
+
+---
+
+4. Certification and Position Tiers
+
+Position Tiers establish organizational eligibility for consideration for particular responsibilities and controlled operational domains.
+
+Certification establishes demonstrated competency required within that eligibility structure.
+
+A certification may identify one or more Position Tiers for which it is applicable.
+
+Holding a certification does not elevate an employee's Position Tier.
+
+Holding a Position Tier does not imply possession of required certifications.
+
+An employee considered for a Position or mission will satisfy both the applicable Position Tier requirements and required certification requirements.
+
+---
+
+5. Certification and Positions
+
+Controlled STN-LABZ Positions may identify required certifications.
+
+A Position definition may require:
+
+- one general STN-LABZ certification;
+- one or more domain-specific certifications;
+- system-specific certifications;
+- position-specific certifications; or
+- additional qualification requirements established by the applicable Position definition.
+
+Certification requirements will be defined by the Position or by the applicable certification standard.
+
+An employee will not be considered qualified for a Position requiring a certification until the required certification is current.
+
+---
+
+6. Certification and Mission Assignment
+
+Certification supports mission eligibility.
+
+Certification does not create a mission assignment.
+
+An employee may hold every certification required for a controlled operational domain and still have no access to that domain when no applicable mission is assigned.
+
+For example:
+
+    Employee Status: ACTIVE
+    Position: QUALIFIED
+    Position Tier: ELIGIBLE
+    Required Certification: CURRENT
+    Mission Assignment: NONE
+
+    Operational Access: NONE
+
+When an applicable mission is assigned:
+
+    Employee Status: ACTIVE
+    Position: QUALIFIED
+    Position Tier: ELIGIBLE
+    Required Certification: CURRENT
+    Mission Assignment: ACTIVE
+
+    Mission Access: ACTIVE
+
+When the mission ends, mission access ends.
+
+The certification remains a record of demonstrated competency unless its own lifecycle status changes.
+
+---
+
+7. Certification Categories
+
+STN-LABZ certifications may be organized into certification categories according to organizational need.
+
+Initial certification domains include:
+
+- STN-LABZ General Engineering;
+- Mission Control;
+- Digit Engineering;
+- Ezra Space Operations;
+- Rictus Intelligence;
+- Sentinel Security Operations.
+
+Additional certifications may be established when a defined Position, system, operational domain, or mission function requires a distinct demonstrated competency.
+
+Certification categories will not be created solely for organizational decoration.
+
+Each certification will correspond to a defined competency requirement.
+
+---
+
+8. General Certifications
+
+A General Certification establishes competency applicable across multiple STN-LABZ Positions or operational domains.
+
+A General Certification may establish foundational competency in areas including:
+
+- STN-LABZ engineering practices;
+- documentation requirements;
+- development doctrine;
+- controlled-system architecture;
+- qualification processes;
+- policy application; and
+- organizational operational doctrine.
+
+General Certifications may be prerequisites for specialized certifications where established by the applicable certification standard.
+
+---
+
+9. Domain-Specific Certifications
+
+A Domain-Specific Certification establishes competency within a defined STN-LABZ operational domain.
+
+Domain-specific certification areas may include:
+
+9.1 Mission Control
+
+Certification applicable to Mission Control responsibilities and mission-management functions.
+
+9.2 Digit Engineering
+
+Certification applicable to engineering work involving Digit and its approved engineering functions.
+
+9.3 Ezra Space Operations
+
+Certification applicable to space operations and Ezra-related mission functions.
+
+9.4 Rictus Intelligence
+
+Certification applicable to intelligence and communications functions associated with Rictus Intelligence.
+
+9.5 Sentinel Security Operations
+
+Certification applicable to cybersecurity and defensive operations associated with Sentinel.
+
+Each domain-specific certification will be governed by its own certification standard.
+
+---
+
+10. Certification Standard Requirements
+
+Every STN-LABZ certification will have a defined certification standard.
+
+Each certification standard will identify at minimum:
+
+- Certification ID
+- Certification Name
+- Status
+- Purpose
+- Applicable Position Tiers
+- Applicable Positions
+- Operational Domain
+- Prerequisites
+- Required Knowledge
+- Required Competencies
+- Required Practical Demonstration
+- Qualification Requirements
+- Evidence Requirements
+- Evaluation Method
+- Passing Requirements
+- Certification Authority
+- Certification Lifecycle
+- References
+
+The certification standard establishes what must be demonstrated.
+
+The certification record establishes whether a particular individual successfully demonstrated it.
+
+---
+
+11. Evidence
+
+Certification decisions will be supported by evidence demonstrating that the certification requirements were satisfied.
+
+Evidence may include:
+
+- completed engineering work;
+- qualification results;
+- practical demonstrations;
+- test results;
+- technical review;
+- documented project work;
+- controlled documentation;
+- code or system artifacts;
+- mission simulations;
+- operational exercises;
+- examination results; and
+- other evidence defined by the applicable certification standard.
+
+The required evidence will be established by the certification standard.
+
+Evidence requirements will correspond to the competency being certified.
+
+---
+
+12. Practical Competency
+
+Where practical competency is part of the certification requirement, the certification process will require demonstrated performance rather than knowledge claims alone.
+
+Examples may include:
+
+- building a compliant component;
+- diagnosing a defined engineering condition;
+- completing a qualification sequence;
+- reviewing controlled engineering evidence;
+- operating within a defined mission simulation;
+- demonstrating system-specific procedures; or
+- completing another practical requirement defined by the certification standard.
+
+Certification will reflect demonstrated competency against the applicable standard.
+
+---
+
+13. Certification Evaluation
+
+Certification evaluation will compare the candidate's evidence against the requirements of the applicable certification standard.
+
+Evaluation results will identify whether the candidate:
+
+- satisfies the certification requirements;
+- requires additional work;
+- does not satisfy the certification requirements; or
+- must repeat a defined qualification or practical requirement.
+
+The certification standard may establish additional evaluation states where needed.
+
+---
+
+14. Certification Records
+
+Each issued certification will have a certification record.
+
+A certification record will identify at minimum:
+
+- Credential ID
+- Certification ID
+- Certification Name
+- Certification Standard Revision
+- Employee or Candidate Identifier
+- Position, when applicable
+- Position Tier, when applicable
+- Status
+- Date Awarded
+- Expiration Date, when applicable
+- Evidence References
+- Reviewer or Certifying Authority
+- Decision Date
+
+Certification records will preserve the basis upon which the certification was awarded.
+
+---
+
+15. Credential Identification
+
+Each issued STN-LABZ certification will receive a unique credential identifier.
+
+The credential identifier will uniquely identify the certification record.
+
+Credential identifiers will not be reused.
+
+The credential record will remain associated with the certification and certification standard against which the individual was evaluated.
+
+---
+
+16. Certification Lifecycle
+
+STN-LABZ certifications may use the following lifecycle states:
+
+- Pending
+- Active
+- Suspended
+- Expired
+- Revoked
+
+16.1 Pending
+
+The certification process has not yet resulted in an active certification.
+
+16.2 Active
+
+The certification requirements have been satisfied and the certification is current.
+
+16.3 Suspended
+
+The certification temporarily does not satisfy current certification status requirements.
+
+16.4 Expired
+
+The certification has reached an established expiration condition.
+
+16.5 Revoked
+
+The certification has been withdrawn according to the applicable certification requirements or organizational action.
+
+The lifecycle of a certification does not alter the historical record showing that the certification was previously awarded.
+
+---
+
+17. Certification Validity
+
+A certification required by a Position or mission will satisfy that requirement only while the certification is in a valid status defined by the applicable standard.
+
+Unless otherwise defined by the applicable certification standard, Active is the status representing a current certification.
+
+Suspended, Expired, or Revoked certifications do not satisfy a requirement for a current certification.
+
+---
+
+18. Expiration and Renewal
+
+A certification may be permanent or time-limited according to the applicable certification standard.
+
+Where expiration applies, the certification standard will identify:
+
+- certification validity period;
+- expiration conditions;
+- renewal requirements;
+- reevaluation requirements; and
+- required evidence for renewal.
+
+A certification without an established expiration requirement will not be assigned an arbitrary expiration period.
+
+---
+
+19. Suspension
+
+A certification may be suspended where an applicable organizational or certification requirement establishes a basis for suspension.
+
+Suspension prevents the certification from satisfying a requirement for current certification while the suspension remains in effect.
+
+The certification record will remain intact.
+
+Restoration from suspension will follow the applicable certification requirements.
+
+---
+
+20. Revocation
+
+A certification may be revoked where an applicable organizational or certification requirement establishes a basis for revocation.
+
+Revocation changes the certification status.
+
+It does not delete the certification record or its historical evidence.
+
+A revoked certification will not satisfy certification requirements for a Position or mission.
+
+---
+
+21. Certification Standard Revisions
+
+A certification will identify the revision of the certification standard against which the individual was evaluated.
+
+A later revision of a certification standard does not silently alter the historical basis of an existing certification.
+
+Where a new certification-standard revision introduces requirements affecting existing certifications, the revised standard or another applicable controlled document will define the effect on those certifications.
+
+Existing certification history will remain traceable to the standard under which certification occurred.
+
+---
+
+22. Qualification Relationship
+
+Certification and qualification are related but distinct concepts.
+
+Certification records demonstrated competency against a certification standard.
+
+Qualification may include:
+
+- certification;
+- system-specific qualification;
+- practical qualification;
+- mission-specific qualification;
+- recency requirements; and
+- other competency requirements established by the applicable Position or mission.
+
+A Position or mission may require both certification and additional qualification.
+
+Certification does not automatically imply satisfaction of every qualification requirement.
+
+---
+
+23. Mission Control Certification
+
+Mission Control certification standards will define competencies required for positions responsible for mission planning, assignment, coordination, direction, reporting, and associated Mission Control functions.
+
+Mission Control certification does not create a Mission Control mission assignment.
+
+Mission Control access exists when the employee is assigned to the applicable Mission Control mission or function.
+
+---
+
+24. Digit Engineering Certification
+
+Digit Engineering certification standards will define competencies required for engineering positions working with Digit.
+
+Certification may include competency in areas established by the applicable standard, including:
+
+- Digit architecture;
+- engineering workflow;
+- controlled knowledge;
+- module development;
+- qualification;
+- documentation;
+- evidence;
+- system boundaries; and
+- applicable STN-LABZ engineering doctrine.
+
+Digit Engineering certification establishes competency for applicable Digit positions and missions.
+
+Digit access exists when an applicable Digit mission is assigned.
+
+---
+
+25. Ezra Space Operations Certification
+
+Ezra Space Operations certification standards will define competencies required for applicable Ezra and space-operations positions.
+
+Certification may include areas established by the applicable standard, including:
+
+- space-system operations;
+- telemetry;
+- mission planning;
+- spacecraft systems;
+- communications;
+- mission procedures;
+- anomaly response;
+- qualification; and
+- applicable STN-LABZ space operations doctrine.
+
+Ezra Space Operations certification establishes competency for applicable Ezra positions and missions.
+
+Ezra access exists when an applicable Ezra mission is assigned.
+
+---
+
+26. Rictus Intelligence Certification
+
+Rictus Intelligence certification standards will define competencies required for applicable intelligence and communications positions.
+
+Certification may include areas established by the applicable standard, including:
+
+- intelligence collection;
+- source handling;
+- intelligence reporting;
+- provenance;
+- communications;
+- Security Research Target handling;
+- evidence distinction;
+- operational reporting; and
+- applicable STN-LABZ intelligence doctrine.
+
+Rictus Intelligence certification establishes competency for applicable Rictus Intelligence positions and missions.
+
+Rictus access exists when an applicable Rictus mission is assigned.
+
+---
+
+27. Sentinel Security Operations Certification
+
+Sentinel Security Operations certification standards will define competencies required for applicable cybersecurity and defensive-operations positions.
+
+Certification may include areas established by the applicable standard, including:
+
+- defensive security operations;
+- network monitoring;
+- anomaly analysis;
+- system protection;
+- security research;
+- incident evidence;
+- qualification;
+- reporting; and
+- applicable STN-LABZ cybersecurity doctrine.
+
+Sentinel Security Operations certification establishes competency for applicable Sentinel positions and missions.
+
+Sentinel access exists when an applicable Sentinel mission is assigned.
+
+---
+
+28. Certification and Mission Access
+
+Certification will not be used as a substitute for mission assignment.
+
+The governing relationship is:
+
+    POSITION TIER
+        ↓
+    CERTIFICATION / QUALIFICATION
+        ↓
+    ELIGIBLE FOR MISSION ASSIGNMENT
+        ↓
+    MISSION ASSIGNMENT
+        =
+    ACCESS TO THE ASSIGNED MISSION
+
+Accordingly:
+
+> Certification proves competency.
+
+> Mission assignment grants access.
+
+> No mission means no mission access.
+
+---
+
+29. Certification Framework Principle
+
+The STN-LABZ Certification Framework exists to establish evidence of competency required for organizational positions and missions.
+
+Certification is not a general access credential.
+
+Certification is not a substitute for Position Tier.
+
+Certification is not a mission assignment.
+
+Certification provides evidence that an employee has satisfied defined competency requirements and may therefore be considered for positions and missions requiring that certification.
+
+---
+
+30. References
+
+- 20260821.0 — STN-LABZ Tiered Position Framework — Governs organizational Positions, Position Tiers, eligibility, qualification relationships, mission assignment, and mission access.
+- 20260730.2 — STN-LABZ General Orders — Establishes assigned mission, authorized instruction, and escalation requirements.
+- 20260729.6 — Engineering Documentation — Governs STN-LABZ engineering documentation requirements.
+- 20260729.8 — Operational Doctrine — Establishes applicable STN-LABZ operational doctrine.
+- 20260731.2 — Documentation Language Policy — Establishes STN-LABZ controlled-document language requirements.
+- 20260806.0 — Agent Modules — Establishes core/module governance, qualification, activation, and requalification requirements for applicable STN-LABZ systems.
+- 20260810.1 — Module Creation Request Policy — Establishes the Module Creation Request process for new STN-LABZ modules.
+- 20260814.2 — Mandatory AI Annotation Policy — Establishes AI annotation requirements for applicable STN-LABZ engineering work.
+- 20260819.1 — AI-Assisted Controlled Documentation Policy — Governs AI-assisted creation, revision, review, analysis, and maintenance of STN-LABZ controlled documentation. :contentReference[oaicite:0]{index=0}
+
+---
+
+31. Subordinate Certification Standards
+
+The following certification standards are anticipated under this framework:
+
+- STN-LABZ General Engineering Certification Standard
+- Mission Control Certification Standard
+- Digit Engineering Certification Standard
+- Ezra Space Operations Certification Standard
+- Rictus Intelligence Certification Standard
+- Sentinel Security Operations Certification Standard
+
+Additional certification standards may be established where a defined organizational Position, Position Tier, system, or mission function requires a distinct demonstrated competency.
+
+---
+
+END OF DOCUMENT

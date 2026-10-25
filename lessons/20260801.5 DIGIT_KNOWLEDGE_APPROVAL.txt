@@ -1,0 +1,40 @@
+20260801.5 — Digit Knowledge Approval
+
+Root Document ID: 20260801.5
+Revision ID: NONE
+Previous Revision: NONE
+sha256: 627f09c3d2ec3609ce3b98f28c6d45e7d4c03ff24ca6ba59f0ad61d80ee9b558
+
+Project: Digit  
+Status: Approved  
+Scope: Policy
+
+Policy
+
+All information intended for Digit's operational use will be reviewed and approved by qualified STN-LABZ engineers before incorporation into an authorized STN-LABZ knowledge source.
+
+Intelligence and operational data derived from Rictus or STN-LABZ research will require human approval through the applicable Digit and Rictus project authority before becoming authorized knowledge for Digit.
+
+Qualified engineers will verify, as applicable:
+
+- Accuracy
+- Relevance
+- Authenticity
+- Mission applicability
+
+Unapproved information will not be made available to Digit as operational knowledge through a knowledge base, Retrieval-Augmented Generation (RAG) system, intranet resource, or other authorized knowledge mechanism.
+
+Information approved for Digit's operational use will be treated as authorized STN-LABZ engineering knowledge within the scope for which it was approved.
+
+Approval does not grant Digit authority to independently acquire, approve, expand, or modify her authoritative knowledge sources.
+
+Rationale
+
+This policy ensures that Digit's engineering knowledge remains accurate, auditable, deterministic, mission-relevant, and under qualified human control throughout the STN-LABZ ecosystem.
+
+References
+
+- STN-LABZ General Orders
+- 20260730.1 — Digit: Authorized Knowledge
+- 20260801.4 — Network Isolation
+- Applicable STN-LABZ engineering policy and doctrine

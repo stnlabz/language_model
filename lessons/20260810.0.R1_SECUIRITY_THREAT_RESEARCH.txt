@@ -1,0 +1,558 @@
+20260810.0 — Security Research Threat (SRT)
+
+Root Document ID: 20260810.0
+Revision ID: 20260810.0.R1
+Previous Revision: 20260810.0
+sha256: b790f9f3ecc018d9c359aa0db0a2508c16d762e6210c40a81b4c4416e69460c7
+
+Project: Sentinel / Rictus
+Status: Approved
+Scope: Policy
+Classification: Security Research
+
+Purpose
+
+The Security Research Threat (SRT) process establishes a structured,
+human-controlled method for identifying, documenting, investigating,
+reviewing, preserving, and, when authorized, publishing potential
+security conditions identified through STN-LABZ research, development,
+intelligence, or operational activity.
+
+An SRT allows a potential security condition to be investigated without
+prematurely establishing that the reported condition is true, exploitable,
+applicable to STN-LABZ, or an established organizational threat.
+
+The SRT process preserves the distinction between discovery, research,
+assessment, human decision, publication, and organizational knowledge.
+
+Completion of one SRT processing stage does not independently authorize
+progression to another stage.
+
+Human interaction remains required at applicable authority boundaries.
+
+
+Identification
+
+A potential Security Research Threat may be identified through:
+
+- STN-LABZ research and development.
+- Rictus intelligence collection.
+- News and intelligence aggregation.
+- Engineering observations.
+- Security research.
+- Operational observations.
+- Other authorized STN-LABZ activities.
+
+Rictus may identify and report an SRT candidate within its assigned
+mission.
+
+Research or other authorized STN-LABZ activity may also identify
+information warranting review by Security Research.
+
+Identification of an SRT candidate does not establish the reported
+condition as fact, establish an organizational threat, or authorize
+further processing.
+
+
+Candidate Threshold
+
+An SRT candidate may be identified when available information provides
+a reasonable basis to investigate a potential condition capable of
+adversely affecting:
+
+- Security.
+- Integrity.
+- Availability.
+- Confidentiality.
+- Operational or command authority boundaries.
+- Safety.
+- Infrastructure.
+- Engineering systems.
+- Autonomous systems.
+- Communications.
+- Space systems or missions.
+- STN-LABZ operations or mission objectives.
+- Other systems or interests within authorized STN-LABZ scope.
+
+The existence of cybersecurity, space, AI, communications, or other
+technically relevant subject matter alone does not establish an SRT
+candidate.
+
+Candidate identification establishes a research question or potential
+condition requiring review.
+
+It does not establish a threat determination.
+
+
+Intelligence and Discovery Identity
+
+Information retained through STN-LABZ intelligence or research activity
+may receive a stable intelligence identifier before becoming an SRT.
+
+Example:
+
+INT-8C4F2A71
+
+The intelligence identifier identifies the originating intelligence or
+research object.
+
+Assignment of an intelligence identifier does not:
+
+- Establish an SRT.
+- Establish a threat.
+- Authorize Security Research.
+- Establish organizational knowledge.
+- Authorize publication.
+
+When an SRT originates from an identified intelligence object, the SRT
+record will preserve the originating intelligence identifier.
+
+
+SRT Candidate
+
+A condition identified for possible Security Research will be designated
+as an:
+
+SRT CANDIDATE
+
+An SRT candidate will initially be treated as:
+
+POTENTIAL — NOT ESTABLISHED
+
+An SRT candidate may be reported for human review.
+
+Where an intelligence identifier exists, candidate reporting may identify
+the candidate by that identifier.
+
+Example:
+
+INT-8C4F2A71 — SRT CANDIDATE
+
+The candidate remains potential until evidence and authorized human
+review establish an applicable disposition.
+
+Candidate status alone does not authorize Security Research activity.
+
+
+Human-Controlled Progression
+
+The SRT process is human-controlled.
+
+No component, agent, module, research process, database, or successful
+processing stage independently authorizes progression across an authority
+boundary.
+
+Applicable transitions require explicit human interaction.
+
+Human interaction may include:
+
+- Review.
+- Approval.
+- Rejection.
+- Revision.
+- Routing.
+- Research authorization.
+- Publication authorization.
+- Distribution authorization.
+- Other explicit authorized human action.
+
+Automated systems may collect, process, validate, preserve, present, or
+recommend information within their authorized scope.
+
+Automation does not replace required human authority.
+
+A successful processing stage establishes only that the applicable stage
+completed successfully.
+
+It does not independently authorize the next stage.
+
+
+Security Research
+
+Security Research evaluates SRT candidates routed or authorized for
+security investigation.
+
+Security Research may:
+
+- Examine the originating observation or intelligence.
+- Locate root or primary evidence.
+- Collect supporting evidence.
+- Collect contradictory evidence.
+- Reproduce or test technical claims when authorized and appropriate.
+- Identify affected systems or domains.
+- Assess technical plausibility.
+- Document unknowns.
+- Assess potential impact.
+- Recommend additional research.
+- Document potential mitigation.
+- Recommend an applicable disposition.
+
+Security Research will preserve the distinction between:
+
+- Observed fact.
+- Reported claim.
+- Technical evidence.
+- Inference.
+- Assessment.
+- Unknown information.
+
+Security Research does not independently create organizational policy or
+approve information as organizational knowledge.
+
+
+Security Research Threat Record
+
+Each formal SRT will receive a stable identifier sufficient to uniquely
+identify the research record.
+
+The identifier format will support multiple SRT records without ambiguity.
+
+Example:
+
+SRT-YYYYMMDD-NNN
+
+An SRT originating from an identified intelligence object will preserve
+both identities.
+
+Example:
+
+Origin Intelligence ID: INT-8C4F2A71
+
+SRT ID: SRT-20260818-001
+
+The intelligence identifier and SRT identifier serve different purposes.
+
+The intelligence identifier identifies the originating intelligence or
+research object.
+
+The SRT identifier identifies the formal Security Research record.
+
+
+SRT Record Content
+
+The SRT record will include, as applicable:
+
+
+Origin
+
+Identify the originating intelligence, research, engineering, operational,
+or other authorized activity.
+
+Where available, preserve the originating intelligence identifier.
+
+
+Title / Research State
+
+Identify the subject of the research and its current research state.
+
+
+Threat
+
+What potential security condition has been identified?
+
+
+Observation
+
+What has actually been observed, demonstrated, or reported?
+
+Observation will remain distinguishable from interpretation or inference.
+
+
+Potential Impact
+
+How could the identified condition affect STN-LABZ systems, operations,
+engineering, security, infrastructure, mission objectives, or the public?
+
+
+Affected Domains
+
+Applicable domains may include:
+
+- Desktop / Laptop
+- Server
+- Network
+- Space
+- AI
+- Communications
+- Infrastructure
+- Autonomous Systems
+- Other affected systems or environments
+
+
+Evidence
+
+Preserve evidence supporting the SRT, including as applicable:
+
+- Original discovery source.
+- Root or primary source.
+- Supporting references.
+- Technical documentation.
+- Research.
+- Demonstrations.
+- Incidents.
+- Contradictory evidence.
+- Other relevant evidence.
+
+Provenance will be preserved sufficiently to allow later verification.
+
+
+Assessment
+
+Analysis and interpretation will remain distinguishable from established
+facts.
+
+Capability will not be interpreted as authority.
+
+The existence of a technical capability does not establish that its use
+was authorized, intended, exploitable, or applicable to STN-LABZ.
+
+
+Unknowns
+
+Information that cannot be established from available evidence will remain:
+
+UNKNOWN
+
+Unknown information will not be replaced with speculation.
+
+
+Confidence
+
+Confidence will be identified as:
+
+- LOW
+- MODERATE
+- HIGH
+
+Confidence describes the strength of the available assessment.
+
+Confidence does not convert an unverified condition into established fact.
+
+
+Recommended Research
+
+Identify additional investigation, testing, evidence, or analysis required
+to determine the condition more completely.
+
+
+Potential Mitigation
+
+Potential defensive or engineering measures may be documented for
+research and review.
+
+Potential mitigation is not policy unless separately approved through the
+STN-LABZ policy process.
+
+
+Human Actions
+
+The record will preserve applicable human actions affecting progression,
+including as appropriate:
+
+- Candidate review.
+- Routing to Security Research.
+- Research authorization.
+- Revision.
+- Disposition.
+- Publication authorization.
+- Distribution authorization.
+
+Records will identify the action and sufficient provenance to establish
+that the applicable human authority boundary was crossed intentionally.
+
+
+Human Review
+
+SRT candidates require human review.
+
+Human review may result in the candidate being:
+
+- Approved for further research.
+- Revised.
+- Escalated.
+- Routed.
+- Closed.
+
+Creation of an SRT candidate does not establish that:
+
+- The reported condition is true.
+- The condition is exploitable.
+- The condition applies to STN-LABZ.
+- The condition constitutes an established organizational threat.
+- The condition requires policy.
+- The condition has been approved as a research assignment.
+- The condition has been approved for publication.
+- The condition has been approved as organizational knowledge.
+
+Human authorization is required before an SRT candidate becomes an
+approved research assignment.
+
+
+Disposition
+
+An SRT may receive an applicable disposition including:
+
+- MONITOR
+- RESEARCH
+- ESCALATE
+- RECOMMEND POLICY
+- CLOSED
+
+Disposition will reflect the current authorized treatment of the SRT and
+will not be interpreted as evidence beyond what the SRT record establishes.
+
+Disposition does not independently authorize publication or distribution.
+
+
+Publication
+
+SRT research may produce information suitable for publication or
+organizational use.
+
+Publication requires human authorization.
+
+Research completion does not independently authorize publication.
+
+Before an SRT-derived artifact enters an approved organizational knowledge
+path, the applicable publication, integrity, provenance, and human-review
+requirements will be completed.
+
+A published controlled artifact will receive the applicable content hash
+or other required integrity record before authorized downstream use.
+
+Publication does not erase the underlying SRT research history.
+
+
+Distribution
+
+Authorized published SRT material may be distributed to approved
+STN-LABZ destinations.
+
+Applicable destinations may include:
+
+- Digit through the approved knowledge pipeline.
+- The STN-LABZ SRT database.
+- Other specifically authorized STN-LABZ systems or repositories.
+
+Distribution requires the applicable human action and does not occur
+merely because research or publication processing completed successfully.
+
+Raw SRT candidates, unapproved assessments, and unresolved research will
+not become approved Digit knowledge merely because they exist within the
+SRT process.
+
+The SRT database may preserve research and historical records according to
+its authorized purpose.
+
+Digit receives only information authorized through the applicable
+organizational knowledge process.
+
+
+Integrity and Provenance
+
+Published or controlled SRT artifacts will preserve sufficient integrity
+and provenance information to establish:
+
+- Origin.
+- Applicable intelligence identifier.
+- Applicable SRT identifier.
+- Evidence lineage.
+- Human decisions.
+- Publication state.
+- Content integrity.
+- Applicable downstream distribution.
+
+Where a content hash is required, the hash identifies the applicable
+content state and does not replace the permanent identity of the
+underlying intelligence or SRT record.
+
+
+Policy Boundary
+
+An SRT does not create organizational policy.
+
+An SRT may recommend policy when research identifies a condition requiring
+organizational governance.
+
+Policy creation, amendment, approval, or rejection remains a separate
+human-governed process.
+
+Potential mitigation documented within an SRT does not become mandatory
+merely because it appears in the research record.
+
+
+Authority Boundary
+
+Security Research identifies and evaluates potential conditions.
+
+Rictus may discover, collect, correlate, document, and report information
+relevant to an SRT candidate within its assigned mission.
+
+Other authorized STN-LABZ research and engineering activities may identify
+and route potential SRT conditions for human review.
+
+Rictus will not:
+
+- Independently establish an SRT candidate as an organizational threat.
+- Independently approve SRT research assignments.
+- Independently approve organizational knowledge.
+- Establish company policy.
+- Bypass required human review.
+- Expand its own authority.
+
+Security Research will not independently authorize organizational
+knowledge, publication, policy, or progression beyond its delegated
+authority.
+
+Digit will not treat unapproved SRT research or candidate information as
+approved organizational knowledge.
+
+Databases, pipelines, modules, and other automated systems will not treat
+successful processing as human authorization.
+
+Human authority remains the approval boundary.
+
+
+Historical Record
+
+SRT records will preserve supporting and contradictory evidence necessary
+to understand how the assessment developed.
+
+An SRT that is rejected, disproven, revised, superseded, or closed remains
+part of the engineering and security research record.
+
+Contrary evidence will not be removed merely because it weakens the
+original hypothesis.
+
+Applicable human decisions and state transitions will remain attributable
+within the historical record.
+
+
+Implementation Boundary
+
+This policy defines governance and authority requirements.
+
+Specific implementation mechanisms used to express human action are
+defined separately by the applicable system or operational procedure.
+
+Such mechanisms may include authenticated commands, administrative
+interfaces, manual review actions, controlled-document approval, or other
+authorized methods.
+
+An implementation mechanism does not alter the human authority requirement.
+
+For example, a future Rictus command may provide an operational mechanism
+for requesting or authorizing an SRT action.
+
+The existence of such a command does not give Rictus independent authority
+to initiate, approve, publish, or distribute SRT research.
+
+
+References
+
+- STN-LABZ General Orders
+- 20260729.0.R0 — Operational Authority
+- 20260729.5 — Unknown State Doctrine
+- 20260729.6.R1 — Engineering Documentation
+- 20260729.8 — Operational Doctrine
+- 20260805.0 — Rictus: Mission Assignment

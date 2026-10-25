@@ -1,0 +1,2291 @@
+DNS stands for Domain Name System.
+
+DNS is a distributed naming system.
+
+DNS maps names to information according to DNS records and protocol rules.
+
+DNS is commonly used to map domain names to IP addresses.
+
+DNS can also publish mail-routing information.
+
+DNS can publish service information.
+
+DNS can publish verification information.
+
+DNS can delegate authority.
+
+DNS can publish cryptographic information.
+
+DNS is not merely a hostname-to-IP lookup table.
+
+A domain name is a hierarchical name in the DNS namespace.
+
+DNS names are composed of labels.
+
+Labels are separated by dots in textual representation.
+
+The hierarchy is interpreted from right to left.
+
+In example.com, com is above example.com in the DNS hierarchy.
+
+The DNS namespace has a root.
+
+The root is conventionally represented by a trailing dot in a fully qualified domain name.
+
+example.com. is an absolute DNS name.
+
+The trailing root dot is commonly omitted in ordinary presentation.
+
+A fully qualified domain name is commonly abbreviated FQDN.
+
+An FQDN identifies a name from the DNS root.
+
+A relative DNS name can be completed using local resolver search rules.
+
+Relative-name expansion can produce different results in different environments.
+
+Do not rely on search-domain behavior for security-sensitive or deterministic naming.
+
+Use the intended absolute name when ambiguity matters.
+
+DNS names are not URLs.
+
+example.com is a DNS name.
+
+https://example.com/path is a URL.
+
+DNS does not resolve the URL path.
+
+DNS does not determine the HTTP resource.
+
+DNS can help locate the network address associated with the hostname portion.
+
+Keep naming layers separate.
+
+DNS names are not IP addresses.
+
+An IP address identifies a network-layer address.
+
+A DNS name can resolve to an IP address.
+
+One DNS name can resolve to multiple IP addresses.
+
+Multiple DNS names can resolve to the same IP address.
+
+A DNS name can exist without an address record.
+
+An IP address can exist without a DNS name.
+
+Name identity and address identity are different.
+
+A hostname is a name assigned to a host according to a system or network naming scheme.
+
+A DNS name can identify a host.
+
+A DNS name can also identify a service or other namespace object.
+
+Do not assume every DNS name represents one physical computer.
+
+A name can represent a load balancer.
+
+A name can represent a cluster.
+
+A name can represent a CDN.
+
+A name can represent a virtual host.
+
+A name can represent a service endpoint.
+
+A name can change addresses over time.
+
+DNS separates naming from network addressing.
+
+This indirection allows an address to change while the name remains stable.
+
+It also means knowing the name does not prove the current address.
+
+Resolve according to current DNS state when current resolution matters.
+
+DNS data is stored in resource records.
+
+A resource record is commonly abbreviated RR.
+
+A resource-record set is commonly abbreviated RRset.
+
+An RRset contains records with the same owner name, class, and type according to DNS semantics.
+
+DNS record types have defined meanings.
+
+An A record maps a DNS name to an IPv4 address.
+
+An AAAA record maps a DNS name to an IPv6 address.
+
+A CNAME record establishes a canonical-name alias according to DNS rules.
+
+An MX record identifies mail exchangers.
+
+A TXT record stores textual data according to applications using TXT records.
+
+An NS record identifies authoritative name servers for a DNS zone or delegation.
+
+An SOA record contains administrative and control information for a DNS zone.
+
+A PTR record is commonly used for reverse DNS mapping.
+
+An SRV record can publish service location information.
+
+CAA records can express certificate-authority authorization policy.
+
+Other DNS record types exist.
+
+Do not infer a record's meaning from its textual appearance alone.
+
+Interpret it according to its DNS type and application protocol.
+
+An A record contains an IPv4 address.
+
+An AAAA record contains an IPv6 address.
+
+A host can have both.
+
+A client can receive multiple A records.
+
+A client can receive multiple AAAA records.
+
+The existence of multiple addresses does not automatically identify one as primary.
+
+Address-selection behavior belongs to the client and network stack according to applicable rules.
+
+Do not assume the first DNS answer is permanently preferred.
+
+Record ordering can vary.
+
+Resolvers can reorder responses.
+
+Authoritative servers can vary response order.
+
+Applications requiring deterministic behavior should not assign unsupported meaning to DNS answer order.
+
+A CNAME record aliases one DNS name to another DNS name.
+
+The CNAME target is another name.
+
+It is not directly an IP address.
+
+Resolution can continue using the target name.
+
+CNAME chains can exist.
+
+Chains should be bounded.
+
+A CNAME loop is invalid for useful resolution.
+
+Resolvers should detect or eventually terminate cyclic resolution according to protocol limits.
+
+Do not recursively follow aliases without bounds.
+
+A CNAME alias does not mean the alias and target are interchangeable in every application context.
+
+Application identity can still depend on the originally requested hostname.
+
+TLS hostname validation commonly uses the requested hostname rather than blindly replacing application identity with DNS canonical names.
+
+DNS aliasing and application identity are separate.
+
+MX records identify mail exchangers for a domain.
+
+MX records include preference values.
+
+Lower preference values are conventionally preferred according to MX semantics.
+
+An MX target is a hostname.
+
+It is not a URL.
+
+It is not an email address.
+
+Mail delivery software resolves the target according to mail and DNS rules.
+
+Do not treat MX records as generic service discovery unless the application protocol defines that behavior.
+
+TXT records contain textual strings.
+
+TXT records are used by many application protocols.
+
+TXT itself does not define the semantic meaning of the text.
+
+SPF-related information can appear in TXT records.
+
+Domain verification tokens can appear in TXT records.
+
+DKIM-related information can appear under selected DNS names.
+
+Other applications can use TXT.
+
+Do not assume every TXT record has the same purpose.
+
+TXT data is application-defined.
+
+An NS record identifies a name server responsible according to zone or delegation semantics.
+
+A delegation directs resolution from a parent zone toward authoritative servers for a child zone.
+
+Delegation is fundamental to DNS hierarchy.
+
+The root delegates top-level domains.
+
+Top-level domains delegate child domains.
+
+Child domains can delegate further subdomains.
+
+No single ordinary DNS server needs to contain the entire DNS namespace.
+
+Authority is distributed.
+
+A zone is an administrative portion of the DNS namespace served authoritatively.
+
+A zone is not necessarily the same thing as a domain.
+
+A domain is a node and descendants in the namespace according to DNS terminology.
+
+A zone contains the portion for which one administrative authority maintains authoritative data, excluding delegated child zones.
+
+A domain can contain multiple zones because subdomains can be delegated.
+
+Do not confuse domain with zone.
+
+A zone apex is the top name of a DNS zone.
+
+For a zone example.com, example.com is the zone apex.
+
+The apex commonly contains SOA and NS records.
+
+Certain aliasing rules at the zone apex differ from ordinary names because required records must coexist there.
+
+Do not assume every provider's proprietary alias feature is a standard CNAME.
+
+Providers can implement ALIAS, ANAME, flattening, or similar features.
+
+These can produce CNAME-like operational behavior without publishing a standard CNAME at the apex.
+
+Distinguish provider features from DNS protocol record types.
+
+The SOA record is the Start of Authority record.
+
+It contains zone control information.
+
+It identifies a primary server name according to SOA semantics.
+
+It contains administrative information.
+
+It contains a serial value.
+
+It contains timing values used by DNS mechanisms.
+
+Exact interpretation follows DNS standards and server implementation.
+
+The SOA serial can be used to determine whether zone data has changed for zone-transfer purposes.
+
+Serial-number handling has defined arithmetic semantics.
+
+Do not treat it as an ordinary unlimited integer without considering DNS serial arithmetic.
+
+Authoritative DNS servers answer using authoritative zone data for names under their authority.
+
+A recursive resolver answers clients by performing or using recursive resolution and caching results.
+
+Authoritative server and recursive resolver are different roles.
+
+One software package can technically provide both roles.
+
+Operationally, the functions remain distinct.
+
+Do not expose unrestricted recursion merely because a server is authoritative.
+
+Open recursive resolvers can be abused.
+
+A stub resolver is the client-side resolver interface commonly used by applications and operating systems.
+
+An application often asks the operating system resolver for an address.
+
+The stub resolver sends queries to configured recursive resolvers.
+
+The application does not necessarily contact authoritative DNS servers directly.
+
+Therefore application-visible DNS behavior can include operating-system and resolver caching.
+
+A recursive resolver accepts a client's recursive query and attempts to obtain the answer.
+
+It can answer from cache.
+
+It can query authoritative hierarchy.
+
+It can return errors.
+
+It can return negative results.
+
+Recursive resolution commonly begins from known root-server information when no useful cached delegation exists.
+
+The resolver can query a root server.
+
+The root can refer it to authoritative servers for a top-level domain.
+
+The resolver can query the top-level-domain servers.
+
+They can refer it to authoritative servers for the requested child zone.
+
+The resolver can query the authoritative server.
+
+The resolver can return the resulting answer to the client.
+
+This process is simplified by caching.
+
+Most lookups do not necessarily begin from the root because useful data can already be cached.
+
+DNS referrals direct a resolver toward another authoritative server.
+
+A referral is not the final answer to the original application question.
+
+It provides information needed to continue resolution.
+
+Resolvers must distinguish answers from referrals.
+
+Glue records provide address information needed to reach delegated name servers in selected delegation situations.
+
+Glue is especially important when a delegated name server's name lies inside the delegated namespace.
+
+Without necessary glue, resolution could become circular.
+
+Glue records are supplied by the parent zone according to delegation requirements.
+
+Glue is not ordinary authoritative child-zone address data merely because it contains an address.
+
+Its role is to make delegation reachable.
+
+Do not confuse glue with the authoritative A or AAAA RRset for the name.
+
+Caching is fundamental to DNS.
+
+DNS responses contain time-to-live values.
+
+TTL stands for Time To Live.
+
+TTL tells caches how long a DNS record can be retained according to DNS semantics.
+
+TTL is commonly expressed in seconds.
+
+A resolver can cache an answer until its TTL expires.
+
+Changing authoritative DNS does not instantly change every cached answer.
+
+Resolvers can continue returning previously cached data until its caching lifetime expires.
+
+DNS propagation is therefore not one global event traveling across the Internet.
+
+What is commonly called propagation is usually the expiration and replacement of cached DNS information across independent resolvers.
+
+Different resolvers can hold different cached states at the same time.
+
+One resolver can show the new address.
+
+Another can still show the old address.
+
+Both can be operating correctly within their cache state.
+
+Do not declare DNS globally updated based on one resolver.
+
+Do not declare DNS globally broken because two resolvers temporarily disagree during a legitimate transition.
+
+Examine TTL and authoritative state.
+
+TTL begins with the authoritative value but observed remaining TTL can decrease in caches.
+
+A resolver returning a lower TTL can indicate cached data nearing expiration.
+
+Do not assume the returned TTL always equals the zone-file TTL.
+
+Caching layers can exist.
+
+Operating systems can cache DNS.
+
+Browsers can cache selected DNS information.
+
+Applications can cache results.
+
+Recursive resolvers cache results.
+
+Network infrastructure can provide additional resolver behavior.
+
+Clearing one cache does not clear every cache.
+
+A local DNS cache flush cannot force remote recursive resolvers to discard valid cached data.
+
+Authority boundaries matter.
+
+Negative DNS answers can also be cached.
+
+A negative answer can state that a name does not exist.
+
+A negative answer can state that the requested record type does not exist for an existing name.
+
+These conditions differ.
+
+NXDOMAIN indicates that the queried domain name does not exist according to the authoritative DNS result.
+
+A NOERROR response with no requested records can indicate that the name exists but has no records of the requested type.
+
+Do not confuse NXDOMAIN with an empty answer.
+
+Negative caching can cause a recently created name to remain unresolved through some caches until the negative cache expires.
+
+Creating the missing record does not instantly remove every cached negative answer.
+
+Account for negative caching during deployment.
+
+SERVFAIL indicates the resolver could not complete resolution successfully.
+
+SERVFAIL does not mean the requested name definitely does not exist.
+
+It can result from upstream failure.
+
+It can result from DNSSEC validation failure.
+
+It can result from authoritative server problems.
+
+It can result from resolver failure.
+
+It can result from delegation problems.
+
+Do not translate SERVFAIL into NXDOMAIN.
+
+REFUSED indicates the server refused the query according to its policy or capability.
+
+REFUSED does not prove the name is absent.
+
+Different DNS response codes represent different states.
+
+Preserve them when diagnosing.
+
+Timeout is not NXDOMAIN.
+
+Timeout is not SERVFAIL unless a resolver returns SERVFAIL as its resulting response.
+
+A client receiving no DNS response knows only that the required response was not received within its waiting behavior.
+
+The server can be unreachable.
+
+The packet can be lost.
+
+A firewall can block traffic.
+
+The resolver can be overloaded.
+
+The network can be unavailable.
+
+Do not invent a DNS content answer from transport failure.
+
+DNS commonly uses UDP port 53.
+
+DNS can use TCP port 53.
+
+Do not assume DNS is UDP-only.
+
+Traditional DNS clients commonly use UDP for ordinary queries when possible.
+
+TCP is used in circumstances defined by DNS protocols.
+
+Large responses can require TCP fallback.
+
+Zone transfers commonly use TCP.
+
+DNSSEC can increase response sizes.
+
+Modern DNS transports also exist.
+
+DNS over TLS is commonly abbreviated DoT.
+
+DNS over HTTPS is commonly abbreviated DoH.
+
+These transports carry DNS using different secure transport mechanisms.
+
+DoT and DoH do not change the underlying meaning of DNS records.
+
+They change transport and privacy/security properties between selected participants.
+
+Do not confuse encrypted DNS transport with DNSSEC.
+
+DNSSEC stands for Domain Name System Security Extensions.
+
+DNSSEC provides mechanisms for authenticating DNS data according to a chain of trust.
+
+DNSSEC can provide origin authentication of DNS data.
+
+DNSSEC can provide integrity protection for signed DNS data.
+
+DNSSEC can provide authenticated denial of existence.
+
+DNSSEC does not encrypt ordinary DNS queries or responses.
+
+DNSSEC does not provide confidentiality.
+
+DoT and DoH can encrypt DNS transport between a client and resolver.
+
+That does not automatically provide end-to-end DNS data authenticity equivalent to DNSSEC.
+
+Transport security and DNS data authentication are different.
+
+DNSSEC uses cryptographic signatures associated with DNS RRsets.
+
+RRSIG records contain DNSSEC signatures.
+
+DNSKEY records publish public keys for a zone.
+
+DS records in a parent zone establish selected trust linkage to a child zone.
+
+NSEC and NSEC3 records support authenticated denial of existence according to DNSSEC mechanisms.
+
+Exact DNSSEC validation follows DNSSEC protocol rules.
+
+Do not implement DNSSEC by merely checking that an RRSIG record exists.
+
+A signature must validate.
+
+The relevant key must be valid.
+
+The chain of trust must be established.
+
+The signed data must match.
+
+Time validity must be considered.
+
+Algorithm support must be considered.
+
+Presence is not validation.
+
+A validating resolver performs DNSSEC validation when configured and supported.
+
+A signed zone with broken DNSSEC can become unreachable to validating resolvers while appearing to work through nonvalidating paths.
+
+This can create apparently inconsistent DNS behavior.
+
+Check DNSSEC status when signed domains produce SERVFAIL unexpectedly.
+
+A DNSSEC chain of trust commonly begins from a configured trust anchor.
+
+The DNS root trust anchor allows validation to proceed through signed delegations.
+
+Trust does not arise merely because a DNS record says it is trusted.
+
+Cryptographic validation and configured trust establish it.
+
+DNSSEC does not establish application authorization.
+
+A correctly signed A record establishes selected authenticity of DNS data.
+
+It does not prove the server at that address is authorized for every application operation.
+
+Application protocols still require their own authentication and authorization where needed.
+
+DNS resolution and service availability are separate.
+
+A name can resolve correctly while the service is down.
+
+A name can resolve correctly while the server refuses connections.
+
+A name can resolve correctly while the application returns errors.
+
+A name can resolve correctly while TLS validation fails.
+
+A name can resolve correctly while a firewall blocks the service port.
+
+A name can resolve correctly while routing fails.
+
+DNS success proves only the DNS result established by the lookup.
+
+It does not prove end-to-end service health.
+
+Likewise, DNS failure does not necessarily prove the underlying server is down.
+
+A server can remain reachable directly by IP while its DNS name fails to resolve.
+
+Do not confuse naming failure with host failure.
+
+A DNS lookup is one stage in network connection establishment.
+
+Application requests can involve:
+
+Interpret application target.
+
+Resolve hostname.
+
+Select an address.
+
+Establish network route.
+
+Establish transport connection.
+
+Perform TLS where applicable.
+
+Perform application protocol exchange.
+
+Authenticate or authorize as required.
+
+Each stage can fail independently.
+
+Report the failed stage.
+
+Do not report "server down" merely because DNS resolution failed.
+
+DNS can support load distribution by returning multiple addresses.
+
+DNS can vary answers.
+
+DNS can use geographically informed responses.
+
+DNS can use health-informed authoritative systems.
+
+DNS can use weighted policies through provider-specific systems.
+
+The DNS protocol itself does not guarantee that every returned address is healthy.
+
+Clients should handle connection failure according to application rules.
+
+DNS is not a substitute for application health checking.
+
+Round-robin DNS commonly refers to returning multiple address records with varying order.
+
+Record order alone does not guarantee balanced traffic.
+
+Clients can cache.
+
+Clients can choose one address.
+
+Resolvers can reorder.
+
+Connection behavior can differ.
+
+Do not infer exact load distribution from DNS record order.
+
+Low TTL values can allow address changes to become visible sooner to compliant caches.
+
+Low TTL does not create instantaneous failover.
+
+Clients can cache beyond expected boundaries.
+
+Existing connections remain established to old addresses.
+
+Applications can maintain their own caches.
+
+DNS changes do not terminate existing TCP connections.
+
+DNS is consulted during resolution, not continuously for every established connection.
+
+A client already connected to an old address can remain connected after DNS changes.
+
+Do not expect a DNS update to move existing connections.
+
+DNS-based failover therefore has timing limits.
+
+If rapid failover is required, design at the appropriate application, transport, load-balancing, or service-discovery layer.
+
+DNS can contribute but should not be assigned guarantees it does not provide.
+
+A DNS record can have a long TTL.
+
+Changing it shortly before migration can leave old data cached for the previous TTL duration.
+
+Operational migrations commonly lower TTL before a planned address change.
+
+The lower TTL itself must first become visible after older cached records expire.
+
+Changing TTL at the same moment as changing the address does not retroactively shorten TTLs already cached.
+
+Plan transitions.
+
+After migration stabilizes, TTL can be increased according to operational needs.
+
+High TTL reduces query load and can improve cache efficiency.
+
+Low TTL allows faster cache turnover.
+
+Neither is universally correct.
+
+Choose according to change frequency and operational requirements.
+
+DNS resolvers can cache failures.
+
+DNS clients should not retry aggressively without bounds.
+
+Repeated immediate retries can increase load during resolver or authoritative failure.
+
+Use appropriate retry behavior.
+
+Multiple configured resolvers can provide resilience.
+
+Do not assume querying many public resolvers simultaneously is always appropriate.
+
+Respect system resolver policy unless architecture requires otherwise.
+
+Applications normally benefit from using the operating system resolver.
+
+Direct DNS implementations require more protocol responsibility.
+
+Do not implement a DNS client from scratch merely to resolve ordinary hostnames unless requirements justify it.
+
+System resolver APIs can provide address resolution.
+
+On POSIX-like systems, getaddrinfo is commonly used.
+
+Windows provides corresponding Winsock resolution interfaces.
+
+getaddrinfo can return IPv4 and IPv6 results.
+
+It can apply system resolver configuration.
+
+It can apply local host mappings.
+
+It can use mechanisms beyond raw DNS according to operating-system configuration.
+
+Therefore hostname resolution through an OS API is not necessarily identical to sending a DNS query directly.
+
+Name resolution and DNS querying are related but not always identical.
+
+A local hosts file can map names to addresses.
+
+Operating-system resolver order can consult local files before DNS.
+
+Other naming systems can participate.
+
+Do not conclude authoritative DNS contains a mapping solely because an application resolves the name locally.
+
+Inspect the source of resolution when it matters.
+
+Likewise, changing authoritative DNS might not change a local result if a local hosts entry overrides it.
+
+Diagnostic testing should distinguish:
+
+Local resolver result.
+
+Configured recursive resolver result.
+
+Independent recursive resolver result.
+
+Authoritative DNS result.
+
+These answer different questions.
+
+Querying the authoritative server reveals current authoritative data.
+
+Querying a recursive resolver reveals what that resolver currently knows or obtains.
+
+Querying the operating system reveals the application's local name-resolution environment.
+
+Do not mix the results.
+
+Tools such as dig can query DNS directly.
+
+Tools such as nslookup can query DNS through their supported behavior.
+
+Host-resolution tools can use system resolver facilities.
+
+Exact tools and output vary by platform.
+
+Understand what the diagnostic tool is actually querying.
+
+A successful ping by hostname demonstrates some form of name resolution plus selected network behavior.
+
+It does not establish authoritative DNS correctness.
+
+Ping can use cached or local resolution.
+
+ICMP behavior is separate from application service behavior.
+
+Do not use ping as the sole DNS diagnostic.
+
+Reverse DNS maps IP addresses toward names using the DNS reverse namespace.
+
+IPv4 reverse DNS commonly uses in-addr.arpa.
+
+IPv6 reverse DNS commonly uses ip6.arpa.
+
+PTR records provide reverse mappings.
+
+Reverse DNS is not the automatic inverse of forward DNS.
+
+An A record does not automatically create a PTR record.
+
+A PTR record does not automatically create an A record.
+
+Forward and reverse DNS are managed separately.
+
+A reverse name can differ from the original forward name.
+
+Multiple forward names can point to one IP while reverse DNS returns one selected name.
+
+Do not require mathematical one-to-one symmetry unless the application policy requires matching forward and reverse resolution.
+
+Forward-confirmed reverse DNS is a validation technique used by selected applications.
+
+It involves resolving an address to a name and resolving that name forward to check whether the address is represented.
+
+This provides selected evidence.
+
+It is not general authentication.
+
+DNS names can be internationalized.
+
+Internationalized Domain Names allow non-ASCII user-facing domain labels through defined mechanisms.
+
+DNS wire representation historically operates on an ASCII-compatible representation for these names.
+
+Punycode is used within the IDNA framework to represent selected Unicode domain labels in ASCII-compatible form.
+
+Labels beginning with xn-- commonly represent encoded internationalized labels.
+
+Do not implement IDNA conversion by manually adding or removing xn--.
+
+Use standards-compliant IDNA processing.
+
+Unicode domain names create security considerations.
+
+Different characters can look similar.
+
+Display and network forms can differ.
+
+A browser can choose to display an ASCII-compatible form in suspicious situations.
+
+DNS identity should use the canonical form required by the application and relevant standards.
+
+Case in ordinary ASCII DNS names is generally compared case-insensitively according to DNS rules.
+
+Example.COM and example.com ordinarily refer to the same DNS name for lookup purposes.
+
+Preserving presentation case does not create distinct DNS identity.
+
+Do not create application authorization rules that assume DNS letter case creates separate names.
+
+DNS label length is limited.
+
+A label can contain at most the protocol-defined maximum number of octets.
+
+A complete DNS name also has a protocol-defined maximum encoded length.
+
+Do not accept unbounded domain-name input.
+
+Validate according to DNS syntax and application requirements.
+
+Not every string containing dots is a valid DNS name.
+
+Not every valid DNS name is appropriate as an Internet hostname.
+
+DNS syntax and hostname application rules are related but not identical.
+
+Validate for the intended use.
+
+A wildcard DNS record can match selected otherwise nonexistent names according to DNS wildcard rules.
+
+A wildcard is not arbitrary shell-style pattern matching.
+
+A wildcard does not simply mean every string under a domain in every circumstance.
+
+Existing names and delegation boundaries affect wildcard synthesis.
+
+Do not reason about DNS wildcards as generic text wildcards.
+
+A wildcard certificate and a wildcard DNS record are different mechanisms.
+
+One affects DNS answers.
+
+The other affects TLS certificate identity.
+
+Do not confuse them.
+
+A DNS zone transfer transfers zone data between DNS servers according to DNS protocols.
+
+AXFR provides full zone transfer.
+
+IXFR provides incremental zone transfer.
+
+Zone transfer should be authorized according to operational policy.
+
+Unrestricted zone transfer can disclose DNS namespace information.
+
+Authoritative servers should not expose transfers merely because TCP port 53 is reachable.
+
+DNS dynamic update allows authorized changes to DNS data according to defined protocols.
+
+Dynamic update is not ordinary recursive resolution.
+
+Update authority should be restricted.
+
+Do not permit arbitrary clients to modify authoritative DNS.
+
+DNS changes are control-plane operations.
+
+DNS queries are data-plane naming operations.
+
+Keep authority boundaries separate.
+
+DNS administration commonly occurs through provider APIs, zone files, control systems, or dynamic update.
+
+The interface used to change DNS is not itself DNS resolution.
+
+A successful provider API call means the provider accepted the requested control operation according to its interface.
+
+It does not automatically prove every authoritative server now serves the new record.
+
+Verify authoritative state when required.
+
+A DNS zone file is a textual representation used by many authoritative DNS implementations.
+
+Zone-file syntax has its own rules.
+
+Names can be relative to an origin.
+
+TTL values can be inherited according to syntax and server behavior.
+
+Record classes and types have defined positions.
+
+Do not parse zone files as generic whitespace-separated text.
+
+Use a DNS-aware parser when correctness matters.
+
+A missing trailing dot in selected zone-file names can change meaning.
+
+A name intended as absolute can become relative to the zone origin.
+
+For example, a mail target entered without the intended absolute-name syntax can receive the zone suffix.
+
+This can produce a syntactically valid but semantically wrong record.
+
+Understand the zone-file grammar.
+
+Provider web interfaces can hide some zone-file syntax.
+
+Do not assume the interface stores exactly the text displayed.
+
+Verify actual DNS answers.
+
+DNS delegation depends on parent and child configuration.
+
+The parent publishes delegation NS records.
+
+The child publishes authoritative NS information.
+
+These should be operationally consistent.
+
+A delegation can be lame.
+
+A lame delegation points toward a server that is not authoritative for the delegated zone as expected.
+
+This can cause resolution failures.
+
+Check both parent delegation and child authority.
+
+A name server hostname itself must be resolvable.
+
+If the name server is inside the delegated child zone, glue can be required at the parent.
+
+Circular dependency can otherwise prevent reaching the authoritative server.
+
+Delegation design must remain resolvable from outside the zone.
+
+Authoritative DNS should have sufficient server redundancy according to operational requirements.
+
+Multiple NS records can provide resilience.
+
+Redundancy is meaningful only if failure domains are sufficiently independent for the requirement.
+
+Two names pointing to the same unavailable infrastructure may provide little resilience.
+
+DNS protocol presence and infrastructure resilience are separate.
+
+Authoritative servers should answer consistently for the same zone version according to expected DNS behavior.
+
+During updates, temporary differences can occur depending on replication architecture.
+
+Serial values and provider mechanisms can help identify version differences.
+
+Do not assume all authoritative servers update simultaneously.
+
+Query individual authoritative servers when diagnosing inconsistent answers.
+
+A recursive resolver can select among authoritative servers.
+
+One broken authoritative server can therefore cause intermittent failures.
+
+Intermittent DNS problems warrant testing every authoritative server.
+
+Do not test only one successful server and declare the delegation healthy.
+
+UDP DNS can experience packet loss.
+
+Resolvers retry according to implementation behavior.
+
+A firewall that permits UDP 53 but blocks TCP 53 can create selective failures.
+
+Small queries can work.
+
+Larger or truncated responses requiring TCP can fail.
+
+Therefore "DNS works for some names" does not prove the complete DNS path is correctly configured.
+
+Test both required transports where appropriate.
+
+The TC bit in a DNS response indicates truncation according to DNS protocol semantics.
+
+A client receiving a truncated UDP response can retry using TCP according to applicable behavior.
+
+Do not treat a truncated response as a complete answer.
+
+EDNS extends DNS message capabilities.
+
+EDNS allows larger UDP payload negotiation and additional options.
+
+EDNS is not a separate replacement for DNS.
+
+Network devices that mishandle EDNS can cause difficult DNS failures.
+
+Modern DNS operation expects standards-compliant handling.
+
+Do not disable protocol features blindly without identifying the failure.
+
+Large DNS responses can be fragmented at the IP layer depending on size and network conditions.
+
+Fragmentation can increase failure risk through networks that drop fragments.
+
+Modern resolver and server behavior attempts to manage response sizes and transport fallback.
+
+DNS engineering must consider actual path behavior.
+
+DNS amplification attacks abuse DNS servers to generate responses larger than attacker requests toward spoofed victims.
+
+Open recursive resolvers can contribute to amplification attacks.
+
+Authoritative servers can also be abused with suitable query patterns.
+
+Rate limiting and proper recursion policy can reduce abuse.
+
+Do not expose recursion to the Internet without an explicit requirement and controls.
+
+DNS cache poisoning attempts to insert false DNS information into resolver caches.
+
+Resolvers use transaction identifiers, source-port randomization, validation, DNSSEC, and other mechanisms to reduce risk according to implementation.
+
+Do not build security assumptions around unauthenticated DNS alone when stronger authentication is required.
+
+An attacker able to alter DNS can redirect clients.
+
+TLS can independently authenticate the application endpoint when correctly validated.
+
+DNSSEC can authenticate DNS data when correctly deployed and validated.
+
+Layered security matters.
+
+DNS rebinding is a technique where DNS responses for a name change in ways that can cause client software to access different network addresses over time.
+
+Applications accepting user-controlled hostnames for server-side connections must consider this.
+
+Validating a hostname once and then resolving it later can produce a different address.
+
+Validating one resolved address does not necessarily bind all future resolutions.
+
+Security-sensitive outbound connection logic should define how DNS resolution relates to authorization.
+
+Do not treat a hostname string as proof that the eventual address is allowed.
+
+A name can resolve to loopback.
+
+A name can resolve to private address space.
+
+A name can resolve to link-local addresses.
+
+A name can resolve to public addresses.
+
+It can later change.
+
+Server-side request systems should validate the actual destination according to their network policy.
+
+DNS is dynamic.
+
+Authorization based on resolution requires careful binding between validation and connection.
+
+A resolver can return stale data under selected configurations or extensions.
+
+Some systems deliberately serve expired cached data temporarily when authoritative servers are unavailable.
+
+This can improve availability.
+
+It means observed TTL and freshness behavior can depend on resolver policy.
+
+Do not assume every recursive resolver has identical cache behavior.
+
+DNS resolver policy can filter names.
+
+Enterprise resolvers can provide split DNS.
+
+Security resolvers can block malicious domains.
+
+Parental or organizational policy can alter answers.
+
+A public resolver and an internal resolver can legitimately return different results.
+
+Split-horizon DNS provides different answers depending on resolver or network context.
+
+An internal client can receive a private address.
+
+An external client can receive a public address.
+
+This can be intentional architecture.
+
+Do not declare differing answers incorrect without understanding the DNS view.
+
+Split DNS makes observation location important.
+
+A test outside the network cannot prove what an internal resolver returns.
+
+A test inside the network cannot prove public DNS state.
+
+Identify the vantage point.
+
+Search domains can append suffixes to relative names.
+
+A request for server can become server.example.internal according to resolver configuration.
+
+This convenience can create ambiguity.
+
+Use FQDNs in machine configuration when exact destination identity matters.
+
+A trailing dot can explicitly indicate an absolute DNS name in contexts that honor DNS textual syntax.
+
+Application libraries can normalize it differently for higher-level protocols.
+
+Know the interface.
+
+DNS can participate in service discovery.
+
+SRV records encode service location information including priority, weight, port, and target according to SRV semantics.
+
+Priority and weight have defined selection behavior.
+
+Do not simply choose the first SRV record.
+
+Implement the protocol's selection rules.
+
+The SRV target identifies a hostname.
+
+The port comes from the SRV record.
+
+Address resolution follows for the target.
+
+A service using SRV must explicitly support SRV.
+
+Ordinary HTTP clients do not automatically use arbitrary SRV records unless their protocol or implementation defines it.
+
+Do not publish an SRV record and assume every client will discover it.
+
+Service discovery and ordinary hostname resolution are separate application behaviors.
+
+TXT-based service discovery exists in selected systems.
+
+Its semantics belong to those systems.
+
+DNS merely carries the records.
+
+DNS can publish CAA policy.
+
+CAA records identify certificate-authority authorization according to CAA semantics.
+
+CAA does not itself issue certificates.
+
+CAA does not replace certificate validation.
+
+CAA is one control in certificate issuance policy.
+
+A missing CAA record does not mean a certificate is invalid.
+
+Certificate validity is evaluated according to TLS and PKI rules.
+
+DNS can participate in email authentication mechanisms.
+
+SPF policies are commonly published in TXT records.
+
+DKIM public-key information is commonly published under selector-specific DNS names.
+
+DMARC policies are commonly published under defined DNS names.
+
+DNS provides publication.
+
+The email protocols define interpretation.
+
+Do not treat DNS TXT presence as proof that email authentication succeeded.
+
+The receiving mail system must evaluate the relevant protocol.
+
+DNS records can be used for ownership verification.
+
+A service can ask an operator to publish a random token.
+
+Finding that token later provides evidence that someone with DNS control published it.
+
+The strength of this evidence depends on the verification design and DNS security assumptions.
+
+The token itself does not create permanent ownership.
+
+Verification policy belongs to the application.
+
+DNS should not contain secrets.
+
+DNS records are commonly publicly queryable.
+
+TXT records are not private storage.
+
+Do not publish passwords.
+
+Do not publish private keys.
+
+Do not publish secret tokens intended to remain confidential.
+
+Verification tokens should be designed with the expectation that DNS contents can be observed.
+
+DNS query privacy is separate from DNS record confidentiality.
+
+DoH or DoT can hide queries from selected network observers between client and resolver.
+
+The authoritative DNS data can still be public.
+
+The recursive resolver can still observe the query.
+
+Authoritative servers involved in resolution can observe relevant queries.
+
+Encrypted transport does not make public DNS records secret.
+
+DNS logging can expose browsing or service-use information.
+
+Resolver logs can be sensitive.
+
+Retain them according to policy.
+
+Limit access.
+
+Do not log more than operational requirements justify.
+
+DNS telemetry can include query counts.
+
+DNS telemetry can include response codes.
+
+DNS telemetry can include latency.
+
+DNS telemetry can include cache hit rates.
+
+DNS telemetry can include DNSSEC failures.
+
+DNS telemetry can include authoritative-server health.
+
+Metrics should distinguish resolver failures from authoritative failures where possible.
+
+High DNS latency can delay application connection establishment.
+
+DNS is often on the critical path before a connection.
+
+Caching can reduce latency.
+
+Poor authoritative availability can increase lookup time.
+
+Long CNAME chains can increase resolution work.
+
+Broken IPv6 or address-selection behavior can appear as connection delay after DNS succeeds.
+
+Measure stages separately.
+
+Do not blame DNS for every delay occurring after hostname use.
+
+A DNS query has a question.
+
+The question includes a name.
+
+The question includes a type.
+
+The question includes a class.
+
+Internet DNS commonly uses class IN.
+
+The requested type matters.
+
+An A query and AAAA query are different questions.
+
+A successful A answer does not prove AAAA exists.
+
+A successful AAAA answer does not prove A exists.
+
+A client can request both through resolver APIs.
+
+A resolver can return aliases and supporting records.
+
+Interpret the response according to DNS protocol rules.
+
+An authoritative answer can include an AA flag indicating authoritative status according to DNS message semantics.
+
+A recursive resolver's answer can contain cached authoritative data without itself being authoritative for the zone.
+
+Do not identify server role solely from whether the data originally came from authority.
+
+Query the appropriate server and inspect protocol state.
+
+Recursion Desired and Recursion Available flags communicate recursion behavior.
+
+They do not prove the final data is correct.
+
+DNS flags have protocol meanings.
+
+Do not infer application semantics from them.
+
+DNS transaction identifiers help match responses with queries in traditional DNS exchanges.
+
+They are not persistent request identifiers.
+
+They are not authentication by themselves.
+
+Do not log a DNS transaction ID as permanent query identity.
+
+DNS messages have size and structural limits.
+
+Parsers must validate counts.
+
+Parsers must validate offsets.
+
+DNS name compression can use pointers within messages.
+
+Compression pointers must be validated.
+
+Malformed pointers can create loops.
+
+Malformed pointers can point outside the message.
+
+DNS parsers should bound pointer traversal.
+
+Never trust network-supplied offsets.
+
+DNS name compression reduces repeated-name size in DNS messages.
+
+It is an encoding mechanism.
+
+It does not change the semantic DNS name.
+
+Compressed and uncompressed representations can describe the same name.
+
+Do not hash raw DNS packet representation as semantic name identity unless the protocol explicitly requires packet-byte identity.
+
+Canonical DNSSEC processing has its own defined representation rules.
+
+DNS packet parsing is security-sensitive.
+
+Malformed DNS packets should not crash the resolver.
+
+Malformed labels should be rejected.
+
+Invalid lengths should be rejected.
+
+Compression loops should be rejected.
+
+Out-of-bounds offsets should be rejected.
+
+Resource use should be bounded.
+
+Network input is untrusted.
+
+DNS libraries are preferable to casual custom packet parsing unless custom implementation is actually required.
+
+DNS configuration should be validated before publication.
+
+Validate record type.
+
+Validate owner name.
+
+Validate target syntax.
+
+Validate address syntax.
+
+Validate TTL range.
+
+Validate required relationships.
+
+Validate delegation.
+
+Validate DNSSEC where enabled.
+
+Do not publish malformed state merely because a text file could be written.
+
+An authoritative server can refuse to load an invalid zone.
+
+A provider API can reject an invalid record.
+
+A provider can accept a record that is syntactically valid but operationally wrong.
+
+Validation should include semantics.
+
+For example, an MX target can be syntactically valid while pointing somewhere unintended.
+
+A CNAME can be syntactically valid while creating a loop.
+
+An NS record can point to an unreachable server.
+
+Syntax is not operation.
+
+DNS changes should be verified from authority.
+
+Query the authoritative servers.
+
+Confirm the expected RRset.
+
+Confirm unwanted old records are absent where removal was intended.
+
+Confirm delegation when delegation changed.
+
+Confirm DNSSEC chain when DNSSEC changed.
+
+Then observe recursive behavior as caches expire.
+
+Do not use one local cached lookup as the only verification.
+
+DNS monitoring should distinguish authoritative state from recursive observations.
+
+Authoritative monitoring asks what the source of truth serves.
+
+Recursive monitoring asks what clients through selected resolvers observe.
+
+Both can matter.
+
+A correct authoritative configuration can coexist temporarily with stale recursive caches.
+
+A broken authoritative configuration can remain hidden temporarily because recursive caches still contain valid old data.
+
+Cache can delay both failure and recovery visibility.
+
+This is important during incident response.
+
+A domain can appear healthy until cached records expire.
+
+Then resolution can begin failing.
+
+Do not assume a DNS change caused an incident at the exact moment users first observed failure.
+
+Consider TTL history.
+
+Likewise, fixing authoritative DNS can take time to become visible through negative or positive caches.
+
+Observe authoritative correctness first.
+
+Then account for cache expiration.
+
+DNS incident analysis should establish:
+
+What name was queried?
+
+What record type was requested?
+
+Which resolver was used?
+
+What response code was returned?
+
+Was the answer cached?
+
+What TTL remained?
+
+What do authoritative servers currently return?
+
+Do all authoritative servers agree?
+
+Is delegation correct?
+
+Is DNSSEC valid?
+
+Is UDP working?
+
+Is TCP working?
+
+Are local overrides involved?
+
+Is split DNS involved?
+
+Only then assign cause.
+
+Do not begin with "DNS propagation" as a universal explanation.
+
+Propagation is often shorthand, not diagnosis.
+
+DNS configuration errors can include:
+
+Missing records.
+
+Wrong addresses.
+
+Wrong targets.
+
+Wrong zone.
+
+Incorrect relative names.
+
+Broken delegation.
+
+Missing glue.
+
+Lame name servers.
+
+CNAME loops.
+
+Conflicting record types.
+
+DNSSEC chain failures.
+
+Expired DNSSEC signatures.
+
+Blocked TCP 53.
+
+Unreachable authoritative servers.
+
+Stale resolver caches.
+
+Local hosts overrides.
+
+Split-view mistakes.
+
+Search-domain mistakes.
+
+Each requires different evidence.
+
+Do not solve all DNS problems by flushing the local cache.
+
+A local flush helps only when stale local cache is the problem.
+
+It cannot repair authoritative DNS.
+
+It cannot repair delegation.
+
+It cannot repair DNSSEC.
+
+It cannot repair remote resolver caches.
+
+It cannot start an application service.
+
+Use the repair matching the failure.
+
+A DNS server process running does not prove DNS service is healthy.
+
+The process can be alive but unable to load the zone.
+
+It can listen only on the wrong interface.
+
+It can answer some zones and fail another.
+
+It can serve stale data.
+
+It can have broken DNSSEC material.
+
+It can refuse recursion.
+
+It can fail TCP while UDP works.
+
+Test the required DNS operation.
+
+Process existence and DNS correctness are separate.
+
+A port 53 listener does not prove correct DNS answers.
+
+A successful DNS query does not prove every record type works.
+
+A successful query to one server does not prove every authoritative server works.
+
+A successful recursive query does not prove delegation is ideal if cache hid the problem.
+
+Test at the appropriate layer.
+
+DNS names should be treated as untrusted input when supplied externally.
+
+A user-supplied hostname can be extremely long within protocol bounds.
+
+It can contain unexpected labels.
+
+It can resolve to unexpected addresses.
+
+It can change over time.
+
+Do not concatenate hostnames into shell commands.
+
+Do not treat successful DNS resolution as authorization.
+
+Do not trust reverse DNS as identity without additional verification.
+
+DNS-based allowlists require careful threat analysis.
+
+An allowlisted hostname can change addresses.
+
+An IP address can be reassigned.
+
+DNS can be compromised.
+
+If DNS identity is used for security policy, define the trust mechanism.
+
+Certificate identity, cryptographic keys, signed configuration, or other mechanisms can provide stronger identity depending on architecture.
+
+DNS is useful naming infrastructure.
+
+Do not force it to become an authentication system without appropriate controls.
+
+DNS resolution can be asynchronous.
+
+Applications should avoid blocking critical event loops with slow synchronous resolution where architecture requires responsiveness.
+
+Resolver libraries can provide asynchronous mechanisms.
+
+Thread pools can isolate blocking resolver calls.
+
+Exact implementation depends on platform.
+
+Timeouts should be bounded.
+
+Cancellation semantics should be understood.
+
+A DNS timeout does not prove the name does not exist.
+
+Retrying another resolver can produce an answer.
+
+Do not convert timeout into negative cache unless the resolver protocol defines a negative answer.
+
+Applications can cache DNS results themselves.
+
+Application caching can improve performance.
+
+It can also ignore DNS TTL if implemented incorrectly.
+
+If an application caches addresses indefinitely, authoritative DNS changes may never be observed until process restart.
+
+Respect DNS caching semantics according to application requirements.
+
+Do not use permanent address caches unless architecture explicitly requires pinned addressing.
+
+Connection pools can preserve old destinations even after DNS cache expires.
+
+DNS re-resolution affects new address selection.
+
+Existing pooled connections can remain bound to previous endpoints.
+
+Service migration should consider connection lifetime as well as DNS TTL.
+
+DNS is not a connection migration mechanism.
+
+DNS can return IPv4 and IPv6 addresses.
+
+Dual-stack clients can choose between them according to address-selection algorithms.
+
+A working A record and broken IPv6 path can cause user-visible behavior depending on client strategy.
+
+A working AAAA record means only that DNS supplied an IPv6 address.
+
+It does not prove IPv6 connectivity works.
+
+Likewise, absence of AAAA is not an IPv4 DNS failure.
+
+Separate DNS from network-path validation.
+
+Private DNS names can exist in internal namespaces.
+
+Public DNS does not need to know them.
+
+Internal DNS should avoid accidental collisions with public namespaces according to organizational design.
+
+A name resolving internally and not externally can be intentional.
+
+Determine expected scope.
+
+DNS scope matters.
+
+Multicast DNS is a separate naming mechanism used on local networks.
+
+mDNS commonly uses the .local namespace according to its protocol conventions.
+
+mDNS does not require ordinary unicast DNS infrastructure for local discovery.
+
+Do not confuse mDNS with authoritative Internet DNS.
+
+Local service discovery can use mDNS and DNS-SD.
+
+DNS-SD uses DNS-compatible records for service discovery.
+
+The use of DNS record structures does not mean every DNS-SD operation uses the public DNS hierarchy.
+
+Understand the discovery environment.
+
+DNS is eventually observed through caches, but authoritative control remains deterministic at its own boundary.
+
+If an authoritative zone is configured with a specific RRset, the server should serve that defined state according to its implementation.
+
+What every client observes at one instant can differ because caches and views differ.
+
+Do not demand impossible global simultaneity from DNS.
+
+Instead define the boundary:
+
+Authoritative state is one question.
+
+Resolver cache state is another.
+
+Client observation is another.
+
+Service connection is another.
+
+Keep them separate.
+
+DNS should not determine consensus-visible results in a deterministic distributed system unless the protocol explicitly defines how DNS input is captured and agreed.
+
+Different nodes can resolve the same name at different times and receive different addresses.
+
+Caches can differ.
+
+Geographic responses can differ.
+
+Split DNS can differ.
+
+DNS is therefore unsuitable as an implicit consensus oracle.
+
+If deterministic protocol state requires a value, encode that value explicitly in protocol state or define a deterministic authority mechanism.
+
+DNS can be used to discover peers.
+
+Discovery is not consensus.
+
+A discovered peer can still require protocol qualification.
+
+A DNS result can provide a candidate endpoint.
+
+It does not prove that endpoint belongs to the intended network.
+
+Perform network identity validation according to the protocol.
+
+Discovery and trust are separate.
+
+DNS bootstrap can provide initial peer names.
+
+After resolution, the application should establish the peer's actual protocol identity.
+
+Do not accept a peer merely because DNS returned its address.
+
+DNS compromise should not automatically become protocol authority.
+
+Use cryptographic or protocol identity where required.
+
+DNS changes can be operationally audited.
+
+Record the requested change.
+
+Record the actor or authorized system.
+
+Record the old state.
+
+Record the new state.
+
+Record the time.
+
+Record provider acceptance.
+
+Record authoritative verification.
+
+These are separate events.
+
+A requested DNS change is not the same as an observed authoritative change.
+
+Do not report deployment complete before required verification.
+
+DNS automation should be idempotent where practical.
+
+Setting an RRset to a desired value repeatedly should converge on that desired state.
+
+Appending duplicate records repeatedly is not equivalent.
+
+Represent desired state explicitly.
+
+Read current state.
+
+Calculate required change.
+
+Apply bounded change.
+
+Verify.
+
+Do not delete unrelated records accidentally.
+
+DNS record ownership should be clear.
+
+One automation system should not overwrite records owned by another system without coordination.
+
+TXT records are especially prone to multiple independent application uses.
+
+Replacing the entire TXT RRset can delete unrelated verification or policy records.
+
+Modify the intended RRset carefully.
+
+Understand provider APIs.
+
+Some APIs replace an entire RRset.
+
+Some operate on individual records.
+
+Do not assume.
+
+A DNS record can remain after the application using it is gone.
+
+Stale DNS can direct clients to retired infrastructure.
+
+Stale DNS can leak architecture.
+
+Stale DNS can cause certificate or service confusion.
+
+Remove obsolete records according to lifecycle policy.
+
+Historical audit records can preserve what existed without leaving obsolete DNS active.
+
+Operational state and historical record are separate.
+
+Domain registration and DNS hosting are separate functions.
+
+A registrar manages domain registration with the relevant registry.
+
+A DNS hosting provider serves authoritative DNS.
+
+The same company can provide both services.
+
+Changing registrar does not necessarily require changing authoritative DNS.
+
+Changing DNS hosting does not necessarily change domain registration.
+
+Nameserver delegation at the registrar or registry connects the registered domain to authoritative DNS.
+
+Do not confuse registrar failure with authoritative DNS failure.
+
+A registry maintains information for a top-level domain according to the DNS and registration system.
+
+A registrar interacts with the registry on behalf of registrants.
+
+A registrant controls a registered domain according to registration policy.
+
+These roles differ.
+
+DNS itself does not establish legal ownership.
+
+WHOIS or registration data is not DNS resolution.
+
+Keep administrative systems distinct.
+
+Domain expiration can ultimately affect DNS availability.
+
+That is a registration lifecycle issue.
+
+A healthy authoritative server cannot compensate indefinitely for loss of delegation caused by registration state.
+
+Operational monitoring can include registration status separately from DNS health.
+
+DNS and domain registration should have independent checks.
+
+DNSSEC key management requires lifecycle planning.
+
+Keys can be introduced.
+
+Keys can be rotated.
+
+Keys can be retired.
+
+Parent DS records can need coordinated changes.
+
+Incorrect sequencing can break validation.
+
+Do not rotate DNSSEC keys by guessing.
+
+Follow the defined DNSSEC key-rollover procedure used by the implementation and policy.
+
+A DNSSEC signature has validity times.
+
+Expired signatures can cause validation failure even if ordinary unsigned-looking data appears present.
+
+Monitor signature validity.
+
+Automate renewal where appropriate.
+
+Do not assume signed zones remain valid forever without maintenance.
+
+Clock correctness matters for cryptographic validity.
+
+Severely incorrect time can affect DNSSEC validation.
+
+Time problems can therefore appear as DNSSEC failures.
+
+Verify system time when signature validation fails unexpectedly.
+
+Do not disable validation merely because time is wrong.
+
+Fix the actual cause.
+
+A DNS resolver can use QNAME minimization to reduce unnecessary disclosure during iterative resolution.
+
+This changes which portions of the requested name are sent to selected authoritative levels.
+
+It is a privacy improvement.
+
+It does not change the final DNS name being resolved.
+
+Implementation details should not be mistaken for application semantics.
+
+DNS cookies and other protocol mechanisms can improve selected security or operational properties.
+
+They do not replace application authentication.
+
+Keep layer responsibilities clear.
+
+DNS has protocol standards.
+
+Provider-specific DNS features can extend operational behavior.
+
+Do not describe proprietary flattening, traffic steering, failover, or proxying as universal DNS behavior.
+
+State whether behavior comes from DNS itself or a provider.
+
+A proxied DNS provider can return provider addresses instead of origin addresses.
+
+The DNS answer can therefore intentionally identify an intermediary.
+
+This does not mean the origin server moved.
+
+Understand the architecture before diagnosing.
+
+CDNs frequently use DNS as part of traffic steering.
+
+A hostname can resolve differently by region.
+
+A diagnostic query from one location may not reproduce another user's answer.
+
+Use the relevant resolver and vantage point.
+
+Do not treat geographic variance as corruption without evidence.
+
+Anycast can allow the same IP address to be announced from multiple network locations.
+
+DNS can return one address while routing directs different clients to different physical infrastructure.
+
+Therefore one IP address does not necessarily mean one physical server.
+
+DNS answers alone cannot reveal complete physical topology.
+
+DNS should remain small and boring where requirements are simple.
+
+If one hostname needs one address, an A or AAAA record can be sufficient.
+
+Do not introduce complex traffic steering without need.
+
+Complex DNS creates more failure modes.
+
+Use the smallest configuration satisfying requirements.
+
+A reliable DNS design has clear authority.
+
+A reliable DNS design has redundant authoritative service appropriate to its requirements.
+
+A reliable DNS design has deliberate TTLs.
+
+A reliable DNS design has valid delegation.
+
+A reliable DNS design has correct glue where required.
+
+A reliable DNS design validates DNSSEC if DNSSEC is used.
+
+A reliable DNS design does not expose open recursion without reason.
+
+A reliable DNS design monitors authoritative answers.
+
+A reliable DNS design monitors client-visible resolution where required.
+
+A reliable DNS design distinguishes name resolution from service health.
+
+A reliable DNS design does not use DNS as unverified application identity.
+
+A reliable DNS design plans changes around cache lifetime.
+
+A reliable DNS design verifies changes at authority.
+
+A reliable DNS design preserves evidence during incidents.
+
+Do not confuse a DNS name with a URL.
+
+Do not confuse a DNS name with an IP address.
+
+Do not confuse a domain with a zone.
+
+Do not confuse a zone with a physical server.
+
+Do not confuse an authoritative server with a recursive resolver.
+
+Do not confuse a recursive resolver with a stub resolver.
+
+Do not confuse a referral with a final answer.
+
+Do not confuse glue with ordinary authoritative child-zone data.
+
+Do not confuse an A record with an AAAA record.
+
+Do not confuse CNAME with an IP address.
+
+Do not confuse CNAME aliasing with application identity.
+
+Do not confuse MX priority with generic record ordering.
+
+Do not confuse TXT storage with one universal TXT meaning.
+
+Do not confuse TTL with guaranteed global update time.
+
+Do not confuse cache expiration with one global propagation event.
+
+Do not confuse NXDOMAIN with NOERROR and an empty requested RRset.
+
+Do not confuse SERVFAIL with NXDOMAIN.
+
+Do not confuse timeout with NXDOMAIN.
+
+Do not confuse DNS success with service availability.
+
+Do not confuse DNS failure with server failure.
+
+Do not confuse port 53 availability with correct DNS data.
+
+Do not confuse process existence with DNS health.
+
+Do not confuse one successful authoritative server with healthy delegation.
+
+Do not confuse one recursive resolver's cache with authoritative state.
+
+Do not confuse local hosts-file resolution with public DNS.
+
+Do not confuse reverse DNS with authentication.
+
+Do not confuse DNSSEC with DNS encryption.
+
+Do not confuse DoH with DNSSEC.
+
+Do not confuse DoT with DNSSEC.
+
+Do not confuse a DNSSEC signature's presence with successful validation.
+
+Do not confuse wildcard DNS with wildcard TLS certificates.
+
+Do not confuse DNS discovery with protocol trust.
+
+Do not confuse DNS record publication with application authorization.
+
+Do not confuse a provider API accepting a change with authoritative verification.
+
+Do not confuse domain registration with DNS hosting.
+
+Do not confuse DNS control with permanent application ownership.
+
+Do not confuse an IP address with one physical machine.
+
+Do not confuse a resolver's current answer with permanent truth.
+
+When diagnosing a hostname that does not resolve, identify the exact name.
+
+Identify the requested record type.
+
+Query the local resolver if application behavior is being investigated.
+
+Query the configured recursive resolver.
+
+Query authoritative DNS.
+
+Inspect the response code.
+
+Inspect delegation.
+
+Inspect all authoritative servers.
+
+Inspect DNSSEC where applicable.
+
+Inspect local overrides.
+
+Inspect split-DNS behavior.
+
+Do not guess from one failed application request.
+
+When diagnosing a hostname that resolves to the wrong address, determine which resolver supplied the answer.
+
+Inspect its TTL.
+
+Determine whether the answer is cached.
+
+Query authority directly.
+
+Compare current authoritative data.
+
+Determine whether multiple DNS views exist.
+
+Determine whether geographic or provider steering exists.
+
+Do not immediately edit authoritative DNS if authority already contains the intended value.
+
+The problem can be cache state.
+
+When changing a service address, inspect the existing TTL before the migration.
+
+Lower TTL in advance when faster cache turnover is required.
+
+Wait for older high-TTL cached records to expire where the migration plan requires it.
+
+Change the authoritative address.
+
+Verify every authoritative server or provider-defined authoritative endpoint.
+
+Observe recursive resolvers.
+
+Keep old infrastructure available during the required transition when possible.
+
+Do not assume all clients move instantly.
+
+When a DNS query succeeds but an application fails, stop treating DNS as the only suspect.
+
+Test address reachability.
+
+Test the required transport port.
+
+Test TLS if applicable.
+
+Test application protocol.
+
+Test application authentication.
+
+Identify the actual failing stage.
+
+DNS has already supplied evidence that name resolution succeeded.
+
+When a DNS query returns SERVFAIL, do not create an A record blindly.
+
+Inspect authoritative reachability.
+
+Inspect delegation.
+
+Inspect DNSSEC.
+
+Inspect server responses.
+
+Inspect resolver behavior.
+
+SERVFAIL says resolution failed.
+
+It does not identify one universal cause.
+
+When a DNS query returns NXDOMAIN, establish whether authority agrees.
+
+If authority returns the name, a recursive resolver can hold a negative cache.
+
+If authority also returns NXDOMAIN, the name is absent according to current authoritative DNS.
+
+If the name should exist, repair authoritative state.
+
+Then account for negative cache lifetime.
+
+When authoritative servers disagree, query them individually.
+
+Compare SOA and record data.
+
+Determine whether replication is incomplete.
+
+Determine whether one server serves stale configuration.
+
+Determine whether one server is incorrectly authoritative.
+
+Do not average the answers.
+
+DNS correctness is not determined by majority vote unless a specific architecture defines such policy outside DNS.
+
+Each authoritative server should serve the intended zone state.
+
+When DNSSEC validation fails, preserve validation.
+
+Identify the failing chain.
+
+Inspect DS.
+
+Inspect DNSKEY.
+
+Inspect signatures.
+
+Inspect validity times.
+
+Inspect algorithms.
+
+Inspect parent-child coordination.
+
+Repair the broken trust chain.
+
+Do not disable DNSSEC merely to make the error disappear unless the authorized operational decision is to remove DNSSEC correctly through its defined process.
+
+When building software that accepts a hostname, validate the hostname syntax required by the application.
+
+Resolve it through the intended resolver mechanism.
+
+Treat returned addresses as current resolution results.
+
+Do not treat them as permanent.
+
+If network policy restricts destinations, validate the actual destination addresses.
+
+Establish application identity separately.
+
+Handle multiple addresses.
+
+Handle IPv4 and IPv6 according to requirements.
+
+Handle resolution failure explicitly.
+
+Do not convert resolution failure into a fabricated address.
+
+When building deterministic systems, keep DNS outside consensus semantics unless DNS input is explicitly captured and agreed through the protocol.
+
+DNS can discover candidate endpoints.
+
+The protocol can then validate candidate identity.
+
+Do not let two nodes independently resolving a dynamic DNS name create different authoritative state.
+
+Discovery can vary.
+
+Consensus cannot.
+
+DNS answers the question:
+
+What DNS information is currently available for this name according to the resolver, authority, cache state, query type, and DNS policy involved?
+
+It does not answer:
+
+Is the application running?
+
+Is the destination trustworthy?
+
+Is the destination authorized?
+
+Is the service healthy?
+
+Will every resolver return the same answer right now?
+
+Will this address remain the same?
+
+Those are different questions.
+
+Use DNS for naming.
+
+Use network tests for connectivity.
+
+Use application protocols for service behavior.
+
+Use cryptographic identity where trust requires it.
+
+Use authorization policy for permission.
+
+And when DNS evidence is incomplete, do not turn a resolver's uncertainty into a fabricated answer.
+
+The DNS result is unknown until the required evidence establishes it.

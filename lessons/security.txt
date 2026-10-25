@@ -1,0 +1,681 @@
+Security engineering protects systems, data, operations, and authority from unauthorized or unintended actions.
+Security is a system property.
+Security is not a single feature.
+Security is not provided by one programming language.
+Security is not provided by one firewall.
+Security is not provided by encryption alone.
+Security depends on architecture, implementation, configuration, operation, and human authority.
+A trust boundary separates components or contexts with different levels of trust.
+Data crossing a trust boundary should be treated according to the receiving system's validation requirements.
+External input is untrusted unless an established mechanism proves otherwise.
+Network input is untrusted.
+HTTP request input is untrusted.
+Command-line input can be untrusted.
+Environment variables can be untrusted.
+Configuration files can be untrusted when unauthorized parties can modify them.
+Database content can be untrusted.
+File content can be untrusted.
+Module input can be untrusted.
+Plugin input can be untrusted.
+Inter-process messages can be untrusted.
+Data becoming internal does not automatically make it trustworthy.
+Trust should be established through defined mechanisms.
+Trust should not be inferred merely from location.
+localhost does not automatically mean trusted.
+A private network does not automatically mean trusted.
+An internal service does not automatically mean trusted.
+A file under an application directory does not automatically mean trusted.
+A module being present does not automatically mean trusted.
+A successful network connection does not automatically mean trusted.
+A valid JSON document does not automatically mean trusted.
+A syntactically valid request does not automatically mean authorized.
+Authentication establishes identity according to an authentication mechanism.
+Authorization determines what an authenticated or identified actor is permitted to do.
+Authentication and authorization are different.
+An authenticated user can still be unauthorized for an operation.
+An authenticated service can still be unauthorized for an operation.
+Authorization should be checked where protected actions occur.
+A username alone does not prove identity.
+A claimed identifier alone does not prove identity.
+A request field saying admin does not grant administrative authority.
+Client-controlled data should not define its own authority.
+Least privilege means granting only the authority required for a task.
+A process should not run as root merely because root avoids permission errors.
+A web service should not receive filesystem write access everywhere merely because it needs one writable directory.
+A module should receive only the capabilities required for its mission.
+A user should receive only the permissions required for their role.
+A service account should have only the resources required by that service.
+Reducing privilege reduces the consequences of compromise.
+Privilege should have a defined purpose.
+Privilege should have a defined scope.
+Privilege should have a defined lifetime when temporary authority is sufficient.
+Permission to execute is not permission to act without boundaries.
+Capability and authority are different concepts.
+A program can technically be capable of an action without being authorized to perform it.
+Authorization should be explicit.
+Input validation determines whether input satisfies defined requirements.
+Validation should occur before input controls privileged behavior.
+Validation should enforce expected type.
+Validation should enforce expected length.
+Validation should enforce expected range.
+Validation should enforce expected format.
+Validation should enforce permitted values.
+Validation should enforce required relationships between fields.
+Validation should reject prohibited states.
+Validation should reject malformed input.
+Validation should not silently reinterpret malformed input into a different valid request.
+Normalization and validation are different operations.
+Normalization transforms representations according to defined rules.
+Validation determines whether a value is permitted.
+Normalization should not create ambiguity.
+Canonicalization produces a defined representation.
+Canonicalization can be security-sensitive.
+Path canonicalization matters when input influences filesystem access.
+URL canonicalization matters when input influences routing or authorization.
+Encoding transformations can change interpreted meaning.
+Repeated decoding can create vulnerabilities.
+Validation should occur against the representation actually used for the security decision.
+An allowlist defines values or patterns explicitly permitted.
+A denylist defines values or patterns explicitly prohibited.
+Allowlists are often stronger when the set of valid inputs can be precisely defined.
+A denylist can miss unexpected dangerous input.
+An allowlist should still be designed correctly.
+Input validation is not the same as output encoding.
+Output encoding protects data when inserted into a particular interpretation context.
+HTML output requires HTML-appropriate encoding.
+JavaScript output requires JavaScript-appropriate handling.
+SQL values require parameterized query handling.
+Shell arguments require safe process invocation.
+URL components require appropriate URL encoding.
+JSON values require JSON serialization.
+One encoding mechanism should not be assumed safe for another context.
+HTML escaping does not make a string safe as SQL.
+JSON escaping does not make a string safe as HTML.
+SQL escaping does not make a string safe as a shell command.
+Context matters.
+Injection occurs when untrusted data changes the structure or meaning of commands or code interpreted by another system.
+SQL injection occurs when untrusted data alters intended SQL syntax.
+Command injection occurs when untrusted data alters intended operating-system command syntax.
+Code injection occurs when untrusted data becomes executable code.
+Template injection occurs when untrusted data is interpreted as template instructions.
+LDAP injection can occur when untrusted data alters LDAP query syntax.
+Injection vulnerabilities cross a data-to-instruction boundary.
+Data should remain data.
+Parameterized SQL queries separate SQL structure from parameter values.
+Prepared statements can prevent many SQL injection vulnerabilities when used correctly.
+Concatenating untrusted strings into SQL creates risk.
+Escaping manually is generally weaker than correct parameter binding.
+A parameterized query does not automatically fix authorization errors.
+A parameterized query does not automatically validate business rules.
+SQL injection prevention and authorization are separate concerns.
+Shell command construction requires similar discipline.
+Untrusted input should not be concatenated into shell commands.
+Direct process execution with an argument array avoids unnecessary shell interpretation.
+A shell should not be invoked when shell syntax is unnecessary.
+If a shell must be used, input handling must follow the shell's actual parsing rules.
+A filename is not automatically a safe shell argument.
+A URL is not automatically a safe shell argument.
+A numeric-looking string is not automatically safe without validation.
+Cross-site scripting is commonly abbreviated XSS.
+XSS occurs when attacker-controlled content is executed as script or otherwise interpreted as active content in another user's browser.
+Stored XSS persists attacker-controlled content for later delivery.
+Reflected XSS returns attacker-controlled content through a request-response path.
+DOM-based XSS can result from unsafe browser-side DOM manipulation.
+HTML output encoding helps prevent XSS in HTML text contexts.
+Different HTML contexts require appropriate handling.
+An HTML attribute context differs from an HTML text context.
+A JavaScript context differs from an HTML context.
+Using textContent is safer than innerHTML when only text is intended.
+Content Security Policy can reduce some XSS impact.
+Content Security Policy does not replace correct output handling.
+Cross-Site Request Forgery is commonly abbreviated CSRF.
+CSRF causes a user's authenticated client to perform an unwanted action.
+CSRF and XSS are different vulnerabilities.
+State-changing requests should use appropriate methods.
+GET should not perform destructive state changes.
+CSRF tokens can protect state-changing requests.
+A CSRF token should be unpredictable.
+A CSRF token should be associated with the appropriate user or session context according to application design.
+A CSRF token should be validated server-side.
+Merely placing a hidden field named csrf does not provide protection if its value is not verified.
+SameSite cookies can provide additional CSRF protection.
+SameSite cookies do not replace authorization.
+Logout can be a state-changing operation.
+A state-changing logout operation can use POST with CSRF protection according to application policy.
+Passwords are authentication secrets.
+Passwords should not ordinarily be stored in plaintext.
+Passwords should not ordinarily be reversibly encrypted merely for later comparison.
+Passwords should be processed with an appropriate password hashing algorithm.
+Password hashing algorithms are deliberately expensive.
+Password hashing should use a unique salt.
+A salt does not need to be secret.
+A salt helps prevent efficient reuse of precomputed password hashes.
+A password hash is not the same as a general cryptographic hash used without a password-hardening construction.
+General-purpose fast hashes are not appropriate password storage algorithms by themselves.
+Password verification should use the password-hashing algorithm's verification mechanism.
+Passwords should not be logged.
+Passwords should not be included in URLs.
+Passwords should not be exposed in error messages.
+Authentication systems should not reveal unnecessary information about account existence.
+Secrets include passwords.
+Secrets include private keys.
+Secrets include bearer tokens.
+Secrets include API credentials.
+Secrets include session identifiers when possession grants authority.
+Secrets should be protected at rest according to requirements.
+Secrets should be protected in transit according to requirements.
+Secrets should not be embedded unnecessarily in source code.
+Secrets should not be committed to public source-control repositories.
+Removing a secret from the latest source revision does not remove it from repository history.
+A disclosed secret should be considered for rotation.
+Secret rotation replaces credentials that may no longer be trustworthy.
+Access to secrets should follow least privilege.
+Private keys should remain private.
+A public key can be distributed.
+A private key should not be distributed as though it were a public identifier.
+Possession of a private key can grant cryptographic authority.
+Private-key file permissions should be restrictive.
+Private-key backups should be protected.
+Losing a private key can mean losing the ability to authenticate or sign according to the system design.
+Cryptographic hashes map arbitrary input to fixed-size digest values.
+A cryptographic hash is deterministic.
+The same exact input produces the same hash under the same hash algorithm.
+Changing input generally changes the hash.
+A cryptographic hash is not encryption.
+A hash is not designed to be decrypted.
+A hash alone does not prove who produced data.
+SHA-256 is a cryptographic hash algorithm.
+SHA-256 produces a 256-bit digest.
+A SHA-256 digest is commonly represented using 64 hexadecimal characters.
+A SHA-256 digest can detect changes when compared against a trusted expected digest.
+A digest received from the same untrusted source as the data does not independently establish authenticity.
+The trusted source of the expected digest matters.
+A cryptographic hash can provide integrity evidence.
+A digital signature can provide integrity and authenticity properties when correctly designed.
+A digital signature uses asymmetric cryptography.
+A private key creates a signature.
+A corresponding public key verifies a signature.
+Successful signature verification establishes that the signature is valid for the verified data and key according to the signature algorithm.
+Successful signature verification does not prove that the signer was authorized to perform every possible action.
+Cryptographic identity and authorization remain separate.
+RSA is an asymmetric cryptographic algorithm family.
+RSA key size affects security properties.
+RSA-3072 uses a 3072-bit RSA modulus.
+SHA-256 can be used with appropriate RSA signature schemes.
+Signature schemes must define padding and encoding requirements.
+Raw RSA operations should not be invented as application signature schemes.
+Established cryptographic constructions should be used.
+Cryptographic code should use well-reviewed implementations where practical.
+Inventing custom cryptography creates unnecessary risk.
+Encryption protects confidentiality.
+Encryption and hashing are different.
+Encryption is designed to be reversible with appropriate key material.
+Hashing is designed as a one-way digest operation.
+Symmetric encryption uses shared secret key material.
+Asymmetric encryption uses a public-private key relationship.
+TLS uses cryptography to protect network communication.
+Encryption does not automatically provide authorization.
+Encryption does not make malicious data safe.
+Encrypted malicious input remains malicious after decryption.
+Integrity verification should occur according to protocol requirements.
+Authentication should occur according to protocol requirements.
+Authorization should occur according to application requirements.
+A nonce is a value intended for limited or single use according to protocol design.
+Nonces can help prevent replay.
+A nonce should have properties required by the protocol.
+A nonce is not automatically secret.
+Replay attacks reuse previously valid messages or credentials.
+Replay protection can use nonces.
+Replay protection can use sequence numbers.
+Replay protection can use timestamps combined with appropriate acceptance windows and identity mechanisms.
+Replay protection can use protocol state.
+No single replay mechanism is correct for every protocol.
+A timestamp alone does not prove freshness.
+System clocks can differ.
+System clocks can be manipulated.
+Freshness rules should be explicit.
+Random values used for security should come from a cryptographically secure random source.
+Predictable random numbers should not be used for session identifiers.
+Predictable random numbers should not be used for authentication tokens.
+Predictable random numbers should not be used for cryptographic keys.
+Operating systems provide secure randomness interfaces.
+Cryptographic libraries provide secure random generation.
+A pseudo-random generator can be cryptographically secure when designed and seeded appropriately.
+The ordinary language runtime random function may not be suitable for cryptographic use.
+Memory safety protects against invalid memory operations.
+C permits direct memory manipulation.
+C does not automatically enforce array bounds.
+C does not automatically prevent use-after-free.
+C does not automatically prevent buffer overflow.
+C does not automatically prevent null-pointer dereference.
+C does not automatically prevent integer overflow.
+C does not automatically initialize all memory.
+Memory-safe programming in C requires explicit discipline.
+A buffer overflow occurs when a program writes beyond the bounds of a buffer.
+A buffer over-read occurs when a program reads beyond intended bounds.
+An out-of-bounds operation can corrupt memory.
+An out-of-bounds operation can disclose data.
+An out-of-bounds operation can crash a process.
+An out-of-bounds operation can sometimes permit arbitrary code execution.
+Input length should be validated before copying into fixed-size buffers.
+Copy operations should know destination capacity.
+String operations should account for terminating null bytes when C strings are used.
+A C string is conventionally terminated by a null byte.
+Binary data is not necessarily a C string.
+Binary data can contain null bytes.
+strlen should not be used on arbitrary binary buffers unless null-termination is guaranteed.
+Network message lengths should be tracked explicitly.
+File data lengths should be tracked explicitly.
+A pointer does not carry buffer length information by itself.
+A function receiving a buffer should receive or otherwise know its valid length.
+Integer overflow can invalidate size calculations.
+Multiplication used for allocation size can overflow.
+Addition used for message length can overflow.
+Bounds checks should account for arithmetic overflow.
+Signed and unsigned conversions can create unexpected values.
+Negative signed values converted to unsigned types can become large positive values.
+Compiler warnings should be reviewed.
+Warnings can identify dangerous conversions.
+Warnings are not proof that code is secure.
+No warnings does not mean no vulnerabilities.
+Use-after-free occurs when memory is accessed after its lifetime has ended.
+Double free occurs when dynamically allocated memory is freed more than once.
+Memory ownership should be explicit.
+Each allocation should have defined ownership.
+Each resource should have defined cleanup responsibility.
+Resource ownership can be transferred deliberately.
+Ambiguous ownership creates bugs.
+Resource leaks can cause denial of service.
+Memory leaks consume memory.
+File descriptor leaks consume descriptors.
+Socket leaks consume network resources.
+Thread leaks consume execution resources.
+Resource exhaustion is a security concern.
+Security includes availability.
+Availability means authorized users or systems can obtain required service according to requirements.
+Confidentiality protects information from unauthorized disclosure.
+Integrity protects information from unauthorized modification.
+Availability protects required access to systems and information.
+Confidentiality, integrity, and availability are commonly called the CIA triad.
+The CIA triad is a conceptual model.
+Security requirements can extend beyond the CIA triad.
+Authenticity concerns confidence in identity or origin.
+Accountability concerns associating actions with actors according to system evidence.
+Non-repudiation concerns evidence intended to prevent credible denial of certain actions under defined conditions.
+Privacy concerns appropriate handling of information about individuals.
+Safety and security can overlap but are not identical.
+Availability can be attacked through denial of service.
+A denial-of-service attack attempts to make a service unavailable.
+A distributed denial-of-service attack uses multiple sources or systems.
+DDoS is not defined by the attacker's country.
+Observed source location does not establish attacker identity.
+Compromised machines can participate in DDoS attacks.
+Botnets can distribute attack traffic.
+Reflection attacks cause third-party systems to send responses toward a victim.
+Amplification attacks generate responses larger than triggering requests.
+Rate limiting can reduce some denial-of-service effects.
+Connection limits can reduce some denial-of-service effects.
+Request-size limits can reduce some denial-of-service effects.
+Timeouts can reduce some resource-exhaustion attacks.
+Upstream filtering can be required when attack traffic exceeds local network capacity.
+An application cannot filter traffic that has already saturated its upstream connection.
+Security controls should exist at appropriate layers.
+A web application firewall can inspect application traffic according to configured rules.
+A web application firewall is commonly abbreviated WAF.
+A WAF does not replace secure application code.
+A WAF can produce false positives.
+A WAF can produce false negatives.
+A firewall does not repair SQL injection.
+A firewall does not repair broken authorization.
+A firewall does not repair unsafe memory handling.
+Defense in depth uses multiple independent or complementary security controls.
+Defense in depth does not mean adding arbitrary complexity.
+Each security control should address a defined risk.
+Redundant controls can reduce dependence on a single failure.
+Security complexity itself can create vulnerabilities.
+Small, understandable security boundaries are easier to audit.
+Default deny means actions are denied unless explicitly permitted.
+Default allow means actions are permitted unless explicitly prohibited.
+Default deny is often appropriate for security-sensitive authority boundaries.
+Default deny should not be applied blindly where system requirements require open participation.
+Access policy should follow the system's actual requirements.
+Security policy defines permitted and prohibited behavior.
+Code implements mechanisms.
+Policy and mechanism are different.
+A mechanism should not silently invent policy.
+A developer should not silently change governing policy through implementation convenience.
+A module should not expand its own authority.
+A service should not grant itself new authority because an operation would otherwise fail.
+Failure to obtain authorization means the action should not occur.
+An error should not be solved by bypassing security controls.
+Permission denied is evidence that an access-control mechanism rejected an operation.
+chmod 777 is not a generic solution to permission denied.
+Running as root is not a generic solution to permission denied.
+Disabling TLS verification is not a generic solution to certificate errors.
+Disabling CSRF protection is not a generic solution to failed POST requests.
+Disabling authentication is not a generic solution to authorization problems.
+Security failures should be diagnosed rather than bypassed.
+Secure failure means the system remains within authorized boundaries when an operation fails.
+Fail closed means failure results in denying the protected action.
+Fail open means failure results in permitting the action.
+Security-sensitive authorization commonly should fail closed.
+Not every system function should fail closed in the same way.
+Availability requirements can require carefully designed degraded behavior.
+A logging failure should not necessarily grant administrative access.
+An authentication-service failure should not automatically authenticate everyone.
+A signature-verification failure should not treat the signature as valid.
+An unreadable access-control policy should not silently become allow-all.
+Security-critical defaults should be explicit.
+A missing required security configuration should produce a clear failure.
+A malformed required security configuration should produce a clear failure.
+A security subsystem should not silently guess credentials.
+A security subsystem should not silently generate replacement identity unless policy explicitly permits identity generation.
+Identity creation should be deliberate.
+Key creation should be deliberate.
+Key replacement should be deliberate.
+Replacing a key can invalidate established identity relationships.
+Existing keys should not be overwritten casually.
+File existence should be checked before identity generation when preservation is required.
+Atomic creation can prevent concurrent identity-generation races.
+Private-key creation should use restrictive permissions.
+Public-key creation can use broader read permissions according to policy.
+A module system creates a trust boundary.
+A module can execute code inside or alongside a host process depending on architecture.
+Loading native code grants substantial capability within the hosting process.
+A native module can potentially access host memory.
+A native module can potentially call host-accessible operating-system functions.
+Native module qualification is therefore security-sensitive.
+Module discovery should identify candidates.
+Manifest validation should verify required metadata.
+ABI validation should verify binary interface compatibility.
+Qualification should verify required module properties.
+Loading should occur only after required validation.
+Activation should occur only after successful loading and qualification according to architecture.
+Discovery does not equal authorization.
+Presence does not equal qualification.
+Qualification does not equal unrestricted authority.
+A module should remain within its assigned interface.
+A module should not modify unrelated host state unless explicitly authorized.
+A module should not invent new host capabilities.
+A module ABI defines binary compatibility.
+An ABI version mismatch can justify module rejection.
+An ABI mismatch is not a network error.
+An ABI mismatch is not a knowledge miss.
+An ABI mismatch is not a malformed HTTP request.
+Failure categories should remain precise.
+A module manifest can declare ABI compatibility.
+The host's authoritative ABI definition determines the interface it implements.
+Historical documentation does not override the active interface contract.
+Documentation should be kept current to reduce ambiguity.
+Runtime validation should not rely solely on human-readable README history when machine-readable authoritative data exists.
+Security decisions should prefer authoritative structured state.
+A file hash can detect module modification.
+A signature can authenticate an approved module according to signing policy.
+Hash verification and signature verification are different.
+A matching hash proves equality to a trusted expected hash.
+A valid signature proves validity under the corresponding verification key and signature scheme.
+A valid signature does not automatically mean a module is compatible.
+Compatibility should still be validated.
+A compatible module does not automatically mean a module is authorized.
+Authorization should still be validated.
+Security checks can form a pipeline.
+Each stage should answer one defined question.
+Is the file present?
+Is the file structurally valid?
+Is the manifest valid?
+Is the ABI compatible?
+Is the signature valid?
+Is the signer authorized?
+Does the module satisfy qualification requirements?
+Can the module load?
+Can the module activate?
+Each question is different.
+Collapsing all failures into "module invalid" destroys useful evidence.
+Audit logs record security-relevant and operational events.
+An audit log should record facts about events.
+An audit log should distinguish fact from inference.
+An audit log should use stable event categories.
+An audit log should include useful timestamps.
+An audit log can include actor identity when known.
+An audit log can include action.
+An audit log can include target.
+An audit log can include result.
+An audit log can include reason.
+An audit log should not contain unnecessary secrets.
+Audit records should be protected from unauthorized modification.
+Audit records can support incident reconstruction.
+Audit records do not automatically prove every event that occurred.
+Logging coverage determines what can be concluded from absence.
+A missing audit record is not proof that an event did not happen unless the logging system guarantees such coverage.
+Security monitoring detects events requiring attention.
+An alert is not proof of compromise.
+An alert is evidence that a detection rule triggered.
+Detection rules can produce false positives.
+Detection rules can produce false negatives.
+An investigation evaluates available evidence.
+A candidate finding is not necessarily a confirmed finding.
+A confirmed incident should meet defined evidence requirements.
+Evidence and suspicion are different.
+Evidence and probability are different.
+A pattern match is evidence of a pattern match.
+A pattern match is not automatically evidence of successful exploitation.
+An HTTP attack request reaching a server does not prove exploitation succeeded.
+A vulnerability scanner request does not prove the vulnerability exists.
+A failed login attempt does not prove account compromise.
+A successful login proves authentication succeeded according to the system but does not by itself prove the human identity behind the action.
+Incident classification should match evidence.
+Observed source IP addresses identify observed network sources.
+Observed country information is derived from address-location data and can be inaccurate.
+Observed network source does not establish human attacker location.
+Attribution requires additional evidence.
+Security reports should avoid unsupported attribution.
+Security reports should preserve timestamps.
+Security reports should preserve observed indicators.
+Security reports should preserve affected systems.
+Security reports should preserve operational impact.
+Security reports should distinguish confirmed impact from attempted activity.
+Security reports should distinguish outage duration from attack duration when evidence differs.
+Security reports should distinguish correlation from causation.
+An event occurring during an outage does not alone prove it caused the outage.
+Causation requires supporting evidence.
+Security research should preserve historical records.
+Historical security records can remain valuable after a threat is resolved.
+Status can change while the historical record remains.
+Deletion of evidence can damage future analysis.
+Retention policy should define how evidence is preserved.
+Sensitive evidence should have access controls.
+Integrity verification can help detect evidence modification.
+Chain of custody records who handled evidence according to investigation requirements.
+Digital evidence should be collected without unnecessary modification.
+Original evidence should be preserved where required.
+Analysis can operate on copies.
+Hashes can verify that copies match originals.
+Time synchronization improves event correlation.
+UTC timestamps simplify cross-system correlation.
+Clock drift can complicate timelines.
+A timestamp is evidence of what a system clock reported.
+A timestamp is not infallible proof of absolute real-world time.
+Multiple independent evidence sources can strengthen conclusions.
+Security engineering should avoid speculation.
+If evidence does not establish a conclusion, the conclusion should not be presented as fact.
+If there is doubt, the evidence should be described rather than certainty invented.
+Unknown should remain unknown until evidence resolves it.
+Insufficient evidence should remain insufficient evidence.
+Contradictory evidence should be reported as contradictory.
+Security systems should not fabricate certainty.
+A vulnerability is a weakness that can potentially be exploited.
+An exploit is a method or action that takes advantage of a vulnerability.
+An attack is an attempt to violate security properties.
+A compromise occurs when protected security properties have actually been violated.
+An attempted attack is not automatically a compromise.
+A vulnerability existing is not proof that it has been exploited.
+An exploit attempt is not proof of exploit success.
+Evidence of successful unauthorized state change is stronger than evidence of attempted input.
+Security severity should reflect potential and actual impact according to the chosen assessment framework.
+Risk considers likelihood and impact according to a risk model.
+Risk is not the same as vulnerability severity.
+A high-severity vulnerability can have low immediate exposure in one deployment.
+A lower-severity weakness can become important in combination with other weaknesses.
+Threat modeling identifies assets.
+Threat modeling identifies trust boundaries.
+Threat modeling identifies possible threats.
+Threat modeling identifies controls.
+Threat modeling identifies residual risk.
+Threat modeling should occur before incidents where practical.
+An asset is something requiring protection.
+Assets can include data.
+Assets can include credentials.
+Assets can include availability.
+Assets can include identity.
+Assets can include authority.
+Assets can include software integrity.
+Assets can include intellectual property.
+Assets can include reputation, although reputation is not a technical control.
+An attack surface consists of interfaces through which a system can be influenced.
+Network listeners contribute to attack surface.
+Web endpoints contribute to attack surface.
+File parsers contribute to attack surface.
+Module loaders contribute to attack surface.
+Administrative interfaces contribute to attack surface.
+Update mechanisms contribute to attack surface.
+IPC interfaces contribute to attack surface.
+Reducing unnecessary interfaces reduces attack surface.
+Unused functionality should not remain enabled without reason.
+Administrative interfaces should receive stronger protection than ordinary public interfaces when their authority is greater.
+Administrative actions should require authorization.
+Sensitive administrative actions can require additional confirmation according to policy.
+Administrative actions should be auditable.
+Administrative access should not be inferred from obscurity.
+A hidden URL is not authentication.
+A nonstandard port is not authentication.
+An uncommon filename is not authorization.
+Security through obscurity can supplement but should not replace actual controls.
+Software updates can repair vulnerabilities.
+Update authenticity should be verified.
+An update should come from an authorized source.
+An update package can be hashed.
+An update package can be digitally signed.
+A valid signature can authenticate the update according to signing policy.
+An update should be compatible with the target system.
+An authentic update can still be incompatible.
+An update process should have defined failure recovery.
+Partial updates can leave inconsistent state.
+Atomic replacement can reduce partial-update risk.
+Rollback can restore a previous version when supported and authorized.
+Rollback itself can create security risk if it permits installation of known-vulnerable versions.
+Update policy should define permitted versions.
+Automatic updates trade operator control for faster deployment.
+Manual updates trade automation for operator scheduling.
+Neither approach is universally correct.
+Security policy should determine update behavior.
+Dependencies create inherited risk.
+A vulnerable dependency can affect applications using it.
+Dependency version information should be known.
+Unused dependencies should be removed.
+Dependencies should come from trusted sources.
+Dependency updates should be tested.
+A dependency being popular does not prove it is secure.
+A dependency being open source does not prove it is secure.
+A dependency being proprietary does not prove it is secure.
+Evidence matters more than labels.
+Software composition analysis can identify known dependency vulnerabilities.
+Known-vulnerability scanning does not detect every vulnerability.
+Absence of known CVEs does not prove software is secure.
+Static analysis examines source or compiled representations without executing the complete target behavior.
+Dynamic analysis observes executing software.
+Fuzzing supplies generated or mutated inputs to discover failures.
+Code review examines implementation.
+Penetration testing evaluates exploitable behavior under defined authorization.
+No single testing method proves complete security.
+Multiple methods provide different evidence.
+Fuzzing is useful for parsers.
+Fuzzing is useful for protocol handlers.
+Fuzzing is useful for file formats.
+Fuzzing is useful for memory-unsafe code.
+A crash found by fuzzing should be investigated.
+A crash is evidence of incorrect behavior.
+A crash is not automatically exploitable.
+A reproducible crash provides stronger engineering evidence than an unreproducible anecdote.
+A test case should preserve the input that caused failure.
+Regression tests can ensure a repaired vulnerability does not reappear.
+Security tests should include negative tests.
+A negative test verifies that prohibited or invalid behavior is rejected.
+Authentication testing should include invalid credentials.
+Authorization testing should include insufficient privileges.
+Parser testing should include malformed input.
+Protocol testing should include unsupported versions.
+Module testing should include incompatible ABI versions.
+Signature testing should include modified content.
+File-access testing should include denied paths.
+Security systems should prove that boundaries reject invalid behavior, not only that valid behavior succeeds.
+Failing safely is part of correctness.
+Error messages should provide enough information for legitimate diagnosis.
+Error messages should not unnecessarily disclose secrets.
+Stack traces can reveal internal paths and implementation details.
+Database errors can reveal schema details.
+Authentication errors can reveal account information.
+Production error responses should be bounded.
+Detailed diagnostics can be recorded in protected logs.
+Operator-facing diagnostics can contain more detail than untrusted client responses when appropriate.
+Error identifiers can correlate external failures with internal logs.
+An alert identifier can support investigation.
+An alert identifier is not evidence by itself.
+Security alerts should have stable identifiers where operational workflows require them.
+Security state should be explicit.
+NORMAL can represent expected operation according to system policy.
+DEGRADED can represent reduced capability.
+ALERT can represent detected conditions requiring attention.
+FAILED can represent loss of required capability.
+COMPROMISED should not be asserted without evidence meeting the system's definition.
+State names should have defined criteria.
+A warning should not automatically mean compromise.
+A module failure should not automatically mean compromise.
+A timeout should not automatically mean attack.
+A crash should not automatically mean attack.
+An attack should not automatically mean successful compromise.
+Precise language protects operational decision quality.
+Secure software should validate assumptions.
+Secure software should bound resources.
+Secure software should separate data from instructions.
+Secure software should authenticate identity where identity matters.
+Secure software should authorize actions where authority matters.
+Secure software should preserve least privilege.
+Secure software should protect secrets.
+Secure software should verify integrity where integrity matters.
+Secure software should log important events without leaking secrets.
+Secure software should fail within defined boundaries.
+Secure software should distinguish errors accurately.
+Secure software should preserve evidence.
+Secure software should avoid unsupported conclusions.
+Secure software should remain understandable enough to audit.
+Complexity increases the number of states a system can enter.
+Unnecessary complexity increases the number of states engineers must reason about.
+Security controls should therefore be as simple as their requirements permit.
+Simple does not mean weak.
+A small explicit trust boundary can be stronger than a large implicit one.
+A small explicit interface can be easier to secure than unrestricted internal access.
+A deterministic validator can be easier to test than heuristic acceptance.
+A deterministic permission model can be easier to audit than undocumented exceptions.
+A deterministic module loader can be easier to qualify than arbitrary plugin behavior.
+Security behavior should be predictable.
+The same unauthorized operation should be rejected consistently.
+The same invalid signature should be rejected consistently.
+The same incompatible ABI should be rejected consistently.
+The same malformed request should be rejected consistently.
+Security decisions should not depend on irrelevant timing or incidental ordering.
+Security-sensitive configuration should have one authoritative interpretation.
+Historical documentation should not override active security configuration.
+Old credentials should not remain active merely because they appear in documentation.
+Old interface versions should not be accepted merely because they appear in history.
+Current authority should come from the system's governing source of truth.
+Evidence should come from the source appropriate to the question.
+Source code can establish intended implementation.
+Compiled artifacts establish what was built from some source and toolchain.
+Runtime state establishes what is currently executing.
+Configuration establishes configured behavior.
+Logs establish recorded historical events.
+Documentation explains intended or historical behavior according to its scope.
+No one evidence source answers every question.
+Security analysis should ask what each piece of evidence actually proves.
+Security is not certainty produced by confidence.
+Security is disciplined control supported by evidence.

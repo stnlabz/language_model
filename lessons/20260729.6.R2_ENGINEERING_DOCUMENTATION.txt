@@ -1,0 +1,295 @@
+20260729.6.R1 — Engineering Documentation
+
+Root Document ID: 20260729.6
+Revision ID:       NONE
+Previous Revision: NONE
+sha256: 66137d78e561e8c4422f54e80f962536b17844c85758165ff36f2fdb500453d7
+
+Status: Approved  
+Scope: Policies  
+
+Policy
+
+STN-LABZ establishes standardized requirements for controlled engineering documentation, permanent document identity, revision identity, authoritative revision selection, digital document integrity requirements, and documentation boundaries.
+
+Journal / Log Naming Rule
+
+YYYYMMDD.X_LOG_NAME
+
+Where:
+
+- YYYYMMDD = Entry date.
+- X = The next sequential number for that date.
+- LOG_NAME = Descriptive entry name.
+
+Example
+
+20260729.0_OPERATIONAL_AUTHORITY
+
+Each entry represents an evolution of thought rather than only a date stamp.
+
+Suggested Metadata
+
+- Topic
+- Objective
+- Decisions
+- Principles
+- References
+- Status
+
+Controlled Document Identity
+
+Every STN-LABZ controlled document will receive a permanent Document ID at original publication.
+
+The canonical Document ID format is:
+
+YYYYMMDD.#
+
+The Document ID establishes the permanent root identity of the controlled document.
+
+The original root document will use:
+
+Revision ID: NONE  
+Previous Revision: NONE
+
+Revision of a controlled document will not change its root Document ID.
+
+The first revision of a controlled document will append Revision 0 to the permanent root Document ID.
+
+Subsequent revisions will append the next sequential revision identifier.
+
+The canonical revision format is:
+
+YYYYMMDD.#.R#
+
+Where:
+
+- YYYYMMDD.# = Permanent root Document ID.
+- R = Revision designation.
+- # = Sequential revision number beginning with 0.
+
+Example
+
+Root publication:
+
+20260806.0
+
+Root metadata:
+
+Root Document ID: 20260806.0  
+Revision ID: NONE  
+Previous Revision: NONE
+
+First revision:
+
+20260806.0.R0
+
+Second revision:
+
+20260806.0.R1
+
+Third revision:
+
+20260806.0.R2
+
+Revision identifiers will progress sequentially.
+
+A revision will not replace, renumber, or assume the identity of another revision.
+
+Each revision will identify its immediately preceding revision through the Previous Revision field.
+
+For the first revision:
+
+Previous Revision: NONE
+
+For subsequent revisions:
+
+Previous Revision: YYYYMMDD.#.R#
+
+Document Approval State
+
+Controlled-document authorization requires deterministic confirmation of the applicable approval evidence.
+
+Where a root Document ID carries an applicable approval state, that state will be validated.
+
+Where a specific revision carries an applicable approval state, that state will also be validated.
+
+Approval of a root document does not independently establish approval of a revision when revision approval is required.
+
+Approval of a revision does not independently establish approval of its root document when root approval is required.
+
+Missing, conflicting, duplicate, ambiguous, or otherwise unresolved approval evidence will not be interpreted as approval.
+
+Authoritative Index
+
+Where an authoritative document index applies, the index will identify the controlled document and the currently authorized revision.
+
+For a revision identified as:
+
+20260806.0.R1
+
+the corresponding root identity is:
+
+20260806.0
+
+The authoritative index, root document identity, revision identity, and applicable approval states will agree before the document proceeds as authorized controlled documentation.
+
+The following will not independently establish document authority:
+
+- File timestamps.
+- Creation dates.
+- Modification dates.
+- Directory order.
+- Filename sorting.
+- Retrieval order.
+- Search ranking.
+- Repository presentation order.
+- Document claims.
+- Upstream system output.
+
+When applicable authorization evidence cannot be deterministically established, the authorization state remains UNKNOWN.
+
+UNKNOWN will not be interpreted as APPROVED.
+
+Digital Policy and Doctrine Integrity Requirement
+
+Every digital STN-LABZ policy and doctrine document will have SHA-256 integrity evidence.
+
+The root document and each subsequent revision will have SHA-256 integrity evidence corresponding to the authoritative digital content of that specific controlled artifact.
+
+Each controlled digital policy or doctrine artifact will therefore have, at minimum:
+
+- Permanent root Document ID.
+- Revision ID or NONE for the root artifact.
+- Previous Revision or NONE where applicable.
+- Applicable approval state.
+- SHA-256 integrity evidence.
+
+The governing document relationship is:
+
+Document ID
+        ↓
+Root or Revision Identity
+        ↓
+Approval Evidence
+        ↓
+SHA-256 Integrity Evidence
+        ↓
+Controlled Digital Artifact
+
+A SHA-256 value belongs to the specific digital artifact from which it was calculated.
+
+A revision will not inherit the SHA-256 value of the root document or another revision.
+
+Modification of controlled digital content requires integrity evidence corresponding to the resulting authorized artifact.
+
+Authorization and Integrity Separation
+
+Document authorization and document integrity are separate determinations.
+
+Authorization establishes whether the identified controlled document or revision is permitted to govern.
+
+Integrity establishes whether the evaluated digital content corresponds to the identified artifact's cryptographic integrity evidence.
+
+A valid SHA-256 value does not independently establish authorization.
+
+An APPROVED state does not independently establish cryptographic integrity.
+
+Where both authorization and integrity validation are required, both will successfully validate before the controlled document is accepted.
+
+The governing relationship is:
+
+IDENTITY
+    ↓
+AUTHORIZATION
+    ↓
+INTEGRITY
+    ↓
+ACCEPT
+
+Failure to establish any required element prevents acceptance.
+
+Atomic Authorization Boundary
+
+Where a controlled document is required as authorization evidence for a research item, knowledge item, engineering record, or other governed information set, failure of the required document authorization or integrity validation invalidates that authorization path.
+
+The affected information will not be partially accepted by selecting only portions whose authorization cannot independently be established.
+
+A failed authorization path will return a deterministic rejection or UNKNOWN state according to the applicable governing policy.
+
+Structured Documentation File Size
+
+All STN-LABZ Markdown (.md) and JSON (.json) files will have a maximum permitted file size of 8 MiB.
+
+The file-size acceptance boundary is:
+
+- ≤ 8 MiB → ACCEPT
+- 8 MiB + 1 byte → REJECT
+
+For enforcement purposes:
+
+8 MiB = 8,388,608 bytes
+
+Therefore:
+
+- 8,388,608 bytes → ACCEPT
+- 8,388,609 bytes → REJECT
+
+Markdown and JSON files exceeding the established limit will not be accepted for processing, ingestion, validation, or use as authorized STN-LABZ engineering documentation or knowledge.
+
+This boundary applies regardless of the system, agent, module, parser, ingestion mechanism, retrieval mechanism, or storage mechanism processing the file.
+
+Implementations will determine file size in bytes and will not approximate, round, or reinterpret the established boundary.
+
+Authority Separation
+
+This policy is the governing authority for:
+
+- Controlled-document identity.
+- Controlled-document revision identity.
+- Applicable approval-state requirements.
+- Authoritative revision identification.
+- Digital policy and doctrine integrity requirements.
+- Structured documentation file-size boundaries.
+
+Other STN-LABZ policies and doctrine will reference these requirements where applicable rather than independently redefining them.
+
+One authority governs each established rule.
+
+Cryptographic validation, Trust Chain continuity, cryptographic failure handling, and related integrity-processing requirements are governed by the applicable STN-LABZ Trust Chain policy.
+
+Implementation Boundary
+
+This policy defines required controlled-document behavior.
+
+It does not prescribe the internal software implementation used to satisfy these requirements.
+
+Applicable systems will implement the controls necessary to satisfy this policy and applicable Trust Chain requirements.
+
+Qualification will demonstrate that the implementation obeys the governing requirements.
+
+The engineering relationship is:
+
+Policy / Doctrine
+        ↓
+Defines Required Behavior
+        ↓
+Implementation
+        ↓
+Implements Required Controls
+        ↓
+Qualification
+        ↓
+Demonstrates Compliance
+
+References
+
+- STN-LABZ General Orders
+- 20260729.0 — Operational Authority
+- 20260729.1 — Engineering Organization
+- 20260729.2 — Engineering Workflow
+- 20260729.5 — Unknown State Doctrine
+- 20260729.8 — Operational Doctrine
+- 20260731.2 — Drafting Standard
+- Engineering Development Doctrine
+- STN-LABZ Trust Chain Policy

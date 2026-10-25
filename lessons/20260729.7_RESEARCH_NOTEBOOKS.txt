@@ -1,0 +1,27 @@
+20260729.7 — Research Notebooks
+
+Root Document ID: 20260729.7
+Revision ID: NONE
+Previous Revision: NONE
+sha256: 6706a20ebd991e230c557fbab21a7799bf5c2b712e73b252115968ef2092f97a
+
+Status: Approved  
+Scope: Policies
+
+Policy
+
+Engineering notebooks will record engineering decisions rather than conversations.
+
+All engineering notebooks are the property of STN-LABZ.
+
+Purpose
+
+- Preserve rationale.
+- Record architectural evolution.
+- Track implementation history.
+- Maintain long-term engineering doctrine.
+
+References
+
+- General Orders
+- 20260729.6.R1 — Engineering Documentation

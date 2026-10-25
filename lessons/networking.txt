@@ -1,0 +1,767 @@
+A computer network allows systems to exchange data.
+Network communication occurs through defined protocols.
+A protocol defines rules for communication between participants.
+Different protocols operate at different layers and solve different problems.
+A failure at one network layer should not automatically be reported as a failure at another layer.
+Physical connectivity, IP routing, transport connectivity, name resolution, TLS, and application protocols are distinct concerns.
+The Internet Protocol is commonly abbreviated IP.
+IP provides packet delivery between network interfaces across interconnected networks.
+IPv4 is version 4 of the Internet Protocol.
+IPv6 is version 6 of the Internet Protocol.
+IPv4 and IPv6 use different address formats.
+An IPv4 address contains 32 bits.
+An IPv6 address contains 128 bits.
+An IPv4 address is commonly written as four decimal octets.
+192.0.2.1 is an example IPv4 address.
+An IPv6 address is commonly written as hexadecimal groups separated by colons.
+2001:db8::1 is an example IPv6 address reserved for documentation.
+An IP address identifies an interface or addressing endpoint according to network configuration.
+An IP address does not identify an application by itself.
+Multiple applications can communicate through the same IP address using different transport endpoints.
+A host can have multiple IP addresses.
+A hostname can resolve to multiple IP addresses.
+Multiple hostnames can resolve to the same IP address.
+An IP address and a hostname are different concepts.
+IPv4 address 127.0.0.1 is part of the loopback range.
+127.0.0.1 commonly refers to the local IPv4 host.
+IPv6 address ::1 is the IPv6 loopback address.
+Loopback traffic does not ordinarily leave the local host.
+0.0.0.0 has special meaning in IPv4 contexts.
+A server binding to 0.0.0.0 commonly listens on all available IPv4 interfaces.
+A client should not ordinarily use 0.0.0.0 as though it were the normal remote identity of a service.
+The unspecified IPv6 address is ::.
+Binding and connecting are different operations.
+A server binds a local endpoint.
+A client connects to a remote endpoint.
+A socket is an operating-system abstraction for communication.
+A network socket can be associated with a protocol family.
+A network socket can be associated with a transport protocol.
+A socket endpoint can include an IP address and port.
+A TCP connection is identified by endpoint information for both participants.
+A port number is a 16-bit unsigned number.
+Port numbers range from 0 through 65535.
+A port number does not identify a protocol by itself.
+TCP port 80 and UDP port 80 are different transport endpoints.
+Port assignments are conventions and configuration.
+An application can use a nonstandard port when both sides agree.
+A service listening on a port does not prove it implements the expected application protocol.
+A TCP listener on port 443 does not by itself prove valid HTTPS behavior.
+Protocol qualification requires protocol-level evidence.
+TCP stands for Transmission Control Protocol.
+TCP is connection-oriented.
+TCP provides a reliable ordered byte stream between endpoints while the connection remains operational.
+TCP detects loss and performs retransmission according to its protocol.
+TCP preserves byte order.
+TCP does not preserve application message boundaries.
+One send operation does not necessarily correspond to one receive operation.
+A receiver can receive part of one sender write.
+A receiver can receive data from multiple sender writes in one read.
+Applications using TCP must define message framing.
+Message framing identifies where one application message ends and another begins.
+Length-prefix framing places a message length before message content.
+Delimiter framing separates messages using a defined delimiter.
+Fixed-size framing uses messages of a predetermined size.
+Protocol-specific framing can combine multiple techniques.
+A newline can be used as a delimiter only when the protocol defines how newlines inside content are handled.
+JSON alone does not define framing for multiple JSON documents over a raw TCP stream.
+HTTP defines its own message framing.
+A custom TCP protocol must define its own framing.
+Failure to handle partial reads is a common TCP programming error.
+Failure to handle partial writes is a common TCP programming error.
+A successful write call can report fewer bytes written than requested depending on API and conditions.
+A correct application handles the number of bytes actually transferred.
+TCP connection establishment uses a handshake.
+The TCP handshake establishes transport connectivity.
+Successful TCP connection establishment does not prove application compatibility.
+Successful TCP connection establishment does not prove authentication.
+Successful TCP connection establishment does not prove protocol qualification.
+Successful TCP connection establishment does not prove that a required application operation will succeed.
+Transport connectivity and application readiness are different states.
+TCP connections have state.
+A connection can be established.
+A connection can be closing.
+A connection can be closed.
+A connection can be reset.
+A graceful TCP close and a connection reset are different events.
+A peer can close its sending direction while still receiving according to TCP half-close semantics.
+Applications should define how connection closure affects their protocol.
+TCP keepalive can detect some dead peer conditions over long-lived connections.
+TCP keepalive is not the same as an application heartbeat.
+An application heartbeat can test application-level responsiveness.
+A TCP keepalive tests transport-level connection conditions according to operating-system behavior.
+A successful application heartbeat provides stronger evidence of application responsiveness than mere socket existence.
+A connection can remain established while an application is deadlocked or otherwise unable to perform useful work.
+Application health should be tested at the required layer.
+UDP stands for User Datagram Protocol.
+UDP is connectionless at the protocol level.
+UDP sends datagrams.
+UDP preserves datagram boundaries.
+UDP does not guarantee delivery.
+UDP does not guarantee ordering.
+UDP does not guarantee duplicate suppression.
+UDP does not provide TCP-style retransmission.
+Applications using UDP must provide additional reliability mechanisms when required.
+A UDP send succeeding does not prove the remote application received the datagram.
+A UDP application can receive duplicate messages.
+A UDP application can receive messages out of order.
+UDP is appropriate when its semantics match application requirements.
+TCP is appropriate when reliable ordered byte-stream semantics match application requirements.
+Neither TCP nor UDP is universally superior.
+Protocol choice should follow requirements.
+IP packets can be dropped.
+IP packets can be duplicated.
+IP packets can arrive out of order.
+Transport protocols handle these conditions according to their semantics.
+Networks are not inherently reliable.
+Applications should expect communication failure.
+Timeouts bound how long an operation waits.
+A connect timeout limits waiting for connection establishment.
+A read timeout limits waiting for incoming data.
+A write timeout limits waiting for outgoing data progress.
+An application timeout can limit an entire operation.
+Different timeout types should remain distinguishable.
+A timeout is not proof that the remote system performed no work.
+A request can reach a server and complete even when the client times out before receiving the response.
+Retrying after an ambiguous timeout can duplicate an operation.
+State-changing operations require deliberate retry design.
+Idempotency can make retries safer.
+A retry should be bounded.
+Infinite immediate retry loops can create failure storms.
+Retry delays can reduce pressure on a failing dependency.
+Exponential backoff increases delay after repeated failures.
+Jitter adds variation to retry timing.
+Jitter can reduce synchronized reconnect storms.
+Many clients reconnecting simultaneously can overload a recovering server.
+A reconnect loop should have bounded and controlled timing.
+Repeated disconnect and reconnect behavior can indicate transport instability.
+Repeated disconnect and reconnect behavior can indicate application timeout configuration.
+Repeated disconnect and reconnect behavior can indicate server overload.
+Repeated disconnect and reconnect behavior can indicate protocol disagreement.
+Repeated disconnect and reconnect behavior can indicate an intermediary closing connections.
+Repeated disconnect and reconnect behavior can indicate client logic incorrectly treating normal conditions as failure.
+The reconnect pattern alone does not prove the cause.
+Evidence should identify the failure layer before assigning cause.
+A connection refusal indicates that the destination host actively rejected the transport connection or no listener accepted it according to network conditions.
+Connection refused is different from connection timeout.
+A connection timeout indicates that connection establishment did not complete within the configured time.
+A timeout does not prove that the host is offline.
+A firewall can silently drop packets.
+Routing problems can prevent packets from reaching the destination.
+Network congestion can delay packets.
+An overloaded host can respond slowly.
+A refused connection often indicates that the destination was reachable enough to reject the connection.
+An accepted connection indicates a listener accepted transport establishment.
+Neither condition alone proves application correctness.
+DNS stands for Domain Name System.
+DNS maps names to data including network addresses.
+DNS is a distributed naming system.
+DNS resolution is different from TCP connection establishment.
+A DNS lookup can succeed while the resulting service is unavailable.
+A DNS lookup can fail while a service remains reachable directly by IP address.
+A DNS record can exist while no application listens at the resulting address.
+DNS data has caching behavior.
+DNS records have TTL values.
+TTL stands for Time To Live.
+A DNS TTL influences how long applicable DNS data can be cached.
+Changing a DNS record does not guarantee every resolver immediately observes the new value.
+Cached old values can remain until expiration according to resolver behavior.
+DNS propagation is not a single global instantaneous event.
+An A record maps a name to an IPv4 address.
+An AAAA record maps a name to an IPv6 address.
+A CNAME record aliases one DNS name to another according to DNS rules.
+An MX record identifies mail exchange information.
+A TXT record stores text data used by many higher-level mechanisms.
+An NS record identifies authoritative name servers for a DNS zone.
+A PTR record supports reverse DNS mappings.
+DNS record types have different purposes.
+A hostname used by an application should resolve according to the application's network requirements.
+A resolver can return multiple addresses.
+Clients can attempt addresses according to resolver and connection policy.
+IPv4 and IPv6 connectivity can differ.
+Successful IPv4 connectivity does not prove successful IPv6 connectivity.
+Successful IPv6 connectivity does not prove successful IPv4 connectivity.
+A dual-stack host supports IPv4 and IPv6 according to configuration.
+Routing determines where IP packets are sent.
+A routing table contains route information.
+A route can identify a destination network.
+A route can identify a gateway.
+A route can identify an outgoing interface.
+A default route is used when no more specific route matches.
+A default IPv4 route is commonly represented as 0.0.0.0/0.
+A default IPv6 route is commonly represented as ::/0.
+Longest-prefix matching is used to select more specific IP routes.
+A gateway forwards packets between networks.
+A router operates primarily at the network layer.
+A route existing does not prove the destination is reachable.
+A missing route can prevent communication.
+A wrong route can send traffic toward the wrong network.
+Routing loops can prevent successful delivery.
+traceroute can provide evidence about the path packets take where network devices permit the required responses.
+A traceroute failure does not necessarily mean the final destination is unreachable.
+Network devices can filter traceroute-related traffic.
+ping commonly uses ICMP echo messages.
+ICMP stands for Internet Control Message Protocol.
+ICMP communicates network control and diagnostic information.
+Ping success proves some IP and ICMP communication occurred.
+Ping success does not prove TCP connectivity.
+Ping success does not prove an application service is healthy.
+Ping failure does not prove a host is down.
+ICMP can be filtered.
+A host can serve TCP applications while refusing ICMP echo requests.
+Network diagnosis should test the layer relevant to the problem.
+A subnet groups addresses according to a network prefix.
+CIDR stands for Classless Inter-Domain Routing.
+CIDR notation combines an address with prefix length.
+192.0.2.0/24 represents an IPv4 prefix with 24 network-prefix bits.
+2001:db8::/32 represents an IPv6 prefix with 32 network-prefix bits.
+A subnet mask describes network-prefix boundaries in IPv4 representations.
+Hosts determine whether a destination is on-link according to routing and prefix configuration.
+Network prefixes should not be inferred merely from similar-looking addresses.
+Private IPv4 address ranges include 10.0.0.0/8.
+Private IPv4 address ranges include 172.16.0.0/12.
+Private IPv4 address ranges include 192.168.0.0/16.
+Private IPv4 addresses are not globally routable on the public Internet under ordinary routing policy.
+Private does not mean secure.
+A private network can contain hostile or compromised systems.
+Network location is not authentication.
+Link-local IPv4 addresses use 169.254.0.0/16.
+IPv6 has link-local addressing commonly using fe80::/10.
+Link-local addresses have limited routing scope.
+Address scope matters.
+NAT stands for Network Address Translation.
+NAT modifies network addressing information according to translation rules.
+NAT commonly allows multiple private hosts to share public IPv4 connectivity.
+NAT is not a security model by itself.
+A NAT device can incidentally block unsolicited inbound connections when no mapping exists.
+A firewall explicitly implements traffic policy.
+NAT and firewalling are different concepts.
+Port forwarding creates translation rules allowing traffic toward an internal service.
+Exposing a port through NAT makes the service reachable according to routing and firewall policy.
+Reachability should be intentional.
+A firewall filters network traffic according to rules.
+A firewall can allow traffic.
+A firewall can reject traffic.
+A firewall can drop traffic.
+Reject and drop have different observable behavior.
+Reject commonly sends an error response.
+Drop commonly discards traffic without an explicit rejection response.
+A dropped TCP SYN can lead to a connection timeout.
+A rejected TCP connection can produce an immediate failure.
+Firewall behavior can therefore affect observed client errors.
+An application should not infer too much from one network symptom.
+Host firewalls and network firewalls are separate enforcement points.
+Cloud-provider firewalls can add another enforcement point.
+Multiple firewall layers can exist simultaneously.
+Opening a host firewall does not prove an upstream firewall permits traffic.
+Opening an upstream firewall does not prove the application is listening.
+A listening application does not prove routing reaches it.
+Troubleshooting should proceed layer by layer.
+Network interfaces connect hosts to networks.
+An interface has state.
+An interface can be administratively up.
+An interface can be administratively down.
+An interface can have one or more addresses.
+An interface can have routes.
+The loopback interface is commonly named lo on Linux.
+Ethernet interfaces can have implementation-dependent names.
+Interface names should not be hard-coded without an architectural reason.
+ip addr displays interface addressing on Linux.
+ip link displays link-layer interface information.
+ip route displays routing information.
+ss displays socket information.
+ss -l can show listening sockets according to options.
+A listening socket proves that a local socket is listening.
+A listening socket does not prove external reachability.
+A listening socket does not prove protocol qualification.
+netstat is an older networking utility still present on some systems.
+ss is commonly preferred on modern Linux systems.
+Network tools provide evidence about particular layers.
+Their output should be interpreted according to what they actually measure.
+Ethernet operates at a link layer.
+Ethernet frames carry network-layer packets on Ethernet networks.
+A MAC address identifies a link-layer interface according to Ethernet addressing.
+MAC addresses and IP addresses operate at different layers.
+A router normally forwards based on IP routing rather than remote MAC addresses across routed networks.
+ARP maps IPv4 addresses to link-layer addresses on applicable local networks.
+ARP stands for Address Resolution Protocol.
+IPv6 uses Neighbor Discovery rather than ARP.
+Neighbor Discovery uses ICMPv6.
+ARP failure can prevent local IPv4 communication even when routing appears correct.
+Neighbor Discovery failure can prevent applicable IPv6 communication.
+Link-layer problems and IP-layer problems are different.
+MTU stands for Maximum Transmission Unit.
+MTU limits packet size on a network link.
+Different network paths can have different effective MTUs.
+Path MTU Discovery attempts to determine usable packet sizes.
+Incorrectly filtered ICMP can interfere with Path MTU Discovery.
+MTU problems can produce connections that establish but fail when larger data transfers occur.
+A successful handshake does not prove all packet sizes will traverse the path.
+MSS stands for Maximum Segment Size in TCP.
+TCP MSS relates to payload sizing within the path's packet constraints.
+Fragmentation and segmentation are different mechanisms.
+Performance problems can result from inappropriate MTU configuration.
+TLS stands for Transport Layer Security.
+TLS provides confidentiality and integrity for application communication when correctly configured.
+TLS can authenticate servers through certificates.
+TLS can optionally authenticate clients.
+TLS commonly operates above TCP.
+HTTPS uses HTTP over TLS.
+TLS and TCP are different layers.
+TCP connectivity can succeed while TLS negotiation fails.
+TLS negotiation can succeed while HTTP fails.
+HTTP can succeed while the application returns an application-level error.
+Each stage should remain distinguishable.
+A TLS certificate binds identity information according to certificate validation rules.
+A certificate has a validity period.
+A certificate can be expired.
+A certificate can be not yet valid.
+A certificate can be issued by a trusted certification path.
+A certificate can fail hostname validation.
+Certificate trust and hostname validation are separate checks.
+Disabling certificate verification removes important authentication guarantees.
+A client should not disable TLS verification merely to make an error disappear.
+A TLS handshake negotiates cryptographic parameters.
+TLS protocol versions differ.
+TLS cipher suites define cryptographic algorithm combinations according to protocol version.
+TLS configuration should use currently appropriate security settings.
+TLS protects data in transit.
+TLS does not protect a compromised endpoint.
+TLS does not provide application authorization by itself.
+TLS does not prevent an authorized application from returning incorrect data.
+TLS does not prevent SQL injection.
+TLS does not prevent application logic errors.
+Network security requires multiple layers.
+A proxy forwards communication on behalf of clients or servers.
+A forward proxy acts on behalf of clients.
+A reverse proxy acts on behalf of servers.
+A reverse proxy can terminate TLS.
+A reverse proxy can route requests.
+A reverse proxy can load balance.
+A reverse proxy can enforce request limits.
+A reverse proxy can alter headers.
+A reverse proxy can hide the origin server from direct public access.
+Proxy behavior introduces another failure layer.
+A client can successfully reach a reverse proxy while the reverse proxy cannot reach the origin.
+An upstream connection failure can produce an HTTP gateway error.
+HTTP 502 commonly indicates invalid or failed upstream response behavior at a gateway or proxy.
+HTTP 504 commonly indicates an upstream timeout at a gateway or proxy.
+A direct application timeout is not automatically HTTP 504.
+Architecture determines whether the component is acting as a gateway.
+Load balancing distributes traffic among multiple service instances.
+A load balancer can use round-robin selection.
+A load balancer can use least-connections selection.
+A load balancer can use health information.
+A load balancer can use other routing policies.
+Health checks should test the capability required for traffic.
+A process existing is weaker evidence than successful application-level qualification.
+A backend can be reachable but unhealthy.
+A backend can be healthy for one capability but unhealthy for another.
+Health should be scoped.
+Failover changes service traffic from one endpoint to another.
+Failover should occur according to defined qualification rules.
+A fallback endpoint should be validated before use.
+Merely being listed in configuration does not prove an endpoint is healthy.
+A successful TCP connection is one qualification stage.
+A successful protocol handshake is a stronger qualification stage.
+Network identity can be validated at the application layer.
+Protocol version can be validated.
+Network identifier can be validated.
+Genesis identifier can be validated in a blockchain protocol.
+Capabilities can be validated.
+Qualification should reject an endpoint that answers transport connections but belongs to the wrong network.
+Transport success is not identity success.
+A peer is another participant in a network protocol.
+Peer-to-peer is commonly abbreviated P2P.
+A P2P network allows participants to communicate according to peer protocol rules.
+P2P does not mean that every peer has identical authority.
+P2P does not mean that every peer stores identical state at every instant.
+P2P protocol rules define participant behavior.
+A peer discovery mechanism identifies candidate peers.
+Discovery and qualification are different stages.
+A discovered peer is not automatically trusted.
+A discovered peer is not automatically compatible.
+A discovered peer should be validated according to protocol requirements.
+A peer handshake can exchange identity information.
+A peer handshake can exchange protocol version.
+A peer handshake can exchange network identifier.
+A peer handshake can exchange capabilities.
+A peer handshake can exchange current state information.
+Handshake data should be validated.
+A peer claiming an identity does not prove that identity unless the protocol includes an appropriate authentication mechanism.
+A peer can send malformed messages.
+A peer can send oversized messages.
+A peer can send unsupported messages.
+A peer can disconnect unexpectedly.
+A peer can become silent.
+A peer can lie.
+Network protocol implementations should treat remote input as untrusted.
+Message lengths should be bounded.
+Field values should be validated.
+Protocol versions should be validated.
+Network identifiers should be validated.
+State transitions should be validated.
+Malformed remote input should not corrupt local state.
+A protocol parser should reject invalid messages safely.
+One malformed peer should not automatically crash the entire service.
+Peer failures should be isolated where architecture permits.
+Network protocols should define byte order.
+Network byte order is conventionally big-endian.
+Multi-byte integer serialization should use explicit byte order.
+Sending raw native integer memory across a network is not portable.
+Sending raw C structures across a network is not portable unless the protocol deliberately fixes layout, alignment, byte order, and sizes.
+Structure padding can differ between compilers and platforms.
+CPU endianness can differ.
+Protocol serialization should be explicit.
+A 32-bit protocol field should have exactly defined width.
+A 64-bit protocol field should have exactly defined width.
+Signedness should be defined.
+Maximum values should be defined.
+Malformed lengths should be rejected before allocation where possible.
+An attacker-controlled length should not cause unbounded memory allocation.
+Integer overflow should be considered when calculating message sizes.
+Message framing should be validated before message processing.
+Protocol parsing should separate transport receipt from semantic validation.
+Receiving bytes does not mean the message is valid.
+Parsing a message does not mean the message is authorized.
+Validating syntax does not mean the message is truthful.
+Authorization and consensus rules can apply after parsing.
+Protocol state machines define allowed message sequences.
+A message can be syntactically valid but invalid in the current protocol state.
+State transitions should be explicit.
+Unexpected messages should be handled deterministically.
+A protocol should not silently guess the meaning of unknown message types.
+Unknown protocol versions should be handled according to compatibility policy.
+Backward compatibility should be deliberate.
+Forward compatibility should be deliberate.
+Network protocol behavior should not depend on undefined implementation behavior.
+A heartbeat is an application-level message indicating liveness according to protocol rules.
+A heartbeat interval defines expected heartbeat timing.
+A heartbeat timeout defines when a peer can be considered unresponsive according to policy.
+Heartbeat intervals should not be unnecessarily aggressive.
+Excessive heartbeat traffic wastes resources.
+A heartbeat succeeding does not prove every application operation works.
+A protocol-specific health request can test stronger capability.
+Long-lived connections need lifecycle management.
+A connection should have a defined establishment state.
+A connection should have a defined qualification state.
+A connection should have a defined active state.
+A connection should have a defined closing state.
+A connection should have a defined failure state.
+A connection should not be considered qualified merely because a socket descriptor exists.
+Reconnect logic should distinguish intentional shutdown from failure.
+Intentional shutdown should not trigger endless reconnection.
+Authentication failure should not necessarily trigger rapid automatic retry.
+Protocol incompatibility should not trigger endless automatic retry.
+Transient transport failure can justify retry.
+Permanent configuration failure should be surfaced rather than hidden behind infinite retry.
+Retry behavior should depend on failure category.
+DNS failure can be retried according to policy.
+Connection refusal can be retried according to policy.
+Timeout can be retried according to policy.
+Authentication rejection should normally require correcting credentials or authority.
+Protocol-version rejection should normally require compatibility correction.
+Wrong-network rejection should not be retried indefinitely against the same endpoint.
+Malformed local configuration should be corrected rather than repeatedly retried.
+Deterministic failure classification prevents useless reconnect loops.
+A connection pool maintains reusable connections.
+Connection pooling can reduce connection-establishment overhead.
+A pool has finite capacity.
+A leaked connection can exhaust a pool.
+An unhealthy pooled connection should not be reused blindly.
+A pool should validate connections according to its contract.
+Idle connections can be closed by servers, proxies, firewalls, or NAT devices.
+A client should tolerate a pooled connection becoming stale.
+Connection reuse and reconnect behavior should be explicit.
+Network latency is the time required for communication.
+Round-trip time is commonly abbreviated RTT.
+RTT measures time for a message or packet exchange to travel to a destination and back according to the measurement method.
+Bandwidth describes data-transfer capacity.
+Latency and bandwidth are different.
+A high-bandwidth link can still have high latency.
+A low-latency link can still have limited bandwidth.
+Throughput is the achieved data-transfer rate.
+Throughput can be lower than nominal bandwidth.
+Packet loss can reduce TCP throughput.
+High latency can affect protocols requiring many sequential round trips.
+Application design can reduce unnecessary round trips.
+Batching can reduce round trips.
+Persistent connections can reduce repeated handshake overhead.
+Caching can reduce network requests.
+Performance optimization should be measured.
+A slow request is not necessarily caused by the network.
+Server computation can dominate latency.
+Database queries can dominate latency.
+Queueing can dominate latency.
+DNS resolution can contribute latency.
+TCP connection establishment can contribute latency.
+TLS negotiation can contribute latency.
+Application processing can contribute latency.
+Response transfer can contribute latency.
+Timing measurements should separate stages when diagnosis matters.
+Network monitoring can observe connection and traffic behavior.
+Packet capture records network packets visible at a capture point.
+tcpdump is a common Linux packet-capture tool.
+Wireshark analyzes network protocol traffic.
+Packet captures can contain sensitive data.
+Unencrypted application data can be visible in packet captures.
+TLS encrypts application payloads in transit.
+TLS metadata can still reveal some communication characteristics.
+Packet captures should be protected according to their contents.
+A packet capture provides evidence from the capture point.
+Traffic absent from one interface capture does not prove it was absent from every network segment.
+Capture location matters.
+Logs and packet captures provide different evidence.
+Application logs show application interpretation.
+Packet captures show observed network traffic.
+Kernel socket state shows transport state.
+DNS tools show name-resolution behavior.
+Each source answers different questions.
+netcat can create simple TCP or UDP connections according to implementation.
+A successful netcat TCP connection proves basic transport connectivity to the listener.
+It does not prove the application protocol is correct.
+telnet can establish plain TCP sessions and is sometimes used for basic diagnostics.
+telnet is not appropriate for transmitting sensitive credentials over unencrypted networks.
+curl is useful for HTTP and related protocol testing.
+dig queries DNS.
+nslookup queries DNS but has different behavior and output.
+ip route examines routing.
+ss examines sockets.
+tcpdump examines packets.
+No single diagnostic command proves every layer is healthy.
+Diagnosis should begin with the observed failure.
+If a hostname cannot resolve, inspect DNS.
+If an address resolves but connection establishment fails, inspect routing, firewall, and listener state.
+If TCP connects but TLS fails, inspect TLS configuration and identity.
+If TLS succeeds but HTTP fails, inspect HTTP behavior.
+If HTTP succeeds but application data is wrong, inspect application logic and data.
+If an application protocol handshake fails after TCP connection, inspect protocol compatibility and state.
+Layered diagnosis reduces speculation.
+A client should preserve concrete error information.
+"Network error" is less useful than a specific failure category.
+"DNS resolution failed" identifies a layer.
+"TCP connection refused" identifies a layer.
+"TCP connection timed out" identifies a layer.
+"TLS certificate validation failed" identifies a layer.
+"Protocol handshake rejected: version mismatch" identifies a layer.
+"Read timed out waiting for response" identifies a layer.
+"Peer closed connection" identifies a layer.
+"Malformed response" identifies a layer.
+Specific errors improve debugging.
+Specific errors improve automated recovery.
+Specific errors reduce false assumptions.
+Windows network error codes and Linux errno values are platform-specific representations.
+A platform-independent application can translate platform-specific network errors into defined internal categories.
+The original platform error should remain available for diagnostics where useful.
+A portable network layer should preserve semantic meaning across operating systems.
+A timeout should remain a timeout across platforms.
+A connection refusal should remain a connection refusal across platforms.
+A DNS failure should remain a DNS failure across platforms.
+Platform abstraction should not erase useful distinctions.
+Network byte serialization should produce identical protocol bytes across supported platforms.
+Protocol behavior should not depend on Windows or Linux socket implementation details.
+The platform interface can translate operating-system networking APIs into common internal operations.
+Common protocol semantics should remain platform-independent.
+Platform-specific implementation behavior belongs behind the platform boundary.
+A network module should have a defined interface.
+The interface can define connect.
+The interface can define listen.
+The interface can define accept.
+The interface can define send.
+The interface can define receive.
+The interface can define close.
+The interface can define timeout behavior.
+The interface can define address resolution.
+The interface can define error categories.
+The exact interface depends on architecture.
+An interface should expose enough information for callers to distinguish meaningful failures.
+Returning one generic failure for every network condition destroys information.
+A Boolean success-or-failure return can be insufficient when callers need recovery decisions.
+Structured error categories can preserve failure semantics.
+Network errors should not automatically become knowledge errors.
+A failed socket connection does not mean information does not exist.
+A knowledge miss does not mean the socket failed.
+A protocol response saying no records were found means the remote service responded.
+A remote service returning no matching records is evidence that communication succeeded far enough to receive that result.
+A service timeout and an empty result are different.
+A connection failure and an unsupported request are different.
+A malformed response and a valid negative response are different.
+Operational state and information state should remain distinct.
+A service can be online and know nothing about a requested subject.
+A service can contain the requested information while temporarily being unreachable.
+These conditions require different reporting.
+Distributed systems communicate over networks.
+A distributed system should expect partial failure.
+One component can fail while others remain operational.
+One network path can fail while another remains operational.
+One peer can be unreachable while other peers remain reachable.
+A DNS server can fail while cached records remain usable.
+A primary endpoint can fail while a qualified fallback remains available.
+Partial failure is normal in networked systems.
+Architecture should define which failures are fatal.
+Architecture should define which failures cause degraded state.
+Architecture should define which failures permit failover.
+Architecture should define which failures should merely be logged.
+Failover should preserve protocol identity.
+A fallback server belonging to the wrong network is not a valid failover merely because it accepts a connection.
+A fallback server using an incompatible protocol is not a valid failover.
+Qualification should precede promotion to active use.
+Network state changes over time.
+A peer qualified earlier can later fail.
+A previously failed peer can later recover.
+Health should be re-evaluated according to policy.
+Re-evaluation should not create excessive traffic.
+A cached qualification result should have a defined lifetime if continued validity matters.
+Connection establishment itself can provide fresh evidence.
+Application-level handshake can provide fresh compatibility evidence.
+Trust decisions should use the evidence required by the architecture.
+A network identifier distinguishes one logical network from another.
+A protocol identifier distinguishes protocols.
+A protocol version distinguishes protocol revisions.
+A node identifier identifies a protocol participant according to protocol rules.
+An address identifies a transport location.
+These identifiers are not interchangeable.
+A node can change IP address while retaining logical identity if the protocol permits it.
+An IP address can host multiple logical nodes or services.
+Transport location and protocol identity should remain separate.
+Cryptographic identity can bind protocol identity to a key.
+A public key can identify an entity according to protocol design.
+A signature can prove possession of the corresponding private key for signed data when verification succeeds.
+A network connection alone does not prove cryptographic identity.
+TLS server authentication can establish transport endpoint identity according to certificate rules.
+Application signatures can establish message-level authenticity according to application rules.
+Transport authentication and message authentication are different layers.
+Network data should be treated as untrusted until validated according to the protocol.
+Length fields should be checked.
+Checksums should be verified when the protocol defines them.
+Cryptographic hashes should be verified when the protocol defines them.
+Signatures should be verified when required.
+Network identifiers should be checked.
+Protocol versions should be checked.
+Sequence numbers should be checked when defined.
+Replay protection should be applied when required.
+Replay occurs when a previously valid message is transmitted again in a context where repetition is not authorized.
+Timestamps alone do not always prevent replay.
+Nonces can help distinguish protocol exchanges.
+Sequence numbers can help detect duplicates or ordering violations.
+Replay protection must match protocol requirements.
+A checksum detects some accidental corruption.
+A checksum is not generally a cryptographic authentication mechanism.
+A cryptographic hash provides stronger integrity properties but does not authenticate the sender by itself.
+A message authentication code can provide integrity and authentication when participants share an appropriate secret.
+A digital signature can provide message authenticity using asymmetric cryptography when correctly implemented.
+Networking and cryptography solve related but distinct problems.
+Broadcast sends traffic to multiple participants within applicable network scope.
+IPv4 supports broadcast addressing.
+IPv6 does not use broadcast in the same way and relies heavily on multicast.
+Multicast delivers traffic to subscribed groups according to network support.
+Unicast addresses one destination endpoint.
+Broadcast, multicast, and unicast have different scaling and routing behavior.
+Public Internet routing does not generally forward local broadcast traffic.
+Service discovery on a LAN can use multicast or broadcast protocols.
+Service discovery across routed networks requires appropriate mechanisms.
+A network daemon should validate discovery responses.
+Discovery does not establish trust.
+Network services should bind only where required.
+An administrative service needed only locally should normally bind to loopback or another restricted interface according to architecture.
+A public service must intentionally bind and be permitted through firewall policy.
+Exposing an internal control interface publicly increases attack surface.
+Attack surface should be minimized.
+Unused listeners should be disabled.
+Unused protocols should be disabled when practical.
+Default credentials should not be used.
+Network authentication should be explicit where required.
+Rate limiting can protect network services from excessive request volume.
+Connection limits can protect finite resources.
+Per-client limits can reduce abuse.
+Global limits can prevent resource exhaustion.
+Timeouts can prevent idle clients from consuming resources indefinitely.
+Maximum message sizes can prevent memory exhaustion.
+Maximum connection counts can prevent descriptor exhaustion.
+Maximum queue sizes can prevent unbounded memory growth.
+Backpressure allows overloaded components to slow producers instead of accepting unlimited work.
+Dropping work can be appropriate when protocol and application semantics permit it.
+Rejecting work explicitly can be preferable when callers need deterministic failure.
+Silent failure makes diagnosis difficult.
+A server under overload should preserve enough capacity to report useful status where practical.
+Denial-of-service conditions can exhaust bandwidth.
+Denial-of-service conditions can exhaust CPU.
+Denial-of-service conditions can exhaust memory.
+Denial-of-service conditions can exhaust sockets.
+Denial-of-service conditions can exhaust application worker pools.
+Distributed denial-of-service is commonly abbreviated DDoS.
+DDoS uses traffic or requests from multiple sources to disrupt service.
+The observed source IP of hostile traffic is not always the true human or organizational origin.
+Source addresses can be spoofed in protocols where return traffic is unnecessary.
+Compromised systems can generate attack traffic.
+Proxies and relays can obscure origin.
+Attribution requires evidence beyond country or IP address alone.
+Traffic source and attacker identity are different claims.
+Operational reporting should distinguish observed source addresses from attribution.
+A network outage can result from attack.
+A network outage can result from overload.
+A network outage can result from configuration error.
+A network outage can result from provider failure.
+A network outage can result from routing failure.
+A network outage can result from application failure.
+A network outage can have multiple contributing causes.
+Evidence should establish cause before conclusions are asserted.
+Network monitoring should record enough evidence to reconstruct incidents.
+Useful network evidence can include timestamps.
+Useful network evidence can include source and destination addresses.
+Useful network evidence can include source and destination ports.
+Useful network evidence can include protocol.
+Useful network evidence can include connection state.
+Useful network evidence can include request counts.
+Useful network evidence can include response status.
+Useful network evidence can include duration.
+Useful network evidence can include failure category.
+Sensitive information should be protected.
+Logs should distinguish observation from inference.
+"Connection received from address X" is an observation.
+"Address X belongs to attacker Y" is an attribution claim requiring additional evidence.
+Evidence-based reporting should preserve that distinction.
+A network service should have deterministic startup behavior.
+A network service should validate configuration before accepting traffic.
+A network service should fail clearly when a required port cannot be bound.
+A network service should report the address and port it successfully binds when appropriate.
+A network service should define timeout behavior.
+A network service should define maximum message sizes.
+A network service should define connection lifecycle.
+A network service should define protocol version behavior.
+A network service should define malformed-input behavior.
+A network service should define shutdown behavior.
+A network service should define reconnect behavior when acting as a client.
+A network service should define retry behavior.
+A network service should define failure categories.
+A network service should not hide permanent configuration errors behind endless retries.
+A network service should not treat every transient failure as fatal.
+A network service should not treat every negative application result as network failure.
+A network service should preserve boundaries between transport, protocol, application, and knowledge state.
+Networking is communication between systems under imperfect conditions.
+Correct networking code assumes packets can be lost.
+Correct networking code assumes connections can close.
+Correct networking code assumes reads can be partial.
+Correct networking code assumes writes can be partial.
+Correct networking code assumes peers can misbehave.
+Correct networking code assumes names can fail to resolve.
+Correct networking code assumes routes can change.
+Correct networking code assumes dependencies can become unavailable.
+Correct networking code bounds resource use.
+Correct networking code validates remote input.
+Correct networking code reports the layer that actually failed.
+Correct networking code retries only when retry is appropriate.
+Correct networking code preserves protocol semantics across platforms.
+Correct networking code separates reachability from identity.
+Correct networking code separates connectivity from qualification.
+Correct networking code separates availability from knowledge.
+Small protocols are easier to reason about.
+Explicit framing is easier to reason about than implicit framing.
+Explicit versions are easier to reason about than guessed compatibility.
+Explicit timeouts are easier to reason about than indefinite blocking.
+Explicit limits are easier to reason about than unbounded allocation.
+Explicit error categories are easier to reason about than generic failure.
+Explicit peer qualification is easier to reason about than trusting any open socket.
+Deterministic networking does not mean the network itself is deterministic.
+Deterministic networking means the software has defined behavior for each network condition it recognizes.
+The network can fail unpredictably.
+The program's response to recognized failure conditions can still be predictable.

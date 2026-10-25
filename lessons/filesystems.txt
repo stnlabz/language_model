@@ -1,0 +1,2275 @@
+A filesystem organizes and provides access to stored data.
+
+A filesystem commonly organizes data as files and directories.
+
+A filesystem defines naming rules.
+
+A filesystem defines path semantics.
+
+A filesystem defines metadata.
+
+A filesystem defines operations for creating, reading, modifying, renaming, and removing filesystem objects.
+
+A filesystem can provide permissions.
+
+A filesystem can provide links.
+
+A filesystem can provide timestamps.
+
+A filesystem can provide allocation and durability mechanisms.
+
+Exact filesystem behavior depends on the filesystem and operating system.
+
+A filesystem is not the same thing as a storage device.
+
+A storage device can contain one filesystem.
+
+A storage device can contain multiple filesystems.
+
+A filesystem can span storage mechanisms according to its implementation.
+
+A filesystem can exist on local storage.
+
+A filesystem can exist across a network.
+
+A filesystem can exist entirely in memory.
+
+A filesystem can be virtual.
+
+Do not assume filesystem means physical disk.
+
+A file is a filesystem object used to represent stored data according to filesystem semantics.
+
+A file can contain text.
+
+A file can contain binary data.
+
+A file can contain structured data.
+
+A file can contain executable code.
+
+The filesystem does not necessarily understand the application's interpretation of file contents.
+
+A file existing does not prove its contents are valid.
+
+A directory organizes filesystem entries.
+
+A directory can contain references to files.
+
+A directory can contain references to other directories.
+
+A directory is not merely a text list of filenames.
+
+Directory representation is controlled by the filesystem.
+
+Applications should use filesystem APIs rather than attempting to manipulate filesystem metadata directly.
+
+A path identifies a filesystem location according to path-resolution rules.
+
+A path is not the filesystem object itself.
+
+A path can refer to a file.
+
+A path can refer to a directory.
+
+A path can refer to a symbolic link.
+
+A path can fail to resolve.
+
+A path can resolve differently at different times.
+
+A path can resolve differently in different namespaces.
+
+A path can resolve differently depending on the working directory.
+
+Do not confuse a path with permanent object identity.
+
+An absolute path begins from a defined filesystem root or platform-specific absolute location.
+
+A relative path is interpreted relative to a base location.
+
+The process working directory is commonly the base for unresolved relative paths.
+
+Relative paths are context dependent.
+
+The same relative path can identify different objects from different working directories.
+
+Critical state should not depend accidentally on an unknown working directory.
+
+Path syntax differs between operating systems.
+
+Unix-like systems commonly use forward slash as a path separator.
+
+Windows commonly uses backslash in native path syntax and supports additional path forms.
+
+Windows can use drive letters.
+
+Windows can use UNC paths.
+
+Unix-like systems generally use one rooted namespace.
+
+Portable software should not construct paths solely through assumptions about separators or drive syntax.
+
+Use platform-appropriate path facilities.
+
+A root directory represents the root of a filesystem namespace according to the operating system.
+
+The visible filesystem root does not necessarily correspond to one physical storage device.
+
+Mounts can attach additional filesystems into the namespace.
+
+Containers can expose different filesystem roots.
+
+Chroot-like mechanisms can alter visible roots.
+
+Network mounts can appear inside ordinary directory trees.
+
+The visible namespace is not necessarily the physical storage topology.
+
+A mount attaches a filesystem or filesystem view to a location in a namespace.
+
+Crossing a mount point can move an operation onto a different filesystem.
+
+Different mounted filesystems can have different semantics.
+
+Different filesystems can have different capacity.
+
+Different filesystems can have different permission behavior.
+
+Different filesystems can have different durability guarantees.
+
+Different filesystems can have different case behavior.
+
+An operation that is atomic within one filesystem might not be atomic across filesystems.
+
+Do not assume a rename across filesystem boundaries has the same semantics as a rename within one filesystem.
+
+A path component is one part of a path.
+
+Special path components can exist.
+
+On many systems, "." represents the current directory.
+
+On many systems, ".." represents the parent directory.
+
+Path traversal occurs when path resolution moves through directory components.
+
+Untrusted path components require validation.
+
+A user-supplied filename should not automatically be concatenated onto a privileged base path.
+
+Input containing ".." can escape an intended directory under naive validation.
+
+Absolute path input can ignore an intended base path depending on path construction.
+
+Path separators embedded in input can create additional components.
+
+Validate according to the actual filesystem and platform.
+
+String prefix comparison is not sufficient filesystem authorization.
+
+A path beginning with an allowed text prefix can still resolve outside an intended directory.
+
+For example, similarly named directories can share prefixes.
+
+Symbolic links can redirect resolution.
+
+Mount points can alter resolution.
+
+Case rules can alter comparisons.
+
+Normalization can alter representation.
+
+Authorization should operate on correctly resolved filesystem semantics.
+
+Path normalization simplifies selected path syntax according to platform rules.
+
+Normalization can remove redundant separators.
+
+Normalization can resolve selected "." components.
+
+Normalization can process ".." components according to path rules.
+
+Normalization does not prove a path is authorized.
+
+Normalization does not necessarily resolve symbolic links.
+
+Normalization does not prove the target exists.
+
+Normalization does not prove the target remains unchanged.
+
+Do not confuse normalized path text with validated filesystem identity.
+
+Canonicalization can resolve a path into a standardized or fully resolved representation according to a platform API.
+
+Canonicalization semantics differ.
+
+A canonical path can still become stale after resolution.
+
+Filesystem state can change between validation and use.
+
+Time-of-check to time-of-use races can occur.
+
+A path can be checked.
+
+Another process can replace part of the path.
+
+The original process can then operate on a different object.
+
+Security-sensitive code should use filesystem APIs designed to maintain object identity where possible.
+
+An open file handle or descriptor can refer to an already resolved object.
+
+Operations through that handle can avoid selected path re-resolution races.
+
+Exact techniques are platform dependent.
+
+A filename identifies an entry within a directory according to filesystem naming rules.
+
+Filename rules differ.
+
+Some filesystems are case-sensitive.
+
+Some filesystems are case-insensitive.
+
+Some preserve original case while comparing names case-insensitively.
+
+Do not assume File.txt and file.txt identify different files.
+
+Do not assume they identify the same file.
+
+The filesystem determines the behavior.
+
+Portable applications should avoid creating names differing only by case when cross-platform compatibility matters.
+
+Filesystems can restrict characters in names.
+
+Filesystems can reserve names.
+
+Operating systems can impose additional restrictions.
+
+Windows has reserved device names in selected path contexts.
+
+Unix-like filesystems generally permit many bytes in filenames except filesystem-defined restrictions.
+
+Portable naming conventions should use a conservative set when files move between platforms.
+
+Filename length is bounded.
+
+Path length can be bounded.
+
+Exact limits vary.
+
+Do not assume one universal maximum path length.
+
+Applications should handle path construction failure.
+
+A file extension is part of a filename convention.
+
+A file extension does not prove file content.
+
+A file named data.json can contain invalid JSON.
+
+A file named image.png can contain unrelated bytes.
+
+A file named program.exe can be invalid.
+
+Validate contents when content type matters.
+
+A file can have metadata.
+
+Metadata can include size.
+
+Metadata can include timestamps.
+
+Metadata can include ownership.
+
+Metadata can include permissions.
+
+Metadata can include filesystem attributes.
+
+Metadata can include link information.
+
+Metadata semantics vary.
+
+File size represents a filesystem-defined length.
+
+File size does not necessarily equal physical storage consumption.
+
+Sparse files can have large logical size while consuming less physical storage.
+
+Compression can alter physical storage use.
+
+Filesystem metadata consumes storage.
+
+Allocation units can cause physical consumption to exceed logical file size.
+
+Do not equate logical size with exact disk consumption.
+
+A sparse file contains logical regions that do not require ordinary physical allocation according to filesystem semantics.
+
+Reading an unallocated sparse region commonly returns zero bytes according to the filesystem model.
+
+Writing into a sparse region can allocate storage.
+
+Copying a sparse file with an unaware tool can expand its physical storage use.
+
+Filesystem features matter during backup and migration.
+
+Timestamps can include creation time where supported.
+
+Timestamps can include modification time.
+
+Timestamps can include access time.
+
+Timestamps can include metadata-change time.
+
+Not every filesystem supports the same timestamps.
+
+Timestamp precision differs.
+
+Timestamp update policy differs.
+
+Timestamps can be modified.
+
+Timestamps are not secure proof of history.
+
+A modification timestamp indicates filesystem metadata according to its semantics.
+
+It does not prove who changed the file.
+
+It does not prove the file contents are trustworthy.
+
+It does not prove the clock was correct.
+
+Do not use timestamps alone as strong authenticity evidence.
+
+File ownership identifies operating-system ownership according to filesystem and security semantics.
+
+Ownership does not necessarily identify the human who created the contents.
+
+A service account can create files.
+
+An administrator can change ownership.
+
+A copied file can acquire new ownership.
+
+Ownership is one security attribute.
+
+Permissions control allowed operations according to the filesystem and operating-system security model.
+
+Unix-like systems commonly provide owner, group, and other permission classes.
+
+Read permission allows selected reading.
+
+Write permission allows selected modification.
+
+Execute permission has meaning for executable files and directories according to Unix semantics.
+
+Directory permissions have different operational consequences from regular-file permissions.
+
+Read permission on a directory commonly permits listing directory entries.
+
+Write permission on a directory commonly permits modifying directory entries when combined with required permissions.
+
+Execute permission on a directory commonly permits traversal or lookup.
+
+Having write permission to a file is not the only way a file can be replaced.
+
+Directory permissions can permit removal or replacement of directory entries.
+
+Protecting a file therefore requires understanding its containing directory.
+
+A read-only file inside a writable directory can sometimes be replaced through directory operations according to platform semantics.
+
+Do not evaluate file security from file mode alone.
+
+Access-control lists can express permissions beyond simple owner/group/other modes.
+
+Windows commonly uses ACL-based security.
+
+Unix-like systems can also support ACLs.
+
+Portable software should express required access intent rather than assuming one permission representation.
+
+Least privilege applies to filesystem access.
+
+A process needing read access should not receive write access unnecessarily.
+
+A process needing one writable data directory should not receive write access to the entire application.
+
+Executable code can be read-only during normal operation.
+
+Configuration can be read-only when runtime modification is unnecessary.
+
+Mutable application data can use dedicated writable directories.
+
+Logs can use dedicated writable directories.
+
+Temporary files can use dedicated temporary directories.
+
+Separating writable state from executable code reduces risk.
+
+A filesystem entry can refer to another filesystem object.
+
+A hard link creates another directory entry referring to the same underlying file object where supported.
+
+Two hard-link paths can refer to the same file.
+
+Changing the file through one hard link changes the same underlying content visible through the other.
+
+Deleting one hard link does not necessarily delete the underlying file while other links remain.
+
+A file's lifetime can depend on references rather than one filename.
+
+Do not assume one path uniquely identifies one stored file.
+
+Hard-link semantics vary and can be restricted.
+
+Directories are commonly restricted from ordinary hard linking.
+
+Cross-filesystem hard links are generally not supported because the underlying object belongs to one filesystem.
+
+A symbolic link stores a reference to another path according to filesystem semantics.
+
+A symbolic link is distinct from its target.
+
+Opening a symbolic link through ordinary path resolution can access the target.
+
+A symbolic link can point to a nonexistent target.
+
+Such a link is commonly called dangling or broken.
+
+A symbolic link can point to a directory.
+
+A symbolic link can create path cycles.
+
+Recursive traversal should account for links.
+
+Do not follow symbolic links blindly during deletion, copying, indexing, or security-sensitive traversal.
+
+A recursive operation can escape an intended directory if links are followed without policy.
+
+A recursive traversal can loop if cycles are possible.
+
+Track identity or apply link policy.
+
+A shortcut used by a graphical environment is not necessarily a filesystem symbolic link.
+
+Application-level references and filesystem links are different.
+
+A junction on Windows provides filesystem redirection semantics distinct from ordinary shortcut files.
+
+Platform-specific link types should be handled according to their actual semantics.
+
+Opening a file creates or obtains a process-level reference according to the operating-system API.
+
+Unix-like systems commonly represent open files using file descriptors.
+
+Windows commonly uses handles.
+
+A descriptor or handle is not the file contents.
+
+It is a process-visible reference to an operating-system resource.
+
+Descriptors and handles have lifetimes.
+
+They should be closed when no longer required.
+
+A file can remain open after its pathname changes.
+
+A file can remain open after its directory entry is removed on systems whose semantics permit it.
+
+Therefore path existence and open-object existence can differ.
+
+On Unix-like filesystems, unlinking an open file commonly removes a directory entry while the underlying object remains accessible through open descriptors until references are released.
+
+Windows behavior can differ depending on sharing and deletion semantics.
+
+Do not assume one platform's open-file deletion behavior applies everywhere.
+
+An open operation can specify access mode.
+
+A file can be opened for reading.
+
+A file can be opened for writing.
+
+A file can be opened for appending.
+
+A file can be opened for creation.
+
+A file can be opened for exclusive creation.
+
+A file can be opened for truncation.
+
+Exact flags and combinations depend on API.
+
+Opening for write does not always mean existing content is preserved.
+
+Some modes truncate immediately.
+
+Understand the mode before opening authoritative data.
+
+Exclusive creation can create a file only when the target does not already exist according to the API's atomic semantics.
+
+This can prevent selected creation races.
+
+Checking existence and then creating in two separate operations can race.
+
+Another process can create the file between the check and creation.
+
+Use atomic create-if-absent operations where required.
+
+File reading can be partial.
+
+A read request for N bytes can return fewer than N bytes.
+
+This does not always indicate failure.
+
+End-of-file can produce fewer bytes.
+
+Streams and special files can produce partial reads.
+
+Signals or platform conditions can affect operations.
+
+Code should follow the API's exact read contract.
+
+Do not assume one read fills an entire requested buffer.
+
+File writing can be partial.
+
+A write request can write fewer bytes than requested according to the API and resource type.
+
+Robust code should handle partial writes where the interface permits them.
+
+A successful partial write is not complete operation success.
+
+Track remaining bytes.
+
+Disk-full conditions can occur after some bytes were written.
+
+This can leave partial files.
+
+Use atomic replacement strategies for important complete-file updates.
+
+Appending writes data at the end according to append semantics.
+
+Concurrent append behavior depends on filesystem and API guarantees.
+
+Do not assume multiple writes from multiple processes become one indivisible record.
+
+A logical record can require one atomic write or explicit locking according to the system.
+
+Log files written concurrently require deliberate design.
+
+A file offset identifies a position for sequential or random access according to file API semantics.
+
+Multiple descriptors can have independent offsets.
+
+Duplicated descriptors can share selected underlying offset state depending on API.
+
+Concurrent operations can change offsets.
+
+Use positional I/O or synchronization where required.
+
+Random access reads or writes at explicit offsets can avoid shared-position races.
+
+File locking coordinates access according to locking semantics.
+
+Locks can be advisory.
+
+Locks can be mandatory in selected environments.
+
+Advisory locks require cooperating processes.
+
+A process ignoring advisory locking can still access the file if permissions allow.
+
+Lock semantics vary across platforms and filesystems.
+
+Network filesystems can have different locking behavior.
+
+Do not assume a lock mechanism works identically everywhere.
+
+Lock files are ordinary files used by an application convention to represent ownership or exclusion.
+
+A lock file is not the same as an operating-system lock.
+
+A process crash can leave a lock file behind.
+
+Deleting a lock file solely because it is old can be unsafe.
+
+The owning process can still be active.
+
+A lock-file protocol should define owner identity.
+
+It should define stale-lock detection.
+
+It should define recovery.
+
+It should avoid races during creation.
+
+Atomic exclusive creation can help implement lock files.
+
+A lock file does not automatically prevent another program from ignoring the protocol.
+
+File locking should protect the smallest required critical section.
+
+Holding locks for long periods can block other work.
+
+Multiple locks can create deadlocks if acquired inconsistently.
+
+Define lock ordering.
+
+Do not use sleep as file synchronization.
+
+Waiting one second does not prove another writer finished.
+
+Use actual completion or locking mechanisms.
+
+A rename changes a filesystem entry according to filesystem semantics.
+
+Rename can be atomic under defined conditions.
+
+Atomic rename commonly means observers see either the old name relationship or the new one without an intermediate partially renamed state.
+
+Atomic rename does not automatically mean durable rename.
+
+Atomic rename does not automatically mean atomic across filesystems.
+
+Atomic rename does not automatically synchronize file contents to physical media.
+
+Atomicity and durability are separate.
+
+Replacing a file through rename can support safe complete-file updates.
+
+A common strategy is to create a new file in the same filesystem.
+
+Write complete content.
+
+Validate it.
+
+Flush according to required durability semantics.
+
+Close or otherwise complete required operations.
+
+Rename or replace the target atomically where supported.
+
+Synchronize directory metadata where required by the platform's durability model.
+
+Exact implementation is platform dependent.
+
+The temporary file should generally reside on the same filesystem when atomic rename is required.
+
+A temporary file on another filesystem can force copy-and-delete behavior rather than atomic rename.
+
+Do not assume a generic move operation is atomic.
+
+High-level move functions can fall back to copying.
+
+Know the API contract.
+
+Deletion removes a filesystem name or object according to filesystem semantics.
+
+Deletion is not the same as secure erasure.
+
+Deleted bytes can remain on storage media.
+
+Deleted data can remain in snapshots.
+
+Deleted data can remain in backups.
+
+Deleted data can remain in journals.
+
+Deleted data can remain in caches.
+
+Do not promise physical erasure from ordinary deletion.
+
+A directory generally must satisfy filesystem-specific conditions before removal.
+
+Many filesystems require a directory to be empty before ordinary removal.
+
+Recursive deletion traverses and deletes descendants.
+
+Recursive deletion is dangerous.
+
+Validate the root.
+
+Do not allow an empty or unexpected path to become the deletion root.
+
+Do not follow links unintentionally.
+
+Do not cross mount boundaries unintentionally.
+
+Do not delete permanent historical data through generic cleanup.
+
+Deletion policy belongs to data governance.
+
+A filesystem can become full.
+
+A filesystem can have free byte capacity but exhaust other resources.
+
+Unix-like filesystems can exhaust inodes.
+
+A filesystem can hit quota.
+
+A storage pool can hit allocation limits.
+
+A user can hit quota while global free space remains.
+
+A container can hit storage limits while the host has space.
+
+Check the relevant capacity boundary.
+
+A file write failing with no space does not necessarily mean the physical disk has zero unallocated bytes.
+
+The effective storage limit can exist elsewhere.
+
+Filesystem capacity should be observable.
+
+Monitor available space.
+
+Monitor object or inode capacity where relevant.
+
+Monitor growth.
+
+Monitor quotas.
+
+Monitor write failures.
+
+Maintain headroom.
+
+A filesystem at complete capacity can impair recovery.
+
+Logs can fill filesystems.
+
+Temporary files can fill filesystems.
+
+Caches can fill filesystems.
+
+Backups can fill filesystems.
+
+Core application state can fill filesystems.
+
+Separate storage areas or quotas can limit blast radius.
+
+Log rotation controls log growth.
+
+Rotation can rename active logs.
+
+Rotation can create new files.
+
+Rotation can compress older logs.
+
+Rotation can remove old logs according to retention.
+
+Applications should cooperate with rotation semantics.
+
+An application holding an open descriptor can continue writing to an old renamed file.
+
+Path name and open descriptor identity differ.
+
+A process can need to reopen a log after rotation depending on logging design.
+
+Copy-truncate rotation has different semantics from rename-and-reopen.
+
+Understand the selected mechanism.
+
+Filesystem traversal enumerates directory entries.
+
+Enumeration is not necessarily a stable snapshot.
+
+Files can appear during traversal.
+
+Files can disappear during traversal.
+
+Names can change.
+
+Metadata can change.
+
+Do not assume two directory scans produce identical results.
+
+If a consistent snapshot is required, use a mechanism that provides one.
+
+Directory entry ordering is not universally defined.
+
+Do not depend on filesystem enumeration order for deterministic application behavior.
+
+Sort according to explicit application rules when deterministic ordering matters.
+
+Filesystem order should not determine consensus-visible output.
+
+Filesystem order should not determine canonical hashes.
+
+Filesystem order should not determine permanent identifiers.
+
+Explicit ordering is required.
+
+Recursive traversal should have bounds.
+
+Directory depth can be large.
+
+Directory count can be large.
+
+File count can be large.
+
+A malicious or accidental tree can consume enormous time or memory.
+
+Use iterative traversal where appropriate.
+
+Apply depth or object limits where untrusted trees are processed.
+
+Handle permission failures.
+
+Handle disappearing files.
+
+Handle links.
+
+Handle mount boundaries according to policy.
+
+A filesystem can contain special files.
+
+Unix-like systems can expose devices as filesystem entries.
+
+Named pipes can appear as filesystem entries.
+
+Sockets can appear in the filesystem namespace.
+
+Pseudo-filesystems can expose kernel information.
+
+Not every filesystem entry is an ordinary regular file.
+
+Check object type before treating it as ordinary stored data.
+
+Reading a special file can have side effects or unusual behavior.
+
+A device file can represent hardware.
+
+A named pipe can block.
+
+A pseudo-file can generate data dynamically.
+
+Do not assume statically sized regular-file semantics.
+
+A regular file is a filesystem object representing ordinary file data according to the platform.
+
+Applications expecting ordinary data files should verify type when security or correctness requires it.
+
+A directory should not be accepted where a regular file is required.
+
+A symbolic link should not automatically be accepted where direct ownership of a regular file is required.
+
+A device should not automatically be accepted.
+
+File type validation reduces unexpected behavior.
+
+File metadata can change between inspection and opening.
+
+Checking that a path is a regular file and then opening it can race.
+
+Where identity matters, open safely and inspect the opened object.
+
+Operate on the validated handle rather than re-resolving the path.
+
+This reduces selected TOCTOU vulnerabilities.
+
+Permissions can change while a process runs.
+
+A file can become inaccessible.
+
+A directory can become inaccessible.
+
+A mount can disappear.
+
+A network filesystem can disconnect.
+
+Do not assume successful startup validation guarantees future filesystem operations.
+
+Handle runtime errors.
+
+Network filesystems expose filesystem interfaces over network communication.
+
+Network failure can therefore appear as filesystem failure.
+
+Operations can be slow.
+
+Operations can time out.
+
+Servers can become unavailable.
+
+Caches can make state appear stale.
+
+Lock semantics can differ.
+
+Rename semantics can differ.
+
+Durability semantics can differ.
+
+Do not assume local-filesystem timing or failure behavior applies to network filesystems.
+
+A remote filesystem operation can have uncertain outcome.
+
+A client can lose connection after the server applied a change but before receiving acknowledgment.
+
+Retries can duplicate non-idempotent operations if the protocol does not protect them.
+
+Understand the filesystem and protocol.
+
+Filesystem caching improves performance.
+
+The operating system can cache file contents.
+
+The operating system can cache metadata.
+
+Applications can maintain their own caches.
+
+A read can be served from memory without accessing physical storage.
+
+A write can be buffered without immediately reaching physical storage.
+
+Therefore fast completion does not prove physical I/O occurred.
+
+Durability requires the appropriate synchronization contract.
+
+Filesystem page cache is volatile unless backed by durable synchronization according to the operating system.
+
+Power loss can remove unsynchronized changes.
+
+Operating systems can periodically flush dirty data.
+
+Periodic flushing does not provide the same guarantee as application-requested durable synchronization.
+
+If durability matters at a particular operation boundary, explicitly request the required guarantee.
+
+A filesystem journal can improve recovery after interruption.
+
+Journaling can protect metadata.
+
+Some journaling modes can protect selected data ordering.
+
+Exact behavior depends on filesystem configuration.
+
+Journaling is not a backup.
+
+Journaling does not prove application-level consistency.
+
+Journaling does not prevent valid but incorrect application writes.
+
+A filesystem can faithfully persist bad data.
+
+Application correctness remains required.
+
+Copying a file creates another representation according to copy semantics.
+
+A copy is not automatically identical in every property.
+
+Contents can be copied.
+
+Permissions can differ.
+
+Ownership can differ.
+
+Timestamps can differ.
+
+Extended attributes can differ.
+
+Alternate streams can differ.
+
+Sparse layout can differ.
+
+Links can become independent files.
+
+Copy semantics should match requirements.
+
+A recursive directory copy can change link relationships.
+
+Hard-linked files can become separate copies.
+
+Symbolic links can be copied as links or followed to their targets depending on tool options.
+
+Permissions can be preserved or replaced.
+
+Do not assume a generic copy preserves filesystem topology.
+
+Backups requiring fidelity should preserve required metadata explicitly.
+
+Moving a file within one filesystem can often be implemented as rename.
+
+Moving across filesystems commonly requires copying and deleting.
+
+A cross-filesystem move can therefore partially complete.
+
+The destination copy can succeed while source deletion fails.
+
+The copy can fail midway.
+
+Do not assume move is always atomic.
+
+Application interfaces should report actual outcome.
+
+A file can be memory mapped.
+
+Memory mapping creates an address-space mapping associated with file content according to operating-system semantics.
+
+Mapped access can improve selected workloads.
+
+Mapped access still obeys filesystem and virtual-memory rules.
+
+Changing mapped memory does not automatically establish durable storage.
+
+File truncation while another process has mappings can create dangerous or platform-specific behavior.
+
+Coordinate lifecycle.
+
+Filesystem watchers can report changes.
+
+Watchers can report creation.
+
+Watchers can report modification.
+
+Watchers can report deletion.
+
+Watchers can report rename.
+
+Exact event behavior differs by platform.
+
+Watchers can coalesce events.
+
+Watchers can overflow.
+
+Watchers can miss events under selected conditions.
+
+Watch events are useful notifications.
+
+They should not always be treated as complete authoritative history.
+
+After overflow or uncertainty, rescan authoritative state.
+
+A modification event does not necessarily mean a file is complete.
+
+A writer can generate multiple modification events while writing.
+
+Consumers should use publication semantics when complete files matter.
+
+Atomic rename can serve as publication.
+
+Write temporary content first.
+
+Publish the completed file through a defined operation.
+
+Then consumers know which namespace transition represents readiness.
+
+File watching and file publication should be designed together.
+
+Temporary files hold intermediate state.
+
+Temporary storage should use controlled directories.
+
+Temporary filenames should avoid unsafe predictability where security matters.
+
+Temporary files should use appropriate permissions.
+
+Temporary files should not automatically be trusted because they are local.
+
+Temporary files can survive crashes.
+
+Cleanup should identify ownership before deletion.
+
+A temporary directory can be shared among users.
+
+Creating predictable temporary names can allow collisions or malicious replacement.
+
+Use secure temporary-file creation APIs.
+
+Do not check whether a temporary name is unused and then separately create it.
+
+That creates a race.
+
+Create atomically.
+
+Temporary data can contain secrets.
+
+Apply appropriate permissions.
+
+Remove temporary sensitive data when no longer needed according to policy.
+
+Ordinary removal is not secure physical erasure.
+
+A filesystem can support extended attributes.
+
+Extended attributes associate additional metadata with filesystem objects.
+
+Security labels can be stored as extended attributes on selected systems.
+
+Application metadata can be stored as extended attributes.
+
+Not all filesystems preserve them.
+
+Copying between filesystems can lose them.
+
+Do not rely on extended attributes for portable behavior unless support is part of the platform requirement.
+
+Windows filesystems can support alternate data streams.
+
+Alternate streams can contain data not visible as ordinary primary file contents.
+
+Cross-platform copying can discard such streams.
+
+Security tools should understand platform-specific metadata where relevant.
+
+A filesystem can be case-preserving but case-insensitive.
+
+A filesystem can perform Unicode normalization according to its rules.
+
+Different filesystems can treat visually equivalent Unicode names differently.
+
+Do not use display text alone as secure filesystem identity.
+
+Unicode filenames can contain characters that appear similar.
+
+Normalization and comparison should follow defined policy.
+
+Portable software should avoid unnecessary ambiguity in security-sensitive names.
+
+A filesystem can support quotas.
+
+Quotas can apply to users.
+
+Quotas can apply to groups.
+
+Quotas can apply to projects or directories according to system mechanisms.
+
+Quota exhaustion is distinct from global capacity exhaustion.
+
+Report the actual condition when known.
+
+A filesystem can be mounted read-only.
+
+A read-only mount can prevent modification even when file mode appears writable.
+
+Permissions and mount policy both matter.
+
+A filesystem can have execution disabled by mount policy.
+
+A file with execute permission can still fail execution.
+
+Security policy can impose additional restrictions.
+
+Do not infer capability from one metadata bit.
+
+Effective access is the result of multiple layers.
+
+Mandatory access-control systems can further restrict filesystem operations.
+
+Application sandboxing can further restrict filesystem operations.
+
+Container policy can further restrict filesystem operations.
+
+Read-only container layers can prevent modification.
+
+A process running as an administrative user can still encounter policy restrictions.
+
+Use actual errors as evidence.
+
+Filesystem errors should be preserved accurately.
+
+ENOENT-like errors indicate absence according to platform semantics.
+
+Permission errors indicate access denial.
+
+No-space errors indicate storage allocation failure according to the relevant boundary.
+
+Read-only errors indicate modification is prohibited by filesystem state.
+
+I/O errors can indicate underlying storage failure.
+
+Exact error identifiers are platform specific.
+
+Do not convert all failures into "file not found."
+
+A missing parent directory differs from a missing target file.
+
+A broken symbolic link differs from an absent link.
+
+A permission failure can sometimes appear during path traversal before the final target is reached.
+
+Record enough context to identify the failed operation.
+
+Avoid exposing sensitive full paths to untrusted users where paths reveal internals.
+
+Internal logs can retain appropriate diagnostic context according to policy.
+
+A filesystem can become corrupted.
+
+Corruption can affect data.
+
+Corruption can affect metadata.
+
+Corruption can make files inaccessible.
+
+Corruption can create invalid directory relationships.
+
+Filesystem repair tools can restore structural consistency according to their algorithms.
+
+Structural repair does not prove application data is correct.
+
+A repaired file can still contain corrupted application content.
+
+Validate application-level formats after filesystem recovery.
+
+Checksums can detect selected content corruption.
+
+Filesystem checksums can protect selected data or metadata according to filesystem design.
+
+Application checksums can protect application-defined bytes.
+
+A filesystem checksum and application checksum protect different layers.
+
+Neither automatically establishes authenticity.
+
+Backups protect against selected filesystem loss.
+
+Snapshots can preserve filesystem state.
+
+Replication can preserve copies.
+
+None alone replaces application validation.
+
+A corrupted file can be copied into a backup.
+
+A logically incorrect deletion can be replicated.
+
+Recovery planning should include historical versions when required.
+
+File permissions should be set deliberately at creation.
+
+Creating a sensitive file with broad permissions and restricting it afterward creates a window of exposure.
+
+Use creation mechanisms that establish restrictive access immediately where possible.
+
+Unix-like systems can apply umask to creation permissions.
+
+Windows creation can use security descriptors.
+
+Exact mechanisms differ.
+
+Default permissions are part of deployment context.
+
+Do not assume defaults are secure enough.
+
+A process can inherit umask or related environment state.
+
+Service execution can therefore create files with different permissions from interactive execution.
+
+Specify security requirements explicitly.
+
+Executable files are data interpreted as programs by an execution environment.
+
+Execute permission does not establish trust.
+
+A malicious executable can have correct permissions.
+
+A legitimate executable can lack permission.
+
+Artifact authenticity should be established separately where required.
+
+A hash can identify exact executable bytes.
+
+A signature can authenticate selected artifact provenance.
+
+Filesystem location can contribute policy.
+
+No single attribute establishes every property.
+
+Configuration files should have controlled ownership and permissions.
+
+A process should not load privileged configuration from directories writable by untrusted users.
+
+Search paths can create configuration hijacking.
+
+Plugin search paths can create code-loading hijacking.
+
+Library search paths can create executable-loading hijacking.
+
+Resolve trusted locations explicitly.
+
+Do not search arbitrary current directories for privileged modules unless policy permits it.
+
+Directory ownership matters.
+
+If an untrusted user can create files in a module directory, they can potentially introduce load candidates.
+
+Validation and signature requirements can reduce risk.
+
+Prevent unauthorized writes as the first boundary.
+
+Filesystem layout communicates ownership.
+
+Code directories contain code.
+
+Configuration directories contain configuration.
+
+Data directories contain mutable application data.
+
+Cache directories contain reconstructable data.
+
+Log directories contain logs.
+
+Temporary directories contain temporary state.
+
+Runtime directories can contain sockets, PID files, or transient coordination state.
+
+Separating these categories improves permissions and lifecycle management.
+
+Do not store everything beside the executable merely because it is convenient.
+
+Platform conventions can define appropriate locations.
+
+Unix-like systems commonly distinguish system configuration, variable data, runtime data, logs, and user data.
+
+Windows provides platform-specific application-data and program-data locations.
+
+Portable applications can map logical storage categories to platform-specific paths.
+
+Common semantics should remain stable.
+
+A configuration path should remain configuration.
+
+A cache path should remain disposable cache.
+
+A data path should remain authoritative data according to architecture.
+
+Platform-specific location does not change logical ownership.
+
+File format and filesystem semantics are separate.
+
+JSON defines document representation.
+
+The filesystem defines storage and naming.
+
+A valid JSON file can be stored on an unreliable filesystem.
+
+A corrupted filesystem can damage a valid document.
+
+A durable filesystem write can persist semantically invalid JSON.
+
+Both layers require validation.
+
+A database file is still a filesystem object when the database uses file-backed storage.
+
+Do not manipulate database files directly while the database engine owns them unless the database documentation permits it.
+
+Copying a live database file can produce an inconsistent backup.
+
+Use database-supported backup or snapshot mechanisms when required.
+
+Filesystem-level operations can violate higher-level storage semantics.
+
+Ownership extends across layers.
+
+A package manager can own installed files.
+
+An updater can own application binaries.
+
+The running application can own mutable data.
+
+The web server can require read access.
+
+A runtime account can require write access only to selected directories.
+
+Do not solve one permission problem by recursively making the entire application writable.
+
+Broad write access creates broader modification authority.
+
+Grant the smallest required permission.
+
+Changing ownership recursively can damage deployment assumptions.
+
+Before changing filesystem ownership, identify which component should own each path.
+
+The account serving files does not necessarily need to own the files.
+
+Read access and ownership are different.
+
+The account modifying runtime data can own or have write access to that data directory.
+
+Executable code can remain owned by a deployment or administrative account.
+
+This reduces unauthorized code modification.
+
+Filesystem permissions are part of application architecture.
+
+A web application commonly needs read access to code.
+
+It can need write access to upload directories.
+
+It can need write access to cache directories.
+
+It can need write access to logs depending on logging architecture.
+
+It can need write access to selected generated-data directories.
+
+It does not automatically need write access to its core source.
+
+Installer requirements can differ from normal runtime requirements.
+
+An installer can temporarily require broader modification authority.
+
+After installation, runtime permissions can be reduced.
+
+Do not leave installer-level privileges permanently enabled without need.
+
+Upgrade mechanisms should have explicit write authority.
+
+Runtime and updater authority can be separated.
+
+This reduces compromise impact.
+
+A file can be executable by content interpretation even without operating-system execute permission.
+
+A scripting runtime can read a script file and execute its contents.
+
+Therefore removing execute permission does not necessarily prevent application-level execution.
+
+Prevent untrusted modification of code and configuration.
+
+Security depends on the entire execution path.
+
+File inclusion mechanisms should validate paths.
+
+Template loaders should validate paths.
+
+Module loaders should validate paths.
+
+Static-file servers should validate paths.
+
+Archive extractors should validate paths.
+
+Any feature converting external names into filesystem paths creates a traversal boundary.
+
+Archive extraction can contain path traversal entries.
+
+An archive can contain absolute paths.
+
+An archive can contain ".." components.
+
+An archive can contain symbolic links.
+
+Do not extract blindly.
+
+Ensure every extracted object remains within the intended destination according to filesystem semantics.
+
+Archive bombs can exhaust storage.
+
+Limit extracted size.
+
+Limit file count.
+
+Limit nesting.
+
+Validate before and during extraction.
+
+Compressed archive size is not the same as extracted filesystem size.
+
+A small archive can produce enormous output.
+
+Filesystem capacity is a security boundary.
+
+Uploads should have size limits.
+
+Uploads should have count limits.
+
+Uploaded filenames should not determine trusted storage paths directly.
+
+Generate controlled storage names where appropriate.
+
+Preserve original display names separately if required.
+
+Validate file type according to application needs.
+
+Do not trust extension or client-supplied MIME type alone.
+
+Uploaded files are untrusted data.
+
+Store them outside executable code locations where practical.
+
+A web-accessible upload directory can create execution risk if the server interprets uploaded scripts.
+
+Storage location and server configuration matter.
+
+Filesystem paths can contain secrets.
+
+Home directory names can identify users.
+
+Directory names can reveal project structure.
+
+Error messages should not expose internal absolute paths unnecessarily.
+
+Internal diagnostics can preserve them where access is controlled.
+
+Public errors should communicate the useful failure without leaking architecture.
+
+A filesystem path is not a URL.
+
+A URL path is interpreted by a URL or application routing system.
+
+Mapping URLs directly to filesystem paths can create security problems.
+
+Web routing should define controlled mapping.
+
+Do not assume `/images/a.png` means the operating-system path `/images/a.png`.
+
+Different namespaces are involved.
+
+A filesystem path is not a database identifier.
+
+A filesystem path is not a network address.
+
+A filesystem path is not a permanent resource identity.
+
+Use the correct abstraction.
+
+Case differences can break deployments when moving between filesystems.
+
+Code developed on a case-insensitive filesystem can reference `Config.php` while the actual file is `config.php`.
+
+Deployment to a case-sensitive filesystem can then fail.
+
+Consistent naming reduces portability defects.
+
+Test on supported filesystem semantics.
+
+Line endings are file content, not filesystem path semantics.
+
+A filesystem stores bytes.
+
+Text tools and runtimes interpret line endings.
+
+Do not blame filesystem path behavior for text-encoding behavior.
+
+Keep layers distinct.
+
+Filesystem durability depends on more than writing bytes.
+
+Application buffer.
+
+Runtime buffer.
+
+Operating-system page cache.
+
+Filesystem metadata.
+
+Device cache.
+
+Physical or persistent media.
+
+Each can represent a boundary.
+
+Required durability determines how far completion must be established.
+
+A successful high-level write can mean only that one layer accepted data.
+
+Do not claim stronger durability than the interface guarantees.
+
+A filesystem sync operation requests synchronization according to platform semantics.
+
+Synchronizing a file can persist file content according to the API.
+
+Directory metadata can require separate synchronization on selected systems for durable creation or rename.
+
+Other platforms provide different guarantees.
+
+Portable code should define the required outcome and implement it through platform-specific mechanisms.
+
+Do not expose platform-specific assumptions as universal law.
+
+Atomic replacement and durable replacement are distinct goals.
+
+Atomic replacement protects readers from partial new content.
+
+Durable replacement protects against loss across defined failures.
+
+A robust persistent-state update can require both.
+
+Testing should include abrupt termination where durability matters.
+
+Crash testing can reveal incomplete writes.
+
+Power-failure behavior can differ from process-crash behavior.
+
+Process crash leaves the operating system running.
+
+Power loss removes volatile operating-system and device state.
+
+Do not treat the two tests as equivalent.
+
+A read-only workload can still fail.
+
+Storage hardware can fail.
+
+Network mounts can disconnect.
+
+Filesystem metadata can be corrupted.
+
+Permissions can change.
+
+Files can disappear.
+
+Memory allocation for reads can fail.
+
+Readers need error handling too.
+
+Read operations should distinguish end-of-file from error.
+
+An empty file is not a failed read.
+
+Zero bytes can be valid content.
+
+No file and empty file are different states.
+
+A zero-length configuration can be invalid while still existing.
+
+Validate semantics.
+
+Filesystem state can be authoritative.
+
+Filesystem state can be derived.
+
+A JSON configuration file can be authoritative.
+
+A generated index can be derived.
+
+A cache file can be disposable.
+
+A lock file can be coordination state.
+
+A log can be historical evidence.
+
+A temporary file can be intermediate state.
+
+Do not apply one lifecycle rule to all files.
+
+Classify data by purpose.
+
+Authoritative files should receive stronger update and backup guarantees.
+
+Derived files can often be rebuilt.
+
+Cache files can often be deleted.
+
+Historical records can require permanent retention.
+
+Temporary files can expire.
+
+Coordination files can require stale-state recovery.
+
+Filesystem design follows data semantics.
+
+A generated file should identify its source where useful.
+
+A generated file should not silently become authoritative if the source remains authoritative.
+
+Regeneration should be deterministic where requirements demand it.
+
+If generated output is externally published, generation should complete before publication.
+
+Atomic replacement can prevent clients from observing partial generation.
+
+Indexes can be rebuilt into temporary locations and swapped into place.
+
+This reduces partial-state exposure.
+
+A file-based configuration reload should validate before activation.
+
+Read candidate configuration.
+
+Parse it.
+
+Validate structure.
+
+Validate semantics.
+
+Prepare dependent state.
+
+Only then replace active in-memory configuration.
+
+A malformed configuration should not destroy the last working runtime configuration unless policy requires shutdown.
+
+Report rejection.
+
+Preserve the candidate for correction where appropriate.
+
+Configuration file existence does not require automatic acceptance.
+
+A file-based module loader should discover candidates.
+
+Validate file type.
+
+Validate manifest where required.
+
+Validate compatibility.
+
+Validate identity or signature where required.
+
+Load only accepted modules.
+
+Do not equate presence in a directory with authorization to execute.
+
+Discovery is not acceptance.
+
+Acceptance is not initialization.
+
+Initialization is not readiness.
+
+Filesystem placement is only one stage.
+
+A PID file stores process-identification information according to application convention.
+
+A PID file is not proof that the process remains alive.
+
+The process can terminate while the file remains.
+
+The PID can later be reused.
+
+Validate process identity before acting on a PID file.
+
+PID files are coordination aids.
+
+They are not authoritative proof of health.
+
+A Unix-domain socket path can remain after abnormal termination depending on implementation.
+
+A stale socket path does not prove a server is active.
+
+Connection success provides stronger current evidence.
+
+Cleanup should distinguish stale endpoint from active endpoint.
+
+Do not delete active communication endpoints merely because metadata appears old.
+
+A filesystem can support transactions only through selected mechanisms.
+
+Ordinary filesystem operations do not automatically provide multi-file transactions.
+
+Updating two files separately can leave one new and one old after failure.
+
+If multiple files form one authoritative state, define consistency.
+
+Store them in one transactional database.
+
+Use generation directories and atomic pointer switching.
+
+Use a journal.
+
+Use another recoverable mechanism.
+
+Do not assume sequential writes create atomic group updates.
+
+Generation directories can store complete versions of multi-file state.
+
+Build a new generation separately.
+
+Validate it.
+
+Publish the generation through one atomic reference change where filesystem semantics permit.
+
+Readers use only published generations.
+
+Old generations can support rollback.
+
+Cleanup can remove obsolete generations according to policy.
+
+This is one strategy, not universal requirement.
+
+Filesystem design should remain small when requirements are small.
+
+One atomic JSON file can be sufficient.
+
+Do not introduce complex multi-file transaction schemes without need.
+
+Complexity creates more recovery states.
+
+Prefer the smallest mechanism satisfying correctness.
+
+File naming can encode identifiers.
+
+Identifiers should be validated before use as filenames.
+
+Characters meaningful to the filesystem can alter paths.
+
+Identifiers can exceed filename limits.
+
+Case folding can create collisions.
+
+Unicode normalization can create collisions.
+
+If arbitrary identifiers must map to filenames, encode them through a defined safe mapping.
+
+A hash can provide a bounded filesystem-safe name.
+
+Hash collisions must be considered according to algorithm and requirements.
+
+The original identifier can be stored in file contents or metadata.
+
+Do not treat a hash as authorization.
+
+Directory sharding can distribute large numbers of files across subdirectories.
+
+This can improve filesystem performance where directories become very large.
+
+Sharding should be deterministic.
+
+The mapping should be stable.
+
+Sharding is an optimization.
+
+Do not add it before scale requires it unless architecture already expects that scale.
+
+A filesystem hierarchy should remain understandable.
+
+Deep unnecessary directory structures complicate operation.
+
+Flat structures can become unwieldy at high scale.
+
+Balance according to actual requirements.
+
+Filesystem operations should be observable.
+
+Record failed open operations.
+
+Record failed reads when operationally meaningful.
+
+Record failed writes.
+
+Record failed synchronization.
+
+Record failed rename.
+
+Record failed deletion.
+
+Record capacity failures.
+
+Record permission failures.
+
+Record corruption detection.
+
+Do not log every routine filesystem call.
+
+Log meaningful boundaries and failures.
+
+A storage update can have stages.
+
+Prepare.
+
+Write.
+
+Validate.
+
+Synchronize.
+
+Publish.
+
+Verify.
+
+Each stage can fail.
+
+Reporting "save failed" loses useful information.
+
+Report the failed stage.
+
+Do not report published state if publication did not occur.
+
+Do not report durable state if synchronization did not satisfy the required durability contract.
+
+Observability should match actual filesystem semantics.
+
+A successful rename is evidence that rename succeeded according to the filesystem API.
+
+It is not automatically evidence that the content is valid.
+
+A successful write is evidence that the write API accepted the operation according to its contract.
+
+It is not automatically evidence of durable persistence.
+
+A successful open is evidence that an object was opened.
+
+It is not automatically evidence that the file is trustworthy.
+
+Evidence should match the claim.
+
+Filesystem testing should include missing files.
+
+Filesystem testing should include empty files.
+
+Filesystem testing should include malformed files.
+
+Filesystem testing should include permission denial.
+
+Filesystem testing should include unwritable directories.
+
+Filesystem testing should include storage-full conditions where practical.
+
+Filesystem testing should include partial writes where the abstraction can expose them.
+
+Filesystem testing should include concurrent access.
+
+Filesystem testing should include stale temporary files.
+
+Filesystem testing should include link behavior where links are relevant.
+
+Filesystem testing should include path traversal attempts.
+
+Filesystem testing should include unexpected file types.
+
+Filesystem testing should include abrupt process termination for critical update paths.
+
+Cross-platform filesystem code should be tested on supported platforms.
+
+A test on one filesystem does not prove behavior on every filesystem.
+
+Case sensitivity can differ.
+
+Rename semantics can differ.
+
+Locking can differ.
+
+Path rules can differ.
+
+Permission models can differ.
+
+Durability can differ.
+
+Network filesystems can differ from local filesystems.
+
+State the supported assumptions.
+
+A filesystem abstraction should not erase meaningful differences.
+
+Common operations can include:
+
+Open.
+
+Read.
+
+Write.
+
+Create.
+
+Replace.
+
+Rename.
+
+Delete.
+
+List.
+
+Inspect metadata.
+
+Create directory.
+
+Synchronize.
+
+Lock.
+
+Platform adapters can implement them differently.
+
+If a required guarantee cannot be provided on one platform, common code should know.
+
+Do not silently pretend equivalent guarantees exist.
+
+A portable atomic-replace interface can require all supported implementations to provide the same logical outcome.
+
+If a platform cannot satisfy that outcome, return failure or declare the capability unsupported.
+
+Determinism is more important than pretending success.
+
+Filesystem behavior can influence application determinism.
+
+Directory enumeration order can vary.
+
+Timestamp precision can vary.
+
+Case comparison can vary.
+
+Temporary filenames can vary.
+
+Physical allocation can vary.
+
+These implementation details should not determine authoritative application results.
+
+Sort inputs explicitly.
+
+Normalize defined representations.
+
+Use stable identifiers.
+
+Exclude irrelevant metadata from canonical calculations.
+
+Do not hash arbitrary directory traversal order.
+
+Do not use file modification time as authoritative ordering unless the protocol explicitly defines it and its limitations.
+
+Filesystem state should not silently become consensus state.
+
+If files provide protocol input, parse and canonicalize according to protocol rules.
+
+A file is a transport for bytes.
+
+The protocol defines meaning.
+
+A filesystem error should not cause invention of missing protocol data.
+
+Unknown remains unknown.
+
+Missing remains missing.
+
+Invalid remains invalid.
+
+A reliable filesystem design knows where data belongs.
+
+It knows who owns each path.
+
+It knows which paths are writable.
+
+It knows which files are authoritative.
+
+It knows which files can be rebuilt.
+
+It knows which files are temporary.
+
+It knows which records must remain permanent.
+
+It validates paths before privileged use.
+
+It validates file types.
+
+It validates file contents.
+
+It handles partial operations.
+
+It handles concurrent access.
+
+It uses atomic publication when complete-file visibility matters.
+
+It requests durability when durability matters.
+
+It does not grant broad write access merely to avoid permission configuration.
+
+It does not treat filenames as trusted identities.
+
+It does not treat file existence as proof of validity.
+
+It does not treat a successful write as proof of durable persistence.
+
+It does not treat deletion as secure erasure.
+
+It does not treat a path as permanent object identity.
+
+Do not confuse a filesystem with a disk.
+
+Do not confuse a path with a file.
+
+Do not confuse a filename with file content.
+
+Do not confuse an extension with content type.
+
+Do not confuse file existence with validity.
+
+Do not confuse file existence with authorization.
+
+Do not confuse path normalization with authorization.
+
+Do not confuse canonical path text with permanent object identity.
+
+Do not confuse ownership with permission.
+
+Do not confuse permission with application authorization.
+
+Do not confuse read-only file mode with complete protection when the directory remains writable.
+
+Do not confuse a symbolic link with its target.
+
+Do not confuse a hard link with an independent copy.
+
+Do not confuse a shortcut with a symbolic link.
+
+Do not confuse an open descriptor with a pathname.
+
+Do not confuse unlinking with immediate destruction of every open reference.
+
+Do not confuse delete with secure erasure.
+
+Do not confuse rename with copy.
+
+Do not confuse move with atomic rename.
+
+Do not confuse atomic rename with durable persistence.
+
+Do not confuse write completion with synchronization.
+
+Do not confuse synchronization with application validity.
+
+Do not confuse journaling with backup.
+
+Do not confuse snapshots with every form of backup.
+
+Do not confuse replication with historical recovery.
+
+Do not confuse filesystem repair with application-data correctness.
+
+Do not confuse free bytes with every form of available filesystem capacity.
+
+Do not confuse a stale PID file with a live process.
+
+Do not confuse a stale socket path with a live service.
+
+Do not confuse a lock file with an operating-system lock.
+
+Do not confuse file age with stale ownership.
+
+Do not confuse directory enumeration order with defined ordering.
+
+Do not confuse local filesystem behavior with network filesystem behavior.
+
+Do not confuse filesystem metadata timestamps with secure historical evidence.
+
+Do not confuse code location with authority to execute code.
+
+Do not confuse a writable application directory with a requirement that all application code be writable.
+
+When opening a critical file, identify the expected location.
+
+Resolve it according to controlled path rules.
+
+Establish required file type.
+
+Establish required permissions where appropriate.
+
+Open the object.
+
+Validate the opened object where identity matters.
+
+Read according to the API contract.
+
+Validate the contents.
+
+Reject invalid state.
+
+Do not substitute defaults merely because reading failed.
+
+When writing a critical file, construct the complete new state separately.
+
+Validate it.
+
+Write to controlled temporary storage.
+
+Handle partial writes.
+
+Synchronize according to durability requirements.
+
+Publish atomically where supported and required.
+
+Synchronize publication metadata where required.
+
+Verify the resulting state when appropriate.
+
+Only then report successful completion.
+
+When handling an untrusted filename, treat it as data.
+
+Do not concatenate it blindly into a privileged path.
+
+Reject or encode path separators according to policy.
+
+Reject traversal components.
+
+Reject absolute paths when only relative names are permitted.
+
+Apply platform-specific rules.
+
+Resolve within the intended root.
+
+Ensure filesystem links cannot escape the permitted boundary where that matters.
+
+When recursively processing a directory, define whether links are followed.
+
+Define whether mount boundaries are crossed.
+
+Define maximum depth where required.
+
+Define maximum object count where required.
+
+Handle disappearing entries.
+
+Handle permission failures.
+
+Do not rely on enumeration order.
+
+Do not turn traversal errors into silent absence.
+
+When changing filesystem permissions, identify the minimum required access.
+
+Identify the process account.
+
+Identify the operation requiring access.
+
+Grant access to the narrowest required path.
+
+Keep executable code protected from runtime modification when practical.
+
+Do not recursively make an application writable merely because one data directory needs write access.
+
+When a filesystem operation fails, preserve the distinction between:
+
+Not found.
+
+Permission denied.
+
+Wrong object type.
+
+Invalid path.
+
+Read-only filesystem.
+
+No space.
+
+Quota exceeded.
+
+I/O failure.
+
+Lock conflict.
+
+Unsupported operation.
+
+Cross-filesystem operation.
+
+Corrupted data.
+
+Unknown outcome.
+
+These conditions are not interchangeable.
+
+When evidence is insufficient, report the filesystem operation as unresolved rather than inventing a cause.
+
+Filesystems provide names and structure for stored data.
+
+They provide an interface between applications and storage.
+
+They provide useful atomicity, metadata, security, and organization mechanisms.
+
+But their guarantees have boundaries.
+
+A path is a name.
+
+A file is an object.
+
+A write is an operation.
+
+A flush is a synchronization request.
+
+A rename is a namespace operation.
+
+A permission is an operating-system access rule.
+
+None of those concepts should be asked to prove more than it actually establishes.
+
+Reliable filesystem engineering begins by knowing exactly which guarantee is required and using the filesystem operation that actually provides that guarantee.

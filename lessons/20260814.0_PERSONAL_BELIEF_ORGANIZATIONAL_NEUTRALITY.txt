@@ -1,0 +1,87 @@
+20260814.0 — Personal Belief and Organizational Neutrality
+
+Root Document ID: 20260814.0
+Revision ID: NONE
+Previous Revision: NONE
+sha256: 860a8aa9b87d0ac79470bb489b6b22f4d03832095d61836236800095adca2153
+
+Project: STN-LABZ  
+Status: Approved  
+Scope: Organization-wide  
+Approval Authority: Founder / PM  
+Effective Date: 20260814
+
+Purpose
+
+This policy establishes a boundary between an individual's personal beliefs and the engineering, business, governance, research, and operational activities of STN-LABZ.
+
+Individuals may privately hold personal beliefs consistent with applicable law. Those beliefs remain personal to the individual and will not constitute organizational authority, evidence, engineering justification, operational doctrine, or a basis for company decision-making.
+
+Policy
+
+Personal beliefs have no operational role within the STN-LABZ ecosystem.
+
+STN-LABZ business development, engineering, research, autonomous systems, policies, documentation, decision-making, and operations will be based upon applicable requirements, authorized evidence, established policy, approved knowledge sources, engineering analysis, and defined mission authority.
+
+Concepts derived from personal belief systems will not be incorporated into STN-LABZ business development or operations as organizational authority, technical justification, operational instruction, or engineering fact.
+
+Organizational Neutrality
+
+STN-LABZ will maintain institutional neutrality regarding the personal beliefs of personnel, contributors, contractors, users, and other participants.
+
+No individual will be required to adopt, affirm, reject, or participate in another person's personal beliefs as a condition of performing STN-LABZ work, except where a restriction is independently required by applicable law, safety requirements, security requirements, established company policy, or authorized duties.
+
+Personal expression will not be represented as an official position of STN-LABZ unless separately authorized as an organizational statement through the established governance process.
+
+Engineering and Evidence Boundary
+
+Personal belief, conviction, intuition, or tradition will not substitute for evidence.
+
+Technical and operational claims will be evaluated according to STN-LABZ evidence and documentation requirements.
+
+Where sufficient evidence does not exist, the condition will be identified according to established STN-LABZ uncertainty and Unknown State doctrine rather than resolved through personal belief.
+
+Analysis and inference will remain distinguishishable from established fact.
+
+Autonomous Agents and Software Systems
+
+STN-LABZ autonomous agents, software systems, modules, mission packages, and other governed computational assets will not be assigned personal-belief doctrine as operational authority.
+
+Their authorized behavior will derive from their defined mission, applicable STN-LABZ policies, approved instructions, authorized knowledge sources, and established technical requirements.
+
+Business and Operational Application
+
+STN-LABZ personnel acting in an organizational capacity will distinguish personal expression from company business.
+
+Company decisions concerning engineering, research, security, safety, employment, contracting, partnerships, procurement, publication, autonomous operations, and other organizational matters will have an identifiable business, technical, legal, safety, security, policy, or evidentiary basis appropriate to the decision.
+
+Personal belief alone will not constitute such a basis.
+
+Applicability
+
+This policy applies throughout STN-LABZ regardless of project, system, organizational position, or level of authority.
+
+Project-specific policies may impose additional requirements consistent with this policy but will not create an exemption without formal amendment or supersession through the established STN-LABZ policy process.
+
+Legal and Regulatory Compliance
+
+This policy will be interpreted and administered consistently with applicable law.
+
+Nothing in this policy is intended to eliminate or unlawfully restrict rights or protections afforded to individuals under applicable law.
+
+Where applicable law imposes an obligation that conflicts with an internal implementation of this policy, the legal obligation will control and the matter will be documented and referred through the appropriate STN-LABZ authority.
+
+Governance
+
+Questions concerning interpretation, exceptions, conflicts, or applicability will be referred to the appropriate organizational authority under the STN-LABZ General Orders.
+
+Any amendment, exception, or superseding policy will require authorization through the established STN-LABZ governance process and will be documented so the historical policy record is preserved.
+
+References
+
+- STN-LABZ General Orders
+- 20260729.0 — Operational Authority
+- 20260729.5 — Unknown State Doctrine
+- 20260729.6 — Engineering Documentation
+- 20260729.8 — Operational Doctrine
+- 20260730.1 — Digit: Authorized Knowledge

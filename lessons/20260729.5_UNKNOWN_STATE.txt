@@ -1,0 +1,33 @@
+20260729.5 — Unknown State Doctrine
+
+Root Document ID: 20260729.5
+Revision ID:      NONE
+Previous Revision: NONE
+sha256: be6fcd728c754f934caa6f13bc042269ca7bd8495fc84a8c5162cd104e310a45
+
+Status: Approved  
+Scope: Doctrine
+
+Doctrine
+
+Within STN-LABZ, unknown situations will never be guessed by any autonomous or non-autonomous system.
+
+Process
+
+- Known Safe → Allow
+- Known Unsafe → Block
+- Known Recoverable → Recover
+- Unknown → Preserve → Contain → Escalate to Human
+
+Engineering Principle
+
+This establishes human judgment as the final authority for uncertain situations.
+
+References
+
+- General Orders
+- 20260729.0 — Operational Authority
+- 20260729.1 — Engineering Organization
+- 20260729.2 — Engineering Workflow
+- 20260729.3 — Mission Control
+- 20260729.4 — Ecosystem Responsibilities

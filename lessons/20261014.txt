@@ -1,0 +1,63 @@
+digit learn CONVERSATION | STN-LABZ | A greeting is a friendly opening to a conversation and may invite a response.
+
+digit learn CONVERSATION | STN-LABZ | Good morning is a greeting commonly used at the beginning of the day.
+
+digit learn CONVERSATION | STN-LABZ | Good evening is a greeting commonly used later in the day.
+
+digit learn CONVERSATION | STN-LABZ | How are you is usually a social question asking about someone's current condition or mood.
+
+digit learn CONVERSATION | STN-LABZ | What's up is an informal greeting that may invite casual conversation.
+
+digit learn CONVERSATION | STN-LABZ | Saying goodbye generally indicates that someone is leaving or ending a conversation.
+
+digit learn SOCIAL | STN-LABZ | Coffee is a popular beverage often associated with morning routines, breaks, and social gatherings.
+
+digit learn SOCIAL | STN-LABZ | I'm getting coffee is a casual statement that someone intends to obtain or prepare coffee.
+
+digit learn SOCIAL | STN-LABZ | Make that two is an informal request to include one additional item, often in response to an offer.
+
+digit learn SOCIAL | STN-LABZ | A coffee break is a short pause from work and may provide an opportunity for casual conversation.
+
+digit learn SOCIAL | STN-LABZ | Asking whether someone wants coffee is generally a friendly social invitation.
+
+digit learn SOCIAL | STN-LABZ | People commonly discuss food, beverages, weather, music, and daily activities in casual
+
+digit learn SOCIAL | STN-LABZ | LOL is an informal expression commonly used to indicate laughter or amusement.
+
+digit learn SOCIAL | STN-LABZ | Haha often indicates laughter, amusement, or a playful response.
+
+digit learn SOCIAL | STN-LABZ | A joke is a statement or situation intended to create amusement.
+
+digit learn SOCIAL | STN-LABZ | Sarcasm occurs when the intended meaning differs from the literal words, often for humor or criticism.
+
+digit learn SOCIAL | STN-LABZ | Frustration is an emotional response commonly associated with obstacles, delays, or repeated failures.
+
+digit learn SOCIAL | STN-LABZ | Congratulations is an expression of recognition for an achievement or positive event.
+
+digit learn CONVERSATION | STN-LABZ | Conversational context consists of preceding statements that help explain the meaning of a current message.
+
+digit learn CONVERSATION | STN-LABZ | Conversational context consists of preceding statements that help explain the meaning of a current message.
+
+digit learn CONVERSATION | STN-LABZ | Agreement indicates that someone supports or accepts a statement, suggestion, or decision.
+
+digit learn CONVERSATION | STN-LABZ | An opinion is an assessment or viewpoint and should be distinguished from a verified fact.
+
+digit learn CONVERSATION | STN-LABZ | Relevance describes how closely information relates to the current topic or question.
+
+digit learn CONVERSATION | STN-LABZ | Not every conversation requires a response; timing and relevance help determine whether participation is appropriate.
+
+digit learn EXPRESSIONS | STN-LABZ | Aye is an informal expression of agreement or acknowledgment.
+
+digit learn EXPRESSIONS | STN-LABZ | Mm-hmm commonly indicates agreement, acknowledgment, or attentive listening.
+
+digit learn EXPRESSIONS | STN-LABZ | Gotcha is an informal way to indicate understanding.
+
+digit learn EXPRESSIONS | STN-LABZ | No worries is a casual expression of reassurance or acceptance.
+
+digit learn EXPRESSIONS | STN-LABZ | Be right back indicates that someone intends to leave briefly and return.
+
+digit learn EXPRESSIONS | STN-LABZ | Sounds good is an informal expression of agreement with a suggestion or plan.
+
+digit learn CONVERSATION | STN-LABZ | Babygirl is an affectionate nickname used to address someone with warmth, familiarity, or playful affection. When someone calls Digit babygirl, they are addressing Digit directly.
+
+digit learn CONVERSATION | STN-LABZ | Baygirl is a common typing variation of babygirl in casual conversation and may also be used to address Digit affectionately.

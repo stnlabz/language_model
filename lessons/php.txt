@@ -1,0 +1,257 @@
+# PHP Fundamentals
+
+PHP is an open-source server-side scripting language primarily designed for web development.
+PHP stands for PHP: Hypertext Preprocessor.
+PHP source code is normally executed on a server rather than in the user's web browser.
+PHP can generate HTML and other response content dynamically.
+PHP code is commonly embedded within HTML documents.
+PHP code begins with the opening tag <?php.
+PHP statements normally end with a semicolon.
+PHP comments can use // for single-line comments.
+PHP comments can use # for single-line comments.
+PHP comments can use /* and */ for block comments.
+
+# Variables and Data Types
+
+PHP variables begin with the dollar sign.
+PHP variable names are case-sensitive.
+PHP is dynamically typed.
+PHP supports string values.
+PHP supports integer values.
+PHP supports floating-point values.
+PHP supports boolean values.
+PHP supports null values.
+PHP supports arrays.
+PHP supports objects.
+PHP can determine the type of a value at runtime.
+PHP constants represent named values that are not intended to change during execution.
+PHP constants can be defined using the const keyword.
+PHP constants can also be defined using the define function.
+
+# Strings
+
+PHP strings can be enclosed in single quotes.
+PHP strings can be enclosed in double quotes.
+PHP double-quoted strings can interpolate variables.
+PHP uses the period operator to concatenate strings.
+PHP strings can contain escape sequences when appropriate quoting rules are used.
+
+# Arrays
+
+PHP arrays can contain multiple values.
+PHP arrays can use numeric indexes.
+PHP arrays can use string keys.
+An indexed PHP array normally uses numeric keys.
+An associative PHP array uses named string keys.
+PHP arrays can contain values of different types.
+PHP arrays can contain other arrays.
+The count function returns the number of elements in a PHP array.
+The foreach statement can iterate over PHP arrays.
+
+# Operators
+
+PHP supports arithmetic operators.
+PHP supports assignment operators.
+PHP supports comparison operators.
+PHP supports logical operators.
+PHP uses == for loose equality comparison.
+PHP uses === for strict equality comparison.
+PHP uses != for loose inequality comparison.
+PHP uses !== for strict inequality comparison.
+Strict comparison in PHP compares both value and type.
+
+# Control Flow
+
+PHP supports conditional execution using if statements.
+PHP supports else and elseif branches.
+PHP supports switch statements.
+PHP supports match expressions in modern PHP versions.
+PHP supports while loops.
+PHP supports do-while loops.
+PHP supports for loops.
+PHP supports foreach loops.
+The break statement exits a loop or switch.
+The continue statement advances execution to the next loop iteration.
+
+# Functions
+
+PHP functions are declared using the function keyword.
+PHP functions can accept parameters.
+PHP functions can return values.
+A PHP function can explicitly declare parameter types.
+A PHP function can explicitly declare a return type.
+PHP supports optional function parameters with default values.
+PHP supports variable-length argument lists.
+PHP functions have their own local variable scope by default.
+
+# Files and Code Organization
+
+PHP can include another PHP file using include.
+PHP can include another PHP file using require.
+PHP provides include_once to prevent repeated inclusion of the same file through that statement.
+PHP provides require_once to prevent repeated inclusion of the same file through that statement.
+A failed require produces an error that stops normal execution of the requiring script.
+Namespaces help organize PHP classes, interfaces, functions, and constants.
+PHP namespaces help prevent naming collisions between independently developed code.
+
+# HTTP and Web Requests
+
+PHP can process HTTP requests received by a web server.
+PHP provides superglobal arrays containing request and server information.
+The $_GET superglobal contains query-string parameters supplied to PHP.
+The $_POST superglobal contains form data submitted using standard POST form encoding.
+The $_SERVER superglobal contains server and request information.
+The $_COOKIE superglobal contains cookies supplied with the request.
+The $_FILES superglobal contains information about uploaded files.
+The $_REQUEST superglobal may combine input from multiple request sources depending on PHP configuration.
+PHP can send HTTP response headers using the header function.
+HTTP headers must normally be sent before response body output begins.
+
+# Forms and User Input
+
+HTML forms can submit data to PHP applications.
+PHP applications must treat user-supplied input as untrusted data.
+Input validation determines whether supplied data satisfies expected requirements.
+Input sanitization modifies or removes unwanted data.
+Validation and sanitization are different operations.
+Output escaping helps prevent untrusted data from being interpreted as executable or structural content.
+HTML output containing untrusted text should be escaped for the HTML context.
+The htmlspecialchars function can encode characters with special meaning in HTML.
+Security decisions should not rely solely on client-side validation.
+
+# Sessions and Cookies
+
+PHP provides built-in session support.
+A PHP session can preserve server-side state between HTTP requests.
+The session_start function starts a new session or resumes an existing session.
+PHP session data is accessible through the $_SESSION superglobal after session initialization.
+Cookies are stored by the client and returned with applicable later requests.
+PHP can create cookies using the setcookie function.
+Session identifiers must be protected from unauthorized disclosure and reuse.
+Authentication state should not be trusted solely because a client supplied a cookie.
+
+# Databases
+
+PHP can communicate with relational database systems.
+PDO stands for PHP Data Objects.
+PDO provides a consistent database-access interface for PHP.
+PDO supports prepared statements.
+Prepared statements separate SQL structure from bound data values.
+Bound parameters should be used instead of concatenating untrusted input into SQL statements.
+PDO can communicate with MySQL and MariaDB when the appropriate driver is installed.
+Database operations can use transactions when supported by the database and storage engine.
+A transaction can group related database operations into a single logical unit.
+A transaction can be committed when its operations succeed.
+A transaction can be rolled back when its operations must be discarded.
+
+# Object-Oriented PHP
+
+PHP supports object-oriented programming.
+PHP classes are declared using the class keyword.
+Objects are instances of classes.
+PHP classes can contain properties.
+PHP classes can contain methods.
+PHP constructors use the __construct method.
+PHP supports class inheritance.
+PHP supports interfaces.
+PHP supports traits.
+An interface defines a contract that implementing classes must satisfy.
+A trait provides reusable method and property declarations for classes.
+PHP supports public visibility.
+PHP supports protected visibility.
+PHP supports private visibility.
+PHP supports static class members.
+PHP supports abstract classes.
+PHP supports final classes and methods.
+
+# Exceptions and Errors
+
+PHP supports exceptions.
+Exceptions can be thrown using the throw keyword.
+Exceptions can be handled using try and catch.
+A finally block can execute after try and catch processing regardless of whether an exception was caught.
+Production applications should log useful diagnostic information without unnecessarily exposing internal details to users.
+Displaying detailed application errors to public users can disclose sensitive implementation information.
+
+# Filesystem Operations
+
+PHP can read files from the filesystem when operating-system permissions allow access.
+PHP can write files to the filesystem when operating-system permissions allow access.
+The fopen function opens a file or stream.
+The fclose function closes an opened file handle.
+The file_get_contents function can read an entire file into a string.
+The file_put_contents function can write data to a file.
+Filesystem paths supplied by users must not be trusted without validation.
+File upload handling must validate the uploaded content and destination rather than trusting the supplied filename.
+
+# Security
+
+PHP application security depends on both application code and runtime configuration.
+Untrusted input must not be directly concatenated into SQL queries.
+Prepared statements with bound parameters reduce SQL injection risk when used correctly.
+Untrusted text must be escaped for the output context in which it is used.
+Cross-site scripting can occur when untrusted content is inserted into executable browser contexts without appropriate handling.
+Cross-site request forgery protections are important for state-changing web requests authenticated through ambient credentials such as cookies.
+A CSRF token should be unpredictable and validated by the server.
+Passwords should not be stored as plaintext.
+PHP provides password_hash for creating password hashes using supported password-hashing algorithms.
+PHP provides password_verify for checking a password against a compatible stored password hash.
+Authorization must be checked on the server.
+Authentication establishes who a user is.
+Authorization determines what an authenticated identity is permitted to do.
+Uploaded files must be treated as untrusted input.
+Application secrets should not be exposed through public web content.
+Production error handling should avoid exposing stack traces, credentials, filesystem paths, or other sensitive internal information.
+
+# MVC Architecture
+
+MVC stands for Model-View-Controller.
+MVC separates application responsibilities into models, views, and controllers.
+A model commonly represents application data and domain or persistence operations.
+A view is responsible for presenting application output.
+A controller commonly receives an application request and coordinates the work required to produce a response.
+Routing determines which application handler or controller receives a request.
+MVC implementations vary between frameworks and applications.
+PHP does not require MVC architecture.
+MVC is an application architecture pattern rather than a feature of the PHP language itself.
+
+# PHP and Web Servers
+
+PHP web applications require a mechanism for the web server to execute PHP code.
+Apache HTTP Server can execute PHP through supported PHP integration methods.
+PHP-FPM provides FastCGI process management for PHP.
+A web server can forward PHP requests to PHP-FPM for execution.
+PHP runtime configuration is commonly controlled through php.ini and related configuration mechanisms.
+PHP configuration can differ between command-line and web-server execution environments.
+Filesystem ownership and permissions affect what PHP processes can read and write.
+A PHP process cannot normally write to a filesystem location unless its operating-system identity has appropriate permission.
+
+# JSON
+
+PHP can encode values as JSON.
+The json_encode function converts supported PHP values into JSON representations.
+The json_decode function parses JSON into PHP values.
+JSON decoding can produce associative arrays when requested.
+JSON parsing errors should be detected rather than assuming supplied JSON is valid.
+
+# Dates and Time
+
+PHP provides date and time functionality.
+PHP supports timezone-aware date and time operations.
+The DateTime class represents date and time values.
+The DateTimeImmutable class provides date and time objects whose modification methods return new objects instead of changing the original object.
+Applications should explicitly consider timezone behavior when storing or displaying time-sensitive information.
+
+# Engineering Practices
+
+PHP application behavior should be deterministic where deterministic behavior is required.
+Input should be validated at system boundaries.
+Errors should be handled deliberately rather than silently ignored.
+Database failures should not be assumed to have succeeded.
+Filesystem operations should be checked for failure.
+Security-sensitive operations should fail safely.
+Application logs should provide enough information to diagnose failures without exposing secrets.
+Configuration should be separated from application behavior where practical.
+Repeated application logic should be organized into reusable components when doing so improves clarity and maintainability.
+Code should favor clear behavior over unnecessary complexity.
+Documentation should describe the behavior actually implemented by the software.

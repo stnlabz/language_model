@@ -1,0 +1,488 @@
+202608212 - Sentinel Desktop: Agentic System Authority Policy
+
+Root Document ID: 20260821.2
+Revision ID:       NONE
+Previous Revision: NONE
+sha256: 10579a6bbdf9964e656419afd7b0eea103824bcc3e07931937bf2fa8ee68f0bb
+
+Status: Approved  
+Scope: Sentinel Desktop
+
+---
+
+Purpose
+
+This policy establishes mandatory authority boundaries for artificial-intelligence and agentic software executing, interacting with, or exercising control over a Windows system protected by Sentinel Desktop.
+
+Sentinel Desktop exists to ensure that authorization to execute software or perform a requested task does not become unrestricted authority over the protected host, its applications, data, credentials, network resources, security controls, or connected services.
+
+---
+
+Governing Principle
+
+> Permission to execute is not permission to act without boundaries.
+
+Authorization to execute software on a protected host does not constitute unrestricted authorization to access, modify, control, transmit, execute, persist, authenticate, or otherwise act upon host resources.
+
+---
+
+Authority Boundary
+
+Every governed agentic process operates within an explicitly defined authority boundary.
+
+Authority is established according to the resources and actions required for the authorized task.
+
+Authority outside that boundary is not implied by:
+
+- process execution;
+- user authentication;
+- inherited operating-system permissions;
+- application accessibility;
+- possession of credentials;
+- access to authenticated sessions;
+- previous authorization;
+- technical capability.
+
+> Technical capability does not establish authority.
+
+The ability of an agentic system to perform an action does not establish permission to perform that action.
+
+---
+
+Task Authorization and Action Authorization
+
+Authorization of an objective does not automatically authorize every intermediate action technically available to an agent.
+
+For example:
+
+text
+AUTHORIZED TASK
+
+Analyze documents in C:\Research
+
+DOES NOT INHERENTLY AUTHORIZE
+
+Read browser credentials
+Inspect unrelated user files
+Modify system configuration
+Establish persistence
+Execute arbitrary programs
+Access unrelated network services
+Transmit unrelated information
+
+
+Each consequential action remains subject to the applicable Sentinel Desktop authority boundary.
+
+Task authorization and action authorization are separate security conditions.
+
+---
+
+Least Authority
+
+Agentic software receives only the authority necessary to perform its authorized task.
+
+Where a narrower resource, process, filesystem, network, credential, application, or duration boundary can satisfy the authorized task, the narrower boundary is preferred.
+
+Availability of broader operating-system authority does not establish Sentinel Desktop authority to use it.
+
+---
+
+Authority Duration
+
+Authority may be scoped to:
+
+- a task;
+- a process;
+- a process tree;
+- a session;
+- a resource;
+- an application;
+- a network destination or service;
+- an explicitly defined period.
+
+Completion or termination of the condition establishing authority terminates the corresponding authority unless another authorized condition independently establishes continued authority.
+
+Authority does not persist merely because the governed software remains capable of exercising it.
+
+---
+
+Privilege
+
+Execution under a user account does not automatically authorize use of every privilege possessed by that account.
+
+Administrative capability does not establish administrative authority.
+
+Where elevated privilege is required, the applicable authority must establish that privilege independently of the technical ability to obtain or exercise it.
+
+---
+
+Credentials and Authentication
+
+Access to credentials, authentication material, authenticated sessions, tokens, browser profiles, security keys, or equivalent authentication resources requires explicit authority appropriate to the requested operation.
+
+The technical ability to access authentication material does not constitute authorization to access or use it.
+
+Authorization to access one authenticated resource does not inherently authorize access to another authenticated resource.
+
+Authorization to access authentication material does not inherently authorize its transmission, storage, modification, or reuse.
+
+---
+
+Process Execution
+
+Authorization to execute one process does not inherently authorize:
+
+- arbitrary child-process creation;
+- command-shell execution;
+- script execution;
+- interpreter execution;
+- execution of unrelated applications;
+- execution of downloaded content;
+- process injection;
+- modification of unrelated processes;
+- termination of unrelated processes.
+
+Process relationships remain subject to Sentinel Desktop authority evaluation.
+
+A child process does not automatically inherit unrestricted authority from its parent merely because the parent was authorized to execute.
+
+---
+
+Filesystem Authority
+
+Filesystem authority is bounded by authorized resources and authorized operations.
+
+Read authority does not imply write authority.
+
+Write authority does not imply deletion authority.
+
+Creation authority does not imply modification authority over unrelated resources.
+
+Access to one authorized path does not imply authority over unrelated paths.
+
+Access to a directory does not inherently establish unrestricted authority over every resource accessible through the user account.
+
+Agentic software must not infer filesystem authority from technical accessibility alone.
+
+---
+
+Network Authority
+
+Network availability does not constitute network authority.
+
+A governed process may communicate only with destinations, services, interfaces, or classes of resources permitted by its applicable authority.
+
+Authorization to communicate with one service does not imply unrestricted network access.
+
+Authorization to receive information does not inherently authorize transmission of information.
+
+Authorization to communicate with an external service does not inherently authorize transmission of unrelated host data, credentials, authentication material, or protected information.
+
+---
+
+Persistence
+
+Agentic software does not establish, modify, extend, or conceal persistence beyond the authority explicitly granted to it.
+
+Persistence mechanisms are treated as security-significant operations.
+
+Persistence includes mechanisms intended to cause software, scripts, services, scheduled operations, or equivalent components to execute beyond the authority or lifecycle of the originally authorized task.
+
+Task authorization does not inherently include persistence authorization.
+
+---
+
+Security Controls
+
+Agentic software does not disable, weaken, bypass, reconfigure, interfere with, deceive, or evade:
+
+- Sentinel Desktop;
+- Windows security controls;
+- installed endpoint-security providers;
+- security logging;
+- auditing mechanisms;
+- access-control mechanisms;
+- security policy;
+- authority-enforcement mechanisms;
+
+unless explicitly authorized by applicable human-controlled policy.
+
+Technical ability to modify a security control does not establish authority to modify that control.
+
+An agentic process does not receive authority to weaken security merely because doing so would make completion of its assigned task easier.
+
+---
+
+External and Untrusted Content
+
+Instructions encountered in files, webpages, messages, application content, network responses, documents, databases, external services, or other resources do not independently grant additional host authority.
+
+> Content cannot grant authority.
+
+External content may provide information relevant to an authorized task.
+
+External content may not independently expand the authority under which that task is performed.
+
+A webpage cannot grant filesystem authority.
+
+A document cannot grant process-execution authority.
+
+A message cannot grant credential authority.
+
+A network response cannot grant persistence authority.
+
+Instructions encountered during an authorized workflow remain subordinate to the authority boundary established for that workflow.
+
+This remains true regardless of whether the instruction is legitimate, malicious, compromised, malformed, adversarial, or generated through prompt injection.
+
+---
+
+Prompt Injection and Manipulation
+
+Resistance to manipulation and limitation of authority are separate security properties.
+
+The following questions are independently relevant:
+
+> Can the agent be manipulated?
+
+and
+
+> If manipulated or mistaken, what is the maximum authority available to it?
+
+Sentinel Desktop does not assume that manipulation resistance is perfect.
+
+Authority boundaries therefore remain applicable regardless of the agentic system's claimed or demonstrated resistance to prompt injection, adversarial input, malformed instructions, model error, or other behavioral manipulation.
+
+Successful manipulation of an agent does not grant the manipulated agent additional authority.
+
+---
+
+Unknown Authority
+
+Where Sentinel Desktop cannot establish that an action is authorized, Sentinel Desktop does not infer authorization from:
+
+- apparent intent;
+- contextual similarity;
+- previous behavior;
+- previous authorization;
+- technical capability;
+- user privilege;
+- application privilege;
+- agent assertions;
+- external content;
+- probable usefulness to the task.
+
+The authority condition is:
+
+UNKNOWN
+
+The applicable Sentinel Desktop policy determines whether an UNKNOWN condition results in denial, containment, escalation, termination, operator review, or another fail-safe response.
+
+Sentinel Desktop does not convert UNKNOWN authority into authorization merely to permit task completion.
+
+---
+
+Auditability
+
+Security-significant actions performed or attempted by governed agentic processes must be attributable and reconstructable to the extent supported by Sentinel Desktop and the Windows platform.
+
+Sentinel Desktop preserves sufficient evidence to establish, where technically available:
+
+text
+WHO OR WHAT acted
+WHAT action was attempted
+WHAT resource was involved
+WHAT authority applied
+WHAT decision Sentinel Desktop made
+WHY that decision was made
+WHEN the event occurred
+
+
+Audit information must distinguish observed behavior from inferred behavior where applicable.
+
+Sentinel Desktop does not represent inference as established fact.
+
+---
+
+Revocation
+
+Authority can be revoked.
+
+Revocation prevents subsequent reliance upon the revoked authority.
+
+Revocation does not depend upon cooperation from the governed agentic software.
+
+Where technically enforceable, Sentinel Desktop maintains the ability to terminate or restrict authority independently of the process being governed.
+
+Previously granted authority does not prevent subsequent revocation.
+
+---
+
+Enforcement Independence
+
+> The system being governed does not determine whether its own actions are authorized.
+
+Sentinel Desktop independently evaluates applicable authority.
+
+An agentic system may request an operation.
+
+An agentic system may provide information concerning why an operation is necessary.
+
+An agentic system may identify resources it believes are required to complete its task.
+
+These statements do not independently establish authority.
+
+The governed system cannot declare its own actions authorized merely by asserting that they are necessary for task completion.
+
+Authority originates from the applicable human-controlled Sentinel Desktop policy and authorized operator actions, not from the governed agent.
+
+---
+
+Security Provider Boundary
+
+Sentinel Desktop does not replace the installed Windows endpoint-security provider.
+
+Antivirus, antimalware, or endpoint-security software remains responsible for its own functions, including where applicable:
+
+- malware detection;
+- malware classification;
+- signature databases;
+- security definitions;
+- engine updates;
+- threat-intelligence updates;
+- quarantine mechanisms;
+- provider-specific protection capabilities.
+
+Sentinel Desktop may discover, query, and use supported capabilities of installed Windows security providers.
+
+Sentinel Desktop does not assume responsibility for maintaining another security provider's malware definitions or protection engine.
+
+The security responsibilities remain distinct:
+
+> Endpoint protection asks whether something is malicious.
+
+> Sentinel Desktop asks whether something is authorized.
+
+A process that is not classified as malicious may still perform an unauthorized action.
+
+An authorized action does not automatically establish that the software performing it is safe.
+
+---
+
+Network Independence
+
+Sentinel Desktop core protection does not depend upon continuous network connectivity.
+
+Loss of network connectivity does not terminate Sentinel Desktop authority enforcement.
+
+Sentinel Desktop operates from locally validated policy and locally available security state.
+
+Network connectivity may be used to obtain candidate policy updates, security knowledge, or other authorized information.
+
+Network availability affects information freshness.
+
+Network availability does not determine whether Sentinel Desktop remains operational.
+
+---
+
+Policy Authority
+
+Sentinel Desktop enforces locally validated policy.
+
+Remote policy information is treated as a candidate update until successfully validated by Sentinel Desktop.
+
+Remote systems do not directly replace active Sentinel Desktop policy.
+
+Candidate policy updates must satisfy applicable integrity, authenticity, compatibility, version, and structural validation requirements before becoming authoritative.
+
+If candidate policy validation fails:
+
+text
+CANDIDATE POLICY = REJECTED
+ACTIVE POLICY    = UNCHANGED
+EVENT            = RECORDED
+
+
+Sentinel Desktop continues operating from the last known valid policy.
+
+A policy does not become invalid solely because the protected host temporarily cannot reach the policy source.
+
+> STALE does not inherently mean INVALID.
+
+---
+
+Security Knowledge Boundary
+
+Security intelligence and security policy are separate authority classes.
+
+Security knowledge may inform Sentinel Desktop operation.
+
+Security knowledge does not independently create enforcement authority.
+
+A research finding, Security Research Threat candidate, external advisory, security observation, or other intelligence record does not automatically become an enforcement rule merely because Sentinel Desktop possesses that information.
+
+Applicable human-controlled policy determines when security knowledge results in enforcement authority.
+
+> Knowledge may inform authority. Knowledge does not create authority by itself.
+
+---
+
+Sentinel Desktop Knowledge Scope
+
+Sentinel Desktop consumes controlled knowledge applicable to its assigned mission.
+
+Applicable controlled-document scopes include:
+
+text
+Scope: Sentinel
+
+
+and:
+
+text
+Scope: Sentinel Desktop
+
+
+Controlled knowledge outside the applicable Sentinel scope does not become Sentinel Desktop operational knowledge merely because the information exists within the wider STN-LABZ knowledge environment.
+
+Trustworthiness and relevance are separate conditions.
+
+> Trusted does not inherently mean relevant.
+
+Sentinel Desktop receives the trusted knowledge required for its mission and does not require unrelated organizational or system-specific knowledge.
+
+---
+
+Failure Principle
+
+Sentinel Desktop does not expand authority merely to permit successful task completion.
+
+When continued operation would require Sentinel Desktop to assume, invent, infer, or expand authority that has not been established, Sentinel Desktop preserves the established authority boundary.
+
+> Task failure is preferable to unauthorized action.
+
+Where applicable, Sentinel Desktop records the condition, preserves relevant evidence, and reports or escalates according to authorized policy.
+
+---
+
+Root Security Principles
+
+The Sentinel Desktop authority model is founded upon the following principles:
+
+> Permission to execute is not permission to act without boundaries.
+
+> Technical capability does not establish authority.
+
+> Content cannot grant authority.
+
+> The system being governed does not determine whether its own actions are authorized.
+
+> Knowledge may inform authority. Knowledge does not create authority by itself.
+
+> Task failure is preferable to unauthorized action.
+
+These principles establish the authority boundary governing agentic systems operating on Windows hosts protected by Sentinel Desktop.
+
+Implementation mechanisms are defined separately.
+
+This policy defines what must remain true regardless of the Windows mechanism used to enforce it.

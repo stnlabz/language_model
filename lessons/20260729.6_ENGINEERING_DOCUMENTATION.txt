@@ -1,0 +1,46 @@
+20260729.6 — Engineering Documentation
+
+Root Document ID: 20260729.6
+Revision ID:       NONE
+Previous Revision: NONE
+sha256: 51d4c64e78e8ada1e5eb5b98b185cd0870fe63574373147985df47ce4c04099c
+
+Status: Approved  
+Scope: Policies
+
+Policy
+
+STN-LABZ establishes a standardized format for all company physical notebooks and digital logs.
+
+Journal / Log Naming Rule
+
+YYYYMMDD.X_LOG_NAME
+
+Where:
+
+- YYYYMMDD = Entry date.
+- X = The next sequential number for that date.
+- LOG_NAME = Descriptive entry name.
+
+Example
+
+20260729.0_OPERATIONAL_AUTHORITY
+
+Each entry represents an evolution of thought rather than only a date stamp.
+
+Suggested Metadata
+
+- Topic
+- Objective
+- Decisions
+- Principles
+- References
+- Status
+
+References
+
+- STN-LABZ General Orders
+- 20260729.0 — Operational Authority
+- 20260729.1 — Engineering Organization
+- 20260729.2 — Engineering Workflow
+- 20260729.5 — Unknown State Doctrine

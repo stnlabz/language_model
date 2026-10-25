@@ -1,0 +1,100 @@
+20260810.1 — Module Creation Request (MCR)
+
+Root Document ID: 20260810.1
+Revision ID: NONE
+Previous Revision: NONE
+sha256: 22d965901140163def82e62a0b0d984e56d0895dc776bc129989e966a0cc1364
+
+Project: Modules  
+Topic: Module Creation Request  
+Status: Approved
+
+Summary
+
+A method and historical Module Creation Request is established to provide the basic module creation concept and historical fact of the module's request.
+
+Any new module requires an MCR. Bug fixes, maintenance changes, and ordinary revisions to an existing module do not.
+
+The requester must be ready to explain the module's concept and reason for creation as a separate step after submission.
+
+Applicability
+
+The MCR requirement applies regardless of organizational position or authority. The founder submitted the first MCR under this policy; therefore, no organizational role is exempt from the requirement.
+
+The first MCR is preserved as institutional history demonstrating that the policy applied to its author from its first use.
+
+Module Creation Request (MCR)
+
+Identifier: YYYY-MM-DD-XX  
+Date: YYYYMMDD  
+Requested By:  
+Proposed Module: <Module Name>  
+Status: Pending | Approved | Rejected
+
+Purpose
+
+Why is this module needed?
+
+Requirement
+
+What capability must the module provide?
+
+Justification
+
+Why should this capability exist?
+
+Scope
+
+What is the module responsible for?
+
+Out of Scope
+
+What is explicitly not the module's responsibility?
+
+Dependencies
+
+Required Core interfaces, modules, libraries, policies, standards, or other assets.
+
+Authority / References
+
+What policies, research, requirements, incidents, or engineering decisions support the request?
+
+Initial Qualification Requirements
+
+Other than the established module qualification requirements, what other qualifications must be demonstrated before the module can be qualified?
+
+Human Review
+
+Decision:  
+Reviewer:  
+Date: YYYYMMDD  
+Notes:
+
+Governance Boundary
+
+Approval of an MCR authorizes the module creation process but remains distinct from module qualification and activation.
+
+Permission to create a module is not evidence that the resulting module is trusted.
+
+MCR approval authorizes module creation but does not override system qualification requirements.
+
+Module development will not begin until the target system Core has successfully completed all mandatory Core qualification tests and reached QUALIFIED status.
+
+This establishes two separate gates:
+
+Gate 1 — Authorization: Approved MCR.
+
+Gate 2 — Eligibility: Qualified system Core.
+
+Passing one gate does not satisfy the other.
+
+References
+
+- STN-LABZ General Orders
+- 20260729.0 — Operational Authority
+- 20260729.5 — Unknown State Doctrine
+- 20260729.6 — Engineering Documentation
+- 20260729.8 — Operational Doctrine
+- 20260731.2 — Drafting Standard
+- 20260801.1 — KISS Theory
+- 20260806.0 — Agent Modules

@@ -1,0 +1,52 @@
+20260814.1 — FTP Client Policy
+
+Root Document ID: 20260814.1
+Revision ID: NONE
+Previous Revision: NONE
+sha256: 9a44b15a8c6282cedd7a0fea2d8b0f0998dd59c8327153ddbc07bf530b0bd670
+
+Status: Approved  
+Scope: STN-LABZ-managed systems
+
+Policy
+
+FileZilla is not approved for installation or operational use on STN-LABZ-managed systems.
+
+Basis
+
+During the August 2026 FTPS incident, FileZilla 3.70.6 repeatedly failed to complete an explicit TLS connection from the affected workstation.
+
+Independent testing established that the hosting service was operational, and an alternate FTP client successfully completed authenticated file transfers from the affected environment.
+
+The available evidence therefore did not establish the hosting service as the cause of the operational failure.
+
+Approved Client
+
+WinSCP is approved for STN-LABZ operational use, subject to continued operational reliability and compliance with applicable STN-LABZ security and configuration requirements.
+
+Approval of WinSCP does not exempt the software from future review, testing, restriction, or replacement when operational evidence warrants such action.
+
+Engineering Principle
+
+Software used for operational infrastructure must demonstrate reliable execution of its assigned function.
+
+Failure of an application in a particular environment does not establish a general defect in that application. This restriction reflects documented STN-LABZ operational experience, observed behavior, and risk-management requirements.
+
+Exception
+
+FileZilla may be installed or executed within an isolated test environment when required for compatibility testing, reproduction of an incident, security research, comparative testing, or other authorized engineering investigation.
+
+Testing authorization does not constitute approval for operational use.
+
+Review
+
+This policy may be reconsidered when new evidence demonstrates that the conditions responsible for the August 2026 incident have been identified and that FileZilla can reliably satisfy STN-LABZ operational requirements.
+
+Until such evidence exists, FileZilla will remain unapproved for operational deployment.
+
+References
+
+- STN-LABZ General Orders
+- 20260729.0 — Operational Authority
+- 20260729.6 — Engineering Documentation
+- 20260729.8 — Operational Doctrine

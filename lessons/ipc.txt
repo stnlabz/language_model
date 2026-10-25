@@ -1,0 +1,2701 @@
+Inter-process communication, or IPC, is the exchange of data, signals, or synchronization information between separate processes.
+
+Processes normally have separate address spaces.
+
+One process cannot ordinarily access another process's memory directly.
+
+IPC provides controlled mechanisms for processes to communicate.
+
+Common IPC mechanisms include:
+
+Anonymous pipes.
+
+Named pipes.
+
+FIFOs.
+
+Unix domain sockets.
+
+TCP sockets.
+
+UDP sockets.
+
+Shared memory.
+
+Message queues.
+
+Signals.
+
+Semaphores.
+
+Memory-mapped files.
+
+Platform-specific IPC facilities.
+
+Different IPC mechanisms solve different problems.
+
+Do not choose IPC merely because a mechanism is familiar.
+
+Choose the smallest mechanism that satisfies the communication requirements.
+
+Before selecting IPC, determine:
+
+Which processes communicate?
+
+Are they on the same machine?
+
+Can they be on different machines?
+
+Is communication one-way or bidirectional?
+
+Is communication request-response or asynchronous?
+
+How much data is exchanged?
+
+Does message ordering matter?
+
+Does message delivery need acknowledgement?
+
+Can messages be duplicated?
+
+Can messages be lost?
+
+Does communication require authentication?
+
+Does communication cross a privilege boundary?
+
+What happens when one process exits?
+
+What happens when communication fails?
+
+What latency and throughput are required?
+
+What platform support is required?
+
+IPC is an interface.
+
+Treat it with the same discipline as any other interface.
+
+Define:
+
+Message format.
+
+Message boundaries.
+
+Ordering.
+
+Error behavior.
+
+Connection lifecycle.
+
+Size limits.
+
+Timeouts.
+
+Authentication where required.
+
+Authorization where required.
+
+Versioning where required.
+
+Do not let two processes depend on undocumented assumptions.
+
+A pipe is a byte stream.
+
+An anonymous pipe is commonly created by one process and inherited by related processes.
+
+Typical uses include:
+
+Parent-to-child communication.
+
+Child-to-parent communication.
+
+Connecting command-line programs.
+
+Redirecting standard input.
+
+Redirecting standard output.
+
+A pipe does not inherently contain application-level messages.
+
+If a process writes:
+
+HELLO
+
+then:
+
+WORLD
+
+the reader should not assume two reads will return exactly those two writes.
+
+Byte streams do not preserve application message boundaries.
+
+Define framing if messages matter.
+
+A simple line-oriented protocol can use:
+
+MESSAGE\n
+
+This works when:
+
+Messages cannot contain unescaped newlines.
+
+Maximum line length is bounded.
+
+Encoding is defined.
+
+More complex protocols can use length prefixes.
+
+For example:
+
+4-byte length
+
+followed by:
+
+payload bytes
+
+The receiver reads the length.
+
+Validates it.
+
+Then reads exactly that many payload bytes.
+
+Do not allocate memory from an untrusted length field before validating its range.
+
+For example:
+
+length = 4294967295
+
+must not cause an enormous allocation merely because the field is syntactically valid.
+
+Set protocol limits.
+
+A reader must handle partial reads.
+
+Requesting 100 bytes does not guarantee one read operation returns 100 bytes.
+
+The operating system can return fewer bytes.
+
+Continue reading until:
+
+The required amount is received.
+
+EOF occurs.
+
+An error occurs.
+
+A timeout or cancellation condition occurs.
+
+Do not treat a short read as automatically meaning the complete message arrived.
+
+Likewise, writes can be partial.
+
+A request to write 100 bytes can write fewer than 100.
+
+Handle the actual number of bytes written.
+
+Do not assume one write operation transmits the entire buffer unless the API explicitly guarantees it for that operation and size.
+
+Standard input and standard output can form an IPC interface.
+
+A parent process can launch a child process and communicate through stdin and stdout.
+
+This is often a useful design for small tools.
+
+For example:
+
+Parent sends requests through child stdin.
+
+Child sends structured responses through stdout.
+
+Child sends diagnostics through stderr.
+
+Keep protocol output separate from diagnostic output.
+
+Do not write arbitrary log messages into stdout if stdout is carrying machine-readable protocol data.
+
+Use stderr or another logging channel.
+
+Otherwise the parent cannot distinguish:
+
+Protocol response.
+
+Debug message.
+
+Warning.
+
+Status text.
+
+This can corrupt the interface.
+
+Exit status is also communication.
+
+A child process can return an exit code.
+
+For example:
+
+0 = success
+
+nonzero = failure
+
+The exact meaning of nonzero values should be defined if callers depend on them.
+
+Do not encode large amounts of information into exit codes.
+
+They are small status channels.
+
+Use stdout, stderr, files, sockets, or another mechanism for detailed results.
+
+An exit code is not a substitute for structured error information when structured information is required.
+
+EOF has meaning.
+
+For a pipe or socket, EOF commonly means the other side closed its writing endpoint or connection.
+
+Do not interpret EOF as an empty message.
+
+Empty payload and closed stream are different conditions.
+
+Handle them separately.
+
+Named pipes and FIFOs allow independently started processes to communicate through a named operating-system object.
+
+On Unix-like systems, a FIFO can appear in the filesystem.
+
+One process writes.
+
+Another reads.
+
+FIFOs can be useful for simple local communication.
+
+They also require lifecycle management.
+
+Consider:
+
+Who creates the FIFO?
+
+Who owns it?
+
+What permissions does it have?
+
+What happens if it already exists?
+
+What happens if no reader exists?
+
+Who removes it?
+
+Could an attacker create it first?
+
+Do not blindly trust a filesystem object because it has the expected pathname.
+
+Validate ownership and permissions where the IPC boundary is security-sensitive.
+
+Named pipes on Windows provide a different platform mechanism with similar high-level purpose.
+
+Do not assume Unix FIFO behavior and Windows named-pipe behavior are identical.
+
+If software is platform-independent, define a platform-neutral IPC abstraction.
+
+Implement platform-specific mechanisms behind it.
+
+The externally visible semantics should remain consistent where required.
+
+Unix domain sockets provide socket communication between processes on the same Unix-like system.
+
+They can support:
+
+Stream semantics.
+
+Datagram semantics.
+
+Local request-response.
+
+Local services.
+
+They avoid external network routing.
+
+Filesystem-named Unix sockets can use filesystem permissions as part of access control.
+
+Do not assume filesystem permissions alone provide all required authorization.
+
+Peer credentials can sometimes be obtained through operating-system facilities.
+
+Use them where appropriate.
+
+Unix domain sockets can be useful when:
+
+Processes are independently started.
+
+Bidirectional communication is required.
+
+Multiple clients connect to one local service.
+
+A socket-style interface is convenient.
+
+Do not use TCP localhost automatically when a local-domain socket better matches the requirement.
+
+Likewise, do not use a Unix domain socket if cross-machine communication is required.
+
+TCP sockets provide a reliable ordered byte stream between endpoints.
+
+TCP can be used locally or across networks.
+
+TCP does not provide application message boundaries.
+
+Define framing.
+
+TCP does not provide application identity merely because a connection exists.
+
+Authentication may still be required.
+
+TCP does not prove the peer is authorized.
+
+Transport connectivity is not authority.
+
+A TCP connection to:
+
+127.0.0.1
+
+is local network communication.
+
+That can reduce exposure.
+
+It does not automatically make every local client trusted.
+
+Other processes running under other users may be able to connect depending on system configuration.
+
+If the service performs privileged operations, authenticate or otherwise enforce the required local authority boundary.
+
+Binding to all interfaces:
+
+0.0.0.0
+
+or:
+
+::
+
+can expose an IPC-style service to the network.
+
+Do not change a local-only service to all-interface binding casually.
+
+That changes the security boundary.
+
+Configuration should make the binding explicit.
+
+UDP provides datagram communication.
+
+Datagrams preserve message boundaries.
+
+UDP does not guarantee:
+
+Delivery.
+
+Ordering.
+
+Uniqueness.
+
+Connection establishment.
+
+A UDP sender can send a datagram that never arrives.
+
+Datagrams can arrive out of order.
+
+Datagrams can be duplicated.
+
+Applications using UDP must tolerate the behavior required by their protocol.
+
+Do not build reliability assumptions into UDP merely because local testing rarely loses packets.
+
+Local IPC can still use datagram sockets where their semantics are useful.
+
+Choose based on required behavior.
+
+Shared memory allows multiple processes to access a common memory region.
+
+This can provide very high throughput.
+
+It also introduces synchronization requirements.
+
+Shared memory gives processes shared bytes.
+
+It does not automatically provide:
+
+Message boundaries.
+
+Mutual exclusion.
+
+Ordering.
+
+Consistency.
+
+Ownership.
+
+Crash recovery.
+
+A shared-memory structure needs a defined layout.
+
+For example:
+
+Header.
+
+Version.
+
+State.
+
+Sequence number.
+
+Data length.
+
+Data.
+
+Do not let separate processes independently assume structure layout without a stable contract.
+
+Binary shared-memory structures can be affected by:
+
+Alignment.
+
+Padding.
+
+Integer width.
+
+Endianness.
+
+Compiler ABI.
+
+Structure packing.
+
+Version differences.
+
+Do not map an arbitrary native C struct into shared memory and assume every build will interpret it identically.
+
+Define representation deliberately.
+
+If all communicating processes use the same binary and platform, native layout can sometimes be acceptable.
+
+Know the constraint.
+
+If interoperability matters, use an explicitly defined representation.
+
+Shared memory requires synchronization when multiple processes can access mutable data concurrently.
+
+Possible mechanisms include:
+
+Process-shared mutexes.
+
+Semaphores.
+
+Atomic operations.
+
+Sequence locks.
+
+Ring-buffer ownership rules.
+
+Single-producer/single-consumer designs.
+
+Do not access shared mutable data concurrently without a synchronization model.
+
+Race conditions cross process boundaries just as they cross thread boundaries.
+
+A shared-memory flag such as:
+
+ready = 1
+
+is not automatically sufficient synchronization.
+
+Memory visibility and ordering matter.
+
+Use synchronization primitives appropriate to the platform and language.
+
+Do not invent a home-grown lock from ordinary integer reads and writes unless the required atomic and memory-order semantics are established.
+
+Shared memory can outlive a process depending on the mechanism.
+
+A crashed process can leave:
+
+Stale objects.
+
+Stale state.
+
+Locks.
+
+Partial records.
+
+Ownership markers.
+
+Recovery behavior must be defined.
+
+Do not assume shared state is valid merely because the memory object still exists.
+
+Version and validate persistent or semi-persistent shared structures.
+
+A message queue communicates discrete messages.
+
+This can simplify framing because the mechanism preserves message boundaries.
+
+Message queues can provide:
+
+Asynchronous communication.
+
+Buffering.
+
+Priority.
+
+Multiple producers.
+
+Multiple consumers.
+
+The exact semantics depend on the queue implementation.
+
+Do not assume all message queues guarantee the same behavior.
+
+Determine:
+
+Maximum message size.
+
+Queue capacity.
+
+Ordering.
+
+Persistence.
+
+Delivery guarantees.
+
+Acknowledgement behavior.
+
+Blocking behavior.
+
+Failure behavior.
+
+A full queue requires defined handling.
+
+Possible policies include:
+
+Block.
+
+Wait with timeout.
+
+Reject.
+
+Drop according to explicit policy.
+
+Apply backpressure.
+
+Do not silently discard messages unless loss is an intentional property of the system.
+
+Backpressure occurs when a producer generates work faster than a consumer can process it.
+
+Without backpressure, queues can grow until memory or storage is exhausted.
+
+Bound queues where appropriate.
+
+When full, make behavior explicit.
+
+Backpressure is part of IPC design.
+
+Do not solve overload merely by making buffers enormous.
+
+Large buffers delay failure.
+
+They do not remove capacity limits.
+
+Signals provide small asynchronous notifications to processes on Unix-like systems.
+
+Examples include:
+
+SIGTERM.
+
+SIGINT.
+
+SIGHUP.
+
+SIGCHLD.
+
+Signals are not general-purpose data transport.
+
+Use them for events that fit signal semantics.
+
+For example:
+
+Request termination.
+
+Notify configuration reload.
+
+Notify child process state change.
+
+Do not try to transmit large structured data through ordinary signals.
+
+Signal handlers have severe restrictions in many environments.
+
+Only async-signal-safe operations can safely be performed directly inside a POSIX signal handler.
+
+Do not perform complex application logic inside the handler.
+
+A common design is:
+
+Signal handler sets a flag or writes to a safe notification mechanism.
+
+Normal event loop observes the notification.
+
+Normal code performs the work.
+
+This keeps complex behavior out of asynchronous signal context.
+
+Do not call arbitrary allocation, logging, or locking code from signal handlers unless the platform guarantees it is safe.
+
+Signals can interrupt blocking operations.
+
+System calls can return interruption errors.
+
+Handle interruption according to API semantics.
+
+Do not treat every interrupted call as permanent failure.
+
+Likewise, do not retry blindly if cancellation or shutdown is intended.
+
+Signals can be coalesced.
+
+Do not assume one signal delivery corresponds exactly to one logical event unless the mechanism guarantees it.
+
+If event counts matter, use a mechanism designed to preserve counts.
+
+Semaphores provide synchronization and counting.
+
+A semaphore can represent available resources or coordinate processes.
+
+For example:
+
+Producer adds an item.
+
+Semaphore count increases.
+
+Consumer waits.
+
+Consumer removes an item.
+
+Do not use a semaphore without defining what its count represents.
+
+A binary semaphore can provide lock-like behavior.
+
+A counting semaphore represents multiple available units.
+
+Do not confuse semaphore state with application data.
+
+The data still needs its own representation.
+
+Mutexes can sometimes be shared between processes.
+
+A process-shared mutex requires explicit platform support and correct initialization.
+
+Do not assume a normal thread mutex automatically works across processes.
+
+Crash behavior matters.
+
+If a process dies while holding an inter-process mutex, other processes can deadlock depending on the mechanism.
+
+Robust mutex facilities can help detect owner death.
+
+Recovery still requires application logic.
+
+A dead owner does not prove protected data is consistent.
+
+The process could have died halfway through an update.
+
+After detecting owner death:
+
+Inspect or recover protected state.
+
+Restore invariants.
+
+Then continue if safe.
+
+Do not simply unlock and assume everything is valid.
+
+Memory-mapped files can provide shared or persistent communication.
+
+Multiple processes can map the same file.
+
+Changes can become visible according to mapping and synchronization semantics.
+
+Memory-mapped files share many concerns with shared memory:
+
+Layout.
+
+Synchronization.
+
+Partial updates.
+
+Crash recovery.
+
+Versioning.
+
+File permissions.
+
+Do not use memory mapping merely because it avoids explicit read and write calls.
+
+It changes the programming model but does not remove consistency requirements.
+
+Files themselves can be IPC.
+
+One process writes a file.
+
+Another reads it.
+
+This can be perfectly appropriate.
+
+For example:
+
+Batch processing.
+
+Drop directories.
+
+Configuration generation.
+
+Job handoff.
+
+Export/import.
+
+Do not dismiss file-based IPC as primitive.
+
+It can be simple, inspectable, durable, and easy to debug.
+
+But define ownership and atomicity.
+
+A writer should not expose a partially written file as complete data.
+
+A common pattern is:
+
+Write temporary file.
+
+Flush as required.
+
+Close it.
+
+Atomically rename into final location.
+
+Reader only consumes final names.
+
+This reduces partial-read races.
+
+The exact atomicity guarantees depend on filesystem and platform.
+
+Know them.
+
+File-based IPC needs a way to detect new work.
+
+Options include:
+
+Polling.
+
+Filesystem notifications.
+
+Directory scanning.
+
+Explicit notification through another IPC mechanism.
+
+Polling can be sufficient for low-frequency work.
+
+Do not introduce complex notification infrastructure if a five-second directory scan satisfies requirements.
+
+Small and deterministic can beat clever.
+
+If multiple processes consume files, define claiming semantics.
+
+For example:
+
+Atomic rename from pending to processing.
+
+This can establish ownership.
+
+Do not let two workers process the same file because both observed it before either marked it claimed.
+
+IPC can be synchronous.
+
+A synchronous request waits for a response.
+
+For example:
+
+Client sends request.
+
+Server processes it.
+
+Server returns response.
+
+Client continues.
+
+This is simple when operations are short and bounded.
+
+Do not use unbounded synchronous waits.
+
+Define timeouts or cancellation where required.
+
+IPC can be asynchronous.
+
+A sender submits a message and continues.
+
+The result can arrive later.
+
+This can improve decoupling.
+
+It also introduces:
+
+Correlation.
+
+Queueing.
+
+Retry.
+
+Ordering.
+
+Lifecycle.
+
+Cancellation.
+
+Do not choose asynchronous communication merely because it sounds scalable.
+
+It adds state.
+
+Use it when the problem requires it.
+
+Request-response protocols need correlation when multiple requests can be outstanding.
+
+For example:
+
+request_id=42
+
+Response:
+
+request_id=42
+
+Do not assume responses arrive in request order unless the protocol guarantees it.
+
+Correlation identifiers should be unique within the required scope.
+
+They do not need to be globally unique unless the protocol requires it.
+
+A monotonically increasing local request number can be sufficient for one connection.
+
+Do not introduce globally unique identifiers without need.
+
+If identifiers can wrap, define behavior.
+
+IPC messages should have explicit types.
+
+For example:
+
+STATUS_REQUEST
+
+STATUS_RESPONSE
+
+START_REQUEST
+
+START_RESPONSE
+
+ERROR_RESPONSE
+
+Do not infer message type from vague payload contents if a type field can make the protocol explicit.
+
+A message type does not authorize the operation.
+
+The receiver still validates:
+
+Connection state.
+
+Sender identity where required.
+
+Sender authority where required.
+
+Message structure.
+
+Message values.
+
+Current application state.
+
+A START_REQUEST received from an unauthorized process remains unauthorized.
+
+IPC transports requests.
+
+It does not grant authority.
+
+IPC messages should be validated at the receiving boundary.
+
+Never assume another local process always sends correct data.
+
+Processes can have bugs.
+
+Versions can differ.
+
+Data can be corrupted.
+
+A local process can be compromised.
+
+Validate.
+
+For every message validate:
+
+Header.
+
+Version.
+
+Type.
+
+Length.
+
+Required fields.
+
+Ranges.
+
+Encoding.
+
+Current protocol state.
+
+Authorization where required.
+
+Do not pass malformed IPC data deeper into the application.
+
+Message size limits are essential.
+
+Define maximum payload size.
+
+Reject oversized messages before allocating excessive resources.
+
+For example:
+
+MAX_MESSAGE_SIZE = 1 MiB
+
+If header says:
+
+length = 4 GiB
+
+reject it.
+
+Do not attempt allocation first.
+
+Length arithmetic must be checked for overflow.
+
+For example:
+
+total = header_size + payload_size
+
+can overflow fixed-width integers.
+
+Validate before arithmetic or use checked arithmetic.
+
+IPC protocols need encoding rules.
+
+Possible encodings include:
+
+Binary.
+
+JSON.
+
+TSV.
+
+Line-oriented text.
+
+Length-prefixed text.
+
+Protocol-specific structures.
+
+Choose based on requirements.
+
+Text protocols are often easier to inspect.
+
+Binary protocols can be smaller and faster.
+
+Neither is automatically better.
+
+For small local control protocols, simple text can be entirely adequate.
+
+Do not build a binary serialization framework to transmit three commands unless there is a reason.
+
+TSV can be useful for simple deterministic records.
+
+For example:
+
+STATUS	42	RUNNING
+
+Define:
+
+Column count.
+
+Column meaning.
+
+Escaping.
+
+Encoding.
+
+Maximum field length.
+
+Do not assume fields will never contain tabs unless the protocol prohibits them.
+
+If tabs are prohibited, validate and reject them.
+
+JSON can be useful for structured messages.
+
+Validate JSON structure after parsing.
+
+Valid JSON is not necessarily a valid protocol message.
+
+For example:
+
+{"type":"START","port":-1}
+
+is valid JSON.
+
+It can still be semantically invalid.
+
+Parsing is not validation.
+
+Binary protocols need byte order.
+
+Multi-byte integers must have defined representation.
+
+Network byte order is commonly big-endian for network protocols.
+
+Local IPC can use another representation if explicitly defined.
+
+Do not use native host byte order in an interoperable protocol unless all participants are guaranteed to share it and that dependency is intentional.
+
+The protocol defines byte order.
+
+A network does not independently invent byte order at runtime.
+
+Protocol designers define representation.
+
+Version IPC protocols when incompatible changes are possible.
+
+A header can include:
+
+magic.
+
+version.
+
+type.
+
+length.
+
+request identifier.
+
+Do not add fields merely for decoration.
+
+Each field should serve a purpose.
+
+Magic values can help identify protocol data.
+
+They do not provide security.
+
+A matching magic number does not authenticate the sender.
+
+Version negotiation can be useful when processes can run different software versions.
+
+For example:
+
+Client supports versions 1 and 2.
+
+Server supports version 2.
+
+They select version 2.
+
+If no common version exists:
+
+Reject the connection.
+
+Do not guess.
+
+For tightly coupled processes deployed together, explicit negotiation can be unnecessary.
+
+A fixed protocol version can be simpler.
+
+Know the deployment model.
+
+Backward compatibility has cost.
+
+Do not support old protocol versions forever without need.
+
+When support is removed, fail clearly.
+
+Do not reinterpret old messages as new messages based on guesswork.
+
+IPC state machines define valid message sequences.
+
+For example:
+
+CONNECTED
+
+HELLO_SENT
+
+QUALIFIED
+
+READY
+
+CLOSING
+
+A command received before READY can be rejected.
+
+Do not process a valid command in an invalid protocol state.
+
+Message validity includes sequence.
+
+This directly applies the state-machine principle:
+
+An event does not authorize an arbitrary transition.
+
+Only a defined transition does.
+
+IPC peers can disconnect at any time.
+
+Handle:
+
+Clean close.
+
+Crash.
+
+Timeout.
+
+Broken pipe.
+
+Connection reset.
+
+Protocol error.
+
+Local shutdown.
+
+Do not assume a peer will always send a graceful goodbye.
+
+Resources associated with a connection must be cleaned up.
+
+Examples:
+
+Buffers.
+
+Pending requests.
+
+Locks.
+
+Temporary files.
+
+Shared-memory ownership.
+
+Subscriptions.
+
+Do not leak resources because the peer disappeared unexpectedly.
+
+A broken pipe is normal failure behavior in IPC systems.
+
+Do not crash the entire process merely because one client disconnected unless architecture requires it.
+
+On Unix-like systems, writing to a closed pipe or socket can generate SIGPIPE.
+
+Programs should handle this according to design.
+
+Possible approaches include:
+
+Ignore SIGPIPE and handle the write error.
+
+Use APIs or flags that suppress the signal.
+
+Define another controlled behavior.
+
+Do not let an ordinary client disconnect unexpectedly terminate a long-running server.
+
+Timeouts need clear semantics.
+
+Possible timeouts include:
+
+Connection timeout.
+
+Handshake timeout.
+
+Read timeout.
+
+Write timeout.
+
+Request timeout.
+
+Idle timeout.
+
+Shutdown timeout.
+
+Do not use one vague timeout value for everything unless identical semantics are intentional.
+
+A request timeout means:
+
+The requester stopped waiting.
+
+It does not necessarily mean:
+
+The remote operation did not occur.
+
+This distinction is critical.
+
+For example:
+
+Client sends START.
+
+Server performs START.
+
+Response is lost.
+
+Client times out.
+
+Retrying START can duplicate the operation.
+
+Use idempotency or request identifiers where duplication matters.
+
+Timeout is uncertainty.
+
+Do not automatically translate it into operation failure if the remote result is unknown.
+
+IPC retries must consider side effects.
+
+Safe retry:
+
+STATUS request.
+
+Potentially unsafe retry:
+
+TRANSFER_FUNDS.
+
+START_JOB.
+
+DELETE_FILE.
+
+If an operation is not naturally idempotent, use an operation identifier.
+
+The server can remember:
+
+request_id=42 already completed.
+
+Then a duplicate request can return the prior result rather than repeating the action.
+
+Do not rely on transport retries to provide application exactly-once semantics.
+
+Exactly-once effects require application design.
+
+At-most-once, at-least-once, and effectively-once behavior have different tradeoffs.
+
+Define what the system needs.
+
+Do not advertise stronger guarantees than the implementation provides.
+
+Ordering matters.
+
+A stream preserves byte order.
+
+That does not automatically define semantic operation order across multiple connections.
+
+If client A sends operation 1 and client B sends operation 2 concurrently, the server needs a defined ordering mechanism if order matters.
+
+Possible mechanisms include:
+
+Single event loop.
+
+Queue.
+
+Sequence numbers.
+
+Locks.
+
+Transactions.
+
+Consensus for distributed systems.
+
+IPC itself does not solve application ordering.
+
+If messages have sequence numbers:
+
+Validate them.
+
+Detect duplicates where required.
+
+Detect stale messages where required.
+
+Do not accept arbitrary sequence jumps if protocol forbids them.
+
+Sequence numbers can wrap.
+
+Define comparison semantics if long-lived communication can reach wraparound.
+
+IPC can cross privilege boundaries.
+
+For example:
+
+Unprivileged user process.
+
+Privileged service.
+
+This boundary requires special care.
+
+Never trust a privileged operation request merely because it arrived through a local socket.
+
+Authenticate the caller using an appropriate mechanism.
+
+Authorize the requested operation.
+
+Validate all parameters.
+
+Apply least privilege.
+
+Do not expose generic:
+
+EXECUTE_COMMAND
+
+interfaces from privileged services unless arbitrary execution is explicitly the intended feature.
+
+Prefer narrow operations.
+
+For example:
+
+GET_STATUS
+
+RELOAD_CONFIGURATION
+
+START_SERVICE
+
+STOP_SERVICE
+
+Each can have explicit authorization.
+
+Narrow IPC interfaces reduce attack surface.
+
+A privileged service should not accept arbitrary filesystem paths without validation if the operation acts on those paths.
+
+Path traversal and symlink attacks can cross IPC boundaries.
+
+Treat IPC input like any other untrusted input.
+
+Local does not mean safe.
+
+Unix domain socket peer credentials can identify:
+
+User ID.
+
+Group ID.
+
+Process ID.
+
+Availability varies by platform.
+
+Use operating-system-provided peer identity where appropriate rather than trusting a client-supplied field:
+
+{"uid":0}
+
+A client claiming to be root is not evidence.
+
+Obtain identity from the trusted transport or authentication mechanism.
+
+Named-pipe security descriptors on Windows can restrict access.
+
+Unix filesystem permissions can restrict local socket or FIFO access.
+
+These mechanisms can establish part of the access boundary.
+
+Do not duplicate security poorly in application code when the operating system already provides a stronger primitive.
+
+But understand exactly what the OS primitive guarantees.
+
+Authentication answers:
+
+Who is the peer?
+
+Authorization answers:
+
+What may the peer do?
+
+Keep them separate.
+
+IPC confidentiality may matter.
+
+Local IPC can sometimes rely on operating-system isolation.
+
+Network IPC can require encryption such as TLS.
+
+Do not add encryption where it solves no threat in the defined environment merely for decoration.
+
+Do not omit it where data crosses an untrusted network.
+
+Threat model the actual transport.
+
+Integrity matters even when confidentiality does not.
+
+A message altered in transit can change behavior.
+
+Transport and protocol mechanisms should provide the required integrity guarantees.
+
+TCP checksums are not cryptographic integrity protection against an attacker.
+
+Know the distinction.
+
+IPC servers should limit clients.
+
+Possible limits include:
+
+Maximum simultaneous connections.
+
+Maximum requests per connection.
+
+Maximum message size.
+
+Maximum queue depth.
+
+Maximum pending requests.
+
+Idle timeout.
+
+Per-client resource limits.
+
+Do not let one client consume unbounded server resources.
+
+Resource exhaustion is an IPC concern.
+
+A client can connect and send nothing.
+
+If each connection consumes memory forever, enough idle clients can exhaust the server.
+
+Use bounded resources and timeouts appropriate to the mission.
+
+Rate limiting can be useful.
+
+Do not add it automatically to tiny trusted local systems if connection limits already solve the problem.
+
+Use the smallest sufficient mechanism.
+
+IPC servers need shutdown behavior.
+
+A graceful shutdown can:
+
+Stop accepting new clients.
+
+Notify existing clients where appropriate.
+
+Finish or cancel active operations according to policy.
+
+Flush required state.
+
+Close IPC endpoints.
+
+Release resources.
+
+Exit.
+
+Do not simply terminate halfway through a persistent state update unless abrupt termination semantics are acceptable.
+
+Shutdown itself can be state-driven.
+
+For example:
+
+RUNNING
+
+DRAINING
+
+STOPPING
+
+STOPPED
+
+Do not accept new work in STOPPING unless defined.
+
+Clients need reconnection behavior.
+
+If a server restarts:
+
+Can clients reconnect?
+
+Do they retry automatically?
+
+How often?
+
+Do they resend pending requests?
+
+Are those requests idempotent?
+
+Do not implement reconnect without defining pending-operation behavior.
+
+A reconnect creates a new transport session.
+
+Do not assume it resumes old protocol state automatically.
+
+Perform required handshake again.
+
+Re-authenticate if required.
+
+Re-establish subscriptions.
+
+Do not carry stale connection state into a new connection.
+
+Connection identity and application identity can differ.
+
+A user or agent can reconnect through a new socket while retaining application identity.
+
+Define the relationship.
+
+Do not use ephemeral socket descriptors as durable identities.
+
+File descriptors and handles are process-local resources.
+
+The integer:
+
+5
+
+does not globally identify a connection.
+
+Do not persist file descriptor numbers as durable references.
+
+They can be reused.
+
+IPC endpoint names should be stable where needed.
+
+For example:
+
+/run/digit/control.sock
+
+Naming should communicate purpose.
+
+Temporary runtime endpoints should live in appropriate runtime directories.
+
+Do not place mutable sockets in configuration directories merely because the path is convenient.
+
+Separate configuration from runtime state.
+
+Runtime socket directories need correct permissions.
+
+Do not create privileged sockets in world-writable locations without protections against substitution.
+
+Temporary directories can introduce race conditions.
+
+Use secure creation mechanisms.
+
+If an IPC server creates a filesystem socket:
+
+Handle stale socket files from prior crashes.
+
+Do not blindly delete any file at that path.
+
+Verify what it is and whether removal is safe.
+
+An attacker could place a symlink or unrelated file there.
+
+Filesystem security applies.
+
+PID files are not IPC by themselves.
+
+They can help locate or identify a process.
+
+Do not trust a PID file as proof that the intended process is alive.
+
+PIDs are reused.
+
+If identity matters, verify the process through stronger evidence.
+
+Signals sent using a stale PID can reach an unrelated process after PID reuse.
+
+Use process handles or additional identity checks where available.
+
+IPC and process supervision often interact.
+
+A supervisor can:
+
+Start child.
+
+Capture stdout/stderr.
+
+Monitor exit.
+
+Restart according to policy.
+
+Send termination.
+
+This is a controlled parent-child relationship.
+
+Do not create a separate network service if inherited pipes satisfy the requirement.
+
+Simple process trees can be robust.
+
+Subprocess IPC should avoid deadlocks.
+
+A classic deadlock occurs when:
+
+Parent writes large data to child stdin.
+
+Child writes large data to stdout.
+
+Both pipe buffers fill.
+
+Each process waits for the other to read.
+
+If bidirectional communication can be concurrent, design reads and writes accordingly.
+
+Possible solutions include:
+
+Separate threads.
+
+Nonblocking I/O.
+
+Event loops.
+
+Bounded request-response sequencing.
+
+Do not assume pipe buffers are infinite.
+
+Pipe buffer sizes are implementation details.
+
+Do not build correctness around a particular capacity.
+
+A process can block while writing when the reader is slow.
+
+That is backpressure.
+
+Decide whether blocking is acceptable.
+
+Nonblocking IPC returns when an operation cannot proceed immediately.
+
+The program must then wait for readiness through mechanisms such as:
+
+select.
+
+poll.
+
+epoll.
+
+kqueue.
+
+IOCP.
+
+Other platform facilities.
+
+Do not busy-loop:
+
+while write fails:
+    try again
+
+That wastes CPU.
+
+Wait for readiness or use blocking I/O where appropriate.
+
+Blocking I/O is not inferior.
+
+For simple single-purpose processes, blocking operations can be easiest to reason about.
+
+Use nonblocking complexity when concurrency requirements justify it.
+
+Event-driven IPC can handle many connections efficiently.
+
+It also introduces state management.
+
+Each connection can have:
+
+Read buffer.
+
+Write buffer.
+
+Protocol state.
+
+Pending requests.
+
+Timeout.
+
+Authentication state.
+
+Do not adopt event-driven architecture without modeling these states explicitly.
+
+Partial messages must remain buffered until complete.
+
+Do not discard partial input merely because one event-loop iteration ended.
+
+IPC buffers should have bounds.
+
+A peer that never completes a message can otherwise grow memory indefinitely.
+
+For example:
+
+Maximum header size.
+
+Maximum message size.
+
+Maximum buffered incomplete data.
+
+Handshake timeout.
+
+Define limits.
+
+Malformed peers should be disconnected according to protocol.
+
+Do not attempt infinite recovery from arbitrary garbage.
+
+Protocol resynchronization is difficult.
+
+For a length-prefixed stream, a corrupt length can destroy framing.
+
+Often the safest behavior is:
+
+Close connection.
+
+Require a new handshake.
+
+Do not scan arbitrary bytes looking for something that resembles a header unless the protocol explicitly defines resynchronization.
+
+Fail deterministically.
+
+Shared IPC protocols should have test vectors.
+
+For example:
+
+Known request bytes.
+
+Expected parsed fields.
+
+Known response bytes.
+
+Malformed length.
+
+Unknown message type.
+
+Unsupported version.
+
+This proves implementations agree.
+
+Cross-language IPC especially benefits from test vectors.
+
+C and Go can serialize differently if representation is not explicit.
+
+Do not rely on language-native serialization across language boundaries.
+
+Define wire representation independently.
+
+Likewise, do not use raw pointer values in IPC.
+
+A pointer is meaningful only within its process address space.
+
+Sending:
+
+0x7ffe12345678
+
+to another process does not give it access to the same object.
+
+Use identifiers, offsets into explicitly shared memory, or serialized data.
+
+Process boundaries are real boundaries.
+
+Do not pass process-local resources as though they were universal.
+
+Some operating systems allow descriptor or handle passing.
+
+For example, Unix domain sockets can transfer file descriptors.
+
+This is a specialized capability.
+
+If used, define:
+
+Who may send descriptors.
+
+What descriptor types are accepted.
+
+Ownership after transfer.
+
+Cleanup.
+
+Validation.
+
+Do not accept arbitrary privileged descriptors from untrusted peers.
+
+IPC can transfer capabilities.
+
+A file descriptor can itself grant access to a resource.
+
+Treat capability transfer as authority-sensitive.
+
+The receiver may gain access without reopening the path.
+
+This can be useful.
+
+It can also bypass path-based assumptions.
+
+Know what authority is being transferred.
+
+IPC observability should answer:
+
+Which endpoint is active?
+
+How many clients are connected?
+
+How many requests were processed?
+
+How many failed?
+
+How many timed out?
+
+How many invalid messages were received?
+
+How full are queues?
+
+What is average latency?
+
+Do not expose sensitive message contents merely for observability.
+
+Metadata is often sufficient.
+
+Logging every IPC payload can leak:
+
+Credentials.
+
+Tokens.
+
+Personal data.
+
+Keys.
+
+Operational details.
+
+Log deliberately.
+
+A request identifier can connect logs across processes.
+
+For example:
+
+request_id=184
+
+Client log:
+
+sent STATUS request 184
+
+Server log:
+
+received STATUS request 184
+
+Server log:
+
+completed request 184
+
+Client log:
+
+received response 184
+
+This improves debugging.
+
+Do not use secret values as correlation identifiers.
+
+IPC errors should preserve useful categories.
+
+Examples:
+
+CONNECT_FAILED
+
+CONNECTION_CLOSED
+
+TIMEOUT
+
+PROTOCOL_ERROR
+
+MESSAGE_TOO_LARGE
+
+UNSUPPORTED_VERSION
+
+AUTHENTICATION_FAILED
+
+AUTHORIZATION_DENIED
+
+QUEUE_FULL
+
+PEER_UNAVAILABLE
+
+Do not collapse every failure into:
+
+IPC_ERROR
+
+if callers need different behavior.
+
+Likewise, do not expose raw platform errors as the entire application contract.
+
+Preserve native error details for diagnostics while mapping them into stable application categories where useful.
+
+A timeout can be retryable.
+
+Authentication failure usually is not automatically retryable with identical credentials.
+
+Protocol version mismatch usually requires compatibility action.
+
+Queue full can require backoff.
+
+Classify failures according to actual semantics.
+
+Do not retry every IPC error.
+
+Unbounded retries can create reconnect storms.
+
+Use bounded or paced retry according to policy.
+
+Backoff can reduce load.
+
+For example:
+
+1 second.
+
+2 seconds.
+
+4 seconds.
+
+8 seconds.
+
+Maximum 30 seconds.
+
+Exact values are application-specific.
+
+Do not add random jitter where deterministic behavior is required unless jitter is explicitly part of the design.
+
+For distributed clients, jitter can prevent synchronized reconnect storms.
+
+Use it when justified.
+
+For local deterministic systems, fixed schedules can be easier to test.
+
+Know the tradeoff.
+
+IPC tests should include normal operation.
+
+For example:
+
+Connect.
+
+Handshake.
+
+Request.
+
+Response.
+
+Disconnect.
+
+Then test failure.
+
+Server absent.
+
+Client disconnects early.
+
+Server disconnects early.
+
+Malformed header.
+
+Partial message.
+
+Oversized message.
+
+Unsupported version.
+
+Unauthorized request.
+
+Timeout.
+
+Duplicate request.
+
+Stale request.
+
+Queue full.
+
+Restart.
+
+Do not test only the happy path.
+
+Test process crashes.
+
+Kill the client during a request.
+
+Kill the server during a request.
+
+Restart the server.
+
+Observe cleanup.
+
+Verify state remains valid.
+
+IPC failure behavior is part of correctness.
+
+Test partial reads deliberately.
+
+Do not depend on localhost usually delivering a small message in one read.
+
+A test can fragment writes intentionally:
+
+Write first byte.
+
+Pause.
+
+Write next three bytes.
+
+Write remainder.
+
+Receiver should reconstruct the message correctly.
+
+Test multiple messages in one read.
+
+For example:
+
+MESSAGE1MESSAGE2
+
+A stream receiver must parse both.
+
+Do not assume one read equals one message.
+
+Test message boundaries.
+
+For datagram or message-queue IPC, verify the mechanism's boundary semantics explicitly.
+
+Test maximum-size messages.
+
+Test one byte over maximum.
+
+Reject the latter.
+
+Test zero-length payload if allowed.
+
+If zero-length payload is not valid, reject it explicitly.
+
+Do not let edge behavior emerge accidentally.
+
+Test concurrent clients.
+
+Verify one client's malformed request does not corrupt another client's state.
+
+Connection-specific buffers must remain connection-specific.
+
+Do not accidentally share parser state across clients.
+
+Test slow clients.
+
+A client that reads one byte per second should not necessarily block every other client.
+
+Architecture determines acceptable behavior.
+
+If the server is intentionally single-client, document it.
+
+Do not accidentally become single-client because one blocking read holds the entire server.
+
+IPC can use one server process as an authority boundary.
+
+For example:
+
+Multiple applications request operations from one service that owns a resource.
+
+This can be cleaner than letting every application manipulate the resource directly.
+
+The service serializes access.
+
+It validates requests.
+
+It enforces policy.
+
+It owns state.
+
+This is a strong pattern when centralized ownership is useful.
+
+Do not create a service merely to move functions into another process.
+
+A process boundary has cost.
+
+Use it for:
+
+Isolation.
+
+Privilege separation.
+
+Independent lifecycle.
+
+Resource ownership.
+
+Fault containment.
+
+Language separation.
+
+Scalability.
+
+Operational boundaries.
+
+If none apply, a normal function call may be better.
+
+IPC is more expensive and more failure-prone than an in-process function call.
+
+Across IPC, you must consider:
+
+Serialization.
+
+Partial I/O.
+
+Peer failure.
+
+Timeout.
+
+Version mismatch.
+
+Authentication.
+
+Authorization.
+
+Resource limits.
+
+Deployment.
+
+Do not introduce a process boundary casually.
+
+Process isolation can improve reliability.
+
+A module crashing in its own process need not crash the parent.
+
+The parent can detect exit and recover according to policy.
+
+This can justify IPC.
+
+Do not assume isolation automatically makes the system reliable.
+
+Restart loops and corrupted shared state can still cause failure.
+
+Define supervision.
+
+Privilege separation is another strong reason for IPC.
+
+A small privileged process can expose a narrow interface to a larger unprivileged process.
+
+For example:
+
+Unprivileged process requests one approved privileged operation.
+
+Privileged helper validates and performs it.
+
+This can reduce the amount of privileged code.
+
+Keep the privileged IPC interface narrow.
+
+Do not expose arbitrary shell execution.
+
+A privileged helper should distrust the unprivileged caller's input.
+
+Privilege separation assumes one side can be compromised.
+
+Validate accordingly.
+
+IPC can form a trust boundary.
+
+Document it.
+
+For each endpoint ask:
+
+Who can connect?
+
+How is identity established?
+
+What can each identity request?
+
+What data can cross?
+
+What happens on malformed input?
+
+What resource limits apply?
+
+What is logged?
+
+What authority does the receiver possess?
+
+The greater the receiver's authority, the more carefully the interface should be constrained.
+
+IPC should not become an authority laundering mechanism.
+
+If process A lacks permission to delete protected data, sending:
+
+DELETE
+
+to process B should not make the operation legitimate merely because B has filesystem permission.
+
+B must enforce the intended authorization model.
+
+Operating-system capability is not application authorization.
+
+A service running as root can technically do many things.
+
+That does not mean every IPC caller is authorized to request them.
+
+IPC transports intent.
+
+Authority must still be established.
+
+For autonomous agents, IPC can separate:
+
+Core.
+
+Modules.
+
+Sensors.
+
+Workers.
+
+External adapters.
+
+Model services.
+
+Each component can have a narrow contract.
+
+For example:
+
+Core -> model service:
+
+PROMPT request.
+
+Model service -> core:
+
+generated text.
+
+The model service does not need authority to perform system actions.
+
+It only returns text.
+
+The core decides what, if anything, happens next according to its own rules.
+
+This is an important boundary.
+
+A language model behind IPC should not gain authority merely because it generated an instruction.
+
+Generated text is data.
+
+The authoritative component evaluates it.
+
+Likewise, a deterministic knowledge service can return:
+
+FACT
+
+RULE
+
+MATCH
+
+The caller decides how the result is used according to architecture.
+
+Do not let transport topology accidentally establish decision authority.
+
+Digit can use IPC to isolate optional probabilistic components.
+
+For example:
+
+Digit Core
+    |
+    +-- deterministic corpus
+    |
+    +-- rules
+    |
+    +-- state
+    |
+    +-- optional local model IPC
+
+If the model process disappears:
+
+Deterministic functions can continue.
+
+Only operations requiring model fallback become unavailable.
+
+This is possible only if the model dependency is actually optional in the architecture.
+
+Do not claim graceful degradation while startup refuses to run without the optional service.
+
+Test dependency absence.
+
+Stop the model service.
+
+Start Digit.
+
+Verify deterministic commands still operate if that is the intended design.
+
+This creates a measurable path toward removing the model dependency.
+
+IPC boundaries can make component replacement easier.
+
+If the interface is stable:
+
+Llama service today.
+
+Different model service tomorrow.
+
+No model service later.
+
+Digit Core need not care about internal implementation.
+
+It cares about the interface.
+
+This is one reason IPC can support architectural evolution.
+
+But do not create IPC solely for hypothetical future replacement.
+
+Use it when isolation or lifecycle already makes sense.
+
+A model IPC interface should define:
+
+Request format.
+
+Context format.
+
+Maximum input.
+
+Timeout.
+
+Response format.
+
+Failure behavior.
+
+Cancellation.
+
+Do not parse arbitrary model prose as trusted control messages unless a strict protocol layer validates it.
+
+If structured output is required, define the structure and validate it.
+
+For example:
+
+RESULT	KNOWN
+ANSWER	...
+
+or a defined JSON object.
+
+A model can still generate malformed structured output.
+
+Validate it.
+
+Do not assume instruction-following guarantees protocol correctness.
+
+If the model output cannot be validated:
+
+Reject it.
+
+Retry according to policy.
+
+Fall back.
+
+Escalate.
+
+Do not invent missing fields.
+
+This same principle applies to every IPC peer.
+
+Trust evidence, not expectation.
+
+IPC protocol definitions should be independent of implementation language.
+
+Bad specification:
+
+Send the C struct.
+
+Better:
+
+Byte 0..3: payload length, unsigned 32-bit big-endian.
+
+Byte 4: message type.
+
+Byte 5: protocol version.
+
+Byte 6..N: payload according to message type.
+
+Or define an equivalent text protocol.
+
+The exact design depends on requirements.
+
+The important point is explicit representation.
+
+Protocol documents should define error responses.
+
+For example:
+
+ERROR	INVALID_MESSAGE
+ERROR	UNAUTHORIZED
+ERROR	UNSUPPORTED_VERSION
+
+Do not make clients infer failure from connection closure unless closure itself is the defined error behavior.
+
+Some malformed input should cause immediate close without response for security or framing reasons.
+
+Define that.
+
+A server should not attempt to explain an error if parsing enough to construct a safe response is impossible.
+
+Fail closed.
+
+IPC state should be separate from business state.
+
+Connection:
+
+AUTHENTICATED
+
+does not mean job:
+
+AUTHORIZED
+
+Protocol:
+
+READY
+
+does not mean system:
+
+HEALTHY
+
+Keep state domains distinct.
+
+One process can have:
+
+Connection state.
+
+Authentication state.
+
+Application state.
+
+Job state.
+
+Shutdown state.
+
+Do not collapse them into one giant status variable.
+
+IPC should preserve deterministic boundaries.
+
+Given the same:
+
+Current protocol state.
+
+Valid message.
+
+Authoritative identity.
+
+Relevant application state.
+
+Defined configuration.
+
+The receiver should make the same transition decision.
+
+Do not let arbitrary language interpretation determine low-level protocol validity.
+
+Protocol parsing should be deterministic.
+
+Authorization should be deterministic according to policy and state.
+
+The LLM, if present, belongs above these boundaries.
+
+Do not ask a model whether a length field is valid.
+
+Check it.
+
+Do not ask a model whether a message type exists.
+
+Check the protocol table.
+
+Do not ask a model whether a caller is authorized when permissions are explicit.
+
+Check authority.
+
+Use probabilistic reasoning only where the problem genuinely requires interpretation.
+
+This reduces model dependency.
+
+IPC can therefore support a deterministic architecture by separating:
+
+Deterministic control plane.
+
+Optional reasoning services.
+
+External adapters.
+
+Workers.
+
+The control plane remains authoritative.
+
+IPC peers provide bounded services.
+
+A reliable IPC design has explicit endpoints.
+
+A reliable IPC design has explicit framing.
+
+A reliable IPC design has bounded messages.
+
+A reliable IPC design validates every message.
+
+A reliable IPC design handles partial I/O.
+
+A reliable IPC design handles peer disappearance.
+
+A reliable IPC design defines timeouts.
+
+A reliable IPC design defines retry behavior.
+
+A reliable IPC design defines duplicate handling.
+
+A reliable IPC design defines ordering where ordering matters.
+
+A reliable IPC design defines authentication where identity matters.
+
+A reliable IPC design defines authorization where authority matters.
+
+A reliable IPC design limits resource consumption.
+
+A reliable IPC design separates protocol data from diagnostics.
+
+A reliable IPC design defines shutdown behavior.
+
+A reliable IPC design does not assume local means trusted.
+
+A reliable IPC design does not assume connected means authenticated.
+
+A reliable IPC design does not assume authenticated means authorized.
+
+A reliable IPC design does not assume sent means received.
+
+A reliable IPC design does not assume received means processed.
+
+A reliable IPC design does not assume timeout means failure.
+
+A reliable IPC design does not assume retry is safe.
+
+A reliable IPC design does not guess.
+
+Do not confuse IPC with networking.
+
+Networking can be IPC.
+
+IPC can be entirely local.
+
+Do not confuse a byte stream with messages.
+
+Do not confuse a write with a complete message.
+
+Do not confuse a read with a complete message.
+
+Do not confuse connection with readiness.
+
+Do not confuse transport identity with application authority.
+
+Do not confuse shared memory with synchronized memory.
+
+Do not confuse queueing with guaranteed processing.
+
+Do not confuse delivery with successful execution.
+
+Do not confuse acknowledgement with durable completion unless the protocol defines it that way.
+
+Do not confuse timeout with proof that nothing happened.
+
+Do not confuse reconnect with continuation of the old session.
+
+Do not confuse process ID with durable identity.
+
+Do not confuse local access with trusted access.
+
+Do not confuse an IPC request with authorization to act.
+
+When selecting IPC:
+
+Identify the processes.
+
+Identify the communication pattern.
+
+Identify the trust boundary.
+
+Identify lifecycle requirements.
+
+Identify throughput and latency needs.
+
+Identify failure behavior.
+
+Choose the smallest mechanism that satisfies them.
+
+When receiving IPC:
+
+Read according to transport semantics.
+
+Reconstruct complete framing.
+
+Validate lengths before allocation.
+
+Validate protocol version.
+
+Validate message type.
+
+Validate payload structure.
+
+Establish peer identity where required.
+
+Authorize the requested operation where required.
+
+Validate current state.
+
+Perform only defined behavior.
+
+Return a defined result.
+
+Do not invent missing meaning.
+
+When IPC fails:
+
+Preserve the actual failure category.
+
+Clean up resources.
+
+Do not corrupt application state.
+
+Determine whether retry is safe.
+
+Do not retry side effects blindly.
+
+Do not claim completion when the outcome is uncertain.
+
+When a peer disappears:
+
+Release connection resources.
+
+Recover owned state according to policy.
+
+Do not assume the peer completed pending work.
+
+Do not assume it did not complete pending work if completion could have occurred before disconnect.
+
+Use evidence.
+
+When IPC crosses an authority boundary:
+
+Treat all input as untrusted.
+
+Authenticate through trusted mechanisms.
+
+Authorize narrowly.
+
+Validate completely.
+
+Limit resources.
+
+Audit significant operations.
+
+Do not expose arbitrary execution when narrow operations suffice.
+
+When IPC connects a deterministic core to a probabilistic model:
+
+Treat model output as data.
+
+Do not grant the model authority through the IPC connection.
+
+Keep deterministic facts authoritative.
+
+Keep state transitions authoritative.
+
+Keep policy enforcement authoritative.
+
+Let the model perform only the interpretation or generation role assigned to it.
+
+If deterministic machinery can resolve the request, it should not need probabilistic permission.
+
+The model can eventually disappear.
+
+The interface can remain.
+
+Or the interface can disappear with it.
+
+Architecture should permit that evolution without redefining Digit herself.
+
+IPC connects processes.
+
+It does not define their authority.
+
+It does not make their data correct.
+
+It does not make their operations safe.
+
+It provides a controlled path across a process boundary.
+
+Keep that path small.
+
+Keep it explicit.
+
+Keep it deterministic where determinism is possible.

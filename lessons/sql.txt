@@ -1,0 +1,619 @@
+SQL stands for Structured Query Language.
+SQL is a language used to work with relational database systems.
+SQL is used to define, query, insert, update, and delete relational data.
+SQL is not a general-purpose programming language in the same sense as C, C++, Go, or JavaScript.
+SQL is standardized, but database systems implement different SQL dialects and extensions.
+SQL syntax and behavior can differ between database systems.
+MySQL uses SQL.
+MariaDB uses SQL.
+PostgreSQL uses SQL.
+SQLite uses SQL.
+Microsoft SQL Server uses SQL.
+Oracle Database uses SQL.
+SQL and MySQL are not the same thing.
+SQL and MariaDB are not the same thing.
+MySQL is a relational database management system that implements an SQL dialect.
+MariaDB is a relational database management system that implements an SQL dialect.
+A relational database organizes data into relations commonly represented as tables.
+A table contains rows and columns.
+A row represents one record or tuple in a table.
+A column represents an attribute of the data stored in a table.
+Each column has a defined data type according to the database system.
+A database schema describes database structures.
+A schema can define tables.
+A schema can define columns.
+A schema can define constraints.
+A schema can define indexes.
+A schema can define relationships.
+A schema can define views and other database objects according to the database system.
+A table name identifies a table.
+A column name identifies a column.
+Database identifier rules vary between SQL implementations.
+Identifier case sensitivity can vary according to the database system and configuration.
+SQL keywords are commonly written in uppercase for readability.
+SQL keywords generally do not have to be uppercase in many database systems.
+A SQL statement commonly ends with a semicolon in tools and scripts.
+The semicolon separates SQL statements where required by the client or environment.
+SELECT retrieves data.
+INSERT adds rows.
+UPDATE modifies existing rows.
+DELETE removes rows.
+CREATE defines database objects.
+ALTER changes database objects.
+DROP removes database objects.
+TRUNCATE removes table data according to database-specific semantics.
+SELECT is used to query data.
+SELECT * requests all columns from the selected source.
+SELECT column_name requests a particular column.
+Selecting only required columns can reduce unnecessary data transfer.
+The FROM clause identifies the source of queried data.
+The WHERE clause filters rows.
+A WHERE condition determines which rows qualify.
+The = operator commonly tests equality in SQL.
+The <> operator represents inequality in standard SQL.
+Many SQL implementations also accept != for inequality.
+The < operator tests less-than relationships where supported by the operand types.
+The > operator tests greater-than relationships.
+The <= operator tests less-than-or-equal relationships.
+The >= operator tests greater-than-or-equal relationships.
+AND combines conditions requiring both to be true.
+OR combines conditions requiring at least one to be true.
+NOT negates a condition.
+Parentheses can make logical grouping explicit.
+Operator precedence affects SQL expressions.
+WHERE conditions should use parentheses when grouping might otherwise be unclear.
+SQL uses three-valued logic involving TRUE, FALSE, and UNKNOWN in applicable expressions.
+NULL represents the absence of a known value.
+NULL is not the same thing as zero.
+NULL is not the same thing as an empty string.
+NULL is not equal to itself using ordinary equality comparison.
+The expression column = NULL does not correctly test for NULL.
+IS NULL tests whether a value is NULL.
+IS NOT NULL tests whether a value is not NULL.
+Comparisons involving NULL commonly produce UNKNOWN.
+Three-valued logic affects filtering behavior.
+A WHERE clause retains rows whose condition evaluates to TRUE.
+Rows for which a WHERE condition is FALSE are not selected.
+Rows for which a WHERE condition is UNKNOWN are not selected.
+COALESCE returns the first non-NULL expression in its argument list according to SQL semantics.
+COALESCE can provide a fallback value for NULL.
+NULL handling should be deliberate.
+DISTINCT removes duplicate result rows according to the selected expressions.
+ORDER BY sorts query results.
+ORDER BY can sort ascending.
+ASC specifies ascending ordering.
+DESC specifies descending ordering.
+Without ORDER BY, result row order should not be assumed.
+Observed row order without ORDER BY is not a reliable ordering contract.
+Deterministic result ordering requires an ORDER BY expression sufficient to distinguish ordering as required.
+Ordering by a non-unique column can leave ties without deterministic relative ordering.
+Additional ordering columns can break ties.
+LIMIT restricts result count in SQL dialects that support LIMIT.
+OFFSET skips a number of rows in dialects that support OFFSET.
+Pagination syntax differs between database systems.
+LIMIT is not universal standard syntax across every SQL implementation.
+Pagination without deterministic ordering can produce unstable results.
+OFFSET-based pagination can become expensive for large offsets.
+Keyset pagination can provide an alternative for appropriate ordered datasets.
+Aliases provide alternate names for columns or tables within a statement.
+AS can introduce an alias in applicable SQL syntax.
+A column alias can make calculated results easier to understand.
+A table alias can make joins and long queries easier to read.
+Aggregate functions compute values from sets of rows.
+COUNT counts rows or non-NULL expression values according to the selected form.
+COUNT(*) counts qualifying rows.
+COUNT(column) counts qualifying rows where that column expression is not NULL.
+SUM calculates a total over numeric values.
+AVG calculates an average.
+MIN returns a minimum value.
+MAX returns a maximum value.
+Aggregate functions commonly ignore NULL values except where function semantics specify otherwise.
+GROUP BY groups rows for aggregate calculations.
+A GROUP BY query produces results according to grouping expressions.
+HAVING filters groups after grouping.
+WHERE filters rows before grouping.
+HAVING and WHERE serve different purposes.
+Using HAVING where WHERE is appropriate can produce unnecessary work or different semantics.
+SQL queries can combine tables.
+A JOIN combines rows from multiple table expressions according to a join condition.
+INNER JOIN returns matching combinations according to the join condition.
+LEFT JOIN preserves rows from the left side even when no matching right-side row exists.
+RIGHT JOIN preserves rows from the right side in database systems that support it.
+FULL OUTER JOIN preserves unmatched rows from both sides in systems that support it.
+CROSS JOIN produces combinations of rows from its inputs.
+A cross join of A rows and B rows can produce A multiplied by B result rows.
+An accidental missing join condition can produce unexpectedly large result sets.
+Join conditions commonly compare key columns.
+A foreign key relationship and a JOIN are related but distinct concepts.
+A foreign key enforces a referential constraint.
+A JOIN retrieves related data.
+Tables can be joined even without a declared foreign key.
+A declared foreign key does not automatically cause every query to join the tables.
+A primary key uniquely identifies rows according to its constraint.
+A table can have a primary key.
+A primary key can consist of one column.
+A primary key can consist of multiple columns.
+A multi-column primary key is a composite primary key.
+Primary key columns are constrained according to the database's primary-key semantics.
+A UNIQUE constraint prevents duplicate values or combinations according to database NULL semantics.
+Primary keys and UNIQUE constraints are related but not identical concepts.
+A foreign key references a candidate key, commonly a primary or unique key, in another or the same table according to database rules.
+Foreign keys enforce referential integrity.
+Referential integrity prevents invalid references according to defined constraints.
+A foreign key can prevent insertion of a reference to a nonexistent parent row.
+A foreign key can affect deletion of referenced rows.
+ON DELETE behavior defines what happens when a referenced row is deleted.
+ON UPDATE behavior defines what happens when a referenced key is updated.
+CASCADE propagates an applicable referential action.
+RESTRICT can prevent an operation that would violate references according to database semantics.
+NO ACTION has semantics defined by the database and constraint timing.
+SET NULL sets referencing columns to NULL when allowed by the schema and referential action.
+Cascading actions should be chosen deliberately.
+A careless cascading delete can remove more data than intended.
+Constraints enforce data rules within the database.
+NOT NULL prevents NULL values in a column.
+UNIQUE enforces uniqueness according to its semantics.
+CHECK enforces a Boolean condition in database systems that support and enforce it.
+DEFAULT supplies a default value when an insert does not provide one according to statement and database semantics.
+PRIMARY KEY establishes primary-key constraints.
+FOREIGN KEY establishes referential constraints.
+Database constraints protect invariants independently of application code.
+Application validation does not replace important database constraints.
+Database constraints do not replace all application validation.
+Validation and integrity constraints serve related but different layers.
+Data types describe permitted stored values.
+SQL data types vary between database systems.
+INTEGER represents integer values according to implementation rules.
+SMALLINT represents a smaller-range integer type according to implementation rules.
+BIGINT represents a larger-range integer type.
+DECIMAL represents exact decimal values according to declared precision and scale.
+NUMERIC commonly represents exact numeric values.
+FLOAT and REAL commonly represent approximate floating-point values.
+CHAR represents fixed-length character data according to implementation semantics.
+VARCHAR represents variable-length character data.
+TEXT commonly represents larger variable-length text in systems providing that type.
+DATE represents calendar dates.
+TIME represents times.
+TIMESTAMP represents date-and-time information according to implementation semantics.
+BOOLEAN represents Boolean values in systems with a Boolean type.
+BINARY types store binary data in systems supporting them.
+BLOB commonly stores binary large objects.
+JSON types are provided by some database systems.
+A database-specific JSON type is not part of every SQL implementation.
+Exact monetary values should normally use an exact numeric representation rather than binary floating point.
+Data type ranges should be chosen according to actual domain requirements.
+A larger type is not automatically better.
+Schema types should communicate and enforce expected data.
+CREATE TABLE creates a table.
+A CREATE TABLE statement defines columns and constraints.
+ALTER TABLE modifies an existing table according to supported operations.
+DROP TABLE removes a table definition and its data according to database semantics.
+Dropping a table is destructive.
+Schema-changing operations should be controlled.
+A migration represents an intentional change from one database schema state to another.
+Database migrations should be versioned when repeatable deployment matters.
+A migration should have a defined expected starting state.
+A migration should have a defined resulting state.
+Migration failure should be detectable.
+Production schema changes should account for existing data.
+Adding a NOT NULL column to a populated table requires handling existing rows according to the database and migration design.
+Schema changes can lock tables or consume substantial resources depending on the database and operation.
+Database-specific behavior matters for operational schema changes.
+INSERT adds rows to a table.
+An INSERT statement can specify target columns.
+Explicitly specifying target columns can make inserts more resilient to schema ordering changes.
+INSERT behavior for generated columns and defaults depends on the schema and database.
+A single INSERT can add multiple rows in database systems supporting multi-row syntax.
+Generated identifiers can be returned using database-specific or standard-supported mechanisms.
+Auto-increment behavior is database-specific.
+AUTO_INCREMENT is associated with MySQL and MariaDB.
+Identity-column syntax differs between database systems.
+Sequence objects can generate numeric values in systems supporting sequences.
+Generated numeric identifiers do not automatically provide globally unique identity.
+UPDATE changes existing rows.
+The SET clause specifies new column values.
+The WHERE clause restricts rows modified by UPDATE.
+An UPDATE without an appropriate WHERE clause can modify every row in a table.
+Destructive UPDATE operations should be reviewed carefully.
+DELETE removes rows.
+The WHERE clause restricts rows removed by DELETE.
+A DELETE without an appropriate WHERE clause can delete every row in a table.
+DELETE and DROP are different operations.
+DELETE removes rows.
+DROP removes a database object.
+TRUNCATE and DELETE have different transactional, logging, trigger, identity, and locking behavior depending on the database system.
+TRUNCATE should not be treated as universally equivalent to DELETE without a WHERE clause.
+A transaction groups database operations into a transactional unit.
+BEGIN or database-specific syntax starts an explicit transaction.
+COMMIT makes a successful transaction's changes durable according to the database's transaction guarantees.
+ROLLBACK abandons changes made by a transaction according to transactional semantics.
+Transactions support atomic groups of operations.
+Atomicity means a transaction's operations are treated as a unit with respect to commit or rollback.
+Consistency means transactions preserve defined database invariants when used correctly.
+Isolation concerns interaction between concurrent transactions.
+Durability concerns persistence of committed changes despite failures within the guarantees of the database system.
+Atomicity, Consistency, Isolation, and Durability are commonly abbreviated ACID.
+ACID does not mean every application operation is automatically correct.
+A transaction does not replace application validation.
+A transaction does not automatically prevent logical race conditions.
+Isolation levels control classes of interactions visible between concurrent transactions.
+READ UNCOMMITTED permits weak isolation in systems supporting it.
+READ COMMITTED prevents certain dirty reads according to database semantics.
+REPEATABLE READ provides stronger repeat-read behavior according to database semantics.
+SERIALIZABLE provides behavior equivalent to some serial execution according to the database's serialization guarantees.
+Isolation-level details differ between database systems.
+MySQL or MariaDB behavior at a named isolation level should not automatically be assumed identical to another database engine.
+A dirty read observes uncommitted changes from another transaction.
+A non-repeatable read occurs when repeated reads can observe a changed committed value.
+A phantom involves changes in rows satisfying a query predicate between reads according to isolation definitions.
+Serialization anomalies involve concurrent executions producing outcomes inconsistent with required serializable behavior.
+Locks coordinate concurrent access.
+A database can use row locks.
+A database can use table locks.
+A database can use predicate, range, metadata, or other lock forms depending on implementation.
+Locking implementation is database-specific.
+A deadlock occurs when transactions form a cycle of incompatible waits.
+Database systems can detect and resolve deadlocks by aborting a transaction.
+Applications should be prepared for transaction failure caused by deadlock resolution.
+Retrying a failed transaction can be appropriate when the operation is safe to retry.
+Retries should be bounded.
+Retries should not blindly repeat non-idempotent external side effects.
+Database transactions do not automatically include unrelated external systems.
+Sending an email and committing a SQL transaction are not one atomic operation merely because application code performs them together.
+Distributed transaction requirements need explicit architecture.
+An index is a data structure used by a database to accelerate certain data access patterns.
+An index can reduce the work required for some queries.
+An index consumes storage.
+Maintaining an index adds work to inserts, updates, and deletes.
+More indexes are not automatically better.
+Indexes should reflect actual query and integrity requirements.
+A primary key commonly has an associated index or index-like structure depending on the database.
+A UNIQUE constraint commonly uses an index or equivalent enforcement mechanism.
+A composite index contains multiple columns.
+Column order matters in many composite index access patterns.
+An index on columns A and B is not universally equivalent to separate indexes on A and B.
+A query optimizer determines an execution strategy.
+An execution plan describes how a database intends to execute a query.
+EXPLAIN displays execution-plan information in many SQL database systems.
+EXPLAIN syntax and output differ between database systems.
+Execution plans should be examined when query performance matters.
+A query being syntactically short does not mean it is computationally inexpensive.
+A query returning one row can still scan millions of rows.
+An index can make some lookups faster.
+An inappropriate index can be unused.
+Statistics help query optimizers estimate data distributions and costs.
+Stale or inaccurate statistics can influence plan quality.
+Optimization should be based on measured query behavior.
+SELECT * can retrieve unnecessary columns.
+Retrieving unnecessary data consumes database, network, and application resources.
+Filtering at the database can reduce unnecessary transfer.
+Applying a function to an indexed column in a predicate can prevent some index access strategies depending on the database and expression.
+Implicit type conversions can affect index use and comparison semantics.
+Query performance is affected by schema, indexes, data distribution, query form, concurrency, memory, storage, and database implementation.
+Normalization organizes relational data to reduce undesirable redundancy and dependency problems.
+First Normal Form is commonly abbreviated 1NF.
+Second Normal Form is commonly abbreviated 2NF.
+Third Normal Form is commonly abbreviated 3NF.
+Boyce-Codd Normal Form is commonly abbreviated BCNF.
+Normalization is a design tool rather than a requirement to maximize normalization in every system.
+Denormalization deliberately introduces redundancy for defined operational reasons.
+Denormalization can improve some read patterns.
+Denormalization creates consistency responsibilities.
+A normalized design can still perform poorly if queries and indexes are inappropriate.
+A denormalized design can still be correct if redundancy is deliberately maintained.
+Database design should reflect data invariants and access patterns.
+A one-to-one relationship associates one row with at most one corresponding row according to defined constraints.
+A one-to-many relationship associates one parent with multiple child rows.
+A many-to-many relationship is commonly represented using an associative or junction table.
+A junction table stores references to related rows.
+A junction table can have a composite primary key.
+Relationships should be enforced with constraints when database integrity requires enforcement.
+A view is a stored query definition presented as a table-like object.
+A view does not necessarily store its result data.
+A materialized view stores query results in systems supporting materialized views.
+Materialized views require refresh behavior.
+Views can simplify repeated query logic.
+Views do not automatically improve performance.
+Views can provide an abstraction over underlying schema.
+Stored procedures contain database-side executable logic in systems supporting them.
+Stored functions return values according to database-specific procedural facilities.
+Triggers execute automatically in response to defined database events.
+Stored procedures and triggers are not portable across every SQL implementation.
+Triggers can enforce or automate behavior.
+Hidden trigger behavior can make data changes harder to reason about.
+Database-side logic should be deliberate and documented.
+SQL injection occurs when untrusted input changes the intended structure of an SQL statement.
+Concatenating untrusted values directly into SQL can create SQL injection vulnerabilities.
+Escaping is not a universal substitute for parameterized queries.
+Parameterized queries separate SQL structure from supplied data values according to the database API.
+Prepared statements support parameter binding.
+Application code should use parameters for untrusted data values.
+A parameter represents a data value.
+A parameter does not ordinarily represent an arbitrary table name.
+A parameter does not ordinarily represent an arbitrary column name.
+A parameter does not ordinarily represent an SQL keyword.
+Dynamic SQL identifiers require validation against an allowed set or another database-specific safe construction mechanism.
+A query such as SELECT * FROM users WHERE username = ? uses a placeholder in APIs and database systems supporting question-mark parameters.
+Placeholder syntax differs between database systems and client libraries.
+Some systems use numbered placeholders.
+Some systems use named placeholders.
+The principle of parameter binding is more important than a particular placeholder syntax.
+A parameterized query can still contain a logic flaw.
+A parameterized query prevents specific injection mechanisms when used correctly but does not provide authorization.
+SQL injection prevention and authorization are different security responsibilities.
+A valid query can still expose data the user is not authorized to access.
+Database credentials should have only required privileges.
+Least privilege limits the damage possible through compromised credentials or application defects.
+A web application generally should not connect as a database administrative superuser for ordinary requests.
+Read-only operations can use read-only privileges where architecture supports them.
+Database users and application users are different identity concepts.
+Authentication determines identity.
+Authorization determines permitted actions.
+Database authorization controls what database identities can do.
+Application authorization controls what application actors can do.
+Both layers can matter.
+Passwords should not be stored as plaintext in database tables.
+Password values should be stored using an appropriate password hashing scheme.
+SQL does not itself make password storage secure.
+Database encryption and password hashing solve different problems.
+Encrypted database storage can protect data under certain storage-threat conditions.
+Encryption at rest does not prevent an authorized running application from accessing data it is permitted to decrypt or read.
+TLS can protect database connections in transit when correctly configured.
+TLS does not repair SQL injection vulnerabilities.
+Backups preserve recoverable copies of database data.
+A backup is useful only if it can be restored successfully when required.
+Backup procedures should be tested through restoration.
+Replication is not the same thing as backup.
+Replication copies data changes to other database instances according to replication design.
+An accidental DELETE can replicate to replicas.
+A replica containing the same accidental deletion is not an independent historical backup.
+Point-in-time recovery can restore a database to an earlier state when appropriate backups and logs are available.
+Recovery objectives should be defined according to system requirements.
+Recovery Point Objective is commonly abbreviated RPO.
+Recovery Time Objective is commonly abbreviated RTO.
+Durability does not eliminate the need for backups.
+A database can become unavailable.
+Applications should handle connection failures.
+Applications should handle authentication failures.
+Applications should handle query failures.
+Applications should handle constraint violations.
+Applications should handle transaction failures.
+Applications should handle timeouts.
+Applications should not convert every database error into the same internal meaning.
+A duplicate-key violation is different from a connection timeout.
+A syntax error is different from a deadlock.
+A missing table is different from a rejected credential.
+Preserving error categories improves diagnosis and correct application behavior.
+Database error messages can contain sensitive schema or query information.
+Raw database errors should not automatically be exposed to untrusted web clients.
+Operational logs can preserve diagnostic information according to security policy.
+A database connection is a finite resource.
+Opening a new physical database connection for every small operation can be expensive.
+Connection pooling reuses database connections.
+A pool has finite capacity.
+A leaked connection can exhaust a connection pool.
+Applications should release database resources according to their client library contract.
+Long-running transactions can retain locks and old row versions depending on the database.
+Transactions should be kept appropriately bounded.
+A transaction should not remain open while waiting unnecessarily for user interaction.
+Connection timeout and query timeout are different concepts.
+A connection timeout limits waiting to establish or acquire a connection according to the client.
+A query or command timeout limits execution waiting according to the client and database.
+A timeout does not prove that the database performed no work.
+An application must understand whether an operation may have committed before retrying after ambiguous connection failure.
+Idempotency matters when retrying database operations.
+Reading data is generally safer to retry than performing an unprotected state-changing operation.
+A generated request identifier can help correlate database operations with application logs.
+Audit logging records relevant database or application activity.
+An audit log should distinguish who performed an action, what action occurred, and when according to policy.
+Audit logs should be protected against unauthorized modification.
+A normal application log and an audit record serve different purposes.
+SQL supports subqueries.
+A subquery is a query nested inside another SQL statement.
+A scalar subquery returns a single value according to its context.
+An EXISTS subquery tests whether qualifying rows exist.
+EXISTS can express relationship existence without returning the matching data.
+IN tests membership in a set of values.
+NOT IN involving NULL values can produce unintuitive UNKNOWN results.
+NOT EXISTS can be safer for some anti-join logic involving nullable values.
+A correlated subquery references values from an outer query.
+Correlated subqueries can be useful but can have performance implications.
+A Common Table Expression is commonly abbreviated CTE.
+WITH introduces a CTE in systems supporting it.
+A CTE names a query expression for use by a larger statement.
+A CTE does not inherently materialize its result.
+Materialization behavior depends on the database and optimizer.
+Recursive CTEs can express hierarchical and graph-like traversal.
+Recursive queries require termination conditions.
+An incorrectly bounded recursive query can consume excessive resources.
+Window functions calculate values across sets of related rows without collapsing them into one aggregate row per group.
+OVER defines the window for a window function.
+PARTITION BY divides rows into window partitions.
+ORDER BY inside a window defines ordering for applicable window calculations.
+ROW_NUMBER assigns sequential numbers within its window ordering.
+RANK assigns ranks with gaps after ties.
+DENSE_RANK assigns ranks without gaps after ties.
+Window functions and GROUP BY solve different problems.
+UNION combines result sets while removing duplicates according to UNION semantics.
+UNION ALL combines result sets without duplicate elimination.
+UNION ALL can avoid unnecessary duplicate-removal work when duplicates are permitted.
+The combined queries in a UNION must have compatible result structures according to database rules.
+INTERSECT returns rows common to result sets in systems supporting it.
+EXCEPT returns rows from one result not present in another in systems supporting it.
+Set-operation support varies between database systems.
+SQL operates primarily on sets or multisets of rows rather than requiring row-by-row procedural thinking.
+Set-based operations can express bulk data transformations efficiently.
+A single set-based statement can replace many application-level per-row queries.
+Executing one query per returned row is commonly called the N+1 query problem when an initial query causes repeated related queries.
+N+1 query patterns can cause excessive database round trips.
+Joins, batch queries, or preloading can avoid N+1 patterns where appropriate.
+Reducing round trips can improve performance.
+One enormous query is not automatically better than several bounded queries.
+Query architecture should reflect correctness, maintainability, and measured performance.
+Database state is persistent state.
+Application memory is not automatically persistent.
+A variable in PHP is not a database row.
+A JavaScript object in a browser is not a database row.
+A C structure is not a database row.
+A Go struct is not a database row.
+An object-relational mapper can map application objects to relational data.
+An object-relational mapper is commonly abbreviated ORM.
+An ORM is not a database.
+An ORM generates or executes database operations through a database interface.
+Using an ORM does not eliminate SQL concepts.
+Developers using an ORM still need to understand transactions, relationships, indexes, constraints, and query behavior.
+An ORM abstraction can produce inefficient SQL.
+Generated SQL should be inspected when performance or correctness requires it.
+Raw SQL can provide precise control.
+Raw SQL also requires careful parameterization and maintenance.
+The correct choice depends on the application.
+PHP can communicate with SQL databases using database client extensions and libraries.
+PDO is a PHP database access abstraction.
+PDO is not SQL.
+PDO can execute SQL through supported database drivers.
+MySQLi is a PHP extension for interacting with MySQL-compatible databases.
+JavaScript server runtimes can communicate with SQL databases using database client libraries.
+Browser JavaScript should not normally connect directly to a private relational database.
+A browser should communicate with an application server or defined service interface.
+Exposing database credentials to browser JavaScript exposes those credentials to the client.
+C can communicate with SQL databases using database client libraries.
+C++ can communicate with SQL databases using database client libraries.
+C# can communicate with SQL databases using .NET database providers.
+Go can communicate with SQL databases using database/sql and an appropriate driver.
+Programming-language database APIs and SQL are separate layers.
+The application constructs or selects an SQL operation.
+The database engine parses and executes the SQL.
+The database returns results or status.
+The application interprets those results according to its own contract.
+An HTTP request is not an SQL query.
+An HTTP endpoint can cause server code to execute SQL.
+A database error is not automatically an HTTP 503.
+An unavailable database can make an HTTP service or operation unavailable when that database is required.
+A constraint violation is not service unavailability.
+A query returning zero rows is not service unavailability.
+A query returning zero rows can be a valid result.
+A missing database record and a database connection failure are different conditions.
+A knowledge system retrieving zero matching records has experienced a retrieval miss, not necessarily a database failure.
+Error reporting should identify the actual failure layer.
+A SQL query that executes successfully can still return incorrect logical results.
+Successful syntax does not establish semantic correctness.
+A query returning data does not establish that the caller was authorized to see the data.
+Correctness includes both query logic and surrounding application requirements.
+Data retrieved from a database should not automatically be considered safe for every output context.
+Stored data can contain malicious strings.
+A stored XSS payload remains dangerous when later inserted into HTML without proper output encoding.
+Database storage does not sanitize data.
+Parameterized INSERT statements prevent SQL injection into the statement but do not make stored text safe HTML.
+Input validation, SQL parameterization, and output encoding solve different problems.
+SQL comments commonly use -- for line comments according to SQL syntax and database support.
+Block comments commonly use /* and */.
+Comment syntax can vary in details across database systems.
+Attackers can use SQL comments as part of injection attempts when vulnerable query construction permits them.
+The correct defense is safe query construction and parameterization rather than attempting to blacklist suspicious characters.
+Blacklisting quote characters is not a reliable SQL injection defense.
+Escaping rules depend on the database, connection configuration, and client API.
+Prepared statements avoid requiring application code to manually reproduce SQL literal escaping rules for bound data.
+Prepared statements can improve security and can sometimes improve repeated execution efficiency.
+A prepared statement separates preparation from execution according to database and driver behavior.
+Server-side and client-side emulated prepared statements are not necessarily identical.
+Client-library configuration can affect prepared-statement behavior.
+Application code should understand the contract of its database library.
+Character encoding matters in databases.
+UTF-8 is a common text encoding.
+A database connection has character encoding settings.
+A table or column can have character-set and collation settings depending on the database.
+A character set defines how characters are represented.
+A collation defines comparison and ordering rules for text.
+Collation can affect equality.
+Collation can affect ordering.
+Collation can affect uniqueness.
+Case sensitivity can depend on collation.
+Accent sensitivity can depend on collation.
+Text equality in a database should not be assumed to mean byte-for-byte equality unless the selected collation and type provide that behavior.
+Binary comparison and linguistic comparison solve different requirements.
+Identifiers and user-facing text can require different comparison policies.
+Deterministic identifiers should use explicitly defined comparison rules.
+Database timestamps require defined timezone semantics.
+A DATE value represents a date rather than an instant in time.
+A timestamp representation should have a defined timezone interpretation.
+Storing UTC timestamps is common for interoperable event records.
+UTC storage does not remove the need to convert correctly for user-facing local time.
+Database server timezone and application timezone can differ.
+Implicit timezone assumptions can produce incorrect results.
+CURRENT_TIMESTAMP obtains a current timestamp according to database semantics.
+Database-generated time and application-generated time can differ.
+A system requiring one authoritative time source should define which source is authoritative.
+Replication can introduce delay.
+A replica can lag behind its source.
+Reading immediately from an asynchronous replica after writing to a primary can return stale data.
+Read-after-write consistency should be explicitly considered when replicas are used.
+High availability and consistency involve architectural tradeoffs.
+A failover changes which database instance provides service.
+Failover should preserve required data guarantees.
+A successful TCP connection to a database server does not prove that the database is operational for every required query.
+A successful authentication does not prove required tables exist.
+A successful query does not prove replication is healthy.
+Health checks should test the capability they claim to represent.
+SELECT 1 can demonstrate that a database can execute a simple query on a connection.
+SELECT 1 does not prove every application schema operation works.
+Schema qualification can verify required tables or migrations.
+Application startup can validate required database schema version.
+Schema version mismatch should be distinguished from database unavailability.
+Database migrations and application versions should have defined compatibility.
+Backward-compatible schema changes can permit staged deployment.
+Dropping a column still used by an older application version can break that application.
+Compatibility should be deliberate.
+Data deletion should follow application and retention policy.
+Soft deletion marks data as deleted without physically removing the row.
+Hard deletion physically removes data.
+Soft deletion and archival are different concepts.
+Soft-deleted rows require queries to respect deletion state.
+Forgetting a soft-delete predicate can expose logically deleted data.
+A database retention rule should be explicit.
+Permanent historical records should be represented according to their governing lifecycle rather than casually deleted.
+Database backups can retain deleted information according to backup policy.
+Deleting a production row does not necessarily erase every backup copy immediately.
+Privacy and retention requirements must account for replicas, backups, logs, and derived data.
+A database can enforce immutable-like records through permissions, triggers, append-only design, or application architecture.
+An append-only table records new events rather than modifying historical events.
+Event logs and current-state tables serve different purposes.
+An audit history should not be rewritten merely to make current state appear historically consistent.
+Current state can be represented separately from historical events.
+Event sourcing represents state as a sequence of events according to that architecture.
+Event sourcing is not required for ordinary relational database applications.
+Relational databases can store both current state and historical records.
+Database design should follow actual requirements rather than fashion.
+SQL queries should answer the question actually being asked.
+A query that retrieves related data is not necessarily sufficient evidence for a more specific conclusion.
+The presence of a historical row does not prove that the historical state remains current.
+A current-status column and a historical event table represent different kinds of evidence.
+When answering a question about current state, current authoritative state should be distinguished from historical records.
+A version-history row does not establish that an older version is currently active.
+A database containing versions 1.3, 1.4, and 1.5 does not imply that all three versions are active.
+A query should filter according to the state required by the question.
+Ordering versions chronologically does not determine which one is active unless the data model defines that relationship.
+MAX(version) does not universally determine the active version.
+Version strings do not always sort correctly as ordinary text.
+Semantic version comparison is different from lexicographic string comparison.
+Database schema should explicitly represent active state when active state matters.
+An authoritative declaration should be preferred over inference from unrelated historical records when the data model defines that authority.
+Evidence retrieval and evidence interpretation are separate operations.
+A database can return relevant evidence without that evidence supporting the requested conclusion.
+Correct SQL retrieval does not guarantee correct reasoning about the retrieved rows.
+A query can be syntactically valid and semantically wrong.
+A query can be semantically correct and operationally inefficient.
+A query can be efficient and still violate authorization.
+A secure query can still answer the wrong question.
+Database engineering requires correctness, integrity, security, performance, recoverability, and understandable behavior.
+Simple schemas are easier to reason about when they satisfy the requirements.
+Explicit constraints are preferable to undocumented assumptions.
+Explicit ordering is preferable when deterministic ordering matters.
+Explicit transactions are preferable when multiple writes must succeed or fail as a unit.
+Explicit error handling is preferable to silently discarding database failures.
+Parameterized queries are preferable to constructing SQL by concatenating untrusted data.
+Measured query plans are preferable to guessing about performance.
+Tested backups are preferable to assuming backups work.
+Defined ownership of schema changes is preferable to uncontrolled production modification.
+A relational database is a persistent system of record only when the architecture assigns it that authority.
+SQL is a tool for expressing operations over relational data.
+Correct use of SQL requires understanding both the query language and the database system executing it.

@@ -1,0 +1,745 @@
+C# is a general-purpose programming language.
+C# is pronounced C sharp.
+C# is a statically typed programming language.
+C# is a managed programming language.
+C# is commonly used with the .NET platform.
+C# and .NET are related but are not the same thing.
+C# is the programming language.
+.NET provides runtimes, libraries, tools, and application frameworks used by C# and other languages.
+C# source files commonly use the .cs filename extension.
+C# is case-sensitive.
+C# supports procedural programming.
+C# supports object-oriented programming.
+C# supports generic programming.
+C# supports functional programming techniques.
+C# supports asynchronous programming.
+A C# program is compiled before execution.
+Modern .NET normally compiles C# source into Common Intermediate Language and associated metadata.
+Common Intermediate Language is commonly abbreviated CIL.
+The .NET runtime can use just-in-time compilation to translate CIL into native machine code.
+Just-in-time compilation is commonly abbreviated JIT.
+.NET can also support ahead-of-time compilation in applicable deployment models.
+Ahead-of-time compilation is commonly abbreviated AOT.
+The Common Language Runtime is commonly abbreviated CLR.
+The CLR is the execution environment used by .NET implementations that provide the CLR.
+The runtime provides services including managed memory, type handling, exception handling, and execution support.
+Managed code executes under services provided by the .NET runtime.
+Managed code does not mean that application logic is automatically correct or secure.
+A C# application can still use unmanaged resources.
+C# can interoperate with native code.
+C# statements commonly end with a semicolon.
+C# blocks are enclosed by braces.
+C# line comments begin with //.
+C# block comments begin with /* and end with */.
+XML documentation comments commonly begin with ///.
+An identifier names a program entity.
+C# identifiers are case-sensitive.
+A variable stores a value according to its type.
+A declaration introduces a variable, member, type, or other program entity.
+A local variable must be definitely assigned before its value is read.
+C# is statically typed.
+The type of an expression is determined according to C# language rules.
+The var keyword requests local variable type inference.
+A variable declared with var still has a statically determined type.
+var does not create a dynamically typed variable.
+The dynamic type defers certain operations to runtime binding.
+dynamic and var have different meanings.
+bool represents Boolean values.
+byte represents an unsigned 8-bit integer.
+sbyte represents a signed 8-bit integer.
+short represents a signed 16-bit integer.
+ushort represents an unsigned 16-bit integer.
+int represents a signed 32-bit integer.
+uint represents an unsigned 32-bit integer.
+long represents a signed 64-bit integer.
+ulong represents an unsigned 64-bit integer.
+char represents a UTF-16 code unit.
+float represents a single-precision floating-point value.
+double represents a double-precision floating-point value.
+decimal represents a decimal floating-point value designed for high-precision decimal calculations.
+string represents a sequence of characters.
+object is the root type from which other .NET types ultimately derive according to the .NET type system.
+C# distinguishes value types from reference types.
+A value type directly contains its value according to its representation.
+A reference type variable holds a reference to an object or can hold null where nullable.
+Structures are value types.
+Enumerations are value types.
+Classes are reference types.
+Arrays are reference types.
+Delegates are reference types.
+Strings are reference types.
+A class defines a reference type.
+A struct defines a value type.
+The class keyword declares a class.
+The struct keyword declares a structure.
+The enum keyword declares an enumeration.
+An enum defines a set of named constants backed by an integral type.
+A namespace organizes related types.
+Namespaces help prevent naming collisions.
+The namespace keyword declares a namespace.
+The using directive can make names from a namespace available without repeatedly writing their fully qualified names.
+A using directive does not copy a library into a program.
+Types can contain fields.
+Types can contain properties.
+Types can contain methods.
+Types can contain events.
+Types can contain constructors.
+Types can contain nested types.
+A field stores data associated with a type or object.
+A property exposes value access through accessors.
+A property can define a get accessor.
+A property can define a set accessor.
+An init accessor permits initialization in applicable object initialization contexts while restricting later assignment.
+An auto-implemented property allows the compiler to provide its backing storage.
+A method defines executable behavior.
+A method can accept parameters.
+A method can return a value.
+A method returning void does not return a value.
+C# passes arguments by value by default.
+Passing a reference-type variable by value passes the reference value by value.
+Passing a reference value by value does not copy the referenced object.
+The ref modifier supports passing an argument by reference.
+The out modifier supports passing a variable by reference for output.
+The in modifier supports readonly reference passing in applicable contexts.
+A ref parameter and an ordinary value parameter have different semantics.
+A constructor initializes a new instance of a type.
+A constructor has the same name as its containing type.
+A constructor does not declare a return type.
+A class can define multiple constructors.
+Constructor overloading allows different initialization parameter lists.
+A static constructor initializes static state for a type according to runtime rules.
+The new operator can create an object or value according to the target type.
+Creating a managed object normally allocates storage managed by the runtime.
+C# uses automatic garbage collection for managed memory.
+The garbage collector is commonly abbreviated GC.
+Garbage collection reclaims managed objects that are no longer reachable according to runtime rules.
+Garbage collection does not guarantee immediate reclamation when an object becomes unreachable.
+Garbage collection does not automatically release every type of unmanaged resource promptly.
+Files, sockets, database connections, and similar resources can require deterministic cleanup.
+IDisposable defines a standard pattern for releasing resources.
+The Dispose method releases resources according to an object's implementation.
+The using statement can ensure IDisposable resources are disposed when control leaves the applicable scope.
+The using declaration can associate disposal with the enclosing scope.
+Garbage collection and deterministic resource disposal solve different problems.
+A finalizer can participate in cleanup of unmanaged resources when a type requires one.
+Finalizers are not a substitute for deterministic disposal.
+A finalizer's execution time is not deterministic.
+Classes support encapsulation.
+Encapsulation hides implementation details behind defined interfaces.
+The public access modifier allows access according to public accessibility rules.
+The private access modifier restricts access to the containing type.
+The protected access modifier provides access associated with inheritance.
+The internal access modifier provides access within the same assembly according to C# accessibility rules.
+protected internal and private protected provide combined accessibility forms.
+Class members are private by default when no applicable access modifier is supplied.
+A namespace-level type is internal by default when no applicable access modifier is supplied.
+C# supports inheritance.
+A class can derive from another class.
+A class can have only one direct base class.
+A class can implement multiple interfaces.
+Inheritance and interface implementation are different mechanisms.
+A derived class inherits accessible behavior from its base class.
+The base keyword accesses members of the base class in applicable contexts.
+The virtual modifier permits applicable members to be overridden.
+The override modifier provides a new implementation of an inherited virtual member.
+The abstract modifier can declare incomplete behavior requiring implementation by a derived non-abstract type.
+An abstract class cannot be instantiated directly.
+A sealed class cannot be inherited.
+A sealed override prevents further overriding of that member.
+Polymorphism allows code to operate through a base type or interface while runtime dispatch selects applicable overridden behavior.
+An interface defines a contract that implementing types can satisfy.
+The interface keyword declares an interface.
+A class can implement multiple interfaces.
+Interfaces can define members according to the capabilities of the selected C# language version.
+Interfaces are commonly used to separate contracts from implementations.
+Composition allows one object to contain or reference other objects.
+Composition and inheritance model different relationships.
+Composition can reduce coupling when inheritance is not required.
+C# supports method overloading.
+Method overloading allows methods to share a name when their parameter signatures distinguish the overloads.
+The compiler performs overload resolution.
+Operator overloading allows user-defined types to define behavior for supported operators.
+C# does not permit arbitrary new operator symbols to be invented.
+The assignment operator is =.
+The equality operator is ==.
+The inequality operator is !=.
+C# does not use === as an equality operator.
+The behavior of == depends on the types being compared and any applicable overloaded operator.
+ReferenceEquals can determine whether two reference variables refer to the same object.
+Value equality and reference identity are different concepts.
+The Equals method participates in value equality conventions.
+Types overriding Equals should follow the associated equality contract.
+GetHashCode should be consistent with Equals when objects are used in hash-based collections.
+The relational operators include <, <=, >, and >= where supported.
+The logical AND operator is &&.
+The logical OR operator is ||.
+The logical NOT operator is !.
+The bitwise AND operator is &.
+The bitwise OR operator is |.
+The bitwise XOR operator is ^.
+The bitwise complement operator is ~.
+&& uses short-circuit evaluation.
+|| uses short-circuit evaluation.
+The null-coalescing operator is ??.
+The null-coalescing assignment operator is ??=.
+The null-conditional operators include ?. and ?[].
+The conditional operator is ?:.
+The member access operator is a period.
+The lambda operator is =>.
+The null-forgiving operator is ! in applicable nullable-reference contexts.
+The null-forgiving operator does not perform a runtime null check.
+C# supports nullable value types.
+A nullable value type can represent either a value or null.
+The syntax int? represents a nullable int.
+Nullable reference types provide compile-time annotations and analysis concerning possible null references.
+Nullable reference type analysis does not make null reference errors impossible.
+A non-nullable reference annotation expresses an intended nullability contract to compiler analysis.
+A nullable reference annotation such as string? indicates that null is an expected value according to nullable analysis.
+A NullReferenceException can occur when code dereferences a null reference.
+Null input should be validated where an interface does not permit it.
+Pattern matching provides structured testing and extraction based on values and types.
+The is operator can test type and pattern relationships.
+The switch statement supports pattern matching in modern C#.
+A switch expression can produce a value according to matching arms.
+The if statement conditionally executes code.
+The else clause provides an alternative branch.
+The switch statement selects behavior among cases.
+The for statement provides iteration.
+The foreach statement iterates over an enumerable sequence.
+The while statement repeats while its condition remains true.
+The do statement executes its body before testing its continuation condition.
+The break statement exits an applicable loop or switch.
+The continue statement advances to the next applicable loop iteration.
+The return statement exits a method and can return a value.
+The throw statement raises an exception.
+C# supports exception handling.
+A try block contains code for which exceptions can be handled.
+A catch block handles matching exceptions.
+A finally block executes cleanup behavior when control leaves the associated try construct according to language rules.
+Exceptions can propagate through multiple method calls.
+Exceptions should not normally be used as ordinary control flow when a simpler expected-result mechanism is appropriate.
+System.Exception is the base type for standard exception objects.
+Exception messages can provide diagnostic information.
+Sensitive information should not be exposed through exception messages presented to untrusted users.
+An exception can contain an inner exception.
+Preserving an exception's original context can assist diagnostics.
+C# supports generics.
+Generics allow types and methods to operate with type parameters.
+A generic type can be reused with different type arguments.
+List<T> is a generic collection type.
+Dictionary<TKey,TValue> is a generic key-value collection.
+HashSet<T> is a generic set collection.
+Queue<T> is a generic first-in-first-out collection.
+Stack<T> is a generic last-in-first-out collection.
+Generic constraints restrict the types that can be supplied as type arguments.
+Generics provide compile-time type information.
+Generics differ from storing all values as object.
+Boxing converts a value type to an object or implemented interface representation.
+Unboxing extracts a value type from a compatible boxed representation.
+Unboxing requires compatible type information.
+Unnecessary boxing can create allocations and overhead.
+Arrays contain a fixed number of elements after creation.
+Array indexing begins at zero.
+Accessing an array outside its valid bounds throws an IndexOutOfRangeException.
+C# arrays know their length.
+The Length property reports an array's number of elements.
+List<T> provides a dynamically sized sequence.
+The Count property reports the number of elements in many collection types.
+Count and capacity are different concepts.
+A collection's capacity can exceed its current element count.
+Dictionary<TKey,TValue> associates keys with values.
+Dictionary keys should have stable equality and hash behavior while used as keys.
+Collections are not automatically thread-safe.
+Concurrent collections are available for applicable multithreaded scenarios.
+System.Collections.Concurrent provides concurrent collection types.
+C# supports delegates.
+A delegate represents references to methods with a compatible signature.
+Delegates enable callbacks.
+Delegates can reference static or instance methods.
+Delegates can be combined in applicable multicast scenarios.
+Action represents a delegate that returns no value.
+Func represents a delegate that returns a value.
+Predicate<T> represents a delegate returning a Boolean result for a value.
+A lambda expression can create an anonymous function.
+Lambda expressions use the => syntax.
+A lambda can capture variables from its surrounding scope.
+Captured variables can outlive the immediate execution of the declaring method depending on the resulting closure.
+Closures can introduce additional object lifetimes and allocations.
+C# events provide a publish-and-subscribe mechanism based on delegates.
+The event keyword restricts direct invocation and assignment according to event semantics.
+Subscribers register handlers with an event.
+Publishers raise events.
+Event subscriptions can affect object lifetimes when publishers retain references to subscribers.
+C# supports Language Integrated Query.
+Language Integrated Query is commonly abbreviated LINQ.
+LINQ provides query operations over compatible data sources.
+LINQ operations can be written using method syntax.
+LINQ operations can be written using query expression syntax for supported operations.
+Where filters a sequence.
+Select projects elements into another form.
+OrderBy orders elements according to a key.
+GroupBy groups elements according to a key.
+Any determines whether a sequence contains an element satisfying applicable conditions.
+All determines whether all applicable elements satisfy a condition.
+First returns the first applicable element and throws when no element exists according to its contract.
+FirstOrDefault returns the first applicable element or a default value when none exists.
+Single requires exactly one applicable element according to its contract.
+SingleOrDefault permits zero or one applicable element according to its contract.
+Count determines the number of elements in a sequence according to the selected overload.
+LINQ queries can use deferred execution.
+Deferred execution means evaluation can occur when results are enumerated rather than when the query is constructed.
+Not every LINQ operation uses deferred execution.
+ToList materializes a sequence into a List<T>.
+ToArray materializes a sequence into an array.
+Repeated enumeration can repeat underlying work for deferred queries.
+LINQ query providers can translate expression trees into another query language or execution model.
+A LINQ expression used with a database provider is not necessarily executed as ordinary in-memory C# code.
+C# supports asynchronous programming.
+The async modifier identifies methods that can contain await according to language rules.
+The await operator asynchronously waits for an awaitable operation according to its contract.
+async and await do not automatically create a new thread.
+Task represents an asynchronous operation.
+Task<T> represents an asynchronous operation that produces a value.
+An async method commonly returns Task, Task<T>, ValueTask, or ValueTask<T> according to its requirements.
+An async void method should generally be limited to scenarios such as event handlers where the contract requires void.
+Blocking synchronously on asynchronous operations can cause performance or synchronization problems.
+Asynchronous I/O can allow a thread to perform other work while waiting for external operations.
+CancellationToken communicates cancellation requests to cooperating operations.
+Cancellation is cooperative.
+A CancellationToken does not forcibly terminate arbitrary executing code.
+CancellationTokenSource creates and controls cancellation tokens.
+Timeouts and cancellation are related but distinct concepts.
+C# supports multithreading.
+Thread represents an operating-system thread abstraction provided by .NET.
+Task is not the same thing as a thread.
+The thread pool manages reusable worker threads.
+Task-based programming commonly uses the thread pool for CPU-bound scheduled work.
+lock provides mutual exclusion around a critical section.
+The lock statement uses a synchronization object.
+Code should not normally lock on publicly accessible objects.
+Deadlock can occur when execution paths wait indefinitely for resources held by one another.
+Shared mutable state requires synchronization when accessed concurrently.
+Immutable state can reduce synchronization requirements.
+Interlocked provides atomic operations for supported scenarios.
+volatile affects certain memory-access semantics but is not a replacement for all synchronization.
+Concurrent programming requires attention to ordering and memory visibility.
+A race condition occurs when program results depend improperly on timing or ordering between operations.
+A data race and a higher-level race condition are related concepts but should not be treated as universally identical terms.
+Thread safety is a property of design and implementation, not merely of using threads.
+C# strings are immutable.
+Modifying a string conceptually creates or produces another string value.
+Repeated string concatenation can create multiple intermediate strings.
+StringBuilder provides mutable string-building functionality.
+String interpolation can embed expressions into formatted strings.
+An interpolated string commonly begins with $.
+The syntax $"Hello {name}" is an interpolated string.
+String comparisons should use an appropriate comparison rule.
+StringComparison can specify ordinal or culture-sensitive comparison behavior.
+Ordinal comparison compares string data according to ordinal rules.
+Culture-sensitive comparisons can vary according to cultural rules.
+Security-sensitive identifiers should not casually depend on culture-sensitive string comparison.
+C# supports records.
+A record is a type designed to support value-oriented data modeling.
+Records can provide compiler-generated value equality behavior.
+Record classes are reference types.
+Record structs are value types.
+Records do not make contained mutable objects immutable.
+The init accessor can support initialization-focused object models.
+with expressions can create modified copies of records and other supported types.
+C# supports tuples.
+ValueTuple types provide lightweight grouped values.
+Tuple elements can have names.
+Tuples are useful for small grouped return values when a dedicated domain type is unnecessary.
+A dedicated type can communicate stronger domain meaning than a large or widely shared tuple.
+C# supports extension methods.
+An extension method allows a static method to be invoked using instance-method syntax for compatible types.
+Extension methods do not actually add instance members to the extended type.
+Extension method resolution follows compile-time rules.
+Attributes attach metadata to program elements.
+Attributes derive from System.Attribute.
+Reflection can inspect metadata and type information at runtime.
+Reflection can discover types and members.
+Reflection can invoke members dynamically when permitted.
+Reflection trades some compile-time guarantees for runtime flexibility.
+Heavy reflection can increase complexity and runtime cost.
+Assembly metadata describes compiled .NET components.
+An assembly is a deployment and versioning unit containing .NET code and metadata.
+Assemblies commonly use .dll or .exe filename extensions.
+A .NET .dll is not necessarily equivalent in binary interface behavior to an unmanaged native DLL.
+Managed assemblies contain metadata understood by the .NET runtime.
+Namespaces and assemblies are different concepts.
+A namespace can span multiple assemblies.
+An assembly can contain types from multiple namespaces.
+NuGet is a package-management system commonly used by .NET projects.
+A NuGet package can contain libraries, build assets, analyzers, tools, or other package resources.
+Adding a package introduces a dependency.
+Dependencies should be selected deliberately.
+Package versions can affect application behavior and compatibility.
+Restoring packages obtains dependencies described by a project.
+The .NET SDK provides command-line development tools.
+dotnet is the primary command-line driver for modern .NET SDK workflows.
+dotnet build builds a project or solution.
+dotnet run builds and runs an applicable project.
+dotnet test runs tests in applicable test projects.
+dotnet publish prepares an application for deployment.
+A .csproj file describes a C# project using MSBuild project format.
+MSBuild is the build system used by .NET project tooling.
+Project files can define target frameworks.
+A target framework identifies the .NET API surface and runtime family targeted by a project.
+Target frameworks are commonly represented using target framework monikers.
+A project can target more than one framework.
+Targeting a framework does not mean every machine has that runtime installed.
+Framework-dependent deployment requires an appropriate runtime on the target system.
+Self-contained deployment includes the runtime components required for the application according to the selected deployment model.
+Single-file deployment can package application components into a reduced number of deployment files according to .NET publishing behavior.
+Trimming can remove code considered unused during publishing.
+Reflection and dynamic loading can complicate trimming because required code may not be statically obvious.
+Native AOT can compile applicable .NET applications ahead of time to native code.
+AOT deployment has different compatibility and runtime characteristics from ordinary JIT deployment.
+C# can be used for command-line applications.
+C# can be used for desktop applications.
+C# can be used for web applications.
+C# can be used for web APIs.
+C# can be used for background services.
+C# can be used for libraries.
+C# can be used for cloud services.
+C# can be used for games with frameworks and engines that support C#.
+C# can be used for mobile and cross-platform applications with applicable .NET frameworks.
+ASP.NET Core is a framework for building web applications and services using .NET.
+ASP.NET Core can be used with C#.
+ASP.NET Core is not the C# language itself.
+A web application receives HTTP requests and produces HTTP responses.
+Routing maps HTTP requests to application endpoints according to configured rules.
+Middleware forms a processing pipeline for HTTP requests and responses in ASP.NET Core.
+Middleware can inspect, modify, handle, or pass requests to later middleware.
+An endpoint performs application behavior associated with a matched request.
+Dependency injection is built into common ASP.NET Core application patterns.
+Dependency injection supplies dependencies to components rather than requiring those components to construct every dependency themselves.
+Dependency injection and interfaces can reduce coupling when used appropriately.
+Dependency injection does not automatically make a design correct.
+Configuration provides application settings.
+Secrets should not be committed directly into source code.
+Environment variables can provide configuration values.
+Environment variables are not automatically secret merely because they are environment variables.
+Production secrets require appropriate secret-management controls.
+Logging records application events and diagnostics.
+Logs should not unnecessarily contain passwords, tokens, private keys, or other sensitive data.
+Structured logging records fields in a machine-processable form.
+Database access can be performed using database providers or libraries.
+ADO.NET provides core .NET database-access abstractions.
+DbConnection represents a database connection abstraction.
+DbCommand represents a database command abstraction.
+DbDataReader provides forward-only reading of query results according to provider behavior.
+Database commands should use parameters rather than constructing SQL by concatenating untrusted input.
+Parameterized SQL helps prevent SQL injection when parameters are used correctly for data values.
+Parameterized SQL does not automatically make dynamically constructed SQL identifiers safe.
+Database input remains untrusted input.
+Entity Framework Core is an object-relational mapping framework for .NET.
+Entity Framework Core is commonly abbreviated EF Core.
+EF Core is not part of the C# language.
+An object-relational mapper is commonly abbreviated ORM.
+An ORM maps between application objects and relational database operations according to its model.
+Using an ORM does not eliminate the need to understand database behavior.
+Database transactions group operations into an atomic unit according to database transaction semantics.
+A transaction can be committed.
+A transaction can be rolled back.
+Applications should handle database failures explicitly.
+Database connections are resources and should be released appropriately.
+Connection pooling can reuse underlying database connections.
+Disposing a pooled connection object normally returns its underlying connection to the pool according to provider behavior rather than necessarily closing the physical connection immediately.
+C# applications can interact with MySQL through an appropriate .NET database provider.
+C# applications can interact with MariaDB through an appropriate compatible provider.
+C# applications can interact with SQL Server through an appropriate .NET provider.
+C# applications can interact with PostgreSQL through an appropriate .NET provider.
+C# applications can interact with SQLite through an appropriate .NET provider.
+Database-provider behavior is not defined by the C# language.
+C# supports file operations through .NET libraries.
+System.IO provides common file and stream APIs.
+File provides static convenience methods for common file operations.
+FileStream provides stream-based file access.
+Stream represents a sequence of bytes according to its implementation.
+StreamReader reads characters from a stream using text encoding.
+StreamWriter writes characters to a stream using text encoding.
+File operations can fail.
+Filesystem permissions can prevent an otherwise correct C# program from reading or writing a file.
+A valid path on one operating system might not be valid on another.
+Path provides methods for manipulating filesystem path strings.
+Path.Combine combines path components using platform-aware rules.
+User-controlled paths require validation when they can influence filesystem access.
+Directory traversal can occur when untrusted path components escape an intended directory.
+Canonicalization and authorization of filesystem targets require careful design.
+C# applications can process JSON using .NET libraries.
+System.Text.Json provides JSON serialization and deserialization facilities.
+Serialization converts an object representation into a transferable or stored representation.
+Deserialization reconstructs values from serialized data.
+Deserializing untrusted data requires validation.
+A deserialized object should not automatically be trusted merely because parsing succeeded.
+JSON property names and C# property names can be mapped according to serializer configuration.
+Serialization formats should be defined when data is exchanged between independently developed systems.
+Binary compatibility and serialized-data compatibility are different concerns.
+A C# object should not be treated as a portable binary protocol merely because its in-memory fields appear suitable.
+Explicit serialization defines transferable representation independently of managed object layout.
+C# supports network programming through .NET libraries.
+TcpClient provides a higher-level TCP client abstraction.
+TcpListener provides a TCP listener abstraction.
+Socket provides lower-level socket functionality.
+TCP provides a reliable ordered byte stream.
+TCP does not preserve application message boundaries.
+An application protocol over TCP must define message framing.
+Network reads can return fewer bytes than the complete application message requires.
+Network writes and reads must handle connection failures.
+Network operations can block unless asynchronous or timeout behavior is used appropriately.
+HTTP client functionality is provided by HttpClient.
+HttpClient sends HTTP requests and receives HTTP responses.
+HttpClient instances are intended to be reused according to common .NET usage patterns rather than unnecessarily created and destroyed for every request.
+HTTP success should be determined from the actual response status and application contract.
+A 200 HTTP status indicates successful handling according to HTTP semantics.
+A 404 HTTP status indicates that a requested resource was not found.
+A 503 HTTP status indicates that a service is unavailable.
+A 503 response should represent actual service unavailability rather than uncertainty about an answer.
+C# itself does not define HTTP status codes.
+HTTP behavior is provided through protocols and .NET libraries.
+Security boundaries should be explicit.
+Input from users is untrusted.
+Input from network peers is untrusted unless established otherwise by a trusted protocol and validation.
+Input from files can be untrusted.
+Deserialized data can be untrusted.
+Database data can contain untrusted content.
+Client-side validation is not a server-side security boundary.
+Server-side applications must validate untrusted input.
+Validation determines whether input satisfies expected requirements.
+Sanitization modifies input according to a defined policy.
+Output encoding prepares data for a particular output context.
+Validation, sanitization, and output encoding solve different problems.
+HTML output should be encoded for its destination context.
+SQL values should be supplied through parameters where applicable.
+Shell commands should not be constructed by concatenating untrusted input.
+File paths derived from untrusted input require boundary validation.
+Authentication determines who or what an actor is.
+Authorization determines what an authenticated actor is permitted to do.
+Authentication and authorization are different security responsibilities.
+A successful login does not imply permission to perform every operation.
+Authorization should be enforced by trusted server-side code.
+Hiding a user-interface control does not enforce authorization.
+Passwords should not be stored as plaintext.
+Password storage should use an appropriate password hashing algorithm.
+Password hashing and encryption are different concepts.
+Secrets should not be hard-coded into publicly distributed client software when secrecy depends on users being unable to recover them.
+TLS protects network traffic between communicating endpoints when correctly configured.
+TLS does not automatically make application logic secure.
+Cryptographic algorithms should be used through established cryptographic libraries rather than invented casually.
+System.Security.Cryptography provides cryptographic facilities in .NET.
+RandomNumberGenerator provides cryptographically suitable random data for applicable security uses.
+System.Random is not intended to provide cryptographically secure random values.
+Cryptographic keys require secure generation, storage, access control, rotation, and disposal according to system requirements.
+C# supports unsafe code.
+The unsafe keyword permits operations involving pointers and other unsafe constructs.
+Unsafe code requires an appropriate compilation context.
+Unsafe C# can bypass some protections normally provided by managed execution.
+Pointer arithmetic can be used within unsafe contexts.
+Unsafe code should be bounded and justified when used.
+Span<T> represents a contiguous region of memory with bounds-aware semantics.
+Span<T> is a ref struct.
+Span<T> cannot be stored in ordinary heap objects in ways prohibited by ref struct lifetime rules.
+ReadOnlySpan<T> provides read-only access to a contiguous region.
+Memory<T> provides a memory abstraction that can be stored and used across asynchronous boundaries in scenarios where Span<T> cannot.
+Spans can reduce allocations when processing slices of existing memory.
+Slices reference portions of existing storage rather than necessarily copying it.
+Bounds checking remains part of ordinary safe span access.
+C# uses managed references rather than exposing ordinary raw memory addresses in normal safe code.
+Object identity and object value are distinct concepts.
+Reference equality asks whether references identify the same object.
+Value equality asks whether values should be considered equal according to the type's equality semantics.
+The == operator must not automatically be described as reference equality for every C# type.
+For strings, == performs value equality according to string operator semantics.
+C# strings are reference types with value-oriented equality behavior.
+The === operator does not exist in C#.
+C# and PHP have different equality operators and semantics.
+C# and JavaScript have different equality operators and semantics.
+Programming-language operators should be interpreted according to the language being discussed.
+C# and C are distinct languages.
+C# and C++ are distinct languages.
+C# code does not compile as C merely because some syntax looks similar.
+C# code does not compile as C++ merely because some syntax looks similar.
+C# normally depends on .NET runtime and library facilities.
+C normally uses its implementation and native platform facilities.
+C++ normally uses its implementation, standard library, and native platform facilities.
+A C# assembly and a native shared library use different execution and metadata models.
+Native interoperability must define a compatible boundary.
+Platform Invocation Services are commonly called P/Invoke.
+P/Invoke allows managed code to call functions exported by compatible native libraries.
+The DllImport attribute can declare native functions for P/Invoke in established .NET patterns.
+LibraryImport can provide source-generated interop declarations in applicable modern .NET versions.
+Managed and native code must agree on calling conventions and data representation at an interop boundary.
+Incorrect native interop declarations can corrupt memory or produce incorrect behavior.
+Structure layout can be controlled for interoperability using applicable interop attributes.
+Strings require explicit marshaling semantics at native boundaries.
+Native ownership rules must specify who allocates and frees memory.
+A pointer obtained from native code is not automatically safe merely because C# receives it.
+Native callbacks require compatible delegate and lifetime handling.
+An ABI is an Application Binary Interface.
+An ABI defines binary-level conventions between compiled components.
+C# source-level APIs and native ABIs are different concepts.
+Managed assemblies use metadata and runtime type information beyond a traditional C ABI.
+A stable native interface can be exposed to C# through interop.
+A C-compatible ABI can simplify interoperability with multiple languages.
+Version compatibility should be checked explicitly when independently deployed components communicate.
+A module should not assume implementation details that are absent from its declared contract.
+A module boundary should define ownership.
+A module boundary should define lifetime.
+A module boundary should define version compatibility.
+A module boundary should define error behavior.
+A module boundary should validate untrusted input.
+C# attributes can provide metadata used by frameworks and tools.
+An attribute does not necessarily execute behavior by itself.
+Frameworks can inspect attributes and change behavior based on their metadata.
+Reflection can discover attributes.
+Dependency injection containers can use reflection or generated metadata to construct objects.
+Source generators can generate C# source code during compilation.
+A source generator participates in compilation.
+Generated code should be treated as part of the resulting program and reviewed according to project requirements.
+Roslyn is the .NET compiler platform used for C# and Visual Basic tooling.
+The C# compiler can expose analyzers.
+Analyzers can identify code patterns during development or compilation.
+Code fixes can suggest transformations for analyzer findings.
+Compiler warnings and analyzers provide evidence but do not prove correctness.
+Unit tests exercise bounded program behavior.
+Regression tests preserve previously expected behavior.
+Negative tests verify correct handling of invalid or prohibited conditions.
+Integration tests exercise interactions between components.
+A passing test demonstrates that the tested condition passed for that execution.
+A passing test does not prove that every possible defect is absent.
+A warning-free build does not prove that software is correct.
+Static analysis can identify classes of defects without ordinary execution.
+Dynamic testing observes behavior during execution.
+Code review complements automated analysis.
+Assertions can verify assumptions during development.
+Debug.Assert provides diagnostic assertions according to its runtime and build behavior.
+Assertions should not replace validation of untrusted production input.
+Logging can provide operational evidence.
+Logging should distinguish normal operation from warnings and failures.
+Logs should provide enough context for diagnosis without exposing unnecessary secrets.
+Structured error handling is preferable to silently ignoring failures.
+An operation that fails should return or report failure according to its interface contract.
+Catching Exception indiscriminately can hide important failures when used carelessly.
+A catch block should handle exceptions it can meaningfully address or report.
+An empty catch block can conceal defects and operational failures.
+Cancellation should not automatically be reported as an unexpected failure when cancellation was requested and is part of the interface contract.
+A deterministic operation produces the same required result for the same defined input and state.
+C# does not automatically guarantee deterministic application behavior.
+Hash-based collection enumeration order should not be used as a protocol-defined ordering unless explicitly guaranteed by the applicable contract.
+Current observed iteration order should not be mistaken for a permanent cross-runtime protocol guarantee.
+Culture-sensitive formatting can produce different text under different culture settings.
+Protocol serialization should specify culture-independent formats.
+InvariantCulture provides culture-independent formatting behavior for applicable conversions.
+Date and time serialization should use explicitly defined formats.
+Time zones should not be inferred when protocol semantics require an explicit time basis.
+DateTime and DateTimeOffset represent different time concepts.
+DateTimeOffset includes an offset from UTC.
+UTC is commonly used for interoperable timestamps.
+A deterministic protocol should specify timestamp representation.
+A deterministic protocol should specify integer representation.
+A deterministic protocol should specify string encoding.
+UTF-8 is commonly used for interoperable text protocols.
+C# strings use UTF-16 code units internally according to .NET string representation semantics.
+Internal string representation and network encoding are different concepts.
+Encoding.UTF8 provides UTF-8 encoding support.
+A protocol should not depend on the in-memory representation of a managed object.
+BinaryWriter and BinaryReader can read and write primitive values but protocol byte order and format must still be deliberately specified.
+BitConverter behavior can depend on machine endianness for applicable conversions.
+BinaryPrimitives provides explicit endian-aware operations for primitive values.
+Cross-platform protocols should explicitly define byte order.
+Cross-platform behavior should not depend on filesystem path separators.
+Cross-platform behavior should not assume Windows-only drive letters.
+Cross-platform behavior should not assume Unix-only root paths.
+Path manipulation should use platform-aware facilities where filesystem semantics are intended to be platform dependent.
+Protocol paths and filesystem paths are different concepts.
+A protocol can define its own platform-independent path syntax.
+.NET supports multiple operating systems.
+C# applications can run on Windows when supported by their target runtime and dependencies.
+C# applications can run on Linux when supported by their target runtime and dependencies.
+C# applications can run on macOS when supported by their target runtime and dependencies.
+Cross-platform .NET code can still contain platform-specific dependencies.
+Platform-specific behavior should be isolated when portability is required.
+OperatingSystem provides runtime operating-system checks in applicable modern .NET versions.
+Conditional compilation can select code according to defined compilation symbols.
+#if begins a conditional compilation section.
+#endif ends a conditional compilation section.
+Conditional compilation and runtime platform selection solve different problems.
+A common interface can hide platform-specific implementations.
+Platform-specific implementations should preserve common required behavior.
+Platform independence concerns behavior, not merely whether code compiles on multiple systems.
+C# supports partial types.
+The partial modifier allows one type definition to be split across multiple source declarations.
+Partial methods provide related compile-time extension mechanisms according to C# version rules.
+Generated code commonly uses partial types to cooperate with developer-written code.
+C# supports indexers.
+An indexer allows instances of a type to be accessed using indexing syntax.
+The this keyword refers to the current instance in applicable contexts.
+The base keyword refers to the base-class portion or members in applicable contexts.
+The static modifier associates a member with the type rather than an individual instance.
+A static class cannot be instantiated.
+A static class contains only static members according to C# rules.
+Static mutable state is shared across applicable callers within its runtime context.
+Global or static mutable state can make testing and concurrency harder.
+readonly fields restrict assignment according to readonly field rules.
+A const field represents a compile-time constant.
+const and readonly have different initialization and runtime semantics.
+C# supports local functions.
+A local function is declared within another member.
+Local functions can help keep bounded helper behavior close to its caller.
+C# supports expression-bodied members.
+Expression-bodied syntax can make simple members concise.
+Concise syntax should not be used when it makes behavior harder to understand.
+C# supports named arguments.
+Named arguments identify parameters by name at a call site.
+C# supports optional parameters.
+Optional parameter default values become part of the calling contract.
+Changing an optional parameter default can have versioning implications for already compiled callers.
+C# supports params parameters.
+The params modifier permits a variable number of arguments for an applicable parameter.
+params can cause an array or compatible collection representation to be created according to the language and runtime behavior.
+C# supports ref returns and ref locals.
+Reference-return features expose aliases to storage and require careful lifetime reasoning.
+ref struct types have restricted lifetimes designed to prevent unsafe escape of stack-associated data.
+C# supports pattern-based disposal and enumeration in addition to interface-based mechanisms in applicable language versions.
+await using supports asynchronous disposal.
+IAsyncDisposable defines asynchronous cleanup.
+await foreach supports asynchronous enumeration.
+IAsyncEnumerable<T> represents an asynchronous sequence.
+Asynchronous enumeration can produce values over time without materializing the entire sequence first.
+Asynchronous code should propagate cancellation when its interface supports cancellation.
+Fire-and-forget asynchronous work can lose errors or outlive required state if not deliberately managed.
+Application shutdown should account for active background operations.
+BackgroundService provides a common abstraction for long-running hosted .NET service work.
+IHostedService defines hosted-service lifecycle behavior in Microsoft.Extensions.Hosting.
+A service should handle startup failures explicitly.
+A service should handle shutdown explicitly.
+A service should not report itself ready before required initialization succeeds.
+Health checks can report service health.
+A health check is evidence about the checks it performs, not proof that every application function is correct.
+A dependency being unavailable can make an operation unavailable without requiring the entire process to crash.
+Failure boundaries should be defined according to system architecture.
+A 503 response is appropriate when an HTTP service is genuinely unable to handle a request because required service capability is unavailable.
+A knowledge failure and a service availability failure are different conditions.
+An application should not report service unavailability merely because it lacks information to answer a question.
+Errors should describe the actual failure condition.
+Fallback behavior should remain within established information and authority boundaries.
+Correctness is more important than producing an elaborate answer.
+A short supported result is preferable to a detailed unsupported result.
+C# provides mechanisms for building strongly typed managed software.
+.NET provides the runtime and libraries commonly used to execute C# applications.
+Garbage collection manages ordinary managed memory but does not remove the need for resource ownership and disposal.
+Async and await provide language support for asynchronous workflows but do not automatically create threads.
+Interfaces define contracts.
+Classes and structs provide implementations and data models.
+Generics provide reusable type-safe abstractions.
+LINQ provides composable query operations.
+Delegates and events provide callback and notification mechanisms.
+Exceptions provide structured failure propagation.
+Tasks represent asynchronous operations.
+The standard .NET libraries provide collections, files, networking, JSON, cryptography, threading, and other facilities.
+C# can interoperate with native C and C++ code through deliberately defined native interfaces.
+Cross-platform C# software still requires explicit control of platform-dependent behavior.
+Deterministic C# systems require explicit control of serialization, ordering, culture, time, numeric behavior, and external state.
+Readable interfaces, explicit ownership, bounded responsibilities, and validation make C# systems easier to reason about.

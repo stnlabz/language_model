@@ -1,0 +1,129 @@
+20260806.0 — Agent Modules
+
+Root Document ID: 20260806.0
+Revision ID: 20260806.0.R1
+Previous Revision: NONE
+sha256: 308d01d49bc3c905b4c1f5975ae270893c5066e277fcf6bee0148fc56f96b342
+
+Status: Approved  
+Project: STN-LABZ  
+Topic: Agent Core and Module Architecture  
+Revision Date: 20260817
+
+Purpose
+
+This policy defines the relationship between an agent Core, its modules, qualification requirements, and the project development cycle.
+
+The established Agent Modules architecture remains in effect. This policy defines how modules are governed, developed, qualified, maintained, and integrated throughout continuing project development.
+
+Core and Module Relationship
+
+Modules are integral components of an agent's Core architecture.
+
+The Core governs the modules assigned to it.
+
+A separate architectural or organizational layer identified as "Module Governance" is not required. Module governance is inherent in the relationship between the Core and its modules.
+
+The Core is responsible for controlling module discovery, qualification, lifecycle state, activation, failure handling, quarantine, and other module operations established by applicable project requirements and policy.
+
+Modules do not independently govern their relationship with the Core.
+
+Project Development Cycle
+
+Agent development occurs through continuing project development cycles.
+
+Core development and module development are activities within the development cycle of the project to which they belong.
+
+A development cycle may include:
+
+- Research and requirements development.
+- Engineering decisions.
+- Core development or revision.
+- Module creation or revision.
+- Qualification.
+- Integration.
+- Release.
+- Operational evaluation.
+- Evidence collection.
+- Maintenance and corrective development.
+
+Completion of one development cycle does not terminate development of the project.
+
+Operational evidence, new requirements, research, incidents, defects, or engineering decisions may initiate subsequent development cycles.
+
+Module Creation
+
+When a development cycle establishes a requirement for a new module, the established Module Creation Request (MCR) process applies.
+
+An approved MCR authorizes development of the new module within its approved purpose, requirement, scope, dependencies, and other established boundaries.
+
+Bug fixes, maintenance changes, corrective development, and ordinary revisions to an existing module do not require a new MCR.
+
+Core Qualification
+
+Every agent Core requires a minimum of 20 qualification tests.
+
+Twenty tests establish the minimum qualification floor and do not establish a maximum test count.
+
+Additional qualification tests will be created whenever project requirements, architecture, risk, complexity, engineering evidence, operational experience, or subsequent development require additional verification.
+
+A Core is not considered qualified merely because 20 tests have been executed. All applicable qualification requirements and required tests will be successfully satisfied before the Core is considered qualified.
+
+Module Qualification
+
+Every module requires a minimum of 10 qualification tests.
+
+Ten tests establish the minimum qualification floor and do not establish a maximum test count.
+
+Additional qualification tests will be created whenever the module's requirements, risk, complexity, dependencies, operational role, engineering evidence, or subsequent development require additional verification.
+
+A module is not considered qualified merely because 10 tests have been executed. All applicable qualification requirements and required tests will be successfully satisfied before the module is considered qualified.
+
+Established negative-validation requirements remain applicable.
+
+Continuing Qualification
+
+Qualification is part of the continuing project development cycle.
+
+As Core or module capabilities evolve, qualification suites may also evolve.
+
+New requirements, corrected defects, changed interfaces, identified failure conditions, security findings, operational evidence, or architectural changes may require additional qualification tests.
+
+Previously established tests remain part of the qualification suite when they continue to verify applicable requirements.
+
+Qualification test counts therefore may increase throughout the operational life of a project.
+
+Governance Principle
+
+The governing architectural relationship is:
+
+Core → Modules
+
+The governing engineering relationship is:
+
+Project → Development Cycle → Core and Modules → Qualification → Integration → Release → Operational Evidence → Subsequent Development Cycle
+
+Module governance is not treated as an independent development system.
+
+It is an inherent responsibility of the Core operating within the project's established development and qualification processes.
+
+Engineering Principle
+
+Qualification test counts establish minimum evidence requirements, not limits on verification.
+
+Core: Minimum 20 tests. No established maximum.
+
+Module: Minimum 10 tests. No established maximum.
+
+The amount of testing required beyond those minimums is determined by engineering requirements and evidence.
+
+References
+
+- STN-LABZ General Orders
+- 20260729.0.R0 — Operational Authority
+- 20260729.2 — Engineering Workflow
+- 20260729.5 — Unknown State Doctrine
+- 20260729.8 — Operational Doctrine
+- 20260731.2 — Drafting Standard
+- 20260801.1 — KISS Theory
+- 20260810.1 — Module Creation Request

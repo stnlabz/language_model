@@ -1,0 +1,666 @@
+HTTP stands for Hypertext Transfer Protocol.
+HTTP is an application-layer protocol.
+HTTP defines communication between clients and servers.
+HTTP uses a request-response model.
+An HTTP client sends a request.
+An HTTP server sends a response.
+A request and a response are different protocol messages.
+HTTP defines message semantics independently of the programming language implementing the client or server.
+PHP can implement HTTP server behavior.
+JavaScript can initiate HTTP requests through host APIs.
+C can implement HTTP clients and servers.
+C++ can implement HTTP clients and servers.
+C# can implement HTTP clients and servers.
+Go can implement HTTP clients and servers.
+HTTP is not PHP.
+HTTP is not JavaScript.
+HTTP is not HTML.
+HTTP is not JSON.
+HTTP is not TCP.
+HTTP can transport HTML.
+HTTP can transport JSON.
+HTTP can transport text.
+HTTP can transport binary data.
+HTTP commonly operates over TCP in HTTP/1.1 and HTTP/2 deployments.
+HTTP/3 operates over QUIC.
+HTTPS is HTTP transported with TLS protection.
+TLS and HTTP solve different protocol responsibilities.
+TLS provides transport security properties.
+HTTP defines application request and response semantics.
+Using HTTPS does not make an application logically correct.
+Using HTTPS does not provide application authorization by itself.
+Using HTTPS does not validate application input.
+An HTTP request contains a method.
+An HTTP request identifies a target.
+An HTTP request contains protocol metadata.
+An HTTP request can contain header fields.
+An HTTP request can contain a message body when permitted by the request semantics.
+An HTTP response contains a status code.
+An HTTP response contains header fields.
+An HTTP response can contain a message body.
+The request method communicates the requested operation semantics.
+GET requests retrieval of a representation.
+HEAD is similar to GET but requests no response content.
+POST submits data for processing according to the target resource's semantics.
+PUT requests creation or replacement of the state of a target resource according to the supplied representation.
+PATCH requests partial modification according to the patch representation and server contract.
+DELETE requests removal of a resource association according to server semantics.
+OPTIONS requests communication options for a target resource or server.
+TRACE performs a diagnostic loop-back operation where supported.
+CONNECT establishes a tunnel according to HTTP semantics.
+Not every HTTP server supports every method.
+A server can restrict methods available for a resource.
+GET is a safe HTTP method according to HTTP semantics.
+HEAD is a safe HTTP method.
+OPTIONS is a safe HTTP method.
+TRACE is a safe HTTP method according to protocol semantics.
+A safe method requests read-only semantics from the client perspective.
+Safe does not mean that a server performs literally no internal activity.
+A server can log a GET request without violating GET's safe semantics.
+GET should not be designed to request destructive state changes.
+HTTP defines idempotent methods.
+An idempotent method has the same intended effect when an identical request is made multiple times as when it is made once.
+GET is idempotent.
+HEAD is idempotent.
+PUT is idempotent.
+DELETE is idempotent according to HTTP method semantics.
+OPTIONS is idempotent.
+TRACE is idempotent.
+POST is not inherently idempotent.
+PATCH is not inherently idempotent.
+An application can provide additional idempotency guarantees.
+An idempotency key can help protect some state-changing operations from duplicate execution.
+Idempotency does not mean every repeated response must be byte-for-byte identical.
+Deleting an already deleted resource can produce a different response while DELETE remains idempotent in intended effect.
+HTTP status codes are three-digit integers.
+Status codes are grouped into classes.
+1xx status codes are informational responses.
+2xx status codes indicate successful handling.
+3xx status codes concern redirection.
+4xx status codes indicate client-related request conditions or failures.
+5xx status codes indicate server-side failures.
+The status class is determined by the first digit.
+A 2xx response is not automatically HTTP 200.
+A 4xx response is not automatically HTTP 404.
+A 5xx response is not automatically HTTP 500.
+The specific status code should represent the actual result.
+HTTP 100 means Continue.
+HTTP 101 means Switching Protocols.
+HTTP 200 means OK.
+HTTP 201 means Created.
+HTTP 202 means Accepted.
+HTTP 204 means No Content.
+HTTP 206 means Partial Content.
+HTTP 301 means Moved Permanently.
+HTTP 302 means Found.
+HTTP 303 means See Other.
+HTTP 304 means Not Modified.
+HTTP 307 means Temporary Redirect.
+HTTP 308 means Permanent Redirect.
+HTTP 400 means Bad Request.
+HTTP 401 means Unauthorized.
+Despite its historical name, HTTP 401 concerns missing or invalid authentication credentials.
+HTTP 403 means Forbidden.
+HTTP 403 indicates that the server understood the request but refuses to fulfill it according to authorization or policy.
+HTTP 404 means Not Found.
+HTTP 405 means Method Not Allowed.
+HTTP 406 means Not Acceptable.
+HTTP 408 means Request Timeout.
+HTTP 409 means Conflict.
+HTTP 410 means Gone.
+HTTP 411 means Length Required.
+HTTP 412 means Precondition Failed.
+HTTP 413 means Content Too Large.
+HTTP 414 means URI Too Long.
+HTTP 415 means Unsupported Media Type.
+HTTP 416 means Range Not Satisfiable.
+HTTP 422 means Unprocessable Content.
+HTTP 426 means Upgrade Required.
+HTTP 428 means Precondition Required.
+HTTP 429 means Too Many Requests.
+HTTP 431 means Request Header Fields Too Large.
+HTTP 500 means Internal Server Error.
+HTTP 501 means Not Implemented.
+HTTP 502 means Bad Gateway.
+HTTP 503 means Service Unavailable.
+HTTP 504 means Gateway Timeout.
+HTTP 505 means HTTP Version Not Supported.
+A 400 response means the server cannot or will not process the request because of a problem attributed to the request.
+A malformed request can produce HTTP 400.
+Invalid request syntax can produce HTTP 400.
+A missing required request field can produce HTTP 400 when that makes the request invalid.
+HTTP 401 is appropriate when valid authentication credentials are required and have not been supplied or accepted.
+HTTP 403 is appropriate when the request is understood but the server refuses authorization.
+Authentication and authorization are different concepts.
+Authentication determines identity.
+Authorization determines permitted actions.
+A user can be authenticated but not authorized.
+HTTP 404 means the target resource was not found or the server is not willing to disclose its existence according to applicable semantics.
+A resource not being found is not an internal server error.
+A resource not being found is not service unavailability.
+HTTP 405 means the target resource exists or is understood but does not permit the request method.
+A 405 response should include an Allow header identifying supported methods according to HTTP requirements.
+HTTP 409 represents a conflict with the current state of a resource.
+A duplicate or conflicting state transition can produce 409 when that accurately represents the application contract.
+HTTP 410 indicates that a target resource is known to be gone and the condition is expected to be permanent.
+HTTP 413 indicates that request content exceeds a limit the server is willing or able to process.
+HTTP 415 indicates that the request representation format is unsupported.
+HTTP 422 indicates that the server understands the content type and syntax but cannot process the contained instructions according to the request semantics.
+HTTP 429 represents rate limiting or excessive request frequency.
+A 429 response can include Retry-After.
+HTTP 500 represents an unexpected server condition preventing fulfillment of the request.
+A programming error can produce HTTP 500.
+An unhandled exception can produce HTTP 500.
+An internal operation failing unexpectedly can produce HTTP 500.
+HTTP 500 should not be used merely because the requested information does not exist.
+HTTP 501 indicates that the server does not support functionality required to fulfill the request.
+HTTP 501 is different from HTTP 405.
+405 means the method is not allowed for the target.
+501 means the server does not implement the required functionality.
+HTTP 502 indicates that a server acting as a gateway or proxy received an invalid response from an upstream server.
+HTTP 503 indicates that the server is currently unable to handle the request.
+Temporary overload can produce HTTP 503.
+Maintenance can produce HTTP 503.
+Failure of a required service dependency can produce HTTP 503 when it makes the requested service unavailable.
+HTTP 503 represents service availability.
+HTTP 503 does not mean "I do not know."
+HTTP 503 does not mean "no evidence was found."
+HTTP 503 does not mean "the search returned zero results."
+HTTP 503 does not mean "the answer is uncertain."
+HTTP 503 does not mean "the resource does not exist."
+HTTP 503 does not mean "the request was malformed."
+HTTP 503 does not mean "the caller lacks authorization."
+A knowledge miss is not inherently HTTP 503.
+A retrieval miss is not inherently HTTP 503.
+Insufficient evidence is not inherently HTTP 503.
+An unsupported conclusion is not inherently HTTP 503.
+A question that cannot be answered from available knowledge is an information-state condition rather than automatically a transport-service failure.
+An unavailable required internal service can legitimately cause HTTP 503.
+A failed optional subsystem does not necessarily make the whole service unavailable.
+A server should report availability according to the capability actually required by the request.
+HTTP 504 indicates that a gateway or proxy did not receive a timely response from an upstream server.
+HTTP 504 and HTTP 408 are different.
+HTTP 408 concerns the client request timing at the server.
+HTTP 504 concerns an upstream response timeout at a gateway or proxy.
+A network timeout is not automatically HTTP 504.
+A standalone application that is not acting as a gateway should not blindly translate every timeout into 504.
+HTTP status describes HTTP request handling.
+Internal error categories can be more precise than HTTP status codes.
+An application can record a detailed internal error while returning an appropriate HTTP status externally.
+HTTP status should not be used as a replacement for internal diagnostic information.
+Internal diagnostic information should not automatically be exposed to untrusted clients.
+A response status and a response body serve different purposes.
+The status code communicates protocol-level outcome semantics.
+The response body can provide application-specific detail.
+A successful HTTP response can contain an application-level result indicating no records were found.
+Zero search results can be returned with HTTP 200 when the search itself succeeded.
+An empty JSON array can represent a successful query with no matching records.
+A successful request can legitimately produce an empty result.
+Empty is not unavailable.
+Unknown is not unavailable.
+Unsupported is not unavailable.
+Not found is not unavailable.
+Invalid is not unavailable.
+Unauthorized is not unavailable.
+Forbidden is not unavailable.
+Conflict is not unavailable.
+Unavailable should mean unavailable.
+Error categories should preserve their actual meanings.
+HTTP header fields communicate metadata.
+Header field names are case-insensitive.
+Header field values have syntax defined by each header field.
+Content-Type identifies the media type of message content.
+Content-Length indicates message content length in bytes when present and applicable.
+Accept communicates media types acceptable for the response.
+Accept-Encoding communicates acceptable content codings.
+Content-Encoding identifies applied content coding.
+Authorization carries authentication credentials according to an authentication scheme.
+WWW-Authenticate communicates authentication challenges.
+Location identifies another URI in redirects and certain creation responses.
+Cache-Control communicates caching directives.
+ETag carries an entity tag representing a selected representation.
+If-None-Match supplies entity-tag conditions.
+If-Match supplies entity-tag preconditions.
+Last-Modified communicates a representation modification time.
+If-Modified-Since provides a date-based conditional request.
+User-Agent identifies information about a requesting user agent according to client behavior.
+Server can identify information about server software.
+Exposing unnecessary server implementation details can aid fingerprinting.
+Host identifies the target host and port information in HTTP/1.1 requests according to protocol rules.
+Origin identifies the origin initiating certain requests.
+Referer can identify a referring URI.
+The Referer header name is historically misspelled by specification.
+Cookie carries cookies from a client to a server.
+Set-Cookie instructs a user agent to store a cookie.
+Retry-After indicates when a client might retry in applicable responses.
+Allow identifies supported methods in applicable responses.
+Vary describes request header fields affecting representation selection and caching.
+Headers are not inherently trustworthy.
+Request headers originate from clients or intermediaries.
+A client can forge many ordinary request headers.
+User-Agent is not an authentication mechanism.
+Referer is not a reliable authentication mechanism.
+Origin can be useful in security policy but does not replace authentication.
+An application should not trust arbitrary X-Forwarded-For values unless they come through a trusted proxy configuration.
+Reverse proxies can add forwarding headers.
+Proxy trust boundaries must be explicitly configured.
+A media type identifies the format and nature of content.
+text/html identifies HTML content.
+text/plain identifies plain text.
+application/json identifies JSON content.
+application/octet-stream identifies arbitrary binary content.
+application/x-www-form-urlencoded is commonly used for HTML form data.
+multipart/form-data is commonly used for forms containing files or multipart fields.
+Content-Type describes the representation being sent.
+Accept describes representations the recipient would prefer to receive.
+Content-Type and Accept are different headers.
+A JSON body should normally be identified using application/json.
+Valid JSON syntax does not prove that the JSON satisfies an application's schema.
+Media-type validation and semantic validation are different steps.
+An HTTP message body is a sequence of bytes interpreted according to representation metadata.
+A request body can be empty.
+A response body can be empty.
+HTTP 204 responses do not contain response content.
+HEAD responses do not include response content even though representation metadata can describe what a GET would return.
+A response body should not be assumed to contain JSON merely because an application usually returns JSON.
+Clients should inspect the protocol contract and applicable Content-Type.
+Parsing an HTML error page as JSON can produce a JSON parser error that hides the original HTTP result.
+A client should preserve the HTTP status when response-body parsing fails.
+Body parsing failure and HTTP status failure are different conditions.
+A URI identifies a resource.
+A URL is a type of URI associated with locating resources.
+An HTTP URL contains a scheme.
+An HTTP URL contains an authority.
+An HTTP URL can contain a path.
+An HTTP URL can contain a query.
+An HTTP URL can contain a fragment.
+The fragment portion is not sent to an HTTP server as part of the request target in ordinary browser HTTP requests.
+Query parameters are part of the URL query component.
+Query parameters are untrusted input.
+Path parameters extracted by an application router are untrusted input.
+HTTP headers are untrusted input.
+Cookies are untrusted input.
+Request bodies are untrusted input.
+Uploaded files are untrusted input.
+Client-provided filenames are untrusted input.
+Client-provided Content-Type values are untrusted input.
+Validation should occur before untrusted input controls privileged behavior.
+A URL path and a filesystem path are different concepts.
+Mapping URL paths directly to filesystem paths without validation can create path traversal vulnerabilities.
+Percent-encoding represents certain bytes in URI components.
+URL decoding can change the interpreted value of input.
+Repeated or inconsistent decoding can create security problems.
+Canonicalization should be deliberate.
+A server should define accepted URL forms.
+HTTP supports persistent connections.
+HTTP/1.1 commonly permits multiple request-response exchanges over one TCP connection.
+A TCP connection and an HTTP request are different lifetimes.
+One TCP connection can carry multiple HTTP requests.
+Closing one HTTP response does not necessarily mean closing the TCP connection.
+HTTP/2 multiplexes multiple streams over a connection.
+HTTP/2 allows multiple concurrent request-response exchanges on one connection.
+HTTP/3 provides HTTP semantics over QUIC.
+Application semantics should not depend unnecessarily on whether HTTP/1.1, HTTP/2, or HTTP/3 carries the request.
+A server can support multiple HTTP protocol versions.
+HTTP version negotiation can occur through TLS and protocol mechanisms.
+HTTP is stateless at the protocol application semantics level between requests unless state is represented or associated externally.
+Applications can maintain sessions across HTTP requests.
+A session is application state associated with requests.
+Cookies can carry session identifiers.
+A session identifier is not the session data itself when the server stores session state separately.
+HTTP does not require PHP sessions.
+PHP sessions are one implementation of application session state.
+JavaScript does not create server-side session security merely by retaining a token.
+Session identifiers should be unpredictable when they provide access to authenticated state.
+Session identifiers should be protected against disclosure.
+Session fixation occurs when an attacker can cause a victim to use a session identifier known to the attacker.
+Session identifiers can be regenerated after authentication to mitigate fixation risks.
+Session expiration limits session lifetime.
+Logging out should invalidate or otherwise terminate authenticated session authority according to application design.
+Deleting a visible client cookie alone may not invalidate server-side session state.
+Cookies have attributes.
+Secure restricts cookie transmission to secure contexts according to cookie rules.
+HttpOnly prevents ordinary browser JavaScript from reading the cookie.
+SameSite influences whether cookies are sent in cross-site contexts.
+Path limits the URL paths for which a cookie is applicable.
+Domain controls host scope according to cookie rules.
+Expires can define an absolute cookie expiration.
+Max-Age can define a relative cookie lifetime.
+Cookie attributes provide different protections.
+HttpOnly does not encrypt a cookie.
+Secure does not prevent server-side theft of a session identifier.
+SameSite does not replace authorization.
+HTTP authentication can use multiple schemes.
+Basic authentication sends credentials encoded according to the Basic scheme.
+Base64 encoding is not encryption.
+Basic authentication should be protected by TLS when credentials require confidentiality.
+Bearer authentication uses bearer tokens.
+Possession of a bearer token is ordinarily sufficient to exercise the authority represented by that token.
+Bearer tokens should be protected as credentials.
+An API key is not inherently the same thing as a user session.
+Authentication credentials should not be placed in URLs without a compelling protocol reason.
+URLs can appear in logs, browser history, analytics, and referrer information.
+Authorization headers are generally preferable to query strings for bearer credentials.
+HTTP caching stores reusable responses.
+Caching can reduce latency and server load.
+Caching can also serve stale data.
+Cache policy should reflect data semantics.
+Cache-Control: no-store instructs caches not to store a response according to HTTP caching rules.
+Cache-Control: no-cache does not simply mean never store.
+no-cache requires validation before reuse according to caching semantics.
+max-age defines freshness lifetime.
+public permits shared caching according to applicable rules.
+private restricts response reuse to private caches.
+An ETag identifies a selected representation version.
+Conditional requests can avoid retransmitting unchanged representations.
+If-None-Match can validate a cached representation.
+A matching If-None-Match condition can result in HTTP 304.
+HTTP 304 means Not Modified.
+HTTP 304 is not an error.
+A 304 response allows reuse of a cached representation according to caching rules.
+Caches must respect Vary.
+Improper caching of authenticated or user-specific content can disclose data.
+Sensitive responses require deliberate caching policy.
+A reverse proxy can cache HTTP responses.
+A CDN can cache HTTP responses.
+Application developers should know whether intermediaries can store responses.
+HTTP redirects instruct clients to use another location.
+301 represents permanent redirection.
+302 represents Found and historically has client behavior considerations.
+303 directs retrieval using GET according to its semantics.
+307 preserves the request method during temporary redirection.
+308 preserves the request method during permanent redirection.
+Redirect semantics matter for state-changing requests.
+An open redirect occurs when untrusted input controls a redirect destination without adequate restrictions.
+Redirect targets derived from user input should be validated.
+HTTP content negotiation selects representations based on request metadata.
+Accept can participate in content negotiation.
+Accept-Language can communicate language preferences.
+Accept-Encoding can communicate supported content codings.
+Content negotiation should not silently change security semantics.
+Compression reduces representation size.
+gzip is a common HTTP content coding.
+br identifies Brotli content coding.
+Compression can reduce bandwidth.
+Compression consumes CPU resources.
+Compression of secrets mixed with attacker-controlled content can create side-channel risks in some designs.
+HTTP range requests request portions of representations.
+Range identifies requested byte ranges.
+206 Partial Content represents successful partial transfer.
+Content-Range describes the transferred range.
+Range support is useful for large files and resumable downloads.
+Range handling must validate requested bounds.
+HTTP supports conditional modification.
+If-Match can require a representation to have a particular entity tag before an operation proceeds.
+Conditional modification can prevent lost updates.
+Optimistic concurrency uses state versions or equivalent preconditions to detect conflicting changes.
+HTTP 412 indicates a failed precondition.
+HTTP 428 can require clients to submit preconditions.
+Concurrency control and authentication are separate concerns.
+CORS stands for Cross-Origin Resource Sharing.
+CORS is primarily a browser mechanism governing script access to cross-origin responses.
+CORS uses HTTP headers.
+Access-Control-Allow-Origin identifies permitted origins according to CORS processing.
+Access-Control-Allow-Methods identifies methods permitted for applicable cross-origin requests.
+Access-Control-Allow-Headers identifies permitted request headers.
+Access-Control-Allow-Credentials controls credentialed cross-origin behavior according to CORS rules.
+A CORS preflight commonly uses OPTIONS.
+Not every cross-origin request requires a preflight.
+CORS is not authentication.
+CORS is not authorization.
+CORS does not prevent non-browser clients from sending requests.
+A server exposed to a network remains exposed regardless of whether CORS permits browser JavaScript to read its responses.
+Cross-Site Request Forgery is commonly abbreviated CSRF.
+CSRF abuses a user's authenticated browser context to cause unwanted requests.
+CSRF protections can include unpredictable request tokens.
+SameSite cookies can reduce some CSRF exposure.
+Checking request methods can support correct design but does not by itself prevent CSRF.
+GET should not perform destructive actions.
+Cross-site scripting is commonly abbreviated XSS.
+XSS and CSRF are different vulnerabilities.
+HTTP headers can contribute to browser security policy.
+Content-Security-Policy controls permitted content sources and execution according to browser CSP processing.
+X-Content-Type-Options: nosniff restricts certain MIME sniffing behavior.
+Strict-Transport-Security instructs supporting browsers to use HTTPS for a host according to HSTS rules.
+HSTS is effective only after it is established through a trusted HTTPS context or preload mechanisms.
+Referrer-Policy controls referrer information.
+Permissions-Policy controls selected browser capabilities.
+Security headers complement application security.
+Security headers do not repair broken authorization.
+Security headers do not repair SQL injection.
+Security headers do not make untrusted HTML safe.
+HTTP servers must handle malformed input.
+Request parsing has security consequences.
+Conflicting message-length information can create request-smuggling vulnerabilities when intermediaries interpret requests differently.
+Proxies and origin servers must agree on request framing.
+HTTP/1.1 message framing must follow protocol requirements.
+Servers should use mature protocol parsers rather than ad hoc parsing where practical.
+Request limits protect resources.
+A server can limit request body size.
+A server can limit header size.
+A server can limit header count.
+A server can limit request-line length.
+A server can limit concurrent connections.
+A server can limit requests per client according to policy.
+A server can impose timeouts.
+Timeouts provide resource boundaries.
+A read timeout limits how long a server waits for request data according to implementation semantics.
+A write timeout limits how long a server waits while sending response data according to implementation semantics.
+An idle timeout limits unused persistent connections.
+A connection timeout limits establishing a connection according to client implementation.
+A total request timeout can bound an entire client operation.
+Different timeout types protect against different failure modes.
+A timeout should report the operation that timed out.
+A timeout waiting for an upstream service is not the same as a malformed client request.
+A timeout waiting for a local database is not automatically a gateway timeout.
+System architecture determines the correct error classification.
+Retries can recover from transient HTTP failures.
+Retries can also duplicate state-changing operations.
+A client should not blindly retry every failed request.
+Idempotent operations are generally safer to retry.
+Retry policy should be bounded.
+Retry policy should include delays where repeated immediate attempts would create load.
+Retry-After can guide retry timing for applicable responses.
+Exponential backoff increases delays between repeated attempts.
+Jitter can reduce synchronized retry storms.
+A retry storm can worsen an overloaded service.
+Circuit breakers can temporarily stop repeated calls to a failing dependency.
+A circuit breaker is an application resilience pattern rather than an HTTP protocol requirement.
+Health checks determine whether a service or capability is operating according to defined criteria.
+A health endpoint should report what it actually tests.
+A process being alive does not prove its dependencies are healthy.
+A database connection being healthy does not prove every application capability works.
+Liveness and readiness are different concepts.
+Liveness indicates whether a process should be considered alive according to deployment policy.
+Readiness indicates whether a service is ready to receive applicable traffic.
+A temporarily unready service can legitimately be removed from load balancing.
+Health checks should not perform unnecessarily destructive operations.
+HTTP APIs expose application capabilities through HTTP.
+An API endpoint is a defined HTTP target with an application contract.
+An endpoint contract can define method.
+An endpoint contract can define path.
+An endpoint contract can define request headers.
+An endpoint contract can define request body.
+An endpoint contract can define response status.
+An endpoint contract can define response headers.
+An endpoint contract can define response body.
+API behavior should be explicit.
+A client should not have to infer critical behavior from undocumented accidents.
+API versioning manages compatibility across interface changes.
+Versioning can appear in paths.
+Versioning can appear in media types.
+Versioning can be represented through other defined protocol mechanisms.
+No single API versioning strategy is universally required.
+Backward compatibility means existing valid clients continue to work according to their established contract.
+Adding an optional response field is often easier to make backward compatible than removing an existing required field.
+Changing the meaning of an existing field can break compatibility even when syntax remains unchanged.
+An API version and an ABI version are different things.
+HTTP API compatibility is not native binary ABI compatibility.
+A REST API is an API designed according to REST architectural constraints to some degree.
+HTTP and REST are not synonyms.
+An HTTP API does not automatically satisfy REST constraints.
+REST is not required for every HTTP service.
+RPC can operate over HTTP.
+GraphQL can operate over HTTP.
+File downloads can operate over HTTP.
+Streaming can operate over HTTP.
+Server-Sent Events use HTTP to deliver a stream of events from server to client.
+WebSocket begins with an HTTP-based opening handshake but then uses the WebSocket protocol.
+HTTP and WebSocket are different protocols after a successful protocol switch or extended connection establishment.
+HTTP can carry machine-to-machine traffic.
+HTTP can carry browser traffic.
+HTTP can carry internal service traffic.
+HTTP can carry public API traffic.
+The same protocol does not imply the same trust level.
+Internal HTTP requests should still have defined authentication and authorization when required.
+Network location alone is not sufficient authorization for many systems.
+localhost does not automatically mean trusted.
+A local process can be malicious or compromised.
+A reverse proxy sits between clients and origin servers.
+A reverse proxy can terminate TLS.
+A reverse proxy can route requests.
+A reverse proxy can apply limits.
+A reverse proxy can cache responses.
+A reverse proxy can modify headers.
+An origin application should know which proxy headers it trusts.
+A load balancer distributes requests among service instances.
+Load balancing can improve availability and capacity.
+Load balancing does not make an unhealthy application correct.
+Session state can complicate load balancing.
+Sticky sessions route a client repeatedly to the same backend according to load-balancer policy.
+Shared session storage can permit requests to reach different backend instances.
+Stateless application design can simplify horizontal scaling.
+Stateless does not mean an application stores no persistent data.
+Stateless HTTP application instances can use shared databases or external state services.
+HTTP logging records request and response activity.
+Useful request logs can include method.
+Useful request logs can include path.
+Useful request logs can include status.
+Useful request logs can include duration.
+Useful request logs can include a correlation identifier.
+Logs should avoid unnecessary credentials.
+Authorization headers should not be logged casually.
+Session cookies should not be logged casually.
+Request bodies can contain secrets.
+Response bodies can contain secrets.
+Logging entire HTTP messages can create security and privacy risks.
+A request identifier can correlate activity across components.
+Correlation identifiers should not be mistaken for authentication credentials.
+Distributed tracing can follow requests across services.
+Tracing and logging are complementary observability mechanisms.
+Metrics can measure request count.
+Metrics can measure response status distribution.
+Metrics can measure latency.
+Metrics can measure error rates.
+Metrics can measure active connections.
+Observability should preserve meaningful failure categories.
+Reporting every failed answer as 503 destroys diagnostic information.
+Reporting every failure as 500 destroys diagnostic information.
+Reporting every missing record as 404 can also be wrong when the endpoint represents a successful search collection.
+The endpoint contract determines how application results map to HTTP.
+An HTTP transport layer should not invent application knowledge.
+An application reasoning layer should not invent HTTP transport failure.
+Transport status and knowledge state are separate dimensions.
+A request can succeed technically while producing no answer.
+A request can fail technically even when the requested knowledge exists.
+A retrieval subsystem can find no matching evidence while HTTP remains fully operational.
+A reasoning subsystem can reject an unsupported conclusion while HTTP remains fully operational.
+A storage subsystem can fail while the HTTP server remains alive.
+A required storage failure can make a particular endpoint unavailable.
+An optional storage failure can leave other endpoints healthy.
+Failure scope matters.
+An application should degrade according to the capability actually lost.
+A module failure does not automatically mean total service failure.
+A single unavailable module does not automatically justify HTTP 503 for unrelated capabilities.
+A dispatcher failure should be distinguished from a module execution failure.
+A module execution failure should be distinguished from a retrieval miss.
+A retrieval miss should be distinguished from insufficient evidence.
+Insufficient evidence should be distinguished from contradictory evidence.
+Contradictory evidence should be reported as contradiction rather than transport failure.
+An answer can state that available information does not establish a conclusion without claiming the service is unavailable.
+A service can truthfully say it does not know.
+Not knowing is an information condition.
+Being unavailable is an operational condition.
+Those conditions should not be conflated.
+HTTP clients should inspect status codes.
+HTTP clients should not assume every response is successful.
+HTTP clients should not assume every non-200 response means a network failure.
+A server returning HTTP 404 is reachable.
+A server returning HTTP 500 is reachable.
+A server returning HTTP 503 is reachable enough to return that HTTP response.
+Receiving an HTTP error response proves that an HTTP response was received.
+A connection refusal occurs before an HTTP response exists.
+A DNS failure occurs before an HTTP response from the target server exists.
+A TLS handshake failure occurs before ordinary HTTP exchange completes.
+A socket timeout can occur without any HTTP response.
+Network-layer failures and HTTP-layer failures are different categories.
+DNS resolves names to network information according to DNS.
+TCP establishes reliable byte-stream connections for applicable HTTP versions.
+TLS can establish encrypted authenticated transport.
+HTTP then exchanges application messages over the established transport.
+Failure can occur at each layer.
+A DNS error should not be mislabeled as an HTTP status.
+A TCP connection error should not be mislabeled as an HTTP status unless an intermediary deliberately maps it into an HTTP response.
+A TLS error should not be mislabeled as an origin HTTP response.
+Layer boundaries matter for diagnosis.
+HTTP/1.1 messages are textual in their framing syntax with message content represented as bytes.
+HTTP/2 uses binary framing.
+HTTP/3 uses HTTP semantics with QUIC transport and binary framing mechanisms.
+HTTP/2 and HTTP/3 do not change the fundamental meaning of GET into something different.
+Status semantics remain HTTP semantics across protocol versions unless specifications define otherwise.
+HTTP clients and servers should follow standards rather than depend on accidental implementation behavior.
+Standards compliance improves interoperability.
+Interoperability requires both parties to agree on protocol behavior.
+An application-specific protocol carried over HTTP should define its own message contract.
+JSON over HTTP is a common application protocol pattern.
+JSON-RPC can be transported over HTTP.
+Using JSON does not automatically make an API RESTful.
+Using POST does not automatically make an operation unsafe.
+Using GET does not make a badly designed destructive endpoint safe.
+Application behavior should respect HTTP method semantics.
+A response should use the most accurate applicable status.
+A successful operation should not return 500 merely because the result was unexpected to a developer.
+A failed operation should not return 200 merely to avoid handling errors.
+Returning 200 with an error object can obscure protocol semantics when an HTTP error status accurately represents the failure.
+Application-specific error codes can supplement HTTP status.
+An application error code should have documented meaning.
+An error message should explain the failure without leaking unnecessary implementation details.
+Machine-readable errors should have stable fields.
+Human-readable messages can provide context.
+A machine should not have to parse prose to determine a stable error category when a structured error code can provide it.
+Error contracts are part of API design.
+Errors should be deterministic where the underlying condition is deterministic.
+The same invalid request should not randomly alternate between unrelated status codes.
+A server should distinguish invalid input from unavailable dependencies.
+A server should distinguish unauthorized action from nonexistent resources according to security policy.
+A server should distinguish conflicts from internal crashes.
+Precise error classification improves clients.
+Precise error classification improves testing.
+Precise error classification improves monitoring.
+Precise error classification improves debugging.
+Precise error classification reduces false operational alarms.
+HTTP status codes are evidence about request handling.
+They should not be dramatic decorations.
+HTTP 503 has a specific operational meaning.
+HTTP 500 has a specific server-failure meaning.
+HTTP 404 has a specific resource-result meaning.
+HTTP 400 has a specific request-failure meaning.
+HTTP 403 has a specific authorization meaning.
+HTTP 409 has a specific state-conflict meaning.
+HTTP 429 has a specific rate-limiting meaning.
+Choosing a status code should follow the actual condition.
+If no HTTP failure occurred, an internal knowledge response should not fabricate one.
+If an answer cannot be established from available evidence, the response should say that the evidence is insufficient.
+If no matching knowledge exists, the response should report the knowledge miss according to the application's contract.
+If an internal service required for the operation is genuinely unavailable, service-unavailable reporting is appropriate.
+If an internal service is available but returns no matching record, service-unavailable reporting is inappropriate.
+If a module is active and successfully executes but finds no answer, the module did not become unavailable merely because its result was empty.
+If a module crashes or cannot execute a required operation, that is an execution failure.
+If module discovery fails, that is a discovery failure.
+If module qualification fails, that is a qualification failure.
+If routing cannot identify a handler, that is a routing failure.
+If retrieval returns no relevant evidence, that is a retrieval miss.
+If evidence exists but does not support a conclusion, that is insufficient evidence.
+If evidence supports multiple incompatible conclusions, that is contradictory evidence.
+These failure and knowledge states should remain distinct.
+Correct HTTP handling preserves those distinctions at the transport boundary.

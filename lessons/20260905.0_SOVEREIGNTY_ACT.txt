@@ -1,0 +1,685 @@
+20260905.0 — The 2026 Sovereignty Act of STN-LABZ
+
+Root Document ID: 20260905.0
+Revision ID: NONE
+Previous Revision: NONE
+sha256: 3aafc2f9205db0c5fc9706b86861977882a768bb36221f652afe69395d1067b2
+
+Status: Approved
+Scope: Organization-wide
+Applicability: STN-LABZ Technology, Engineering, Infrastructure, Data, Operations, Procurement, and External Dependencies
+
+---
+
+1. Purpose
+
+The 2026 Sovereignty Act of STN-LABZ establishes technological sovereignty as a governing organizational requirement.
+
+STN-LABZ will design, operate, acquire, and maintain technology in a manner that preserves practical organizational control over:
+
+- systems;
+- source code;
+- software;
+- infrastructure;
+- data;
+- communications;
+- development;
+- deployment;
+- security;
+- knowledge;
+- operational continuity; and
+- future technical direction.
+
+STN-LABZ will minimize unnecessary dependency upon third-party systems, services, platforms, products, infrastructure, and authorities.
+
+Third-party technology may be used when technically, operationally, economically, or strategically justified.
+
+Convenience alone will not justify surrendering operational control to a third party.
+
+---
+
+2. Sovereignty Principle
+
+STN-LABZ technological sovereignty means retaining sufficient control over organizational technology to continue engineering and operations without unnecessary dependence upon the continued permission, availability, commercial decisions, technical decisions, or cooperation of an external party.
+
+The governing principle is:
+
+> STN-LABZ will own or retain practical control of the technology, data, knowledge, and engineering capability necessary to continue its mission.
+
+External technology may support STN-LABZ.
+
+External technology will not unnecessarily control STN-LABZ.
+
+---
+
+3. Dependency Principle
+
+Third-party dependency is not inherently contrary to technological sovereignty.
+
+Unnecessary dependency, uncontrolled dependency, and dependency that transfers essential organizational control require correction.
+
+The governing relationship is:
+
+    External Technology
+            |
+            v
+    Engineering Requirement
+            |
+            v
+    Dependency Evaluation
+            |
+       +----+----+
+       |         |
+       v         v
+    Justified  Unnecessary
+       |         |
+       v         v
+     Bounded   Remove /
+       |       Replace
+       v
+    Maintain
+    Sovereignty
+
+A dependency will exist because it provides demonstrated value or required capability.
+
+A dependency will not exist merely because using it is easier than understanding the requirement.
+
+---
+
+4. Preferred Engineering Order
+
+When technically practical, STN-LABZ will prefer technology according to the following order:
+
+1. STN-LABZ-owned implementation.
+2. Locally operated, inspectable, portable, or independently maintainable implementation.
+3. Replaceable third-party component with defined boundaries.
+4. External service or externally controlled infrastructure with a demonstrated requirement and viable continuity strategy.
+5. Technology creating substantial external control or lock-in only when explicitly authorized after evaluation of the dependency.
+
+This order establishes engineering preference.
+
+It does not require STN-LABZ to recreate mature technology without an engineering reason.
+
+---
+
+5. STN-LABZ-Owned Technology
+
+Technology developed by STN-LABZ will remain under STN-LABZ organizational control.
+
+Where practical, STN-LABZ-owned systems will retain:
+
+- source availability;
+- build capability;
+- configuration knowledge;
+- deployment capability;
+- operational documentation;
+- recovery capability;
+- data access;
+- migration capability; and
+- maintenance capability.
+
+Critical organizational knowledge will not exist exclusively within an external service or external party.
+
+---
+
+6. Third-Party Software
+
+Third-party software may be used when it satisfies an established engineering, operational, security, compatibility, economic, or mission requirement.
+
+Selection will consider applicable:
+
+- necessity;
+- maturity;
+- security;
+- maintainability;
+- inspectability;
+- licensing;
+- portability;
+- replaceability;
+- interoperability;
+- operational dependence;
+- update dependence;
+- support dependence;
+- data control; and
+- continuity risk.
+
+A third-party package will not be introduced merely to avoid implementing a small, well-understood capability when the resulting dependency creates greater lifecycle complexity than the capability itself.
+
+The KISS Theory applies to dependency selection.
+
+---
+
+7. External Services
+
+Externally hosted services may be used when their value justifies the dependency they introduce.
+
+Applicable services include:
+
+- hosted APIs;
+- cloud services;
+- development platforms;
+- source-hosting platforms;
+- communication services;
+- authentication services;
+- storage services;
+- build services;
+- deployment services;
+- monitoring services;
+- artificial-intelligence services; and
+- other remotely operated technical services.
+
+Use of an external service will not transfer ownership of STN-LABZ engineering decisions, source material, organizational data, or operational authority to the service provider.
+
+Where an external service performs an important organizational function, STN-LABZ will maintain an appropriate continuity, replacement, migration, export, local-operation, or recovery strategy according to the significance of the dependency.
+
+---
+
+8. Cloud Dependency
+
+Cloud infrastructure is an implementation option, not an organizational requirement.
+
+STN-LABZ systems will not become cloud-dependent without a demonstrated engineering or operational requirement.
+
+Where cloud infrastructure is used, architecture will preserve practical control over applicable:
+
+- data;
+- configuration;
+- software;
+- deployment artifacts;
+- credentials;
+- backups;
+- operational knowledge; and
+- migration capability.
+
+Critical STN-LABZ data will remain recoverable independently of a single cloud provider where technically practical.
+
+---
+
+9. Data Sovereignty
+
+STN-LABZ retains control of STN-LABZ data.
+
+Organizational data stored or processed through external technology will remain accessible in a form sufficient for applicable recovery, migration, audit, continued operation, or reconstruction.
+
+Data architecture will avoid unnecessary dependence upon proprietary representations that prevent practical migration or independent use.
+
+Where technically practical, STN-LABZ will prefer:
+
+- documented formats;
+- portable formats;
+- deterministic representations;
+- exportable data;
+- locally retainable authoritative records; and
+- formats that can be processed without permanent dependence upon a single provider.
+
+The location of data does not independently determine sovereignty.
+
+Control, accessibility, integrity, recoverability, and practical portability determine the engineering condition.
+
+---
+
+10. Source Sovereignty
+
+STN-LABZ will retain authoritative access to source code required for continued development of STN-LABZ-owned systems.
+
+Use of an external source-hosting provider does not transfer source authority to that provider.
+
+Applicable repositories will be recoverable or reproducible independently of the continued availability of the hosting provider according to their operational importance.
+
+Repository visibility remains governed independently by the STN-LABZ Repository Visibility and Public Access Policy.
+
+Repository hosting and repository ownership are separate matters.
+
+---
+
+11. Build Sovereignty
+
+STN-LABZ will preserve the practical ability to build its own software where the software is maintained from STN-LABZ-controlled source.
+
+A hosted build system may assist development or release activity.
+
+Hosted build infrastructure will not become the only means by which critical STN-LABZ-owned software can be produced unless explicitly justified.
+
+Applicable build requirements, dependencies, toolchains, and procedures will be documented sufficiently to support continued engineering.
+
+---
+
+12. Deployment Sovereignty
+
+STN-LABZ will retain practical control over deployment of STN-LABZ-owned systems.
+
+External deployment infrastructure may be used where justified.
+
+The ability of a third party to host or deploy an STN-LABZ system does not establish authority over the system's mission, configuration, engineering direction, or organizational use.
+
+Critical deployment knowledge will remain available to STN-LABZ.
+
+---
+
+13. Knowledge Sovereignty
+
+STN-LABZ engineering and operational knowledge will remain available to STN-LABZ independently of any single external service.
+
+Applicable knowledge includes:
+
+- architecture;
+- source documentation;
+- build procedures;
+- deployment procedures;
+- configuration;
+- qualification evidence;
+- controlled documentation;
+- operational procedures;
+- recovery procedures;
+- engineering decisions; and
+- other information necessary to understand and maintain STN-LABZ systems.
+
+External tools may assist in producing or managing organizational knowledge.
+
+They will not become the sole authoritative location of critical organizational knowledge without an established continuity mechanism.
+
+---
+
+14. Artificial Intelligence Services
+
+Artificial intelligence may be used as an engineering, research, documentation, development, analytical, or operational tool according to applicable STN-LABZ policy.
+
+Use of an external AI service does not transfer STN-LABZ engineering authority to the provider or system.
+
+STN-LABZ-owned systems will not acquire an unnecessary runtime dependency upon an external AI service.
+
+Where an AI capability is used during development but is not required by the resulting system, the resulting system will remain operational without that development service.
+
+Autonomous STN-LABZ agents remain governed by their applicable architecture, mission, policy, qualification, and knowledge requirements.
+
+---
+
+15. Communications Sovereignty
+
+External communications infrastructure may be used where required or useful.
+
+STN-LABZ will avoid unnecessary dependence upon a single communications provider, protocol implementation, service, or platform where that dependency would materially prevent continued required operations.
+
+Communication architecture will be evaluated according to mission requirements and the consequences of provider or service loss.
+
+---
+
+16. Authentication and Identity
+
+External identity or authentication services will not become an unnecessary exclusive authority over access to critical STN-LABZ-controlled systems.
+
+Where externally provided authentication is used for an important organizational function, applicable recovery and continuity requirements will be established according to the significance of that function.
+
+STN-LABZ will retain practical means of recovering organizational control when a third-party identity service is unavailable or replaced where the underlying system permits such control.
+
+---
+
+17. Security Dependencies
+
+Security technology will be selected according to demonstrated security and engineering requirements.
+
+Technological sovereignty does not justify replacing mature security or cryptographic implementations with weaker STN-LABZ implementations merely to eliminate a third-party dependency.
+
+Security-sensitive dependency decisions will consider:
+
+- implementation quality;
+- reviewability;
+- maintenance;
+- vulnerability response;
+- cryptographic correctness;
+- supply-chain integrity;
+- operational independence; and
+- replacement capability.
+
+Sovereignty and security will be evaluated together.
+
+Neither will be sacrificed merely to satisfy the appearance of the other.
+
+---
+
+18. Hardware and Operating Systems
+
+Use of externally manufactured hardware, processors, operating systems, drivers, firmware, toolchains, or other foundational technology does not independently violate this Act.
+
+STN-LABZ will evaluate such dependencies according to the control realistically available at the applicable engineering layer.
+
+The objective is practical technological sovereignty.
+
+The objective is not artificial self-sufficiency.
+
+STN-LABZ is not required to reproduce commodity technology where doing so provides no demonstrated engineering benefit.
+
+---
+
+19. Portability
+
+Portability is an important sovereignty mechanism when applicable to the system.
+
+Systems will avoid unnecessary coupling to proprietary mechanisms where a technically appropriate portable interface satisfies the requirement.
+
+Portability may include:
+
+- source portability;
+- data portability;
+- protocol portability;
+- infrastructure portability;
+- deployment portability;
+- storage portability; and
+- provider portability.
+
+Portability requirements will remain proportional to actual organizational and engineering need.
+
+---
+
+20. Interoperability
+
+STN-LABZ may use open, documented, standardized, or otherwise interoperable interfaces where doing so improves organizational control and engineering flexibility.
+
+Interoperability does not require publication of STN-LABZ source code.
+
+Public interfaces and private implementations may coexist.
+
+Repository visibility remains an independent organizational decision.
+
+---
+
+21. Replaceability
+
+Important third-party dependencies will be evaluated for practical replaceability.
+
+Replaceability may be established through:
+
+- alternative implementations;
+- documented interfaces;
+- open standards;
+- data export;
+- source availability;
+- local fallback;
+- abstraction boundaries;
+- migration procedures;
+- independent backups; or
+- another demonstrated continuity mechanism.
+
+The required degree of replaceability will correspond to the consequence of dependency loss.
+
+---
+
+22. Dependency Failure
+
+Engineering decisions involving significant external dependencies will consider conditions including:
+
+- service outage;
+- provider failure;
+- product discontinuation;
+- account termination;
+- loss of network connectivity;
+- licensing change;
+- pricing change;
+- API change;
+- acquisition of the provider;
+- loss of support;
+- incompatible update;
+- removal of functionality; and
+- loss of access.
+
+The purpose of this evaluation is continuity engineering.
+
+A dependency whose loss materially affects STN-LABZ operations will receive continuity treatment appropriate to that impact.
+
+---
+
+23. Dependency Exit
+
+Significant external dependencies will have an understood exit condition.
+
+Where appropriate, STN-LABZ will know:
+
+- what data must be recovered;
+- what software must be replaced;
+- what interfaces must be reimplemented;
+- what configuration must be preserved;
+- what credentials must be changed;
+- what infrastructure must be migrated; and
+- what operational capability must be restored.
+
+An exit strategy may be simple when the dependency is trivial.
+
+It will be proportionate when the dependency is significant.
+
+---
+
+24. Dependency Classification
+
+Dependencies may be evaluated according to their effect on organizational sovereignty.
+
+A dependency may be treated as:
+
+24.1 Incidental
+
+Loss causes little or no meaningful operational impact.
+
+24.2 Replaceable
+
+Loss requires engineering action but an established replacement path exists.
+
+24.3 Significant
+
+Loss materially affects an STN-LABZ system or organizational capability and requires defined continuity planning.
+
+24.4 Sovereignty-Critical
+
+Loss could prevent STN-LABZ from exercising practical control over critical technology, data, infrastructure, or operations.
+
+Sovereignty-critical dependencies require explicit organizational awareness and appropriate continuity measures.
+
+---
+
+25. Procurement and Adoption
+
+Technology adoption is an engineering decision when the adopted technology becomes part of STN-LABZ operations or systems.
+
+Before adopting a significant external dependency, applicable evaluation will consider:
+
+    Requirement
+        |
+        v
+    Why External?
+        |
+        v
+    What Dependency?
+        |
+        v
+    What Control Remains?
+        |
+        v
+    What Happens If It Disappears?
+        |
+        v
+    Can STN-LABZ Continue?
+        |
+        v
+    Adopt / Reject / Mitigate
+
+The depth of evaluation will remain proportional to the significance of the dependency.
+
+---
+
+26. Convenience
+
+Convenience is a legitimate engineering consideration.
+
+Convenience alone is not sufficient justification for a dependency that materially reduces STN-LABZ sovereignty.
+
+Where a third-party dependency substantially increases complexity, lock-in, operational exposure, or loss of organizational control for minor convenience, the simpler sovereign implementation will be preferred.
+
+---
+
+27. Existing Dependencies
+
+Approval of this Act does not automatically invalidate existing STN-LABZ technology or external dependencies.
+
+Existing significant dependencies may be evaluated as systems are developed, maintained, revised, migrated, qualified, or otherwise reviewed.
+
+Where an existing dependency materially conflicts with this Act, STN-LABZ will determine an appropriate remediation, replacement, mitigation, or authorized retention strategy.
+
+The Act governs future engineering decisions immediately upon approval.
+
+---
+
+28. No Inferred Dependency Authority
+
+The existence of:
+
+- an account;
+- an API key;
+- a subscription;
+- technical compatibility;
+- available integration;
+- an installed package;
+- developer access;
+- administrative access;
+- prior use;
+- industry convention;
+- vendor recommendation;
+- hosting-provider functionality; or
+- technical capability
+
+does not independently authorize introduction of that dependency into STN-LABZ architecture.
+
+Dependency adoption requires the applicable STN-LABZ engineering or organizational decision.
+
+---
+
+29. System Architecture
+
+New STN-LABZ architecture will minimize unnecessary external points of control.
+
+Where external dependencies are required, their boundaries will be identifiable.
+
+Critical STN-LABZ functionality will preferentially remain within STN-LABZ-controlled architecture where technically and operationally practical.
+
+The intended relationship is:
+
+    STN-LABZ System
+          |
+          +-- STN-LABZ-Controlled Core
+          |
+          +-- Defined Interfaces
+                  |
+                  v
+          Justified External
+             Dependencies
+
+External dependencies support the architecture.
+
+They do not define STN-LABZ sovereignty.
+
+---
+
+30. Continuity Principle
+
+STN-LABZ will design significant systems with the expectation that external dependencies can change.
+
+Providers may disappear.
+
+Services may change.
+
+Products may be discontinued.
+
+Terms may change.
+
+Technology may become obsolete.
+
+STN-LABZ architecture will account for these realities according to the significance of the dependency.
+
+The governing question is:
+
+> If this dependency ceased to exist, could STN-LABZ retain or recover practical control of the affected capability?
+
+The answer will inform the engineering decision.
+
+---
+
+31. Sovereignty Review
+
+Sovereignty review will be proportional to the engineering decision.
+
+Routine use of ordinary replaceable technology does not require unnecessary administrative process.
+
+Significant or sovereignty-critical dependencies require deliberate evaluation.
+
+Review may occur during:
+
+- architecture development;
+- design review;
+- procurement;
+- module creation;
+- infrastructure changes;
+- qualification;
+- release;
+- migration;
+- incident review; or
+- dependency replacement.
+
+The purpose of review is to preserve organizational control without introducing unnecessary bureaucracy.
+
+---
+
+32. Engineering Principle
+
+STN-LABZ will use outside technology where outside technology serves STN-LABZ.
+
+STN-LABZ will avoid architecture in which STN-LABZ unnecessarily exists at the permission of outside technology.
+
+The engineering objective is:
+
+    Control
+      +
+    Portability
+      +
+    Replaceability
+      +
+    Recoverability
+      +
+    Knowledge
+      |
+      v
+    Technological Sovereignty
+
+Sovereignty is demonstrated through practical control.
+
+It is not demonstrated by refusing useful technology.
+
+---
+
+33. Core Rule
+
+The controlling rule of the 2026 Sovereignty Act of STN-LABZ is:
+
+> STN-LABZ will retain practical control over the technology, data, knowledge, infrastructure, and engineering capability necessary to continue its mission. Third-party technology may support STN-LABZ where justified, but unnecessary external dependency will not become an authority over STN-LABZ operations or engineering.
+
+In application:
+
+> Dependency is permitted. Dependency without sufficient organizational sovereignty is not.
+
+---
+
+34. Human Review
+
+Decision: Approved 
+Reviewer: P. Mei
+Date: 2026-09-05
+
+References
+
+- 20260730.2 — STN-LABZ General Orders
+- 20260729.6 — Engineering Documentation
+- 20260729.8 — Operational Doctrine
+- 20260801.1 — KISS Theory
+- 20260815.1 — GitHub Repository Requirements
+- 20260817.0 — Engineering Development Doctrine
+- 20260817.1 — STN-LABZ Trust Chain
+- 20260819.0 — AI-Assisted Controlled Documentation Policy
+- STN-LABZ Repository Visibility and Public Access Policy
+
+END DOCUMENT

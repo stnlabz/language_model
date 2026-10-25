@@ -1,0 +1,508 @@
+C++ is a general-purpose programming language.
+C++ is a compiled programming language.
+C++ was originally developed as an extension of ideas and capabilities associated with C.
+C++ and C are distinct programming languages.
+Valid C code is not necessarily valid C++ code.
+Valid C++ code is not necessarily valid C code.
+C++ supports procedural programming.
+C++ supports object-oriented programming.
+C++ supports generic programming.
+C++ supports functional programming techniques.
+C++ is statically typed.
+C++ is case-sensitive.
+C++ source files commonly use the .cpp, .cc, or .cxx filename extensions.
+C++ header files commonly use the .h, .hpp, .hh, or .hxx filename extensions.
+A C++ implementation includes a compiler and supporting implementation facilities.
+The compiler translates C++ source code into a lower-level representation or object code.
+The linker combines object files and libraries into an executable or library.
+A translation unit is source code processed after preprocessing.
+A C++ program can consist of multiple translation units.
+ISO C++ refers to standardized versions of the C++ programming language.
+Portable C++ avoids unnecessary dependence on implementation-specific behavior.
+C++ has evolved through multiple standardized revisions.
+A compiler can support one or more C++ language standard modes.
+Compiler support for a language feature depends on the compiler and selected language standard.
+The -std option can select a C++ standard mode in GCC and compatible compilers.
+A hosted C++ program begins execution through the main function.
+The main function returns int.
+Returning zero from main conventionally indicates successful program termination.
+A nonzero exit status conventionally indicates some form of failure.
+Statements commonly end with a semicolon.
+Blocks are enclosed by braces.
+Comments can use // for a line comment.
+Comments can use /* and */ for a block comment.
+An identifier names a program entity.
+A declaration introduces information about an entity.
+A definition provides an entity where a definition is required.
+A variable is an object with a name.
+An object is a region of storage associated with a type and lifetime according to C++ rules.
+Every expression has a type and a value category.
+C++ provides fundamental types.
+bool represents boolean values.
+char is a character and integer type.
+short is an integer type.
+int is an integer type.
+long is an integer type.
+long long is an integer type.
+Integer types can be signed or unsigned.
+float is a floating-point type.
+double is a floating-point type.
+long double is a floating-point type.
+void represents the absence of a value in applicable contexts.
+std::size_t is an unsigned integer type suitable for representing object sizes.
+The sizeof operator reports the size of an object or type in bytes.
+Fixed-width integer types such as std::uint32_t are provided through <cstdint> when supported.
+Signed integer overflow has undefined behavior.
+Unsigned integer arithmetic has defined modulo behavior.
+C++ does not automatically make arithmetic immune to overflow.
+auto can request type deduction from an initializer.
+auto does not mean that an object has no type.
+An object declared using auto still has a statically determined type.
+const prevents modification through an applicable const-qualified access path.
+constexpr indicates that an entity can participate in constant evaluation when its requirements are satisfied.
+consteval requires a function invocation to produce a compile-time constant where the language requires immediate invocation.
+constinit can require static or thread storage initialization to occur without dynamic initialization.
+A reference provides an alias to another object or function.
+An lvalue reference is written using & in a type declaration.
+An rvalue reference is written using && in a type declaration.
+A reference must be initialized.
+A reference is not normally reseated to refer to a different object after initialization.
+Pointers and references are different language mechanisms.
+A pointer stores a pointer value.
+The address-of operator & can obtain the address of an object where permitted.
+The dereference operator * accesses an object through a valid pointer.
+nullptr is the C++ null pointer literal.
+nullptr should generally be preferred over integer zero or NULL for null pointer values in C++.
+Dereferencing a null pointer has undefined behavior.
+Dereferencing an invalid pointer has undefined behavior.
+Using an object after its lifetime has ended can have undefined behavior.
+An array contains a fixed number of elements once its bound is established.
+Array indexing begins at zero.
+Out-of-bounds array access has undefined behavior.
+Built-in arrays do not automatically perform bounds checking.
+std::array provides a fixed-size array container.
+std::vector provides a dynamically sized sequence container.
+std::string represents and manages character strings.
+std::string manages its own storage.
+std::string knows its current size.
+std::string is different from a null-terminated C string.
+A C-style string is conventionally a null-terminated sequence of characters.
+std::string can interoperate with C-style strings when required.
+The c_str member function provides access to a null-terminated character representation of a std::string.
+The lifetime of pointers obtained from a std::string must obey the string object's invalidation rules.
+C++ provides namespaces.
+A namespace groups names and helps prevent naming collisions.
+The C++ standard library primarily places its names in namespace std.
+std::cout is a standard output stream.
+std::cin is a standard input stream.
+std::cerr is a standard error stream.
+The insertion operator << is commonly used with output streams.
+The extraction operator >> is commonly used with input streams.
+std::getline can read a line from an input stream into a string.
+<iostream> declares standard stream facilities.
+<string> declares std::string.
+<vector> declares std::vector.
+<array> declares std::array.
+<memory> declares standard smart pointer facilities.
+<algorithm> declares many standard algorithms.
+<filesystem> declares standard filesystem facilities in applicable C++ versions.
+<thread> declares standard thread facilities.
+<mutex> declares mutual exclusion facilities.
+<chrono> declares time-related utilities.
+<optional> declares std::optional.
+<variant> declares std::variant.
+<map> declares std::map.
+<unordered_map> declares std::unordered_map.
+C++ classes define user-defined types.
+The class keyword defines a class type.
+The struct keyword can also define a class type in C++.
+Members of a class can include data and functions.
+A member function is a function associated with a class.
+A data member stores data associated with an object.
+Class members are private by default when declared using class.
+Class members are public by default when declared using struct.
+The public access specifier makes members accessible according to public access rules.
+The private access specifier restricts access according to private access rules.
+The protected access specifier provides access associated with inheritance relationships.
+Encapsulation combines data and operations behind a defined interface.
+Encapsulation can prevent callers from depending directly on internal representation.
+A constructor initializes an object.
+A constructor has the same name as its class.
+A constructor does not declare a return type.
+A destructor performs cleanup associated with the end of an object's lifetime.
+A destructor is named using a tilde followed by the class name.
+An object can have multiple constructors with different parameter lists.
+Function overloading allows multiple functions with the same name when their parameter declarations distinguish the overloads.
+The compiler performs overload resolution to determine which applicable function is called.
+A default constructor can construct an object without caller-supplied arguments.
+A copy constructor constructs an object from another object of the same type.
+A move constructor can transfer resources from an eligible source object.
+A copy assignment operator assigns from another object of the same type.
+A move assignment operator can transfer resources during assignment.
+A destructor releases resources owned by an object when required.
+The Rule of Zero recommends designing types so resource management is handled by members that already manage their own resources.
+The Rule of Three describes the relationship among destructor, copy constructor, and copy assignment in resource-managing classes.
+The Rule of Five extends that consideration to move constructor and move assignment.
+RAII stands for Resource Acquisition Is Initialization.
+RAII associates resource ownership with object lifetime.
+An RAII object acquires or represents a resource through its lifetime and releases it during destruction.
+RAII can manage memory.
+RAII can manage files.
+RAII can manage locks.
+RAII can manage sockets through suitable wrapper types.
+RAII reduces the need for manually paired cleanup operations.
+Stack unwinding destroys applicable automatic objects when an exception propagates through their scopes.
+Destructors are therefore important to exception-safe resource management.
+C++ supports dynamic memory allocation.
+The new expression can allocate and construct an object dynamically.
+The delete expression can destroy and release an object allocated by a compatible new expression.
+new[] allocates an array dynamically.
+delete[] releases an array allocated by a compatible new[] expression.
+Using mismatched allocation and deallocation mechanisms has undefined behavior.
+Manual new and delete are often unnecessary in modern C++ application code.
+Standard containers and smart pointers can manage dynamic storage automatically.
+std::unique_ptr represents exclusive ownership of a dynamically managed object.
+A std::unique_ptr is normally not copyable.
+A std::unique_ptr can be moved.
+std::make_unique constructs an object managed by a std::unique_ptr.
+std::shared_ptr represents shared ownership.
+A dynamically managed object owned by shared_ptr objects remains alive while qualifying shared ownership remains.
+std::weak_ptr provides a non-owning relationship to an object managed by std::shared_ptr.
+std::weak_ptr can help break shared ownership cycles.
+std::make_shared constructs an object managed through shared ownership.
+Shared ownership should be used when shared lifetime is actually required.
+A raw pointer does not inherently express ownership.
+A reference does not inherently express ownership.
+Resource ownership should be clear at interface boundaries.
+C++ supports inheritance.
+Inheritance allows one class to derive from another class.
+A derived class can inherit accessible members and behavior from a base class.
+Public inheritance commonly represents an is-a relationship.
+Inheritance should be used when the modeled relationship warrants it.
+Composition allows an object to contain objects of other types.
+Composition is often preferable when the relationship is has-a rather than is-a.
+A virtual member function supports dynamic dispatch.
+Dynamic dispatch can select an overriding function according to the runtime type of an object.
+The virtual keyword declares applicable virtual behavior.
+A derived class can override a virtual function.
+The override specifier asks the compiler to verify that a member function overrides a virtual base-class function.
+The final specifier can prevent further overriding or derivation in applicable contexts.
+A pure virtual function is declared using = 0.
+A class containing an unimplemented pure virtual function is abstract.
+An abstract class cannot be instantiated directly.
+A base class intended for polymorphic deletion should generally provide an appropriate virtual destructor.
+Deleting a derived object through a base pointer without an appropriate virtual destructor can produce undefined behavior.
+C++ supports templates.
+Templates allow code to operate on types or values supplied as template arguments.
+A function template describes a family of functions.
+A class template describes a family of classes.
+std::vector is a class template.
+std::array is a class template.
+Template code is instantiated for applicable template arguments.
+Generic programming expresses algorithms and data structures independently of specific types where appropriate.
+A template is not the same mechanism as a preprocessor macro.
+Templates participate in C++ type checking and language semantics.
+Concepts can constrain template arguments in applicable modern C++ standards.
+A concept expresses requirements on template arguments.
+Constrained templates can produce clearer interfaces and diagnostics.
+The C++ standard library provides containers.
+A container manages a collection of objects.
+std::vector stores a dynamically sized contiguous sequence.
+std::array stores a fixed-size contiguous sequence.
+std::deque provides a double-ended sequence container.
+std::list provides a doubly linked list.
+std::forward_list provides a singly linked list.
+std::map stores key-value pairs ordered by key according to its ordering relationship.
+std::unordered_map stores key-value pairs using hashing.
+std::set stores unique keys in ordered form.
+std::unordered_set stores unique keys using hashing.
+Container choice should reflect required operations and behavior rather than habit.
+std::vector is often a useful default sequence container when contiguous dynamic storage is appropriate.
+Standard containers manage their own storage.
+Container iterators provide generalized access to elements.
+An iterator represents a position within a sequence or range according to its iterator requirements.
+Iterators can be invalidated by container operations.
+Iterator invalidation rules depend on the container and operation.
+Using an invalidated iterator can produce undefined behavior.
+Range-based for loops provide convenient iteration over ranges.
+A range-based for loop can iterate through a standard container.
+Using a reference in a range-based for loop can avoid copying each element.
+Using const references can provide read-only iteration without unnecessary copies.
+The standard library provides algorithms.
+std::sort sorts an applicable range.
+std::find searches an applicable range.
+std::copy copies elements between appropriate ranges.
+std::transform applies an operation while transforming elements.
+Algorithms commonly operate using iterators or ranges.
+Modern C++ ranges provide additional mechanisms for composing operations in applicable standards.
+A lambda expression creates an unnamed function object.
+Lambdas can capture values or references from their surrounding scope.
+Capture behavior should be chosen deliberately.
+Capturing by reference requires the referenced object's lifetime to remain valid when the lambda uses it.
+C++ supports exceptions.
+The throw expression raises an exception.
+A try block defines code for which exceptions can be handled.
+A catch clause handles matching exceptions.
+Exceptions can propagate through multiple function calls.
+Exception propagation performs stack unwinding.
+RAII allows resources to be released during stack unwinding.
+Exceptions should represent conditions appropriate to a project's error-handling design.
+Not every C++ project uses exceptions.
+Some systems deliberately disable or avoid exceptions.
+Error handling policy should be consistent within an interface.
+std::exception is a standard base class used by many standard exceptions.
+The what member function can provide a diagnostic string for standard exception objects.
+C++ also supports error reporting through return values.
+std::error_code can represent certain error conditions without exceptions.
+std::optional can represent the presence or absence of a value.
+std::variant can represent one value selected from a defined set of alternative types.
+An interface should make failure behavior clear.
+C++ has deterministic object lifetime rules for many scoped objects.
+Automatic objects are destroyed when their lifetime ends according to language rules.
+RAII uses deterministic destruction to manage resources.
+Garbage collection is not the normal automatic memory-management model of C++.
+C++ programmers commonly manage resources through ownership types and object lifetimes rather than tracing garbage collection.
+A memory leak occurs when allocated resources become unreachable or are otherwise never released when they should be.
+A dangling pointer or reference refers to an object whose lifetime has ended or an invalid location.
+Use-after-free is an invalid access to storage after its lifetime has ended.
+Buffer overflows can occur in C++ when unsafe memory access exceeds valid bounds.
+Using C++ does not automatically prevent memory-safety defects.
+Standard containers can reduce some manual memory-management risks.
+Bounds-checked access is available through facilities such as the at member function of standard containers.
+The [] operator on standard sequence containers generally does not perform bounds checking.
+std::vector::at checks whether an index is within range and reports failure according to its contract.
+std::array::at provides checked element access.
+Undefined behavior means the C++ standard imposes no requirements on the behavior of that operation.
+Signed integer overflow has undefined behavior.
+Out-of-bounds memory access can have undefined behavior.
+Dereferencing invalid pointers can have undefined behavior.
+Data races can have undefined behavior.
+Correct C++ software avoids reliance on undefined behavior.
+Implementation-defined behavior is behavior for which an implementation selects and documents a permitted choice.
+Unspecified behavior allows one of several possibilities without requiring a particular choice.
+Portable C++ distinguishes defined behavior from implementation-dependent assumptions.
+C++ supports function overloading.
+C++ supports operator overloading.
+Operator overloading allows user-defined types to define behavior for supported operators.
+Operator overloading cannot create arbitrary new operator symbols.
+Operator overloading should preserve understandable semantics.
+The == operator represents equality comparison according to the applicable built-in or overloaded semantics.
+The = operator represents assignment according to the applicable semantics.
+Assignment and equality comparison are different operations.
+The === operator is not a C++ operator.
+C++ does not use === for strict equality.
+The != operator represents inequality comparison.
+The <=> operator is the three-way comparison operator in applicable modern C++ standards.
+The logical AND operator is &&.
+The logical OR operator is ||.
+The logical NOT operator is !.
+The bitwise AND operator is &.
+The bitwise OR operator is |.
+The bitwise XOR operator is ^.
+The bitwise complement operator is ~.
+Logical and bitwise operators are not interchangeable.
+&& uses short-circuit evaluation.
+|| uses short-circuit evaluation.
+The conditional operator is ?:.
+The -> operator accesses a member through a pointer-like expression according to applicable language rules.
+The . operator accesses a member through an object expression.
+Scope resolution uses ::.
+The expression std::string uses the scope-resolution operator to identify string within namespace std.
+C++ supports references in function parameters.
+A parameter declared T& receives an lvalue reference to an object of type T.
+A parameter declared const T& can refer to an object without copying it and prevents modification through that reference.
+Passing small scalar values by value is often straightforward and efficient.
+Passing large objects by const reference can avoid copying when ownership is not transferred.
+Passing by value can be appropriate when a function needs its own copy.
+Move semantics allow resources to be transferred rather than copied in applicable situations.
+std::move performs a cast that enables move semantics where the target operation supports moving.
+std::move does not itself move bytes or resources.
+An object that has been moved from remains valid when required by its type's contract but its value may be unspecified.
+Code should not assume a specific value for a moved-from object unless its type guarantees one.
+Perfect forwarding preserves relevant value-category information through generic interfaces.
+std::forward is used for perfect forwarding in appropriate template code.
+C++ supports compile-time programming.
+constexpr functions can be evaluated at compile time when used in an appropriate constant-evaluation context.
+Templates can perform compile-time computation.
+Concepts can express compile-time interface constraints.
+static_assert checks a condition during compilation.
+A failed static_assert prevents successful compilation.
+Compile-time validation can prevent invalid configurations from reaching runtime.
+The preprocessor operates before normal C++ compilation.
+#include includes preprocessing content.
+#define defines a macro.
+Macros are not type-safe language functions.
+Macros can cause surprising behavior through textual substitution.
+constexpr variables and inline functions can often replace simple constant or function-like macros.
+Header guards prevent unintended repeated header processing effects.
+A conventional header guard uses #ifndef, #define, and #endif.
+#pragma once is widely supported but historically has not been specified by all C++ standards.
+Templates are commonly defined in headers because their definitions must be available where required for instantiation.
+The inline specifier participates in language linkage and definition rules and does not guarantee machine-code inlining.
+Compiler optimization decisions are separate from the source-level inline keyword.
+C++ has linkage rules.
+Internal linkage restricts applicable names to a translation unit.
+External linkage permits applicable names to refer to entities across translation units.
+Namespaces organize source-level names.
+An ABI governs binary compatibility between compiled components.
+ABI means Application Binary Interface.
+An ABI can define calling conventions.
+An ABI can define object layout.
+An ABI can define symbol naming and name mangling conventions.
+An ABI can define exception and runtime conventions.
+C++ source compatibility does not guarantee C++ binary compatibility.
+C++ ABI compatibility can depend on compiler, compiler version, standard library, build options, architecture, and platform ABI.
+Changing the layout of a class exposed across a binary boundary can break ABI compatibility.
+Changing a virtual function layout can break ABI compatibility.
+Changing function signatures can break binary compatibility.
+C++ name mangling encodes information about entities into linker symbol names according to an implementation ABI.
+C++ does not define one universal name-mangling scheme for every implementation.
+extern "C" can request C language linkage for applicable declarations.
+extern "C" is commonly used when exposing a C-compatible interface from C++.
+extern "C" does not transform C++ types into C types.
+A stable C interface can sometimes provide a simpler binary boundary between independently built components.
+C++ classes should not be exposed across an ABI boundary without deliberately controlling compiler and ABI compatibility.
+C++ standard library types should not be assumed binary-compatible across arbitrary compilers or runtimes.
+A module system should define its binary contract explicitly.
+Dynamically loaded modules must satisfy the ABI expected by their host.
+A module and host must agree on function signatures and shared data layouts.
+ABI version validation can prevent incompatible modules from loading.
+C++ itself does not define a universal operating-system dynamic-library API.
+Dynamic loading commonly requires platform facilities or an abstraction layer.
+Unix-like systems commonly use shared objects with the .so extension.
+Windows commonly uses dynamic-link libraries with the .dll extension.
+Platform-specific loading code can be isolated behind a common interface.
+Platform independence does not require every implementation file to be identical.
+Platform-independent behavior requires defined externally observable behavior to remain consistent where the system requires consistency.
+C++ standard filesystem facilities can provide portable filesystem operations within their specified behavior.
+std::filesystem provides paths and filesystem operations in applicable C++ standards.
+Filesystem behavior can still differ because operating systems have different filesystem semantics.
+A portable application should not assume that path syntax is identical on every platform.
+std::filesystem::path represents filesystem paths.
+C++ supports multithreading through the standard library.
+std::thread represents a thread of execution.
+std::jthread provides a joining thread abstraction in applicable modern C++ standards.
+std::mutex provides mutual exclusion.
+std::lock_guard manages a lock using RAII.
+std::unique_lock provides a more flexible lock ownership wrapper.
+std::atomic provides atomic operations for supported types and operations.
+A data race occurs when conflicting unsynchronized accesses meet the language's data-race conditions.
+Data races cause undefined behavior.
+volatile does not provide general inter-thread synchronization.
+Mutexes and atomic operations serve different synchronization purposes.
+Thread-safe design requires explicit synchronization of shared mutable state.
+Immutable data can reduce synchronization requirements.
+Concurrency does not automatically improve performance.
+Thread creation and synchronization have costs.
+C++ provides time utilities through std::chrono.
+std::chrono provides clocks, durations, and time points.
+A monotonic clock is useful for measuring elapsed durations when available through an appropriate clock such as steady_clock.
+System wall-clock time can change while a program is running.
+Timeout logic should use an appropriate clock for measuring elapsed time.
+C++ does not define standard TCP socket facilities in the core language or traditional standard library networking facilities.
+Network programming commonly uses operating-system APIs or additional libraries.
+TCP provides a reliable ordered byte stream.
+TCP does not preserve application message boundaries.
+C++ network code using TCP must define application-level framing.
+A send operation does not imply one matching receive operation.
+Partial reads and writes must be handled.
+Connections can fail or close.
+Network operations can block.
+Timeouts can bound waiting behavior.
+Protocol serialization should be explicitly defined.
+Writing the raw bytes of a C++ object to a network connection does not automatically create a portable protocol.
+Object layout can include padding.
+Object layout can depend on ABI rules.
+Byte order can differ across platforms.
+Pointer values are not portable serialized data.
+Virtual table pointers are not portable serialized data.
+std::string's internal representation is not a portable serialization format.
+std::vector's internal representation is not a portable serialization format.
+Portable serialization defines the bytes independently of in-memory implementation details.
+Deserialization must validate untrusted input before using lengths, indexes, or allocations derived from it.
+Integer overflow should be considered when calculating buffer and allocation sizes.
+Consensus-sensitive serialization should be deterministic.
+Consensus-sensitive behavior should avoid undefined behavior.
+Consensus-sensitive behavior should not depend on unspecified iteration order unless the protocol explicitly accounts for it.
+std::unordered_map iteration order should not be treated as a portable deterministic ordering.
+An ordered representation should be explicitly defined when deterministic ordering is required.
+Floating-point calculations can have properties that make them unsuitable for some cross-platform consensus calculations.
+Fixed-width integer representations can be easier to define precisely for deterministic protocols.
+C++ exceptions crossing arbitrary module or ABI boundaries can create compatibility problems.
+Memory allocated by one runtime should not automatically be freed by an incompatible runtime.
+Ownership across binary boundaries should be explicitly specified.
+An ABI should define who allocates and who releases transferred resources.
+Opaque handles can hide C++ implementation details behind a stable interface.
+A C-compatible ABI can use opaque pointers or handles to represent internal C++ objects.
+Implementation details can remain private behind an ABI boundary.
+A compiler warning identifies a condition the compiler considers noteworthy.
+Warnings do not necessarily indicate an error.
+Warnings should be reviewed rather than ignored automatically.
+-Wall enables a useful set of warnings in GCC and compatible C++ compilers.
+-Wextra enables additional warnings.
+-Wpedantic requests diagnostics concerning strict language conformance.
+Treating warnings as errors can be useful in controlled build environments.
+A warning-free build does not prove that software is correct.
+Tests provide evidence about tested behavior.
+A unit test exercises a bounded unit of functionality.
+A regression test protects previously established behavior.
+A negative test verifies correct handling of invalid or prohibited conditions.
+Tests should be deterministic when the behavior being tested is deterministic.
+A passing test does not prove that every possible defect is absent.
+Static analysis examines source or program properties without ordinary execution.
+Dynamic analysis examines behavior during execution.
+AddressSanitizer can detect classes of memory errors in supported compiler environments.
+UndefinedBehaviorSanitizer can detect classes of undefined behavior in supported compiler environments.
+ThreadSanitizer can detect classes of data races in supported environments.
+Sanitizers are development tools and do not prove the absence of all defects.
+Code review complements automated testing.
+Resource ownership should be visible from interfaces where practical.
+RAII should be preferred for resource lifetime management where appropriate.
+Raw owning pointers should be avoided when an ownership type expresses the requirement more clearly.
+Global mutable state can make systems harder to test and reason about.
+Small interfaces reduce unnecessary coupling.
+Small functions with clear responsibilities are easier to understand and test.
+Composition can reduce coupling compared with unnecessary inheritance.
+Interfaces should expose required behavior without exposing unnecessary implementation details.
+Implementation details should remain private when callers do not need them.
+Dependencies should be introduced deliberately.
+Additional libraries increase dependency and deployment considerations.
+The standard library should be considered before introducing a third-party dependency for functionality it already provides adequately.
+Correctness is more important than clever syntax.
+Readable code is easier to maintain than unnecessarily complicated code.
+Modern language features should be used when they improve correctness or clarity.
+Modern C++ does not mean using every available language feature.
+Simple code can still be modern C++.
+A deterministic system should make important behavior explicit.
+A deterministic system should not depend on unspecified ordering where ordering affects externally visible results.
+A deterministic system should avoid undefined behavior.
+A deterministic system should explicitly define serialization.
+A deterministic system should explicitly define protocol behavior.
+A deterministic system should explicitly define error behavior where interoperability depends on it.
+A platform abstraction should isolate operating-system-specific behavior.
+Platform-specific implementations can share a common C++ interface.
+The common interface should define behavior rather than merely hide filenames.
+Platform-specific backends should produce equivalent required results where platform independence requires equivalence.
+C++ can be used for command-line applications.
+C++ can be used for desktop applications.
+C++ can be used for servers.
+C++ can be used for libraries.
+C++ can be used for embedded systems where an appropriate implementation is available.
+C++ can be used for performance-sensitive software.
+C++ can be used for systems programming.
+C++ can interoperate with C through carefully designed interfaces.
+C++ can provide higher-level resource-management abstractions while retaining access to lower-level facilities.
+C++ does not automatically make a program object-oriented.
+C++ does not require classes for every problem.
+C++ does not require inheritance for code reuse.
+C++ does not automatically prevent memory corruption.
+C++ does not automatically provide garbage collection.
+C++ does not automatically provide thread safety.
+C++ does not automatically provide network security.
+C++ does not automatically provide deterministic behavior.
+C++ provides language and library mechanisms from which those properties can be deliberately engineered.
+RAII, standard containers, value semantics, smart pointers, and strong interfaces can reduce classes of resource-management defects.
+A well-designed C++ program makes ownership and lifetime understandable.
+A well-designed C++ interface makes invalid use difficult where practical.
+A well-designed C++ system separates platform-specific implementation from platform-independent behavior where portability is required.
+A well-designed C++ binary interface treats ABI compatibility as an explicit engineering constraint.

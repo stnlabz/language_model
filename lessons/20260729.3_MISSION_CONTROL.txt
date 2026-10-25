@@ -1,0 +1,33 @@
+20260729.3 — Mission Control
+
+Root Document ID: 20260729.3
+Revision ID:       NONE
+Previous Revision: NONE
+sha256: ebda3804ed8f7be49c930fac9300205f81646e6c13eec408fd7cecc8674127ec
+
+Status: Approved  
+Scope: Procedures
+
+Policy
+
+The STN-LABZ Chaos MVC will be converted into the Architect MVC for Mission Control purposes.
+
+Role
+
+The Architect MVC will serve as the Mission Control Platform for all subordinate systems in the STN-LABZ ecosystem.
+
+Responsibilities
+
+Each department has its own work environment:
+
+- Operator Interface: Tier 1 Department Operators.
+- System Management: Tier 2 for Systems.
+- Authority Management: Tier 3 Policy Management.
+- Integrations: Digit, Rictus, Ezra.
+
+References
+
+- General Orders
+- 20260729.0 — Operational Authority
+- 20260729.1 — Engineering Organization
+- 20260729.2 — Engineering Workflow

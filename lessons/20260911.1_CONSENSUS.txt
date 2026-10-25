@@ -1,0 +1,801 @@
+20260911.1 — STN-LABZ Controlled Documentation Consensus Policy
+
+Root Document ID: 20260911.1
+Revision ID: NONE
+Previous Revision: NONE
+sha256: df80126635d7f9cd5121988c963228133053a92872eddd83a32a494200cda5ab
+
+Status: APPROVED
+Scope: Organization-wide
+Applicability: STN-LABZ Policies, Doctrine, Controlled Research, and other controlled documentation requiring organizational approval
+
+---
+
+1. Purpose
+
+This policy establishes the mandatory STN-LABZ consensus process for the review, reconciliation, controlled modification, conflict resolution, and approval of controlled Policy and Doctrine.
+
+The purpose of consensus review is to ensure that controlled organizational requirements are examined from the applicable policy, engineering, quality, legal, and operational perspectives before becoming authoritative.
+
+Consensus review will identify conflicts, deficiencies, ambiguity, unintended authority, unsupported requirements, implementation concerns, qualification concerns, and other material issues before final organizational approval.
+
+---
+
+2. Core Rule
+
+> A controlled Policy or Doctrine will not receive final organizational approval until the required consensus review is complete and every required consensus authority records APPROVED, except where an unresolved consensus conflict is resolved through the controlled tie-break process defined by this policy.
+
+Consensus is established through review and reconciliation.
+
+Consensus is not established through majority vote.
+
+A required consensus authority recording REJECTED or CHANGES means ordinary consensus has not been established.
+
+A tie-break resolution does not retroactively convert dissent into unanimous consensus.
+
+---
+
+3. Minimum Consensus Authorities
+
+At minimum, every STN-LABZ Policy or Doctrine will receive consensus review from:
+
+- Policies;
+- Lab;
+- Q&A; and
+- Legal.
+
+These constitute the minimum organizational consensus authorities.
+
+Additional consensus authorities may be required according to the subject, scope, affected systems, affected entities, or applicable controlled documentation.
+
+---
+
+4. Final Approval Authority
+
+Final organizational approval will be performed by:
+
+- Ops Chief; or
+- Ops VP.
+
+The Ops Chief or Ops VP is the final approving authority for the controlled document after consensus has been established or an authorized consensus conflict has been resolved according to this policy.
+
+Final approval is distinct from consensus review.
+
+Consensus authorities establish whether the proposed document has successfully completed the required organizational review.
+
+The Ops Chief or Ops VP determines whether the resulting document receives final organizational approval.
+
+---
+
+5. Consensus Dispositions
+
+Each required consensus authority will record one of the following dispositions:
+
+5.1 APPROVED
+
+The reviewing authority finds no unresolved issue within its applicable review responsibility that prevents the document from proceeding.
+
+5.2 CHANGES
+
+The reviewing authority identifies one or more issues requiring reconciliation before approval.
+
+The requested change will identify, where applicable:
+
+- the affected section;
+- the identified condition;
+- the requested correction or required outcome;
+- the basis for the requested change; and
+- the originating consensus authority.
+
+CHANGES does not establish consensus.
+
+5.3 REJECTED
+
+The reviewing authority identifies a material issue that prevents approval in the document's current form.
+
+The reason for rejection will be recorded.
+
+REJECTED does not establish consensus.
+
+5.4 OBJECTION
+
+OBJECTION records a material disagreement that remains after ordinary reconciliation has been attempted.
+
+OBJECTION is used when the reviewing authority cannot record APPROVED but the disagreement has progressed to formal Consensus Conflict Resolution.
+
+An OBJECTION will remain visible in the final controlled record if resolved through tie-break.
+
+---
+
+6. Unanimous Consensus
+
+Ordinary consensus requires APPROVED from every required consensus authority.
+
+For the minimum organizational consensus body:
+
+    Lab       = APPROVED
+    Q&A       = APPROVED
+    Legal     = APPROVED
+    Policies  = APPROVED
+
+Only then is:
+
+    Consensus = ESTABLISHED
+
+Three approvals and one unresolved disposition do not establish unanimous consensus.
+
+There is no majority-vote substitution for a required consensus approval.
+
+---
+
+7. Reconciliation
+
+A CHANGES or REJECTED disposition returns the document to reconciliation.
+
+The document may be:
+
+- clarified;
+- corrected;
+- narrowed;
+- expanded where justified;
+- reconciled with governing controlled documentation;
+- reconciled with engineering evidence;
+- reconciled with applicable legal requirements;
+- reconciled with qualification requirements; or
+- otherwise modified to resolve the identified issue.
+
+The objective of ordinary reconciliation is to resolve the condition preventing consensus rather than override the dissenting review.
+
+After modification, affected consensus authorities will review the resulting document as necessary.
+
+---
+
+8. Controlled Change Requests
+
+Consensus authorities own their findings and requested changes.
+
+Consensus authorities will not independently modify the authoritative consensus draft unless explicitly acting as the designated Document Custodian.
+
+A requested change will be communicated to the Document Custodian for controlled incorporation.
+
+The Document Custodian will preserve sufficient information to identify:
+
+- the originating consensus authority;
+- the affected provision;
+- the requested change or required outcome;
+- the reason for the request;
+- the resulting modification; and
+- whether the originating authority accepted the resulting modification.
+
+The originating consensus authority retains authority over whether its identified concern has been satisfactorily resolved.
+
+The Document Custodian controls the artifact.
+
+The originating consensus authority controls its review disposition.
+
+---
+
+9. Document Custodian
+
+Policies is the default Document Custodian for STN-LABZ Policy and Doctrine.
+
+The Document Custodian is responsible for:
+
+- maintaining the authoritative consensus draft;
+- preventing uncontrolled competing drafts;
+- incorporating reconciled changes;
+- preserving document structure;
+- preserving applicable controlled-document metadata;
+- maintaining change provenance;
+- identifying material changes requiring renewed review;
+- presenting the reconciled draft for subsequent consensus review; and
+- preparing the final consensus artifact for approval.
+
+The Document Custodian does not acquire authority over another consensus authority's review domain merely by controlling the document artifact.
+
+Policies will not alter, weaken, reinterpret, or discard another consensus authority's required change without reconciliation with that authority.
+
+---
+
+10. Change Verification
+
+After a requested change is incorporated, the originating consensus authority will determine whether the resulting language resolves its identified condition.
+
+The originating authority may record:
+
+- APPROVED;
+- additional CHANGES;
+- REJECTED; or
+- where applicable, OBJECTION.
+
+A Document Custodian statement that a change has been incorporated does not independently establish that the originating concern has been resolved.
+
+---
+
+11. Material Changes During Consensus
+
+A material modification made during consensus review will not inherit approval merely because an earlier version was approved.
+
+A reviewing authority whose approval could reasonably be affected by the modification will review the changed document before consensus is established.
+
+Changes affecting multiple review domains may require renewed review by multiple consensus authorities.
+
+The Document Custodian will determine which previous approvals may have been affected and return the modified draft to those authorities.
+
+A reviewing authority may also independently determine that a subsequent modification affects its previous approval and require renewed review.
+
+The document presented for final approval will be the document for which consensus was established or for which an authorized conflict resolution was recorded.
+
+---
+
+12. Conflicting Change Requests
+
+Two or more consensus authorities may identify requirements that cannot simultaneously be satisfied.
+
+Conflicting requested changes will not be resolved through silent editorial choice by the Document Custodian.
+
+The conflict will be identified and returned to the affected consensus authorities for direct reconciliation.
+
+The conflict record will identify:
+
+- the affected section or requirement;
+- the authorities involved;
+- each authority's position;
+- the basis for each position;
+- proposed reconciliation where available; and
+- the resulting disposition.
+
+---
+
+13. Consensus Conflict Resolution
+
+Where required consensus authorities remain materially opposed after documented ordinary reconciliation, the disagreement will enter Consensus Conflict Resolution.
+
+The normal progression is:
+
+    Conflicting Positions
+            |
+            v
+    Direct Reconciliation
+            |
+       unresolved
+            v
+    Policies Reconciliation Review
+            |
+       unresolved
+            v
+    Ops Chief / Ops VP
+            |
+            +-- RETURN FOR RESEARCH
+            |
+            +-- RETURN FOR ENGINEERING EVIDENCE
+            |
+            +-- RETURN FOR LEGAL CLARIFICATION
+            |
+            +-- RETURN FOR QUALIFICATION EVIDENCE
+            |
+            +-- RETURN WITH DEFINED SCOPE
+            |
+            +-- WITHDRAW PROPOSAL
+            |
+            +-- TIE-BREAK DECISION
+
+A tie-break is an exceptional termination mechanism.
+
+It is not the normal method of establishing organizational consensus.
+
+---
+
+14. Tie-Break Authority
+
+The Ops Chief or Ops VP may issue a tie-break decision where:
+
+1. required consensus authorities remain materially opposed;
+2. ordinary reconciliation has been attempted;
+3. the disagreement has been documented;
+4. the available evidence and positions have been presented for resolution; and
+5. further ordinary reconciliation is not reasonably expected to establish consensus without an authoritative decision.
+
+The tie-break authority may:
+
+- select one proposed position;
+- establish a reconciled position;
+- narrow the disputed requirement;
+- return the matter for additional evidence;
+- defer the matter;
+- remove the disputed provision;
+- reject the proposed document; or
+- establish another explicit resolution within organizational authority.
+
+The basis for the tie-break decision will be recorded.
+
+A tie-break decision will not authorize conduct prohibited by applicable law or override a mandatory external legal requirement.
+Where Legal identifies such a condition, the affected provision will be corrected, removed, narrowed to lawful scope, or the proposed document will not receive approval in that form.
+A disagreement concerning interpretation, legal risk, organizational authority, or a matter on which lawful alternatives exist may proceed through Consensus Conflict Resolution.
+
+---
+
+15. Preservation of Dissent
+
+A tie-break decision will not be recorded as unanimous consensus.
+
+The dissenting consensus authority's final position will remain part of the controlled record.
+
+For example:
+
+    Lab:       APPROVED
+    Q&A:       APPROVED
+    Legal:     OBJECTION
+    Policies:  APPROVED
+
+    Consensus Resolution:
+    OPS TIE-BREAK
+
+The controlled record will identify:
+
+- the unresolved objection;
+- the authority raising the objection;
+- the resolution;
+- the resolving authority;
+- the basis for the resolution; and
+- the resulting document state.
+
+The historical record will not be modified to falsely indicate that the dissenting authority approved the disputed requirement.
+
+---
+
+16. Policies Review
+
+Policies will perform the final ordinary consensus review after the other required consensus authorities have completed their applicable review and identified issues have been reconciled.
+
+Policies review will evaluate, as applicable:
+
+- consistency with existing STN-LABZ Policy and Doctrine;
+- authority boundaries;
+- conflicting requirements;
+- unintended authority grants;
+- unintended removal of established authority;
+- terminology;
+- controlled-document relationships;
+- applicability;
+- scope;
+- organizational consistency;
+- required references;
+- supersession or amendment effects;
+- change-control integrity; and
+- readiness for organizational approval.
+
+Policies recording APPROVED establishes completion of the ordinary consensus process when every other required consensus authority has also recorded APPROVED.
+
+Policies approval does not independently constitute final organizational approval.
+
+---
+
+17. Lab Review
+
+Lab will evaluate the proposed document from the applicable research, technical, architectural, systems, experimental, and evidence perspectives.
+
+Lab review may evaluate:
+
+- technical consistency;
+- architectural implications;
+- evidence supporting proposed requirements;
+- interaction with existing systems;
+- implementation feasibility;
+- deterministic behavior;
+- unresolved technical unknowns;
+- engineering assumptions;
+- research findings; and
+- consequences requiring further validation.
+
+Lab approval does not independently constitute final organizational approval.
+
+---
+
+18. Q&A Review
+
+Q&A will evaluate the proposed document from the applicable quality, qualification, validation, testability, evidence, and assurance perspectives.
+
+Q&A review may evaluate:
+
+- whether requirements can be deterministically evaluated;
+- qualification implications;
+- validation requirements;
+- negative validation;
+- regression requirements;
+- evidence requirements;
+- ambiguous success or failure conditions;
+- execution-target implications;
+- requalification boundaries;
+- acceptance criteria; and
+- consistency with applicable quality requirements.
+
+Q&A approval does not independently constitute final organizational approval.
+
+---
+
+19. Legal Review
+
+Legal will evaluate the proposed document for applicable legal, regulatory, licensing, contractual, liability, authority, ownership, and organizational concerns.
+
+Legal review will distinguish organizational policy from external legal requirements.
+
+Legal approval establishes only that Legal has no unresolved issue preventing organizational approval within the scope of its review.
+
+Legal approval does not independently constitute final organizational approval.
+
+---
+
+20. Additional Consensus Authorities
+
+The minimum consensus body may be expanded when a document materially affects another organizational domain, project, system, mission, or entity.
+
+Examples may include:
+
+- Engineering;
+- Security;
+- Mission Operations;
+- STN Chain Operations;
+- an applicable project;
+- an applicable autonomous-agent program;
+- another organization participating in an affected relationship; or
+- another specifically authorized review authority.
+
+Additional required consensus authorities become part of the consensus requirement for that document.
+
+If an additional authority is designated as required, its unresolved CHANGES, REJECTED, or OBJECTION disposition prevents ordinary unanimous consensus from being established.
+
+---
+
+21. Cross-Entity Review
+
+A controlled document materially affecting another entity may require review by an authorized representative of that entity.
+
+Cross-entity review will not be inferred from ordinary project participation, technical access, employment, development responsibility, or system access.
+
+Where STN Chain is materially affected by an STN-LABZ Policy or Doctrine, STN Chain Operations review may be added to the required consensus record.
+
+Where STN-LABZ is materially affected by policy originating from another participating entity, an authorized STN-LABZ representative may be required to review the applicable cross-entity effects.
+
+Cross-entity review does not transfer organizational authority between entities.
+
+---
+
+22. Authorized Cross-Entity Representation
+
+Where an STN-LABZ organizational position is required to represent STN-LABZ in cross-entity policy consensus, that representation will be limited to:
+
+- Ops Chief; or
+- Ops VP;
+
+unless another representative is explicitly authorized for the specific review.
+
+Participation in a project or system does not independently establish authority to approve policy on behalf of STN-LABZ.
+
+---
+
+23. STN Chain Relationship
+
+STN-LABZ policy consensus and STN Chain consensus are distinct processes.
+
+STN-LABZ policy consensus is an organizational controlled-document review process.
+
+STN Chain consensus establishes consensus-visible Chain state according to applicable STN Chain rules.
+
+Use of consensus in organizational policy governance does not cause an organizational review decision to become STN Chain consensus.
+
+Where the policy process is subsequently represented through an STN Chain contract, the Chain may provide consensus-backed evidence of applicable identities, reviews, objections, resolutions, approvals, document hashes, state transitions, and other defined records.
+
+Chain acceptance does not independently establish STN-LABZ organizational approval.
+
+STN-LABZ organizational approval does not independently establish STN Chain acceptance.
+
+---
+
+24. Consensus Evidence
+
+The controlled document will preserve the disposition of each required consensus authority.
+
+At minimum, the final document will identify:
+
+- each required consensus authority;
+- its final disposition;
+- any unresolved objection resolved through tie-break;
+- the applicable conflict resolution;
+- the final approving authority;
+- the final approval decision; and
+- the applicable approval date.
+
+Where required by another controlled process, additional review evidence may be preserved separately.
+
+---
+
+25. Document Integrity
+
+The final controlled artifact will correspond to the document that completed consensus or the document resulting from an authorized conflict resolution and received final approval.
+
+Where a SHA-256 digest is used to identify the controlled artifact, the digest will identify the final approved artifact according to the applicable controlled-document process.
+
+Modification of the controlled content after hashing requires generation of the applicable new digest.
+
+Modification after final approval will follow the applicable revision and change-control process rather than silently modifying the approved artifact.
+
+---
+
+26. Required Terminal Sections
+
+Every Policy or Doctrine governed by this policy will contain a Consensus section and an Approval section near the end of the controlled document.
+
+Section numbers may vary according to document length and structure.
+
+For ordinary unanimous consensus:
+
+    ## Consensus
+
+    Lab: APPROVED
+    Q&A: APPROVED
+    Legal: APPROVED
+    Policies: APPROVED
+
+
+    ## Approval
+
+    Approved By: Ops Chief
+    Date: YYYYMMDD
+    Decision: APPROVED
+
+Additional required consensus authorities will be recorded in the Consensus section.
+
+Where a tie-break was required, the Consensus section will preserve the actual dissent and resolution.
+
+Example:
+
+    ## Consensus
+
+    Lab: APPROVED
+    Q&A: APPROVED
+    Legal: OBJECTION
+    Policies: APPROVED
+
+    Consensus Resolution: OPS TIE-BREAK
+    Resolved By: Ops Chief
+    Resolution: <recorded resolution>
+    Basis: <recorded basis>
+
+
+    ## Approval
+
+    Approved By: Ops Chief
+    Date: YYYYMMDD
+    Decision: APPROVED
+
+---
+
+27. Approval Sequence
+
+The normal approval sequence is:
+
+    Draft
+      |
+      v
+    Lab Review
+      |
+      v
+    Q&A Review
+      |
+      v
+    Legal Review
+      |
+      v
+    Reconciliation
+      |
+      v
+    Policies Review
+      |
+      v
+    Consensus Established
+      |
+      v
+    Ops Chief / Ops VP
+      |
+      v
+    Final Decision
+
+Review may occur in parallel where useful.
+
+Regardless of review order, Policies will perform the final ordinary consensus review after material issues from the other required reviews have been reconciled.
+
+Where ordinary consensus cannot be established, the Consensus Conflict Resolution process applies.
+
+Final organizational approval occurs only after ordinary consensus has been established or an authorized conflict resolution has produced a final controlled document.
+
+---
+
+28. Final Approval Dispositions
+
+The Ops Chief or Ops VP may record:
+
+28.1 APPROVED
+
+The document becomes organizationally approved according to its stated applicability and effective conditions.
+
+28.2 RETURNED FOR CHANGES
+
+The document returns to the consensus process.
+
+Changes will be reviewed according to their effect on prior consensus approvals.
+
+28.3 REJECTED
+
+The document does not become organizationally approved.
+
+Consensus approval does not compel the Ops Chief or Ops VP to approve a document.
+
+---
+
+29. No Inferred Approval
+
+Approval will not be inferred from:
+
+- silence;
+- participation in discussion;
+- prior drafts;
+- prior versions;
+- technical agreement;
+- implementation;
+- repository access;
+- authorship;
+- employment;
+- position outside the applicable approval authority;
+- ability to modify the document;
+- historical practice; or
+- approval of a related document.
+
+Approval exists when the applicable authority explicitly records APPROVED.
+
+---
+
+30. Research Documents
+
+Controlled research may use the same consensus process when the research is intended to authorize engineering validation, establish an organizational research disposition, or prepare a candidate Policy or Doctrine.
+
+Consensus approval of research does not automatically approve a Doctrine Candidate contained within that research.
+
+A Doctrine Candidate will receive its applicable consensus and final approval before becoming authoritative Doctrine.
+
+---
+
+31. Policy and Doctrine Revisions
+
+A revision to approved Policy or Doctrine will undergo consensus review when required by the applicable controlled-document change process.
+
+Prior approval does not automatically establish approval of materially changed requirements.
+
+The resulting revision will preserve its applicable document identity, revision relationship, integrity record, consensus record, and approval record.
+
+---
+
+32. Consensus Does Not Eliminate Responsibility
+
+Consensus distributes review responsibility.
+
+It does not erase the responsibility of each reviewing authority for its applicable review domain.
+
+Each consensus authority will evaluate the document according to the responsibilities assigned to that authority.
+
+A reviewer will not record APPROVED merely because another consensus authority has approved the document.
+
+---
+
+33. Consensus Does Not Manufacture Evidence
+
+Consensus may determine whether available evidence is sufficient for an organizational decision.
+
+Consensus does not transform an assumption, unsupported claim, unknown condition, or unqualified implementation into evidence.
+
+Where required evidence does not exist, the applicable condition will remain unresolved until evidence is established or the requirement is appropriately changed.
+
+---
+
+34. Consensus and Unknown Conditions
+
+An unresolved unknown that materially affects the validity, safety, authority, legality, qualification, or deterministic interpretation of a proposed Policy or Doctrine will not be silently treated as resolved.
+
+The applicable consensus authority will identify the unknown for reconciliation, further research, engineering validation, legal clarification, qualification, or another appropriate disposition.
+
+---
+
+35. Minimum Rule
+
+The minimum STN-LABZ controlled-document consensus relationship is:
+
+    Lab
+     |
+    Q&A
+     |
+    Legal
+     |
+    Policies
+     |
+     v
+    CONSENSUS ESTABLISHED
+     |
+     v
+    Ops Chief / Ops VP
+     |
+     v
+    FINAL ORGANIZATIONAL APPROVAL
+
+Where ordinary consensus cannot be established:
+
+    UNRESOLVED CONFLICT
+           |
+           v
+    CONFLICT RESOLUTION
+           |
+           v
+    Ops Chief / Ops VP
+           |
+           +-- Return
+           +-- Defer
+           +-- Reject
+           +-- Tie-Break
+           |
+           v
+    RECORDED RESOLUTION
+
+No required consensus review may be omitted merely for convenience.
+
+Additional review may be required.
+
+Required review will not be silently bypassed.
+
+---
+
+36. Organizational Principle
+
+> Consensus establishes that the required organizational perspectives have independently examined and reconciled the proposed controlled requirement. Final approval establishes that the authorized organizational authority accepts the resulting requirement.
+
+Where unanimous consensus cannot be achieved, the controlled conflict-resolution process preserves the disagreement and establishes a deterministic means of reaching or declining an organizational decision.
+
+Consensus and final approval are therefore complementary but distinct controls.
+
+---
+
+37. Core Rule
+
+> Review until the requirement is solid. Control every change. Preserve every material objection. Establish consensus where possible. Resolve deadlock explicitly. Approve only the resulting controlled artifact.
+
+---
+
+38. Consensus
+
+Policies: APPROVED
+Lab: APPROVED
+Legal: APPROVED 
+Q&A: APPROVED  
+
+
+39. Approval
+
+Approved By: Ops Chief 
+Date: 20260911  
+Decision: APPROVED
+
+---
+
+References
+
+- 20260729.6 — Engineering Documentation
+- 20260729.8 — Operational Doctrine
+- 20260730.2 — STN-LABZ General Orders
+- 20260731.2 — Documentation Language Policy
+- 20260801.1 — KISS Theory
+- 20260817.0 — Engineering Development Doctrine
+- 20260817.1 — STN-LABZ Trust Chain
+- 20260819.0 — AI-Assisted Controlled Documentation Policy
+- 20260824.0 — STN-LABZ AI LAW
+- 20260905.0 — The 2026 Sovereignty Act of STN-LABZ
+- 20260909.0 — STN-LABZ / STN Chain Authority Separation Policy
+
+END DOCUMENT

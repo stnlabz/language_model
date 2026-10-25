@@ -1,0 +1,785 @@
+Debugging is the systematic investigation of incorrect software behavior.
+Debugging seeks to identify the cause of an observed problem.
+Debugging is not guessing.
+Debugging is not randomly changing code until symptoms disappear.
+A symptom is observable incorrect behavior.
+A cause is the condition responsible for producing that behavior.
+A symptom and its cause can occur in different components.
+An error message is evidence.
+An error message is not automatically the root cause.
+A warning is evidence.
+A warning is not automatically the root cause.
+A log entry is evidence.
+A log entry is not automatically the root cause.
+A crash location is evidence.
+A crash location is not automatically where the defect originated.
+Debugging begins with observation.
+Record what actually happened.
+Record what was expected to happen.
+Identify the difference between expected and observed behavior.
+Preserve exact error messages.
+Preserve relevant timestamps.
+Preserve relevant logs.
+Preserve relevant input.
+Preserve relevant configuration.
+Preserve the software version.
+Preserve the source revision when known.
+Preserve the operating environment when relevant.
+Do not replace observed facts with assumptions.
+A reproducible failure is easier to debug than an intermittent failure.
+Reproduction means producing the same relevant failure under defined conditions.
+Reproduction steps should be explicit.
+A reproduction should identify required initial state.
+A reproduction should identify inputs.
+A reproduction should identify actions.
+A reproduction should identify expected results.
+A reproduction should identify actual results.
+A minimal reproduction removes unrelated conditions while preserving the failure.
+Reducing a reproduction can identify the failing boundary.
+Change one relevant variable at a time when practical.
+Changing many variables simultaneously weakens causal conclusions.
+If five things are changed and the problem disappears, the responsible change is unknown.
+A hypothesis is a proposed explanation.
+A hypothesis is not evidence.
+A hypothesis should produce testable predictions.
+Test the prediction.
+Reject hypotheses contradicted by evidence.
+Retain hypotheses consistent with evidence.
+Prefer explanations supported by observed behavior.
+Do not become attached to a hypothesis.
+The first plausible explanation is not necessarily correct.
+The most complicated explanation is not necessarily correct.
+The simplest explanation is not automatically correct.
+Evidence determines which explanation survives.
+Correlation is not causation.
+Two events occurring together does not prove one caused the other.
+A code change occurring before a failure makes the change relevant to investigation.
+It does not automatically prove the change caused the failure.
+A network attack occurring during an outage makes the attack relevant evidence.
+It does not automatically prove the attack caused the outage.
+Causation requires evidence connecting cause and effect.
+Debugging should identify the failing layer.
+A user-interface failure can originate in the interface.
+A user-interface failure can originate in application logic.
+A user-interface failure can originate in a network request.
+A user-interface failure can originate in a remote service.
+A user-interface failure can originate in persistence.
+A visible symptom does not establish the defective layer.
+Trace execution through boundaries.
+A boundary is where responsibility passes between components.
+Function calls create boundaries.
+Module interfaces create boundaries.
+Process communication creates boundaries.
+Network protocols create boundaries.
+Database interfaces create boundaries.
+Filesystem interfaces create boundaries.
+Platform abstractions create boundaries.
+Each boundary provides an opportunity to inspect inputs and outputs.
+If correct data enters a component and incorrect data leaves it, that component becomes relevant.
+If incorrect data already enters a component, investigate upstream.
+If correct data leaves a component but the next component receives incorrect data, investigate the boundary or transport.
+Debugging can be treated as narrowing a search space.
+Begin with the largest known failing path.
+Identify a midpoint.
+Determine whether behavior is correct before or after that midpoint.
+Continue narrowing.
+This resembles binary search when the investigation permits it.
+Divide-and-conquer debugging can rapidly isolate defects.
+git bisect applies this idea across source history.
+Logging can expose execution state.
+Logs should identify important transitions.
+Logs should identify failures.
+Logs should preserve useful context.
+Logs should not expose unnecessary secrets.
+Adding targeted diagnostic logging can test a hypothesis.
+Diagnostic logging should be removed or reduced when it is no longer appropriate.
+Excessive logging can hide important events.
+Useful logging is structured and purposeful.
+A log saying "failed" is weaker than a log identifying the failed operation and reason.
+A log saying "network error" is weaker than a log identifying timeout, refusal, DNS failure, TLS failure, or protocol failure.
+Specific errors narrow investigation.
+Generic errors widen investigation.
+Error propagation should preserve useful cause information.
+Wrapping an error can add context.
+Wrapping an error should not destroy the underlying cause.
+An internal error can contain a platform-specific code.
+A higher layer can translate that code into a stable application error category.
+Both can be useful for debugging.
+Windows error codes are platform-specific.
+Linux errno values are platform-specific.
+A portable application can preserve both portable category and native detail.
+A timeout is different from connection refusal.
+Connection refusal is different from DNS failure.
+DNS failure is different from malformed protocol data.
+Malformed protocol data is different from authentication failure.
+Authentication failure is different from authorization failure.
+Authorization failure is different from empty data.
+Empty data is different from service failure.
+Do not collapse distinct failures during debugging.
+A debugger is a tool for inspecting executing programs.
+A debugger can pause execution.
+A debugger can set breakpoints.
+A debugger can inspect variables.
+A debugger can inspect memory.
+A debugger can inspect call stacks.
+A debugger can step through instructions or source lines according to available symbols.
+A breakpoint pauses execution at a defined location or condition.
+A conditional breakpoint pauses only when a condition is satisfied.
+Conditional breakpoints are useful for failures occurring only under specific state.
+A watchpoint can pause when memory changes according to debugger capability.
+A call stack records active function calls.
+The top stack frame identifies the current execution location.
+Earlier frames show how execution arrived there.
+A stack trace is valuable crash evidence.
+A stack trace should be preserved before restarting a failed process when practical.
+The crashing function is not necessarily the function that corrupted state.
+Memory corruption can occur earlier and become visible later.
+A buffer overflow can corrupt memory.
+The crash can occur far from the original overflow.
+Use-after-free can corrupt or read invalid state.
+The visible failure can depend on memory layout.
+Uninitialized memory can produce inconsistent behavior.
+Undefined behavior can change when optimization changes.
+A bug disappearing in a debug build does not prove it is repaired.
+A bug appearing only in a release build can indicate undefined behavior, timing, optimization, or another build-dependent condition.
+Compare build settings.
+Compare compiler versions.
+Compare optimization settings.
+Compare preprocessor definitions.
+Compare linked libraries.
+Build configuration is part of the debugging environment.
+A clean rebuild removes stale build artifacts.
+Stale object files can create misleading behavior.
+A successful incremental build does not prove every source file was rebuilt.
+When build-state uncertainty exists, perform a clean build.
+Do not make clean builds a ritual without reason.
+Use them when stale artifacts are plausible.
+Compiler warnings can identify defects.
+Read warnings.
+Do not suppress warnings merely to obtain a clean build.
+A warning can reveal implicit conversions.
+A warning can reveal uninitialized variables.
+A warning can reveal unreachable code.
+A warning can reveal incompatible types.
+A warning can reveal format-string mismatches.
+Not every warning is a defect.
+Every warning should be understood before dismissal.
+A crash should be reproduced when possible.
+Record the input that caused the crash.
+Record the stack trace.
+Record relevant logs.
+Record the binary version.
+Record the source revision.
+Record platform information.
+Record whether the crash is deterministic.
+A deterministic crash is easier to isolate.
+An intermittent crash may require repeated execution.
+Intermittent failures can result from races.
+Intermittent failures can result from uninitialized state.
+Intermittent failures can result from timing.
+Intermittent failures can result from external dependencies.
+Intermittent failures can result from resource exhaustion.
+Intermittent does not mean random.
+There is still a cause.
+A race condition depends on relative timing between operations.
+Adding logging can alter timing.
+A race can disappear when observed.
+This is sometimes called a Heisenbug.
+A debugger can also alter timing.
+Timing-sensitive defects require careful evidence.
+Thread sanitizers can help identify data races.
+Stress testing can increase occurrence frequency.
+Controlled delays can test timing hypotheses.
+Controlled delays should not become the permanent repair unless timing itself is the defined requirement.
+sleep is rarely a correct synchronization primitive.
+Synchronization should use defined coordination mechanisms.
+Deadlocks occur when execution participants wait indefinitely on one another according to a dependency cycle or equivalent condition.
+A deadlocked process can remain alive.
+A process being alive does not prove it is responsive.
+CPU usage can provide evidence.
+Zero CPU usage does not prove deadlock.
+High CPU usage does not prove useful work.
+A busy loop can consume CPU while making no progress.
+Progress should be measured by meaningful state transitions.
+A watchdog can detect lack of expected progress.
+A heartbeat can detect some liveness failures.
+A heartbeat does not prove complete functional health.
+Debugging should test the capability that failed.
+If a database query fails, test database behavior.
+If DNS fails, test DNS.
+If TCP connection fails, test TCP connectivity.
+If TLS fails, test TLS.
+If protocol qualification fails, test the protocol handshake.
+Do not use ping as proof that an application protocol works.
+Do not use a successful TCP connection as proof that the application works.
+Do not use application startup as proof that every module works.
+Layer-specific tests produce layer-specific evidence.
+A network timeout can occur because packets were dropped.
+A network timeout can occur because a server was slow.
+A network timeout can occur because a service was overloaded.
+A network timeout can occur because a response was lost.
+A network timeout can occur because timeout configuration was too short.
+A timeout alone does not identify which cause applies.
+Inspect both endpoints when possible.
+Inspect server logs.
+Inspect client logs.
+Inspect packet behavior when necessary.
+Inspect timing.
+Do not immediately increase the timeout.
+Increasing a timeout can hide a performance or deadlock problem.
+A larger timeout is appropriate only when the required operation legitimately needs more time.
+A connection repeatedly disconnecting and reconnecting should be investigated as a lifecycle problem.
+Record why each disconnect occurs.
+Determine which side closes the connection.
+Determine whether closure is graceful.
+Determine whether a timeout triggers closure.
+Determine whether protocol validation triggers closure.
+Determine whether an intermediary triggers closure.
+Determine whether the application intentionally reconnects.
+Do not assume the network is unstable merely because reconnect messages appear.
+The reconnect logic itself can be defective.
+A reconnect loop can amplify a minor failure.
+A retry loop should record its failure category.
+A retry loop should have bounded timing.
+A permanent error should not create endless rapid retry.
+Authentication failure is not normally repaired by reconnecting repeatedly.
+Protocol-version mismatch is not repaired by reconnecting repeatedly.
+Wrong-network identity is not repaired by reconnecting repeatedly.
+Malformed configuration is not repaired by reconnecting repeatedly.
+Transient connection refusal can justify retry according to policy.
+Transient timeout can justify retry according to policy.
+Failure classification determines recovery behavior.
+Database debugging should separate connection from query execution.
+Can the application reach the database server?
+Can the application authenticate?
+Can it select the required database?
+Does it have permission?
+Does the SQL parse?
+Does the query execute?
+Does it return expected rows?
+Does the application interpret those rows correctly?
+Each question identifies a different stage.
+Zero rows is not a database failure.
+A successful query returning zero rows should be debugged as data or query-condition behavior when zero rows are unexpected.
+Inspect the actual query.
+Inspect bound parameters.
+Inspect data types.
+Inspect NULL behavior.
+Inspect collation when relevant.
+Inspect transaction visibility.
+Inspect the actual database being queried.
+Do not assume the application connected to the intended database merely because connection succeeded.
+Configuration can point to the wrong database.
+Development and production databases can contain different data.
+A query can be correct against the wrong database and still produce an unexpected result.
+Record connection target during diagnosis without exposing secrets.
+Prepared statements should be inspected with their parameter values represented safely.
+Do not reconstruct SQL by unsafe concatenation merely for debugging.
+The executed SQL structure and bound values can be logged separately.
+Database transactions can hide state from other connections according to isolation.
+An uncommitted insert can exist in one transaction but remain invisible elsewhere.
+A rollback can remove changes that appeared temporarily successful.
+A COMMIT failure or ambiguous connection loss requires careful investigation.
+Do not infer persistence merely because an INSERT call initially succeeded.
+Verify transaction outcome.
+Filesystem debugging should use the actual runtime identity.
+A file being writable by the developer does not prove it is writable by the service.
+A file being writable by root does not prove it is writable by the service.
+Inspect ownership.
+Inspect permissions.
+Inspect parent-directory permissions.
+Inspect filesystem mount options where relevant.
+Inspect access-control mechanisms where relevant.
+Test using the actual service identity.
+Permission denied is not repaired by blindly granting everyone write access.
+Determine which path requires access.
+Determine which identity requires access.
+Grant the minimum required access according to policy.
+Directory write permission and file write permission are different.
+Creating a file requires appropriate directory permissions.
+Modifying an existing file requires appropriate file and path permissions.
+Renaming files requires directory permissions.
+Atomic replacement often requires directory write permission.
+A program can read a file but be unable to replace it.
+Exact operation matters.
+Path bugs can result from incorrect working directories.
+Relative paths depend on process working directory.
+Interactive shell working directory can differ from service working directory.
+A path working from a terminal does not prove it works from a service.
+Log resolved paths when diagnosing path problems.
+Absolute paths can remove some ambiguity.
+Hard-coded absolute paths reduce portability.
+Architecture should determine path strategy.
+Module debugging should preserve loader stages.
+Discovery identifies a candidate.
+Manifest validation validates metadata.
+ABI validation checks compatibility.
+Qualification evaluates required properties.
+Loading maps or attaches executable module code.
+Initialization establishes module state.
+Activation makes module functionality available according to architecture.
+Failure at one stage should not be mislabeled as failure at another.
+"module.conf missing" is a manifest-stage failure.
+An ABI mismatch is an ABI-validation failure.
+A missing export is a loading or interface-validation failure according to architecture.
+Initialization failure occurs after loading when initialization does not complete.
+Functional failure can occur after successful activation.
+The exact stage should be recorded.
+A module rejected during discovery should not be debugged by modifying unrelated response logic.
+A manifest error should first be investigated at the manifest boundary.
+Do not modify a valid module manifest merely because another component failed.
+Do not touch unrelated configuration without evidence.
+A module's module.conf can be authoritative configuration.
+If module.conf is known correct and evidence points elsewhere, preserve it.
+Changing known-good configuration introduces a new variable.
+Debugging should minimize new variables.
+When a module hot-loads successfully, that proves the loader reached the active state according to its state machine.
+It does not prove every module command works.
+Test the module's actual interface.
+If "ingest php" fails, inspect command routing.
+If routing succeeds, inspect lesson lookup.
+If lookup succeeds, inspect file access.
+If file access succeeds, inspect parsing.
+If parsing succeeds, inspect storage.
+If storage succeeds, inspect reporting.
+The failing stage should be isolated.
+Do not rewrite the entire module because one command failed.
+A narrow defect should receive a narrow repair when architecture permits.
+A broad rewrite increases regression risk.
+Response debugging should distinguish retrieval from generation.
+Did the request reach the response component?
+Was the question parsed?
+Was relevant knowledge retrieved?
+Was irrelevant knowledge retrieved?
+Was source authority applied?
+Was context constructed?
+Did the response generator execute?
+Did an internal dependency fail?
+Was the generated response delivered?
+Each stage can fail independently.
+A wrong answer is not necessarily a generation defect.
+The wrong evidence may have been retrieved.
+Correct evidence can be retrieved but ranked below irrelevant evidence.
+Correct evidence can be passed to the generator but ignored.
+Correct output can be produced but lost during transport.
+Trace the pipeline.
+If Digit answers an unrelated PHP fact to a specific PHP question, inspect retrieval evidence before changing the PHP lesson.
+The lesson can contain the correct fact.
+A retrieval failure does not mean the lesson is wrong.
+A reasoning failure does not mean ingestion failed.
+A successful ingestion count does not prove retrieval quality.
+A successful retrieval does not prove response quality.
+Keep stages separate.
+Source provenance is useful debugging information.
+Record which source produced a retrieved fact.
+Record source type.
+Record current versus historical status when relevant.
+Record ranking score when the retrieval architecture uses one.
+Record selected context.
+This can explain why an answer was produced.
+If an old README outranks a current interface header, the retrieval problem is source precedence.
+Deleting historical evidence is one possible workaround but can destroy useful history.
+A stronger repair is distinguishing historical documentation from authoritative current state.
+When current state is requested, current authoritative sources should win according to architecture.
+When history is requested, historical sources become relevant.
+Debugging retrieval requires understanding question intent.
+A current-state question and a historical question are not equivalent.
+"What ABI do your modules use?" requests current state.
+"What ABI versions have your modules used?" requests history.
+"What changed between ABI 1.4 and 1.5?" requests comparison.
+A retrieval system should not answer all three with the same evidence selection.
+A debugging test should include all three.
+If the first returns "1.3 -> 1.4 -> 1.5," source-role handling is defective.
+If the second returns only "1.5," historical retrieval may be incomplete.
+If the third invents differences not present in evidence, grounding is defective.
+Different failures require different repairs.
+Configuration debugging should establish actual loaded configuration.
+The configuration file on disk is not necessarily the configuration currently in memory.
+A process can load configuration only at startup.
+Changing a file does not guarantee a running process reloaded it.
+Some systems support live reload.
+Some systems require restart.
+Some systems watch files.
+Some systems cache configuration.
+Determine actual behavior.
+Log configuration source where safe.
+Do not log secrets.
+Verify which configuration path was loaded.
+Multiple similarly named configuration files can cause confusion.
+Environment variables can override files.
+Command-line options can override defaults.
+Precedence rules should be explicit.
+Debugging configuration requires knowing precedence.
+A default value should not be mistaken for an explicitly configured value.
+A stale environment variable can override a corrected file.
+A service manager can provide environment variables different from an interactive shell.
+A service can run under a different working directory.
+A service can run under a different user.
+A service can have different PATH settings.
+A program working interactively but failing as a service often indicates environment differences.
+Compare environments systematically.
+Do not immediately rewrite the application.
+Deployment debugging should identify the actual executing binary.
+The source directory can contain new code while an old binary remains running.
+A binary can be rebuilt but not deployed.
+A binary can be deployed but the service not restarted.
+A service can restart but execute a different path.
+Multiple copies of an executable can exist.
+Determine the process executable path.
+Determine version output.
+Determine build identity when available.
+Determine process start time.
+Determine source revision associated with the binary when available.
+"Source is fixed" does not mean "running service is fixed."
+"Build succeeded" does not mean "deployment succeeded."
+"Deployment succeeded" does not mean "runtime behavior is correct."
+Each stage requires evidence.
+Version strings are useful diagnostic evidence.
+Build identifiers are useful diagnostic evidence.
+Commit identifiers are useful diagnostic evidence.
+ABI versions are useful diagnostic evidence.
+Protocol versions are useful diagnostic evidence.
+Do not confuse them.
+Application version 2.0 can use ABI 1.5.
+Protocol version 1 can coexist with application version 2.0.
+A commit hash does not replace any of these semantic versions.
+Record identifiers with labels.
+Unlabeled version numbers create ambiguity.
+Debugging distributed systems requires multiple perspectives.
+A client log shows client observations.
+A server log shows server observations.
+A proxy log shows proxy observations.
+A database log shows database observations.
+A packet capture shows traffic visible at the capture point.
+No single perspective necessarily contains the complete event.
+Correlate using timestamps and identifiers.
+Request identifiers can connect events across components.
+Transaction identifiers can connect related operations.
+Peer identifiers can connect protocol events.
+Alert identifiers can connect monitoring events.
+Correlation identifiers improve distributed debugging.
+Clock synchronization improves timeline reconstruction.
+Clock drift can make event order appear incorrect.
+Use monotonic clocks for measuring elapsed duration when appropriate.
+Wall-clock time is useful for cross-system event timestamps.
+Monotonic time is useful for durations because it is not affected by ordinary wall-clock adjustments.
+Time source matters.
+Performance debugging should measure before optimizing.
+Identify where time is spent.
+Measure DNS time.
+Measure connection time.
+Measure TLS time.
+Measure server processing.
+Measure database time.
+Measure serialization.
+Measure response transfer.
+The relevant stages depend on architecture.
+A slow request should not automatically trigger code optimization.
+The bottleneck may be external.
+Profiling measures execution behavior.
+A CPU profiler identifies where processor time is spent.
+A memory profiler identifies allocation behavior.
+An I/O profiler can identify blocking or heavy input-output behavior.
+Profiling provides evidence.
+Optimize measured bottlenecks.
+Premature optimization can increase complexity without solving the actual problem.
+A high CPU process should be profiled before assuming a loop is defective.
+High CPU can represent legitimate computation.
+Low CPU can represent blocking.
+Low CPU can represent deadlock.
+Low CPU can represent idle healthy operation.
+Metrics require context.
+Memory debugging should observe growth over time.
+A process using memory is not automatically leaking.
+Caches intentionally retain memory.
+A memory leak occurs when memory that is no longer needed remains unreachable for reuse or is otherwise improperly retained according to the program's ownership model.
+Repeated operations causing unbounded growth are suspicious.
+Measure the same operation repeatedly.
+Observe whether memory stabilizes.
+Use memory-analysis tools where available.
+A leak can exist in application code.
+A leak can exist in a library.
+A leak can exist in a module.
+A leak can exist in resource handles rather than heap memory.
+Count resources.
+File descriptor exhaustion can look like unrelated I/O failures.
+Socket exhaustion can look like network failure.
+Thread exhaustion can prevent new work.
+Disk exhaustion can cause write failures.
+Resource state should be inspected.
+Disk-full errors should remain disk-full errors.
+Permission errors should remain permission errors.
+Resource exhaustion should remain resource exhaustion.
+Generic "internal service unavailable" messages can obscure actionable causes.
+A core dump captures process state around a crash according to operating-system configuration.
+Core dumps can contain sensitive information.
+Core dumps should be protected.
+A core dump can be examined with a debugger.
+Debug symbols improve stack traces.
+Debug symbols map machine addresses to source information.
+Stripped binaries can be harder to debug.
+Production binaries can keep separate debug-symbol files.
+Debug information does not need to change program semantics.
+Debug builds and production builds can differ.
+Reproduce against the actual failing build where possible.
+A repair should address the identified cause.
+A workaround changes conditions so the symptom does not occur without necessarily correcting the cause.
+Workarounds can be legitimate temporary measures.
+A workaround should not be mislabeled as a root-cause repair.
+Increasing a timeout can be a workaround.
+Restarting a process can be a workaround.
+Clearing a cache can be a workaround.
+Deleting state can be a workaround.
+Reinstalling software can be a workaround.
+These actions can restore operation while destroying evidence about the cause.
+Preserve evidence before destructive recovery when investigation matters.
+Restarting should not be the first debugging action when state needed for diagnosis will be lost.
+Operational urgency can require recovery before complete investigation.
+When recovery must occur, capture available evidence first when practical.
+Incident response and debugging have overlapping but different priorities.
+Incident response can prioritize restoring service.
+Debugging prioritizes understanding defects.
+After service restoration, root-cause analysis can continue using preserved evidence.
+A root cause is a condition whose correction prevents recurrence within the defined causal model.
+There can be multiple contributing causes.
+Complex failures can have more than one necessary condition.
+Do not force every incident into one simplistic root cause.
+Identify contributing factors when evidence supports them.
+A root-cause analysis should distinguish trigger from underlying weakness.
+A malformed request can trigger a crash.
+Unsafe parser behavior can be the underlying defect.
+The request is not necessarily the software defect.
+A network outage can trigger reconnect behavior.
+Unbounded reconnect logic can amplify the outage.
+Both conditions can matter.
+A regression is behavior that previously worked and became incorrect after change.
+Establish that the behavior actually worked previously.
+Find a known-good revision.
+Find a known-bad revision.
+Compare them.
+git bisect can narrow the change boundary.
+The first bad commit identifies where the tested behavior changed.
+Inspect that change.
+Do not assume the commit author intended the defect.
+Debugging concerns cause, not blame.
+Blame does not repair software.
+Evidence does.
+A patch should be as narrow as practical.
+A patch should preserve unrelated known-good behavior.
+A patch should not modify files unrelated to the identified defect without reason.
+A patch should not modify configuration unrelated to the defect.
+A patch should not modify a module manifest when the manifest is known-good and the defect lies elsewhere.
+A patch should not introduce speculative architectural changes.
+Fix the demonstrated problem.
+Test the repair.
+Run the original reproduction.
+The original reproduction should now pass.
+Run related regression tests.
+Verify that neighboring behavior still works.
+A repaired symptom without regression testing can conceal new defects.
+A fix should include a regression test when practical.
+The regression test should fail before the fix.
+The regression test should pass after the fix.
+This provides evidence that the patch addresses the observed defect.
+If the test passed before the patch, it does not demonstrate the patch repaired that failure.
+A patch can accidentally make a test pass for the wrong reason.
+Inspect resulting behavior.
+Do not merely chase green indicators.
+Tests are evidence, not decoration.
+Debugging can use assertions.
+Assertions expose violated assumptions.
+An assertion failure identifies an assumption that was false.
+The assertion itself can be wrong.
+Investigate both the state and the assumption.
+Do not simply delete an assertion because it fired.
+If the assertion expresses a valid invariant, the state-producing defect should be repaired.
+An invariant is a condition expected to remain true during defined system states.
+Examples include count never exceeding capacity.
+Examples include a pointer being non-null before dereference.
+Examples include an active module having completed qualification.
+Examples include a protocol message length remaining within maximum size.
+Explicit invariants make debugging easier.
+A state machine makes legal transitions explicit.
+State-machine logs can show transition history.
+An impossible transition indicates either corrupted state, a defective transition, or an incorrect state model.
+Inspect the evidence.
+Do not silently coerce impossible state into a normal state unless recovery policy defines that behavior.
+Silent coercion hides defects.
+Failing loudly during development can expose invariant violations.
+Production behavior can require controlled degradation.
+Development and production failure policies can differ while preserving the same underlying correctness rules.
+Defensive programming anticipates invalid conditions.
+Defensive programming does not mean hiding every defect.
+Returning a safe error can protect production state.
+Logging the invariant violation can preserve debugging evidence.
+A system should avoid corrupting persistent state after detecting invalid internal state.
+When state validity is uncertain, fail according to defined policy.
+Do not continue blindly.
+Data corruption debugging should preserve the corrupted artifact.
+Do not immediately rewrite the corrupted file.
+Make a copy.
+Calculate a hash if integrity tracking matters.
+Inspect structure.
+Compare with known-good examples.
+Identify the first invalid field or region.
+Determine which writer could produce that region.
+Trace write paths.
+A corrupted file can be caused by partial writes.
+A corrupted file can be caused by concurrent writers.
+A corrupted file can be caused by incorrect serialization.
+A corrupted file can be caused by storage failure.
+A corrupted file can be caused by memory corruption.
+Do not assume malicious modification without evidence.
+Atomic writes can reduce partial-file corruption.
+Write temporary content.
+Flush according to durability requirements.
+Rename atomically where filesystem semantics permit.
+The exact durability requirements determine whether additional synchronization is required.
+Debug the actual persistence contract.
+Serialization debugging compares encoded and decoded representations.
+Serialize a known value.
+Inspect exact bytes.
+Deserialize the bytes.
+Compare the result.
+Test boundary values.
+Test zero.
+Test maximum values.
+Test signed values when permitted.
+Test multi-byte values.
+Test cross-platform behavior.
+Byte-order defects often appear only for values larger than one byte.
+Structure-padding defects can appear across compilers.
+Never assume raw C structure memory is portable protocol serialization.
+Inspect bytes.
+Protocol debugging should use known messages.
+Capture sent bytes.
+Capture received bytes.
+Compare against protocol specification.
+Verify message length.
+Verify type.
+Verify version.
+Verify byte order.
+Verify identifiers.
+Verify checksums or hashes.
+Verify signatures where applicable.
+Verify state-machine position.
+A peer sending 80 bytes does not prove those 80 bytes are valid.
+Decode success does not prove semantic validation.
+Semantic validation success does not prove authorization.
+Each stage matters.
+When a protocol handshake succeeds but later operations fail, do not debug handshake code first without evidence.
+The successful handshake narrows the failure to later behavior.
+Use successful stages to eliminate portions of the search space.
+Known-good evidence is valuable.
+If discovery passed, investigate after discovery.
+If manifest validation passed, investigate after manifest validation.
+If ABI validation passed, investigate after ABI validation.
+If loading passed, investigate initialization or later behavior.
+Do not repeatedly repair stages already proven correct unless new evidence contradicts that proof.
+Evidence has scope and time.
+A stage proven correct yesterday may have changed today.
+A stage proven correct for one input may fail for another.
+Be precise about what was proven.
+A test result applies to its tested conditions.
+Debugging should avoid absolute conclusions beyond those conditions.
+A debugger should ask: what changed?
+A debugger should ask: what remained the same?
+A debugger should ask: where is the first observable divergence?
+A debugger should ask: which component owned that transition?
+A debugger should ask: what evidence supports this hypothesis?
+A debugger should ask: what experiment can falsify this hypothesis?
+A debugger should ask: what is the smallest change that repairs the demonstrated cause?
+A debugger should ask: how will the repair be verified?
+These questions keep investigation disciplined.
+Do not ask unrelated questions merely because they are easy to answer.
+Do not modify unrelated components merely because they are accessible.
+Do not replace architecture merely because one implementation has a defect.
+Do not introduce a database to repair a parser.
+Do not introduce networking to repair local state.
+Do not rewrite core code to repair a module unless evidence establishes the core defect.
+Do not rewrite a module to repair incorrect source ranking unless the module owns ranking.
+Responsibility determines repair location.
+The component that displays a symptom is not automatically the component that should be patched.
+Trace ownership.
+A debugger should know when evidence is insufficient.
+"I do not yet know" is a valid debugging state.
+Unknown is better than invented certainty.
+Collect additional evidence.
+Instrument the relevant boundary.
+Reproduce again.
+Compare states.
+Narrow the problem.
+A failed experiment is useful when it eliminates a hypothesis.
+Debugging progress includes proving what is not causing the problem.
+Document eliminated hypotheses when investigations are complex.
+This prevents repeatedly investigating the same disproven explanation.
+Do not treat a disproven hypothesis as current merely because it remains in historical notes.
+Historical debugging notes record investigation history.
+Current conclusions should reflect current evidence.
+History and current state are different.
+A previous suspected cause is not the current root cause after evidence disproves it.
+A previous software version is not the current version.
+A previous ABI is not the current ABI.
+A previous configuration is not the current configuration.
+A previous failure can still provide useful historical evidence.
+Retrieval systems should distinguish old hypotheses from established findings.
+Words such as suspected, candidate, confirmed, rejected, fixed, and current have operational meaning.
+Preserve status.
+A candidate cause is not confirmed.
+A rejected cause should not be presented as confirmed.
+A fixed defect remains historical fact but is not necessarily a current defect.
+A reopened defect indicates new evidence or recurrence.
+Status transitions preserve history without rewriting it.
+Debugging documentation should record evidence.
+Record reproduction.
+Record diagnosis.
+Record root cause when established.
+Record patch.
+Record verification.
+Record remaining uncertainty.
+Do not rewrite history to make the investigation appear cleaner than it was.
+Incorrect early hypotheses can remain part of the record when useful.
+They should be labeled as superseded or rejected.
+This preserves evidence without confusing current conclusions.
+A debug session ends when the required problem has been explained or repaired according to scope.
+Repair and explanation are separate accomplishments.
+A problem can be repaired without fully understanding the cause.
+A problem can be understood before a repair is implemented.
+Engineering should distinguish these states.
+A workaround can restore operation.
+A root-cause repair can prevent recurrence.
+A regression test can preserve the repair.
+Monitoring can detect recurrence.
+Together these create stronger confidence.
+Debugging is an evidence-driven process.
+Observe.
+Reproduce.
+Localize.
+Hypothesize.
+Test.
+Identify cause.
+Patch narrowly.
+Verify.
+Regression test.
+Document.
+Do not guess when evidence can be collected.
+Do not alter known-good state without reason.
+Do not destroy evidence unnecessarily.
+Do not confuse history with current state.
+Do not confuse symptoms with causes.
+Do not confuse correlation with causation.
+Do not confuse a successful intermediate stage with successful completion.
+Do not confuse an error message with the root cause.
+Do not confuse recovery with repair.
+Do not confuse a workaround with a fix.
+Do not confuse a hypothesis with a finding.
+Do not confuse a failed dependency with missing knowledge.
+Do not confuse empty data with service failure.
+Do not confuse service failure with incorrect data.
+Do not confuse one layer's failure with another layer's failure.
+Precise observations produce precise diagnoses.
+Precise diagnoses permit small repairs.
+Small repairs reduce regression risk.
+Regression tests preserve demonstrated repairs.
+Debugging should make uncertainty smaller with every useful experiment.
+When evidence establishes the cause, stop speculating and repair that cause.

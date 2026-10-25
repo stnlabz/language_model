@@ -1,0 +1,20 @@
+20260731.2 — Documentation Language Policy
+
+Root Document ID: 20260731.2
+Revision ID: NONE
+Previous Revision: NONE
+sha256: a45f6bc8cac85dbb1c2e36d58735a47924f70b26a7938c3dfc106394bbfe58ed
+
+Status: Approved  
+Scope: Organization-wide documentation
+
+Policy
+
+The word "shall" is prohibited in STN-LABZ governance, engineering, standards, procedures, and operational documentation because it introduces ambiguity.
+
+The normative verb "will" will be used consistently throughout STN-LABZ policies, standards, doctrine, procedures, engineering documentation, and operational documentation.
+
+References
+
+- STN-LABZ General Orders
+- 20260729.6 — Engineering Documentation

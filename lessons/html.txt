@@ -1,0 +1,241 @@
+HTML stands for HyperText Markup Language.
+HTML is the standard markup language used to structure content on web pages.
+HTML describes the structure and meaning of web content.
+HTML is a markup language, not a programming language.
+HTML documents are interpreted by web browsers.
+A web browser parses HTML to construct a representation of the document.
+The browser represents a parsed HTML document as the Document Object Model, commonly called the DOM.
+HTML elements represent parts of a document.
+Most HTML elements are represented using tags.
+An HTML element can contain text, other elements, or both.
+HTML elements can be nested inside other HTML elements.
+Proper nesting helps maintain a valid and understandable document structure.
+An opening tag begins most HTML elements.
+A closing tag ends most non-void HTML elements.
+A closing tag includes a forward slash before the element name.
+Some HTML elements are void elements and do not contain child content.
+The img element is a void element.
+The br element is a void element.
+The hr element is a void element.
+HTML tag names are conventionally written in lowercase.
+HTML attributes provide additional information about an element.
+Attributes are normally written inside an element's opening tag.
+An attribute commonly consists of a name and a value.
+Attribute values should normally be enclosed in quotation marks.
+An element can have multiple attributes.
+The id attribute identifies an element within a document.
+An id value should be unique within an HTML document.
+The class attribute associates an element with one or more class names.
+Multiple elements can share the same class.
+Classes are commonly used by CSS and JavaScript to select groups of elements.
+HTML5 is the modern HTML standard used for web documents.
+An HTML5 document normally begins with the <!DOCTYPE html> declaration.
+The DOCTYPE tells the browser which general HTML parsing mode the document expects.
+The html element is the root element of an HTML document.
+The head element contains document metadata and related resources.
+The body element contains the document content normally presented to the user.
+The title element defines the title of the document.
+The document title commonly appears in the browser tab or window title.
+The meta element provides metadata about an HTML document.
+The charset metadata declares the character encoding used by the document.
+UTF-8 is a commonly used character encoding for HTML documents.
+A typical UTF-8 declaration is <meta charset="UTF-8">.
+The viewport metadata helps browsers size pages appropriately on different devices.
+The link element can associate external resources with an HTML document.
+The link element is commonly used to load an external CSS stylesheet.
+The script element is used to associate executable script code with an HTML document.
+JavaScript is commonly loaded using the script element.
+The style element can contain CSS rules within an HTML document.
+External stylesheets are generally preferable when styles are shared across multiple pages.
+HTML headings represent headings and subheadings within document content.
+HTML provides heading elements from h1 through h6.
+The h1 element normally represents the highest-level heading of a document or major content region.
+Heading levels communicate document structure and should be chosen according to meaning rather than appearance alone.
+The p element represents a paragraph.
+The br element creates a line break.
+The hr element represents a thematic break between sections of content.
+The strong element represents content with strong importance.
+The em element represents emphasized content.
+The b element draws attention to text without necessarily assigning additional semantic importance.
+The i element can represent text distinguished from surrounding prose for reasons such as terminology or alternate voice.
+Semantic meaning should be considered when selecting HTML elements.
+The div element is a generic block-level container.
+The span element is a generic inline container.
+Div and span are useful when no more meaningful semantic element is appropriate.
+Semantic HTML uses elements whose names describe the purpose or meaning of their content.
+Semantic HTML can improve accessibility and document maintainability.
+Semantic HTML can help software understand the organization of a document.
+The header element represents introductory or navigational content for a page or section.
+The footer element represents footer information for a page or section.
+The main element represents the primary content of a document.
+A document should normally have only one visible main content region represented by the main element.
+The nav element represents a section containing navigation links.
+The section element represents a thematic section of content.
+The article element represents self-contained content that could reasonably stand independently.
+The aside element represents content indirectly related to surrounding content.
+HTML links are created using the a element.
+The href attribute specifies the destination of a link.
+A link can point to another web page.
+A link can point to another resource.
+A link can point to a fragment within the current document.
+A fragment link commonly references an element by its id.
+An absolute URL includes sufficient information to identify a resource independently of the current document location.
+A relative URL identifies a resource relative to the current document or configured base URL.
+Relative URLs are useful for resources located within the same website.
+The target attribute can influence where a linked resource is opened.
+Opening untrusted links in a new browsing context can require additional security considerations.
+Images are embedded in HTML using the img element.
+The src attribute identifies the image resource.
+The alt attribute provides a text alternative for an image.
+Meaningful images should normally have useful alternative text.
+Decorative images can use an empty alt attribute when appropriate.
+Alternative text is important for accessibility and when an image cannot be displayed.
+The width and height attributes can provide intrinsic dimensions for an image.
+HTML supports ordered and unordered lists.
+The ul element represents an unordered list.
+The ol element represents an ordered list.
+The li element represents an item within a list.
+Lists can contain nested lists.
+The dl element represents a description list.
+The dt element represents a term or name in a description list.
+The dd element represents a description or value associated with a term in a description list.
+HTML tables represent tabular data.
+The table element contains a table.
+The tr element represents a table row.
+The th element represents a table header cell.
+The td element represents a table data cell.
+The thead element groups table header content.
+The tbody element groups the main body rows of a table.
+The tfoot element groups table footer content.
+The caption element provides a title or description for a table.
+Tables should be used for tabular data rather than general page layout.
+HTML forms collect information from users.
+The form element defines a form.
+The action attribute identifies where form data is submitted.
+The method attribute identifies the HTTP method normally used when submitting a form.
+GET and POST are commonly used HTTP methods for HTML forms.
+GET form submissions commonly encode submitted data into the request URL.
+POST form submissions commonly place submitted data in the HTTP request body.
+POST does not by itself make submitted information secure.
+Sensitive information requires appropriate transport security such as HTTPS.
+The input element represents many types of form controls.
+The type attribute determines the behavior of many input elements.
+An input with type="text" accepts general single-line text.
+An input with type="password" obscures entered text visually.
+A password input does not encrypt the password merely because its characters are visually obscured.
+An input with type="email" represents an email-address input.
+An input with type="number" represents numeric input.
+An input with type="checkbox" represents an independent on-or-off choice.
+An input with type="radio" represents a choice commonly grouped with related radio controls.
+An input with type="hidden" submits a value that is not normally presented as an editable control.
+Hidden form values are still controlled by the client and must not automatically be trusted by the server.
+The textarea element accepts multi-line text.
+The select element provides a selection control.
+The option element represents a choice within a select element.
+The button element represents an interactive button.
+A submit button can initiate form submission.
+The name attribute determines the name associated with a successful form control during submission.
+The value attribute provides or represents a value associated with a form control.
+The label element associates descriptive text with a form control.
+Labels improve form usability and accessibility.
+A label can be associated with a control using the for attribute and the control's id.
+The required attribute can request browser-side validation before form submission.
+HTML form validation can improve usability.
+Client-side HTML validation is not a security boundary.
+A user can bypass or modify client-side validation.
+Server-side applications must independently validate untrusted form data.
+Data submitted by an HTML form must be treated as untrusted by the server.
+HTML attributes such as maxlength can constrain normal browser interaction but do not establish a server-side security limit.
+Disabled form controls are generally not submitted with a form.
+Readonly controls can prevent normal editing while still allowing their values to be submitted.
+HTML comments begin with <!-- and end with -->.
+HTML comments are delivered to the client when included in a served document.
+Secrets must not be placed in HTML comments.
+Anything sent as HTML to a browser should be considered visible to the client.
+Server-side secrets should remain on the server and should not be embedded in generated HTML.
+HTML entities can represent characters that have special meaning in markup.
+The entity &lt; represents a less-than sign.
+The entity &gt; represents a greater-than sign.
+The entity &amp; represents an ampersand.
+Escaping special characters is important when inserting untrusted text into HTML.
+Untrusted data inserted into HTML without appropriate output escaping can create cross-site scripting vulnerabilities.
+Cross-site scripting is commonly abbreviated XSS.
+Output escaping should be appropriate for the context in which data is inserted.
+HTML text content and HTML attribute values can require different output-handling considerations.
+URLs and JavaScript contexts have security considerations different from ordinary HTML text.
+HTML itself should not be relied upon to sanitize untrusted data.
+Server-side software should validate input and encode output appropriately for its destination.
+The DOM is a structured representation of a document exposed to software.
+JavaScript can inspect and modify the DOM.
+Changes to the DOM can change what a user sees without changing the original HTML response received from the server.
+HTML provides document structure and semantics.
+CSS controls the visual presentation and layout of HTML content.
+JavaScript commonly provides client-side behavior and interactivity.
+HTML, CSS, and JavaScript have distinct responsibilities even though they commonly work together.
+PHP can generate HTML on the server.
+A PHP program can produce an HTML document as its HTTP response.
+The browser does not normally receive the PHP source code executed by the server.
+The browser receives the output produced by PHP, which can include HTML.
+HTML does not execute PHP.
+PHP is executed by the server before generated HTML is sent to the browser.
+An HTML form can submit data to a PHP application.
+A PHP application can process submitted form data and return another HTML document.
+A PHP application can retrieve information from a database and represent that information in generated HTML.
+Database credentials should not be embedded in HTML delivered to a browser.
+HTML cannot directly protect a server-side database.
+Authorization decisions must be enforced by trusted server-side software rather than HTML controls.
+Hiding a button in HTML does not prevent an unauthorized client from attempting the corresponding server request.
+Disabling a button in HTML does not establish authorization.
+Security-sensitive operations must be protected on the server.
+HTTP is the protocol commonly used to transfer HTML documents between web clients and web servers.
+HTTPS is HTTP protected using TLS.
+HTTPS protects data while it travels between communicating endpoints when correctly configured.
+HTTPS does not make unsafe HTML or unsafe server-side application logic automatically secure.
+A web server can serve static HTML files directly.
+A web server can also pass a request to server-side software that dynamically generates HTML.
+A browser sends an HTTP request for a resource.
+A web server returns an HTTP response.
+An HTTP response can contain an HTML document.
+The Content-Type response header tells the client what media type the response represents.
+HTML responses commonly use the text/html media type.
+HTML document structure and HTTP transport are separate concerns.
+The lang attribute on the html element identifies the primary language of a document.
+Declaring document language assists accessibility tools and other software.
+Accessibility means designing content so people with differing abilities can perceive and interact with it.
+Semantic elements can improve accessibility.
+Form controls should have meaningful labels.
+Images conveying information should have appropriate alternative text.
+Interactive controls should use elements appropriate for interaction when possible.
+Keyboard accessibility is important for interactive web interfaces.
+Visual appearance alone should not be the only means used to communicate important meaning.
+HTML source order can affect reading and keyboard navigation order.
+Valid and meaningful document structure can make accessibility easier to maintain.
+HTML should be validated during development when practical.
+HTML validation can detect malformed markup and structural mistakes.
+Valid HTML does not guarantee that a page is accessible.
+Valid HTML does not guarantee that an application is secure.
+Valid HTML does not guarantee that application behavior is correct.
+Browser developer tools can inspect HTML and the DOM.
+Client-side HTML must never be treated as inaccessible to the user.
+A user can inspect and modify HTML in their own browser.
+A user can construct HTTP requests without using the HTML interface provided by a website.
+Server-side security must therefore never depend solely on HTML restrictions.
+The id and class attributes serve different purposes.
+An id identifies a particular element within a document.
+A class categorizes one or more elements.
+CSS can select elements by element type, id, class, attributes, and other relationships.
+JavaScript can locate DOM elements using selectors and DOM APIs.
+HTML provides the structure on which CSS and client-side JavaScript commonly operate.
+Separating HTML structure, CSS presentation, and JavaScript behavior generally improves maintainability.
+HTML files commonly use the .html or .htm filename extension.
+A web server can return HTML regardless of the server-side filename or technology that generated it.
+A URL does not have to end in .html for its response to contain HTML.
+Dynamic web applications often generate HTML without exposing implementation filenames in URLs.
+Semantic HTML should be preferred over generic containers when an appropriate semantic element exists.
+Document structure should describe content rather than merely reproduce a desired visual appearance.
+HTML is one layer of a web application and does not replace server-side application logic.
+HTML is not a database.
+HTML is not an authentication system.
+HTML is not an authorization system.
+HTML is not a server-side programming language.
+HTML is the structural and semantic foundation of content presented on the Web.

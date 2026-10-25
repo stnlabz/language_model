@@ -1,0 +1,285 @@
+CSS stands for Cascading Style Sheets.
+CSS is a style sheet language used to control the presentation of documents.
+CSS is commonly used to style HTML documents.
+HTML primarily defines document structure and semantics.
+CSS primarily defines presentation and layout.
+CSS is not HTML.
+CSS is not JavaScript.
+CSS is not a server-side programming language.
+CSS can control colors, typography, spacing, sizing, borders, backgrounds, and layout.
+A CSS rule normally consists of a selector and a declaration block.
+A selector identifies the elements to which a CSS rule applies.
+A declaration block contains one or more CSS declarations.
+A CSS declaration consists of a property and a value.
+CSS declarations are normally separated by semicolons.
+A property identifies the presentation characteristic being configured.
+A value specifies the setting assigned to a CSS property.
+The syntax selector { property: value; } represents a basic CSS rule.
+CSS comments begin with /* and end with */.
+CSS can be written inline using the style attribute.
+CSS can be embedded in an HTML document using the style element.
+CSS can be stored in an external stylesheet.
+External stylesheets commonly use the .css filename extension.
+An HTML document can load an external stylesheet using the link element.
+External stylesheets allow multiple HTML documents to share presentation rules.
+Separating CSS from HTML generally improves maintainability.
+The cascade determines which CSS declarations apply when multiple declarations target the same element.
+CSS means Cascading Style Sheets because applicable style rules participate in a cascade.
+The cascade considers factors including origin, importance, specificity, and source order.
+Specificity helps determine which competing selector takes precedence.
+Source order can determine the winning declaration when otherwise competing declarations have equal precedence.
+The !important annotation changes the priority of a CSS declaration within the cascade.
+Using !important unnecessarily can make styles harder to maintain.
+Inheritance allows some CSS property values to pass from an element to its descendants.
+Not every CSS property is inherited.
+Text-related properties are commonly inherited.
+Layout-related properties are commonly not inherited.
+A user agent stylesheet is a browser's built-in default stylesheet.
+Browser defaults can cause elements to have presentation even when no author stylesheet is provided.
+A type selector selects elements by HTML element name.
+The selector p selects p elements.
+A class selector selects elements according to their class attribute.
+A class selector begins with a period.
+The selector .notice selects elements having the notice class.
+An ID selector selects an element according to its id attribute.
+An ID selector begins with a hash character.
+The selector #header selects the element whose id is header.
+An attribute selector can select elements according to attributes or attribute values.
+The universal selector * can select all elements within its applicable scope.
+Selectors can be combined to express relationships between elements.
+A descendant combinator selects elements nested within another matching element.
+A child combinator selects direct children of another matching element.
+The child combinator is represented by >.
+The adjacent sibling combinator is represented by +.
+The general sibling combinator is represented by ~.
+A selector list allows the same declarations to apply to multiple selectors.
+Selectors in a selector list are separated by commas.
+A pseudo-class represents an element in a particular state or relationship.
+Pseudo-classes begin with a colon.
+:hover can select an element while a pointing device is positioned over it.
+:focus can select an element that currently has focus.
+:checked can select a checked form control.
+:first-child can select an element that is the first child of its parent.
+:nth-child() can select elements according to their position among siblings.
+A pseudo-element represents a stylable part or generated portion of an element.
+Pseudo-elements are commonly written using two colons.
+::before can generate a pseudo-element before an element's content.
+::after can generate a pseudo-element after an element's content.
+Generated CSS content should not be relied upon as the sole source of essential document information.
+CSS specificity is influenced by the components of a selector.
+ID selectors have greater specificity than class selectors under ordinary specificity comparison.
+Class selectors, attribute selectors, and pseudo-classes contribute to specificity.
+Type selectors and pseudo-elements contribute to specificity.
+A more specific selector can override a less specific selector when their declarations otherwise compete in the same cascade context.
+CSS source order matters when competing declarations have equivalent cascade priority and specificity.
+The box model describes how CSS represents the dimensions and spacing of an element.
+The CSS box model consists of content, padding, border, and margin areas.
+The content area contains an element's content.
+Padding creates space between content and the border.
+A border surrounds the padding and content areas.
+Margin creates space outside the border.
+The width property can specify the width of an element's box according to its box-sizing behavior.
+The height property can specify the height of an element's box according to its box-sizing behavior.
+The box-sizing property controls how specified dimensions are calculated.
+With box-sizing: content-box, specified width and height apply to the content box.
+With box-sizing: border-box, specified width and height include padding and border.
+The margin property controls outer spacing.
+The padding property controls inner spacing.
+The border property can define an element's border.
+Top, right, bottom, and left sides can be styled independently.
+CSS shorthand properties can set multiple related values in one declaration.
+The margin shorthand can specify margins for multiple sides.
+The padding shorthand can specify padding for multiple sides.
+The border shorthand can specify border width, style, and color.
+The display property affects how an element participates in layout.
+display: block creates a block-level formatting behavior.
+display: inline creates inline formatting behavior.
+display: inline-block combines characteristics of inline and block layout.
+display: none removes an element from normal rendering.
+An element using display: none does not occupy its normal layout space.
+Hiding an element with CSS does not provide security.
+Content hidden by CSS can still exist in the document and be inspected by the user.
+CSS must not be used as an authorization mechanism.
+CSS must not be used to protect sensitive information.
+The visibility property controls whether an element is visibly rendered while generally retaining its layout space.
+visibility: hidden hides an element while generally preserving its occupied layout space.
+The position property controls an element's positioning scheme.
+position: static is the normal default positioning scheme for most elements.
+position: relative keeps an element in normal flow while allowing positional offsets and establishing positioning context for certain descendants.
+position: absolute removes an element from normal flow and positions it relative to an applicable containing block.
+position: fixed positions an element relative to the viewport or another applicable fixed-position containing block.
+position: sticky can switch between relative-like and fixed-like behavior according to scrolling conditions.
+The top, right, bottom, and left properties can offset positioned elements.
+The z-index property can influence stacking order within applicable stacking contexts.
+A larger z-index value does not universally place an element above every other element because stacking contexts affect comparison.
+Normal document flow is the default system used to arrange many HTML elements.
+CSS can modify how elements participate in normal document flow.
+Floats allow content to flow around an element.
+The float property was historically used for page layouts but is primarily intended for floated content.
+Modern layouts commonly use Flexbox or Grid instead of float-based page layout.
+Flexbox is a CSS layout model designed primarily for one-dimensional layout.
+A flex container is created using display: flex or display: inline-flex.
+Direct children of a flex container become flex items.
+The flex-direction property controls the main axis direction.
+The default flex-direction is row.
+flex-direction: column arranges the main axis vertically.
+justify-content controls distribution and alignment along the main axis.
+align-items controls alignment of flex items along the cross axis.
+align-content affects distribution of multiple flex lines when applicable.
+The gap property can create spacing between flex or grid items.
+flex-wrap controls whether flex items can wrap onto additional lines.
+The flex property is a shorthand for flex-grow, flex-shrink, and flex-basis.
+flex-grow controls how available positive free space can be distributed to a flex item.
+flex-shrink controls how a flex item can shrink when space is insufficient.
+flex-basis specifies an initial main-size basis for a flex item.
+CSS Grid is a layout model designed for rows and columns.
+A grid container is created using display: grid or display: inline-grid.
+Direct children of a grid container become grid items.
+grid-template-columns defines the columns of an explicit grid.
+grid-template-rows defines the rows of an explicit grid.
+The fr unit represents a fraction of available space in a grid layout.
+The repeat() function can define repeated grid tracks.
+Grid items can span multiple rows or columns.
+The gap property can define spacing between grid tracks.
+Flexbox and Grid solve different layout problems and can be used together.
+Flexbox is commonly useful for arranging content primarily along one dimension.
+Grid is commonly useful for layouts involving both rows and columns.
+CSS supports absolute and relative length units.
+The px unit represents a CSS pixel.
+The em unit is relative to an applicable font size.
+The rem unit is relative to the root element's font size.
+Percentage values are relative to a property-specific reference.
+The vw unit represents one percent of the viewport width.
+The vh unit represents one percent of the viewport height.
+Relative units can help create adaptable layouts.
+CSS supports color values in multiple formats.
+Named colors are predefined color keywords.
+Hexadecimal color notation can represent RGB colors.
+The rgb() function specifies colors using red, green, and blue components.
+The rgba() legacy syntax can include an alpha component.
+Modern rgb() syntax can also represent alpha transparency.
+The hsl() function specifies colors using hue, saturation, and lightness.
+The color property controls the foreground color of text and related content.
+The background-color property controls an element's background color.
+The background property is a shorthand for multiple background properties.
+CSS can use background images.
+The background-image property can reference an image resource.
+CSS can load external resources such as images and fonts.
+External CSS resources can generate additional network requests.
+The font-family property specifies preferred fonts.
+A font-family list can contain fallback fonts.
+Generic font families provide broad fallback categories.
+The font-size property controls text size.
+The font-weight property controls font weight.
+The font-style property can control styles such as italic presentation.
+The line-height property controls line box height.
+The text-align property controls inline content alignment.
+The text-decoration property controls decorative lines and related text decoration.
+The text-transform property can alter the displayed capitalization of text.
+CSS presentation does not change the underlying semantic meaning of HTML text.
+Changing text to uppercase with CSS does not change the underlying text content.
+Web fonts can be defined using @font-face.
+A web font can be downloaded by the browser when referenced by CSS.
+Font availability can affect how text is rendered.
+Fallback fonts should be considered when designing layouts.
+Responsive web design allows layouts to adapt to different devices and viewport sizes.
+Media queries conditionally apply CSS according to characteristics of the rendering environment.
+A media query begins with @media.
+Media queries can test characteristics such as viewport width.
+CSS breakpoints are conditions chosen by the developer at which layout rules change.
+Responsive design should not assume one fixed screen size.
+Flexible layouts can reduce dependence on device-specific dimensions.
+Images can be made responsive using appropriate sizing rules.
+max-width: 100% can prevent an image from exceeding the width of its containing block in common layouts.
+The max-width property specifies an upper bound for width.
+The min-width property specifies a lower bound for width.
+The max-height property specifies an upper bound for height.
+The min-height property specifies a lower bound for height.
+The overflow property controls handling of content that exceeds an element's box.
+overflow: hidden clips overflowing content.
+overflow: auto can provide scrolling when needed.
+overflow: scroll requests scrolling behavior for overflowing content.
+CSS transitions can animate changes between property values.
+The transition property is a shorthand for transition-related properties.
+CSS animations can define sequences of style changes.
+The @keyframes rule defines stages of a CSS animation.
+The animation property is a shorthand for animation-related properties.
+Animations should not interfere with usability or accessibility.
+User preferences regarding reduced motion can be detected using an appropriate media query.
+CSS transforms can visually translate, rotate, scale, or skew rendered elements.
+The transform property applies transformations.
+A transform can change visual presentation without changing ordinary document flow.
+Opacity controls the transparency of an element and its rendered descendants as a group.
+opacity: 0 makes an element fully transparent but does not necessarily remove its layout or interactivity.
+Visual invisibility does not establish security.
+CSS custom properties are author-defined reusable property values.
+CSS custom property names begin with two hyphens.
+A custom property can be referenced using the var() function.
+Custom properties participate in the cascade.
+Custom properties can reduce repetition in stylesheets.
+The :root selector commonly provides a convenient location for document-wide custom properties.
+CSS inheritance and custom properties can be used together.
+CSS supports calculations using the calc() function.
+calc() can combine compatible values and units according to CSS rules.
+CSS supports minimum and maximum selection using functions such as min() and max().
+CSS supports bounded responsive values using clamp().
+CSS files are text resources.
+A CSS syntax error can cause a declaration or rule to be ignored depending on where the error occurs.
+Browsers generally attempt to continue processing CSS after unsupported or invalid declarations.
+Unknown CSS properties are generally ignored by browsers rather than causing the entire stylesheet to fail.
+A valid stylesheet can still produce an undesirable layout.
+CSS validation can identify some syntax and standards errors.
+CSS validity does not guarantee accessibility.
+CSS validity does not guarantee security.
+CSS validity does not guarantee correct visual design.
+Browser developer tools can inspect applied CSS rules.
+Browser developer tools can modify CSS locally.
+A user can override or remove CSS in their own browser.
+Server-side software must not trust a state merely because CSS hides or disables its interface.
+CSS cannot enforce authentication.
+CSS cannot enforce authorization.
+CSS cannot securely hide confidential information delivered to the client.
+If sensitive content is included in the HTML response, CSS does not make that content secret.
+Accessibility should be considered when designing CSS.
+Text and background colors should provide sufficient contrast.
+Content should remain understandable when stylesheets fail to load where practical.
+CSS should not make keyboard focus impossible to identify.
+Removing focus indicators without providing an accessible replacement can make an interface difficult to use.
+Layouts should account for text resizing and varying content lengths.
+Fixed dimensions can cause content to overflow when text size increases.
+Color alone should not be the sole indicator of important state or meaning.
+CSS can visually reorder content in some layouts.
+Visual order and document order can differ.
+Document order remains important for accessibility and keyboard navigation.
+CSS selectors operate on document structure and state.
+CSS does not modify server-side application state by itself.
+CSS does not directly query a database.
+CSS does not process PHP.
+PHP can generate HTML containing class and id attributes that CSS subsequently styles.
+PHP can generate links to CSS stylesheets.
+CSS is interpreted by the client browser rather than by PHP in the ordinary web request model.
+A PHP application can choose which CSS resources or class names appear in generated HTML.
+CSS cannot make unsafe PHP application logic secure.
+HTML provides structure and semantics.
+CSS provides presentation and layout.
+JavaScript can provide client-side behavior.
+PHP can provide server-side application behavior and generate HTML.
+A browser can combine HTML, CSS, and JavaScript when rendering and operating a web page.
+The web server can send HTML and CSS as separate HTTP resources.
+CSS resources are commonly served with the text/css media type.
+A browser can cache CSS resources according to HTTP caching rules.
+Changes to a cached stylesheet might not immediately appear if a client continues using an older cached response.
+Stylesheet URLs can be versioned or otherwise changed to assist cache invalidation.
+CSS specificity should not be increased unnecessarily.
+Overly specific selectors can make styles difficult to override and maintain.
+Reusable classes can provide predictable styling across multiple elements.
+Class names should preferably describe useful roles or concepts rather than depend entirely on temporary visual appearance.
+Large stylesheets can be organized into logical sections or separate files.
+Consistent naming conventions can improve stylesheet maintainability.
+Duplicated CSS declarations can make maintenance harder.
+Shared rules can reduce unnecessary duplication.
+CSS should remain understandable enough for developers to determine why a style applies.
+CSS is declarative: authors describe desired presentation rather than writing an imperative sequence for rendering each element.
+The browser's rendering engine determines how applicable CSS rules are used to present the document.
+CSS can adapt presentation without requiring the semantic HTML content to be rewritten.
+CSS is a core technology of web presentation.

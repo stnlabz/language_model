@@ -1,0 +1,804 @@
+JavaScript is a general-purpose programming language widely used for web development.
+JavaScript is standardized primarily through the ECMAScript specification.
+ECMAScript defines the standardized core language used by JavaScript implementations.
+JavaScript and Java are different programming languages.
+JavaScript is case-sensitive.
+JavaScript source files commonly use the .js filename extension.
+JavaScript modules commonly use the .js or .mjs filename extension depending on the environment and configuration.
+JavaScript can execute in web browsers.
+JavaScript can execute outside web browsers using server-side and standalone runtimes.
+A JavaScript runtime provides facilities beyond the ECMAScript language itself.
+Browser APIs are not the JavaScript language itself.
+The DOM is a browser-provided API rather than part of the ECMAScript core language.
+HTTP networking facilities such as fetch are provided by host environments rather than being fundamental language syntax.
+JavaScript is dynamically typed.
+Variables do not have permanently fixed value types.
+Values have types.
+A variable can refer to values of different types during its lifetime.
+JavaScript primitive types include undefined.
+JavaScript primitive types include null.
+JavaScript primitive types include boolean.
+JavaScript primitive types include number.
+JavaScript primitive types include bigint.
+JavaScript primitive types include string.
+JavaScript primitive types include symbol.
+Objects are non-primitive JavaScript values.
+Functions are callable objects.
+Arrays are objects.
+JavaScript numbers use IEEE-754 double-precision floating-point representation for the number type.
+The bigint type represents integers outside the ordinary safe integer limitations of number.
+BigInt and Number are different numeric types.
+Arithmetic cannot freely mix BigInt and Number values without explicit conversion where required.
+NaN means Not-a-Number.
+NaN is a value of the number type.
+NaN is not equal to itself using ==.
+NaN is not equal to itself using ===.
+Number.isNaN can test whether a value is the numeric NaN value without coercing unrelated values.
+Infinity is a numeric value.
+-Infinity is a numeric value.
+Number.MAX_SAFE_INTEGER identifies the largest integer that can be represented exactly and safely for ordinary integer comparisons using the number type.
+Number.MIN_SAFE_INTEGER identifies the corresponding smallest safe integer.
+Floating-point arithmetic can produce rounding results that differ from exact decimal arithmetic.
+The expression 0.1 + 0.2 does not produce an exactly represented mathematical decimal 0.3 in ordinary JavaScript Number arithmetic.
+Floating-point values should not be used casually for exact financial or consensus calculations.
+A string is an immutable sequence of UTF-16 code units.
+JavaScript strings are immutable.
+Changing a string operation produces another string value rather than modifying the original string's contents.
+String length counts UTF-16 code units rather than necessarily counting user-perceived characters.
+Unicode characters can require more than one UTF-16 code unit.
+const declares a block-scoped binding.
+let declares a block-scoped binding.
+var declares a variable using older function-scoped or global-scoped semantics.
+const prevents reassignment of the binding.
+const does not make an object stored through that binding immutable.
+Properties of an object referenced by const can still be modified unless other mechanisms prevent modification.
+let permits reassignment.
+Modern JavaScript generally favors const when a binding does not need reassignment.
+Modern JavaScript generally favors let when reassignment is required.
+var has different scoping and hoisting behavior from let and const.
+Block scope is associated with constructs enclosed by braces where lexical declarations apply.
+Function scope applies to var declarations inside functions.
+Lexical declarations include let and const.
+A variable declared with let cannot be accessed normally before its declaration is initialized.
+A variable declared with const cannot be accessed normally before its declaration is initialized.
+The period before lexical initialization is commonly called the temporal dead zone.
+Declarations are processed according to JavaScript execution rules before ordinary statement execution.
+The informal term hoisting describes several different declaration behaviors and should not be treated as one universal mechanism.
+The typeof operator returns a string describing certain type categories.
+typeof undefined returns "undefined".
+typeof true returns "boolean".
+typeof 1 returns "number".
+typeof 1n returns "bigint".
+typeof "text" returns "string".
+typeof Symbol() returns "symbol".
+typeof function(){} returns "function".
+typeof null returns "object" because of a historical JavaScript behavior.
+typeof null returning "object" does not mean null is an ordinary object.
+null represents an intentional absence of an object value according to common usage.
+undefined commonly represents absence of an assigned value or missing result according to language and API context.
+null and undefined are distinct values.
+The == operator performs abstract equality comparison.
+Abstract equality comparison can perform type coercion.
+The === operator performs strict equality comparison.
+Strict equality does not perform the same cross-type coercions as abstract equality.
+The expression 5 == "5" evaluates to true.
+The expression 5 === "5" evaluates to false.
+The expression null == undefined evaluates to true.
+The expression null === undefined evaluates to false.
+Using === avoids many implicit coercion cases associated with ==.
+The !== operator performs strict inequality comparison.
+The != operator performs abstract inequality comparison.
+JavaScript equality semantics are different from PHP equality semantics.
+The existence of == and === in both JavaScript and PHP does not make their complete coercion rules identical.
+Operator semantics must be interpreted according to the language being discussed.
+Object equality using === compares object identity.
+Two separately created objects with identical properties are not strictly equal merely because their contents appear identical.
+The expression {} === {} evaluates to false.
+Two references to the same object compare strictly equal.
+Object.is provides another equality comparison with semantics that differ from === for a small number of numeric cases.
+Object.is(NaN, NaN) evaluates to true.
+Object.is(0, -0) evaluates to false.
+The = operator performs assignment.
+The == operator performs abstract equality comparison.
+The === operator performs strict equality comparison.
+Assignment and comparison are different operations.
+The logical AND operator is &&.
+The logical OR operator is ||.
+The logical NOT operator is !.
+&& and || use short-circuit evaluation.
+&& and || return operand values rather than necessarily returning Boolean values.
+The nullish coalescing operator is ??.
+The ?? operator uses its right operand when its left operand is null or undefined.
+The ?? operator differs from || because values such as zero, false, and the empty string are not nullish.
+Optional chaining uses the ?. syntax.
+Optional chaining can stop property access or calls when the preceding value is null or undefined.
+The conditional operator is ?:.
+JavaScript supports arithmetic operators.
+JavaScript supports bitwise operators.
+Most ordinary JavaScript bitwise operators convert Number operands to 32-bit integer representations according to language rules.
+JavaScript supports increment and decrement operators.
+Prefix and postfix increment have different result-value behavior.
+Operator precedence affects expression grouping.
+Parentheses can make intended grouping explicit.
+Implicit type coercion converts values according to language rules.
+String concatenation can trigger coercion.
+The + operator can perform numeric addition or string concatenation depending on operands.
+The expression 1 + 2 evaluates numerically.
+The expression "1" + 2 produces a string.
+The expression 1 + "2" produces a string.
+Explicit conversion can make intent clearer.
+Number(value) converts a value according to Number conversion rules.
+String(value) converts a value to a string according to String conversion rules.
+Boolean(value) converts a value according to Boolean conversion rules.
+Falsy values convert to false in Boolean contexts.
+false is falsy.
+0 is falsy.
+-0 is falsy.
+0n is falsy.
+The empty string is falsy.
+null is falsy.
+undefined is falsy.
+NaN is falsy.
+Most other values are truthy.
+The string "false" is truthy.
+The string "0" is truthy.
+An empty array is truthy.
+An empty object is truthy.
+Truthiness is not the same as strict equality to true.
+An if statement executes conditionally according to the truthiness of its condition.
+The else clause provides an alternative branch.
+The switch statement selects among cases.
+JavaScript switch case matching uses strict equality comparison semantics.
+A for statement provides looping.
+A while statement loops while a condition remains truthy.
+A do-while statement executes its body before checking its continuation condition.
+A for...of loop iterates values from an iterable.
+A for...in loop iterates enumerable property keys.
+for...of and for...in serve different purposes.
+for...in should not be treated as the ordinary value iterator for arrays.
+The break statement exits an applicable loop or switch.
+The continue statement advances an applicable loop.
+Functions define reusable behavior.
+A function declaration declares a named function.
+A function expression creates a function value.
+An arrow function uses => syntax.
+Arrow functions and ordinary functions have important semantic differences.
+Arrow functions do not create their own this binding.
+Arrow functions do not create their own arguments object.
+Arrow functions cannot be used as constructors with new.
+An ordinary function's this value depends on how the function is invoked according to JavaScript rules.
+this does not simply mean the function in which the word appears.
+Method invocation can establish this from the receiver object.
+Calling an ordinary function without a receiver has behavior dependent on execution mode and context.
+bind creates a function with a specified this value and optionally pre-supplied arguments.
+call invokes a function with an explicitly supplied this value.
+apply invokes a function with an explicitly supplied this value and an array-like argument collection.
+JavaScript functions can return values.
+A function without an explicit return value returns undefined.
+Functions are first-class values.
+Functions can be stored in variables.
+Functions can be passed as arguments.
+Functions can be returned from other functions.
+A callback is a function supplied for later invocation.
+A closure occurs when a function retains access to lexical bindings from its surrounding scope.
+Closures can preserve state after an outer function returns.
+Closures can also retain objects in memory while those bindings remain reachable.
+Lexical scope determines which surrounding declarations code can access.
+JavaScript uses lexical scoping for ordinary variable resolution.
+Nested functions can access bindings in enclosing lexical scopes.
+An inner declaration can shadow an outer declaration with the same name.
+Objects store properties.
+An object property associates a key with a value.
+Object property keys are strings or symbols.
+Numeric-looking property names are represented according to property-key conversion rules.
+Object literals commonly use braces.
+Property access can use dot notation.
+Property access can use bracket notation.
+Bracket notation can use computed property names.
+obj.name accesses a property named name.
+obj["name"] accesses a property named name.
+Objects can contain methods.
+A method is a function associated with an object through a property or method definition.
+JavaScript objects use prototypes.
+A prototype can provide inherited properties and methods.
+Prototype-based inheritance differs from traditional class-based inheritance models.
+The class syntax provides a higher-level syntax over JavaScript's object and prototype mechanisms.
+A class declaration defines a class.
+A constructor method initializes class instances.
+The new operator constructs an object using a constructor or class according to applicable rules.
+Class methods are defined on the class prototype unless declared static.
+Static methods belong to the class constructor rather than individual instances.
+The extends keyword creates a derived class relationship.
+The super keyword accesses base-class construction or methods according to context.
+Private class elements can use names beginning with #.
+A private class field is enforced by JavaScript private-element semantics.
+A property whose ordinary name merely begins with an underscore is not language-enforced private state.
+JavaScript arrays are ordered list-like objects.
+Array indexes normally begin at zero.
+Arrays can grow dynamically.
+The length property reports an array's length according to array semantics.
+An array can contain values of different types.
+Array.isArray determines whether a value is an Array.
+typeof [] returns "object".
+push adds values to the end of an array.
+pop removes and returns the last array element.
+shift removes and returns the first array element.
+unshift adds values to the beginning of an array.
+slice returns a selected portion without modifying the original array.
+splice can remove, replace, or insert elements and modifies the array.
+map creates an array containing transformed results.
+filter creates an array containing elements satisfying a predicate.
+reduce combines elements according to a reducer function.
+find returns the first element satisfying a predicate.
+findIndex returns the index of the first element satisfying a predicate.
+some tests whether at least one element satisfies a predicate.
+every tests whether all elements satisfy a predicate.
+includes tests whether an array contains a value according to its comparison semantics.
+sort sorts an array in place.
+The default Array sort compares elements as strings according to its default rules.
+Numeric sorting should provide an appropriate comparison function.
+Array iteration methods can invoke callback functions.
+Mutating an array while iterating it can affect iteration behavior.
+An iterable provides values through the iteration protocol.
+Strings are iterable.
+Arrays are iterable.
+Maps are iterable.
+Sets are iterable.
+Plain ordinary objects are not automatically iterable merely because they contain properties.
+Map stores key-value pairs.
+Map keys can be values of any JavaScript type.
+Map preserves insertion order for iteration according to its defined semantics.
+Set stores unique values.
+Set membership uses SameValueZero comparison semantics.
+WeakMap stores weakly held object or non-registered symbol keys according to supported language semantics.
+WeakSet stores weakly held eligible values.
+Weak collections are not enumerable.
+Weak collections allow entries to disappear when keys are no longer otherwise reachable.
+JavaScript uses automatic garbage collection in ordinary implementations.
+The language does not provide ordinary deterministic manual memory deallocation.
+An object can be reclaimed after it becomes unreachable according to implementation behavior.
+Garbage collection timing is not deterministic.
+A program should not depend on garbage collection happening at a particular moment.
+References retained by event listeners, closures, caches, or global structures can keep objects reachable.
+Logical memory leaks can occur when unnecessary references are retained.
+JavaScript has exceptions.
+The throw statement throws a value.
+Error objects are conventionally thrown to represent errors.
+The Error class represents a generic error.
+TypeError represents certain errors involving inappropriate types or operations.
+RangeError represents certain values outside permitted ranges.
+SyntaxError represents invalid syntax.
+ReferenceError represents certain invalid identifier references.
+A try block contains code whose exceptions can be caught.
+A catch block handles an exception.
+A finally block executes cleanup behavior when control leaves the associated try construct according to language rules.
+An exception can propagate through multiple function calls.
+Exceptions should not be silently discarded when the failure matters.
+An empty catch block can hide defects.
+Error messages can assist diagnostics.
+Error messages should not expose unnecessary secrets to untrusted clients.
+JavaScript has synchronous execution semantics within an individual execution job.
+Host environments provide mechanisms for asynchronous operations.
+Promises represent eventual completion or failure of asynchronous operations.
+A Promise can be pending.
+A Promise can become fulfilled.
+A Promise can become rejected.
+A settled Promise is either fulfilled or rejected.
+A Promise settles only once.
+then registers behavior for Promise fulfillment and can also register rejection handling.
+catch registers Promise rejection handling.
+finally registers behavior after settlement without replacing the result unless its own behavior changes the chain.
+Promise chaining creates new Promises.
+Returning a Promise from a then callback causes the chain to adopt its eventual state according to Promise resolution rules.
+Throwing from a Promise callback produces rejection of the resulting Promise.
+Unhandled Promise rejections can represent programming or operational failures.
+async functions return Promises.
+An async function always returns a Promise.
+Returning an ordinary value from an async function fulfills its returned Promise with that value.
+Throwing from an async function rejects its returned Promise.
+The await operator waits for an awaited value according to Promise resolution semantics within an async context.
+await does not block the entire JavaScript runtime in the same manner as synchronous busy waiting.
+async and await do not automatically create operating-system threads.
+Asynchronous programming and parallel execution are different concepts.
+The JavaScript event loop coordinates asynchronous callbacks and jobs in common host environments.
+The event loop is substantially defined by the host environment rather than solely by ECMAScript.
+Promise reactions use the language's job mechanism and are commonly processed as microtasks by host integrations.
+Timers such as setTimeout are host APIs.
+setTimeout does not guarantee execution at the exact requested time.
+A zero-millisecond timeout does not mean immediate synchronous execution.
+Long-running synchronous JavaScript can delay other work on the same execution thread.
+CPU-intensive operations can make a browser interface unresponsive when executed on its main thread.
+Web Workers can provide additional browser execution contexts.
+Worker threads or processes can provide additional concurrency in server-side runtimes depending on the runtime.
+Concurrency mechanisms depend on the host environment.
+JavaScript modules support explicit imports and exports.
+The export keyword exposes module bindings.
+The import keyword imports module bindings.
+ECMAScript modules are commonly abbreviated ESM.
+A module has its own scope.
+Module imports are statically analyzable in ordinary import declarations.
+Dynamic import uses import() and returns a Promise.
+Modules are evaluated according to defined dependency relationships.
+Circular module dependencies can exist but require understanding initialization behavior.
+CommonJS is a module system historically associated with Node.js.
+CommonJS and ECMAScript modules are different module systems.
+require is associated with CommonJS environments rather than ECMAScript language module syntax.
+module.exports is associated with CommonJS.
+export and import are ECMAScript module syntax.
+A runtime can support both module systems according to its rules and configuration.
+JSON stands for JavaScript Object Notation.
+JSON was inspired by JavaScript object literal syntax.
+JSON and JavaScript object literals are not identical syntaxes.
+JSON is a data-interchange format.
+JSON supports objects.
+JSON supports arrays.
+JSON supports strings.
+JSON supports numbers.
+JSON supports true.
+JSON supports false.
+JSON supports null.
+JSON does not support undefined.
+JSON does not support functions.
+JSON does not support comments in standard JSON syntax.
+JSON object property names must be strings enclosed according to JSON syntax.
+JSON.parse converts JSON text into JavaScript values.
+JSON.stringify converts supported JavaScript values into JSON text.
+JSON.stringify does not preserve every possible JavaScript value or object relationship.
+Functions and undefined values have special omission or conversion behavior during JSON serialization depending on their location.
+BigInt cannot be serialized directly by ordinary JSON.stringify without custom handling.
+Circular object references cause ordinary JSON.stringify to fail unless custom handling removes or transforms the cycle.
+Successful JSON parsing does not establish that input is trusted.
+Parsed JSON should be validated against application requirements.
+JavaScript is central to browser-side web development.
+HTML defines document structure and content semantics.
+CSS defines presentation and visual layout.
+JavaScript defines programmable behavior and interaction.
+HTML, CSS, and JavaScript serve different primary responsibilities in a web application.
+JavaScript can read and modify a browser document through the DOM.
+DOM stands for Document Object Model.
+The DOM represents a document as objects and nodes.
+document is a browser-provided object representing the active document.
+document.querySelector selects the first matching element according to a CSS selector.
+document.querySelectorAll selects matching elements according to a CSS selector.
+getElementById retrieves an element by its id.
+textContent reads or writes textual content of a node.
+innerHTML parses or serializes HTML content.
+Assigning untrusted data to innerHTML can create cross-site scripting vulnerabilities.
+textContent should be preferred when inserting untrusted plain text that should not be interpreted as markup.
+Creating DOM nodes explicitly can avoid interpreting arbitrary strings as HTML.
+An event represents an occurrence recognized by the browser or application.
+Event listeners register behavior for events.
+addEventListener registers an event listener.
+removeEventListener removes a matching registered event listener according to its contract.
+Events can propagate through DOM trees.
+Event propagation includes capture and bubble phases.
+event.target identifies the originating event target.
+event.currentTarget identifies the target whose listener is currently executing.
+preventDefault requests prevention of an event's default action where cancelable.
+stopPropagation stops further propagation according to event rules.
+Event delegation attaches a listener to an ancestor and handles events originating from descendants.
+Event delegation can reduce the number of listeners required for dynamic collections.
+HTML forms collect user input.
+JavaScript can respond to form submission events.
+A submit event can be intercepted with an event listener.
+preventDefault can prevent the browser's normal form submission behavior.
+FormData can collect form control values.
+JavaScript can send form data using network APIs.
+A browser can also submit an HTML form without JavaScript.
+JavaScript is not required for basic HTML form submission.
+A server receives submitted form data according to the form's method and encoding.
+PHP can process form data sent by a browser.
+JavaScript can enhance form interaction before or after communication with a PHP application.
+Client-side JavaScript and server-side PHP execute in different environments.
+Browser JavaScript normally executes on the user's device.
+PHP normally executes on the web server.
+Browser JavaScript cannot directly read arbitrary server-side PHP variables.
+PHP can generate HTML or JavaScript text sent in an HTTP response.
+JavaScript can send HTTP requests to server endpoints.
+The server can return JSON consumed by JavaScript.
+A common web flow is browser JavaScript to HTTP to server application to database and back through HTTP to JavaScript.
+Client-side validation can improve usability.
+Client-side validation is not a trusted security boundary.
+A malicious client can bypass browser-side validation.
+Server-side applications must independently validate untrusted input.
+JavaScript validation does not replace PHP validation on a PHP server.
+HTTP is an application protocol.
+JavaScript can interact with HTTP through host-provided APIs.
+fetch is a commonly available web API for HTTP requests.
+fetch returns a Promise.
+A fetch Promise can fulfill even when the HTTP response status represents an HTTP error such as 404 or 500.
+Code using fetch should inspect the response status when application behavior depends on HTTP success.
+response.ok indicates whether the HTTP status is within the successful range defined by the Fetch API.
+response.status provides the HTTP status code.
+response.json parses a response body as JSON.
+response.text reads a response body as text.
+Parsing a response body can fail.
+A network request can fail before an HTTP response is received.
+A network failure and an HTTP error response are different conditions.
+An HTTP 404 response is still an HTTP response.
+An HTTP 500 response is still an HTTP response.
+An HTTP 503 response is still an HTTP response.
+A rejected fetch operation can indicate a network-level or Fetch-level failure rather than an HTTP status failure.
+HTTP status 200 represents successful handling according to HTTP semantics.
+HTTP status 201 represents successful creation according to HTTP semantics.
+HTTP status 204 represents successful handling with no response content.
+HTTP status 400 represents a bad request.
+HTTP status 401 concerns authentication requirements or failure according to HTTP semantics.
+HTTP status 403 indicates that the server refuses authorization.
+HTTP status 404 indicates that a requested resource was not found.
+HTTP status 405 indicates that the request method is not allowed for the target resource.
+HTTP status 409 represents a conflict with current resource state.
+HTTP status 429 represents too many requests.
+HTTP status 500 represents an internal server error.
+HTTP status 502 represents a bad gateway.
+HTTP status 503 represents service unavailable.
+HTTP status 504 represents a gateway timeout.
+A 503 status should represent actual service unavailability.
+An application not knowing an answer is not inherently a 503 condition.
+HTTP methods include GET.
+HTTP methods include POST.
+HTTP methods include PUT.
+HTTP methods include PATCH.
+HTTP methods include DELETE.
+HTTP methods include HEAD.
+HTTP methods include OPTIONS.
+GET is intended for retrieving a representation without requesting unsafe state-changing semantics.
+POST submits data for processing according to resource semantics.
+PUT requests creation or replacement of a resource representation according to target semantics.
+PATCH requests partial modification according to the patch representation and server contract.
+DELETE requests removal of a resource according to server semantics.
+HTTP method semantics are defined by HTTP standards rather than JavaScript.
+JavaScript merely uses those methods through APIs.
+HTTP headers carry metadata about requests and responses.
+Content-Type identifies the media type of a message representation.
+Accept communicates media types acceptable to the client.
+Authorization can carry authentication credentials according to the selected scheme.
+Credentials should not be exposed unnecessarily to JavaScript.
+Secrets embedded in browser JavaScript should be considered accessible to the user operating the browser.
+A private API key cannot be kept secret merely by placing it in minified JavaScript.
+Browser developer tools can inspect network requests and loaded scripts.
+Client-side code is not an appropriate location for secrets that must remain hidden from the client.
+Cookies are managed by browsers according to cookie rules.
+JavaScript can access some cookies through document.cookie.
+HttpOnly cookies are not exposed through document.cookie.
+HttpOnly can reduce exposure of cookie values to injected JavaScript.
+Secure cookies are restricted to secure transport according to cookie semantics.
+SameSite controls aspects of cross-site cookie sending.
+Cookie security attributes solve different problems.
+Sessions commonly store server-side state associated with a client identifier.
+A session identifier can be stored in a cookie.
+JavaScript does not need direct access to an HttpOnly session cookie for the browser to send it with eligible requests.
+Cross-Origin Resource Sharing is commonly abbreviated CORS.
+CORS is a browser security mechanism controlling whether scripts can access responses from different origins.
+CORS is enforced primarily by browsers.
+CORS does not function as server-side authentication.
+Allowing a CORS origin does not authorize a user to perform every operation.
+The same-origin policy restricts interactions between origins.
+An origin consists of scheme, host, and port.
+Two URLs can have the same host but different origins because their scheme or port differs.
+Cross-site scripting is commonly abbreviated XSS.
+XSS occurs when attacker-controlled content is executed as script in a trusted web context.
+Injecting untrusted strings into HTML can create XSS.
+Output encoding should match the output context.
+HTML encoding and JavaScript string encoding solve different contexts.
+A Content Security Policy can restrict sources and execution of web content.
+Content Security Policy is commonly abbreviated CSP.
+CSP can reduce the impact of some injection vulnerabilities.
+CSP does not replace correct output encoding and input handling.
+Cross-Site Request Forgery is commonly abbreviated CSRF.
+CSRF causes a browser to submit an unwanted authenticated request under applicable conditions.
+CSRF defenses can include tokens and appropriate cookie policies.
+CORS and CSRF are different security concerns.
+XSS and CSRF are different security concerns.
+Authentication determines identity.
+Authorization determines permitted actions.
+Client-side JavaScript must not be the sole enforcement point for authorization.
+Disabling a button does not prevent an attacker from manually sending the corresponding HTTP request.
+Hiding an administrative interface does not enforce administrative authorization.
+Server-side authorization must protect privileged operations.
+The browser environment provides localStorage.
+localStorage stores string data associated with an origin.
+localStorage data persists according to browser storage behavior.
+JavaScript accessible to an origin can access that origin's localStorage according to browser security rules.
+Sensitive authentication credentials stored in localStorage can be exposed by successful XSS.
+sessionStorage provides origin-associated storage scoped according to browser session rules.
+IndexedDB provides a browser database for structured client-side data.
+Browser storage should not be treated as a trusted server-side datastore.
+Users can modify client-side stored values.
+Client-side state must be validated before trusted server operations rely on it.
+JavaScript can manipulate URLs.
+URL represents and parses URLs in supported host environments.
+URLSearchParams provides query parameter operations.
+User-provided URLs should be validated according to the application's intended schemes and destinations.
+Open redirect vulnerabilities can occur when untrusted input controls redirect destinations without proper restrictions.
+Server-side request forgery and browser-side URL navigation are different security concerns.
+JavaScript regular expressions provide pattern matching.
+A regular expression is created with literal syntax or RegExp.
+Regular expressions are useful for text processing.
+Regular expressions are not appropriate parsers for every structured language.
+Poorly designed regular expressions can cause excessive computation.
+Untrusted patterns can create resource-exhaustion risks in some regex engines and usage patterns.
+Date represents date and time values using milliseconds relative to the ECMAScript epoch internally.
+Date has historically complicated local-time and timezone behavior.
+Date.now returns the current timestamp in milliseconds according to the system clock.
+System wall-clock time can change.
+Performance timing APIs can provide monotonic-style elapsed-time measurements in browser environments.
+A protocol should explicitly define timestamp representation.
+ISO 8601 formats are commonly used for interoperable timestamps.
+A timestamp lacking timezone information can be ambiguous.
+UTC is commonly used for machine-to-machine timestamps.
+Locale-sensitive formatting should not define deterministic protocol data.
+Intl provides internationalization functionality.
+Intl formatting can depend on locale and runtime data.
+User-facing localization and protocol serialization have different requirements.
+Deterministic protocols should use explicitly defined culture-independent representations.
+JavaScript property enumeration order has defined rules for many operations in modern ECMAScript.
+Protocol determinism should nevertheless define serialization requirements rather than relying accidentally on object construction history.
+JSON object member ordering should not be treated as semantic equality unless the protocol explicitly defines ordering requirements.
+A deterministic serialization format should specify canonical ordering when byte-for-byte equality matters.
+Cryptographic hashing of structured data requires deterministic serialization if logically identical data must produce identical hashes.
+JavaScript itself does not define cryptographic security merely because it can manipulate bytes.
+Web Crypto provides cryptographic functionality in supported web environments.
+crypto.getRandomValues provides cryptographically strong random values in supported web environments.
+Math.random is not intended for cryptographic security.
+Passwords should not be generated or protected using Math.random when cryptographic randomness is required.
+Password hashing should be performed with algorithms designed for password storage.
+A general cryptographic hash is not automatically an appropriate password-storage algorithm.
+Private keys require controlled storage.
+A private key delivered to browser JavaScript cannot remain secret from the user controlling that browser.
+TLS protects transport between endpoints when correctly configured.
+TLS does not prevent application-level XSS.
+TLS does not enforce authorization.
+TLS does not validate application data semantics.
+JavaScript can use WebSocket APIs in supported browsers.
+WebSocket provides bidirectional communication over a persistent connection after its opening handshake.
+WebSocket messages have message boundaries.
+WebSocket and raw TCP are different abstractions.
+Browser JavaScript does not ordinarily expose arbitrary raw TCP sockets.
+Server-side JavaScript runtimes can provide TCP APIs.
+Network capabilities depend on the runtime environment.
+A WebSocket connection can close unexpectedly.
+WebSocket applications require reconnection policy when reconnection is desired.
+Automatic reconnection should use bounded retry behavior.
+Immediate infinite retry loops can overload a service.
+Exponential backoff can reduce repeated retry load.
+Retry behavior should distinguish transient failures from permanent failures.
+An operation should not be retried automatically when repeating it can produce unsafe duplicate effects unless the operation is idempotent or otherwise protected.
+Idempotency means repeating an operation has the same intended effect as performing it once according to the operation's contract.
+GET, PUT, and DELETE have idempotent semantics under HTTP definitions even though repeated requests can produce different response representations.
+POST is not inherently idempotent.
+Application-level idempotency keys can protect some retried creation operations.
+JavaScript can execute in server environments.
+Node.js is a JavaScript runtime built for server-side and general-purpose execution.
+Node.js is not the JavaScript language itself.
+Other JavaScript runtimes can also execute server-side JavaScript.
+Runtime-specific APIs should not be mistaken for universal ECMAScript APIs.
+process is a Node.js global API rather than a browser JavaScript global.
+window is a browser global object in traditional browser contexts.
+document is a browser API and is not normally available in a basic Node.js process.
+A JavaScript program should know which runtime environment it targets.
+Package ecosystems provide third-party JavaScript libraries.
+npm is a package manager commonly associated with JavaScript and Node.js.
+A package.json file describes package metadata and dependencies in common JavaScript tooling.
+package.json is not part of ECMAScript syntax.
+Third-party packages introduce dependencies and supply-chain considerations.
+A dependency should not be added merely because a small operation can be delegated to a package.
+Dependency versions affect compatibility and security.
+Lock files can record resolved dependency versions.
+package-lock.json is used by npm for dependency resolution state.
+Installing a package can execute lifecycle behavior depending on package manager configuration and package metadata.
+Untrusted dependencies can execute code with developer or build-system privileges.
+Dependency provenance matters.
+Unused dependencies should be removed when practical.
+A framework is not the JavaScript language.
+React is a JavaScript user-interface library.
+Vue is a JavaScript framework or progressive framework used for user interfaces.
+Angular is a web application framework.
+Express is a server-side web framework commonly used with Node.js.
+Using JavaScript does not require React.
+Using JavaScript does not require Node.js.
+Using JavaScript does not require npm.
+Using JavaScript does not require a framework.
+Plain JavaScript can directly use browser APIs.
+A framework adds abstractions and conventions.
+Framework abstractions can improve development for appropriate applications.
+Frameworks also introduce dependencies and complexity.
+The simplest adequate implementation is often easier to maintain.
+TypeScript is a language that adds a static type system and related features to JavaScript development.
+TypeScript source commonly compiles or transforms into JavaScript.
+TypeScript and JavaScript are distinct languages.
+JavaScript runtimes execute JavaScript rather than TypeScript source unless tooling or runtime-specific support transforms it.
+TypeScript type checking does not automatically validate runtime data.
+External JSON remains untrusted even when a TypeScript type says what shape the programmer expects.
+Runtime validation and compile-time typing solve different problems.
+JavaScript uses automatic semicolon insertion in certain grammatical situations.
+Automatic semicolon insertion is commonly abbreviated ASI.
+Semicolons can still be written explicitly.
+ASI has defined rules and should not be treated as random behavior.
+Certain line breaks can change how JavaScript is parsed.
+Consistent formatting reduces ambiguity for human readers.
+Formatters can standardize source layout.
+Linting tools can detect suspicious patterns and enforce project conventions.
+ESLint is a commonly used JavaScript linting tool.
+A linter is not a proof of correctness.
+A formatter is not a validator of program semantics.
+A clean lint run does not prove a program is correct.
+Testing verifies selected expected behavior.
+A unit test exercises a bounded unit of behavior.
+An integration test exercises interaction between components.
+An end-to-end test exercises a larger application path.
+A regression test protects behavior that previously failed or was established.
+A negative test verifies behavior under invalid or prohibited conditions.
+JavaScript tests should include asynchronous failure paths when asynchronous behavior matters.
+A Promise-based test should wait for the Promise to settle.
+A test that exits before asynchronous work completes has not tested that work correctly.
+Fake timers can provide deterministic control of timer-dependent tests when used appropriately.
+Mocking can isolate dependencies.
+Excessive mocking can cause tests to verify the mock arrangement rather than actual component integration.
+Tests should assert externally meaningful behavior.
+A passing test proves only the conditions exercised by that test.
+Browser developer tools can inspect JavaScript execution.
+console.log writes diagnostic information to a console provided by the host.
+console.error writes error-oriented diagnostic information.
+Console output is not a durable audit log.
+Production diagnostics should use logging appropriate to the runtime and system requirements.
+Sensitive data should not be written casually to browser consoles.
+Source maps associate transformed or bundled code with original source locations.
+Source maps can aid debugging.
+Publicly deployed source maps can reveal original source code and structure depending on deployment.
+Minification reduces source representation size and can obscure formatting.
+Minification is not a security boundary.
+Obfuscation is not equivalent to encryption.
+Client-side source code should be considered obtainable by the client.
+JavaScript engines optimize code dynamically.
+JIT compilation can translate frequently executed JavaScript into optimized machine code.
+Optimization strategies vary between engines.
+Program correctness should not depend on a particular engine optimization.
+Performance should be measured rather than inferred solely from syntax.
+Premature optimization can add complexity without meaningful benefit.
+Algorithmic complexity can matter more than micro-optimizations.
+Repeated DOM operations can cause expensive rendering work in browser applications.
+Batching DOM changes can improve performance in applicable cases.
+Network latency often dominates small local computation costs in web applications.
+Caching can reduce repeated work.
+Caches introduce invalidation and stale-data concerns.
+A cache is not the authoritative data source unless the system explicitly defines it as such.
+Cached information can become stale.
+A cache miss is not necessarily an application error.
+A cache miss and service unavailability are different conditions.
+A retrieval miss and a network failure are different conditions.
+Error categories should preserve the actual failure.
+JavaScript supports destructuring.
+Array destructuring extracts values from iterable positions.
+Object destructuring extracts properties by name.
+Default values can be supplied during destructuring.
+Rest syntax collects remaining values or properties according to context.
+Spread syntax expands iterable values or object properties according to context.
+The ... syntax has different meanings depending on whether it is used as rest or spread.
+Spreading an object creates a shallow copy of enumerable own properties according to object spread rules.
+A shallow copy does not recursively clone nested objects.
+Two shallow copies can still refer to the same nested object.
+Object.assign performs shallow property assignment.
+Structured cloning can copy supported structured data using host-provided structuredClone facilities where available.
+Not every JavaScript value can be structured-cloned.
+JSON serialization is not a universal deep-cloning mechanism.
+JSON cloning loses or changes unsupported JavaScript values and types.
+Mutation changes an existing object.
+Immutability avoids changing an existing value or object state according to the selected design.
+JavaScript does not make ordinary objects immutable by default.
+Object.freeze prevents certain modifications to an object itself.
+Object.freeze is shallow.
+Nested objects are not automatically frozen by freezing their containing object.
+Pure functions produce results without observable side effects according to their defined inputs.
+JavaScript does not require functions to be pure.
+Pure functions can be easier to test and reason about.
+Side effects include operations such as changing external state, performing I/O, or modifying shared objects.
+State should be explicit when practical.
+Global mutable state can make software harder to reason about and test.
+Modules can reduce accidental global state.
+Browser scripts historically shared global scope in ways that could create name collisions.
+ECMAScript modules provide module-scoped bindings.
+Strict mode changes certain JavaScript semantics and error handling.
+The directive "use strict" enables strict mode in applicable script or function contexts.
+ECMAScript modules execute in strict mode automatically.
+Strict mode prevents or reports several historically error-prone behaviors.
+Strict mode does not make a program automatically secure.
+Property descriptors define characteristics of object properties.
+Properties can be writable or non-writable.
+Properties can be enumerable or non-enumerable.
+Properties can be configurable or non-configurable.
+Properties can be data properties or accessor properties.
+A getter computes a property value when read.
+A setter handles assignment to an accessor property.
+Getters can execute arbitrary code.
+Reading a property is therefore not guaranteed to be free of side effects when accessors or proxies are involved.
+Proxy can intercept certain operations on another object.
+Proxy enables metaprogramming.
+Proxy behavior can make program flow less obvious and should be used deliberately.
+Reflect provides functions corresponding to several fundamental object operations.
+Symbols provide unique primitive values often used as property keys.
+Symbol() creates a unique symbol.
+Symbol.for uses a global symbol registry.
+Symbols created separately with Symbol() are distinct even when given the same description.
+JavaScript supports iterators.
+An iterator produces a sequence of values through next calls.
+A generator function uses function* syntax.
+A generator can pause using yield.
+Calling a generator function returns a generator object rather than immediately running the entire body to completion.
+Generators implement iteration protocols.
+Async generators can produce asynchronous sequences.
+for await...of consumes asynchronous iterables in appropriate contexts.
+Asynchronous iteration and ordinary synchronous iteration are different mechanisms.
+JavaScript can process binary data.
+ArrayBuffer represents a raw binary data buffer.
+Typed arrays provide typed views over binary buffers.
+Uint8Array provides a view of unsigned 8-bit integer elements.
+DataView provides explicit reading and writing of multiple numeric formats and byte orders.
+Binary protocol code should explicitly define byte order.
+Machine memory representation should not be assumed to be a network protocol.
+Protocol field widths should be defined explicitly.
+Protocol string encoding should be defined explicitly.
+TextEncoder commonly encodes strings as UTF-8 in supported web and runtime environments.
+TextDecoder decodes byte sequences using a selected encoding.
+Deterministic binary protocols should not depend on object property layout.
+A protocol is a contract between communicating components.
+An API is a source or service interface contract.
+An ABI is a binary interface contract.
+API and ABI are different concepts.
+Browser JavaScript normally interacts through APIs and protocols rather than native ABIs.
+Server-side runtimes can provide native extension mechanisms.
+Native extensions must obey the runtime's supported binary interface.
+A JavaScript package version is not an ABI version.
+A README history is not necessarily the authoritative declaration of a currently active interface.
+Current authoritative interface declarations should be distinguished from historical documentation.
+Historical information describes previous states.
+Current configuration describes current state.
+Evidence about a previous version does not establish that the previous version remains active.
+When multiple sources disagree, the source directly defining current executable behavior should be distinguished from secondary descriptive documentation.
+A technical answer should state only what available evidence supports.
+Relevant evidence is not necessarily sufficient evidence.
+Topic overlap does not establish a specific conclusion.
+Retrieval should preserve important operators and technical tokens in a question.
+The strings == and === carry important meaning in JavaScript questions.
+Removing punctuation from technical queries can destroy meaning.
+The strings +, ++, &&, ||, ??, ?., =>, and === can be semantically significant JavaScript tokens.
+Technical retrieval should not discard meaningful punctuation indiscriminately.
+A question asking about == and === is not equivalent to a generic question about equality.
+A question asking about async and await is not equivalent to a generic question about functions.
+A question asking about Promise rejection is not equivalent to a generic question about errors.
+Specific technical terms should influence evidence selection.
+An answer should address the question asked rather than merely return a fact from the same broad topic.
+A correct but unrelated fact is not a correct answer to the question.
+Insufficient evidence should not be replaced with invented detail.
+A concise supported answer is preferable to a detailed unsupported answer.
+JavaScript is commonly one layer of a larger web system.
+HTML provides structure.
+CSS provides presentation.
+JavaScript provides programmable client behavior.
+HTTP carries requests and responses.
+A server-side language such as PHP can implement application logic.
+SQL can communicate with relational databases.
+JSON can carry structured data between client and server.
+Each layer has its own syntax and semantics.
+Knowledge from one layer should not be substituted for another merely because they participate in the same application.
+A JavaScript syntax rule is not a PHP syntax rule.
+A PHP runtime behavior is not a browser JavaScript runtime behavior.
+An SQL query is not JavaScript merely because JavaScript constructed the query string.
+HTML is not a programming language merely because JavaScript can modify HTML.
+CSS is not JavaScript merely because JavaScript can modify styles.
+Separation of responsibilities makes web systems easier to reason about.
+Client behavior belongs on the client when it genuinely concerns client interaction.
+Trusted authorization belongs on the server.
+Persistent authoritative data belongs in an appropriate trusted datastore according to application architecture.
+Client state should not be assumed authoritative merely because the browser reports it.
+Server responses should not be assumed correct merely because they are valid JSON.
+Every trust boundary requires deliberate validation.
+JavaScript can build sophisticated applications.
+JavaScript can also build small scripts without a framework.
+The appropriate architecture depends on the actual problem.
+More abstraction is not automatically better engineering.
+More dependencies are not automatically better engineering.
+More code is not automatically more capable code.
+Simple, bounded behavior is easier to reason about.
+Deterministic behavior requires explicit control of state, ordering, serialization, time, randomness, and external dependencies.
+Correctness requires answering and implementing the actual contract rather than merely producing plausible output.

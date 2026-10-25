@@ -1,0 +1,1433 @@
+An operating system manages computer hardware and provides services to programs.
+
+An operating system is commonly abbreviated OS.
+
+An operating system manages processor execution.
+
+An operating system manages memory.
+
+An operating system manages files.
+
+An operating system manages devices.
+
+An operating system manages processes.
+
+An operating system manages users and permissions.
+
+An operating system provides interfaces through which applications request system services.
+
+Windows is an operating system family.
+
+Linux is an operating system family.
+
+macOS is an operating system.
+
+Different operating systems expose different native interfaces.
+
+Applications can hide operating-system differences behind platform abstractions.
+
+Platform-specific implementation does not require platform-specific application behavior.
+
+Portable software should distinguish common behavior from operating-system-specific implementation.
+
+A kernel is the privileged core of an operating system.
+
+The kernel manages hardware resources.
+
+The kernel manages process execution.
+
+The kernel manages virtual memory.
+
+The kernel provides device access through drivers and system interfaces.
+
+The kernel enforces many security boundaries.
+
+Application programs normally execute outside kernel mode.
+
+User mode provides restricted execution for ordinary applications.
+
+Kernel mode provides privileged access to system resources.
+
+An application normally requests kernel services through system calls.
+
+A system call transfers a request from user-space software to the operating-system kernel.
+
+Opening a file ultimately requires operating-system services.
+
+Creating a process requires operating-system services.
+
+Allocating virtual memory requires operating-system services.
+
+Network communication requires operating-system services.
+
+Applications should not assume they directly control hardware merely because they requested an operation.
+
+The operating system mediates access.
+
+A process is a running instance of a program.
+
+A program stored on disk is not itself a running process.
+
+Starting a program creates or participates in creating a process according to the operating system.
+
+A process has an address space.
+
+A process has execution state.
+
+A process has operating-system resources.
+
+A process has an identifier.
+
+A process identifier is commonly abbreviated PID.
+
+Process identifiers are normally unique among currently applicable processes.
+
+A PID can be reused after a process terminates.
+
+A PID is therefore not a permanent identity.
+
+A parent process can create child processes.
+
+Parent and child relationships depend on operating-system process semantics.
+
+On Unix-like systems, process creation commonly involves fork and exec mechanisms.
+
+fork creates a new process based on the calling process according to Unix semantics.
+
+exec replaces the current process image with another program according to Unix semantics.
+
+fork and exec are distinct operations.
+
+Windows uses different native process-creation mechanisms.
+
+Portable application logic should not require Unix process creation semantics unless Unix is an explicit requirement.
+
+A process has an exit status.
+
+An exit status communicates process completion information.
+
+By common command-line convention, exit status zero indicates success.
+
+Nonzero exit status commonly indicates failure or another defined condition.
+
+Exact exit-code meanings belong to the program interface.
+
+Do not assume every nonzero value means the same failure.
+
+A parent process can inspect a child process's exit status.
+
+Ignoring exit status discards evidence about execution.
+
+A successful process start does not prove the process completed successfully.
+
+A process can start and later fail.
+
+A process can crash.
+
+A process can be terminated.
+
+A process can exit normally.
+
+A process can become blocked waiting for a resource.
+
+A process can consume excessive resources.
+
+Process lifecycle should be distinguished from program installation state.
+
+A thread is an execution path within a process.
+
+A process can contain one thread.
+
+A process can contain multiple threads.
+
+Threads within the same process normally share the process address space.
+
+Threads can share global data.
+
+Threads can share heap memory.
+
+Threads normally have separate stacks.
+
+Concurrent access to shared mutable data can create race conditions.
+
+A race condition occurs when program behavior depends incorrectly on execution timing or ordering.
+
+Thread scheduling is not generally deterministic.
+
+The operating system scheduler determines when runnable threads receive processor time according to scheduling policy.
+
+Applications should not depend on accidental thread timing.
+
+A mutex provides mutual exclusion.
+
+A mutex can protect shared state.
+
+Only one thread should hold a particular mutex at a time according to normal mutex semantics.
+
+A mutex does not automatically make an entire program thread-safe.
+
+The correct shared state must be protected consistently.
+
+A deadlock occurs when execution participants wait indefinitely for resources held in a way that prevents progress.
+
+Two threads can deadlock when each waits for a lock held by the other.
+
+Consistent lock ordering can reduce deadlock risk.
+
+Holding locks longer than necessary can increase contention.
+
+A semaphore maintains a count controlling access according to its synchronization semantics.
+
+A condition variable allows threads to wait for a condition associated with shared state.
+
+Atomic operations provide indivisible operations according to their defined memory model.
+
+Atomic does not mean every sequence involving an atomic variable is itself atomic.
+
+Concurrency correctness requires understanding the applicable memory model.
+
+Threads are not processes.
+
+Processes provide stronger memory isolation than threads under ordinary operating-system models.
+
+One process normally cannot directly access another process's address space without specific operating-system mechanisms and permission.
+
+Inter-process communication is commonly abbreviated IPC.
+
+IPC allows processes to exchange information.
+
+Pipes are an IPC mechanism.
+
+Named pipes are an IPC mechanism.
+
+Shared memory is an IPC mechanism.
+
+Sockets can be used for IPC.
+
+Message queues can be used for IPC.
+
+Files can sometimes provide simple IPC.
+
+Each IPC mechanism has different synchronization and lifetime properties.
+
+Shared memory allows processes to access a shared memory region.
+
+Shared memory requires synchronization when multiple processes modify shared state.
+
+Sharing memory does not automatically make access safe.
+
+A pipe provides a byte stream or message mechanism according to the operating system and pipe type.
+
+Standard input is commonly abbreviated stdin.
+
+Standard output is commonly abbreviated stdout.
+
+Standard error is commonly abbreviated stderr.
+
+Command-line processes commonly receive three standard streams.
+
+stdin normally provides input.
+
+stdout normally provides ordinary output.
+
+stderr normally provides diagnostic output.
+
+stdout and stderr are separate streams.
+
+A shell can redirect stdout.
+
+A shell can redirect stderr.
+
+A shell can connect one program's output to another program's input.
+
+A pipeline connects commands through streams.
+
+The shell and the operating system are different things.
+
+A shell is a command interpreter and execution environment.
+
+Bash is a shell.
+
+PowerShell is a shell and automation environment.
+
+cmd.exe provides the traditional Windows command shell.
+
+A terminal is not the same thing as a shell.
+
+A terminal provides an interface through which interactive programs can communicate with a user.
+
+A shell can run inside a terminal.
+
+A shell can also run noninteractively.
+
+An environment variable associates a name with a value in a process environment.
+
+Processes can inherit environment variables.
+
+Environment variables can configure application behavior.
+
+Environment variables are not automatically secret.
+
+Secrets placed in environment variables can be exposed through process inspection, debugging, logging, or inherited environments depending on the system.
+
+Environment variables should not be treated as magically secure storage.
+
+The PATH environment variable commonly identifies directories searched for executable programs.
+
+PATH ordering matters.
+
+Executing a command by name can run a different executable if PATH resolves unexpectedly.
+
+Security-sensitive software should understand how executable resolution occurs.
+
+A working directory is the directory used as the base for relative filesystem paths.
+
+A relative path depends on context.
+
+An absolute path identifies a location from a defined filesystem root or volume.
+
+Changing the working directory can change what a relative path references.
+
+Services should not rely on an interactive user's working directory unless explicitly configured.
+
+Paths differ between operating systems.
+
+Windows commonly uses drive-letter paths such as C:\directory\file.
+
+Unix-like systems commonly use paths beginning with /.
+
+Path separators differ by platform conventions and APIs.
+
+Portable software should use appropriate path-handling interfaces.
+
+Do not construct paths by blindly concatenating separators when a platform abstraction exists.
+
+A filesystem organizes stored files and directories.
+
+A file is a named or otherwise referenced sequence of data according to filesystem semantics.
+
+A directory contains filesystem entries.
+
+A directory can contain files.
+
+A directory can contain subdirectories.
+
+A filesystem can contain symbolic links.
+
+A symbolic link refers to another filesystem path.
+
+A hard link refers to an existing filesystem object according to filesystem semantics.
+
+Symbolic links and hard links are different.
+
+Deleting a symbolic link does not normally delete its target.
+
+Hard-link behavior depends on filesystem reference semantics.
+
+A filename is not necessarily a unique permanent identity for file content.
+
+A file can be renamed.
+
+A file can be replaced.
+
+A path can refer to different file content over time.
+
+File metadata can include size.
+
+File metadata can include timestamps.
+
+File metadata can include ownership.
+
+File metadata can include permissions.
+
+Filesystem timestamps have different meanings.
+
+Creation time, modification time, metadata-change time, and access time are different concepts where supported.
+
+Do not assume every filesystem exposes the same timestamps.
+
+Do not assume timestamp precision is identical across filesystems.
+
+File content should not be inferred solely from a filename.
+
+A file extension is a naming convention.
+
+A .txt filename conventionally suggests text.
+
+The operating system does not universally guarantee file content from the extension.
+
+A file can contain binary data despite a .txt extension.
+
+A file can contain text despite having no extension.
+
+File formats should be validated according to their actual requirements.
+
+Opening a file creates or returns an operating-system file handle or descriptor according to platform interfaces.
+
+Unix-like systems commonly represent open resources using file descriptors.
+
+A file descriptor is an integer identifying an open resource within a process.
+
+File descriptor zero is conventionally stdin.
+
+File descriptor one is conventionally stdout.
+
+File descriptor two is conventionally stderr.
+
+Sockets can also be represented using file descriptors on Unix-like systems.
+
+Windows uses handles and socket abstractions with different native semantics.
+
+A file descriptor is not a filename.
+
+A handle is not the underlying resource itself.
+
+Closing a handle releases that process's reference according to operating-system semantics.
+
+Forgetting to close resources can create resource leaks.
+
+A process has finite resource limits.
+
+Too many open files can prevent additional files or sockets from being opened.
+
+Resource cleanup matters.
+
+Memory is a finite resource.
+
+Virtual memory gives processes an address-space abstraction.
+
+Virtual addresses are not necessarily physical memory addresses.
+
+The operating system and hardware translate virtual memory according to the memory-management architecture.
+
+Different processes can use identical virtual addresses referring to different physical memory.
+
+Virtual memory provides isolation.
+
+Virtual memory can permit memory to be backed by physical RAM.
+
+Virtual memory can permit memory to be backed by storage.
+
+A page is a fixed-size unit used by virtual-memory systems.
+
+Page size depends on architecture and operating-system configuration.
+
+A page fault occurs when memory access requires operating-system intervention according to virtual-memory state.
+
+A page fault is not automatically an application error.
+
+Some page faults are part of normal memory operation.
+
+An invalid memory access can result in a process fault or exception.
+
+A segmentation fault is a common Unix-like result of invalid memory access.
+
+Windows can report access violations.
+
+Terminology differs while the underlying class of invalid memory access can be similar.
+
+A process address space commonly contains code.
+
+A process address space commonly contains static data.
+
+A process address space commonly contains heap memory.
+
+A process address space commonly contains thread stacks.
+
+Exact layout depends on platform and executable format.
+
+The stack commonly stores function-call state and local automatic variables.
+
+The heap commonly provides dynamically allocated memory.
+
+Stack and heap are different memory-management concepts.
+
+A stack data structure and a process call stack are related concepts but are not identical abstractions.
+
+A heap data structure and process heap memory are different concepts.
+
+Dynamic memory in C can be allocated using malloc.
+
+Dynamic memory in C can be released using free.
+
+The operating system ultimately supplies memory resources, but the C runtime can manage allocations within those resources.
+
+Calling malloc does not necessarily cause a new operating-system allocation for every call.
+
+Memory allocators can manage larger regions internally.
+
+A memory leak occurs when allocated memory remains unreachable or unreleased when it is no longer needed.
+
+A use-after-free occurs when code accesses memory after its lifetime ended.
+
+A double free occurs when memory is released more than once contrary to allocator requirements.
+
+A buffer overflow occurs when writes exceed a valid buffer boundary.
+
+These are application memory defects.
+
+The operating system can mitigate some consequences.
+
+The operating system cannot make incorrect memory handling correct.
+
+Address Space Layout Randomization is commonly abbreviated ASLR.
+
+ASLR randomizes selected memory locations to make some exploitation techniques more difficult.
+
+Data Execution Prevention is commonly abbreviated DEP.
+
+DEP prevents execution from selected memory regions according to platform security mechanisms.
+
+Security mitigations reduce exploitability.
+
+Security mitigations do not replace correct software.
+
+Memory permissions can distinguish readable memory.
+
+Memory permissions can distinguish writable memory.
+
+Memory permissions can distinguish executable memory.
+
+Writable memory does not need to be executable for ordinary data.
+
+Executable memory does not ordinarily need to be writable for ordinary code.
+
+The principle of least privilege also applies to memory permissions.
+
+An executable file contains machine code and metadata according to an executable format.
+
+Windows commonly uses the Portable Executable format.
+
+Portable Executable is commonly abbreviated PE.
+
+Linux commonly uses the Executable and Linkable Format.
+
+Executable and Linkable Format is commonly abbreviated ELF.
+
+PE and ELF are different binary formats.
+
+A Windows executable commonly uses the .exe extension.
+
+Linux executables do not require a filename extension.
+
+Executable permission and executable format are different concepts.
+
+A file can contain valid executable-format data but lack permission to execute.
+
+A file can have executable permission but contain invalid executable data.
+
+A static library contains code linked into a program during the build process according to toolchain behavior.
+
+A dynamic library is loaded separately at runtime or program load time.
+
+Windows dynamic libraries commonly use the .dll extension.
+
+DLL stands for Dynamic-Link Library.
+
+Unix-like shared libraries commonly use .so files.
+
+A shared object is commonly abbreviated SO.
+
+Dynamic libraries allow executable code to be separated into loadable components.
+
+A host program can load a dynamic library.
+
+A host program can resolve exported symbols.
+
+A host program can call compatible exported functions.
+
+A library's presence on disk does not mean it has been loaded.
+
+Successful loading does not prove compatibility.
+
+Compatibility must be validated according to the application's interface rules.
+
+An ABI is an Application Binary Interface.
+
+An ABI defines binary-level interaction requirements.
+
+ABI requirements can include calling conventions.
+
+ABI requirements can include structure layouts.
+
+ABI requirements can include symbol names.
+
+ABI requirements can include type sizes.
+
+ABI requirements can include alignment.
+
+ABI requirements can include function signatures.
+
+ABI compatibility matters when independently compiled components interact.
+
+An API and an ABI are different.
+
+An API defines a programming interface at the source or conceptual level.
+
+An ABI defines binary interaction.
+
+Two components can expose conceptually similar APIs while remaining ABI-incompatible.
+
+Operating systems and architectures can use different ABIs.
+
+Portable module systems should isolate platform-specific loading mechanisms from common module semantics.
+
+Windows can load DLLs using Windows loader APIs.
+
+Unix-like systems can load shared objects using dynamic-loading APIs.
+
+The common application behavior can remain the same despite different loader implementations.
+
+Platform-specific code belongs behind an appropriate platform interface when architecture requires portability.
+
+A daemon is a long-running background process in Unix-like systems.
+
+A service is a long-running managed program.
+
+Windows uses services through the Service Control Manager.
+
+Linux commonly manages services using service-management systems.
+
+systemd is a widely used Linux service manager.
+
+A systemd service is defined by a unit configuration.
+
+systemctl controls systemd-managed units.
+
+Starting a service requests that the service manager activate it.
+
+Stopping a service requests deactivation.
+
+Restarting a service stops and starts it according to service-manager behavior.
+
+Enabling a service normally configures it to start automatically according to systemd rules.
+
+Starting and enabling are different.
+
+A service can be running but not enabled.
+
+A service can be enabled but currently stopped.
+
+Service state should be queried rather than inferred.
+
+A daemon can run without systemd.
+
+systemd is not the Linux kernel.
+
+systemd is not the operating system itself.
+
+A service manager supervises processes according to its configuration.
+
+Supervision can restart failed services.
+
+Automatic restart should be bounded according to operational policy.
+
+A repeatedly crashing service can enter a restart loop.
+
+Restart loops can consume resources.
+
+Restart loops can hide the original failure under repeated secondary errors.
+
+Logs should preserve the first relevant failure.
+
+A service can run under a dedicated user account.
+
+Dedicated service accounts limit authority.
+
+A network service generally should not run as an administrator or root user unless required.
+
+Root is the traditional Unix superuser.
+
+UID stands for User Identifier.
+
+Unix-like systems identify users using numeric UIDs.
+
+GID stands for Group Identifier.
+
+Unix-like systems identify groups using numeric GIDs.
+
+A process runs with security credentials.
+
+Those credentials determine access according to operating-system rules.
+
+File ownership does not automatically grant every possible permission.
+
+File permissions determine allowed operations according to the security model.
+
+Traditional Unix permissions include read.
+
+Traditional Unix permissions include write.
+
+Traditional Unix permissions include execute.
+
+Permissions are represented for file owner.
+
+Permissions are represented for group.
+
+Permissions are represented for others.
+
+chmod changes Unix permission bits.
+
+chown changes ownership.
+
+chgrp changes group ownership.
+
+The permission string rwxr-xr-x represents different permission sets for owner, group, and others.
+
+Read permission on a regular file allows reading file content according to applicable access checks.
+
+Write permission on a regular file allows modification according to applicable access checks.
+
+Execute permission on a regular file permits execution when the file is a valid executable or script according to system rules.
+
+Directory permissions have different practical semantics from regular-file permissions.
+
+Read permission on a directory allows listing directory entries according to Unix semantics.
+
+Execute permission on a directory allows traversal or access through that directory according to Unix semantics.
+
+Write permission on a directory permits modifying directory entries according to applicable permissions.
+
+A process can be unable to modify a file even when the file appears writable if directory or additional security controls prevent the operation.
+
+A process can be unable to create a file when the target directory is not writable.
+
+The user running a web server determines the permissions available to web application code.
+
+PHP running through a web server does not automatically execute as the filesystem owner.
+
+Apache commonly runs worker processes under a configured service account.
+
+A PHP application can only write where its effective operating-system credentials permit writing.
+
+A file owned by one account is not automatically writable by a web-server account.
+
+Changing filesystem permissions changes the operating-system security boundary.
+
+Do not make an entire application tree world-writable merely to fix one required writable directory.
+
+Grant only the required access.
+
+Least privilege means granting only the permissions necessary to perform authorized work.
+
+A web application that needs to write logs requires write access to its log destination.
+
+A web application that needs to update a data directory requires write access to that directory.
+
+A web application that does not need to modify application code should not require write access to application code.
+
+Separating writable data from executable application code improves security.
+
+Unix permissions are not the only Linux access-control mechanism.
+
+Access Control Lists can provide additional permissions.
+
+Access Control List is commonly abbreviated ACL.
+
+SELinux can enforce mandatory access-control rules.
+
+AppArmor can enforce application security profiles.
+
+A file can have apparently sufficient Unix mode bits while an additional security mechanism still denies access.
+
+Diagnose the actual security layer.
+
+Do not disable security mechanisms merely because access was denied without first determining why.
+
+Windows uses Access Control Lists extensively for filesystem security.
+
+Windows file permissions are not equivalent to Unix mode bits.
+
+Portable applications should express required access conceptually and let platform-specific installation logic configure it appropriately.
+
+An installer can create directories.
+
+An installer can establish required ownership.
+
+An installer can establish required permissions.
+
+An installer can create configuration files.
+
+An installer can register services.
+
+An installer can validate prerequisites.
+
+An installer should not grant broader access than required.
+
+Installation and runtime are different lifecycle stages.
+
+Privileges required during installation do not imply the application should run permanently with installation privileges.
+
+A privileged installer can configure resources for an unprivileged runtime account.
+
+Privilege separation reduces risk.
+
+A signal is an asynchronous notification used by Unix-like operating systems.
+
+SIGTERM requests process termination according to signal semantics.
+
+SIGINT commonly represents an interactive interrupt.
+
+SIGKILL forcibly terminates a process and cannot be caught or ignored according to Unix semantics.
+
+SIGHUP is historically associated with terminal hangup and is commonly repurposed by daemons for configuration reload.
+
+Signal behavior depends on application handling.
+
+SIGTERM and SIGKILL are different.
+
+A process receiving SIGTERM can perform cleanup if it handles the signal appropriately.
+
+A process receiving SIGKILL cannot perform application cleanup before termination.
+
+Graceful shutdown should normally be attempted before forced termination when operational requirements permit.
+
+Windows has different native process-control mechanisms.
+
+Portable software should map common shutdown behavior onto platform-specific mechanisms.
+
+A service should define graceful shutdown behavior.
+
+Graceful shutdown can stop accepting new work.
+
+Graceful shutdown can finish current work.
+
+Graceful shutdown can flush logs.
+
+Graceful shutdown can persist required state.
+
+Graceful shutdown can close network connections.
+
+Graceful shutdown should have a bounded completion time according to operational requirements.
+
+A hung process may require forced termination.
+
+Forced termination can leave partially written state.
+
+Persistent state should therefore use designs resilient to unexpected process termination.
+
+Atomic file replacement can reduce partial configuration files.
+
+Write a new file.
+
+Flush it according to required durability semantics.
+
+Replace the old file atomically when the filesystem supports the required operation.
+
+The exact durability guarantees depend on operating-system and filesystem semantics.
+
+A successful write call does not necessarily mean data has reached permanent physical storage.
+
+Operating systems cache filesystem writes.
+
+Flush or synchronization operations can request stronger persistence.
+
+Hardware can also cache writes.
+
+Durability requirements should be explicit.
+
+A filesystem cache improves performance.
+
+Cached data is not a second authoritative version of the file.
+
+The operating system can retain file data in memory and later write it to storage.
+
+A page cache is commonly used for filesystem data.
+
+Applications should not assume every file read causes physical disk access.
+
+Applications should not assume every file write immediately reaches physical media.
+
+Filesystem locking coordinates access according to operating-system and filesystem mechanisms.
+
+Advisory locks require cooperating applications to honor them.
+
+Mandatory locking behavior differs and is not universally available.
+
+A lock does not replace atomic update design.
+
+A process can crash while holding application state.
+
+Operating-system locks are normally released when the owning process terminates according to the lock mechanism.
+
+Application lock files can remain after a crash if they are ordinary files.
+
+A lock file and an operating-system lock are different.
+
+Stale lock files require defined handling.
+
+Do not delete a lock file merely because it exists.
+
+Determine whether it represents an active owner according to the locking design.
+
+A socket is an operating-system communication endpoint.
+
+Sockets can support network communication.
+
+Sockets can support local IPC.
+
+TCP sockets provide TCP communication.
+
+UDP sockets provide UDP communication.
+
+Unix-domain sockets provide local IPC on Unix-like systems.
+
+Windows provides its own local IPC mechanisms and socket support.
+
+Opening a socket consumes an operating-system resource.
+
+Sockets should be closed when no longer needed.
+
+A listening socket waits for incoming connection requests.
+
+An accepted socket represents a connected peer according to TCP server semantics.
+
+Listening and connected sockets have different roles.
+
+A timeout limits how long an operation waits according to configured behavior.
+
+A timeout is not proof of remote failure.
+
+A timeout means the expected operation did not complete within the configured time.
+
+The remote system may be slow.
+
+The network may be delayed.
+
+The response may have been lost.
+
+The remote operation may have completed while its response was lost.
+
+Timeout handling should respect operation semantics.
+
+Retrying a read can be safe according to protocol.
+
+Retrying a state-changing request can duplicate the operation unless the protocol provides idempotency.
+
+The operating system can report errors through platform-specific error mechanisms.
+
+Unix-like APIs commonly use errno for many failures.
+
+Windows APIs commonly provide Windows error codes.
+
+Winsock uses socket-specific error reporting conventions.
+
+Error numbers from one operating system should not be interpreted using another operating system's definitions.
+
+Platform abstraction should translate native failures into common application error categories when appropriate.
+
+Do not discard native error information needed for diagnosis.
+
+An error code is evidence.
+
+An error message is diagnostic information.
+
+Neither should be replaced by speculation.
+
+If an operation reports timeout, report timeout unless additional evidence establishes the cause.
+
+If an operation reports permission denied, investigate permissions and security policy.
+
+If an operation reports connection refused, a network path reached a rejecting endpoint or equivalent condition according to network semantics.
+
+Connection refused and timeout are different.
+
+File not found and permission denied are different.
+
+Invalid argument and unsupported operation are different.
+
+Preserve failure categories.
+
+Logging records operational information.
+
+Operating systems provide logging mechanisms.
+
+Linux services managed by systemd can write to the journal.
+
+journalctl reads systemd journal data.
+
+Applications can maintain their own log files.
+
+Windows provides Event Log facilities.
+
+Application logs and operating-system logs provide different evidence.
+
+A service failure can require examining both.
+
+Logs should include timestamps.
+
+Logs should identify relevant components.
+
+Logs should identify meaningful state transitions.
+
+Logs should identify failures.
+
+Logs should avoid exposing secrets.
+
+Logs should not contain passwords.
+
+Logs should not contain private keys.
+
+Logs should not contain secret authentication tokens.
+
+Log rotation prevents ordinary log files from growing without bound.
+
+A long-running service should have a bounded logging strategy.
+
+Disk exhaustion can become an availability failure.
+
+Operating systems enforce resource limits.
+
+A process can have file-descriptor limits.
+
+A process can have memory limits.
+
+A process can have CPU scheduling constraints.
+
+A service manager can impose resource controls.
+
+Containers can impose resource limits.
+
+Applications should behave predictably when resource allocation fails.
+
+malloc can fail.
+
+File open can fail.
+
+Thread creation can fail.
+
+Process creation can fail.
+
+Socket creation can fail.
+
+Disk writes can fail.
+
+Do not assume operating-system resources are unlimited.
+
+CPU stands for Central Processing Unit.
+
+A CPU executes machine instructions.
+
+A CPU can contain multiple cores.
+
+A core can support one or more hardware execution threads depending on processor architecture.
+
+Operating-system threads are scheduled onto available processor execution resources.
+
+One process does not automatically use every CPU core.
+
+A single-threaded CPU-bound process generally executes on one logical processor at a time.
+
+Multiple processes can execute concurrently on multiple cores.
+
+Multiple threads can execute concurrently on multiple cores.
+
+Concurrency and parallelism are different concepts.
+
+Concurrency means multiple tasks can make progress over overlapping periods.
+
+Parallelism means multiple tasks execute simultaneously on separate execution resources.
+
+A concurrent program is not necessarily parallel.
+
+A parallel program is concurrent.
+
+More threads do not automatically improve performance.
+
+Thread creation and synchronization have overhead.
+
+Contention can reduce performance.
+
+Workload determines useful parallelism.
+
+CPU usage is a measured resource value.
+
+A process using 1 percent CPU does not mean the process is inactive.
+
+CPU percentages depend on measurement convention and number of logical processors.
+
+I/O-bound programs can use little CPU while performing substantial work.
+
+CPU-bound programs spend substantial time performing computation.
+
+I/O-bound programs spend substantial time waiting for input or output.
+
+Optimization should identify the actual bottleneck.
+
+Adding CPU threads does not solve a disk bottleneck.
+
+Adding memory does not automatically solve a network latency problem.
+
+Operating-system metrics provide evidence.
+
+Memory usage provides evidence.
+
+CPU usage provides evidence.
+
+Disk I/O provides evidence.
+
+Network I/O provides evidence.
+
+Open handles provide evidence.
+
+Process state provides evidence.
+
+Use measurements rather than assumptions.
+
+A scheduler decides which runnable execution context receives processor time.
+
+Scheduling policy belongs to the operating system.
+
+Application priority can influence scheduling.
+
+Priority does not guarantee immediate execution.
+
+Real-time scheduling has stronger timing requirements and different policies.
+
+Ordinary desktop and server applications should not claim real-time behavior without meeting the applicable requirements.
+
+A clock measures time.
+
+Operating systems expose multiple clock types.
+
+Wall-clock time represents civil time.
+
+Monotonic time measures elapsed progression unaffected by ordinary wall-clock adjustments.
+
+Timeout measurement should generally use a monotonic clock when available.
+
+Wall-clock time can change.
+
+Time synchronization can adjust wall-clock time.
+
+A user can change system time.
+
+Daylight-saving transitions affect civil time representation.
+
+Elapsed-time calculations should not assume wall-clock time always increases smoothly.
+
+UTC is a time standard commonly used for machine timestamps.
+
+Local time applies timezone rules to represent civil time.
+
+Store and compare time according to application requirements.
+
+Do not discard timezone context when it matters.
+
+A timestamp without timezone context can be ambiguous.
+
+Operating systems expose clocks through platform APIs.
+
+Portable code should use an appropriate abstraction when clock semantics must remain consistent.
+
+A boot is the process of starting the operating system.
+
+Firmware initializes hardware before or during the boot process according to platform architecture.
+
+BIOS is an older firmware interface.
+
+UEFI is a modern firmware interface.
+
+UEFI stands for Unified Extensible Firmware Interface.
+
+The bootloader loads or starts the operating-system kernel according to platform design.
+
+The kernel initializes core operating-system facilities.
+
+User-space initialization starts system services.
+
+On many Linux systems, systemd performs user-space system initialization and service management.
+
+Boot stages should not be confused.
+
+A bootloader is not the kernel.
+
+The kernel is not systemd.
+
+systemd is not the shell.
+
+The shell is not the terminal.
+
+The terminal is not the operating system.
+
+Keeping layers distinct makes debugging easier.
+
+A device driver allows the operating system to control hardware according to the device interface.
+
+Drivers commonly execute with elevated privilege.
+
+A defective kernel-mode driver can destabilize the entire operating system.
+
+User-space application failure is normally more isolated.
+
+Hardware detection depends on operating-system interfaces.
+
+Different operating systems expose hardware information differently.
+
+Portable hardware-detection logic should separate common classification from platform-specific enumeration.
+
+A GPU is a Graphics Processing Unit.
+
+Operating systems expose GPUs through drivers and APIs.
+
+A GPU being present does not mean a particular compute API is available.
+
+A driver being installed does not prove a workload can execute successfully.
+
+Hardware detection, capability detection, and successful execution are different stages.
+
+USB stands for Universal Serial Bus.
+
+USB devices are enumerated by the operating system.
+
+USB device identity can include vendor and product identifiers.
+
+A USB device's presence does not establish its intended application role.
+
+Application logic should qualify devices according to required capabilities.
+
+Storage devices are exposed through operating-system block or filesystem abstractions.
+
+A block device provides addressable blocks according to storage interfaces.
+
+A filesystem provides files and directories above storage.
+
+Formatting creates a filesystem or storage structure according to the selected tool and format.
+
+Mounting attaches a filesystem into the accessible filesystem namespace on Unix-like systems.
+
+Windows commonly exposes mounted volumes through drive letters or mount points.
+
+A mounted filesystem is not necessarily local physical storage.
+
+Network filesystems can be mounted.
+
+Virtual filesystems can be mounted.
+
+Filesystem semantics can differ.
+
+Atomic operations on one filesystem may not have identical guarantees on another.
+
+Portable software should not assume every filesystem behaves identically.
+
+Case sensitivity differs among filesystems.
+
+Linux filesystems commonly distinguish filename case.
+
+Windows filesystems commonly provide case-insensitive filename lookup by default while preserving case.
+
+Do not rely on case-insensitive filenames in portable software.
+
+file.txt and File.txt can be distinct files on a case-sensitive filesystem.
+
+Line endings differ by platform convention.
+
+Unix text files commonly use LF.
+
+Windows text files traditionally use CRLF.
+
+Text-processing software should deliberately handle required line endings.
+
+Protocol serialization should specify line endings independently from local operating-system conventions.
+
+Network protocols should not inherit arbitrary local newline behavior.
+
+Text encoding is also independent of operating-system identity.
+
+UTF-8 can be used on Windows.
+
+UTF-8 can be used on Linux.
+
+Do not assume Windows means one text encoding and Linux means another.
+
+Locale affects language and formatting behavior.
+
+Locale can affect character classification.
+
+Locale can affect sorting.
+
+Locale can affect numeric formatting.
+
+Machine protocols should avoid unintended dependence on user locale.
+
+A decimal point in a machine protocol should not become a comma merely because the host locale changed unless the protocol explicitly defines locale behavior.
+
+Deterministic systems should control locale-sensitive behavior where it affects outputs.
+
+The operating system provides process isolation.
+
+Containers provide an additional isolation mechanism using operating-system features.
+
+A container is not necessarily a virtual machine.
+
+Containers commonly share the host kernel.
+
+Virtual machines normally run a guest operating system using virtualized hardware.
+
+A container image contains application filesystem and configuration layers according to its container system.
+
+A container does not provide a separate physical computer.
+
+Isolation boundaries differ between containers and virtual machines.
+
+Security assumptions should reflect the actual isolation mechanism.
+
+Privilege escalation means obtaining greater authority than currently permitted.
+
+Applications should not require privilege escalation for routine operations unless necessary.
+
+Running as root to avoid filesystem permission configuration is usually excessive.
+
+Running as Administrator to avoid configuring Windows ACLs is usually excessive.
+
+Correct installation should grant the runtime identity exactly the access it requires.
+
+Service identities should be explicit.
+
+File ownership should be explicit.
+
+Writable paths should be explicit.
+
+Network listeners should be explicit.
+
+Privileged operations should be explicit.
+
+Operating-system interaction should be bounded.
+
+A program should know which files it owns.
+
+A program should know which directories it may modify.
+
+A program should know which ports it may bind.
+
+A program should know which subprocesses it may launch.
+
+A program should know which environment configuration it consumes.
+
+A program should know which dynamic libraries it loads.
+
+A program should know which privileges it requires.
+
+Implicit operating-system dependencies make deployment fragile.
+
+Explicit dependencies make installation reproducible.
+
+A platform abstraction provides a common interface over operating-system-specific implementation.
+
+The common layer defines required behavior.
+
+The Windows implementation satisfies that behavior using Windows interfaces.
+
+The Linux implementation satisfies that behavior using Linux or POSIX interfaces as applicable.
+
+Platform implementations can differ internally.
+
+Externally required results should remain consistent where architecture requires consistency.
+
+Platform abstraction should not erase meaningful native errors.
+
+Platform abstraction should normalize behavior that is intended to be common.
+
+Do not put Windows-specific behavior into common semantics unless it is actually a common requirement.
+
+Do not put Linux-specific behavior into common semantics unless it is actually a common requirement.
+
+Platform independence means common system behavior is not determined by one operating system.
+
+Platform independence does not mean platform-specific code cannot exist.
+
+Platform-specific code is often necessary.
+
+The boundary matters.
+
+Compilation selects machine and operating-system-compatible code.
+
+Runtime detection can select platform backends where architecture supports it.
+
+Build-time and runtime platform selection are different strategies.
+
+A single source tree can support multiple platforms.
+
+Separate platform directories can isolate native implementation.
+
+Shared headers can define common interfaces.
+
+Platform-specific source files can implement those interfaces.
+
+The linker can select the required implementation during build.
+
+A runtime loader can select implementations dynamically when required.
+
+The correct design depends on deployment requirements.
+
+Do not introduce runtime platform complexity when build-time selection is sufficient.
+
+Do not hard-code one operating system when runtime portability is required.
+
+Operating-system APIs return evidence.
+
+Check return values.
+
+Check error codes.
+
+Check resource limits.
+
+Close resources.
+
+Bound waits.
+
+Bound retries.
+
+Preserve failure categories.
+
+Protect shared state.
+
+Use least privilege.
+
+Separate common behavior from platform implementation.
+
+Do not infer success from silence.
+
+Do not infer permissions from ownership alone.
+
+Do not infer service state from configuration alone.
+
+Do not infer file content from extension alone.
+
+Do not infer process success from process creation alone.
+
+Do not infer remote success from a local network send.
+
+Do not infer durability from a buffered write alone.
+
+Do not infer thread safety from the presence of one mutex.
+
+Do not infer portability because code compiled on two machines.
+
+Do not infer platform independence when observable results differ where they are required to match.
+
+The operating system is an execution environment and resource manager.
+
+Applications operate within the boundaries it establishes.
+
+Reliable software understands those boundaries rather than fighting them.
+
+Small operating-system interfaces are easier to reason about.
+
+Explicit resource ownership is easier to reason about.
+
+Explicit platform boundaries are easier to maintain.
+
+Explicit permissions are easier to audit.
+
+Explicit process lifecycle is easier to operate.
+
+Explicit failure handling is easier to debug.
+
+Portable software defines common behavior first and implements platform differences behind controlled boundaries.
+
+The operating system provides mechanisms.
+
+The application defines its required behavior.
+
+Correct engineering keeps those responsibilities distinct.

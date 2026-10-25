@@ -1,0 +1,2049 @@
+Memory management is the control of memory used by a program.
+
+Memory management includes obtaining memory.
+
+Memory management includes using memory.
+
+Memory management includes tracking memory ownership.
+
+Memory management includes controlling memory lifetime.
+
+Memory management includes releasing memory when it is no longer required.
+
+Memory management affects correctness.
+
+Memory management affects reliability.
+
+Memory management affects performance.
+
+Memory management affects security.
+
+Memory is finite.
+
+A program should not assume unlimited memory.
+
+Memory allocation can fail.
+
+Memory exhaustion can cause allocation failure.
+
+Memory exhaustion can cause severe performance degradation.
+
+Memory exhaustion can affect other processes.
+
+Memory usage should be bounded where practical.
+
+A memory leak occurs when memory remains allocated after the program no longer needs it and the program has lost or intentionally retained the ability to release it.
+
+Repeated leaks can exhaust available memory.
+
+A memory leak does not necessarily cause immediate failure.
+
+Long-running processes are particularly affected by persistent leaks.
+
+Memory growth is not automatically a memory leak.
+
+A cache can intentionally retain memory.
+
+A memory pool can intentionally retain memory.
+
+An allocator can retain released memory for later reuse.
+
+A runtime can retain memory without returning it immediately to the operating system.
+
+Determine ownership and reachability before declaring a leak.
+
+Memory lifetime describes how long a memory object remains valid.
+
+Using memory outside its valid lifetime is an error.
+
+Ownership describes responsibility for controlling an object's lifetime.
+
+Ownership should be clear.
+
+A function can own memory.
+
+An object can own memory.
+
+A subsystem can own memory.
+
+A caller can transfer ownership to a callee.
+
+A callee can transfer ownership to a caller.
+
+Shared ownership can exist.
+
+Borrowed access can exist without ownership.
+
+Ownership rules should be explicit.
+
+If ownership is unclear, memory defects become more likely.
+
+A pointer identifies or refers to a memory location according to the programming language and runtime model.
+
+A pointer is not the memory itself.
+
+Multiple pointers can refer to the same memory.
+
+Destroying one pointer variable does not necessarily destroy the memory it referenced.
+
+Freeing referenced memory can invalidate every pointer that depends on that memory.
+
+A null pointer represents no valid object according to the language's null-pointer semantics.
+
+A null pointer should not be dereferenced.
+
+A non-null pointer is not automatically valid.
+
+A non-null pointer can be dangling.
+
+A non-null pointer can point outside an intended object.
+
+A non-null pointer can refer to memory with an incompatible type.
+
+Pointer validity depends on provenance, lifetime, bounds, alignment, and language rules.
+
+A dangling pointer refers to an object whose lifetime has ended or memory that is otherwise no longer valid for that access.
+
+Dereferencing a dangling pointer is invalid.
+
+A use-after-free occurs when code accesses dynamically allocated memory after that allocation has been released.
+
+Use-after-free can cause incorrect results.
+
+Use-after-free can cause crashes.
+
+Use-after-free can create security vulnerabilities.
+
+Use-after-free behavior can appear to work temporarily.
+
+Apparent success does not make the access valid.
+
+Released memory can retain old bytes until reused.
+
+Those bytes no longer belong to the released object.
+
+Do not rely on them.
+
+A double-free occurs when code attempts to release the same allocation more than once without a valid intervening allocation establishing a new object.
+
+Double-free can corrupt allocator state.
+
+Double-free can cause crashes.
+
+Double-free can create security vulnerabilities.
+
+Clear ownership reduces double-free risk.
+
+Setting one pointer to null after freeing memory can prevent accidental reuse through that pointer.
+
+It does not invalidate or null other aliases.
+
+It does not solve ownership by itself.
+
+Aliasing occurs when multiple references or pointers provide access to the same underlying object or memory.
+
+Aliasing can be intentional.
+
+Aliasing complicates lifetime management.
+
+Aliasing complicates optimization.
+
+Aliasing can complicate concurrency.
+
+An owner should not release an object while valid borrowers still require it.
+
+Borrowing rules should define how long borrowed access remains valid.
+
+Automatic storage duration commonly provides memory whose lifetime is tied to execution of a block or function scope according to language rules.
+
+Dynamic storage duration commonly provides memory whose lifetime is controlled through allocation and release mechanisms.
+
+Static storage duration commonly provides memory lasting for the program's execution according to language rules.
+
+Exact terminology and semantics depend on the programming language.
+
+Do not treat stack and heap as exact synonyms for language storage duration.
+
+Stack and heap describe common implementation mechanisms.
+
+Language semantics determine object lifetime.
+
+The stack commonly stores function call state and selected local objects.
+
+Stack allocation is typically fast.
+
+Stack memory is typically reclaimed automatically when the associated execution frame ends.
+
+Stack capacity is finite.
+
+Large local objects can exhaust stack capacity.
+
+Deep recursion can exhaust stack capacity.
+
+Stack overflow can terminate or corrupt execution depending on the environment.
+
+Do not place arbitrarily large data on the stack.
+
+The heap commonly supplies dynamically allocated memory.
+
+Heap allocations can outlive the function that created them.
+
+Heap allocations require lifetime management.
+
+Allocation and release have runtime cost.
+
+Heap fragmentation can affect memory usage and allocation behavior.
+
+Heap allocation can fail.
+
+The exact implementation is runtime and platform dependent.
+
+C commonly uses malloc to allocate dynamic memory.
+
+C commonly uses calloc to allocate zero-initialized dynamic memory.
+
+C commonly uses realloc to resize an allocation.
+
+C commonly uses free to release dynamic memory.
+
+These functions have defined language semantics.
+
+Check allocation results before use.
+
+malloc can return a null pointer when allocation fails.
+
+calloc can return a null pointer when allocation fails.
+
+realloc can return a null pointer when resizing fails.
+
+Do not dereference an allocation result before establishing success.
+
+The memory returned by malloc is uninitialized.
+
+Uninitialized memory can contain indeterminate data.
+
+Do not assume malloc returns zeroed memory.
+
+calloc initializes allocated bytes according to its defined behavior.
+
+Do not use calloc merely to hide initialization requirements.
+
+Initialize data according to object semantics.
+
+Reading an uninitialized value can be erroneous or undefined depending on language and type.
+
+Uninitialized memory can expose stale data.
+
+Initialize before use.
+
+free releases memory previously obtained through a compatible dynamic allocation mechanism according to C rules.
+
+Calling free with a null pointer is permitted in C.
+
+Calling free on memory not obtained through a compatible allocation mechanism is invalid.
+
+Do not free stack memory.
+
+Do not free string literals.
+
+Do not free arbitrary addresses.
+
+Do not free interior pointers unless the allocation API explicitly permits it.
+
+Release the allocation using the pointer required by the allocation contract.
+
+After free, the allocation's lifetime has ended.
+
+free does not guarantee that the old bytes are physically erased.
+
+free does not guarantee that the memory is returned immediately to the operating system.
+
+free does not guarantee that another allocation cannot receive the same address.
+
+free means the allocation is no longer owned by the caller according to allocator semantics.
+
+realloc changes the size of an allocation according to C semantics.
+
+realloc can move the allocation.
+
+If realloc moves the allocation, the previous allocation is no longer valid.
+
+If realloc succeeds, use the returned pointer.
+
+If realloc fails for a nonzero requested size, the original allocation remains valid according to standard realloc semantics.
+
+Do not overwrite the only pointer to an allocation before checking realloc success.
+
+A common safe pattern uses a temporary pointer for realloc.
+
+If the temporary result is valid, ownership can be updated.
+
+If it is null under ordinary allocation-failure semantics, the original pointer remains available for cleanup or recovery.
+
+Size calculations must be checked before allocation.
+
+Multiplication can overflow.
+
+Addition can overflow.
+
+A count multiplied by element size can overflow.
+
+An overflowed size can produce an allocation smaller than intended.
+
+Later writes can then exceed the allocation.
+
+Validate counts and sizes before arithmetic.
+
+Use appropriate checked arithmetic where available.
+
+A buffer is a memory region used to hold data.
+
+Every buffer has a capacity.
+
+Operations should respect that capacity.
+
+A buffer overflow occurs when code writes beyond the valid bounds of a buffer.
+
+A buffer over-read occurs when code reads beyond valid bounds.
+
+Out-of-bounds access can corrupt data.
+
+Out-of-bounds access can crash.
+
+Out-of-bounds access can expose data.
+
+Out-of-bounds access can create security vulnerabilities.
+
+Bounds should be established before access.
+
+An array index should remain within the array's valid range.
+
+A length supplied by external input should be validated.
+
+A length stored in a file should be validated.
+
+A length supplied by a network peer should be validated.
+
+Do not trust a length merely because it fits in an integer type.
+
+The requested operation must also fit within the actual object.
+
+Off-by-one errors occur when boundary calculations are wrong by one position.
+
+Strings commonly create off-by-one risks because terminators can require additional storage.
+
+In C, a conventional null-terminated string requires storage for its characters plus a terminating null character.
+
+A buffer containing N visible characters generally requires at least N plus one bytes when represented as an ordinary single-byte null-terminated C string.
+
+Character encoding can affect the relationship between characters and bytes.
+
+Do not confuse character count with byte count.
+
+UTF-8 characters can occupy multiple bytes.
+
+A byte buffer size is not necessarily a character capacity.
+
+String functions have different bounds semantics.
+
+Know the exact function contract.
+
+A function accepting a maximum buffer size can interpret that size differently from another function.
+
+Do not assume similar names imply identical semantics.
+
+Avoid unsafe unbounded copying.
+
+Validate source length and destination capacity.
+
+Ensure termination where the API requires it.
+
+Do not assume truncation is always safe.
+
+Truncation can change identifiers.
+
+Truncation can change paths.
+
+Truncation can change security-sensitive values.
+
+If complete data is required, reject oversized input instead of silently truncating it.
+
+Memory safety means preventing invalid memory access according to the language and execution model.
+
+Memory safety includes preventing out-of-bounds access.
+
+Memory safety includes preventing use-after-free.
+
+Memory safety includes preventing invalid pointer dereference.
+
+Memory safety includes preventing selected uninitialized accesses.
+
+Memory safety is not the same as thread safety.
+
+Thread safety concerns correct behavior under concurrent execution.
+
+Code can be memory-safe but not thread-safe.
+
+Code can be thread-safe in its synchronization design but still contain memory-safety defects.
+
+The properties are independent.
+
+Languages differ in memory-safety guarantees.
+
+Some languages perform automatic bounds checks.
+
+Some languages use garbage collection.
+
+Some languages use ownership systems.
+
+Some languages permit unrestricted pointer arithmetic.
+
+Some languages provide safe and unsafe subsets.
+
+Understand the language's guarantees.
+
+Do not assume a garbage-collected language cannot have memory problems.
+
+Garbage collection prevents selected manual lifetime errors.
+
+Garbage-collected programs can still leak reachable memory.
+
+Garbage-collected programs can still exhaust memory.
+
+Garbage-collected programs can still retain objects accidentally.
+
+Garbage-collected programs can still have concurrency errors.
+
+Garbage-collected programs can still use native code containing memory-safety defects.
+
+Garbage collection automatically identifies and reclaims selected objects no longer reachable according to the collector's model.
+
+Garbage collection does not mean memory is reclaimed immediately when the program stops using an object.
+
+Collection timing can vary.
+
+Collection can pause execution depending on collector design.
+
+Collection can run concurrently depending on collector design.
+
+Collector behavior affects latency and memory use.
+
+Do not depend on garbage collection timing for correctness unless the runtime explicitly provides the required guarantee.
+
+External resources should not depend solely on eventual garbage collection when deterministic release is required.
+
+Files should be closed according to resource-management rules.
+
+Sockets should be closed according to resource-management rules.
+
+Locks should be released according to synchronization rules.
+
+Memory and external resources have related but distinct lifetimes.
+
+Reference counting tracks the number of owning references according to its model.
+
+When the count reaches zero, the object can be destroyed.
+
+Reference counting can provide deterministic destruction.
+
+Reference counting has runtime overhead.
+
+Reference cycles can prevent counts from reaching zero.
+
+Two objects holding owning references to each other can create a cycle.
+
+Weak references can break selected ownership cycles.
+
+Weak references do not keep an object alive according to the weak-reference model.
+
+A weak reference must be validated before use.
+
+Do not convert every reference into shared ownership merely to avoid deciding ownership.
+
+Shared ownership should represent actual shared lifetime responsibility.
+
+Unique ownership is simpler when only one owner is required.
+
+Ownership transfer moves lifetime responsibility from one owner to another.
+
+After ownership transfer, the previous owner should not continue acting as owner.
+
+Borrowing allows temporary access without transferring ownership.
+
+Borrowers should not outlive the owned object.
+
+Explicit ownership improves reasoning.
+
+C does not automatically enforce ownership.
+
+C programs therefore require conventions and disciplined interfaces.
+
+A C API should document who allocates.
+
+A C API should document who frees.
+
+A C API should document whether returned pointers are owned or borrowed.
+
+A C API should document pointer lifetime.
+
+A C API should document whether null is permitted.
+
+A C API should document buffer sizes.
+
+A C API should document mutation rights.
+
+Ambiguous APIs produce memory defects.
+
+An API returning newly allocated memory should clearly transfer ownership.
+
+An API returning an internal buffer should clearly state that the caller must not free it.
+
+An API accepting ownership should clearly state that ownership is transferred.
+
+An API borrowing memory should state how long the memory must remain valid.
+
+Naming conventions can help communicate ownership.
+
+Documentation remains necessary.
+
+C++ commonly uses Resource Acquisition Is Initialization.
+
+RAII ties resource lifetime to object lifetime.
+
+A resource is acquired by an object.
+
+The object's destructor releases the resource.
+
+RAII can manage memory.
+
+RAII can manage files.
+
+RAII can manage locks.
+
+RAII can manage sockets.
+
+RAII can manage other resources.
+
+RAII reduces manual cleanup paths.
+
+Automatic object destruction occurs according to C++ lifetime rules.
+
+RAII does not eliminate every memory problem.
+
+Raw pointers can still be misused.
+
+Ownership can still be modeled incorrectly.
+
+Cycles can still occur with shared ownership.
+
+Out-of-bounds access can still occur.
+
+Use the appropriate ownership model.
+
+C++ unique_ptr represents exclusive ownership of a dynamically allocated object according to its semantics.
+
+C++ shared_ptr represents shared ownership through reference counting according to its semantics.
+
+C++ weak_ptr represents non-owning observation associated with shared ownership.
+
+Use unique ownership by default when ownership is not actually shared.
+
+Shared ownership adds complexity.
+
+A raw pointer can represent non-owning access.
+
+A raw pointer does not automatically communicate lifetime safety.
+
+The pointed-to object must remain valid.
+
+Containers can manage memory automatically.
+
+A vector can resize storage.
+
+A string can manage character storage.
+
+Container reallocation can invalidate pointers, references, or iterators according to container rules.
+
+Do not retain references across operations that invalidate them.
+
+Memory addresses are not necessarily stable.
+
+An allocation can move.
+
+A container can move elements.
+
+A compacting garbage collector can move objects.
+
+Virtual memory can change physical backing.
+
+Code should rely only on the stability guaranteed by its abstraction.
+
+Virtual memory provides processes with virtual address spaces mapped to physical memory or other backing storage according to the operating system.
+
+Virtual addresses are not necessarily physical addresses.
+
+Two processes can use the same numerical virtual address for different memory.
+
+One virtual memory region can be backed by physical memory.
+
+One region can be backed by a file.
+
+One region can be shared.
+
+One region can be unmapped.
+
+The operating system controls mappings.
+
+A page is a unit used by virtual-memory systems.
+
+Page size is platform dependent.
+
+Systems can support multiple page sizes.
+
+Do not hard-code a page size unless the environment explicitly guarantees it.
+
+Paging can move or map memory according to operating-system policy.
+
+A page fault occurs when memory access requires operating-system intervention according to the virtual-memory model.
+
+A page fault is not automatically an error.
+
+Demand paging commonly uses page faults during normal operation.
+
+An invalid page access can result in a process fault or exception.
+
+Do not confuse normal page faults with invalid memory access.
+
+Swap or paging storage can provide backing for selected memory when physical memory is under pressure.
+
+Heavy paging can severely reduce performance.
+
+Memory pressure can therefore appear as latency before allocation fails.
+
+Observe memory behavior.
+
+Physical free memory alone does not describe complete memory health.
+
+Cached memory can be reclaimable.
+
+Committed memory can matter.
+
+Swap use can matter.
+
+Working-set or resident-set size can matter.
+
+Exact metrics depend on the operating system.
+
+Memory mapping maps files or other objects into an address space.
+
+Memory-mapped files can provide efficient access.
+
+Memory mapping does not eliminate storage failure.
+
+Mapped file access can encounter I/O errors.
+
+Mapping semantics differ between platforms.
+
+Visibility of changes depends on mapping type and synchronization.
+
+Durability of mapped changes requires understanding platform guarantees.
+
+Do not assume modifying mapped bytes immediately makes them durable.
+
+Shared memory allows multiple processes or execution contexts to access a common memory region according to platform mechanisms.
+
+Shared memory requires synchronization when multiple participants can modify shared state.
+
+Shared memory can be fast.
+
+Shared memory can create complex lifetime and ownership issues.
+
+A process crash can leave shared state inconsistent.
+
+Design recovery.
+
+Shared memory should contain formats suitable for cross-process use.
+
+Do not place process-local pointers in persistent or independently mapped shared data unless the architecture guarantees identical address mapping and lifetime.
+
+Pointers are usually meaningful only within their address-space context.
+
+Use offsets or explicit identifiers when portable shared representation is required.
+
+Alignment describes placement of objects at addresses suitable for their types and platform requirements.
+
+Some types require specific alignment.
+
+Misaligned access can be slower.
+
+Misaligned access can fault on some architectures.
+
+Language rules can make misaligned typed access invalid even where hardware tolerates it.
+
+Allocators provide alignment guarantees.
+
+Custom allocators must preserve required alignment.
+
+Do not cast arbitrary byte addresses to typed pointers without considering alignment and object representation.
+
+Padding can exist inside structures.
+
+Padding can exist between structure members.
+
+Padding can exist at the end of structures.
+
+Compiler layout can vary according to ABI and options.
+
+Do not assume sizeof a structure equals the sum of member sizes.
+
+Do not serialize raw structures as portable data unless representation is explicitly defined.
+
+Padding bytes can be uninitialized.
+
+Comparing entire structures byte-for-byte can therefore be incorrect when padding is present.
+
+Compare semantic fields unless a canonical byte representation is explicitly established.
+
+Endianness affects multi-byte value representation.
+
+Memory representation can differ across architectures.
+
+Portable persistent and network formats should define byte order explicitly.
+
+Memory copying does not perform semantic conversion.
+
+memcpy copies bytes.
+
+memmove copies bytes while supporting overlapping regions according to its semantics.
+
+Neither validates object meaning.
+
+memcpy requires valid non-overlapping source and destination regions for the requested copy according to its contract.
+
+memmove permits overlap.
+
+Copy size must fit both regions.
+
+A wrong size can cause out-of-bounds access.
+
+memset writes a repeated byte value.
+
+memset does not assign arbitrary typed values semantically.
+
+Zero bytes represent zero for many common objects but language representation rules matter.
+
+Do not use byte-level initialization where the type requires construction or a nontrivial representation.
+
+C++ objects with nontrivial invariants should be initialized through their proper constructors and operations.
+
+Memory pools allocate memory from preallocated or managed regions.
+
+Pools can reduce allocation overhead.
+
+Pools can reduce fragmentation.
+
+Pools can provide predictable limits.
+
+Pools can complicate ownership.
+
+Pools can retain memory.
+
+Destroying a pool can invalidate every object allocated from it.
+
+Pool lifetime should outlive its borrowers.
+
+Arena allocation groups many allocations under one lifetime.
+
+Individual objects may not be freed separately.
+
+Destroying the arena releases the group.
+
+Arenas can simplify temporary workloads.
+
+Arenas are inappropriate when individual objects require independent long lifetimes unless the design accounts for that.
+
+Region-based allocation similarly associates objects with region lifetimes.
+
+The allocation model should reflect actual lifetime relationships.
+
+Custom allocators should be introduced for demonstrated requirements.
+
+General-purpose allocators are sufficient for many systems.
+
+Custom memory management adds correctness risk.
+
+Do not optimize allocation before measuring it.
+
+Fragmentation occurs when available memory is divided such that allocation behavior becomes inefficient or impossible according to allocator constraints.
+
+External fragmentation concerns free regions separated into pieces.
+
+Internal fragmentation concerns unused space within allocated regions or allocation units.
+
+Exact definitions depend on allocation model.
+
+Fragmentation can increase memory footprint.
+
+Long-running allocation patterns can reveal fragmentation.
+
+Pools and size classes can reduce selected fragmentation.
+
+They also consume reserved capacity.
+
+Measure actual behavior.
+
+Allocator metadata is part of allocator state.
+
+Memory corruption can damage allocator metadata.
+
+A crash occurring inside malloc or free can therefore be caused by an earlier invalid write.
+
+The location where corruption is detected is not necessarily where corruption occurred.
+
+Investigate earlier writes.
+
+Guard pages can detect selected out-of-bounds access.
+
+Canaries can detect selected overwrites.
+
+Address sanitizers can detect many memory-safety defects.
+
+Memory sanitizers can detect selected uninitialized reads.
+
+Valgrind-like tools can detect selected leaks and invalid accesses depending on platform and tool.
+
+Static analysis can detect selected lifetime and bounds defects.
+
+No one tool proves memory safety.
+
+Use multiple forms of evidence.
+
+Sanitizers alter memory layout and timing.
+
+A defect disappearing under instrumentation does not prove it is fixed.
+
+A defect appearing only without instrumentation can still be real.
+
+Reproduce under controlled conditions.
+
+Memory debugging should preserve the failing conditions where practical.
+
+A core dump can preserve process memory after selected crashes.
+
+Core dumps can contain secrets.
+
+Core dumps can contain private keys.
+
+Core dumps can contain passwords.
+
+Core dumps can contain tokens.
+
+Core dumps require appropriate access controls.
+
+Diagnostic value does not remove confidentiality requirements.
+
+Crash handling should not expose arbitrary memory to untrusted users.
+
+Error messages should not dump raw memory.
+
+Memory addresses can reveal implementation information.
+
+Address-space layout randomization reduces predictability of selected memory addresses.
+
+ASLR is a security mitigation.
+
+ASLR does not fix memory corruption.
+
+Stack canaries can detect selected stack corruption.
+
+Non-executable memory can prevent selected code execution.
+
+Control-flow protections can mitigate selected exploitation.
+
+These mechanisms reduce impact.
+
+They do not make invalid memory access acceptable.
+
+Fix the underlying defect.
+
+Integer correctness is part of memory safety.
+
+Allocation sizes use integer values.
+
+Buffer offsets use integer values.
+
+Array indexes use integer values.
+
+Length calculations use integer values.
+
+Integer overflow can become memory corruption.
+
+Integer underflow can become memory corruption.
+
+Signed-to-unsigned conversion can create unexpectedly large values.
+
+Narrowing conversions can truncate lengths.
+
+Validate ranges before conversion.
+
+Use types capable of representing required sizes.
+
+size_t is commonly used in C and C++ for object sizes and counts representable by sizeof.
+
+size_t is unsigned.
+
+Unsigned arithmetic still wraps according to language rules.
+
+Using size_t does not automatically prevent overflow.
+
+Check arithmetic.
+
+ptrdiff_t represents selected pointer differences in C and C++.
+
+Do not assume pointer differences fit ordinary int.
+
+Portable code should use appropriate types.
+
+Pointer arithmetic is constrained by language rules.
+
+In C and C++, pointer arithmetic is generally meaningful within an array object and one position past its end according to the language model.
+
+One-past-the-end pointers can be formed for iteration.
+
+They must not be dereferenced.
+
+Arbitrary pointer arithmetic outside valid object relationships is not portable memory access.
+
+Do not treat pointers as unrestricted integers.
+
+Converting pointers to integers has implementation-defined or specified constraints depending on language and type.
+
+Do not use pointer numeric values as portable persistent identifiers.
+
+Memory addresses can change between runs.
+
+Memory addresses can change between processes.
+
+Memory addresses can change because of ASLR.
+
+Persistent identity requires stable identifiers independent of memory location.
+
+Object lifetime can begin and end independently of raw storage lifetime in languages such as C++.
+
+Allocated bytes can exist before an object is constructed within them.
+
+Bytes can remain after an object's lifetime ends until storage is released or reused.
+
+Raw storage and live objects are not always equivalent.
+
+Respect construction and destruction semantics.
+
+Placement construction and custom allocation require careful lifetime management.
+
+Do not use advanced lifetime manipulation without a requirement.
+
+Memory initialization should establish valid state before publication.
+
+Partially initialized objects should not become visible to other components where those components expect complete invariants.
+
+Construct completely.
+
+Validate.
+
+Then publish.
+
+If initialization fails, release resources already acquired.
+
+Cleanup paths matter.
+
+Every successful acquisition should have a corresponding release or ownership transfer.
+
+A function with multiple failure points can leak earlier allocations if cleanup is incomplete.
+
+Structured cleanup reduces this risk.
+
+RAII provides structured cleanup in C++.
+
+In C, a single cleanup path can simplify release.
+
+Ownership structs can centralize resources.
+
+Small helper functions can reduce repetitive cleanup.
+
+Do not duplicate complex cleanup logic across many branches.
+
+Cleanup itself can fail for some resource types.
+
+Memory deallocation usually does not provide a recoverable failure result through ordinary free semantics.
+
+External resource cleanup can fail.
+
+Preserve primary failure while recording cleanup failure where relevant.
+
+Do not replace the original diagnostic cause with a secondary cleanup problem.
+
+Memory exhaustion should be considered during error handling.
+
+An out-of-memory condition can make further allocations fail.
+
+Error reporting that requires large allocations can then fail too.
+
+Critical low-memory paths should avoid unnecessary allocation where practical.
+
+Preallocated emergency buffers can be justified in selected systems.
+
+Most applications do not require elaborate out-of-memory recovery.
+
+If safe continuation is impossible, controlled failure can be preferable to corrupted operation.
+
+Do not ignore allocation failure.
+
+Do not dereference null and hope the operating system handles it usefully.
+
+A server can impose per-request memory limits.
+
+A parser can impose input-size limits.
+
+A queue can impose capacity limits.
+
+A cache can impose maximum size.
+
+A worker can process bounded batches.
+
+Bounds prevent one operation from consuming all memory.
+
+Untrusted input should not control unlimited allocation.
+
+A packet claiming a four-gigabyte payload should not automatically cause a four-gigabyte allocation.
+
+Validate protocol limits first.
+
+A compressed input can expand dramatically.
+
+Decompression limits should prevent unbounded expansion.
+
+A small compressed object can represent a very large decompressed result.
+
+Memory limits are part of input validation.
+
+Recursive structures can consume stack.
+
+Deeply nested JSON can consume parser stack.
+
+Deeply nested expressions can consume parser stack.
+
+Recursive traversal can overflow stack.
+
+Set nesting limits where untrusted input can control depth.
+
+Iterative algorithms can avoid selected recursion limits.
+
+Use the simplest correct implementation within expected bounds.
+
+Memory ownership should cross module boundaries carefully.
+
+A module allocating memory with one allocator should not necessarily require another module using a different runtime or allocator to free it.
+
+This is especially important across dynamic-library boundaries.
+
+Different modules can use different runtime heaps.
+
+Platform rules differ.
+
+Define allocation ownership at API boundaries.
+
+One safe pattern is that the component allocating memory also provides the function that releases it.
+
+Another pattern is caller-provided buffers.
+
+Another pattern is shared allocator contracts.
+
+Choose deliberately.
+
+Do not assume free in one binary is compatible with allocation from every other binary.
+
+DLL and shared-library boundaries can expose allocator mismatches.
+
+ABI compatibility matters.
+
+Compiler runtime compatibility can matter.
+
+Build configuration can matter.
+
+Cross-module interfaces should minimize ambiguous ownership.
+
+Opaque handles can hide internal allocation.
+
+The creating module can own the underlying memory.
+
+The caller receives a handle.
+
+The module provides destruction.
+
+This can reduce ABI coupling.
+
+A handle still requires lifetime rules.
+
+A destroyed handle should not be reused.
+
+A handle can become invalid after shutdown.
+
+Handle validity should be documented.
+
+Memory used by plugins should not compromise core reliability unnecessarily.
+
+A plugin running in the same process shares the process address space.
+
+An in-process plugin can corrupt host memory.
+
+An in-process plugin can leak memory.
+
+An in-process plugin can exhaust memory.
+
+An in-process plugin can crash the host.
+
+Module boundaries do not provide memory isolation by themselves.
+
+Process isolation provides stronger memory separation.
+
+Use stronger isolation when requirements justify it.
+
+Shared process execution is simpler and faster.
+
+It also shares failure domains.
+
+Memory ownership across asynchronous operations requires care.
+
+A buffer passed to an asynchronous operation must remain valid until the operation no longer uses it according to the API contract.
+
+Returning from the initiating function does not necessarily end the asynchronous operation.
+
+Stack memory passed to asynchronous work can become invalid when the stack frame ends.
+
+Use appropriate lifetime management.
+
+Cancellation does not necessarily mean memory can immediately be released.
+
+The operation can still be completing.
+
+Wait for the API-defined completion or cancellation acknowledgment.
+
+Race conditions can become lifetime errors.
+
+One thread can release memory while another thread accesses it.
+
+Locks can coordinate lifetime.
+
+Reference counting can coordinate shared lifetime.
+
+Hazard pointers can support selected lock-free lifetime management.
+
+Epoch-based reclamation can support selected concurrent structures.
+
+These advanced techniques require careful correctness reasoning.
+
+Do not use lock-free reclamation merely because it sounds faster.
+
+Simple locking is often preferable when performance requirements permit it.
+
+Atomic operations do not automatically solve object lifetime.
+
+An atomic pointer can be read safely as a pointer value while the object it references is concurrently freed.
+
+Pointer atomicity and pointee lifetime are separate.
+
+Memory ordering and lifetime must both be correct.
+
+Thread-local storage provides per-thread state according to language or runtime semantics.
+
+Thread-local memory can simplify selected state isolation.
+
+Thread-local objects still consume memory.
+
+Long-lived threads can retain thread-local memory for long periods.
+
+Thread termination semantics determine cleanup.
+
+Do not use thread-local storage as hidden global state without considering lifetime.
+
+Global memory exists for long periods.
+
+Global state can simplify access.
+
+Global state complicates ownership and testing.
+
+Global mutable state complicates concurrency.
+
+Prefer bounded explicit ownership where practical.
+
+Static objects can have initialization-order concerns in some languages.
+
+Cross-module static initialization can be especially complex.
+
+Avoid dependencies on unspecified initialization order.
+
+Explicit initialization can improve determinism.
+
+Memory pools and global caches should have shutdown semantics where clean shutdown matters.
+
+Shutdown order can create use-after-destruction defects.
+
+One global object can depend on another already destroyed object.
+
+Define lifetime ordering.
+
+Long-lived services should observe memory over time.
+
+Measure resident memory.
+
+Measure virtual memory where relevant.
+
+Measure allocator statistics where available.
+
+Measure object counts.
+
+Measure cache size.
+
+Measure queue size.
+
+Measure allocation rate where useful.
+
+A rising resident-memory graph is evidence of growth.
+
+It is not by itself proof of a leak.
+
+Correlate growth with object ownership and workload.
+
+A stable workload with unbounded retained objects suggests investigation.
+
+Heap profiling can identify allocation sources.
+
+Allocation profiles can identify high-volume allocation sites.
+
+Retention profiles can identify objects remaining alive.
+
+The largest allocation source is not necessarily the leak.
+
+A high-volume allocation can be correctly freed.
+
+The important question is what remains owned and why.
+
+Memory performance can depend on locality.
+
+Cache locality describes how memory access patterns interact with processor caches.
+
+Contiguous data can improve locality.
+
+Pointer-heavy structures can reduce locality.
+
+Data layout can affect performance significantly.
+
+Performance optimization should preserve correctness.
+
+Do not replace clear ownership with unsafe manual memory tricks without measured need.
+
+Processor caches are not application storage caches.
+
+CPU cache lines contain copies of memory used by hardware.
+
+Cache coherence coordinates selected visibility between processor cores according to architecture.
+
+Programming-language memory models define what concurrent programs may assume.
+
+Do not reason about concurrency solely from physical CPU caches.
+
+Use language synchronization rules.
+
+Memory barriers or fences constrain selected memory ordering.
+
+They are low-level synchronization mechanisms.
+
+They do not establish high-level ownership automatically.
+
+Use mutexes, atomics, and established concurrency primitives unless lower-level control is required.
+
+Memory visibility means whether writes by one execution context become observable by another according to the language and synchronization model.
+
+Unsynchronized shared access can produce data races.
+
+Data races can be undefined behavior in languages such as C and C++ under relevant conditions.
+
+Memory allocation thread safety depends on allocator implementation and language/runtime guarantees.
+
+Standard allocators commonly support concurrent allocation according to their specified environment.
+
+Custom allocators need explicit synchronization if shared.
+
+Do not assume custom memory pools are thread-safe.
+
+Zeroization overwrites sensitive memory when it is no longer needed.
+
+Ordinary memory clearing can be optimized away by a compiler when the compiler determines the bytes are never subsequently observed.
+
+Security-sensitive zeroization should use mechanisms designed to prevent such removal where available.
+
+Zeroization can reduce the lifetime of sensitive data in memory.
+
+Zeroization does not guarantee that no copies exist elsewhere.
+
+Sensitive data can have been copied.
+
+Sensitive data can exist in registers.
+
+Sensitive data can exist in stack frames.
+
+Sensitive data can exist in swap.
+
+Sensitive data can exist in crash dumps.
+
+Sensitive data can exist in allocator copies.
+
+Minimize unnecessary copies.
+
+Control diagnostic capture.
+
+Use appropriate operating-system protections where required.
+
+Do not promise complete physical erasure of volatile memory solely because one buffer was overwritten.
+
+Passwords should not remain in memory longer than required where practical.
+
+Private keys should be protected.
+
+Tokens should be protected.
+
+Decrypted secrets should be protected.
+
+Memory protection can restrict read, write, or execute permissions on memory pages.
+
+Write XOR execute policies prevent pages from being simultaneously writable and executable according to selected security designs.
+
+Read-only mappings can protect immutable data from accidental writes.
+
+Guard pages can detect boundary violations.
+
+Memory locking can prevent selected pages from being swapped according to operating-system mechanisms and privileges.
+
+These mechanisms have platform-specific behavior.
+
+Use them when threat requirements justify them.
+
+Do not assume memory locking guarantees a secret never exists elsewhere.
+
+Copy-on-write allows memory pages or objects to be shared until modification requires a private copy according to the implementation.
+
+Fork-like process creation can use copy-on-write.
+
+Snapshot systems can use copy-on-write.
+
+Copy-on-write can create hidden copies of sensitive data.
+
+Memory usage can increase suddenly when shared pages are modified.
+
+Understand the mechanism.
+
+Memory-mapped persistent state can be affected by copy-on-write semantics.
+
+A private mapping can modify process-visible bytes without modifying the underlying file.
+
+A shared mapping can propagate changes according to mapping semantics.
+
+Know which mapping was requested.
+
+Memory lifetime and storage lifetime are different.
+
+An object can exist in memory but not be persisted.
+
+A persisted record can exist after its in-memory representation is destroyed.
+
+A cache can reconstruct in-memory objects from persistent state.
+
+Do not confuse destruction of an object with deletion of persistent data.
+
+Do not confuse freeing memory with deleting a file.
+
+Do not confuse process termination with persistent-state rollback.
+
+Separate the layers.
+
+Serialization converts in-memory representation into a storage or transmission representation.
+
+Deserialization creates in-memory state from external representation.
+
+Do not serialize raw pointers.
+
+A pointer address is not portable identity.
+
+Do not assume in-memory structure layout is a stable serialization format.
+
+Validate deserialized lengths.
+
+Validate counts.
+
+Validate types.
+
+Validate versions.
+
+Validate relationships.
+
+Deserialization can allocate memory based on input.
+
+Therefore deserialization is a memory-exhaustion boundary.
+
+Limit allocations.
+
+Limit nesting.
+
+Limit object counts.
+
+Reject impossible sizes.
+
+Lazy allocation delays allocation until needed.
+
+Lazy allocation can reduce initial memory use.
+
+Lazy allocation moves failure to a later point.
+
+The later allocation must still handle failure.
+
+Eager allocation reserves resources earlier.
+
+Eager allocation can establish capacity before accepting work.
+
+Eager allocation can waste unused resources.
+
+Choose based on requirements.
+
+Preallocation reserves expected capacity.
+
+Preallocation can reduce repeated allocation.
+
+Preallocation can improve predictability.
+
+Preallocation can waste memory.
+
+Preallocation should be bounded.
+
+Do not allocate enormous worst-case buffers when smaller incremental processing is possible.
+
+Streaming processes data incrementally rather than storing the entire dataset in memory.
+
+Streaming can reduce memory requirements.
+
+Streaming complicates operations requiring random access or complete-data validation.
+
+A parser can stream large input.
+
+A hash can be computed incrementally.
+
+A file can be copied in chunks.
+
+A network response can be processed in chunks.
+
+Use streaming when complete buffering is unnecessary.
+
+Chunk sizes should be bounded.
+
+Chunk boundaries should not alter semantic parsing.
+
+Some encoded values can span chunks.
+
+Streaming parsers must preserve partial state correctly.
+
+Memory budgets define how much memory a component may use.
+
+A service can have a total budget.
+
+A subsystem can have a budget.
+
+A cache can have a budget.
+
+A request can have a budget.
+
+Budgets support predictable behavior.
+
+When a budget is exhausted, behavior should be defined.
+
+Reject new work.
+
+Evict disposable cache entries.
+
+Apply backpressure.
+
+Reduce optional work.
+
+Do not silently violate correctness.
+
+Memory pressure should not cause security checks to be skipped.
+
+Memory pressure should not cause validation to be skipped.
+
+Memory pressure should not convert failed allocations into successful operations.
+
+Failure remains failure.
+
+Graceful degradation can disable optional memory-intensive features.
+
+Core required behavior should remain correct.
+
+A memory leak in optional functionality can still eventually affect the whole process if the address space is shared.
+
+Isolation can reduce blast radius.
+
+Restarting a leaking process can temporarily restore memory.
+
+Restart is a mitigation.
+
+Restart does not fix the leak.
+
+Record recurrence.
+
+Investigate ownership.
+
+Correct the defect.
+
+Memory leaks should be reproducible where possible.
+
+Run repeated operations.
+
+Measure retained memory.
+
+Compare object counts.
+
+Use profiling.
+
+Reduce the test case.
+
+Identify the allocation whose ownership is never released.
+
+Do not merely increase machine memory to hide an unbounded leak.
+
+More capacity delays failure.
+
+It does not correct unbounded growth.
+
+Memory fragmentation can sometimes be mitigated by allocator tuning.
+
+Allocator tuning should follow measurement.
+
+Changing allocators can change performance.
+
+Changing allocators can change memory footprint.
+
+Changing allocators can expose hidden ownership defects differently.
+
+Test thoroughly.
+
+Allocator behavior should not be part of authoritative application semantics.
+
+An application should remain correct regardless of which valid address an allocator returns.
+
+Do not depend on allocation addresses being sequential.
+
+Do not depend on freed memory being immediately reused.
+
+Do not depend on memory being returned zeroed unless the allocation API guarantees it.
+
+Do not depend on allocation success merely because the requested amount is small.
+
+System conditions can cause failure.
+
+Memory allocation APIs can have zero-size edge cases.
+
+Language and allocator semantics define behavior for zero-size allocations.
+
+Avoid relying on ambiguous or implementation-specific zero-size behavior where portability matters.
+
+Handle zero elements explicitly when practical.
+
+Multiplying zero count by element size can legitimately produce zero.
+
+An empty collection need not allocate storage.
+
+Represent empty state deliberately.
+
+Sentinel values should not be confused with valid addresses.
+
+Null is a common absence representation.
+
+Other sentinel pointer values can be unsafe or nonportable.
+
+Use language-supported representations.
+
+Optional values can represent absence without fabricated pointers.
+
+Memory ownership should be represented in interfaces where the language supports it.
+
+Types can communicate ownership.
+
+Const qualification can communicate selected mutation restrictions.
+
+Const does not automatically establish ownership.
+
+Const does not necessarily make underlying shared data immutable.
+
+A const pointer and pointer-to-const express different properties in C and C++.
+
+Understand the type.
+
+Read-only access does not extend lifetime.
+
+A const pointer can still dangle.
+
+Immutability and lifetime are separate.
+
+Immutable data can simplify sharing.
+
+If data never changes after publication, readers need less synchronization for content.
+
+Lifetime still must be managed.
+
+Reference counts, static lifetime, ownership scopes, or other mechanisms can preserve existence.
+
+Copying immutable data can avoid shared lifetime complexity at the cost of memory.
+
+Tradeoffs depend on scale.
+
+Memory management should remain deterministic where system requirements demand deterministic behavior.
+
+Ownership rules should not depend on guesswork.
+
+Release points should be defined.
+
+Allocation limits should be defined.
+
+Failure behavior should be defined.
+
+Platform-specific allocation mechanisms can differ.
+
+Authoritative program behavior should remain consistent where platform independence is required.
+
+A Windows allocator can use different operating-system mechanisms from a Linux allocator.
+
+The application should still enforce the same logical bounds.
+
+The application should still validate the same sizes.
+
+The application should still preserve the same state semantics.
+
+Platform abstraction should not hide meaningful failure.
+
+An allocation failure should remain visible to common logic.
+
+A mapping failure should remain visible.
+
+A protection failure should remain visible.
+
+Do not silently substitute weaker memory protection when the protection is required.
+
+Capability should be checked.
+
+If a required capability does not exist, fail clearly.
+
+Memory management errors should be observable.
+
+Record allocation failure where operationally meaningful.
+
+Record memory-limit rejection.
+
+Record cache eviction where useful.
+
+Record pool exhaustion.
+
+Record mapping failure.
+
+Record protection failure.
+
+Do not log every ordinary allocation.
+
+That creates noise and overhead.
+
+Instrument boundaries and exceptional conditions.
+
+Metrics can expose process memory.
+
+Metrics can expose cache size.
+
+Metrics can expose pool utilization.
+
+Metrics can expose allocation failure counts.
+
+Metrics can expose request rejection due to memory limits.
+
+Metrics can expose garbage-collection activity where relevant.
+
+Interpret metrics according to runtime semantics.
+
+A garbage-collected process can intentionally maintain a large heap.
+
+A native process can have allocator-reserved memory not actively used by application objects.
+
+Operating-system memory reports and allocator reports can differ.
+
+Understand the measurement.
+
+A memory limit imposed by a container or job object can differ from physical machine memory.
+
+The process can exhaust its assigned limit while the machine still has free memory.
+
+Deployment limits are part of the execution environment.
+
+Read them where appropriate.
+
+Test under realistic limits.
+
+Memory bugs can be nondeterministic in appearance.
+
+The underlying invalid operation can be deterministic while symptoms depend on memory layout.
+
+A use-after-free can appear only when the allocation is reused.
+
+A buffer overflow can corrupt an unused byte in one run and critical metadata in another.
+
+A race can alter timing.
+
+Do not dismiss a defect because it is difficult to reproduce.
+
+Undefined behavior removes reliable assumptions.
+
+In C and C++, undefined behavior means the language standard imposes no requirements on program behavior for that operation.
+
+Undefined behavior is not merely an unpredictable return value.
+
+The compiler can optimize based on the assumption that undefined behavior does not occur.
+
+Code containing undefined behavior can behave differently between builds.
+
+Code containing undefined behavior can behave differently with optimization enabled.
+
+Code containing undefined behavior can appear correct during testing.
+
+Eliminate undefined behavior.
+
+Memory-safety defects are common sources of undefined behavior.
+
+Out-of-bounds access can be undefined behavior.
+
+Use-after-free can be undefined behavior.
+
+Invalid pointer arithmetic can be undefined behavior.
+
+Misaligned typed access can be undefined behavior.
+
+Reading selected uninitialized values can be undefined behavior.
+
+Data races can be undefined behavior in C and C++.
+
+Do not reason from observed results of undefined behavior.
+
+Observed behavior is not a guarantee.
+
+Compiler warnings can identify selected memory problems.
+
+Treat relevant warnings seriously.
+
+Warnings about uninitialized variables matter.
+
+Warnings about incompatible pointer types matter.
+
+Warnings about size conversion matter.
+
+Warnings about format strings matter.
+
+Warnings about lifetime can matter.
+
+Do not disable warnings merely to make a build quiet.
+
+Correct the issue or document a justified suppression.
+
+Static analyzers can reason across paths.
+
+Dynamic analyzers observe executed paths.
+
+Fuzzing generates varied inputs to exercise parsers and boundaries.
+
+Fuzzing is valuable for memory-safety testing.
+
+Fuzz with sanitizers where appropriate.
+
+One successful fuzz campaign does not prove absence of defects.
+
+Increase evidence over time.
+
+Regression tests should preserve discovered memory fixes.
+
+If a malformed input caused overflow, add that input or an equivalent case to tests.
+
+If a lifecycle caused use-after-free, add a lifecycle test.
+
+If allocation failure caused corruption, test allocation failure where feasible.
+
+Failure injection can simulate allocator failure.
+
+Not every allocation site needs a dedicated failure test.
+
+Critical ownership and recovery paths deserve attention.
+
+Memory allocation should not become a hidden source of nondeterminism in authoritative protocols.
+
+Object addresses should not influence consensus-visible ordering.
+
+Hash maps with unspecified iteration order should not determine canonical output unless ordering is explicitly normalized.
+
+Pointer order should not determine persistent identifiers.
+
+Heap layout should not determine protocol results.
+
+Canonical behavior should depend on defined data, not memory placement.
+
+If collection iteration order is unspecified, sort according to protocol rules before canonical serialization.
+
+Determinism requires explicit ordering.
+
+Memory management is implementation machinery.
+
+It should not leak into authoritative semantics.
+
+Do not confuse stack with automatic lifetime in every possible implementation.
+
+Do not confuse heap with dynamic lifetime in every language.
+
+Do not confuse allocation with initialization.
+
+Do not confuse initialization with validation.
+
+Do not confuse a pointer with ownership.
+
+Do not confuse a pointer with object validity.
+
+Do not confuse non-null with valid.
+
+Do not confuse const with lifetime safety.
+
+Do not confuse shared access with shared ownership.
+
+Do not confuse atomic pointer access with safe object lifetime.
+
+Do not confuse free with secure erasure.
+
+Do not confuse free with immediate return of memory to the operating system.
+
+Do not confuse process memory release with persistent-data deletion.
+
+Do not confuse garbage collection with absence of leaks.
+
+Do not confuse reference counting with cycle collection.
+
+Do not confuse RAII with complete memory safety.
+
+Do not confuse memory safety with thread safety.
+
+Do not confuse virtual memory with physical memory.
+
+Do not confuse virtual address with persistent identity.
+
+Do not confuse mapped memory with durable storage.
+
+Do not confuse a successful write to memory with a successful write to persistent storage.
+
+Do not confuse page faults with errors.
+
+Do not confuse high memory use with a leak.
+
+Do not confuse low memory use with correctness.
+
+Do not confuse allocator crash location with corruption origin.
+
+Do not confuse security mitigations with correction of the defect.
+
+Do not confuse larger memory capacity with a fix for unbounded growth.
+
+Do not confuse raw structure bytes with a portable format.
+
+Do not confuse zeroed bytes with valid construction for every type.
+
+Do not confuse byte count with character count.
+
+Do not confuse truncation with safe validation.
+
+Do not confuse an allocation limit with authorization.
+
+Do not confuse capability with permission.
+
+When designing an allocation, determine who owns the memory.
+
+Determine how long it must live.
+
+Determine who can access it.
+
+Determine who can modify it.
+
+Determine who releases it.
+
+Determine whether ownership can transfer.
+
+Determine whether ownership is shared.
+
+Determine what happens if allocation fails.
+
+Determine maximum size.
+
+Determine whether the size can be controlled by external input.
+
+Then implement the smallest ownership model satisfying those requirements.
+
+When accepting a buffer, establish its capacity.
+
+Establish how much valid data it contains.
+
+Establish whether it is mutable.
+
+Establish how long it remains valid.
+
+Establish whether the callee can retain it.
+
+Establish whether ownership transfers.
+
+Do not infer these properties from a pointer alone.
+
+When returning memory, document whether the caller owns it.
+
+Document how it must be released.
+
+Document its lifetime.
+
+Document whether it can be modified.
+
+Document whether it can be null.
+
+Document size separately when the representation does not inherently contain it.
+
+When releasing memory, ensure the current component owns the release responsibility.
+
+Ensure no required borrowers remain.
+
+Release through the correct allocator.
+
+Invalidate local ownership state.
+
+Do not continue accessing the released object.
+
+Do not assume aliases disappeared.
+
+When memory use grows unexpectedly, measure first.
+
+Identify which region grows.
+
+Identify which object types grow.
+
+Identify which operation causes growth.
+
+Identify whether the growth is bounded.
+
+Identify whether objects remain reachable.
+
+Identify whether a cache is responsible.
+
+Identify whether allocator retention explains the measurement.
+
+Then determine whether there is a leak.
+
+When handling untrusted sizes, validate before allocation.
+
+Check protocol maximum.
+
+Check application maximum.
+
+Check arithmetic overflow.
+
+Check platform representability.
+
+Check available budget.
+
+Reject invalid requests.
+
+Do not allocate first and validate later.
+
+When memory allocation fails, do not fabricate success.
+
+Do not continue with a null object.
+
+Do not skip required work.
+
+Release temporary resources where safe.
+
+Return a defined failure.
+
+Enter degraded state only when degraded behavior is explicitly supported.
+
+Escalate according to system policy when required.
+
+When handling sensitive memory, minimize lifetime.
+
+Minimize copies.
+
+Prevent unnecessary logging.
+
+Prevent unnecessary dumps.
+
+Use appropriate zeroization where required.
+
+Use appropriate memory protections where required.
+
+Understand that complete erasure can require controls beyond one buffer overwrite.
+
+When crossing module or library boundaries, define allocator ownership.
+
+Prefer interfaces where allocation and release remain paired.
+
+Do not require unrelated runtimes to guess how memory was created.
+
+Opaque handles can reduce coupling.
+
+Caller-provided buffers can reduce allocator ambiguity.
+
+Explicit ownership contracts prevent entire classes of defects.
+
+When writing portable software, do not depend on pointer size.
+
+Do not depend on native structure padding.
+
+Do not depend on alignment beyond documented guarantees.
+
+Do not depend on endianness for external representation.
+
+Do not depend on allocator address patterns.
+
+Do not depend on operating-system page size unless queried or guaranteed.
+
+Keep platform-specific memory mechanisms behind defined interfaces.
+
+Keep common memory semantics consistent.
+
+Good memory management makes ownership obvious.
+
+Good memory management keeps lifetimes bounded.
+
+Good memory management validates sizes before allocation.
+
+Good memory management handles allocation failure.
+
+Good memory management prevents access outside object lifetime and bounds.
+
+Good memory management releases resources through the correct owner.
+
+Good memory management does not use memory addresses as permanent identity.
+
+Good memory management does not assume successful execution proves valid memory behavior.
+
+Memory is temporary working state unless a system explicitly persists information elsewhere.
+
+Its addresses are implementation details.
+
+Its capacity is finite.
+
+Its objects have lifetimes.
+
+Its ownership must be known.
+
+And once an object's lifetime ends, the fact that its old bytes may still be physically present does not make that object valid again.

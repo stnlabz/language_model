@@ -1,0 +1,37 @@
+20260729.8 — Operational Doctrine
+
+Root Document ID: 20260729.8
+Revision ID: NONE
+Previous Revision: NONE
+sha256: 07f1ccc1a073d98ae6fae3d40e967712f54b24ebae3861cd40b8371577954eeb
+
+Status: Approved  
+Scope: Doctrine
+
+Summary
+
+- Operational authority is determined by authorized organizational position, demonstrated qualification, and mission assignment.
+- Simplicity will be preferred over unnecessary complexity.
+- Every subsystem will have a single defined responsibility.
+- Every engineering discussion will remain within its appropriate engineering discipline.
+- Architecture will precede implementation.
+- Human oversight remains the highest operational authority.
+- Organizational position, qualification, or assignment does not supersede established STN-LABZ doctrine or policy.
+
+Purpose
+
+This doctrine establishes common operational principles for STN-LABZ systems, personnel, engineering activities, and autonomous agents.
+
+It provides a consistent foundation for determining authority, maintaining system simplicity, separating responsibilities, preserving engineering discipline, and ensuring human oversight throughout STN-LABZ operations.
+
+References
+
+- General Orders
+- 20260729.0 — Operational Authority
+- 20260729.1 — Engineering Organization
+- 20260729.2 — Engineering Workflow
+- 20260729.3 — Mission Control
+- 20260729.4 — Ecosystem Responsibilities
+- 20260729.5 — Unknown State Doctrine
+- 20260729.6 — Engineering Documentation
+- 20260729.7 — Research Notebooks

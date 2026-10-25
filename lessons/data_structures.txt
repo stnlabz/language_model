@@ -1,0 +1,781 @@
+A data structure is a method of organizing data for defined operations.
+Different data structures provide different performance and behavioral properties.
+No single data structure is best for every problem.
+Choose a data structure according to the operations the program requires.
+Important operations include insertion.
+Important operations include deletion.
+Important operations include lookup.
+Important operations include traversal.
+Important operations include ordering.
+Important operations include membership testing.
+Important operations include accessing an element by position.
+Important operations include finding minimum or maximum values.
+Important operations include preserving insertion order.
+Important operations include processing elements according to priority.
+Data structure choice should follow requirements rather than habit.
+An algorithm operates on data.
+A data structure organizes data.
+Algorithms and data structures are closely related but are not the same thing.
+The same algorithm can behave differently depending on the data structure used.
+The same data structure can support many algorithms.
+Complexity describes how resource requirements change as input size changes.
+Time complexity concerns computational work.
+Space complexity concerns memory or storage requirements.
+Big O notation describes an asymptotic upper-bound class commonly used to discuss growth.
+O(1) describes constant asymptotic work.
+O(log n) describes logarithmic asymptotic work.
+O(n) describes linear asymptotic work.
+O(n log n) describes linearithmic asymptotic work.
+O(n^2) describes quadratic asymptotic work.
+Complexity classes describe growth rather than exact execution time.
+An O(1) operation can still be slower than an O(n) operation for small inputs because constants and implementation details matter.
+Big O does not replace measurement.
+Complexity analysis and performance measurement provide different evidence.
+An array stores an ordered sequence of elements.
+An array commonly provides indexed access.
+Array indexing normally uses an integer position.
+Many programming languages use zero-based array indexing.
+Zero-based indexing means the first element is at index zero.
+The last valid index of a zero-based array containing n elements is n minus one.
+Array length and last array index are different values.
+An array containing five elements has length five.
+A zero-based array containing five elements has valid indexes zero through four.
+Accessing an index outside the valid range is an out-of-bounds access.
+Different programming languages handle out-of-bounds access differently.
+Some languages detect the error.
+Some languages can produce undefined behavior.
+Bounds behavior should be understood for the language being used.
+An array can have fixed size.
+Some languages provide dynamically sized array-like structures.
+A dynamic array can grow when additional capacity is required.
+The logical length of a dynamic array is the number of elements currently stored.
+The capacity of a dynamic array is the amount of storage currently available before another allocation may be required.
+Length and capacity are different concepts.
+A dynamic array can have capacity greater than its length.
+Appending to a dynamic array can be inexpensive when capacity remains.
+Growing beyond capacity can require allocation and copying.
+Repeated append operations can still have efficient amortized behavior when capacity grows geometrically.
+Amortized analysis describes average cost across a sequence of operations.
+An individual append can be expensive while the amortized append cost remains low.
+Arrays commonly provide efficient indexed access.
+Accessing an array element by known index is commonly O(1).
+Searching an unsorted array for an arbitrary value is commonly O(n).
+Inserting into the middle of a contiguous array can require shifting later elements.
+Deleting from the middle of a contiguous array can require shifting later elements.
+Appending to a fixed-capacity array requires available space.
+An array is useful when indexed access and compact storage matter.
+Contiguous arrays often have good cache locality.
+Cache locality can materially affect real performance.
+Asymptotic complexity does not capture every hardware effect.
+A multidimensional array represents data using multiple indexes.
+A matrix can be represented using a two-dimensional array.
+A two-dimensional conceptual structure can also be stored in one contiguous array.
+Row-major and column-major layouts define different memory ordering.
+Memory layout matters for interoperability and performance.
+A string can be represented using a sequence of characters or code units.
+A string is not necessarily equivalent to a byte array.
+Text encoding determines how characters are represented.
+UTF-8 uses variable-length byte sequences.
+The number of bytes in UTF-8 text is not necessarily the number of characters.
+The number of Unicode code points is not necessarily the number of user-perceived characters.
+String indexing semantics vary by language.
+Do not assume string indexing behaves like byte-array indexing.
+A linked list stores elements as nodes connected by links.
+A singly linked list normally gives each node a link to the next node.
+A doubly linked list normally gives each node links to both previous and next nodes.
+The first node is commonly called the head.
+The final node is commonly called the tail.
+A linked list does not require elements to occupy contiguous memory.
+Following a linked-list element generally requires traversing links.
+Accessing the nth element of a singly linked list is commonly O(n).
+Inserting a node after a known node can commonly be O(1).
+Removing a known node can commonly be O(1) when the required links are available.
+Finding the node to remove can still require O(n) traversal.
+Operation complexity must include the work required to locate the operation position.
+Saying linked-list deletion is O(1) without specifying that the node is already known can be misleading.
+Linked lists require link storage in addition to element data.
+Linked lists can have poorer cache locality than contiguous arrays.
+A linked list is not automatically faster than an array.
+Choose according to actual operations and workload.
+A stack is a Last In, First Out data structure.
+Last In, First Out is commonly abbreviated LIFO.
+A stack inserts elements at one end.
+Pushing adds an element to the stack.
+Popping removes the most recently pushed remaining element.
+Peeking examines the top element without removing it.
+A stack can be implemented using an array.
+A stack can be implemented using a linked list.
+The abstract stack behavior is separate from its concrete implementation.
+Function-call execution commonly uses a call stack.
+A call stack stores active call frames.
+Recursion consumes call-stack space according to implementation.
+Unbounded recursion can exhaust stack space.
+A stack data structure used by an application is conceptually related to but not necessarily identical to the process call stack.
+Stacks are useful for depth-first traversal.
+Stacks are useful for parsing.
+Stacks are useful for undo operations.
+Stacks are useful for nested structures.
+A queue is a First In, First Out data structure.
+First In, First Out is commonly abbreviated FIFO.
+Enqueue adds an element to a queue.
+Dequeue removes the oldest remaining queued element according to FIFO behavior.
+Peeking can examine the next queued element without removing it.
+A queue can be implemented using a linked structure.
+A queue can be implemented using a circular array.
+Removing the first element of a simple contiguous array by shifting every remaining element can be inefficient.
+A circular buffer can avoid repeated shifting.
+A circular buffer uses storage positions cyclically.
+Head and tail indexes identify queue positions according to implementation.
+Index arithmetic can wrap around the storage capacity.
+Queue length must remain distinct from physical index values.
+Queues are useful for work scheduling.
+Queues are useful for message processing.
+Queues are useful for breadth-first traversal.
+Queues are useful when arrival order should be preserved.
+A deque is a double-ended queue.
+A deque supports insertion at both ends.
+A deque supports removal at both ends.
+A deque can behave as a queue.
+A deque can behave as a stack.
+The name deque is commonly pronounced like "deck."
+A priority queue processes elements according to priority rather than simple insertion order.
+A priority queue can be implemented using a heap.
+A priority queue can return the highest-priority element.
+A priority queue can return the lowest-priority element depending on its ordering definition.
+Equal-priority ordering should not be assumed unless the implementation defines it.
+A stable priority queue preserves defined relative order among equal-priority elements.
+Not every priority queue is stable.
+A set stores unique elements according to its equality semantics.
+A set answers membership questions.
+A set does not inherently require duplicate elements.
+Adding an element already present in a mathematical set does not create another distinct member.
+Set implementations can preserve order.
+Set implementations can leave order unspecified.
+Do not assume set iteration order unless the implementation guarantees it.
+Set operations include union.
+Set operations include intersection.
+Set operations include difference.
+Set operations include membership.
+Sets are useful when uniqueness matters.
+Sets are useful when fast membership testing matters.
+A hash set can provide average-case efficient membership testing.
+A tree-based set can maintain ordering.
+Different set implementations provide different guarantees.
+A map associates keys with values.
+A map is also commonly called a dictionary or associative array depending on language and context.
+Each key identifies an associated value according to map semantics.
+Keys are commonly unique within a map.
+Assigning another value to an existing key commonly replaces or updates the associated value.
+Exact behavior depends on implementation.
+A map is useful when data should be retrieved by a meaningful key rather than numeric position.
+A hash table is a common implementation of a map.
+A hash function maps a key into a hash value.
+The hash value helps determine where the key is stored.
+A hash collision occurs when different keys map to the same relevant hash location or hash value.
+Collisions are expected in finite hash tables.
+A correct hash table must handle collisions.
+Collision handling can use chaining.
+Collision handling can use open addressing.
+Collision strategy affects behavior and performance.
+A cryptographic hash function and a hash-table hash function serve different requirements.
+A hash-table hash function does not necessarily need cryptographic security.
+A cryptographic hash function is designed for stronger security properties.
+Do not use a weak ordinary hash-table hash as a cryptographic integrity mechanism.
+Hash tables commonly provide average-case O(1) lookup.
+Worst-case hash-table lookup can be worse than O(1).
+Performance depends on implementation, load factor, hash distribution, and collision handling.
+The load factor describes how full a hash table is relative to its storage structure.
+A high load factor can increase collisions.
+Hash tables can resize.
+Resizing can require rehashing entries.
+An individual resize can be expensive.
+Amortized behavior can still be efficient.
+Hash table iteration order should not be assumed unless explicitly guaranteed.
+Changing implementation, runtime version, or insertion history can affect unspecified iteration order.
+If deterministic ordering is required, use a structure or explicit sorting that guarantees it.
+A tree is a hierarchical data structure.
+A tree contains nodes.
+A tree contains edges connecting nodes.
+A root is the top node of a rooted tree.
+A parent is a node directly above another connected node according to the rooted relationship.
+A child is a node directly below its parent.
+A leaf is a node with no children.
+A subtree is a node and its descendants.
+A node's depth describes its distance from the root according to edge count.
+Tree height describes the maximum path depth according to the chosen definition.
+Definitions of height can differ by convention.
+Use a consistent definition.
+A binary tree allows each node at most two children.
+A binary tree is not automatically a binary search tree.
+A binary search tree is a binary tree maintaining an ordering property.
+Values less than a node can be placed in one subtree according to the chosen ordering rule.
+Values greater than a node can be placed in the other subtree according to the chosen ordering rule.
+Duplicate-value handling must be defined.
+Searching a balanced binary search tree can be O(log n).
+Searching a badly unbalanced binary search tree can degrade to O(n).
+A binary search tree can become shaped like a linked list.
+Balance matters.
+Self-balancing search trees maintain bounded height according to their balancing rules.
+AVL trees are self-balancing binary search trees.
+Red-black trees are self-balancing binary search trees.
+AVL and red-black trees use different balancing rules.
+Neither is universally superior.
+Tree choice depends on required operations and implementation environment.
+An in-order traversal of a binary search tree can produce values in sorted order according to the tree's comparison rule.
+Pre-order traversal visits a node before its subtrees according to the traversal definition.
+Post-order traversal visits subtrees before the node according to the traversal definition.
+Breadth-first traversal visits nodes by levels.
+Depth-first traversal explores depth before returning to alternatives.
+Traversal order matters.
+Different traversals solve different problems.
+A heap is a tree-based structure satisfying a heap property.
+A min-heap keeps a minimum-priority element at its root.
+A max-heap keeps a maximum-priority element at its root.
+A binary heap can be stored compactly in an array.
+A heap is not the same thing as heap memory.
+The term heap has multiple meanings in computing.
+A memory heap refers to dynamic memory allocation storage.
+A binary heap refers to a data structure.
+Context determines the meaning.
+A binary heap can support priority-queue operations efficiently.
+Finding the highest-priority element according to heap orientation is commonly O(1).
+Insertion into a binary heap is commonly O(log n).
+Removing the root from a binary heap is commonly O(log n).
+A heap does not keep every element globally sorted.
+Only the heap property is guaranteed.
+Iterating an array-backed heap does not necessarily produce sorted order.
+A trie is a tree-like data structure used for keys composed of sequences.
+Tries are commonly used for strings.
+A trie stores prefixes structurally.
+Prefix lookup can be efficient.
+A trie can consume substantial memory depending on implementation.
+A radix tree compresses some trie paths.
+Prefix trees are useful when prefix operations are important.
+They are unnecessary when simple exact-key lookup is sufficient.
+A graph represents entities and relationships.
+Graph entities are commonly called vertices or nodes.
+Relationships are commonly called edges.
+A graph can be directed.
+A graph can be undirected.
+A directed edge has direction.
+An undirected edge represents a bidirectional relationship according to the graph model.
+A graph can be weighted.
+A weighted edge has an associated value such as cost, distance, or capacity.
+A graph can contain cycles.
+An acyclic graph contains no cycles according to its graph type.
+A Directed Acyclic Graph is commonly abbreviated DAG.
+Graphs can represent networks.
+Graphs can represent dependencies.
+Graphs can represent routes.
+Graphs can represent social relationships.
+Graphs can represent state transitions.
+Graphs can represent commit history.
+A Git commit graph is a directed graph of commit ancestry.
+A graph can be represented using an adjacency list.
+A graph can be represented using an adjacency matrix.
+An adjacency list stores neighboring relationships.
+An adjacency matrix stores relationships in a matrix.
+Adjacency lists are often space-efficient for sparse graphs.
+Adjacency matrices can provide direct edge-existence lookup.
+Graph representation should follow graph density and required operations.
+Breadth-first search is commonly abbreviated BFS.
+Depth-first search is commonly abbreviated DFS.
+BFS commonly uses a queue.
+DFS can use a stack.
+Recursive DFS can use the call stack.
+BFS can find shortest paths in an unweighted graph according to edge count.
+DFS is useful for reachability and structural exploration.
+Neither traversal is universally better.
+Visited-state tracking prevents repeated traversal of already processed graph nodes.
+Without visited tracking, traversal of cyclic graphs can loop indefinitely.
+Cycle detection is important in dependency graphs.
+A dependency cycle can make ordering impossible.
+Topological sorting orders a directed acyclic graph according to dependency relationships.
+Topological ordering is not defined for a graph containing a directed cycle.
+Build systems can model dependencies as graphs.
+Module dependencies can form graphs.
+Package dependencies can form graphs.
+Task dependencies can form graphs.
+Explicit dependency graphs make relationships inspectable.
+A record groups related fields.
+A C struct is a record-like data structure.
+A class can contain state and behavior according to object-oriented language semantics.
+A tuple groups a fixed sequence of values.
+A record often identifies fields by name.
+A tuple often identifies fields by position.
+Exact terminology varies by language.
+Choose representations that make meaning clear.
+A union in C allows multiple fields to share storage.
+Only the appropriately active representation should be interpreted according to program rules.
+C unions require careful type and lifetime handling.
+A tagged union combines a value with information identifying which variant is active.
+Tagged unions make variant state explicit.
+Some languages provide algebraic data types or discriminated unions directly.
+Variant types are useful when a value can legitimately take one of several defined forms.
+A boolean represents true or false according to language semantics.
+An enum represents one value from a defined set of named constants.
+Enums are useful for bounded states.
+An enum can make state more explicit than arbitrary integers.
+Do not assume an enum prevents invalid underlying values in every programming language.
+Validation may still be required at external boundaries.
+A bit field stores boolean or small integer information using selected bits.
+A bitset represents a set of boolean positions compactly.
+Bitsets can perform set operations efficiently using bitwise operations.
+Bitsets are useful when the domain is bounded and position-based.
+Bit manipulation should use explicit masks.
+A mask identifies selected bits.
+AND can test or clear bits depending on operands.
+OR can set bits.
+XOR can toggle bits.
+Bit shifting moves bit patterns.
+Signed shifts and overflow behavior depend on language semantics.
+Use unsigned types when bit-level representation requires them according to language rules.
+A buffer is a region used to hold data temporarily.
+A buffer has finite capacity.
+A buffer can be empty.
+A buffer can be partially filled.
+A buffer can be full.
+Buffer length and buffer capacity are different.
+A buffer overflow occurs when writing exceeds available bounds.
+A buffer over-read occurs when reading beyond valid data.
+Memory-safe languages can prevent many direct buffer violations.
+C requires explicit bounds discipline.
+A buffer should track the amount of valid data.
+Allocated capacity does not mean every byte contains valid input.
+Network buffers can receive partial messages.
+One receive operation does not necessarily correspond to one complete application message.
+Parsers should operate on defined message boundaries.
+A ring buffer is another name commonly used for a circular buffer.
+Ring buffers are useful for streaming data.
+Ring buffers can avoid moving existing elements during ordinary enqueue and dequeue operations.
+Full and empty states must be distinguishable.
+Implementations can reserve one slot.
+Implementations can track element count.
+Implementations can use additional state.
+The method should be explicit.
+A pool stores reusable objects or resources.
+An object pool can reduce repeated allocation.
+A connection pool reuses connections.
+A thread pool reuses worker threads.
+Pools have finite capacity.
+A pool can become exhausted.
+Pool exhaustion should produce defined behavior.
+A pool should not grow without bound unless architecture explicitly permits it.
+Reusing objects can retain stale state if objects are not reset correctly.
+Pooling introduces lifecycle complexity.
+Use pooling when it solves an actual requirement.
+A cache stores data to avoid repeating expensive work.
+A cache is not automatically authoritative storage.
+Cached data can become stale.
+A cache key identifies cached content.
+Cache invalidation determines when stored cached values are no longer valid.
+A cache can have a size limit.
+A cache can evict entries.
+Least Recently Used is commonly abbreviated LRU.
+LRU eviction removes entries according to recency policy.
+Other eviction strategies exist.
+A cache hit means requested data was found in the cache.
+A cache miss means it was not.
+A cache miss is not necessarily an error.
+The underlying source can still provide the data.
+A cache should not silently become the authority when architecture defines another source as authoritative.
+Current state and cached state can differ.
+A cache should define freshness behavior.
+An immutable data structure does not change after creation according to its abstraction.
+Operations on immutable structures produce new values or structures.
+Immutable structures can share internal representation.
+Immutability can simplify reasoning.
+Immutability can simplify concurrency.
+Immutability does not mean no memory changes occur internally in every implementation.
+It means the observable abstract value is not modified.
+A mutable data structure can change after creation.
+Mutation can be efficient.
+Mutation requires careful ownership and concurrency rules.
+Neither mutable nor immutable structures are universally superior.
+Ownership describes responsibility for a resource or data object's lifetime.
+In C, ownership is usually established by program convention.
+C does not automatically track ownership.
+If a function allocates memory, the interface should define who frees it.
+If a function receives a pointer, the interface should define whether it borrows or takes ownership.
+Ambiguous ownership causes leaks.
+Ambiguous ownership causes double frees.
+Ambiguous ownership causes use-after-free defects.
+Ownership should be explicit.
+Borrowing means using data without assuming ownership according to the interface contract.
+A borrowed pointer must not outlive the owned object.
+A dangling pointer refers to memory that is no longer valid.
+Dereferencing a dangling pointer produces invalid behavior.
+A NULL pointer represents no object according to C pointer conventions.
+NULL should be checked when the interface permits absence.
+A non-NULL pointer is not proof that the referenced memory remains valid.
+Pointer validity depends on lifetime.
+A shallow copy duplicates immediate fields but can retain references to shared underlying data.
+A deep copy duplicates referenced data according to the structure's ownership rules.
+Shallow and deep copies have different semantics.
+Copy behavior should be explicit.
+A shallow copy of a structure containing owning pointers can cause double-free defects if both copies attempt ownership.
+Copying bytes is not always equivalent to copying an abstract object.
+Structures containing pointers require special care.
+Reference counting tracks how many owners or references retain an object according to a defined ownership model.
+When the count reaches zero, the object can be released.
+Reference counting cannot automatically reclaim simple reference cycles without additional mechanisms.
+A cycle can keep reference counts above zero.
+Garbage collection automatically identifies memory that is no longer reachable according to runtime rules.
+Garbage collection and reference counting are different memory-management approaches.
+Garbage collection does not eliminate every resource-lifetime problem.
+Files and sockets may require explicit release even in garbage-collected languages.
+Data structure lifetime and external resource lifetime should be understood separately.
+A persistent data structure preserves previous versions when modified according to its abstraction.
+Persistent data structures can support history efficiently through structural sharing.
+Persistent in this context does not necessarily mean stored on disk.
+The word persistent has multiple meanings.
+Context determines whether persistence means historical structural versions or durable storage.
+A data structure stored on disk requires serialization.
+Serialization converts structured data into a representation suitable for storage or transport.
+Deserialization reconstructs structured data from that representation.
+Serialization format is part of an interface when data crosses system boundaries.
+Field order can matter.
+Byte order can matter.
+Integer size can matter.
+String encoding can matter.
+Versioning can matter.
+Do not serialize raw C structure memory as a portable protocol merely because it is convenient.
+Compiler padding can differ.
+Alignment can differ.
+Integer sizes can differ.
+Byte order can differ.
+Explicit serialization produces deterministic representations.
+A parser reconstructs structure from serialized input.
+Parsers should validate lengths.
+Parsers should validate types.
+Parsers should validate ranges.
+Parsers should validate required fields.
+Parsers should reject malformed structures.
+Parsing successfully does not prove semantic validity.
+Structural validation and semantic validation are different.
+A JSON object is a key-value structure.
+A JSON array is an ordered sequence.
+A JSON object should not be assumed to preserve semantic field order.
+JSON arrays preserve element order.
+JSON does not directly encode pointers.
+JSON does not directly encode executable behavior.
+JSON is a data representation.
+A database table is not the same thing as an in-memory array.
+A database index is not the same thing as an array index.
+The word index has multiple meanings.
+An array index identifies an element position.
+A database index is a structure supporting data access.
+A search-engine index maps searchable terms or representations to retrievable material.
+Context determines meaning.
+A corpus can be represented using multiple data structures.
+Source records can be stored sequentially.
+Lookup structures can map terms to records.
+Metadata can map records to source identity.
+Indexes can accelerate retrieval.
+Current-state metadata can distinguish authoritative current sources from historical sources.
+A data structure does not decide truth.
+A data structure organizes information.
+Retrieval logic determines which organized information is selected.
+Authority rules determine which sources govern a question.
+Response logic determines how evidence is expressed.
+These responsibilities should remain distinct.
+A list of historical values is not automatically the current value.
+A data structure containing ABI 1.3, ABI 1.4, and ABI 1.5 can represent history.
+Another field can identify ABI 1.5 as current.
+The structure should preserve both without ambiguity.
+Representing history as one undifferentiated string can make retrieval harder.
+Structured records can include version.
+Structured records can include status.
+Structured records can include effective time.
+Structured records can include source.
+Structured records can include authority.
+Structured records can include supersession relationships.
+Explicit metadata improves deterministic retrieval.
+A current-state query can filter for current status.
+A historical query can include superseded records.
+A comparison query can retrieve selected historical versions.
+Good structure reduces reasoning ambiguity.
+A state machine can be represented as states and transitions.
+A state is a defined condition.
+A transition moves from one state to another.
+Transitions can have triggering events.
+Transitions can have guards.
+Transitions can have actions.
+Not every transition is permitted from every state.
+A transition table can represent valid state changes.
+A graph can represent state transitions.
+Explicit state structures reduce arbitrary behavior.
+Module lifecycle can be modeled as a state machine.
+A candidate can enter discovery.
+A discovered module can enter validation.
+A validated module can enter qualification.
+A qualified module can enter loading.
+A loaded module can enter initialization.
+An initialized module can enter active state.
+The exact lifecycle depends on architecture.
+Failure transitions should also be represented.
+A module should not become active merely because its directory exists.
+State should reflect completed requirements.
+A queue can represent pending work.
+A set can represent unique active identifiers.
+A map can associate module names with module records.
+A list can preserve ordered history.
+A graph can represent module dependencies.
+A ring buffer can retain recent events.
+A database can persist long-term records.
+Each structure solves a different problem.
+Using one structure for every problem produces unnecessary complexity.
+A list is appropriate when ordered sequential traversal matters.
+A set is appropriate when uniqueness and membership matter.
+A map is appropriate when lookup by key matters.
+A stack is appropriate when most-recent-first processing matters.
+A queue is appropriate when first-arrived-first processing matters.
+A priority queue is appropriate when priority determines processing order.
+A tree is appropriate when hierarchical or ordered relationships matter.
+A graph is appropriate when arbitrary relationships matter.
+A ring buffer is appropriate for bounded streaming history.
+A heap is appropriate for efficient priority selection.
+A trie is appropriate when prefix relationships matter.
+Choose the smallest structure satisfying the required behavior.
+Do not introduce a graph when a simple list is sufficient.
+Do not introduce a database when a bounded file is sufficient.
+Do not introduce a linked list merely because insertion can be O(1).
+Do not introduce a hash table when the collection contains three elements and linear lookup is simpler.
+Asymptotic complexity matters at scale.
+Implementation complexity matters at every scale.
+Small deterministic systems should balance both.
+A simple linear scan over ten items can be preferable to a complex index.
+A linear scan over ten million items can be inappropriate for frequent lookup.
+Measure actual requirements.
+Expected maximum size matters.
+Expected operation frequency matters.
+Memory limits matter.
+Latency requirements matter.
+Concurrency matters.
+Persistence matters.
+Determinism matters.
+Portability matters.
+Security matters.
+Data structure choice is an engineering decision.
+Deterministic iteration requires defined ordering.
+Hash maps frequently do not guarantee portable deterministic iteration.
+If deterministic serialized output is required, sort keys or use an ordered structure according to specification.
+Do not rely on observed hash-map iteration order.
+Observed behavior without a guarantee is not a contract.
+A stable sort preserves relative order of equal elements.
+An unstable sort does not guarantee preservation of equal-element order.
+If equal-item order matters, use a stable algorithm or explicit tie-breaking.
+A comparator defines ordering.
+A comparator should behave consistently.
+An inconsistent comparator can produce incorrect or undefined sorting behavior depending on implementation.
+Equality and ordering should agree where required by the data structure.
+A sorted tree requires a valid ordering relation.
+A hash map requires equality and hashing to be compatible.
+If two keys are equal, their hash behavior must satisfy the map implementation's requirements.
+Mutable keys can break hash-based structures when their hash-relevant state changes after insertion.
+Keys should remain stable according to the structure's contract.
+Data structure invariants are conditions that must remain true.
+An array length cannot exceed its capacity.
+A linked-list next pointer should follow the list's valid structure.
+A doubly linked node's forward and backward relationships should remain consistent according to implementation.
+A binary search tree should preserve its ordering property.
+A heap should preserve its heap property.
+A hash table should preserve its bucket and collision structure.
+A queue should preserve its defined ordering.
+A set should preserve uniqueness.
+A state machine should preserve valid states and transitions.
+Invariant checks are useful during debugging.
+A corrupted invariant can explain later failures.
+Check invariants close to mutation points.
+The first observed invariant violation is usually more useful than a later crash.
+Mutation operations should leave the structure valid.
+If an operation can fail midway, failure handling should preserve or restore a valid state.
+Transactions can provide this property for persistent structures.
+Temporary structures can construct new state before replacing old state.
+Atomic replacement can prevent readers from seeing partially updated state.
+Concurrency complicates data structures.
+Two threads modifying the same structure can race.
+Locks can protect shared structures.
+Atomic operations can protect specific state changes.
+Lock-free structures use carefully designed atomic algorithms.
+Lock-free does not mean simple.
+Lock-free does not mean wait-free.
+Wait-free and lock-free are different progress guarantees.
+Concurrent data structures are difficult to implement correctly.
+Use proven implementations when appropriate.
+Do not invent lock-free algorithms merely for performance appearance.
+Measure contention first.
+Immutable structures can reduce shared-mutation problems.
+Message passing can reduce shared-memory mutation.
+Ownership transfer can make responsibility explicit.
+Thread-local structures avoid sharing where sharing is unnecessary.
+Simpler concurrency models are easier to reason about.
+Memory alignment affects how data is placed in memory.
+C structures can contain padding.
+The sizeof a C structure can exceed the sum of the sizes of its fields.
+Field ordering can affect padding.
+Changing structure layout can affect ABI compatibility.
+A C struct exposed through an ABI is part of the binary interface.
+Adding a field can change structure size.
+Reordering fields can change offsets.
+Changing field types can change layout.
+Changing packing can change layout.
+Compiler and platform rules can affect layout.
+ABI structures should be designed deliberately.
+Do not modify an ABI-visible structure casually.
+An internal structure can change without ABI impact when it is not exposed across the binary boundary.
+Public and private structures should be distinguished.
+Opaque pointers can hide internal structure layout from callers.
+An opaque structure exposes an incomplete type or handle while implementation details remain private.
+Opaque structures can improve ABI stability.
+Callers interact through functions rather than direct field access.
+Internal fields can then change without requiring callers to know their layout, subject to interface design.
+Data encapsulation can therefore support compatibility.
+An ABI version should change according to the project's compatibility rules when incompatible binary structure changes occur.
+Application version and structure version are different concepts.
+Data format version and ABI version are different concepts.
+A structure can contain an explicit version field.
+A parser can select behavior according to supported structure versions.
+Unsupported versions should be rejected or handled according to compatibility policy.
+Do not guess structure layout from an unknown version.
+Validate version before interpreting version-dependent fields.
+A length field can define the amount of structure data available.
+Length-versioned structures can support extension when designed carefully.
+Readers should not access fields beyond the validated length.
+Writers should initialize reserved fields according to specification.
+Reserved fields can support future extension.
+Reserved fields should not be repurposed arbitrarily when compatibility requires them.
+Binary interfaces require exact structure discipline.
+Pointers should not normally be serialized as persistent identities.
+A pointer value is meaningful only within an applicable process address space and lifetime.
+Restarting a process invalidates ordinary pointer identities.
+Sending a raw pointer value to another process does not transfer the referenced object.
+Use explicit identifiers across process boundaries.
+An identifier names an object according to application rules.
+Identifiers should have defined uniqueness scope.
+An array index can be an identifier only when position is stable enough for the requirement.
+Positions can change when elements are removed or reordered.
+Stable identifiers should not depend on unstable position.
+A record ID can remain stable independently of collection ordering.
+Stable identifiers simplify references.
+A UUID is one approach to generating identifiers.
+A sequential integer is another.
+A cryptographic digest can identify content.
+Each has different properties.
+Content-addressed structures identify data using a digest of content.
+Git uses content-addressed objects.
+Changing content changes its object identifier according to the hash model.
+Content addressing is useful for integrity and deduplication.
+Content addressing does not by itself establish semantic authority.
+Two different records can contain identical content.
+Identical content does not necessarily mean identical contextual meaning.
+Metadata matters.
+A Merkle tree is a tree in which parent values depend cryptographically on child data or hashes according to its construction.
+Merkle structures support efficient integrity verification.
+Changing underlying data changes dependent hashes.
+Merkle trees are used in distributed and integrity-sensitive systems.
+A Merkle root summarizes the committed structure according to the construction.
+A matching root provides evidence that the represented structure matches the expected hashed content under the hash assumptions.
+A Merkle root does not explain the semantic correctness of the data.
+Integrity and truth are different properties.
+An append-only structure permits adding new records while prohibiting modification or deletion of existing records according to policy.
+Append-only structures are useful for historical event records.
+Append-only does not automatically mean tamper-proof.
+An actor with sufficient storage authority can modify underlying bytes unless additional controls prevent or detect it.
+Hash chaining can provide tamper evidence.
+Replication can preserve independent copies.
+Signatures can authenticate records.
+Permissions can restrict mutation.
+The required controls depend on the threat model.
+A log is an ordered sequence of events.
+An event log can be append-only.
+An event log can reconstruct state by replaying events according to defined rules.
+Event sourcing stores changes as events and derives current state from them.
+Event sourcing introduces complexity.
+It is useful only when historical state and replay requirements justify that complexity.
+A current-state record is simpler when only current state matters.
+History can be maintained separately.
+Do not introduce event sourcing merely because history exists.
+A bounded log retains only a defined amount of history.
+A ring buffer is useful for bounded recent history.
+Permanent historical records require persistent retention beyond a bounded ring buffer.
+Retention requirements determine structure.
+A Bloom filter is a probabilistic data structure for membership testing.
+A Bloom filter can report that an item may be present.
+A Bloom filter can definitively report absence under its defined assumptions.
+A Bloom filter can produce false positives.
+A Bloom filter does not produce false negatives when correctly implemented without unsupported deletions according to its standard model.
+Probabilistic structures should not be used where exact membership is required unless their uncertainty is explicitly handled.
+Probable and determinate results are different.
+A probabilistic answer should not be represented as a deterministic fact.
+Exact sets provide determinate membership according to their stored state.
+Bloom filters trade exact positive membership for space efficiency.
+Choose according to requirements.
+A skip list is a probabilistic layered linked structure supporting efficient expected search.
+Skip lists can provide expected logarithmic operations.
+Their probabilistic structure differs from deterministic balanced trees.
+A B-tree is a balanced search tree designed for storage systems and block-oriented access.
+B-trees can contain many keys per node.
+B-trees reduce the number of storage accesses required for large indexed data.
+Database indexes commonly use B-tree-family structures.
+A B+ tree stores data or record references according to a variant optimized for range access.
+Implementation details vary among database systems.
+Knowing the conceptual structure helps explain database index behavior.
+A database index is maintained when indexed data changes.
+Indexes accelerate selected reads at the cost of storage and write maintenance.
+This is a data structure tradeoff.
+An inverted index maps terms or features to documents or records containing them.
+Search systems commonly use inverted indexes.
+An inverted index supports efficient term-based retrieval.
+Term frequency can be stored.
+Document metadata can be stored.
+Source identifiers can be stored.
+Ranking systems can use this indexed information.
+An inverted index does not understand truth.
+It locates candidates.
+Ranking and authority logic determine which candidates should matter.
+A vector is a term with multiple meanings.
+In mathematics, a vector is an ordered collection of values.
+In C++, std::vector is a dynamic contiguous sequence container.
+In machine-learning systems, a vector can represent numeric features or embeddings.
+Context determines meaning.
+A vector similarity score measures similarity according to the selected metric.
+Similarity is not identity.
+Similarity is not authority.
+Similarity is not correctness.
+A highly similar historical statement can still be the wrong answer to a current-state question.
+Data structures can make retrieval efficient.
+Retrieval policy must make retrieval appropriate.
+A graph can represent source supersession.
+A record can point to the record it supersedes.
+A current pointer can identify the active record.
+A historical chain can preserve earlier records.
+This allows current state and history to coexist.
+Deleting history is unnecessary when structure distinguishes status.
+Explicit structure reduces ambiguity.
+Data should represent distinctions the system needs to reason about.
+If current versus historical matters, store that distinction.
+If authoritative versus advisory matters, store that distinction.
+If active versus rejected matters, store that distinction.
+If confirmed versus candidate matters, store that distinction.
+If version matters, store the version.
+If source matters, store the source.
+If time matters, store the time.
+Do not expect prose alone to carry every machine-critical distinction reliably.
+Structured metadata exists to make distinctions explicit.
+A data structure should preserve required information.
+A data structure should not invent information.
+A data structure should not discard information required for later decisions.
+A data structure should have defined invariants.
+A data structure should have defined ownership.
+A data structure should have defined limits.
+A data structure should have defined failure behavior.
+A data structure should have defined ordering when ordering matters.
+A data structure should have defined uniqueness when uniqueness matters.
+A data structure should have defined lifetime.
+A data structure should have defined serialization when crossing boundaries.
+A data structure should have defined concurrency rules when shared.
+A data structure should remain as simple as its requirements permit.
+Correct structure makes correct algorithms easier.
+Poor structure forces later code to reconstruct meaning that should have been explicit.
+Good engineering organizes data according to what the data actually represents.

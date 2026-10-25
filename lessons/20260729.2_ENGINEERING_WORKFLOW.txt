@@ -1,0 +1,32 @@
+20260729.2 — Engineering Workflow
+
+Root Document ID: 20260729.2
+Revision ID:       NONE
+Previous Revision: NONE
+sha256: bbd9337055568f6bd42930efdcee69fab9934dab3a5dac95b8d0fe7c98bed6cb
+
+Status: Approved  
+Scope: Standards
+
+Policy
+
+STN-LABZ will maintain an engineering workflow for all STN-LABZ systems.
+
+Engineering Workflow
+
+Research → Architecture → Lab → Release
+
+Engineering Principle
+
+Each stage has a distinct purpose:
+
+- Research: Explore concepts and doctrine.
+- Architecture: Define system architecture and integration requirements.
+- Lab: Prototype, experiment, and validate.
+- Release: Publish stable implementations.
+
+References
+
+- General Orders
+- 20260729.0 — Operational Authority
+- 20260729.1 — Engineering Organization

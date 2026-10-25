@@ -1,0 +1,96 @@
+digit learn CONVERSATION | STN-LABZ | Acknowledgment indicates that a statement has been received without necessarily expressing agreement.
+
+digit learn CONVERSATION | STN-LABZ | A follow-up question seeks additional information about a subject already being discussed.
+
+digit learn CONVERSATION | STN-LABZ | A conversation may continue across multiple messages without repeating the original subject.
+
+digit learn CONVERSATION | STN-LABZ | Short replies such as yes, no, maybe, and sometimes often depend on preceding conversational context.
+
+digit learn CONVERSATION | STN-LABZ | When someone changes the subject, subsequent messages may relate to the new topic rather than the previous discussion.
+
+digit learn CONVERSATION | STN-LABZ | A rhetorical question is asked for emphasis and does not always require a literal answer.
+
+digit learn CONVERSATION | STN-LABZ | Repeating information already established in a conversation may be unnecessary unless clarification is requested.
+----
+
+digit learn SOCIAL | STN-LABZ | Small talk is informal conversation intended to establish or maintain friendly social interaction.
+
+digit learn SOCIAL | STN-LABZ | Sharing music preferences is a common way people connect socially.
+
+digit learn SOCIAL | STN-LABZ | Someone discussing their day may be sharing an experience rather than requesting advice.
+
+digit learn SOCIAL | STN-LABZ | A friendly invitation may be expressed indirectly through casual language.
+
+digit learn SOCIAL | STN-LABZ | Appreciation is an expression of gratitude or recognition for someone's actions.
+
+digit learn SOCIAL | STN-LABZ | Friendly teasing uses playful language and depends on shared context and mutual understanding.
+
+digit learn SOCIAL | STN-LABZ | Silence or a lack of response does not necessarily indicate disagreement or hostility.
+
+digit learn SOCIAL | STN-LABZ | Remembering previously discussed preferences can help maintain conversational continuity.
+-----
+
+digit learn EMOTIONS | STN-LABZ | Excitement is an emotional state commonly associated with anticipation, enthusiasm, or positive developments.
+
+digit learn EMOTIONS | STN-LABZ | Disappointment occurs when expectations or hopes are not fulfilled.
+
+digit learn EMOTIONS | STN-LABZ | Relief is a feeling that may follow the resolution of a stressful or uncertain situation.
+
+digit learn EMOTIONS | STN-LABZ | Nostalgia is an emotional connection to memories or experiences from the past.
+
+digit learn EMOTIONS | STN-LABZ | Pride may occur when someone recognizes an accomplishment or meaningful personal progress.
+
+digit learn EMOTIONS | STN-LABZ | Affection may be expressed through nicknames, playful language, compliments, or gestures.
+
+digit learn EMOTIONS | STN-LABZ | A person may express frustration humorously without intending hostility.
+
+digit learn EMOTIONS | STN-LABZ | Emotional expressions do not always indicate that someone is seeking a solution.
+-----
+
+digit learn EXPRESSIONS | STN-LABZ | Yus is a playful variation of yes and commonly indicates enthusiastic agreement.
+
+digit learn EXPRESSIONS | STN-LABZ | Nah is an informal expression of no or disagreement.
+
+digit learn EXPRESSIONS | STN-LABZ | Yep is an informal affirmative response.
+
+digit learn EXPRESSIONS | STN-LABZ | Oof is an informal expression of sympathy, discomfort, or acknowledgment of a difficult situation.
+
+digit learn EXPRESSIONS | STN-LABZ | Bruh is an informal expression that may indicate disbelief, surprise, frustration, or familiarity.
+
+digit learn EXPRESSIONS | STN-LABZ | LMAO is an internet abbreviation indicating strong amusement or laughter.
+
+digit learn EXPRESSIONS | STN-LABZ | OMG is an abbreviation for oh my god and commonly expresses surprise or disbelief.
+
+digit learn EXPRESSIONS | STN-LABZ | Meh commonly indicates indifference or mild dissatisfaction.
+
+digit learn EXPRESSIONS | STN-LABZ | BISH is a playful variation of bitch that may express familiarity or affection depending on context.
+----
+
+digit learn CONVERSATION | STN-LABZ | A nickname is an alternative name used to identify or address a person, character, or system.
+
+digit learn CONVERSATION | STN-LABZ | Direct address occurs when a speaker intentionally directs a message toward a particular participant.
+
+digit learn CONVERSATION | STN-LABZ | A conversational participant may be addressed by a name, nickname, or other recognized identifier.
+
+digit learn CONVERSATION | STN-LABZ | The meaning of a nickname may depend on who is speaking and who is being addressed.
+
+digit learn CONVERSATION | STN-LABZ | A question containing you generally refers to the participant being addressed, unless context indicates otherwise.
+
+digit learn CONVERSATION | STN-LABZ | A message may contain both a direct address and a conversational question.
+
+digit learn CONVERSATION | STN-LABZ | Knowing the definition of a term does not establish which participant the term refers to in a specific conversation.
+-----
+
+digit learn CONVERSATION | STN-LABZ | Uncertainty means that available information is insufficient to establish a confident conclusion.
+
+digit learn CONVERSATION | STN-LABZ | An assumption is a proposition accepted without sufficient supporting verification.
+
+digit learn CONVERSATION | STN-LABZ | A clarification question seeks to resolve ambiguity before interpreting or answering a request.
+
+digit learn CONVERSATION | STN-LABZ | A factual claim and a personal opinion may require different methods of evaluation.
+
+digit learn CONVERSATION | STN-LABZ | A social greeting does not necessarily require a factual Corpus lookup.
+
+digit learn CONVERSATION | STN-LABZ | Acknowledging a person's statement does not require claiming knowledge beyond what the person provided.
+
+digit learn CONVERSATION | STN-LABZ | When a question lacks supporting evidence, an honest expression of uncertainty is preferable to inventing an answer.

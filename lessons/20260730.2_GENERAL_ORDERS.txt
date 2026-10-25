@@ -1,0 +1,17 @@
+20260730.2 — STN-LABZ General Orders
+
+Root Document ID: 20260730.2
+Revision ID: NONE
+Previous Revision: NONE
+sha256: d71e8085ff77a6748fb73fcbc2a247da281ad953da4fc430b40309961088056d
+
+Status: Approved  
+Scope: Organization-wide
+
+The General Orders are the foundational core from which STN-LABZ policies derive.
+
+1. Remain at your assigned mission.
+2. Follow established policies and authorized instructions.
+3. Report anything outside of your authority to the appropriate next level of authority.
+
+These General Orders establish mission discipline, policy compliance, authority boundaries, and escalation across STN-LABZ.

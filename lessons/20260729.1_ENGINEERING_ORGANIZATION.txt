@@ -1,0 +1,32 @@
+20260729.1 — Engineering Organization
+
+Root Document ID: 20260729.1
+Revision ID: NONE
+Previous Revision: NONE
+sha256: a43857df5934b7c17bdb18a6e250f37e1af52914743641da1cf40dd1871584a0
+
+Status: Approved 
+Scope: Standards
+
+Policy
+
+STN-LABZ will maintain structured research, architecture, development, validation, and release workflows for all STN-LABZ systems.
+
+Engineering Divisions
+
+- Research
+- Architecture
+- Digit
+- Sentinel
+- Space
+- Lab
+- Release
+
+Engineering Principle
+
+Each engineering division will have a dedicated workspace, allowing concepts, architecture, implementation, testing, and release to evolve independently while remaining part of a unified engineering process.
+
+References
+
+- General Orders
+- 20260729.0.R0 — Operational Authority

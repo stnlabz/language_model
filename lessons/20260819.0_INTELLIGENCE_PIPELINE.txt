@@ -1,0 +1,387 @@
+20260819.0 — Intelligence Pipeline Doctrine
+
+Root Document ID: 20260819.0
+Revision ID: NONE
+Previous Revision: NONE
+sha256: 0df00a2533088ce8ef871d506324408f0cd7be1e88abcbb149a703d2f061c114
+
+Status: Approved
+Scope: Doctrine
+Applicability: STN-LABZ Intelligence Pipeline
+
+Purpose
+
+STN-LABZ will implement an intelligence pipeline beginning with external information aggregation and progressing through investigation, controlled document creation, Trust Chain processing, corpus construction, and agent knowledge updates.
+
+The pipeline provides a continuous engineering path from discovered intelligence to validated knowledge available to authorized STN-LABZ agents.
+
+Intelligence Pipeline
+
+The governing intelligence progression is:
+
+External Information
+        ↓
+Rictus Intelligence Collection
+        ↓
+INT Record
+        ↓
+Human Investigation
+        ↓
+Controlled Markdown
+        ↓
+Chain
+        ↓
+rag_builder
+        ↓
+Validated Corpus Data
+        ↓
+kb.corpus.json
+        ↓
+Agent Corpus Validation
+        ↓
+Agent Knowledge Update
+
+Each intelligence item retains an identifiable relationship with the information and artifacts produced from it throughout the pipeline.
+
+Intelligence Collection
+
+Rictus will aggregate information from approved external sources according to its assigned intelligence mission.
+
+Information identified for tracking or further investigation will receive an intelligence identifier in the form:
+
+INT-#####
+
+The intelligence identifier provides the persistent operational reference for the intelligence item.
+
+The intelligence record will preserve information required for continued investigation and processing, including applicable:
+
+- Intelligence identifier.
+- Source.
+- Source reference.
+- Discovery information.
+- Intelligence summary.
+- Supporting information.
+- Processing state.
+- Associated pipeline artifacts.
+
+Rictus intelligence collection will continue to operate according to the established Rictus mission and intelligence requirements.
+
+Human Investigation
+
+An INT record may be retrieved through the Rictus IRC interface for human investigation.
+
+The operator may use the intelligence identifier to retrieve the individual intelligence item and its associated source information.
+
+Investigation may include review of:
+
+- Original reporting.
+- Primary sources.
+- Supporting sources.
+- Technical documentation.
+- Related intelligence.
+- Existing STN-LABZ research.
+- Contrary evidence.
+- Engineering relevance.
+
+The intelligence record remains the common identifier connecting the investigation to subsequent pipeline activity.
+
+IRC Pipeline Commands
+
+Rictus will provide IRC commands for operator interaction with intelligence records and the intelligence pipeline.
+
+The initial command relationship is:
+
+| Command | Application | Operation |
+| --- | --- | --- |
+| !show-ID | Rictus | Display the identified intelligence record |
+| !md-ID | Rictus | Create the applicable Markdown intelligence artifact |
+| !chain-ID | Rictus → Chain | Process the identified artifact through Chain |
+| !rag-ID | Rictus → rag_builder | Process the identified artifact through rag_builder |
+
+The INT identifier supplied through the command identifies the intelligence item being processed.
+
+Rictus will preserve the relationship between the command, intelligence record, resulting artifact, and processing result.
+
+Additional commands may be introduced as pipeline requirements evolve.
+
+Operator Authentication
+
+IRC pipeline commands are a human control mechanism.
+
+Pipeline commands will be accepted only from an operator authenticated according to the applicable Rictus authentication requirements.
+
+Command activity will preserve sufficient operational evidence to identify the authenticated operator, requested operation, intelligence identifier, processing result, and applicable time of execution.
+
+Controlled Markdown
+
+An intelligence item selected for continued processing will be represented as an applicable controlled Markdown artifact.
+
+The artifact will preserve the INT identifier and applicable source provenance.
+
+Controlled Markdown produced from intelligence will comply with established STN-LABZ Engineering Documentation requirements.
+
+The relationship is:
+
+INT-#####
+        ↓
+Investigation
+        ↓
+Controlled Markdown Artifact
+        ↓
+Document Identity
+        ↓
+Source Provenance
+
+The controlled artifact becomes the document representation used by subsequent pipeline stages.
+
+Chain Processing
+
+The controlled Markdown artifact will be processed through Chain according to the STN-LABZ Trust Chain.
+
+Chain will perform the applicable controlled-document and Trust Chain operations established by policy.
+
+The INT record will retain the resulting Chain state and associated controlled-document identity.
+
+The relationship is:
+
+INT-#####
+        ↓
+Controlled Markdown
+        ↓
+Chain
+        ↓
+Root Document ID / Revision ID
+        ↓
+Trust Chain Result
+
+Only artifacts satisfying the applicable Trust Chain requirements proceed to corpus processing.
+
+rag_builder Processing
+
+After successful applicable Trust Chain processing, the controlled artifact may proceed through rag_builder.
+
+rag_builder will transform the controlled source material into the applicable validated corpus representation according to its established architecture and qualification requirements.
+
+The pipeline relationship is:
+
+Controlled Artifact
+        ↓
+Trust Chain PASS
+        ↓
+rag_builder
+        ↓
+Validated Corpus Artifact
+
+Applicable provenance will remain associated with the resulting corpus data.
+
+Knowledge Corpus
+
+Validated corpus artifacts will be combined into the STN-LABZ knowledge corpus:
+
+kb.corpus.json
+
+The corpus aggregation process will construct kb.corpus.json from the applicable validated corpus artifacts.
+
+Corpus construction will preserve the relationship between corpus knowledge and its authoritative controlled source.
+
+The corpus will be constructed deterministically from the current applicable validated knowledge state.
+
+The relationship is:
+
+Validated Corpus Artifacts
+        ↓
+Corpus Aggregation
+        ↓
+kb.corpus.json
+
+Corpus Updates
+
+New intelligence may produce new or revised controlled knowledge.
+
+When validated corpus data changes, the pipeline will rebuild kb.corpus.json from the applicable validated corpus artifacts.
+
+The update progression is:
+
+New or Revised Intelligence
+        ↓
+Investigation
+        ↓
+Controlled Artifact
+        ↓
+Chain
+        ↓
+rag_builder
+        ↓
+Validated Corpus Data
+        ↓
+Rebuild kb.corpus.json
+
+Corpus construction will prevent duplicate knowledge from being introduced when the applicable data has already been represented in the authoritative corpus state.
+
+Agent Corpus Validation
+
+Agents using the STN-LABZ knowledge corpus will check for an updated corpus twice daily.
+
+When an updated corpus is identified, the agent will validate the corpus according to its applicable knowledge and Trust Chain requirements before updating its operational knowledge state.
+
+The progression is:
+
+Scheduled Corpus Check
+        ↓
+Identify Current kb.corpus.json
+        ↓
+Validate Corpus
+        ↓
+Update Agent Knowledge State
+
+The corpus is the authoritative aggregate supplied to the agent for knowledge indexing.
+
+Agents will use the validated corpus rather than independently traversing the underlying controlled-document directory for operational knowledge construction.
+
+Rebuild Model
+
+Agent knowledge state is derived from the validated knowledge corpus.
+
+When the authoritative corpus is updated, the applicable agent knowledge state will be rebuilt or re-indexed from the validated kb.corpus.json.
+
+The governing relationship is:
+
+Controlled Knowledge
+        ↓
+Validated Corpus Artifacts
+        ↓
+kb.corpus.json
+        ↓
+Agent Validation
+        ↓
+Agent Knowledge Index
+
+This provides a repeatable path for reconstructing agent knowledge from the authoritative corpus.
+
+Provenance
+
+Provenance will remain traceable throughout the intelligence pipeline.
+
+The intended provenance chain is:
+
+External Source
+        ↓
+INT-#####
+        ↓
+Controlled Markdown
+        ↓
+Root Document ID / Revision ID
+        ↓
+Trust Chain Evidence
+        ↓
+rag_builder Corpus Artifact
+        ↓
+kb.corpus.json
+        ↓
+Agent Knowledge
+
+Pipeline records will preserve sufficient information to trace agent knowledge back through the controlled corpus to the originating intelligence and source material.
+
+Pipeline State
+
+The INT record will provide a common operational location for tracking progression of an intelligence item through the pipeline.
+
+Applicable pipeline state may include:
+
+- DISCOVERED
+- INVESTIGATING
+- DOCUMENTED
+- CHAINED
+- CORPUS_BUILT
+- PUBLISHED
+- FAILED
+
+Pipeline state will reflect completed engineering activity and associated evidence.
+
+Failures will remain associated with the affected INT record for investigation and corrective action.
+
+Continuing Intelligence Cycle
+
+The intelligence pipeline is continuous.
+
+New external information may create new intelligence records.
+
+Existing intelligence may receive additional evidence.
+
+Investigation may result in new or revised controlled artifacts.
+
+Validated artifacts may produce updated corpus data.
+
+Updated corpus data may produce a new kb.corpus.json.
+
+Agents will periodically validate the available corpus and update their knowledge state when an applicable validated corpus update exists.
+
+The continuing relationship is:
+
+Collect
+        ↓
+Identify
+        ↓
+Investigate
+        ↓
+Document
+        ↓
+Validate
+        ↓
+Build
+        ↓
+Aggregate
+        ↓
+Publish
+        ↓
+Agent Update
+        ↓
+Continue Collection
+
+Engineering Principle
+
+STN-LABZ intelligence progresses through a defined engineering pipeline from external discovery to operational agent knowledge.
+
+Each intelligence item maintains an identifiable path through that pipeline.
+
+The INT identifier connects investigation and operator control.
+
+Controlled-document identity connects intelligence to governed documentation.
+
+The Trust Chain establishes the applicable validation evidence.
+
+rag_builder transforms validated controlled information into corpus data.
+
+Corpus aggregation produces the authoritative kb.corpus.json.
+
+Agents validate and index that corpus as their operational knowledge source.
+
+The complete engineering relationship is:
+
+Intelligence
+        ↓
+Investigation
+        ↓
+Controlled Documentation
+        ↓
+Trust Chain
+        ↓
+Corpus Transformation
+        ↓
+Corpus Aggregation
+        ↓
+Agent Validation
+        ↓
+Operational Knowledge
+
+References
+
+- 20260730.2 — STN-LABZ General Orders
+- 20260729.6 — Engineering Documentation
+- 20260729.8 — Operational Doctrine
+- 20260730.1 — Digit: Authorized Knowledge
+- 20260805.0 — Rictus: Mission Assignment
+- 20260806.0 — Agent Modules
+- 20260810.0 — Security Research Threat (SRT)
+- 20260817.0 — Engineering Development Doctrine
+- 20260817.1 — STN-LABZ Trust Chain

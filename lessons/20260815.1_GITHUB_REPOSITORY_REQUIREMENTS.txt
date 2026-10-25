@@ -1,0 +1,173 @@
+20260815.1 — GitHub Repository Requirements
+
+Root Document ID: 20260815.1
+Revision ID: NONE
+Previous Revision: NONE
+sha256: 4d5e34f7638b2d523e40e750b41c57d52187d8bd653649b03a03fbf978b4c60a
+
+Status: Approved  
+Scope: All official STN-LABZ GitHub repositories
+
+Purpose
+
+Establish a consistent structure, appearance, documentation, repository-control, and organizational presentation baseline for every official STN-LABZ GitHub repository regardless of project size or purpose.
+
+Policy
+
+Every official STN-LABZ GitHub repository will follow a common organizational baseline.
+
+At minimum, the baseline includes:
+
+text
+.github/
+docs/
+.gitattributes
+.gitignore
+README.md
+CHANGELOG.md
+LICENSE
+CONTRIBUTING.md
+SECURITY.md
+INSTALL.md
+CONFIGURATION.md
+ARCHITECTURE.md
+POLICY.md
+ROADMAP.md
+
+
+Project-specific requirements may extend the baseline but will not remove organizational requirements without authorization.
+
+Repositories will maintain appropriate project overview, purpose, installation, configuration, build, usage, version history, licensing, security, contribution, architecture, policy, and roadmap documentation.
+
+Archived repositories will be clearly identified.
+
+Repository Control Files
+
+.gitattributes and .gitignore are required repository engineering infrastructure.
+
+Their presence and configuration implement applicable STN-LABZ repository requirements. They do not independently establish organizational policy and will remain subordinate to approved STN-LABZ policies, standards, and project requirements.
+
+.gitattributes
+
+Repositories will use the approved STN-LABZ .gitattributes baseline.
+
+Unless a project-specific requirement establishes otherwise:
+
+- Text files will use LF line endings.
+- Windows .bat and .cmd files will use CRLF line endings.
+- Binary files will be explicitly identified where appropriate.
+- Source code, documentation, configuration, and structured-data files will use deterministic text normalization.
+
+Project-specific language and file-type requirements may extend the baseline.
+
+.gitignore
+
+Repositories will maintain a .gitignore appropriate to the project's implementation languages, build system, development environment, and operational requirements.
+
+Files and directories not intended to become part of repository source history will be excluded where appropriate, including:
+
+- Build artifacts.
+- Compiled objects and binaries.
+- Runtime state.
+- Temporary and backup files.
+- Logs.
+- Editor and IDE artifacts.
+- Generated documentation.
+- Local configuration.
+- Credentials, secrets, and private keys.
+
+Test, qualification, or generated artifacts required as authoritative engineering evidence will not be excluded solely because they are generated.
+
+Repository-specific requirements determine which engineering evidence requires preservation.
+
+Repository Presentation and Linking
+
+Official STN-LABZ repositories will maintain consistent organizational identification and repository presentation.
+
+STN-LABZ Link
+
+When STN-LABZ is identified as the organization responsible for a repository, the organizational name will link to the official STN-LABZ website using:
+
+markdown
+[STN-LABZ](https://www.stn-labz.com)
+
+
+Where an organizational attribution appears in a repository README, the standard form is:
+
+markdown
+Developed by [STN-LABZ](https://www.stn-labz.com).
+
+
+Unofficial, obsolete, or project-specific domains will not substitute for the primary STN-LABZ organizational link.
+
+Project-specific links may be included separately where applicable.
+
+The approved STN-LABZ mission statement may accompany the organizational attribution where appropriate:
+
+> Engineering systems worthy of trust when trust matters most.
+
+Repository Badges
+
+Repository README files will include badges that communicate applicable engineering and project-status information.
+
+Badges will:
+
+- Accurately represent the current repository state.
+- Communicate information relevant to the project.
+- Use concise and consistent labeling.
+- Avoid claims that have not been demonstrated.
+- Be updated when the represented condition changes.
+- Not imply qualification, security status, build success, release status, or operational readiness without supporting evidence.
+
+Appropriate badge subjects include, where applicable:
+
+- Implementation language.
+- Development status.
+- Architecture.
+- Supported platform.
+- License.
+- Build status when supporting build evidence exists.
+- Test status when supporting test evidence exists.
+- Qualification status when qualification has been successfully completed.
+
+Badge subjects that do not apply to a repository will not be required.
+
+Decorative, redundant, misleading, or unnecessary badges will not be introduced.
+
+The STN-LABZ KISS Theory applies to repository badges.
+
+Source-Control Integrity
+
+Repositories will preserve meaningful source-control history.
+
+Secrets, credentials, private keys, and other information prohibited from source control will not be committed.
+
+Files that constitute source or required engineering evidence will be deliberately preserved.
+
+Temporary, generated, local, or operational state will not enter source history without an established engineering requirement.
+
+Maintenance
+
+Repository documentation and control files will be reviewed when changes to the project materially affect repository requirements or behavior, including:
+
+- Introduction of new development languages.
+- Changes to build systems.
+- Creation of new generated artifacts.
+- Material repository-structure changes.
+- Changes to project status represented by repository badges.
+- Changes to organizational presentation requirements.
+- Operational or engineering evidence demonstrating that existing rules are insufficient.
+
+Changes will remain limited to demonstrated repository requirements.
+
+Engineering Principle
+
+Repository behavior and presentation will be explicit, predictable, accurate, and appropriate to the assigned project.
+
+Unnecessary repository complexity will not be introduced.
+
+References
+
+- 20260730.2 — STN-LABZ General Orders
+- 20260729.6 — Engineering Documentation
+- 20260801.1 — KISS Theory

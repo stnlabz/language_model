@@ -1,0 +1,3447 @@
+Input validation is the process of determining whether supplied data satisfies the requirements defined for that input.
+
+Applications receive input from many sources.
+
+Examples include:
+
+HTML forms.
+
+URLs.
+
+Query parameters.
+
+HTTP headers.
+
+Cookies.
+
+JSON requests.
+
+XML requests.
+
+API clients.
+
+Command-line arguments.
+
+Configuration files.
+
+Environment variables.
+
+Uploaded files.
+
+Databases.
+
+Message queues.
+
+Network protocols.
+
+Other applications.
+
+Hardware devices.
+
+Users.
+
+Do not assume input is trustworthy because it came from a familiar source.
+
+Input crossing a trust boundary must be treated according to the receiving system's requirements.
+
+A trust boundary is a point where data moves between components or contexts with different trust assumptions.
+
+Examples include:
+
+Browser to server.
+
+Client application to API.
+
+Internet to application.
+
+Application to database.
+
+Plugin to host application.
+
+External service to internal service.
+
+Configuration file to privileged process.
+
+Message queue to worker.
+
+User-controlled file to parser.
+
+Do not trust data merely because it is inside the application now.
+
+Its origin still matters.
+
+Input validation answers:
+
+Does this input satisfy the requirements for this field or operation?
+
+Validation does not answer:
+
+Is this user authorized?
+
+Is this input safe in every possible output context?
+
+Is this data true?
+
+Is this data trustworthy?
+
+Is this request legitimate?
+
+Keep these questions separate.
+
+Valid input can still be unauthorized.
+
+Valid input can still be malicious in another context.
+
+Valid input can still be factually false.
+
+Valid input can still violate a business rule.
+
+Validation establishes conformance to defined input requirements.
+
+A useful validation process is:
+
+Identify the expected input.
+
+Define its type.
+
+Define its format.
+
+Define its allowed values.
+
+Define its length or size constraints.
+
+Define its range where applicable.
+
+Define whether it is required.
+
+Define any structural relationships.
+
+Parse it.
+
+Validate it.
+
+Reject it if the requirements are not satisfied.
+
+Do not begin with arbitrary transformations intended to make unknown input acceptable.
+
+Know what valid input means first.
+
+Validation should be explicit.
+
+For example:
+
+Expected:
+
+Integer from 1 through 100.
+
+Valid:
+
+1
+
+42
+
+100
+
+Invalid:
+
+0
+
+101
+
+-5
+
+hello
+
+12.5
+
+The validation rule is clear.
+
+Do not write:
+
+if value looks roughly numeric, accept it.
+
+Define the accepted domain.
+
+Types matter.
+
+Common input types include:
+
+Boolean.
+
+Integer.
+
+Floating-point number.
+
+String.
+
+Enumeration.
+
+Date.
+
+Time.
+
+Timestamp.
+
+Identifier.
+
+Array.
+
+Object.
+
+Binary data.
+
+File.
+
+Do not treat every input as an arbitrary string forever.
+
+Parse into the intended type when appropriate.
+
+If an API requires an integer, validate an integer.
+
+Do not accept:
+
+"twelve"
+
+because application code might later convert it unpredictably.
+
+Type conversion can hide invalid input.
+
+For example:
+
+"12abc"
+
+might be partially interpreted as 12 by permissive conversion routines.
+
+Do not rely on implicit conversion.
+
+Use strict parsing where possible.
+
+Parsing and validation are related but distinct.
+
+Parsing determines whether input can be interpreted according to a grammar or representation.
+
+Validation determines whether the parsed value satisfies application requirements.
+
+For example:
+
+"2026-10-01"
+
+can parse as a date.
+
+The application can still reject it if only future dates are permitted.
+
+Syntactically valid does not mean semantically acceptable.
+
+Syntax describes structure.
+
+Semantics describe meaning.
+
+Validate both where required.
+
+A syntactically valid email-shaped string does not prove the mailbox exists.
+
+A syntactically valid IP address does not prove the address belongs to a trusted system.
+
+A syntactically valid user ID does not prove the requester may access that user.
+
+A syntactically valid URL does not prove the destination is permitted.
+
+Do not infer more than validation establishes.
+
+Allowlist validation defines what is accepted.
+
+For example:
+
+status must be one of:
+
+pending
+
+active
+
+disabled
+
+Anything else is rejected.
+
+This is preferable when the valid set is known.
+
+Do not attempt to enumerate every possible invalid status.
+
+Define the valid domain.
+
+A denylist identifies known prohibited values or patterns.
+
+Denylisting can be useful in selected contexts.
+
+It is generally weaker than defining the valid input when the valid domain is known.
+
+A denylist can miss new or unexpected forms.
+
+For example:
+
+Rejecting:
+
+<script>
+
+does not define valid HTML.
+
+Many other representations can exist.
+
+Do not build general input safety from a small list of bad strings.
+
+Prefer positive validation when possible.
+
+A field with a fixed vocabulary should use an enumeration.
+
+For example:
+
+method:
+
+GET
+
+POST
+
+PUT
+
+PATCH
+
+DELETE
+
+if those are the only accepted values for the application context.
+
+Reject unknown values.
+
+Do not silently interpret:
+
+POTS
+
+as:
+
+POST
+
+Validation should not guess intent.
+
+A boolean should have a defined representation.
+
+For example, an API can define:
+
+true
+
+false
+
+Do not accept arbitrary values such as:
+
+yes
+
+1
+
+on
+
+enabled
+
+unless the interface explicitly defines them.
+
+Different languages interpret truthiness differently.
+
+Explicit representation prevents ambiguity.
+
+An integer field should define range.
+
+For example:
+
+port:
+
+1 through 65535.
+
+Do not merely validate that it contains digits.
+
+999999 is digits.
+
+It is not a valid TCP or UDP port number.
+
+Type validation and range validation are separate.
+
+A quantity can require:
+
+minimum.
+
+maximum.
+
+Both.
+
+Neither.
+
+Define the actual domain.
+
+Do not use arbitrary limits without a requirement.
+
+Length validation constrains strings, arrays, files, or other collections.
+
+For example:
+
+username:
+
+1 through 64 characters.
+
+Do not allow unlimited input when the application has a finite requirement.
+
+Unbounded input can create:
+
+Memory pressure.
+
+Storage growth.
+
+Processing cost.
+
+Log flooding.
+
+Rendering problems.
+
+Protocol failures.
+
+Denial-of-service conditions.
+
+Set meaningful limits.
+
+Do not choose tiny limits that reject legitimate data merely for convenience.
+
+Validation should reflect the actual system.
+
+Character count and byte count are different.
+
+A Unicode string can contain characters represented by multiple bytes.
+
+If a protocol limits bytes, validate bytes.
+
+If an application limits characters, validate characters.
+
+Do not confuse the two.
+
+A database column size can be measured according to database semantics.
+
+Understand the storage model.
+
+Do not assume a 255-character application limit matches every database type automatically.
+
+Unicode requires deliberate handling.
+
+Input can contain:
+
+ASCII.
+
+Accented characters.
+
+CJK characters.
+
+Emoji.
+
+Combining characters.
+
+Other Unicode sequences.
+
+Do not reject non-ASCII input unless the specification requires ASCII.
+
+Do not assume one byte equals one character.
+
+Normalization can matter when equivalent-looking Unicode sequences have different binary representations.
+
+Unicode normalization can convert defined equivalent representations into a canonical form.
+
+Use normalization only when the application's semantics require it.
+
+Do not normalize blindly if exact byte preservation matters.
+
+Identifiers can have stricter rules than human-readable text.
+
+For example, a module slug can require:
+
+lowercase ASCII letters.
+
+digits.
+
+hyphen.
+
+Maximum length.
+
+That is valid if the identifier specification defines it.
+
+Do not apply identifier restrictions to ordinary prose fields without reason.
+
+Different fields require different validation.
+
+Do not create one universal string validator.
+
+A username is not an email address.
+
+An email address is not a filesystem path.
+
+A filesystem path is not a URL.
+
+A URL is not a shell argument.
+
+A shell argument is not SQL.
+
+Context matters.
+
+Validation should be field-specific.
+
+Regular expressions can validate some formats.
+
+They are not automatically the best tool for every input.
+
+Use a regular expression when the accepted language is appropriately expressed by one.
+
+Do not create enormous fragile expressions for formats that already have reliable parsers.
+
+A parser can be clearer.
+
+Regular expressions can also have performance risks.
+
+Certain expressions can exhibit excessive backtracking on crafted input.
+
+Keep expressions bounded and understandable.
+
+Do not accept a complex regular expression merely because it passes ordinary examples.
+
+Test adversarial lengths and patterns.
+
+A regular expression matching format does not establish meaning.
+
+For example:
+
+^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+
+can match:
+
+2026-99-99
+
+The string has the expected shape.
+
+It is not a valid calendar date.
+
+Use semantic validation after format validation.
+
+Dates should use defined formats.
+
+For example:
+
+YYYY-MM-DD
+
+If that is the interface contract, reject ambiguous alternatives unless explicitly supported.
+
+Do not guess whether:
+
+01/02/03
+
+means:
+
+January 2, 2003.
+
+February 1, 2003.
+
+January 2, 1903.
+
+Ambiguous date formats create errors.
+
+Use explicit formats.
+
+Validate actual calendar rules.
+
+February 30 is not valid.
+
+Leap years matter.
+
+Use reliable date libraries where appropriate.
+
+Time zones matter for timestamps.
+
+Define whether timestamps are:
+
+UTC.
+
+Offset-aware.
+
+Local to a specified zone.
+
+Do not accept ambiguous local times where the protocol requires a global instant.
+
+Daylight-saving transitions can create nonexistent or repeated local times.
+
+Use appropriate time representations.
+
+Do not invent timezone assumptions silently.
+
+Numeric validation should consider overflow.
+
+A value can contain valid digits and still exceed the receiving type.
+
+For example:
+
+999999999999999999999999999999999999
+
+may exceed a fixed-width integer.
+
+Check conversion errors.
+
+Check range.
+
+Do not allow overflow to wrap into another value.
+
+Signed and unsigned ranges differ.
+
+A negative value can be invalid for an unsigned quantity.
+
+Do not cast negative input to unsigned and accept the resulting large number.
+
+Validate before unsafe conversion.
+
+Floating-point values require care.
+
+NaN.
+
+Infinity.
+
+Negative infinity.
+
+Signed zero.
+
+Very large exponents.
+
+These can be accepted by some parsers.
+
+If the application requires ordinary finite numbers, explicitly require finite values.
+
+Do not assume every parsed floating-point value is suitable.
+
+Money should not casually use binary floating-point when exact decimal behavior is required.
+
+This is a representation issue beyond validation.
+
+Input validation should still enforce permitted monetary format and range.
+
+For example:
+
+Amount must be nonnegative.
+
+Amount must have no more than two decimal places if policy requires cents.
+
+Do not silently round arbitrary user input unless the interface defines rounding.
+
+Identifiers should be validated according to their actual format.
+
+A UUID should be parsed as a UUID if the system requires UUIDs.
+
+A hexadecimal digest should have the expected length and allowed characters.
+
+A database integer ID should be validated as the correct integer domain.
+
+Do not accept arbitrary strings as identifiers and hope downstream code rejects them.
+
+An identifier being valid does not establish that the resource exists.
+
+Existence is another check.
+
+Existence does not establish authorization.
+
+Authorization is another check.
+
+For example:
+
+Input: document_id=42.
+
+Validation:
+
+42 is a valid identifier.
+
+Lookup:
+
+Document 42 exists.
+
+Authorization:
+
+Requester may or may not access document 42.
+
+Keep the sequence clear.
+
+Validation is not authorization.
+
+Ownership is not established by input.
+
+A request can contain:
+
+user_id=42
+
+That does not prove the requester is user 42.
+
+Authentication establishes the principal.
+
+Do not trust identity fields supplied by the client as requester identity.
+
+The client can identify a target.
+
+The server identifies the actor from trusted authentication state.
+
+Input validation cannot repair a broken trust model.
+
+If a client is allowed to submit:
+
+role=administrator
+
+validation can confirm that administrator is a recognized role.
+
+That does not mean the client is authorized to assign it.
+
+A perfectly valid unauthorized value must still be rejected by authorization.
+
+Valid is not permitted.
+
+This distinction is critical.
+
+Business-rule validation determines whether input makes sense within application state.
+
+For example:
+
+Requested quantity is 10.
+
+The field permits integers from 1 through 100.
+
+Input validation succeeds.
+
+Inventory contains only 3 units.
+
+Business rule rejects the transaction.
+
+Do not overload syntax validation with every domain rule.
+
+Keep layers understandable.
+
+Cross-field validation evaluates relationships between inputs.
+
+For example:
+
+start_date must not be after end_date.
+
+password_confirmation must equal password.
+
+minimum must not exceed maximum.
+
+If fields are individually valid but collectively inconsistent, reject the request.
+
+Do not validate fields only in isolation when relationships matter.
+
+Conditional fields can depend on other fields.
+
+For example:
+
+If shipping_method is delivery, delivery_address is required.
+
+If authentication_method is certificate, certificate identifier is required.
+
+Define these dependencies.
+
+Do not accept incomplete combinations.
+
+Structured input requires structural validation.
+
+JSON can contain:
+
+Objects.
+
+Arrays.
+
+Strings.
+
+Numbers.
+
+Booleans.
+
+Null.
+
+A valid JSON document can still violate the API schema.
+
+For example:
+
+{"age":"twenty"}
+
+is valid JSON.
+
+If age must be an integer, the request is invalid for that API.
+
+JSON syntax validation is not application validation.
+
+Define the expected JSON structure.
+
+Reject missing required fields.
+
+Reject wrong types.
+
+Reject invalid values.
+
+Decide how unknown fields are handled.
+
+Do not ignore unexpected security-sensitive fields casually.
+
+An API can reject unknown fields.
+
+This makes contracts strict and catches client errors.
+
+Another API can permit unknown fields for compatibility.
+
+That is a deliberate protocol decision.
+
+Do not accidentally accept unknown fields because the parser happens to preserve them.
+
+Mass assignment is dangerous when arbitrary input fields map directly to object properties.
+
+Suppose an API expects:
+
+display_name
+
+email
+
+but receives:
+
+display_name
+
+email
+
+is_admin
+
+If the model blindly assigns all fields, a client can modify protected state.
+
+Use explicit field allowlists.
+
+Validation should define which fields are accepted.
+
+Do not expose internal model structure directly as an input contract.
+
+An object can contain fields the client may read but not write.
+
+Readability and writability are separate.
+
+For example:
+
+id
+
+created_at
+
+owner_id
+
+role
+
+can be returned in responses.
+
+They do not necessarily belong in update requests.
+
+Define writable fields explicitly.
+
+Missing and null are different.
+
+In JSON:
+
+field absent
+
+is different from:
+
+"field": null
+
+An update API can interpret these differently.
+
+For example:
+
+Absent means unchanged.
+
+Null means clear the value.
+
+Define semantics.
+
+Do not collapse them accidentally.
+
+Empty string can also be distinct from null.
+
+For example:
+
+""
+
+may mean intentionally blank.
+
+null may mean no value.
+
+Field absent may mean no update.
+
+Know the application's model.
+
+Whitespace handling should be deliberate.
+
+For human-entered names, trimming leading and trailing whitespace can be reasonable.
+
+For passwords, automatically trimming whitespace can change the credential.
+
+For cryptographic material, whitespace can be meaningful depending on format.
+
+Do not apply global trim() to every field.
+
+Normalization is field-specific.
+
+Sanitization is not the same as validation.
+
+Validation asks whether input meets requirements.
+
+Sanitization transforms data.
+
+For example:
+
+Removing characters.
+
+Replacing characters.
+
+Normalizing whitespace.
+
+Stripping markup.
+
+A transformation can change the user's input.
+
+Do not silently sanitize malformed input into something different unless the interface defines that behavior.
+
+Rejecting invalid input is often clearer.
+
+For example, username specification allows:
+
+a-z
+
+0-9
+
+_
+
+Input:
+
+alice<script>
+
+Do not automatically transform it into:
+
+alicescript
+
+That may create an unintended username.
+
+Reject it.
+
+Let the requester provide valid input.
+
+Sanitization can be appropriate for specific transformations.
+
+For example:
+
+Canonical line endings.
+
+Defined Unicode normalization.
+
+Removing formatting from a field explicitly defined as plain text.
+
+But transformation rules should be known.
+
+Do not use sanitization as a vague security ritual.
+
+Escaping is not validation.
+
+Escaping prepares data for a specific output or interpreter context.
+
+Examples include:
+
+HTML escaping.
+
+SQL parameter binding.
+
+Shell argument handling.
+
+URL encoding.
+
+JSON encoding.
+
+Each context has different rules.
+
+Validating input does not eliminate the need for safe output handling.
+
+A valid name can contain:
+
+O'Connor
+
+The apostrophe is valid data.
+
+SQL must still handle it safely.
+
+Do not reject apostrophes merely to avoid SQL injection.
+
+Use parameterized queries.
+
+Input validation and SQL injection prevention are complementary.
+
+Validation limits accepted input according to business requirements.
+
+Parameterized SQL separates data from SQL syntax.
+
+Do not construct SQL by concatenating validated strings and assume validation makes it safe.
+
+Use the database interface correctly.
+
+For example:
+
+A numeric ID validated as an integer can reduce injection risk.
+
+Still use parameter binding.
+
+Defense should follow the interpreter boundary.
+
+HTML output requires context-appropriate encoding.
+
+A comment field can legitimately contain:
+
+<
+
+>
+
+&
+
+quotes.
+
+If arbitrary plain text is allowed, these characters are valid.
+
+When rendering the text into HTML, escape it.
+
+Do not permanently replace characters during input merely because they are special in HTML.
+
+Store data according to application requirements.
+
+Encode for output context.
+
+Output encoding should happen as close as practical to the output boundary.
+
+Do not HTML-escape a value before storing it unless storage semantics explicitly require escaped HTML.
+
+Otherwise the value can become double-encoded or unsuitable for other output formats.
+
+Store canonical data.
+
+Encode for the destination.
+
+JavaScript contexts require different escaping than HTML text contexts.
+
+HTML attributes have different concerns.
+
+URLs have different encoding.
+
+CSS contexts differ again.
+
+Do not create one universal escape() function and use it everywhere.
+
+Context determines safe encoding.
+
+Shell commands are interpreter boundaries.
+
+Input validation can constrain expected values.
+
+Do not build shell commands through untrusted string concatenation.
+
+Use APIs that pass arguments separately where possible.
+
+If a field represents a known operation, use an allowlist.
+
+For example:
+
+operation must be:
+
+start
+
+stop
+
+status
+
+Do not allow arbitrary command text.
+
+Validation should reduce the input language to what the application actually needs.
+
+Filesystem paths require special care.
+
+A filename is not necessarily a safe path.
+
+Input such as:
+
+../../etc/passwd
+
+can be syntactically valid text.
+
+If the application expects a simple filename, define a simple filename grammar.
+
+If the application accepts paths, canonicalize and constrain them according to the intended root.
+
+Do not merely search for "../".
+
+Alternate separators and encodings can exist.
+
+Use platform-aware path handling.
+
+Path canonicalization resolves representations into a consistent path form according to filesystem rules.
+
+Validation can then verify the resolved path remains within the permitted root.
+
+Do not authorize based solely on the raw path string.
+
+For example:
+
+Requested path.
+
+Join with permitted root.
+
+Resolve canonical path.
+
+Verify canonical path remains inside permitted root.
+
+Then apply authorization.
+
+Do not allow canonicalization to escape the intended directory.
+
+Symbolic links can complicate filesystem containment.
+
+A path can appear inside an allowed directory while a symbolic link points elsewhere.
+
+If the threat model includes this, resolve according to filesystem semantics and policy.
+
+Do not claim string prefix checking alone provides filesystem confinement.
+
+Filename extensions are not reliable file-type evidence.
+
+A file named:
+
+photo.jpg
+
+can contain non-image data.
+
+Validate uploaded files according to actual requirements.
+
+Possible checks include:
+
+Size.
+
+Filename.
+
+Extension if relevant.
+
+MIME information.
+
+Magic bytes or file signature.
+
+Parser success.
+
+Image dimensions.
+
+Archive structure.
+
+Other format-specific properties.
+
+No single check proves universal safety.
+
+Define what the application requires.
+
+Do not trust the browser-supplied Content-Type header as definitive file type.
+
+It is client input.
+
+It can be useful metadata.
+
+Validate content where required.
+
+Uploaded filenames are client-controlled.
+
+Do not use them directly as trusted filesystem paths.
+
+Generate server-side storage names where appropriate.
+
+Preserve original filenames only as metadata if needed.
+
+Validate them before display.
+
+Do not let an uploaded filename overwrite arbitrary server files.
+
+Upload size should be limited.
+
+Limits can exist at multiple layers:
+
+Reverse proxy.
+
+Web server.
+
+Application runtime.
+
+Application code.
+
+Storage system.
+
+Know which limit is authoritative.
+
+Do not accept unlimited uploads and attempt validation only after storing enormous data in memory.
+
+Reject oversized input as early as practical.
+
+Streaming validation can help for large inputs.
+
+Do not load a multi-gigabyte body into memory merely to determine it exceeds the permitted size.
+
+Enforce transport and application limits.
+
+Archives require special care.
+
+A small compressed archive can expand into enormous data.
+
+Validate:
+
+Compressed size.
+
+Uncompressed size.
+
+Entry count.
+
+Entry paths.
+
+Compression ratio where relevant.
+
+Do not extract arbitrary archives blindly.
+
+Archive entries can contain path traversal.
+
+Validate extraction paths.
+
+Do not allow:
+
+../../target
+
+to escape the extraction directory.
+
+Parsers should have bounded resource use.
+
+Complex input can consume CPU or memory even when structurally valid.
+
+Examples include:
+
+Deeply nested JSON.
+
+Huge arrays.
+
+Pathological XML.
+
+Complex regular-expression input.
+
+Large multipart requests.
+
+Malformed compressed data.
+
+Define structural limits.
+
+Maximum nesting depth.
+
+Maximum collection size.
+
+Maximum body size.
+
+Maximum field count.
+
+Do not assume valid syntax means safe resource consumption.
+
+XML parsers can have features that are unnecessary or dangerous in some contexts.
+
+Configure parsers according to application requirements.
+
+Do not enable external entity processing unless required and safely designed.
+
+Use secure parser settings.
+
+Do not parse more language than necessary.
+
+General rule:
+
+Reduce accepted complexity.
+
+If the application needs simple JSON, do not accept arbitrary serialized objects.
+
+If it needs plain text, do not accept executable markup.
+
+If it needs an integer, do not accept expressions.
+
+Smaller input languages are easier to validate.
+
+Protocol messages should be validated before processing.
+
+Check:
+
+Message length.
+
+Version.
+
+Message type.
+
+Required fields.
+
+Field types.
+
+Ranges.
+
+Checksums or integrity fields where protocol-defined.
+
+Sequence or state where protocol-defined.
+
+Do not execute actions based on partially parsed malformed messages.
+
+A parser should distinguish:
+
+Incomplete input.
+
+Malformed input.
+
+Unsupported input.
+
+Valid input.
+
+These states can require different handling.
+
+Do not convert malformed input into defaults silently.
+
+Defaults can be appropriate for omitted optional values.
+
+They should not conceal invalid supplied values.
+
+For example:
+
+Optional limit absent -> default 20.
+
+limit=garbage -> reject.
+
+Do not interpret invalid as absent.
+
+This distinction catches errors and attacks.
+
+Unknown protocol versions should be handled according to protocol policy.
+
+Do not assume an unknown version is compatible.
+
+Reject unsupported versions or negotiate according to specification.
+
+Do not guess.
+
+Version fields should be validated before version-specific parsing where practical.
+
+Network length fields require bounds checking.
+
+If a message claims:
+
+payload_length = 4,000,000,000
+
+do not allocate memory blindly.
+
+Validate the declared length against protocol limits and available data.
+
+Integer overflow can occur when calculating buffer sizes.
+
+Check arithmetic.
+
+Do not trust length fields simply because they are part of a binary protocol.
+
+Binary input is still input.
+
+Validate magic values.
+
+Validate header sizes.
+
+Validate offsets.
+
+Validate counts.
+
+Validate indexes.
+
+Validate boundaries.
+
+Do not read beyond available data.
+
+Memory-safe languages reduce some consequences.
+
+They do not remove logical validation requirements.
+
+An invalid index can still crash or produce wrong behavior.
+
+C and C++ require especially careful bounds handling.
+
+Before copying input into a fixed-size buffer, establish the permitted size.
+
+Do not use unbounded copy operations on untrusted input.
+
+Validate lengths before arithmetic and allocation.
+
+Check return values from parsing functions.
+
+Do not assume parsing succeeded.
+
+For example, in C:
+
+strtol()
+
+can provide more controlled parsing than casual atoi() usage because errors and range can be examined.
+
+Use appropriate APIs.
+
+Do not rely on functions that provide no useful error detection when correctness matters.
+
+A successful parse should consume the intended input.
+
+For example:
+
+Input:
+
+123abc
+
+A parser can parse prefix 123 and stop at a.
+
+If the field requires a complete integer, reject remaining characters.
+
+Do not accept partial parsing accidentally.
+
+C string input can contain termination and length issues depending on source.
+
+Know whether data is NUL-terminated.
+
+Do not call string functions on arbitrary binary buffers without establishing termination.
+
+Input length and representation are part of validation.
+
+C++ streams and conversion functions also require error checking.
+
+Exceptions or fail states should be handled.
+
+Do not assume conversion succeeded because a value variable exists.
+
+C# parsing APIs commonly provide TryParse-style operations.
+
+Use explicit success results where appropriate.
+
+Do not catch every parsing exception and substitute zero.
+
+Zero can be a valid value and can hide malformed input.
+
+Go conversion functions return errors.
+
+Check them.
+
+Do not discard errors with blank identifiers when the input matters.
+
+JavaScript can perform surprising coercions.
+
+For example:
+
+Number("")
+
+can produce a numeric value.
+
+Loose equality can coerce types.
+
+Use explicit validation.
+
+Do not rely on JavaScript truthiness for security-sensitive input.
+
+PHP also performs type juggling.
+
+Values such as:
+
+"0"
+
+0
+
+false
+
+null
+
+""
+
+can behave differently depending on comparison.
+
+Use strict comparisons where required.
+
+Validate types explicitly.
+
+Do not use loose comparison as a substitute for input validation.
+
+SQL types can coerce values too.
+
+Do not depend on database coercion to validate application input.
+
+Validate before persistence.
+
+Database constraints should provide an additional integrity layer.
+
+For example:
+
+NOT NULL.
+
+CHECK.
+
+FOREIGN KEY.
+
+UNIQUE.
+
+Data type constraints.
+
+Application validation improves user-facing errors.
+
+Database constraints protect structural integrity.
+
+Use both where appropriate.
+
+Do not assume application validation can never be bypassed.
+
+Other code paths can write to the database.
+
+Database invariants can provide defense in depth.
+
+Validation rules should align with database constraints.
+
+If application allows 100 characters but database permits only 50, requests can fail unexpectedly.
+
+If database allows more than application, that can be intentional.
+
+Know the relationship.
+
+Do not let mismatched limits arise accidentally.
+
+Configuration input needs validation.
+
+Configuration files are often treated as trusted.
+
+They can still contain mistakes.
+
+Validate:
+
+Required keys.
+
+Types.
+
+Ranges.
+
+Paths.
+
+Ports.
+
+URLs.
+
+Modes.
+
+Unknown options.
+
+Do not let malformed configuration produce unpredictable runtime behavior.
+
+Fail clearly.
+
+A configuration error should not silently disable security.
+
+For example:
+
+auth_required = "flase"
+
+should not be interpreted as false because it resembles the word.
+
+Reject invalid configuration.
+
+Configuration should be deterministic.
+
+Environment variables are strings at the environment boundary.
+
+Parse them into required types.
+
+For example:
+
+PORT=18473
+
+can become an integer after validation.
+
+Do not assume:
+
+PORT=banana
+
+should become zero.
+
+Reject it.
+
+Boolean environment variables should have explicit accepted forms.
+
+Do not rely on language-specific truthiness.
+
+Command-line arguments should be validated.
+
+Check:
+
+Known options.
+
+Required values.
+
+Types.
+
+Ranges.
+
+Mutually exclusive options.
+
+Required combinations.
+
+Unknown flags.
+
+Do not silently ignore misspelled security options.
+
+For example:
+
+--require-auth
+
+misspelled as:
+
+--requre-auth
+
+should not silently run without authentication if the option is important.
+
+Reject unknown options where appropriate.
+
+File-based input should be validated after opening the intended file.
+
+A filename existing does not mean the file contains expected data.
+
+Read.
+
+Parse.
+
+Validate.
+
+Handle failure.
+
+Do not treat file extension as proof of format.
+
+Configuration loaded from JSON is still subject to schema validation.
+
+Database data can require validation when crossing into a component that cannot assume database integrity.
+
+Legacy data can be malformed.
+
+Manual database changes can violate old assumptions.
+
+External systems can populate tables.
+
+Do not blindly assume every database value is valid forever.
+
+Trust boundaries are architectural, not merely network boundaries.
+
+Data can become untrusted again when crossing component boundaries.
+
+Message queues contain messages from producers.
+
+Validate them at the consumer.
+
+Do not assume the queue guarantees message semantics.
+
+The queue can guarantee transport properties.
+
+The application defines message validity.
+
+A producer bug can emit malformed messages.
+
+A compromised producer can emit malicious messages.
+
+Consumers should enforce their own contract.
+
+Webhook payloads require both authenticity checks and input validation.
+
+Verify the sender according to the webhook protocol.
+
+Then validate the payload.
+
+A valid signature can authenticate the source.
+
+It does not prove the payload satisfies your application's expected schema.
+
+Authentication and validation are separate.
+
+Likewise, a perfectly valid payload from an unauthenticated source should not be trusted when authentication is required.
+
+Both checks matter.
+
+API responses from external services are input to your application.
+
+Validate assumptions.
+
+Do not assume third-party services always return the documented structure.
+
+They can:
+
+Change.
+
+Fail.
+
+Return errors.
+
+Return partial data.
+
+Be compromised.
+
+Have bugs.
+
+Check required fields before using them.
+
+Do not dereference expected fields blindly.
+
+Internal service responses can also be malformed.
+
+Trust can be higher.
+
+Validation requirements can be lighter depending on architecture.
+
+But protocol boundaries should remain explicit.
+
+Do not let one malformed internal message crash an entire system if reasonable validation can prevent it.
+
+Input validation errors should be controlled.
+
+Do not expose stack traces to ordinary clients.
+
+Return appropriate error information.
+
+For example:
+
+Invalid port.
+
+Missing required field.
+
+Unsupported status.
+
+Do not return secrets or internal paths in validation errors.
+
+Errors should help correct input without revealing unnecessary internals.
+
+Field-specific errors can improve usability.
+
+For example:
+
+username must be between 3 and 32 characters.
+
+This is better than:
+
+bad request
+
+when disclosure is safe.
+
+Security-sensitive validation can use less detailed external messages where needed.
+
+Internally preserve the actual reason.
+
+Validation failures can be logged selectively.
+
+Do not log entire malicious payloads blindly.
+
+Payloads can contain:
+
+Passwords.
+
+Tokens.
+
+Personal data.
+
+Huge data.
+
+Control characters.
+
+Terminal escape sequences.
+
+Log injection content.
+
+Record enough evidence without creating another vulnerability.
+
+Logs are an output context.
+
+Encode or structure logged values safely.
+
+Do not allow user input to forge log lines.
+
+Structured logging can help.
+
+For example, store user input as a field rather than concatenating it into an unstructured line.
+
+Still apply size limits.
+
+Do not log megabytes of rejected input.
+
+Validation failure should not mutate protected state.
+
+Validate before performing the operation.
+
+A request should not partially update a record and then discover the final field is invalid unless the operation explicitly supports partial behavior.
+
+Use transactional semantics where appropriate.
+
+For an atomic update:
+
+Validate all input.
+
+Authorize.
+
+Apply business rules.
+
+Perform the state change.
+
+Commit.
+
+If validation fails, no state change occurs.
+
+Do not leave half-applied operations.
+
+PATCH semantics can intentionally apply partial field updates.
+
+That does not mean partially valid requests should unpredictably update some fields.
+
+Define behavior.
+
+Many APIs reject the entire malformed request.
+
+Some batch APIs return per-item results.
+
+The contract determines behavior.
+
+Be explicit.
+
+Validation order can matter.
+
+A useful general sequence is:
+
+Parse request structure.
+
+Validate required syntax and types.
+
+Authenticate if required.
+
+Identify target resources.
+
+Authorize the requested operation.
+
+Apply deeper business validation.
+
+Perform the operation.
+
+Exact order can vary.
+
+Do not perform expensive work on obviously malformed input.
+
+Do not reveal protected resource information through validation ordering where policy forbids it.
+
+For example, an unauthorized user may not need to know whether a private resource exists.
+
+Authorization and validation can interact.
+
+Design intentionally.
+
+Do not turn ordering into dogma.
+
+The security requirement is that no protected effect occurs without required validation and authorization.
+
+Validation can happen at multiple layers.
+
+Client-side validation.
+
+Server-side validation.
+
+Database constraints.
+
+Protocol parser validation.
+
+Client-side validation improves user experience.
+
+It is not authoritative for server operations.
+
+Users can bypass JavaScript.
+
+Clients can call APIs directly.
+
+Requests can be modified.
+
+Always enforce required validation on the authoritative side.
+
+Do not rely on:
+
+required HTML attribute.
+
+maxlength HTML attribute.
+
+JavaScript form validation.
+
+disabled controls.
+
+These are useful UI features.
+
+They are not server security.
+
+The server must validate again.
+
+Duplicate validation logic can drift.
+
+Where practical, share schemas or validation definitions.
+
+Do not sacrifice server independence merely to avoid duplication.
+
+The server must remain capable of rejecting invalid requests.
+
+Client validation can mirror server rules.
+
+The server is authoritative.
+
+Schema validation can define structured contracts.
+
+Examples include:
+
+JSON Schema.
+
+Protocol schemas.
+
+Typed request models.
+
+Database schemas.
+
+A schema can validate:
+
+Required fields.
+
+Types.
+
+Ranges.
+
+Patterns.
+
+Enumerations.
+
+Structure.
+
+It may not express every business rule.
+
+Use additional validation where required.
+
+Do not assume schema success means the operation is authorized or semantically valid.
+
+Generated validators can reduce repetitive code.
+
+Review their behavior.
+
+Know how they handle:
+
+Unknown fields.
+
+Type coercion.
+
+Defaults.
+
+Null.
+
+Formats.
+
+Numeric boundaries.
+
+Do not assume generated code implements the policy you intended.
+
+Strict mode is often preferable for security-sensitive input.
+
+For example:
+
+Expected integer 42.
+
+Input string "42".
+
+A strict API can reject it.
+
+A coercing API can convert it.
+
+Either can be valid design.
+
+Define which behavior applies.
+
+Do not allow accidental coercion.
+
+Coercion can create ambiguous values.
+
+For example:
+
+"false"
+
+can become true in some truthiness systems because the string is nonempty.
+
+Explicit parsing prevents this.
+
+Canonicalization converts multiple representations into one chosen representation.
+
+For example:
+
+Case normalization for case-insensitive identifiers.
+
+Path resolution.
+
+Unicode normalization.
+
+IP address normalization.
+
+Canonicalization should happen before comparisons that depend on equivalent representation.
+
+Do not validate one representation and then compare another without understanding the transformation.
+
+Canonicalization can introduce security problems if different components canonicalize differently.
+
+One component can approve input.
+
+Another can interpret it differently.
+
+This is a parser differential.
+
+Use consistent parsing rules across trust boundaries where possible.
+
+Do not decode repeatedly.
+
+Double decoding can turn previously harmless-looking data into dangerous syntax.
+
+For example, percent-encoded data can change meaning after multiple decode passes.
+
+Define where decoding occurs.
+
+Decode once according to protocol.
+
+Validate the resulting representation.
+
+Do not repeatedly decode until nothing changes.
+
+Multiple layers can decode automatically.
+
+Web server.
+
+Framework.
+
+Router.
+
+Application.
+
+Know which layer presents the final value.
+
+Do not apply assumptions based on the raw URL if the framework already decoded it.
+
+Test actual behavior.
+
+Canonicalization should precede allowlist comparison when equivalent forms are intended.
+
+For example, if an identifier is case-insensitive:
+
+Normalize according to the defined rule.
+
+Then compare against allowed identifiers.
+
+Do not use locale-dependent case conversion unexpectedly for protocol identifiers.
+
+Protocol tokens often use ASCII-specific rules.
+
+Follow the specification.
+
+Hostnames and domain names have canonicalization rules.
+
+URLs have complex parsing semantics.
+
+Use established URL parsers.
+
+Do not parse URLs with casual string splitting.
+
+For example:
+
+scheme://host:port/path
+
+can contain many valid variations.
+
+If security depends on host validation, inspect the parser's canonical host result.
+
+Do not search the raw string for an allowed hostname.
+
+A malicious URL can contain an allowed hostname in:
+
+User information.
+
+Path.
+
+Query.
+
+Fragment.
+
+The actual destination host can be different.
+
+For server-side request functionality, validate destination policy carefully.
+
+If only specific hosts are allowed, compare parsed canonical hosts against the allowlist.
+
+Resolve additional network concerns according to the application's threat model.
+
+Do not assume a valid URL is an authorized destination.
+
+Email validation is frequently overcomplicated.
+
+If the application needs an email address:
+
+Apply a reasonable parser or framework validator.
+
+Enforce application length requirements.
+
+Use verification mail if mailbox control must be established.
+
+Do not attempt to prove mailbox existence from syntax.
+
+Do not reject valid addresses because of an oversimplified homemade regular expression unless the application intentionally supports a narrower format.
+
+Validation should match the contract.
+
+Passwords should generally permit broad character sets.
+
+Do not reject characters merely because they are special to SQL, HTML, or shells.
+
+Passwords are data.
+
+Handle them safely at interpreter boundaries.
+
+Password validation can enforce:
+
+Minimum length.
+
+Maximum processing length.
+
+Other explicitly defined policy.
+
+Do not silently trim passwords.
+
+Do not normalize passwords unless the authentication specification explicitly defines normalization.
+
+Changing password bytes changes the credential.
+
+Username validation can be narrower if usernames are protocol identifiers.
+
+Display names can be broader.
+
+Do not apply username grammar to display names.
+
+A person should not have to fit a machine identifier grammar unless the field is actually an identifier.
+
+Security questions, free-text descriptions, comments, and names are data.
+
+Do not remove punctuation simply because punctuation can be dangerous in an interpreter.
+
+Use safe output and query mechanisms.
+
+Validation should enforce semantic requirements, not compensate for unsafe coding.
+
+Input validation cannot make unsafe SQL concatenation a good design.
+
+Input validation cannot make eval() safe for arbitrary user expressions.
+
+Input validation cannot make shell concatenation safe for arbitrary command strings.
+
+Reduce interpreter exposure.
+
+Use structured APIs.
+
+Do not ask validation to solve problems created by unnecessary interpreters.
+
+Never pass untrusted input to eval() merely because a regular expression checked it unless the accepted language is rigorously defined and evaluation is truly required.
+
+Prefer direct parsing.
+
+A calculator should parse arithmetic according to a defined grammar rather than executing arbitrary language code.
+
+A configuration value should be parsed, not executed.
+
+Data is not code.
+
+Keep it that way.
+
+Template engines can interpret syntax.
+
+If users provide template content, define whether template execution is intended.
+
+Plain text should remain plain text.
+
+Do not accidentally convert user content into executable template syntax.
+
+Validation and escaping depend on the intended feature.
+
+Rich text is different from plain text.
+
+If HTML input is intentionally accepted, simple HTML escaping will display markup rather than render it.
+
+Rendering user HTML safely can require an HTML sanitizer with an explicit allowed element and attribute policy.
+
+This is a specialized case.
+
+Do not write an HTML sanitizer with a few string replacements.
+
+HTML parsing is complex.
+
+Use a maintained parser or sanitizer appropriate to the environment.
+
+If rich HTML is not required, accept plain text instead.
+
+Smaller feature surface is safer.
+
+Markdown is also input syntax.
+
+Rendering Markdown can produce HTML.
+
+The Markdown renderer and HTML handling configuration matter.
+
+If raw HTML is not required, disable it where supported.
+
+If generated HTML is displayed, understand the renderer's safety properties.
+
+Do not assume Markdown is automatically safe because it is not HTML source.
+
+Template output still needs context-aware handling.
+
+SQL identifiers are different from SQL values.
+
+Parameterized queries commonly parameterize values.
+
+They generally do not parameterize table names or column names.
+
+If a user can select a sort column, use an allowlist mapping.
+
+For example:
+
+input "name" -> known SQL identifier name
+
+input "created" -> known SQL identifier created_at
+
+Do not concatenate arbitrary user-supplied column names.
+
+Validation is especially important where parameterization does not apply.
+
+Sort direction can use an allowlist:
+
+asc
+
+desc
+
+Do not append arbitrary sort strings to SQL.
+
+Pagination input should validate:
+
+offset.
+
+limit.
+
+Maximum limit.
+
+Do not allow negative offsets or enormous limits unless intentionally supported.
+
+Large valid-looking values can create resource abuse.
+
+Set operational bounds.
+
+Search queries can have length limits.
+
+Do not accept megabytes of search text if the search engine is designed for short queries.
+
+Wildcards can have expensive semantics.
+
+If users are allowed wildcard searches, define and bound them.
+
+Do not accidentally expose raw regular-expression execution if plain search is intended.
+
+Regular-expression search is a distinct capability.
+
+If accepted, limit complexity and resource use.
+
+Graph traversal input can specify depth.
+
+Bound it.
+
+Recursive queries can explode in cost.
+
+A valid integer depth of 1,000,000 can be operationally invalid.
+
+Validation includes resource constraints.
+
+Array inputs should have maximum element counts.
+
+Each element should be validated.
+
+Do not validate only the array itself.
+
+For example:
+
+tags must be an array.
+
+Maximum 20 tags.
+
+Each tag must be a string.
+
+Each tag length 1 through 32.
+
+Each tag must satisfy tag grammar.
+
+Do not accept arbitrary nested objects where strings are expected.
+
+Duplicate values can be permitted or rejected according to semantics.
+
+If uniqueness matters, enforce it.
+
+Do not assume clients avoid duplicates.
+
+Maps or objects can have key constraints.
+
+Validate keys.
+
+Unknown keys can create injection-like behavior in dynamic systems.
+
+Do not use user-controlled object keys as method names, file paths, or database columns without a defined mapping.
+
+Prototype-related hazards can exist in some JavaScript object-processing patterns.
+
+Use safe object handling.
+
+Do not merge arbitrary untrusted objects into privileged configuration structures.
+
+Configuration merge operations can modify unexpected fields.
+
+Use explicit schemas.
+
+Deserialization is an input boundary.
+
+Serialized objects can contain more than plain data depending on the format.
+
+Do not deserialize untrusted native object formats that can instantiate arbitrary classes or execute hooks.
+
+Prefer data-only formats such as JSON when appropriate.
+
+Even JSON requires structural validation.
+
+Do not equate data-only syntax with trusted data.
+
+Binary serialization libraries can have schemas.
+
+Use them.
+
+Validate lengths and field constraints beyond the serialization layer where needed.
+
+A successfully decoded protocol buffer or similar message can still contain semantically invalid values.
+
+Decoding is not complete validation.
+
+File parsers can have vulnerabilities.
+
+Keep libraries updated according to project policy.
+
+Limit parser privileges.
+
+Limit file sizes.
+
+Reject unsupported formats.
+
+Do not process arbitrary files merely because a parser exists.
+
+The application's accepted format list should be explicit.
+
+Image processing should validate dimensions.
+
+A compressed image can decode into enormous memory.
+
+File size alone may not represent decoded resource cost.
+
+Check dimensions before allocating large buffers where libraries allow.
+
+Do not assume a 1 MB image is cheap to decode.
+
+Document formats can contain embedded content.
+
+If the application only needs text extraction, use a process designed for that purpose and limit capabilities.
+
+Do not execute macros.
+
+Do not launch embedded programs.
+
+Parsing and execution are different.
+
+Input should remain data.
+
+Network addresses require proper parsers.
+
+IPv4 and IPv6 have different textual forms.
+
+Do not validate IP addresses with simplistic dot-counting.
+
+Use platform parsing functions.
+
+If a subnet is required, parse CIDR notation properly.
+
+Do not assume string prefixes represent network membership.
+
+Network comparisons should operate on parsed addresses and masks.
+
+Port numbers require integer range validation.
+
+Hostnames require hostname rules if hostnames are expected.
+
+A hostname is not an arbitrary URL.
+
+Keep types distinct.
+
+MAC addresses, UUIDs, hashes, public keys, and other structured identifiers each have their own grammar.
+
+Use format-specific parsers.
+
+Do not create one generic "identifier sanitizer."
+
+Cryptographic input requires strict length and format checks.
+
+For example:
+
+Hash digest.
+
+Signature.
+
+Public key.
+
+Nonce.
+
+Initialization vector.
+
+Do not truncate malformed cryptographic input to the expected length.
+
+Reject it.
+
+Cryptographic protocols depend on exact representations.
+
+Do not silently pad or modify values unless the protocol defines it.
+
+Base64 decoding can fail.
+
+Check the result.
+
+Do not assume any string composed of familiar characters is valid Base64.
+
+Strict decoding can reject malformed input.
+
+After decoding, validate expected byte length.
+
+Encoding validity and semantic validity are separate.
+
+Hex input should define:
+
+Allowed case if relevant.
+
+Even number of digits where required.
+
+Exact length where required.
+
+Do not ignore invalid characters.
+
+Do not silently drop whitespace unless the format permits it.
+
+Checksums can detect accidental corruption.
+
+They do not generally authenticate input.
+
+A valid checksum does not mean trusted sender.
+
+Do not confuse integrity checks intended for transmission errors with cryptographic authentication.
+
+Digital signatures can authenticate data according to the signature system.
+
+Signature verification occurs in addition to structural validation.
+
+Malformed signed content can still be malformed.
+
+A valid signature means the signer signed those bytes.
+
+It does not mean the application should accept every possible signed message.
+
+Validate protocol semantics.
+
+Authentication does not replace validation.
+
+Trusted users make mistakes.
+
+Trusted systems have bugs.
+
+Signed messages can contain invalid values.
+
+Validate at the receiving boundary.
+
+Validation rules can evolve.
+
+Changing a rule can make old stored data invalid under new rules.
+
+Plan migrations where necessary.
+
+Do not suddenly reject existing persistent records without understanding impact.
+
+Input validation for new writes can be stricter than legacy stored data during migration.
+
+Keep the distinction explicit.
+
+Backward compatibility can require accepting multiple known formats.
+
+For example:
+
+Protocol version 1.
+
+Protocol version 2.
+
+Parse the declared version.
+
+Apply that version's validation rules.
+
+Do not create one permissive parser that accepts arbitrary mixtures.
+
+Versioned contracts should remain deterministic.
+
+Forward compatibility can permit unknown optional fields.
+
+If so, define that behavior.
+
+Do not allow unknown fields to alter security decisions.
+
+Security-sensitive fields should be recognized explicitly.
+
+Unknown critical fields can require rejection.
+
+Protocol design can mark critical extensions.
+
+Follow the protocol.
+
+Validation should happen every time data enters a new authoritative context if prior validation cannot be relied upon.
+
+Do not repeatedly validate identical immutable internal data without reason.
+
+Trust can be established within a component.
+
+But know where that trust begins and ends.
+
+A function can document preconditions.
+
+For example:
+
+parse_port(raw_string) returns a validated port.
+
+Downstream code can accept the typed port without reparsing.
+
+Typed interfaces can reduce repeated validation.
+
+Use types to represent established invariants.
+
+For example:
+
+RawString
+
+ValidatedUsername
+
+PortNumber
+
+DocumentId
+
+These can make invalid states harder to represent.
+
+Not every language supports strong custom types conveniently.
+
+The principle remains useful.
+
+Validate once at a clear boundary.
+
+Preserve the validated representation.
+
+Do not convert it back into ambiguous raw strings unnecessarily.
+
+Validation functions should have predictable results.
+
+For example:
+
+validate_username(input)
+
+returns success with validated value.
+
+or failure with defined error.
+
+Do not make validators perform unrelated database writes.
+
+Keep validation functions focused where practical.
+
+Pure validation functions are easier to test.
+
+Business validation can require database state and therefore cannot always be pure.
+
+Separate structural validation from state-dependent checks.
+
+This improves reasoning.
+
+Validation code should not silently repair input unless specified.
+
+For example:
+
+Port 70000.
+
+Do not clamp it to 65535.
+
+Reject it.
+
+Age -1.
+
+Do not convert it to 0.
+
+Reject it.
+
+Unknown enum.
+
+Do not choose the first option.
+
+Reject it.
+
+Silent correction hides errors.
+
+Defaults are for absent optional values, not malformed supplied values unless explicitly defined.
+
+Validation should preserve evidence.
+
+If input is rejected, logs or diagnostics can record the reason according to policy.
+
+Do not rewrite history to claim different input was supplied.
+
+If normalization occurs, distinguish original input from normalized value where evidence requirements justify it.
+
+Do not store sensitive original values unnecessarily.
+
+Balance evidence with data minimization.
+
+Validation error messages should use the application's terminology.
+
+If the field is called:
+
+RPC Port
+
+say:
+
+RPC Port must be between 1 and 65535.
+
+Do not expose implementation variable names unnecessarily.
+
+Clear errors improve correction.
+
+APIs can return structured errors.
+
+For example:
+
+field.
+
+error code.
+
+human-readable message.
+
+Do not make clients parse arbitrary prose to determine validation failure type.
+
+Stable error codes can improve integrations.
+
+Do not expose stack traces as error codes.
+
+Validation errors commonly correspond to client errors.
+
+Transport status codes depend on protocol.
+
+For HTTP, malformed or invalid requests often use 4xx responses.
+
+Exact status depends on application semantics.
+
+Do not choose status solely from habit.
+
+Use the defined API contract.
+
+Validation failure should not be reported as server success if the operation did not occur.
+
+Be truthful about result state.
+
+A rejected request is not a completed operation.
+
+Do not return success and silently discard invalid fields unless the API explicitly defines partial acceptance.
+
+Partial acceptance must be documented.
+
+Otherwise clients cannot know what happened.
+
+Deterministic behavior matters.
+
+The same invalid input under the same validation rules should produce the same acceptance decision.
+
+Do not randomly accept borderline input.
+
+Do not use AI probability as the sole validator for deterministic protocol fields.
+
+A model can classify natural language when classification is the intended feature.
+
+A model should not decide whether:
+
+port=70000
+
+is probably acceptable.
+
+The rule is deterministic.
+
+A model can assist in identifying suspicious free text.
+
+That is not a substitute for structural validation.
+
+Use deterministic checks for deterministic requirements.
+
+Input validation should not invent facts.
+
+If a field is missing, it is missing.
+
+Do not infer it from unrelated fields unless the protocol defines that derivation.
+
+If a date is ambiguous, reject it or apply an explicitly defined interpretation.
+
+Do not guess.
+
+If a value is outside range, reject it.
+
+Do not assume the user meant another value.
+
+If an enum is unknown, reject it.
+
+Do not choose the closest known word.
+
+Machine interfaces benefit from exactness.
+
+Human interfaces can offer correction suggestions.
+
+The submitted operation should still use validated values only.
+
+For example:
+
+Input:
+
+statuz=active
+
+The UI can suggest:
+
+Did you mean status?
+
+The server should not silently execute the request as if status was supplied unless that behavior is explicitly part of the interface.
+
+Suggestions are not validation success.
+
+Input validation testing should include valid values.
+
+Test ordinary values.
+
+Test minimum values.
+
+Test maximum values.
+
+Test optional omissions.
+
+Test every defined enum value.
+
+Also test invalid values.
+
+Below minimum.
+
+Above maximum.
+
+Wrong type.
+
+Wrong format.
+
+Empty value.
+
+Null.
+
+Missing required value.
+
+Excessive length.
+
+Malformed encoding.
+
+Unexpected fields.
+
+Duplicate fields where relevant.
+
+Boundary testing is essential.
+
+For a range 1 through 100, test:
+
+0
+
+1
+
+2
+
+99
+
+100
+
+101
+
+Do not test only 50.
+
+Bugs live at boundaries.
+
+For maximum length 64, test:
+
+63.
+
+64.
+
+65.
+
+Test bytes and characters according to the defined metric.
+
+Include multibyte Unicode when supported.
+
+Test empty input.
+
+Test whitespace-only input where relevant.
+
+Test embedded NUL where the interface can carry it.
+
+Test control characters where relevant.
+
+Test line breaks.
+
+Test malformed UTF-8 where raw bytes can reach the parser.
+
+Do not assume every input source produces valid text.
+
+Fuzz testing can discover parser failures.
+
+A fuzzer generates or mutates input to explore unexpected states.
+
+Fuzzing complements defined validation tests.
+
+It does not replace specifications.
+
+A crash found by fuzzing is evidence of a defect.
+
+A lack of crashes is not proof that validation is correct.
+
+Use both specification-driven tests and adversarial testing.
+
+Property-based testing can generate values around defined invariants.
+
+For example:
+
+Every accepted port is between 1 and 65535.
+
+Every rejected oversized username exceeds the defined limit.
+
+This can improve coverage.
+
+Do not use random tests without clear properties.
+
+Know what correctness means.
+
+Validation tests should confirm rejected input causes no protected state change.
+
+This is important.
+
+An endpoint can correctly return an error while having already modified something.
+
+Verify state.
+
+Do not test only response text.
+
+For security-sensitive input, test direct requests rather than only form behavior.
+
+Bypass client validation.
+
+Send malformed values manually.
+
+The server should reject them.
+
+This proves the authoritative validation exists.
+
+Test alternate content types if the endpoint accepts them.
+
+Do not protect JSON while leaving form-encoded input unvalidated.
+
+Every accepted representation should reach equivalent validation.
+
+Content-Type itself should be validated.
+
+If the endpoint accepts application/json, define behavior for other content types.
+
+Do not attempt to parse arbitrary bodies as JSON regardless of declared type unless that is explicitly intended.
+
+Content negotiation should be deterministic.
+
+Request body size should be bounded before expensive parsing where practical.
+
+Header sizes should also be bounded by server infrastructure.
+
+Do not allow unlimited headers.
+
+Cookie sizes are bounded by browsers but servers should still handle malformed or excessive cookie input safely.
+
+Query strings can be oversized.
+
+Use infrastructure and application limits.
+
+Do not depend on clients behaving politely.
+
+Repeated parameters need defined semantics.
+
+For example:
+
+?role=user&role=admin
+
+What value does the framework return?
+
+First?
+
+Last?
+
+Array?
+
+Undefined behavior?
+
+Parameter pollution can exploit differences between components.
+
+Define whether duplicate parameters are permitted.
+
+Reject ambiguous duplicates for scalar fields where practical.
+
+Do not let proxy and application disagree about which value is authoritative.
+
+Duplicate JSON object keys are another ambiguity.
+
+Different parsers can choose:
+
+First value.
+
+Last value.
+
+All values.
+
+Error.
+
+If duplicate keys can affect security-sensitive fields, use a parser or policy that rejects ambiguity where possible.
+
+Do not assume all JSON parsers behave identically.
+
+Parser differentials are dangerous at trust boundaries.
+
+Request smuggling and framing problems can arise when network components interpret message boundaries differently.
+
+These are protocol-level issues.
+
+Validation should use standards-compliant parsers and consistent framing rules.
+
+Do not write casual HTTP parsers for production security boundaries unless required and thoroughly specified.
+
+Use established implementations.
+
+Input validation should not rely on frontend labels.
+
+An HTML field labeled:
+
+Age
+
+can submit any string.
+
+The label does not constrain the protocol.
+
+The server sees bytes and parameters.
+
+Validate them.
+
+HTML input type attributes improve browsers' UI.
+
+For example:
+
+type="number"
+
+does not prove the server receives a valid number.
+
+Requests can be constructed manually.
+
+Server validation remains required.
+
+Hidden fields are still client input.
+
+For example:
+
+<input type="hidden" name="price" value="100">
+
+The user can modify it.
+
+Do not trust hidden price fields.
+
+Load authoritative price from server-side data.
+
+Hidden does not mean protected.
+
+Disabled form controls can be altered by custom requests.
+
+Readonly fields can be changed.
+
+CSS-hidden fields can be changed.
+
+JavaScript constants can be changed.
+
+The browser is not an authority boundary.
+
+Client input is client input.
+
+If a value must not be controlled by the client, do not derive authority from it.
+
+Server-generated values can be referenced through identifiers.
+
+Then load authoritative state server-side.
+
+For example:
+
+Client submits product_id.
+
+Server validates product_id.
+
+Server loads product.
+
+Server obtains authoritative price.
+
+Do not accept price as authoritative client input.
+
+Validation cannot turn client price into server truth.
+
+Similarly:
+
+Client submits account_id.
+
+Server validates identifier.
+
+Server authorizes access.
+
+Do not assume account_id equals authenticated account.
+
+Authentication state is authoritative.
+
+A checksum supplied by the same untrusted client as the data does not make the data trusted.
+
+The client can recompute the checksum.
+
+Use cryptographic authentication with a trusted key if source authenticity is required.
+
+Validation and authenticity are separate.
+
+Sequence numbers can be validated.
+
+They can detect replay or ordering issues according to protocol.
+
+Do not merely check that a sequence number is numeric.
+
+Compare it against expected protocol state.
+
+Stateful validation can depend on previous messages.
+
+For example:
+
+HELLO must occur before DATA.
+
+AUTH must succeed before protected command.
+
+CLOSE ends the session.
+
+A message can be structurally valid but invalid in the current protocol state.
+
+Reject invalid state transitions.
+
+Protocol validation includes state.
+
+State machines can express this clearly.
+
+Do not accept commands out of sequence because each message individually parses.
+
+Consensus systems require especially deterministic validation.
+
+Every participating implementation must agree on whether consensus-visible input is valid.
+
+Do not use locale-dependent parsing.
+
+Do not use platform-dependent integer behavior without specification.
+
+Do not use ambiguous floating-point calculations where exact consensus is required.
+
+Define serialization.
+
+Define ranges.
+
+Define canonical representations.
+
+Define rejection conditions.
+
+Same input must produce the same validity result across supported implementations.
+
+Consensus validation cannot be probabilistic.
+
+Platform-independent systems should produce identical validation outcomes for protocol-visible data.
+
+Do not accept a message on Windows that Linux rejects because path or integer parsing differed, unless the field is explicitly platform-specific and outside shared protocol semantics.
+
+Shared protocol validation should be platform-neutral.
+
+Validate network byte order according to protocol.
+
+Validate integer widths explicitly.
+
+Do not use native structure memory layout as a wire format.
+
+Padding and endianness can differ.
+
+Serialization is part of input contract.
+
+Memory alignment is not protocol validation.
+
+Decode explicitly.
+
+Check every boundary.
+
+Malformed input should not crash the process.
+
+A robust parser rejects it.
+
+Malformed input should not corrupt state.
+
+A robust operation validates before committing.
+
+Malformed input should not create authority.
+
+A robust authorization system remains separate.
+
+Malformed input should not cause arbitrary code execution.
+
+A robust implementation keeps data separate from interpreters.
+
+Malformed input should not cause unbounded resource consumption.
+
+A robust system applies limits.
+
+Validation is one layer.
+
+It works with:
+
+Authentication.
+
+Authorization.
+
+Safe parsing.
+
+Parameterized queries.
+
+Output encoding.
+
+Memory safety.
+
+Filesystem confinement.
+
+Rate limiting.
+
+Resource limits.
+
+Cryptographic verification.
+
+Business rules.
+
+Database constraints.
+
+Logging.
+
+Testing.
+
+Do not expect validation to replace all of them.
+
+A reliable input-validation system knows what input is expected.
+
+A reliable input-validation system knows the accepted type.
+
+A reliable input-validation system knows the permitted range.
+
+A reliable input-validation system knows the permitted structure.
+
+A reliable input-validation system rejects malformed values.
+
+A reliable input-validation system rejects unsupported values.
+
+A reliable input-validation system limits size.
+
+A reliable input-validation system does not trust client authority claims.
+
+A reliable input-validation system does not confuse valid with authorized.
+
+A reliable input-validation system does not confuse validation with escaping.
+
+A reliable input-validation system does not confuse sanitization with validation.
+
+A reliable input-validation system does not silently repair arbitrary malformed input.
+
+A reliable input-validation system uses deterministic rules.
+
+A reliable input-validation system does not guess.
+
+Do not confuse validation with authentication.
+
+Do not confuse validation with authorization.
+
+Do not confuse validation with sanitization.
+
+Do not confuse validation with escaping.
+
+Do not confuse validation with encoding.
+
+Do not confuse validation with normalization.
+
+Do not confuse validation with parsing.
+
+Do not confuse validation with business rules.
+
+Do not confuse validation with database constraints.
+
+Do not confuse valid syntax with valid semantics.
+
+Do not confuse a valid identifier with an existing resource.
+
+Do not confuse an existing resource with authorized access.
+
+Do not confuse a valid URL with an authorized destination.
+
+Do not confuse a valid filename with a safe filesystem path.
+
+Do not confuse a file extension with file content.
+
+Do not confuse Content-Type with proof of content.
+
+Do not confuse a signed message with a semantically valid message.
+
+Do not confuse a checksum with authentication.
+
+Do not confuse client-side validation with server-side enforcement.
+
+Do not confuse hidden input with trusted input.
+
+Do not confuse known format with trusted source.
+
+Do not confuse successful parsing with permission to act.
+
+When receiving scalar input:
+
+Determine the expected type.
+
+Parse strictly.
+
+Reject malformed representation.
+
+Check range.
+
+Check length where relevant.
+
+Check allowed values.
+
+Return a controlled error if invalid.
+
+Do not silently coerce unknown values.
+
+When receiving structured input:
+
+Check overall size.
+
+Parse using the defined format.
+
+Check required structure.
+
+Check field names.
+
+Check field types.
+
+Check required fields.
+
+Check optional fields.
+
+Check field-specific constraints.
+
+Check collection limits.
+
+Check cross-field relationships.
+
+Reject unsupported or ambiguous structures according to policy.
+
+Do not map arbitrary fields directly into privileged objects.
+
+When receiving an identifier:
+
+Validate its syntax and range.
+
+Resolve the target resource.
+
+Determine whether the resource exists.
+
+Authenticate the requester where required.
+
+Authorize access to that resource.
+
+Do not treat the identifier itself as authority.
+
+When receiving a file:
+
+Apply transport size limits.
+
+Treat the filename as untrusted metadata.
+
+Validate required file characteristics.
+
+Inspect content according to the accepted format.
+
+Apply parser resource limits.
+
+Generate safe storage paths.
+
+Authorize the operation.
+
+Store or process the file only after required checks succeed.
+
+Do not trust extension alone.
+
+When receiving a filesystem path:
+
+Determine whether paths are actually required.
+
+Parse using platform-appropriate path handling.
+
+Resolve or canonicalize according to policy.
+
+Constrain the result to the permitted root.
+
+Apply authorization.
+
+Reject escape attempts.
+
+Do not use raw string prefix assumptions as filesystem security.
+
+When receiving configuration:
+
+Parse the defined format.
+
+Reject unknown critical settings.
+
+Validate required keys.
+
+Validate types.
+
+Validate ranges.
+
+Validate relationships.
+
+Fail clearly on malformed security configuration.
+
+Do not silently choose insecure defaults because input was invalid.
+
+When receiving protocol data:
+
+Enforce maximum message size.
+
+Validate framing.
+
+Validate version.
+
+Validate type.
+
+Validate lengths.
+
+Validate counts.
+
+Validate offsets.
+
+Validate field ranges.
+
+Validate state transitions.
+
+Verify cryptographic integrity or authenticity where the protocol requires it.
+
+Reject malformed messages without changing protected state.
+
+Do not guess what malformed protocol data intended.
+
+When using validated data in SQL:
+
+Use parameterized queries.
+
+Do not rely on validation as the SQL security boundary.
+
+When using validated data in HTML:
+
+Apply context-appropriate output encoding.
+
+Do not rely on input filtering as the HTML security boundary.
+
+When using validated data in shell operations:
+
+Avoid shell interpretation where possible.
+
+Pass arguments through structured APIs.
+
+Use allowlists for defined operations.
+
+Do not rely on vague sanitization.
+
+When validation fails:
+
+Do not perform the protected operation.
+
+Return a controlled error.
+
+Record appropriate diagnostics.
+
+Do not expose secrets.
+
+Do not log unlimited attacker-controlled content.
+
+Do not silently substitute a different value unless the interface explicitly defines that behavior.
+
+When validation succeeds:
+
+Continue to authentication, authorization, business rules, or execution as required.
+
+Do not interpret validation success as universal permission.
+
+Validation establishes only that the input satisfies its defined input contract.
+
+Nothing more.
+
+The core question is:
+
+Does this supplied value belong to the set of values this interface explicitly accepts?
+
+If yes, validation succeeds.
+
+If no, reject it.
+
+If the required type cannot be established, reject it.
+
+If the format is malformed, reject it.
+
+If the value is outside the permitted range, reject it.
+
+If the structure is unsupported, reject it.
+
+If the input is ambiguous and the protocol does not define the ambiguity, reject it.
+
+If the application cannot determine whether the input satisfies the contract, do not guess.
+
+Valid means valid according to the defined contract.
+
+Valid does not mean trusted.
+
+Valid does not mean true.
+
+Valid does not mean authenticated.
+
+Valid does not mean authorized.
+
+Valid does not mean safe in every context.
+
+Validate what the input is.
+
+Then separately determine what the system is permitted to do with it.

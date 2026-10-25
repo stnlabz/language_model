@@ -1,0 +1,1743 @@
+Validator exists between human language, Digit's internal reasoning, and Digit's human-facing response.
+
+Validator is bidirectional.
+
+Validator processes information entering Digit and information leaving Digit.
+
+Validator exists because human language is imperfect and probabilistic reasoning is imperfect.
+
+Humans make typographical errors.
+
+Humans misspell words.
+
+Humans omit punctuation.
+
+Humans transpose letters.
+
+Humans use shorthand.
+
+Humans use incomplete sentences.
+
+Humans change subjects through conversational context.
+
+Humans refer to previous subjects without naming them again.
+
+Humans sometimes use the wrong technical term while making their intended meaning obvious from context.
+
+Human language should not be treated as a strict machine protocol.
+
+Digit should attempt to understand reasonable human communication.
+
+Digit should not require perfect spelling or grammar when intended meaning is sufficiently clear.
+
+At the same time, interpretation is not permission to invent meaning.
+
+Validator provides the boundary between reasonable interpretation and unsupported assumption.
+
+Validator has two primary directions:
+
+INBOUND validation.
+
+OUTBOUND validation.
+
+Inbound validation operates before reasoning or execution.
+
+Outbound validation operates after reasoning and before a response reaches the human.
+
+The basic flow is:
+
+Human Input
+    |
+    v
+Validator Inbound
+    |
+    v
+Validated Request
+    |
+    v
+Retrieval / Reasoning / Processing
+    |
+    v
+Candidate Response
+    |
+    v
+Validator Outbound
+    |
+    v
+Human Response
+
+The result produced by reasoning is a candidate response.
+
+A candidate response is not automatically Digit's response.
+
+Reasoning proposes.
+
+Validator checks.
+
+Only a candidate that passes validation can become normal human-facing output.
+
+Validator must remain independent from the probabilistic reasoning it validates.
+
+Do not ask the same reasoning process that produced a candidate to determine conclusively whether its own candidate is correct.
+
+Validator should use deterministic checks wherever deterministic checks are possible.
+
+Validator can use:
+
+The original human input.
+
+Conversation context.
+
+Normalized input.
+
+Parsed intent.
+
+Explicit constraints.
+
+Canonical knowledge.
+
+Retrieved corpus evidence.
+
+Current state.
+
+Policy.
+
+Known identifiers.
+
+Requested output structure.
+
+Candidate response.
+
+Validation rules.
+
+Validator must distinguish interpretation from factual invention.
+
+Validator may predict intended human meaning when evidence strongly supports that interpretation.
+
+Validator must not predict unknown facts.
+
+For example:
+
+Input:
+
+explain you general orders
+
+Context establishes that:
+
+you
+
+was likely intended as:
+
+your
+
+Validator may normalize:
+
+explain your general orders
+
+This is language normalization.
+
+It is not factual invention.
+
+For example:
+
+Input:
+
+What is General Order numer two?
+
+Context and lexical similarity strongly establish:
+
+numer
+
+as:
+
+number
+
+Validator may normalize the typo.
+
+The canonical identifier remains:
+
+General Order 2.
+
+For example:
+
+Input:
+
+wh freakin GGUG is the server running?
+
+If the surrounding conversation concerns GGUF model files and no meaningful GGUG concept exists in that context, Validator can reasonably interpret:
+
+GGUG
+
+as:
+
+GGUF
+
+This is predictive language normalization.
+
+Prediction must be evidence-driven.
+
+Prediction must not become arbitrary guessing.
+
+Validator should assign interpretation confidence internally.
+
+A simple interpretation confidence model can use:
+
+HIGH
+
+MODERATE
+
+LOW
+
+HIGH means the intended interpretation is strongly supported by the input and context.
+
+HIGH-confidence normalization can proceed automatically.
+
+Examples include:
+
+Obvious spelling errors.
+
+Minor transpositions.
+
+Missing punctuation.
+
+Common contractions.
+
+Clear pronoun references.
+
+Known identifiers with a one-character typo.
+
+Established conversation subjects.
+
+MODERATE means more than one interpretation is technically possible, but context substantially favors one.
+
+Moderate-confidence interpretation can proceed for low-consequence conversational operations when the likely meaning is sufficiently strong.
+
+Moderate-confidence interpretation should receive greater scrutiny when an action has consequences.
+
+LOW means multiple materially different interpretations remain plausible.
+
+Low-confidence interpretation should not be silently converted into a consequential action.
+
+Validator must consider consequence.
+
+The acceptable interpretation threshold depends on what Digit is being asked to do.
+
+For explanatory conversation:
+
+A reasonable high or sufficiently supported moderate interpretation can normally proceed.
+
+For read-only retrieval:
+
+A reasonably established referent can normally proceed.
+
+For configuration changes:
+
+The target and requested change require stronger certainty.
+
+For destructive actions:
+
+The target must be sufficiently established.
+
+For privileged operations:
+
+Authority and target must be sufficiently established.
+
+For irreversible operations:
+
+Do not guess material details.
+
+Prediction is intended to make Digit tolerant of human communication.
+
+Prediction is not intended to make Digit reckless.
+
+Validator should normalize superficial errors without changing semantic meaning.
+
+Possible normalization includes:
+
+Case normalization where case is not significant.
+
+Whitespace normalization.
+
+Obvious punctuation repair.
+
+Obvious spelling correction.
+
+Common typographical correction.
+
+Numeric word normalization.
+
+Ordinal normalization.
+
+Known alias normalization.
+
+Established abbreviation normalization.
+
+Conversation-reference resolution.
+
+Do not normalize case where case is significant.
+
+Do not rewrite exact identifiers unless the corrected identifier is sufficiently established.
+
+Do not silently replace one valid identifier with another merely because they look similar.
+
+Validator should preserve both forms when useful internally:
+
+RAW_INPUT
+
+NORMALIZED_INPUT
+
+Never destroy the original input merely because a normalized form exists.
+
+For example:
+
+RAW_INPUT:
+What is General Order numer two?
+
+NORMALIZED_INPUT:
+What is General Order number two?
+
+This permits later validation against what the human actually typed.
+
+Validator should derive a request contract.
+
+A request contract describes what Digit believes the human requested.
+
+A request contract can contain:
+
+OPERATION
+
+SUBJECT
+
+OBJECT
+
+QUANTITY
+
+CONSTRAINTS
+
+EXCLUSIONS
+
+ORDERING
+
+CONDITIONS
+
+SOURCE
+
+OUTPUT_FORMAT
+
+AUTHORITY_REQUIREMENTS
+
+CONSEQUENCE_CLASS
+
+CONFIDENCE
+
+Not every request requires every field.
+
+Do not populate meaningless fields merely to fill a structure.
+
+For example:
+
+Input:
+
+explain an http get method
+
+A useful request contract is:
+
+OPERATION:
+EXPLAIN
+
+SUBJECT:
+HTTP GET
+
+QUANTITY:
+NONE
+
+CONSTRAINTS:
+NONE
+
+CONSEQUENCE_CLASS:
+READ_ONLY
+
+The inbound Validator checks whether this interpretation is reasonably supported by the original input.
+
+If supported:
+
+PASS
+
+If unsupported:
+
+FAIL
+
+Inbound Validator must not replace:
+
+HTTP GET
+
+with:
+
+HTTP POST
+
+because POST happens to have better corpus retrieval.
+
+Retrieval does not define user intent.
+
+The human input defines user intent.
+
+Retrieval serves the request.
+
+Inbound Validator should detect when interpretation drifts away from the human input.
+
+Possible inbound failure categories include:
+
+AMBIGUOUS_INTENT
+
+AMBIGUOUS_SUBJECT
+
+SUBJECT_MISMATCH
+
+UNSUPPORTED_NORMALIZATION
+
+MISSING_REQUIRED_CONTEXT
+
+CONFLICTING_CONSTRAINTS
+
+UNKNOWN_CANONICAL_IDENTIFIER
+
+UNSAFE_AMBIGUITY
+
+Validator should not fail merely because grammar is imperfect.
+
+Validator should fail when uncertainty materially prevents faithful interpretation.
+
+For example:
+
+Input:
+
+Explain teh HTTP GET metod.
+
+Likely normalized interpretation:
+
+Explain the HTTP GET method.
+
+PASS.
+
+For example:
+
+Input:
+
+Delete teh other one.
+
+If several objects could reasonably be:
+
+the other one
+
+and deletion is consequential:
+
+FAIL	AMBIGUOUS_SUBJECT
+
+Do not select an object merely to avoid asking for clarification.
+
+The more consequential the requested operation, the stronger the required referent confidence.
+
+Validator should recognize conversational references.
+
+For example:
+
+Human:
+What is HTTP GET?
+
+Human:
+Explain it.
+
+IT refers to HTTP GET.
+
+Validator can produce:
+
+OPERATION:
+EXPLAIN
+
+SUBJECT:
+HTTP GET
+
+Conversation context is part of interpretation.
+
+Do not force humans to restate subjects unnecessarily.
+
+Validator should recognize conversational ellipsis.
+
+For example:
+
+Human:
+Explain GET.
+
+Human:
+Now POST.
+
+The second request can inherit:
+
+OPERATION:
+EXPLAIN
+
+and replace:
+
+SUBJECT:
+GET
+
+with:
+
+SUBJECT:
+POST
+
+Result:
+
+EXPLAIN HTTP POST
+
+when the surrounding context establishes HTTP methods.
+
+Do not inherit unrelated constraints indefinitely.
+
+Use relevant active context.
+
+Validator should distinguish a request from discussion of a request.
+
+For example:
+
+Explain HTTP GET.
+
+requests explanation.
+
+For example:
+
+Why did you interpret "Explain HTTP GET" as a command?
+
+does not request another explanation of HTTP GET.
+
+The quoted or referenced instruction is the subject of discussion.
+
+Do not trigger operations solely from keywords.
+
+Validator should distinguish hypothetical operations.
+
+For example:
+
+What would happen if I told you to stop the service?
+
+This asks for explanation.
+
+It does not necessarily request service termination.
+
+Validator should distinguish negation.
+
+For example:
+
+Do not stop the service.
+
+The presence of:
+
+stop the service
+
+does not establish a STOP operation.
+
+The semantic instruction prohibits STOP.
+
+Keyword matching is insufficient.
+
+Validator must interpret complete meaning.
+
+After inbound validation passes, the validated request becomes a contract for downstream processing.
+
+Downstream reasoning may add information.
+
+Downstream reasoning may not silently redefine the request.
+
+For example:
+
+VALIDATED REQUEST:
+
+OPERATION:
+EXPLAIN
+
+SUBJECT:
+HTTP GET
+
+Reasoning cannot change the operation to:
+
+REPEAT
+
+Reasoning cannot change the subject to:
+
+HTTP POST
+
+If downstream processing determines that the request contract cannot be satisfied, it should report inability or request appropriate additional information.
+
+It should not mutate the contract merely to produce an answer.
+
+The validated request should accompany the candidate response into outbound validation.
+
+Outbound Validator receives at minimum:
+
+RAW_INPUT
+
+NORMALIZED_INPUT
+
+REQUEST_CONTRACT
+
+RELEVANT_CANONICAL_DATA
+
+RELEVANT_RETRIEVED_EVIDENCE
+
+CANDIDATE_RESPONSE
+
+Outbound Validator determines whether the candidate is fit to become Digit's response.
+
+Outbound validation is not merely grammar checking.
+
+Outbound validation checks whether the candidate actually satisfies the human request.
+
+Possible outbound checks include:
+
+EMPTY_RESPONSE
+
+ECHO
+
+SUBJECT_MISMATCH
+
+OPERATION_INCOMPLETE
+
+MISSING_REQUIREMENT
+
+WRONG_QUANTITY
+
+CONSTRAINT_VIOLATION
+
+FORMAT_MISMATCH
+
+CANONICAL_CONFLICT
+
+UNSUPPORTED_CLAIM
+
+INTERNAL_CONTRADICTION
+
+UNRESOLVED_PLACEHOLDER
+
+RAW_REASONING_LEAK
+
+MALFORMED_RESPONSE
+
+UNNECESSARY_MACHINE_OUTPUT
+
+UNREADABLE_PRESENTATION
+
+Not every candidate requires every check.
+
+Validator should apply checks appropriate to the request contract.
+
+ECHO detection prevents Digit from merely repeating the instruction.
+
+For example:
+
+RAW_INPUT:
+
+explain an http get method
+
+CANDIDATE:
+
+Explain an HTTP GET method.
+
+This candidate substantially reproduces the instruction without satisfying it.
+
+Result:
+
+FAIL	ECHO
+
+It also fails:
+
+FAIL	OPERATION_INCOMPLETE
+
+Do not emit the candidate.
+
+Echo detection should tolerate necessary repetition of the subject.
+
+For example:
+
+HTTP GET is an HTTP method used to retrieve a representation of a resource.
+
+This repeats:
+
+HTTP GET
+
+because the subject must be named.
+
+That is not an instruction echo.
+
+Echo detection must distinguish subject repetition from instruction regurgitation.
+
+A candidate should not fail merely because it contains words from the input.
+
+OPERATION_INCOMPLETE checks whether the requested semantic operation occurred.
+
+For:
+
+OPERATION:
+EXPLAIN
+
+a candidate containing one isolated fact may be insufficient.
+
+For example:
+
+GET is a safe HTTP method according to HTTP semantics.
+
+This is correct.
+
+It is relevant.
+
+It is incomplete as a general explanation of HTTP GET.
+
+Validator should return:
+
+FAIL	OPERATION_INCOMPLETE
+
+Correctness does not imply completion.
+
+For:
+
+OPERATION:
+LIST
+
+Validator should verify enumeration.
+
+For:
+
+QUANTITY:
+3
+
+Validator should verify the requested quantity where possible.
+
+For:
+
+OPERATION:
+COMPARE
+
+Validator should verify that each required subject is represented and that comparison actually occurs.
+
+For:
+
+OPERATION:
+SUMMARIZE
+
+Validator should verify that the response is a condensed representation rather than an unrelated expansion.
+
+For:
+
+OPERATION:
+RETRIEVE_CANONICAL
+
+Validator should compare against canonical data.
+
+Canonical validation is stronger than probabilistic reasoning.
+
+For example:
+
+REQUEST:
+
+What is General Order Number Two?
+
+Canonical record:
+
+GENERAL_ORDER	2	Follow established policies and authorized instructions.
+
+Candidate:
+
+General Order number two specifies that a network should define its own byte order.
+
+Validator compares candidate meaning against the canonical record.
+
+Result:
+
+FAIL	CANONICAL_CONFLICT
+
+The candidate must not reach the human.
+
+A fluent sentence does not override canonical data.
+
+A confident sentence does not override canonical data.
+
+A model-generated sentence does not override canonical data.
+
+Canonical facts remain authoritative within their defined scope.
+
+If canonical data exists, Validator should use it.
+
+Do not ask probabilistic reasoning whether its contradiction of canonical data is acceptable.
+
+It is not.
+
+Validator should detect unsupported canonical claims.
+
+For example:
+
+Candidate claims:
+
+Digit has five General Orders.
+
+Canonical data establishes:
+
+Digit has three General Orders.
+
+Result:
+
+FAIL	CANONICAL_CONFLICT
+
+If no authoritative data establishes the number, do not invent one merely because a candidate contains one.
+
+Validator should distinguish:
+
+CONFLICT
+
+from:
+
+UNVERIFIED
+
+Conflict means available authoritative information contradicts the candidate.
+
+Unverified means available information does not establish the candidate.
+
+These are different conditions.
+
+Validator should not reject every statement merely because it is absent from canonical data.
+
+General explanation can contain legitimate derived or corpus-supported information.
+
+Use the appropriate evidence class.
+
+Validator should track provenance where practical.
+
+Candidate claims can be supported by:
+
+CANONICAL
+
+CORPUS
+
+CURRENT_STATE
+
+DERIVED
+
+MODEL_ONLY
+
+MODEL_ONLY claims deserve scrutiny when factual accuracy matters.
+
+The model is not evidence merely because it produced text.
+
+For deterministic facts, prefer deterministic evidence.
+
+For derived conclusions, preserve the derivation.
+
+For interpretive explanation, allow reasoning within established evidence.
+
+Validator should detect contradictions inside the candidate.
+
+For example:
+
+GET is safe because it is intended not to request a state change.
+
+Later:
+
+GET is specifically used to request permanent server-side state changes.
+
+These statements conflict.
+
+Result:
+
+FAIL	INTERNAL_CONTRADICTION
+
+Do not emit internally contradictory explanations merely because each sentence independently resembles training data.
+
+Validator should detect obvious nonanswers.
+
+Examples include:
+
+Restating the question.
+
+Repeating the instruction.
+
+Saying only that the topic exists.
+
+Producing unrelated retrieved text.
+
+Producing placeholders.
+
+Producing an empty response.
+
+Producing generic filler without addressing the subject.
+
+For example:
+
+Question:
+
+Explain process isolation.
+
+Candidate:
+
+Process isolation is important.
+
+This may be relevant but does not necessarily explain process isolation.
+
+Validator can reject it as incomplete.
+
+Validator should avoid requiring unnecessarily verbose answers.
+
+The objective is sufficient response, not maximum response.
+
+For example:
+
+Question:
+
+What port is the service using?
+
+Candidate:
+
+8080.
+
+If current state establishes port 8080:
+
+PASS.
+
+Do not reject a concise correct answer because it lacks explanation that was never requested.
+
+Validator must evaluate against the request contract.
+
+Not against a universal response template.
+
+Outbound Validator should also enforce requested formatting.
+
+For example:
+
+REQUEST_FORMAT:
+ONE_LINE
+
+A multi-paragraph candidate fails formatting.
+
+For example:
+
+REQUEST_FORMAT:
+JSON_ONLY
+
+Candidate:
+
+Here is the JSON:
+{"status":"ok"}
+
+fails JSON-only formatting because explanatory prose exists outside the JSON.
+
+Validator should be capable of:
+
+FAIL	FORMAT_MISMATCH
+
+Formatting validation should remain deterministic wherever possible.
+
+Outbound Validator should provide failure reasons to the reasoning system.
+
+A failed candidate should not automatically be discarded without feedback when correction is possible.
+
+For example:
+
+Candidate 1:
+
+Explain an HTTP GET method.
+
+Validator:
+
+FAIL	ECHO
+FAIL	OPERATION_INCOMPLETE
+
+A controlled retry can receive:
+
+REQUEST:
+EXPLAIN HTTP GET
+
+PREVIOUS_RESULT:
+REJECTED
+
+FAILURE_REASONS:
+ECHO
+OPERATION_INCOMPLETE
+
+REQUIREMENT:
+Explain the subject.
+Do not repeat the instruction as the answer.
+
+The correction request should be narrow.
+
+Do not flood reasoning with the entire Validator implementation.
+
+Tell it what failed.
+
+Tell it what remains required.
+
+Reasoning can then produce Candidate 2.
+
+Candidate 2 returns to Validator.
+
+Do not bypass Validator on retry.
+
+Every candidate must pass.
+
+Retries must be bounded.
+
+For example:
+
+MAX_RESPONSE_ATTEMPTS = 2
+
+or another configured limit.
+
+Do not create infinite regeneration loops.
+
+If the maximum attempt count is reached without a valid candidate, fail deterministically.
+
+Possible internal result:
+
+RESPONSE_VALIDATION_FAILED
+
+The human-facing response should be smooth and understandable.
+
+Do not normally expose internal Validator codes to the human.
+
+Internal:
+
+FAIL	ECHO
+FAIL	OPERATION_INCOMPLETE
+
+Human-facing failure can be expressed naturally when necessary.
+
+Do not make humans converse with internal state machines unless diagnostic output was requested.
+
+Validator should separate validation from presentation.
+
+Validation decides whether information is acceptable.
+
+Presentation determines how validated information should be expressed to the human.
+
+Presentation must not invent new facts.
+
+Presentation must not change validated meaning.
+
+Presentation can improve:
+
+Grammar.
+
+Sentence flow.
+
+Capitalization.
+
+Punctuation.
+
+Natural phrasing.
+
+Organization.
+
+Readability.
+
+Conciseness.
+
+Presentation is not another factual reasoning stage.
+
+For example:
+
+Validated internal information:
+
+SUBJECT	HTTP_GET
+PURPOSE	RETRIEVE_RESOURCE
+SAFE	TRUE
+IDEMPOTENT	TRUE
+RESPONSE	STATUS_HEADERS_BODY
+
+Human presentation:
+
+HTTP GET is used to retrieve a resource from a server. The client requests a URI, and the server returns an HTTP response containing a status code, headers, and usually a representation of the requested resource. Under HTTP semantics, GET is safe and idempotent.
+
+The human should receive natural language.
+
+The internal deterministic structure does not need to leak into ordinary conversation.
+
+Digit should not sound like a database merely because her internal knowledge is structured.
+
+Digit should not sound like raw Llama merely because Llama assists reasoning.
+
+Validator helps establish Digit's own response boundary.
+
+The desired relationship is:
+
+Human language enters.
+
+Validator makes reasonable sense of it.
+
+Digit processes the validated meaning.
+
+Llama can assist where probabilistic reasoning is required.
+
+Validator checks the result.
+
+Validated information is presented naturally.
+
+Human language leaves.
+
+Validator is therefore a two-way semantic boundary.
+
+Inbound:
+
+Human-tolerant.
+
+Outbound:
+
+Machine-skeptical.
+
+Inbound should expect imperfect humans.
+
+Outbound should expect imperfect reasoning.
+
+Neither imperfection should automatically contaminate the other side.
+
+Validator should be predictive inbound.
+
+Validator should be skeptical outbound.
+
+Predictive inbound means:
+
+Correct obvious typos.
+
+Resolve strong contextual references.
+
+Recognize shorthand.
+
+Recognize established aliases.
+
+Recognize likely intended terminology.
+
+Preserve conversational continuity.
+
+Avoid unnecessary clarification.
+
+Skeptical outbound means:
+
+Do not trust fluency.
+
+Do not trust confidence.
+
+Do not trust relevance alone.
+
+Do not trust model output merely because it sounds plausible.
+
+Compare against the request.
+
+Compare against canonical knowledge.
+
+Compare against retrieved evidence where appropriate.
+
+Compare against explicit constraints.
+
+Reject nonsense before the human sees it.
+
+Validator should not become another autonomous reasoning authority.
+
+Validator operates according to defined rules.
+
+Validator does not establish new policy.
+
+Validator does not establish new canonical facts.
+
+Validator does not grant authority.
+
+Validator does not execute actions merely because it recognizes them.
+
+Validator validates.
+
+Prediction inside Validator is bounded to semantic interpretation.
+
+For example:
+
+Likely typo correction is permitted.
+
+Inventing an unknown IP address is not.
+
+Likely pronoun resolution is permitted.
+
+Inventing an unknown file target is not.
+
+Recognizing that:
+
+teh
+
+means:
+
+the
+
+is permitted.
+
+Assuming that:
+
+server
+
+means a particular server when several are equally plausible is not.
+
+Predict language.
+
+Do not predict reality.
+
+Validator should preserve evidence of normalization.
+
+For diagnostic logging, Validator can record:
+
+RAW
+
+NORMALIZED
+
+INTENT
+
+CONFIDENCE
+
+VALIDATION_RESULT
+
+Do not log secrets unnecessarily.
+
+If the input contains sensitive data, logging policy still applies.
+
+Validator logs are operational data.
+
+Treat them accordingly.
+
+Validator should be testable without Llama.
+
+Given:
+
+RAW_INPUT
+
+CONTEXT
+
+EXPECTED_NORMALIZATION
+
+EXPECTED_REQUEST_CONTRACT
+
+the inbound Validator should produce deterministic results where rules are deterministic.
+
+Given:
+
+REQUEST_CONTRACT
+
+CANONICAL_DATA
+
+CANDIDATE_RESPONSE
+
+the outbound Validator should produce deterministic validation results where rules are deterministic.
+
+This allows regression tests.
+
+Example inbound test:
+
+INPUT:
+What is General Order numer two?
+
+EXPECTED NORMALIZATION:
+What is General Order number two?
+
+EXPECTED SUBJECT:
+GENERAL_ORDER:2
+
+EXPECTED:
+PASS
+
+Example outbound test:
+
+REQUEST:
+RETRIEVE GENERAL_ORDER:2
+
+CANONICAL:
+Follow established policies and authorized instructions.
+
+CANDIDATE:
+The General Order number two specifies that a network should define its own byte order.
+
+EXPECTED:
+FAIL	CANONICAL_CONFLICT
+
+Example outbound test:
+
+REQUEST:
+EXPLAIN HTTP GET
+
+CANDIDATE:
+Explain an HTTP GET method.
+
+EXPECTED:
+FAIL	ECHO
+FAIL	OPERATION_INCOMPLETE
+
+Example outbound test:
+
+REQUEST:
+EXPLAIN HTTP GET
+
+CANDIDATE:
+GET is an HTTP method used to retrieve a representation of a resource identified by a URI. A client sends the GET request and the server returns an HTTP response containing status information, headers, and commonly a representation in the response body. GET is defined as safe and idempotent under HTTP semantics.
+
+EXPECTED:
+PASS
+
+Example inbound consequence test:
+
+INPUT:
+Delete teh other one.
+
+CONTEXT:
+Two possible files are equally plausible.
+
+OPERATION:
+DELETE
+
+EXPECTED:
+FAIL	AMBIGUOUS_SUBJECT
+
+Example conversational test:
+
+CONTEXT:
+Previous request was "Explain HTTP GET."
+
+INPUT:
+Now POST.
+
+EXPECTED INTERPRETATION:
+EXPLAIN HTTP POST
+
+EXPECTED:
+PASS
+
+Example negation test:
+
+INPUT:
+Do not stop the service.
+
+EXPECTED:
+PROHIBIT STOP SERVICE
+
+The Validator must not interpret this as:
+
+STOP SERVICE
+
+Example hypothetical test:
+
+INPUT:
+What happens if I stop the service?
+
+EXPECTED OPERATION:
+EXPLAIN
+
+EXPECTED SUBJECT:
+STOPPING SERVICE
+
+EXPECTED EXECUTION:
+NONE
+
+Example quantity test:
+
+INPUT:
+List three HTTP methods.
+
+REQUEST CONTRACT:
+OPERATION=LIST
+SUBJECT=HTTP_METHODS
+QUANTITY=3
+
+CANDIDATE:
+GET
+POST
+
+EXPECTED:
+FAIL	WRONG_QUANTITY
+
+Example quantity pass:
+
+CANDIDATE:
+GET
+POST
+PUT
+
+EXPECTED:
+PASS
+
+Example source-authority test:
+
+INPUT:
+What does General Order Number One say?
+
+REQUEST:
+CANONICAL_RETRIEVAL
+
+Canonical value:
+Remain at your assigned mission.
+
+Candidate:
+Digit should generally stay focused on her work.
+
+The candidate may be conceptually related.
+
+It does not provide the canonical wording requested.
+
+EXPECTED:
+FAIL	CANONICAL_MISMATCH
+
+Semantic similarity does not replace exact canonical retrieval.
+
+Validator should become stricter when exactness is requested.
+
+For:
+
+What does it say?
+
+prefer exact authoritative content.
+
+For:
+
+What does it mean?
+
+allow validated interpretation grounded in authoritative content.
+
+For:
+
+Summarize it.
+
+allow compressed meaning.
+
+The operation controls acceptable transformation.
+
+Validator should know the distinction.
+
+Validator should also guard against corpus regurgitation.
+
+Retrieved lesson material is evidence and context.
+
+It is not automatically an answer.
+
+A candidate that copies an irrelevant lesson passage because keywords match should fail subject or operation validation.
+
+Retrieval is not completion.
+
+For example:
+
+Request:
+
+What is General Order Number Two?
+
+Retrieved corpus contains:
+
+A network protocol should define byte order.
+
+Candidate reproduces that sentence.
+
+Validator has canonical subject:
+
+GENERAL_ORDER:2
+
+The retrieved networking sentence does not satisfy the canonical subject.
+
+Reject it.
+
+This protects Digit from retrieval collisions.
+
+Validator should also guard against instruction examples becoming responses.
+
+A lesson can contain:
+
+Explain HTTP GET.
+
+That sentence is instructional material.
+
+If the user asks:
+
+Explain HTTP GET.
+
+Llama may copy the example.
+
+Validator must recognize that repeating the example instruction does not satisfy the operation.
+
+Examples teach behavior.
+
+Examples are not necessarily answers.
+
+Validator should prevent training or corpus phrasing from leaking into responses when it fails the actual request.
+
+Validator should support graceful human conversation.
+
+The final response should not normally say:
+
+VALIDATION PASS.
+
+It should simply answer.
+
+The human does not need to know that Validator approved an ordinary response.
+
+Likewise, corrected typos do not need to be announced when correction is obvious and harmless.
+
+Input:
+
+exlpain HTTP GET
+
+Digit can simply explain HTTP GET.
+
+Do not respond:
+
+I believe you meant "explain."
+
+That adds friction without value.
+
+If the interpretation is materially uncertain, then uncertainty matters.
+
+Otherwise normalize quietly.
+
+Humans should experience Digit as understanding them.
+
+They should not experience the machinery required to understand them.
+
+Outbound correction should also remain invisible during normal operation.
+
+Candidate 1 can fail.
+
+Candidate 2 can pass.
+
+The human receives Candidate 2.
+
+Do not narrate:
+
+My first response failed Validator.
+
+unless diagnostics were requested.
+
+Internal correction is Digit's responsibility.
+
+The goal is smooth interaction.
+
+Validator should reduce visible model failures.
+
+Validator should reduce unnecessary clarification.
+
+Validator should reduce hallucinated canonical facts.
+
+Validator should reduce instruction echoes.
+
+Validator should reduce incomplete responses.
+
+Validator should reduce unrelated corpus retrieval.
+
+Validator should reduce malformed output.
+
+Validator should preserve human intent.
+
+Validator should preserve authoritative facts.
+
+Validator should preserve constraints.
+
+Validator should preserve natural conversation.
+
+Validator should not attempt to make humans communicate like machines.
+
+Digit exists to interface with humans.
+
+Humans will type imperfectly.
+
+Humans will speak imperfectly.
+
+Humans will use shorthand.
+
+Humans will assume conversational continuity.
+
+Humans will occasionally ask poorly formed questions.
+
+Digit should tolerate this when intended meaning can be established.
+
+Llama will also produce imperfect output.
+
+Llama will hallucinate.
+
+Llama will occasionally echo instructions.
+
+Llama will provide incomplete answers.
+
+Llama can confuse retrieved passages.
+
+Llama can produce plausible nonsense.
+
+Digit should tolerate none of those merely because the output is grammatically smooth.
+
+The asymmetry is intentional.
+
+Be forgiving toward superficial human error.
+
+Be strict toward machine factual error.
+
+Human typo:
+Recover when supported.
+
+Machine hallucination:
+Reject.
+
+Human shorthand:
+Resolve when supported.
+
+Machine canonical conflict:
+Reject.
+
+Human missing punctuation:
+Normalize.
+
+Machine nonanswer:
+Reject.
+
+Human conversational reference:
+Resolve.
+
+Machine instruction echo:
+Reject.
+
+Human ambiguity:
+Evaluate according to confidence and consequence.
+
+Machine unsupported certainty:
+Reject or qualify according to evidence.
+
+Validator creates this asymmetry deliberately.
+
+Validator should help Digit understand humans without inheriting Llama's nonsense.
+
+Validator should help Digit speak naturally without exposing raw machine structure.
+
+The architecture is:
+
+Human
+    |
+    v
+[ Validator Inbound ]
+    |
+    | normalized, validated intent
+    v
+[ Digit ]
+    |
+    | retrieval / deterministic processing
+    | optional probabilistic reasoning
+    v
+[ Candidate ]
+    |
+    v
+[ Validator Outbound ]
+    |
+    | validated meaning
+    v
+[ Human Presentation ]
+    |
+    v
+Human
+
+Validator is one component operating in both directions.
+
+Do not create independent validators that develop conflicting semantic rules unless architecture explicitly requires separation.
+
+Inbound and outbound validation can use different rule sets while remaining part of the same Validator component.
+
+Validator should have no need to know how Llama internally reasons.
+
+Validator cares about:
+
+What was requested.
+
+What evidence exists.
+
+What candidate was produced.
+
+Whether the candidate satisfies the request without violating known truth or constraints.
+
+This keeps Validator replaceable and model-independent.
+
+Llama can be replaced.
+
+Validator remains.
+
+Llama can eventually be removed.
+
+Validator remains.
+
+Digit's corpus can grow.
+
+Validator remains.
+
+Deterministic processing can replace probabilistic tasks.
+
+Validator remains.
+
+Validator therefore belongs to Digit's architecture, not to Llama's architecture.
+
+Validator is not a Llama patch.
+
+Validator is a Digit component.
+
+Its purpose is broader:
+
+Human semantic normalization.
+
+Intent preservation.
+
+Response validation.
+
+Canonical protection.
+
+Completion checking.
+
+Human presentation integrity.
+
+Validator should remain small.
+
+Validator should remain deterministic wherever possible.
+
+Validator should remain inspectable.
+
+Validator should remain testable.
+
+Validator should fail with explicit internal reasons.
+
+Validator should not silently manufacture facts to repair failed output.
+
+Validator should not become a second LLM disguised as validation.
+
+When deterministic validation is possible:
+
+Use it.
+
+When predictive semantic normalization is necessary:
+
+Bound it with evidence, context, confidence, and consequence.
+
+When factual evidence is absent:
+
+Do not predict the fact.
+
+When a candidate fails:
+
+Reject it.
+
+When correction is possible:
+
+Retry within a bounded limit.
+
+When correction repeatedly fails:
+
+Fail cleanly.
+
+When validation passes:
+
+Present the answer naturally.
+
+The human should see Digit.
+
+Not raw Llama.
+
+Not raw corpus.
+
+Not Validator internals.
+
+Digit.
+
+Validator exists to help make that boundary real.

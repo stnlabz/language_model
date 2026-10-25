@@ -1,0 +1,539 @@
+STN-LABZ Trust Chain
+
+Root Document ID: 20260817.1
+Revision ID: NONE
+Previous Revision: NONE
+sha256: 51e3a898994f7848a02c2693e7410ffeb60efa42b1561d6d2db001a7a431649c
+
+Status: Approved  
+Scope: Policy  
+Applicability: Controlled Digital Documents and Authorized Knowledge  
+Approval Date: 20260817
+
+Purpose
+
+The STN-LABZ Trust Chain establishes deterministic validation requirements for controlled digital information.
+
+The Trust Chain provides evidence that a digital artifact presented to an STN-LABZ system corresponds to the controlled document or revision identified by applicable authorization records and that the artifact has maintained the required cryptographic integrity.
+
+Trust Chain validation does not independently grant organizational authority.
+
+Authority originates from applicable STN-LABZ policy, doctrine, approval records, and human authority.
+
+Principle
+
+Trust will be demonstrated through evidence rather than inferred from possession, location, naming, retrieval, presentation, or upstream claims.
+
+The governing trust relationship is:
+
+Identity
+    ↓
+Authorization
+    ↓
+Cryptographic Integrity
+    ↓
+Trust Chain Validation
+    ↓
+PASS / FAIL / UNKNOWN
+
+Every required validation boundary will successfully validate before the applicable Trust Chain result is PASS.
+
+Document Identity
+
+Controlled-document identity and revision identity are governed by 20260729.6.R1 — Engineering Documentation.
+
+The Trust Chain validates evidence associated with the specific controlled artifact presented for validation.
+
+The permanent Root Document ID identifies the controlled document family.
+
+The root artifact uses:
+
+Revision ID: NONE
+
+A revision uses its applicable Revision ID to identify the specific revision being evaluated.
+
+A Revision ID does not independently establish authorization or integrity.
+
+A filename does not independently establish identity.
+
+A document's internal claim of identity does not independently establish authority.
+
+Canonical Document Header
+
+Every controlled root document subject to Trust Chain validation will use the following metadata:
+
+Root Document ID: YYYYMMDD.#
+Revision ID: NONE
+Previous Revision: NONE
+sha256: <hash>
+
+The root artifact establishes the permanent identity of the controlled document family.
+
+The first revision of a controlled root document will use:
+
+Root Document ID: YYYYMMDD.#
+Revision ID: YYYYMMDD.#.R0
+Previous Revision: NONE
+sha256: <hash>
+
+Each subsequent revision will use:
+
+Root Document ID: YYYYMMDD.#
+Revision ID: YYYYMMDD.#.R#
+Previous Revision: YYYYMMDD.#.R#
+sha256: <hash>
+
+The controlled header provides:
+
+- Permanent document identity.
+- Specific revision identity where applicable.
+- Previous revision lineage where applicable.
+- Cryptographic integrity reference.
+
+The controlled header does not independently establish authorization or cryptographic validity.
+
+Applicable authoritative records remain controlling.
+
+Authoritative Revision Resolution
+
+Where an authoritative index applies and a specific authorized revision is required, the Trust Chain will validate that the index identifies the applicable Revision ID.
+
+The expected relationship is:
+
+Authoritative Index
+        ↓
+YYYYMMDD.#.R#
+        ↓
+Root Document ID: YYYYMMDD.#
+        ↓
+Specific Revision: R#
+
+The Trust Chain will resolve the permanent Root Document ID associated with the indexed revision and validate the applicable authorization evidence for both identities where required.
+
+An index reference identifying only a Root Document ID does not independently establish which revision is authorized when revision-specific authorization is required.
+
+Missing revision identification will not be resolved through filename sorting, timestamps, directory order, retrieval order, or inference.
+
+Authorization Validation
+
+The Trust Chain will validate all authorization evidence required by the governing document and knowledge policies.
+
+Where required, validation will include:
+
+- Authoritative index identity.
+- Root Document ID.
+- Root approval state.
+- Revision ID.
+- Revision approval state.
+- Agreement between the authoritative index and identified revision.
+
+The authoritative index, root identity, revision identity, and applicable approval states will agree before authorization validation succeeds.
+
+An approval state declared by an individual source does not independently establish authorization when additional authorization evidence is required.
+
+Missing, conflicting, duplicate, ambiguous, or otherwise unresolved authorization evidence will not be interpreted as approval.
+
+The Trust Chain will not resolve conflicting or incomplete authorization evidence through inference.
+
+SHA-256 Integrity Requirement
+
+Where SHA-256 integrity evidence is required, the authoritative SHA-256 value will correspond to the canonical representation of the specific controlled artifact.
+
+The SHA-256 value will be bound to that artifact and will not be inherited by another revision.
+
+Cryptographic integrity establishes whether the evaluated digital artifact corresponds to the authoritative cryptographic evidence associated with the identified artifact.
+
+Cryptographic integrity does not independently establish authorization.
+
+Canonical SHA-256 Calculation
+
+A controlled document will not calculate its authoritative SHA-256 value from content containing that resulting SHA-256 value as part of the cryptographic input.
+
+The authoritative SHA-256 value will therefore be calculated from a canonical representation of the controlled document.
+
+For canonical hashing, the SHA-256 header field will contain exactly:
+
+sha256: <hash>
+
+The complete authoritative document, including the canonical SHA-256 placeholder, will constitute the canonical representation used for SHA-256 calculation.
+
+The process is:
+
+Finalize Controlled Artifact
+        ↓
+Set sha256 Field to Canonical Placeholder
+        ↓
+Establish Canonical Document Representation
+        ↓
+Calculate SHA-256
+        ↓
+Record Authoritative SHA-256
+        ↓
+Publish Integrity Evidence
+
+After calculation, the authoritative SHA-256 value may be recorded in:
+
+- The authoritative document index.
+- The applicable Trust Chain record.
+- The document header for human-readable reference.
+
+Where the calculated SHA-256 value is displayed in the document header, that displayed value is excluded as variable content during subsequent cryptographic verification.
+
+For verification, the sha256 field is normalized back to the canonical placeholder before the SHA-256 value is calculated.
+
+The governing verification process is:
+
+Received Controlled Artifact
+        ↓
+Read Claimed Document Identity
+        ↓
+Obtain Authoritative SHA-256
+        ↓
+Normalize sha256 Header to Canonical Placeholder
+        ↓
+Calculate SHA-256 of Canonical Representation
+        ↓
+Compare Calculated SHA-256 to Authoritative SHA-256
+        ↓
+MATCH / MISMATCH
+
+This procedure prevents the document's authoritative SHA-256 value from becoming self-referential.
+
+SHA-256 Integrity Validation
+
+The Trust Chain will compare the SHA-256 digest calculated from the canonical representation against the authoritative SHA-256 value associated with the identified artifact.
+
+The validation boundary is deterministic:
+
+Calculated SHA-256 = Authoritative SHA-256
+        ↓
+PASS
+
+Calculated SHA-256 ≠ Authoritative SHA-256
+        ↓
+FAIL
+
+Required SHA-256 Missing
+        ↓
+FAIL
+
+Required SHA-256 Ambiguous or Conflicting
+        ↓
+FAIL
+
+Cryptographic validation will not use approximate matching, filename similarity, timestamps, retrieval source, document claims, or other non-cryptographic evidence as a substitute for a required SHA-256 match.
+
+Revision Binding
+
+Cryptographic integrity evidence will be bound to the specific controlled artifact from which the authoritative SHA-256 value was established.
+
+For a revision, the governing relationship is:
+
+Root Document ID
+        ↓
+Revision ID
+        ↓
+Authoritative SHA-256
+        ↓
+Canonical Digital Artifact
+        ↓
+Calculated SHA-256
+        ↓
+MATCH / MISMATCH
+
+A SHA-256 value belonging to one artifact will not validate another artifact.
+
+Previous revision integrity does not establish current revision integrity.
+
+Modification of controlled digital content invalidates the previous content-integrity relationship for the modified content.
+
+The resulting authorized revision requires corresponding cryptographic integrity evidence before Trust Chain integrity validation can succeed.
+
+Authorization and Integrity Separation
+
+Authorization and integrity are independent Trust Chain determinations.
+
+Authorization establishes whether the identified controlled artifact is permitted to govern or proceed according to applicable policy.
+
+Integrity establishes whether the evaluated digital artifact corresponds to the cryptographic evidence associated with that artifact.
+
+A valid SHA-256 match does not independently establish authorization.
+
+An APPROVED state does not independently establish cryptographic integrity.
+
+The resulting relationships are:
+
+AUTHORIZED + INTEGRITY VALID
+        ↓
+PASS
+
+AUTHORIZED + INTEGRITY INVALID
+        ↓
+FAIL
+
+UNAUTHORIZED + INTEGRITY VALID
+        ↓
+FAIL
+
+UNAUTHORIZED + INTEGRITY INVALID
+        ↓
+FAIL
+
+AUTHORIZATION UNKNOWN
+        ↓
+UNKNOWN
+
+Only a state satisfying all applicable authorization and integrity requirements may produce a Trust Chain PASS.
+
+Trust Validation Sequence
+
+Where all identified validation boundaries apply, the Trust Chain progression is:
+
+Authoritative Index
+        ↓
+Identify Controlled Artifact
+        ↓
+Resolve Permanent Root Document ID
+        ↓
+Resolve Specific Revision Where Applicable
+        ↓
+Validate Required Authorization
+        ↓
+Validate Index ↔ Artifact Agreement
+        ↓
+Obtain Authoritative SHA-256
+        ↓
+Normalize sha256 Header
+        ↓
+Calculate Artifact SHA-256
+        ↓
+Compare SHA-256 Values
+        ↓
+Evaluate All Required Evidence
+        ↓
+PASS / FAIL / UNKNOWN
+
+A later successful validation step does not override an earlier failed required validation step.
+
+All required boundaries will successfully validate before the overall Trust Chain result is PASS.
+
+Chain Continuity
+
+Where a controlled information process requires continuity between records, revisions, or other governed artifacts, each required relationship will be deterministically validated.
+
+The root artifact establishes the permanent controlled document family.
+
+Revision continuity begins with the first revision of that root artifact.
+
+For example:
+
+20260817.1
+        ↓
+20260817.1.R0
+        ↓
+20260817.1.R1
+        ↓
+20260817.1.R2
+
+The first revision uses:
+
+Previous Revision: NONE
+
+Each subsequent revision will identify its immediate predecessor.
+
+Missing, conflicting, duplicate, ambiguous, or invalid required chain evidence breaks the applicable Trust Chain.
+
+A broken Trust Chain will not be repaired through inference.
+
+Later valid evidence does not silently erase an earlier unresolved break in a required chain.
+
+The applicable Trust Chain remains FAIL or UNKNOWN until the required evidence can be deterministically established or the condition is resolved through an authorized human process according to applicable policy.
+
+Atomic Trust Boundary
+
+Where a research item, knowledge item, intelligence record, engineering record, or other governed information set depends upon required Trust Chain evidence, the required trust path will be treated as an atomic validation boundary.
+
+Failure of required authorization or integrity evidence invalidates that trust path.
+
+A Trust Chain implementation will not selectively produce PASS for portions of an information set whose required trust depends upon a failed or unresolved validation path.
+
+The governing relationship is:
+
+Required Trust Evidence
+        ↓
+ALL REQUIRED VALIDATION PASS
+        ↓
+Trust Chain PASS
+
+Any Required Validation Failure
+        ↓
+Trust Chain FAIL
+
+Required Authorization Cannot Be Deterministically Established
+        ↓
+Trust Chain UNKNOWN
+
+The consuming system will apply its governing policy to the resulting PASS, FAIL, or UNKNOWN state.
+
+Fail-Closed Behavior
+
+Trust Chain validation will fail closed.
+
+A required validation failure will not be:
+
+- Ignored.
+- Automatically waived.
+- Converted to PASS.
+- Repaired through inference.
+- Replaced by filename matching.
+- Replaced by timestamps.
+- Replaced by directory position.
+- Replaced by retrieval order.
+- Replaced by retrieval source.
+- Replaced by document claims.
+- Replaced by upstream system assertions.
+
+A validation implementation will not manufacture missing trust evidence.
+
+Trust Chain Result
+
+The Trust Chain produces a validation result.
+
+The Trust Chain result does not independently determine how every consuming system handles the evaluated information.
+
+PASS establishes that the applicable Trust Chain requirements successfully validated.
+
+FAIL establishes that one or more required validation boundaries failed.
+
+UNKNOWN establishes that a required authorization state could not be deterministically established.
+
+The consuming system's applicable policy determines whether the information is accepted, rejected, quarantined, withheld, reported, escalated, or otherwise handled.
+
+For Digit, authorized-knowledge behavior is governed by 20260730.1 — Digit: Authorized Knowledge.
+
+Evidence
+
+Trust Chain validation will produce applicable evidence sufficient to establish what was evaluated and how the validation result was determined.
+
+Applicable evidence will identify:
+
+- Root Document ID.
+- Revision ID where applicable.
+- Previous Revision where applicable.
+- Indexed revision identity where applicable.
+- Applicable approval states.
+- Authoritative SHA-256.
+- Calculated SHA-256.
+- Authorization validation result.
+- Integrity validation result.
+- Overall Trust Chain result.
+- Applicable failure or unresolved condition.
+- Validation timestamp.
+- Applicable source or processing context.
+
+Trust Chain evidence will be preserved according to applicable STN-LABZ engineering documentation requirements.
+
+Human Authority
+
+Trust Chain validation determines whether required evidence successfully validates.
+
+It does not grant the validating system authority to:
+
+- Approve a document.
+- Approve a revision.
+- Approve knowledge.
+- Change policy.
+- Rewrite authorization evidence.
+- Repair a failed Trust Chain through assumption.
+- Expand organizational authority.
+- Redefine Trust Chain requirements.
+
+Where required evidence cannot be deterministically established, the validating system will preserve the applicable FAIL or UNKNOWN state and follow established reporting or escalation requirements.
+
+Human authority remains the approval boundary where established by governing policy.
+
+Implementation Boundary
+
+This policy defines required Trust Chain behavior.
+
+It does not prescribe a specific internal software implementation.
+
+Applicable systems may implement Trust Chain validation according to their approved architecture provided that the implementation satisfies the governing requirements.
+
+Qualification will demonstrate that the implementation correctly:
+
+- Resolves applicable document and revision identity.
+- Resolves Previous Revision lineage.
+- Validates required authorization evidence.
+- Validates authoritative-index and revision agreement.
+- Produces the canonical document representation.
+- Calculates SHA-256 correctly.
+- Rejects SHA-256 mismatches.
+- Rejects missing required integrity evidence.
+- Rejects conflicting required evidence.
+- Preserves revision binding.
+- Preserves authorization and integrity separation.
+- Preserves atomic trust boundaries.
+- Fails closed.
+- Does not substitute inference for missing evidence.
+- Produces required Trust Chain evidence.
+
+Successful implementation does not independently establish qualification.
+
+Qualification will be performed according to applicable STN-LABZ engineering and qualification requirements.
+
+Authority Separation
+
+20260729.6.R1 — Engineering Documentation governs:
+
+- Controlled-document identity.
+- Revision identity.
+- Controlled-header requirements.
+- Applicable document approval requirements.
+- Authoritative revision identification.
+- The requirement for digital policy and doctrine SHA-256 integrity evidence.
+- Applicable controlled-document boundaries.
+
+This Trust Chain policy governs:
+
+- Canonical SHA-256 calculation.
+- Cryptographic verification.
+- Deterministic Trust Chain validation.
+- Authorization-evidence validation within the trust path.
+- Revision-to-hash binding.
+- Revision continuity validation.
+- Applicable chain continuity.
+- Atomic trust validation.
+- Fail-closed Trust Chain behavior.
+- Trust Chain validation results and evidence.
+
+Applicable knowledge policies govern whether information that has passed the required Trust Chain may be used by a particular system.
+
+No one layer independently grants authority assigned to another.
+
+The governing relationship is:
+
+Engineering Documentation
+        ↓
+Defines Document and Revision Requirements
+        ↓
+Trust Chain
+        ↓
+Validates Required Trust Evidence
+        ↓
+Consuming System Policy
+        ↓
+Determines Authorized Use
+
+References
+
+- STN-LABZ General Orders
+- 20260729.0 — Operational Authority
+- 20260729.5 — Unknown State Doctrine
+- 20260729.6 — Engineering Documentation
+- 20260729.8 — Operational Doctrine
+- 20260730.1 — Digit: Authorized Knowledge
+- 20260731.2 — Drafting Standard
+- 20260801.1 — KISS Theory
+- 20260806.0 — Agent Modules
+- 20260817.0 — Engineering Development Doctrine

@@ -1,0 +1,58 @@
+20260729.4 — Ecosystem Responsibilities
+
+Root Document ID: 20260729.4
+Revision ID:       NONE
+Previous Revision: NONE
+sha256: 78575d789c76ae18c5d08333688c6c8627ad2248425aa1c39c14a8cdfceff5ed
+
+Status: Approved  
+Scope: Policies
+
+Policy
+
+The STN-LABZ architecture will be as follows:
+
+Human → Mission Control → Affected Policies → Agents
+
+Responsibilities
+
+Human
+
+- Final Authority.
+- Accountability.
+- Judgment.
+
+Mission Control
+
+- Coordination.
+- Operator Interface.
+
+Digit
+
+- Cognition.
+- Engineering.
+- Planning.
+- Reasoning.
+
+Rictus
+
+- News Aggregation.
+- Human Interface.
+- Internet Relay Chat (IRC).
+- Routes authorized communications through the human operator to Digit.
+
+Communication Path: Rictus → Human → Digit
+
+Ezra
+
+- Space.
+- Asset Recovery.
+- LEO Communication.
+
+References
+
+- General Orders
+- 20260729.0 — Operational Authority
+- 20260729.1 — Engineering Organization
+- 20260729.2 — Engineering Workflow
+- 20260729.3 — Mission Control

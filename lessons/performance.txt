@@ -1,0 +1,2399 @@
+Performance describes how efficiently a system performs required work under defined conditions.
+
+Performance is not one measurement.
+
+Performance can include latency.
+
+Performance can include throughput.
+
+Performance can include CPU usage.
+
+Performance can include memory usage.
+
+Performance can include storage activity.
+
+Performance can include network activity.
+
+Performance can include concurrency.
+
+Performance can include resource utilization.
+
+Performance can include scalability.
+
+Performance can include responsiveness.
+
+Performance requirements should be defined.
+
+"Fast" is not a precise performance requirement.
+
+"Low latency" is not precise without a target.
+
+"High throughput" is not precise without a workload.
+
+A performance requirement should identify the operation being measured.
+
+A performance requirement should identify the workload.
+
+A performance requirement should identify relevant resource limits.
+
+A performance requirement should identify an acceptable result.
+
+Performance should be measured.
+
+Observation is stronger than assumption.
+
+A slow-looking function is not necessarily a bottleneck.
+
+A frequently called function is not necessarily expensive.
+
+A large function is not necessarily slow.
+
+A small function is not necessarily fast.
+
+Source-code appearance does not establish runtime cost.
+
+Measure before optimizing.
+
+Optimization without measurement can waste engineering effort.
+
+Optimization without measurement can make software more complex without improving meaningful performance.
+
+Optimization can introduce defects.
+
+Optimization can reduce readability.
+
+Optimization can increase memory usage.
+
+Optimization can reduce portability.
+
+Optimization can change timing.
+
+Optimization can expose concurrency defects.
+
+Performance changes should therefore be justified by evidence.
+
+Latency is the time required to complete an operation.
+
+Latency can be measured from request start to response completion.
+
+Latency can be measured for one internal operation.
+
+Latency can be measured across an entire end-to-end workflow.
+
+The measurement boundary must be defined.
+
+Network latency is not the same as application latency.
+
+Storage latency is not the same as total request latency.
+
+One operation can contain multiple latency components.
+
+End-to-end latency includes all work inside the measured boundary.
+
+Throughput is the amount of work completed per unit of time.
+
+Requests per second is a throughput measurement.
+
+Transactions per second is a throughput measurement.
+
+Messages per second is a throughput measurement.
+
+Bytes per second is a throughput measurement.
+
+Operations per second is a throughput measurement.
+
+Throughput and latency are related but different.
+
+A system can have high throughput and poor latency.
+
+A system can have low latency and low total throughput.
+
+Batching can improve throughput while increasing latency for individual items.
+
+Concurrency can improve throughput without making one operation faster.
+
+Performance claims should identify which property improved.
+
+Response time is commonly the elapsed time observed by a requester.
+
+Service time is the time a resource actively spends servicing work according to the measurement model.
+
+Waiting time can contribute substantially to response time.
+
+An operation can be computationally cheap but wait behind other work.
+
+Queueing matters.
+
+A queue stores work waiting for processing.
+
+Queue length can indicate demand exceeding immediate processing capacity.
+
+A growing queue can increase latency.
+
+An unbounded queue can consume unbounded memory.
+
+Queues should be bounded where resource control matters.
+
+Backpressure limits incoming work when downstream capacity is constrained.
+
+Backpressure can protect latency.
+
+Backpressure can protect memory.
+
+Backpressure can prevent overload from spreading.
+
+Rejecting excess work can be safer than accepting work that cannot be completed within requirements.
+
+Capacity is finite.
+
+CPU capacity is finite.
+
+Memory capacity is finite.
+
+Storage bandwidth is finite.
+
+Storage I/O operations are finite.
+
+Network bandwidth is finite.
+
+Connection capacity is finite.
+
+Thread capacity is finite.
+
+Queue capacity should be finite.
+
+A system cannot process unlimited work merely because more work is submitted.
+
+Saturation occurs when a resource approaches its useful capacity.
+
+A saturated CPU cannot provide unlimited additional compute.
+
+A saturated storage device cannot provide unlimited additional I/O.
+
+A saturated network link cannot provide unlimited bandwidth.
+
+A saturated worker pool cannot immediately process additional work.
+
+At saturation, queueing commonly increases.
+
+Latency can rise sharply near saturation.
+
+Performance testing should include behavior near expected peak load.
+
+Average load can hide peak problems.
+
+Average latency can hide slow operations.
+
+An average does not describe distribution.
+
+If nine operations complete quickly and one completes very slowly, the average can obscure the slow operation.
+
+Percentiles describe points in a latency distribution.
+
+The 50th percentile is commonly called the median.
+
+A p50 latency means approximately half the measured observations are at or below that value according to the sample.
+
+A p95 latency describes the value at or below which approximately 95 percent of observations fall.
+
+A p99 latency describes the value at or below which approximately 99 percent of observations fall.
+
+Percentiles reveal tail latency.
+
+Tail latency refers to slower observations toward the high end of the latency distribution.
+
+Tail latency can matter greatly in user-facing and distributed systems.
+
+One slow dependency can increase end-to-end latency.
+
+Multiple sequential dependencies accumulate latency.
+
+Parallel operations can reduce total latency when independent work can execute concurrently.
+
+Parallelism has overhead.
+
+Parallelism can increase contention.
+
+Parallelism should not be introduced automatically.
+
+A benchmark measures performance under defined conditions.
+
+A benchmark should identify the system being tested.
+
+A benchmark should identify hardware.
+
+A benchmark should identify software version.
+
+A benchmark should identify configuration.
+
+A benchmark should identify workload.
+
+A benchmark should identify input data.
+
+A benchmark should identify concurrency.
+
+A benchmark should identify duration.
+
+A benchmark should identify measurement methodology.
+
+Without context, benchmark numbers have limited meaning.
+
+Benchmarks should be reproducible where practical.
+
+A benchmark should measure relevant behavior.
+
+A microbenchmark measures a small operation.
+
+Microbenchmarks can identify low-level costs.
+
+Microbenchmarks do not automatically predict complete application performance.
+
+A function that is faster in isolation can have no measurable effect on the whole application.
+
+End-to-end benchmarks measure complete workflows.
+
+End-to-end measurements include more system effects.
+
+They can make root-cause analysis harder.
+
+Use appropriate measurement levels.
+
+Warm-up can affect benchmark results.
+
+Caches can be cold at startup.
+
+JIT runtimes can compile code during early execution.
+
+Memory allocators can establish internal state.
+
+Connections can require initial setup.
+
+DNS can require resolution.
+
+Storage caches can require population.
+
+Benchmark methodology should distinguish cold-start behavior from steady-state behavior.
+
+Cold-start performance can itself be a requirement.
+
+Do not discard cold-start measurements when startup latency matters.
+
+Steady-state performance measures behavior after transient initialization effects have settled.
+
+Both can matter.
+
+Benchmark duration should be sufficient to capture meaningful variation.
+
+A one-second benchmark can miss periodic work.
+
+A short benchmark can miss memory growth.
+
+A short benchmark can miss thermal throttling.
+
+A short benchmark can miss queue buildup.
+
+A short benchmark can miss resource exhaustion.
+
+Sustained testing can reveal behavior that burst testing misses.
+
+Load testing evaluates behavior under expected or elevated workload.
+
+Stress testing pushes a system toward or beyond normal capacity.
+
+Soak testing runs a system for an extended period.
+
+Spike testing evaluates sudden workload increases.
+
+Each test answers different questions.
+
+A load test can determine expected operating behavior.
+
+A stress test can identify failure boundaries.
+
+A soak test can reveal leaks or long-term degradation.
+
+A spike test can reveal queueing and recovery behavior.
+
+Performance tests should define success criteria.
+
+"Did not crash" is not sufficient when latency requirements exist.
+
+A system can remain running while becoming unusably slow.
+
+Availability and performance are related but different.
+
+A profiler measures where execution resources are consumed.
+
+CPU profiling identifies where processor time is spent.
+
+Memory profiling identifies allocation and retention behavior.
+
+I/O profiling identifies storage or network activity.
+
+Lock profiling can identify synchronization contention.
+
+Sampling profilers periodically inspect execution state.
+
+Instrumentation profilers record selected operations explicitly.
+
+Profiling has overhead.
+
+Profiler results should be interpreted with awareness of measurement effects.
+
+A hot path is code executed frequently or consuming significant runtime resources.
+
+Hot paths should be identified through evidence.
+
+A rarely executed expensive function can still matter if it dominates an important operation.
+
+Frequency alone does not determine importance.
+
+Cost alone does not determine importance.
+
+Total contribution matters.
+
+A bottleneck is a limiting resource or operation constraining overall performance.
+
+Improving a non-bottleneck might not improve system throughput.
+
+If storage is the bottleneck, optimizing unrelated arithmetic can produce no meaningful improvement.
+
+If network latency dominates, shaving microseconds from local parsing can be irrelevant.
+
+Find the limiting factor.
+
+A system can have multiple bottlenecks under different workloads.
+
+A CPU bottleneck can become a storage bottleneck after CPU optimization.
+
+A storage bottleneck can become a lock bottleneck after storage improvement.
+
+Performance work is iterative.
+
+Measure.
+
+Identify.
+
+Change.
+
+Measure again.
+
+Do not assume an optimization worked.
+
+A change intended to improve performance can make performance worse.
+
+Regression testing should detect performance degradation where performance is important.
+
+Performance baselines provide comparison points.
+
+A baseline records measured behavior under defined conditions.
+
+New measurements should use comparable conditions.
+
+Changing hardware invalidates direct comparison unless hardware differences are accounted for.
+
+Changing workload invalidates direct comparison unless workload differences are accounted for.
+
+Changing configuration can invalidate comparison.
+
+Control variables when comparing results.
+
+CPU-bound work is limited primarily by processor execution capacity under the observed workload.
+
+I/O-bound work spends substantial time waiting for input or output.
+
+Memory-bound work can be limited by memory bandwidth or latency.
+
+Lock-bound work can be limited by synchronization contention.
+
+Network-bound work can be limited by network latency or bandwidth.
+
+Storage-bound work can be limited by storage latency or bandwidth.
+
+Classify the actual constraint.
+
+CPU utilization alone does not prove CPU-bound behavior.
+
+Low CPU utilization does not prove the system has spare useful capacity.
+
+A single-threaded workload can saturate one core while total machine CPU appears low.
+
+A process can be blocked on a lock.
+
+A process can be blocked on I/O.
+
+A process can be rate limited.
+
+A process can be waiting for a remote service.
+
+Inspect the relevant resources.
+
+CPU utilization describes processor time consumption.
+
+User CPU time is spent executing application code according to operating-system accounting.
+
+System CPU time is spent executing operating-system work on behalf of the process according to operating-system accounting.
+
+High system CPU can indicate heavy system-call or kernel activity.
+
+Context switching consumes CPU resources.
+
+Excessive context switching can reduce useful work.
+
+Threads are not free.
+
+Each thread consumes memory.
+
+Each thread can create scheduling overhead.
+
+Each thread can increase contention.
+
+Creating more threads does not guarantee more throughput.
+
+Thread count should match workload and architecture.
+
+For CPU-bound work, useful parallelism is constrained by available processing resources.
+
+For I/O-bound work, additional concurrency can keep processing resources busy while operations wait.
+
+Too much concurrency can overwhelm dependencies.
+
+Concurrency should be bounded.
+
+Parallelism means work executes simultaneously.
+
+Concurrency means multiple tasks make progress during overlapping periods.
+
+Concurrent systems are not necessarily parallel.
+
+A single-threaded event loop can handle many concurrent operations.
+
+Parallel processing can use multiple CPU cores.
+
+The distinction matters when diagnosing performance.
+
+Amdahl's law describes limits on speedup when only part of a workload can be parallelized.
+
+If a substantial portion of work remains serial, adding processors has diminishing benefit.
+
+Parallelism cannot eliminate serial work.
+
+Synchronization can increase the serial portion.
+
+Parallel designs should minimize unnecessary shared state.
+
+Lock contention occurs when multiple execution contexts compete for the same lock.
+
+A lock with little contention can have low practical cost.
+
+A heavily contended lock can serialize otherwise parallel work.
+
+Measure contention.
+
+Do not remove locks merely because locks can be expensive.
+
+Incorrect lock removal can create races.
+
+Correctness comes before optimization.
+
+Lock granularity affects contention.
+
+One global lock is simple.
+
+One global lock can serialize unrelated work.
+
+Many fine-grained locks can increase complexity.
+
+Fine-grained locking can create deadlock risks.
+
+Choose the simplest locking strategy that satisfies performance requirements.
+
+Lock-free algorithms avoid traditional mutual exclusion locks for selected operations.
+
+Lock-free does not mean wait-free.
+
+Lock-free does not mean simple.
+
+Lock-free does not mean automatically faster.
+
+Lock-free code can be difficult to reason about.
+
+Use it when measurements and requirements justify it.
+
+Atomic operations can be cheaper than locks for selected operations.
+
+Atomic operations can still cause cache contention.
+
+A frequently modified shared atomic variable can become a scalability bottleneck.
+
+Shared state has hardware costs.
+
+Cache coherence can move cache lines between CPU cores.
+
+False sharing occurs when independent variables modified by different threads occupy the same cache line.
+
+False sharing can reduce performance.
+
+Padding can reduce false sharing in measured cases.
+
+Do not introduce architecture-specific padding without evidence.
+
+Memory locality affects performance.
+
+Contiguous data often benefits processor caches.
+
+Pointer-heavy structures can cause cache misses.
+
+Cache misses can stall execution.
+
+Data layout can matter as much as algorithmic instruction count.
+
+Measure realistic workloads.
+
+CPU cache and application cache are different concepts.
+
+CPU caches are hardware-managed memory hierarchy components.
+
+Application caches store reusable computed or retrieved data.
+
+Application caching trades memory and complexity for reduced repeated work.
+
+Caching is not automatically an optimization.
+
+A cache can become stale.
+
+A cache can consume excessive memory.
+
+A cache can add synchronization.
+
+A cache can reduce correctness if invalidation is wrong.
+
+Cache invalidation must follow data semantics.
+
+A cache hit returns data from the cache.
+
+A cache miss requires obtaining or computing data elsewhere.
+
+Cache hit ratio describes the proportion of requests served by the cache according to the measurement.
+
+A high hit ratio can improve performance when cache hits are substantially cheaper.
+
+A high hit ratio does not prove the cache is valuable if the underlying operation is already cheap.
+
+Measure actual savings.
+
+Caching expensive results can improve latency.
+
+Caching cheap results can cost more than recomputing them.
+
+Cache lookup has cost.
+
+Cache storage has cost.
+
+Cache synchronization has cost.
+
+Cache invalidation has cost.
+
+Cache serialization can have cost.
+
+Caching should target demonstrated repeated expense.
+
+Memoization caches function results based on inputs.
+
+Memoization is useful when repeated calls with the same inputs are expensive and results remain valid.
+
+Memoization requires stable result semantics.
+
+A function depending on hidden mutable state is difficult to memoize correctly.
+
+Deterministic pure functions are natural memoization candidates.
+
+Caches should have bounded size.
+
+Unbounded caches can become memory leaks in operational effect.
+
+Eviction removes entries according to cache policy.
+
+LRU approximates least-recently-used eviction.
+
+FIFO evicts according to insertion order.
+
+TTL expiration removes entries after defined time.
+
+Different policies fit different access patterns.
+
+Cache policy should match requirements.
+
+A TTL is not proof that data remains valid until expiration.
+
+A TTL is a caching policy.
+
+If authoritative state changes earlier, cached state can become stale unless invalidated.
+
+Caching should not silently violate correctness.
+
+Batching groups multiple operations.
+
+Batching can reduce per-operation overhead.
+
+Batching can reduce network round trips.
+
+Batching can reduce storage transactions.
+
+Batching can improve throughput.
+
+Batching can increase individual item latency.
+
+Batching can increase memory use.
+
+Batch size should be bounded.
+
+Larger batches are not automatically better.
+
+A batch can become too large for memory.
+
+A batch can exceed protocol limits.
+
+A batch can hold locks too long.
+
+A batch can increase retry cost.
+
+Measure batch size effects.
+
+Buffering stores data temporarily before processing or transfer.
+
+Buffering can reduce small I/O operations.
+
+Buffering can improve throughput.
+
+Buffering adds memory use.
+
+Buffering can delay visibility.
+
+Buffering can lose unflushed data during failure.
+
+Flush semantics should be understood.
+
+A successful write to an application buffer is not necessarily durable storage.
+
+Performance and durability can trade off.
+
+Storage caching can make writes appear fast before durable media completion.
+
+If durability matters, measure the required durability boundary.
+
+I/O operations have overhead.
+
+Many tiny reads can be slower than fewer larger reads.
+
+Many tiny writes can be slower than buffered writes.
+
+Sequential storage access is often more efficient than random access.
+
+The difference depends on storage technology.
+
+Solid-state storage reduces mechanical seek cost but still has finite I/O capacity.
+
+Do not assume all storage is equivalent.
+
+Storage latency should be measured on the deployment environment.
+
+Filesystem performance can depend on file count.
+
+Filesystem performance can depend on directory structure.
+
+Filesystem performance can depend on metadata operations.
+
+Filesystem performance can depend on synchronization requirements.
+
+Filesystem performance can depend on storage hardware.
+
+Do not generalize from one development machine.
+
+Database performance depends on queries.
+
+Database performance depends on indexes.
+
+Database performance depends on data volume.
+
+Database performance depends on cache state.
+
+Database performance depends on concurrency.
+
+Database performance depends on transactions.
+
+Database performance depends on storage.
+
+Database performance depends on schema design.
+
+A slow database request should be investigated using database evidence.
+
+Do not assume the database is slow merely because a request involving a database is slow.
+
+An index can improve selected query performance.
+
+An index consumes storage.
+
+An index increases selected write costs.
+
+Unused indexes can impose unnecessary overhead.
+
+Index design should follow query patterns.
+
+Query plans show how a database intends to execute queries.
+
+Query plans can reveal full scans.
+
+Query plans can reveal index usage.
+
+Query plans can reveal joins.
+
+Query plans can reveal estimated costs.
+
+Actual execution measurements provide stronger evidence than estimates alone.
+
+An ORM can simplify persistence code.
+
+An ORM can also generate inefficient query patterns.
+
+N+1 query behavior occurs when one initial query causes many additional queries for related data.
+
+N+1 behavior can create excessive round trips.
+
+Measure query count.
+
+Do not blame the ORM without inspecting generated queries.
+
+Network round trips have latency.
+
+Multiple sequential remote calls accumulate round-trip latency.
+
+Combining appropriate requests can reduce round trips.
+
+Parallel remote calls can reduce total elapsed time when operations are independent.
+
+Parallel remote calls increase load.
+
+A remote call is much more expensive and failure-prone than a local function call in many architectures.
+
+Do not design network APIs as though they were local object methods.
+
+Chatty protocols make many small exchanges.
+
+Chatty protocols can suffer badly on higher-latency networks.
+
+Protocol design should consider round trips.
+
+Payload size also matters.
+
+Large payloads consume bandwidth.
+
+Large payloads consume serialization time.
+
+Large payloads consume memory.
+
+Large payloads can increase latency.
+
+Sending unnecessary fields wastes resources.
+
+Compression can reduce network bytes.
+
+Compression consumes CPU.
+
+Compression adds latency.
+
+Compression effectiveness depends on data.
+
+Already compressed data can gain little.
+
+Small messages can cost more to compress than they save.
+
+Measure before enabling compression universally.
+
+Serialization consumes CPU and memory.
+
+Text formats can be larger than binary formats.
+
+Binary formats can be more compact.
+
+Compactness is not the only requirement.
+
+Debuggability can matter.
+
+Compatibility can matter.
+
+Simplicity can matter.
+
+Schema evolution can matter.
+
+Choose serialization based on complete requirements.
+
+Do not choose binary encoding solely because it sounds faster.
+
+DNS lookup can contribute latency.
+
+Connection establishment can contribute latency.
+
+TLS handshakes can contribute latency.
+
+Authentication can contribute latency.
+
+Protocol negotiation can contribute latency.
+
+Request processing can contribute latency.
+
+Response transfer can contribute latency.
+
+End-to-end measurement should account for relevant stages.
+
+Connection reuse can avoid repeated setup costs.
+
+Persistent connections can reduce handshakes.
+
+Persistent connections consume resources while open.
+
+Connection pools reuse connections.
+
+A connection pool can reduce connection setup overhead.
+
+A pool has finite capacity.
+
+A pool that is too small can create waiting.
+
+A pool that is too large can overwhelm the dependency.
+
+Pool size should be measured.
+
+A connection pool does not create unlimited backend capacity.
+
+If a database handles 100 useful concurrent connections, creating 10,000 client connections does not create more database capacity.
+
+Resource pools should protect dependencies.
+
+Timeouts affect performance behavior.
+
+A very long timeout can hold resources during failures.
+
+A very short timeout can reject valid slow operations.
+
+Timeouts should reflect expected latency and failure requirements.
+
+Retries multiply work.
+
+Three attempts can create up to three times the operation load.
+
+During an outage, uncontrolled retries can amplify overload.
+
+Retry storms can prevent recovery.
+
+Retries should be bounded.
+
+Retries should use appropriate delay.
+
+Exponential backoff increases delay between repeated attempts.
+
+Jitter varies retry timing to reduce synchronized retries.
+
+Retries should be limited to retryable failures.
+
+Non-idempotent operations require special care.
+
+Performance optimization must not change correctness.
+
+Dropping validation can make code faster and wrong.
+
+Skipping synchronization can make code faster and unsafe.
+
+Skipping durable writes can make code faster and non-durable.
+
+Skipping authentication can make code faster and insecure.
+
+Changing semantics is not a valid performance optimization unless requirements explicitly change.
+
+Correctness constraints remain constraints.
+
+Algorithmic complexity describes how resource requirements grow with input size.
+
+Big-O notation describes asymptotic growth.
+
+O(1) means bounded growth independent of input size under the model.
+
+O(log n) grows logarithmically.
+
+O(n) grows linearly.
+
+O(n log n) grows faster than linear.
+
+O(n squared) grows quadratically.
+
+Big-O does not specify actual runtime.
+
+Constant factors matter.
+
+Input sizes matter.
+
+Memory behavior matters.
+
+Hardware matters.
+
+An O(n squared) algorithm can be acceptable for tiny bounded input.
+
+An O(n) algorithm can still be slow with enormous constants.
+
+Choose algorithms according to real constraints.
+
+Complexity analysis helps predict scaling.
+
+Benchmarking measures actual implementation behavior.
+
+Use both.
+
+A data structure affects performance.
+
+Arrays provide indexed access and good locality.
+
+Linked structures can support selected insertion patterns but have pointer and locality costs.
+
+Hash tables provide expected efficient keyed lookup under appropriate conditions.
+
+Trees can provide ordered operations.
+
+Queues provide ordered work handling.
+
+Stacks provide last-in-first-out behavior.
+
+Choose structures based on required operations.
+
+Do not select a structure merely because it has favorable complexity for one operation.
+
+Memory allocation has cost.
+
+Repeated allocation can increase overhead.
+
+Repeated allocation can fragment memory.
+
+Pools or arenas can reduce allocation overhead for selected workloads.
+
+Pools and arenas introduce lifecycle complexity.
+
+Do not introduce custom allocation without evidence.
+
+Standard allocators are heavily optimized for general workloads.
+
+Allocation count can be measured.
+
+Allocation size can be measured.
+
+Peak allocation can be measured.
+
+Retained memory can be measured.
+
+Memory performance should distinguish allocation rate from retained memory.
+
+A program can allocate frequently while retaining little.
+
+A program can allocate rarely but retain enormous objects.
+
+These are different problems.
+
+Memory pressure can degrade performance.
+
+When physical memory is constrained, paging can increase.
+
+Paging to storage is far slower than ordinary RAM access.
+
+Heavy paging can destroy latency.
+
+Reducing memory footprint can improve performance under pressure.
+
+Memory optimization can sometimes outperform CPU micro-optimization.
+
+Garbage-collected runtimes have allocation and collection behavior.
+
+Frequent allocation can increase garbage collection work.
+
+Large heaps can affect collection behavior.
+
+Object retention can increase memory pressure.
+
+Garbage collection pauses can affect latency depending on runtime and collector.
+
+Measure runtime-specific behavior.
+
+Do not assume all garbage collectors behave the same way.
+
+Managed runtime tuning should follow measured workload.
+
+Increasing heap size can reduce collection frequency.
+
+Increasing heap size can also increase memory use and potentially collection costs.
+
+Tuning parameters interact.
+
+Change one controlled variable when possible.
+
+Native programs have different memory costs.
+
+Allocator contention can affect multithreaded native applications.
+
+Memory fragmentation can affect long-running applications.
+
+Cache locality can affect CPU behavior.
+
+Performance investigation should match the language and runtime.
+
+Compiler optimization can improve generated code.
+
+Debug builds can be substantially slower than optimized release builds.
+
+Benchmark the build configuration relevant to deployment.
+
+Do not use debug-build timing as proof of release performance.
+
+Do not assume optimized builds are correct merely because they are faster.
+
+Undefined behavior can produce different results under optimization.
+
+Correctness testing remains required.
+
+Compiler optimization levels can change binary size.
+
+Compiler optimization levels can change execution speed.
+
+Compiler optimization levels can change debugging visibility.
+
+Maximum optimization is not automatically best.
+
+Measure representative builds.
+
+Inlining replaces selected function calls with function bodies or equivalent optimized code.
+
+Inlining can reduce call overhead.
+
+Inlining can increase code size.
+
+Larger code can affect instruction cache behavior.
+
+Modern compilers perform inlining automatically.
+
+Manual inlining should be justified.
+
+Function-call overhead is often insignificant compared with I/O or larger computation.
+
+Do not sacrifice architecture to eliminate trivial call overhead without evidence.
+
+Branch prediction affects CPU execution.
+
+Unpredictable branches can reduce processor efficiency.
+
+Branch-level optimization is low-level work.
+
+It matters in selected hot loops.
+
+It is usually irrelevant to I/O-bound application code.
+
+Profile first.
+
+Vectorization allows processors to operate on multiple data elements through SIMD capabilities.
+
+Vectorization can accelerate suitable numeric workloads.
+
+Vectorization can introduce architecture-specific code.
+
+Compilers can automatically vectorize selected loops.
+
+Manual SIMD should be justified by measured requirements.
+
+Platform-specific optimization should remain behind appropriate boundaries when platform independence matters.
+
+A platform-specific fast path should produce equivalent required results.
+
+Optimization must not change protocol-visible or persistent semantics.
+
+Hardware acceleration can improve selected workloads.
+
+GPU acceleration can improve highly parallel workloads.
+
+GPU transfer overhead can outweigh computation savings for small workloads.
+
+Specialized hardware should not be assumed present unless deployment requirements guarantee it.
+
+A fallback can provide portability.
+
+Fallback correctness must match accelerated behavior where equivalent behavior is required.
+
+Performance per watt can matter.
+
+Power consumption can be a requirement.
+
+Embedded systems can have strict power budgets.
+
+Mobile systems can have battery constraints.
+
+Servers can have thermal and power limits.
+
+Maximum throughput is not always the only objective.
+
+Efficiency means useful work relative to consumed resources.
+
+Resource efficiency can reduce operating cost.
+
+Resource efficiency can improve capacity.
+
+Resource efficiency can improve thermal behavior.
+
+Resource efficiency should not compromise required correctness.
+
+Scalability should be measured across increasing workload.
+
+A system that handles 100 requests per second does not necessarily handle 1,000 requests per second with ten times the resources.
+
+Coordination overhead can increase.
+
+Contention can increase.
+
+Shared dependencies can saturate.
+
+Scaling can be nonlinear.
+
+Plot throughput and latency across load levels.
+
+Find the knee where latency rises sharply or throughput stops increasing meaningfully.
+
+Operating comfortably below saturation can provide reliability margin.
+
+Maximum benchmark throughput is not necessarily safe production capacity.
+
+Capacity planning estimates resources required for expected workload.
+
+Capacity planning should consider average load.
+
+Capacity planning should consider peak load.
+
+Capacity planning should consider growth.
+
+Capacity planning should consider failure scenarios.
+
+If two servers normally share load, each may need enough spare capacity to handle increased load when one fails.
+
+Redundancy without spare capacity can fail during failover.
+
+Performance and reliability interact.
+
+Headroom is unused capacity reserved for variation or failure.
+
+Running every resource continuously at maximum utilization leaves little headroom.
+
+Some workloads tolerate high utilization.
+
+Latency-sensitive workloads can require lower steady-state utilization.
+
+Measure the relationship.
+
+Autoscaling adds or removes resources according to policy.
+
+Autoscaling reacts after measurements indicate demand.
+
+Scaling takes time.
+
+Autoscaling cannot instantly solve every spike.
+
+Scaling policies can oscillate if poorly configured.
+
+Autoscaling should use meaningful signals.
+
+CPU alone can be insufficient.
+
+Queue depth can be relevant.
+
+Request latency can be relevant.
+
+Concurrency can be relevant.
+
+The correct signal depends on the bottleneck.
+
+Vertical scaling increases resources available to one instance.
+
+More CPU can improve CPU-bound workloads.
+
+More RAM can reduce memory pressure.
+
+Faster storage can improve storage-bound workloads.
+
+Vertical scaling has limits.
+
+Horizontal scaling adds instances.
+
+Horizontal scaling requires workload distribution.
+
+Shared state can limit horizontal scalability.
+
+Central locks can limit horizontal scalability.
+
+One database can remain the bottleneck behind many application servers.
+
+Scaling one layer does not scale every dependency.
+
+Performance architecture should identify shared bottlenecks.
+
+Load balancing distributes work across available workers or instances.
+
+Load balancing policy affects distribution.
+
+Round-robin distributes requests cyclically.
+
+Least-connections uses connection counts.
+
+Hash-based policies can preserve affinity.
+
+No policy guarantees equal actual computational load.
+
+One request can cost far more than another.
+
+Load balancing should match workload characteristics.
+
+Session affinity directs related requests to the same instance.
+
+Affinity can simplify local session state.
+
+Affinity can reduce balancing flexibility.
+
+Losing the selected instance can lose local session state.
+
+Shared or externally persisted session state can reduce affinity requirements.
+
+Architecture determines the tradeoff.
+
+Rate limiting can protect capacity.
+
+Rate limits can be per client.
+
+Rate limits can be per identity.
+
+Rate limits can be per operation.
+
+Rate limits can be global.
+
+Rate limits should correspond to resource and policy requirements.
+
+A rate limit is not a substitute for capacity planning.
+
+It is a control mechanism.
+
+Admission control decides whether new work should enter the system.
+
+Rejecting work before expensive processing can protect existing work.
+
+Admission control can preserve service quality under overload.
+
+A system that accepts unlimited work can fail more severely than one that rejects excess work predictably.
+
+Load shedding intentionally rejects or drops selected work during overload according to policy.
+
+Load shedding should prioritize correctness.
+
+Authoritative operations should not be silently discarded.
+
+Optional telemetry can have different overload policy from critical transactions.
+
+Priority should reflect mission requirements.
+
+Observability itself consumes resources.
+
+Logging consumes CPU.
+
+Logging consumes memory.
+
+Logging consumes storage.
+
+Logging can consume network bandwidth.
+
+Excessive synchronous logging can reduce throughput.
+
+Logging every iteration of a hot loop can dominate runtime.
+
+Do not disable required audit logging merely for speed.
+
+Design logging appropriately.
+
+Use suitable log levels.
+
+Avoid unnecessary formatting when messages will not be emitted.
+
+Batch or asynchronously process logs where requirements permit.
+
+Audit durability requirements can require synchronous behavior.
+
+Performance must respect those requirements.
+
+Metrics collection consumes resources.
+
+High-cardinality metrics can consume substantial memory and storage.
+
+A unique metric label for every request can be operationally expensive.
+
+Metrics should aggregate useful dimensions.
+
+Tracing can add overhead.
+
+Sampling can reduce tracing cost.
+
+Debug instrumentation can be enabled selectively.
+
+Observability should be sufficient without overwhelming the system.
+
+Performance failures should remain observable.
+
+A system that becomes slow and stops producing diagnostic information is harder to recover.
+
+Watchdog mechanisms can detect stalls.
+
+A watchdog should monitor meaningful progress.
+
+CPU activity does not necessarily mean useful progress.
+
+A deadlocked process can consume little CPU.
+
+A livelocked process can consume substantial CPU while accomplishing nothing.
+
+Progress metrics can be stronger than resource metrics.
+
+Deadlock occurs when execution contexts wait indefinitely for resources held in a dependency cycle.
+
+Deadlock destroys progress.
+
+Lock ordering can prevent selected deadlocks.
+
+Timeouts can detect selected stalls but do not automatically repair state.
+
+Livelock occurs when components remain active but repeatedly react without useful progress.
+
+High activity does not prove throughput.
+
+Measure completed useful work.
+
+Busy waiting repeatedly checks a condition without blocking.
+
+Busy waiting can consume CPU.
+
+Busy waiting can provide low latency in specialized cases.
+
+Ordinary applications should generally avoid uncontrolled spin loops.
+
+Blocking or event-driven waiting is often more efficient.
+
+Spinlocks can be useful when waits are expected to be extremely short and platform behavior justifies them.
+
+Measure.
+
+Polling repeatedly checks for changes.
+
+Polling frequency trades responsiveness for resource usage.
+
+Very frequent polling can waste CPU or network resources.
+
+Very infrequent polling can increase detection latency.
+
+Event-driven notification can reduce unnecessary polling where available.
+
+Polling remains appropriate in some architectures.
+
+Select intervals based on requirements.
+
+Sleep is not synchronization.
+
+Adding delays can hide races.
+
+Adding delays can reduce load accidentally.
+
+A program becoming stable after adding sleep does not prove the underlying problem was performance.
+
+Timing changes can mask concurrency defects.
+
+Investigate the actual cause.
+
+Caching can mask slow dependencies.
+
+A warm cache can make a benchmark look excellent.
+
+A cold cache can expose dependency cost.
+
+Measure both when relevant.
+
+Production cache hit rates can differ from benchmarks.
+
+Use representative data.
+
+Synthetic workloads generate controlled test traffic.
+
+Synthetic workloads are reproducible.
+
+Synthetic workloads can fail to represent real behavior.
+
+Production-derived workload models can be more representative.
+
+Production traffic can contain sensitive information.
+
+Use safe representative datasets.
+
+Benchmark data size matters.
+
+A query fast on 100 rows can be slow on 100 million rows.
+
+An algorithm fast on tiny inputs can scale poorly.
+
+Test realistic data volume.
+
+Test realistic distribution.
+
+Skewed data can change performance.
+
+One hot key can create contention.
+
+Uniform random benchmarks can hide hot-key behavior.
+
+Workload shape matters.
+
+Read-heavy workloads differ from write-heavy workloads.
+
+Sequential access differs from random access.
+
+Small messages differ from large messages.
+
+Short connections differ from persistent connections.
+
+One client differs from thousands of clients.
+
+Performance claims apply to the tested workload.
+
+Do not generalize beyond evidence.
+
+Measurement itself can be wrong.
+
+Wall-clock measurement can be affected by scheduling.
+
+CPU time and elapsed time are different.
+
+System clocks can adjust.
+
+Monotonic clocks should be used for elapsed-duration measurement where available.
+
+A monotonic clock does not move backward due to ordinary wall-clock correction according to its contract.
+
+Wall clock is useful for timestamps.
+
+Monotonic time is appropriate for durations.
+
+Use the correct clock.
+
+Timer resolution matters.
+
+Measuring an operation shorter than timer resolution produces poor data.
+
+Repeat operations or use appropriate high-resolution timing.
+
+Benchmark loops can be optimized away by compilers if results are unused.
+
+A benchmark must ensure measured work actually occurs.
+
+Compiler optimization can distort naive microbenchmarks.
+
+Benchmark frameworks can help but still require understanding.
+
+Outliers are unusually distant measurements.
+
+Outliers can represent noise.
+
+Outliers can represent real tail behavior.
+
+Do not discard outliers automatically.
+
+Investigate their cause.
+
+Garbage collection can create outliers.
+
+Scheduler preemption can create outliers.
+
+Page faults can create outliers.
+
+Network retransmission can create outliers.
+
+Storage flushes can create outliers.
+
+Background tasks can create outliers.
+
+Real systems contain variability.
+
+Report distributions.
+
+Standard deviation measures spread around the mean under its statistical definition.
+
+Median can be more robust to extreme values than mean.
+
+Percentiles are often useful for latency.
+
+Maximum latency can reveal worst observed behavior but is sensitive to sample duration and anomalies.
+
+Use multiple statistics.
+
+Performance comparisons should include uncertainty.
+
+A tiny difference within measurement noise is not evidence of meaningful improvement.
+
+Repeat tests.
+
+Control conditions.
+
+Compare distributions.
+
+Large claims require strong evidence.
+
+A 1 percent apparent improvement can be noise.
+
+A 10 times improvement is easier to distinguish but should still be reproduced.
+
+Performance regressions can be detected in automated testing.
+
+Benchmark suites can run on controlled hardware.
+
+Thresholds can flag changes.
+
+Shared CI infrastructure can have noisy timing.
+
+Use tolerance appropriate to environment.
+
+Do not fail builds on meaningless timing variation.
+
+Critical deterministic operation counts can sometimes be tested without wall-clock timing.
+
+For example, query count can be tested.
+
+Allocation count can be tested.
+
+Message count can be tested.
+
+Algorithmic complexity can be tested indirectly at multiple input sizes.
+
+Structural performance tests can complement timing.
+
+Optimization should target the largest relevant costs first.
+
+Reducing a 5-second database query to 500 milliseconds matters more than reducing a 10-microsecond helper to 5 microseconds when both occur once in the same request.
+
+This follows from total contribution.
+
+Optimize where time or resources are actually spent.
+
+Amdahl's law formalizes this principle for speedup.
+
+If 90 percent of runtime is unaffected by an optimization, even eliminating the remaining 10 percent cannot improve total runtime by more than that portion.
+
+System-level optimization requires system-level measurements.
+
+Performance can trade against memory.
+
+Precomputation uses memory to save computation.
+
+Caching uses memory to save repeated work.
+
+Indexes use storage to improve lookup.
+
+Buffering uses memory to reduce I/O.
+
+Performance can trade against durability.
+
+Asynchronous writes can reduce apparent latency.
+
+Delayed flushes can improve throughput.
+
+Durability guarantees can weaken if acknowledgment occurs before persistence.
+
+Do not alter durability semantics without explicit authorization.
+
+Performance can trade against consistency.
+
+Caching and replication can return stale data.
+
+Eventual consistency can improve availability or scalability for selected systems.
+
+Strong consistency can require coordination.
+
+Correctness requirements determine acceptable tradeoffs.
+
+Performance can trade against security.
+
+Cryptographic operations consume resources.
+
+Validation consumes resources.
+
+Authentication consumes resources.
+
+Removing required security is not optimization.
+
+Security cost is part of required system cost.
+
+Optimize implementation without removing the required property.
+
+Performance can trade against maintainability.
+
+A highly specialized implementation can be faster.
+
+A simple implementation can be easier to maintain.
+
+If both satisfy performance requirements, simplicity is valuable.
+
+Do not optimize beyond the requirement merely for a larger benchmark number.
+
+Performance has an opportunity cost.
+
+Engineering time spent optimizing one area is unavailable elsewhere.
+
+Optimize when the benefit justifies the cost.
+
+Performance budgets allocate acceptable resource or latency cost to components.
+
+A request can have a total latency budget.
+
+Individual stages can receive portions of that budget.
+
+A process can have a memory budget.
+
+A service can have a CPU budget.
+
+Budgets make requirements explicit.
+
+A budget is not a guarantee.
+
+Measurements determine whether the budget is met.
+
+Latency budgets help identify which stages consume too much time.
+
+If a 100-millisecond request budget spends 90 milliseconds on one dependency, local optimization elsewhere has limited effect.
+
+Dependency budgets can expose architecture problems.
+
+Service-level objectives can include performance targets.
+
+An SLO can state that a defined percentage of operations should complete within a defined latency over a defined period.
+
+Performance SLOs should correspond to user or system requirements.
+
+Averages are often poor SLOs because they can hide tails.
+
+Performance monitoring should compare actual behavior with objectives.
+
+Performance degradation can be gradual.
+
+Memory growth can increase paging.
+
+Queue growth can increase latency.
+
+Database growth can slow queries.
+
+Log growth can consume storage.
+
+Connection growth can exhaust descriptors.
+
+Monitor trends.
+
+Capacity problems are easier to solve before exhaustion.
+
+Performance anomalies should be investigated using evidence.
+
+Establish when degradation began.
+
+Identify which metric changed.
+
+Identify which deployment occurred.
+
+Identify which workload changed.
+
+Identify which dependency changed.
+
+Identify whether resource saturation occurred.
+
+Correlation does not automatically establish cause.
+
+A deployment near the time of degradation is evidence worth investigating.
+
+It is not proof until the mechanism is established.
+
+Compare before and after.
+
+Reproduce where possible.
+
+Rollback can provide evidence.
+
+Profiling can provide evidence.
+
+Logs can provide evidence.
+
+Metrics can provide evidence.
+
+Traces can provide evidence.
+
+Operating-system counters can provide evidence.
+
+Database plans can provide evidence.
+
+Packet captures can provide evidence.
+
+Use the evidence appropriate to the boundary.
+
+A trace follows an operation across components.
+
+Tracing can identify where end-to-end latency is spent.
+
+A trace span measures a portion of an operation.
+
+Nested spans can reveal dependency timing.
+
+Trace timestamps should use coherent timing mechanisms.
+
+Distributed clocks can differ.
+
+Duration measurements within a process can be more reliable than comparing unsynchronized wall clocks.
+
+Distributed tracing systems account for these challenges according to their implementation.
+
+A slow request can be caused by queueing before the measured application handler begins.
+
+Instrumentation boundaries matter.
+
+Measure arrival-to-completion when user-observed latency matters.
+
+Measure internal stages for diagnosis.
+
+One measurement cannot answer every performance question.
+
+Performance counters can accumulate events.
+
+Counters can record requests.
+
+Counters can record errors.
+
+Counters can record bytes.
+
+Counters can record cache hits.
+
+Counters can record allocations.
+
+Rates can be derived over time.
+
+Gauges represent current values.
+
+Queue depth is commonly represented as a gauge.
+
+Histograms record distributions.
+
+Latency histograms support percentile estimation.
+
+Metric type should match the property.
+
+High-resolution measurement can consume resources.
+
+Choose resolution appropriate to decisions.
+
+Performance optimization should preserve deterministic behavior where determinism is required.
+
+Do not use unordered parallel execution if output ordering is protocol-significant unless ordering is restored deterministically.
+
+Do not replace exact arithmetic with approximate arithmetic when exact results are required.
+
+Do not use nondeterministic caches as authority.
+
+Do not skip validation because inputs are usually valid.
+
+Optimization must remain inside correctness boundaries.
+
+Platform-specific optimization can exist behind platform abstractions.
+
+A Linux implementation can use an efficient Linux facility.
+
+A Windows implementation can use an efficient Windows facility.
+
+Both should preserve common required semantics.
+
+One platform being faster does not justify different authoritative results.
+
+Performance equivalence is not always required.
+
+Semantic equivalence can be required even when performance differs.
+
+Performance targets can be platform-specific if requirements permit.
+
+Document differences.
+
+Compiler, operating system, CPU, memory, filesystem, and network can all affect performance.
+
+Do not promise identical timing across platforms without evidence.
+
+Portable behavior and identical speed are different goals.
+
+Resource limits should be explicit.
+
+Maximum connections should be bounded where needed.
+
+Maximum message size should be bounded.
+
+Maximum queue depth should be bounded.
+
+Maximum worker count should be bounded.
+
+Maximum cache size should be bounded.
+
+Maximum request body size should be bounded.
+
+Maximum recursion depth should be bounded where untrusted input controls structure.
+
+Bounds protect performance predictability.
+
+An unbounded operation can become a denial-of-service path.
+
+Complexity attacks exploit inputs that cause excessive computation or memory use.
+
+Hash collision attacks can degrade poorly protected hash tables.
+
+Pathological parser inputs can consume excessive CPU.
+
+Deep nesting can consume stack.
+
+Huge counts can consume memory.
+
+Performance is part of security.
+
+Resource exhaustion is a security concern.
+
+Defensive limits should be based on legitimate requirements.
+
+A limit that rejects legitimate workload is incorrect.
+
+A limit that permits destructive resource consumption can be ineffective.
+
+Measure legitimate maxima and provide safe headroom.
+
+Performance failures should fail predictably.
+
+When a queue is full, return a defined result.
+
+When a pool is exhausted, wait within a bound or reject according to policy.
+
+When memory allocation fails, handle failure safely.
+
+When storage is full, do not silently discard authoritative data.
+
+When a timeout occurs, preserve uncertain outcome semantics.
+
+Overload behavior is part of architecture.
+
+Graceful degradation can disable optional expensive work.
+
+Optional analytics can be reduced.
+
+Optional background indexing can be delayed.
+
+Nonessential visual effects can be reduced.
+
+Required correctness should remain.
+
+Do not degrade by disabling validation.
+
+Do not degrade by corrupting state.
+
+Do not degrade by silently losing required data.
+
+Performance testing should include failure conditions.
+
+Test dependency slowdown.
+
+Test packet loss where relevant.
+
+Test storage latency.
+
+Test reduced CPU.
+
+Test memory pressure.
+
+Test one worker failure.
+
+Test connection exhaustion.
+
+Test queue saturation.
+
+A system can perform well only under ideal conditions and fail badly during partial failure.
+
+Real performance includes degraded conditions.
+
+Recovery performance matters.
+
+After an outage, queued work can create a surge.
+
+Reconnecting clients can create a thundering herd.
+
+Caches can all be cold.
+
+Replicas can need synchronization.
+
+Recovery can generate more load than normal operation.
+
+Architecture should account for recovery load.
+
+A thundering herd occurs when many participants perform the same action simultaneously after an event.
+
+Retry jitter can reduce synchronized retries.
+
+Staggered refresh can reduce synchronized cache expiration.
+
+Connection backoff can reduce reconnect storms.
+
+Randomization can improve load distribution where deterministic external results are not affected.
+
+Random timing should not alter authoritative semantics.
+
+Cache stampede occurs when many requests simultaneously recompute the same missing or expired cached value.
+
+Request coalescing can allow one computation while others wait.
+
+Stale-while-revalidate can serve selected stale data while refreshing where correctness permits.
+
+Cache strategy should follow data requirements.
+
+Prefetching obtains data before it is explicitly requested.
+
+Prefetching can reduce future latency.
+
+Prefetching can waste bandwidth and memory when predictions are wrong.
+
+Hardware performs some prefetching automatically.
+
+Applications can prefetch predictable data.
+
+Measure hit usefulness.
+
+Lazy initialization delays work until needed.
+
+Lazy initialization can reduce startup cost.
+
+Lazy initialization moves latency to first use.
+
+Lazy initialization requires synchronization if multiple threads can initialize simultaneously.
+
+Eager initialization performs work during startup.
+
+Eager initialization can increase startup latency.
+
+Eager initialization can ensure failures occur before readiness.
+
+Choose based on lifecycle requirements.
+
+Precomputation performs work ahead of demand.
+
+Precomputation can improve request latency.
+
+Precomputation consumes storage or memory.
+
+Precomputed data can become stale.
+
+Regeneration cost matters.
+
+Derived data should remain reconstructable where architecture requires it.
+
+Incremental computation updates results as inputs change.
+
+Incremental computation can avoid full recomputation.
+
+Incremental state introduces complexity.
+
+A full recomputation can be simpler and sufficiently fast.
+
+Measure before introducing incremental complexity.
+
+Zero-copy techniques reduce data copying between components or buffers.
+
+Copies consume memory bandwidth and CPU.
+
+Zero-copy can improve high-throughput data movement.
+
+Zero-copy can complicate ownership and lifetime.
+
+Do not sacrifice safety for zero-copy without requirement.
+
+One extra copy is often irrelevant in low-volume control paths.
+
+Hot data paths and control paths have different optimization priorities.
+
+Control paths prioritize correctness and clarity.
+
+Data paths can justify specialized optimization under high load.
+
+Identify which path is actually performance critical.
+
+System calls transition between application and operating-system services.
+
+System calls have overhead.
+
+Reducing unnecessary system calls can improve selected workloads.
+
+Batching I/O can reduce calls.
+
+Do not avoid required operating-system boundaries merely to save calls.
+
+Kernel bypass and specialized networking techniques can improve extreme packet-processing workloads.
+
+They greatly increase complexity.
+
+Ordinary applications rarely require them.
+
+Use specialized mechanisms only when ordinary mechanisms fail measured requirements.
+
+Polling versus interrupts is a performance tradeoff at low levels.
+
+Interrupt-driven operation reduces unnecessary CPU when events are sparse.
+
+Polling can reduce latency under extremely high event rates in specialized systems.
+
+Architecture should not adopt low-level techniques without workload evidence.
+
+Performance tuning is workload-specific.
+
+A setting optimal for one workload can be poor for another.
+
+A large buffer can improve sequential throughput.
+
+A large buffer can waste memory for many small connections.
+
+A large thread pool can improve one blocking workload.
+
+A large thread pool can harm another through contention.
+
+Defaults are compromises.
+
+Tune only with evidence.
+
+Configuration should expose performance controls only when operators can use them safely.
+
+Hundreds of tuning parameters can make systems difficult to operate.
+
+Good defaults reduce operational burden.
+
+Automatic adaptation can help when behavior is well understood.
+
+Automatic tuning should remain bounded.
+
+An adaptive system should not oscillate uncontrollably.
+
+Observability should explain automatic decisions.
+
+Performance settings should not silently alter correctness.
+
+Performance optimization should have a hypothesis.
+
+Example: database round trips dominate request latency.
+
+Measure current round trips.
+
+Change the design to reduce round trips.
+
+Measure again.
+
+Confirm latency improved.
+
+Check correctness.
+
+Check resource use.
+
+Check behavior under load.
+
+This is stronger than changing code until a benchmark improves.
+
+One optimization can move cost elsewhere.
+
+Compressing data reduces network bytes but increases CPU.
+
+Caching reduces computation but increases memory.
+
+Parallelism reduces elapsed time but increases total CPU.
+
+Batching reduces calls but increases latency.
+
+Indexing reduces reads but increases writes.
+
+Measure the whole system.
+
+Local optimization can create global regression.
+
+A module reducing its latency by sending twice as many database requests can harm total system capacity.
+
+A client aggressively retrying can improve its individual success chance while harming the service.
+
+Architecture should optimize system objectives rather than one component in isolation.
+
+Fairness can be a performance requirement.
+
+One client should not consume all workers when policy requires shared access.
+
+One large job should not indefinitely block small jobs when latency requirements differ.
+
+Scheduling can enforce fairness.
+
+Fairness can reduce maximum throughput.
+
+Policy determines acceptable tradeoff.
+
+Priority inversion occurs when high-priority work waits indirectly on lower-priority work holding a required resource.
+
+Priority-aware synchronization can mitigate selected cases.
+
+Priority systems increase complexity.
+
+Use them when actual priority requirements exist.
+
+Real-time systems can require bounded worst-case execution time.
+
+Average benchmarks are insufficient for real-time guarantees.
+
+Worst-case behavior matters.
+
+Memory allocation can be problematic in hard real-time paths if allocation latency is unbounded.
+
+Garbage collection can be problematic depending on pause guarantees.
+
+Operating-system scheduling matters.
+
+Real-time performance is a specialized discipline.
+
+Do not claim real-time behavior from ordinary low average latency.
+
+Performance should be documented where operationally significant.
+
+Record expected resource usage.
+
+Record capacity assumptions.
+
+Record benchmark methodology.
+
+Record known limits.
+
+Record tuning parameters.
+
+Record failure thresholds.
+
+Record platform differences.
+
+Documentation prevents benchmark folklore from becoming engineering fact.
+
+A benchmark result is historical evidence for the tested configuration.
+
+It is not a permanent universal property.
+
+Software changes.
+
+Hardware changes.
+
+Workload changes.
+
+Dependencies change.
+
+Repeat measurements when conditions change.
+
+Do not confuse latency with throughput.
+
+Do not confuse throughput with capacity.
+
+Do not confuse capacity with scalability.
+
+Do not confuse concurrency with parallelism.
+
+Do not confuse parallelism with guaranteed speedup.
+
+Do not confuse high CPU with useful work.
+
+Do not confuse low CPU with available useful capacity.
+
+Do not confuse memory usage with memory leak.
+
+Do not confuse cache hit rate with cache value.
+
+Do not confuse warm-cache performance with cold-start performance.
+
+Do not confuse benchmark performance with production performance.
+
+Do not confuse microbenchmark results with end-to-end improvement.
+
+Do not confuse average latency with tail latency.
+
+Do not confuse maximum throughput with safe operating capacity.
+
+Do not confuse more threads with more throughput.
+
+Do not confuse more connections with more backend capacity.
+
+Do not confuse asynchronous execution with faster execution.
+
+Do not confuse batching with lower individual latency.
+
+Do not confuse buffering with durability.
+
+Do not confuse acknowledgment with durable persistence.
+
+Do not confuse retry with reliability.
+
+Do not confuse timeout with remote failure.
+
+Do not confuse compression with automatic performance improvement.
+
+Do not confuse binary encoding with automatic performance superiority.
+
+Do not confuse optimization with correctness.
+
+Do not confuse complexity with sophistication.
+
+Do not confuse specialized code with efficient code.
+
+Do not confuse newer hardware with permission to ignore inefficient algorithms.
+
+Do not confuse old code with slow code.
+
+Do not confuse source-code size with runtime cost.
+
+Do not confuse intuition with profiling.
+
+Do not confuse correlation with causation.
+
+Do not confuse one successful benchmark run with evidence of stable performance.
+
+Do not confuse absence of crashes with acceptable performance.
+
+When a system is slow, define what is slow.
+
+Measure the affected operation.
+
+Measure latency distribution.
+
+Measure throughput.
+
+Measure resource utilization.
+
+Measure queue depth.
+
+Measure dependency latency.
+
+Measure error and retry rates.
+
+Profile where appropriate.
+
+Identify the bottleneck.
+
+Do not optimize unrelated code.
+
+When CPU is saturated, profile CPU work.
+
+When storage is saturated, inspect storage operations.
+
+When memory pressure is high, inspect allocation and retention.
+
+When lock contention is high, inspect synchronization.
+
+When network latency dominates, inspect round trips and payloads.
+
+When a dependency dominates, inspect dependency interaction.
+
+Match investigation to evidence.
+
+When optimizing, preserve correctness.
+
+Preserve protocol semantics.
+
+Preserve persistent semantics.
+
+Preserve authorization.
+
+Preserve validation.
+
+Preserve durability.
+
+Preserve deterministic behavior where required.
+
+Preserve platform-independent results where required.
+
+Then compare performance.
+
+When testing an optimization, use the same workload.
+
+Use the same data.
+
+Use the same hardware where practical.
+
+Use the same configuration.
+
+Run enough repetitions.
+
+Inspect variability.
+
+Compare relevant percentiles.
+
+Check throughput.
+
+Check resource consumption.
+
+Check failure behavior.
+
+An optimization is successful only if it improves the required property without violating other requirements.
+
+When capacity planning, identify the expected workload.
+
+Identify peak workload.
+
+Identify per-operation resource cost.
+
+Identify shared dependencies.
+
+Identify saturation points.
+
+Identify required redundancy.
+
+Reserve headroom.
+
+Test the expected peak.
+
+Test failure conditions.
+
+Do not plan capacity from hope.
+
+When designing for performance, keep the design small enough to understand.
+
+Avoid unnecessary network boundaries.
+
+Avoid unnecessary serialization.
+
+Avoid unnecessary copying.
+
+Avoid unnecessary allocation.
+
+Avoid unnecessary polling.
+
+Avoid unnecessary synchronization.
+
+Avoid unnecessary database round trips.
+
+Avoid unnecessary retries.
+
+Avoid unnecessary work.
+
+The fastest unnecessary operation is the operation that is not performed.
+
+Performance engineering is evidence-driven.
+
+Measure first.
+
+Identify the limiting factor.
+
+Change the smallest appropriate thing.
+
+Measure again.
+
+Keep the change only when the evidence supports it.
+
+Correctness defines what the system must do.
+
+Performance defines whether it can do that work within required resource and timing constraints.

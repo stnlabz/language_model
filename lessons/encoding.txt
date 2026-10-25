@@ -1,0 +1,1761 @@
+Encoding is the representation of information according to defined rules.
+
+An encoding maps information from one representation into another representation.
+
+Encoding does not inherently provide secrecy.
+
+Encoding does not inherently provide authenticity.
+
+Encoding does not inherently provide integrity.
+
+Encoding is not encryption.
+
+Encoding is not hashing.
+
+Encoding is not compression.
+
+These operations can be combined, but they solve different problems.
+
+Text encoding defines how textual information is represented as bytes.
+
+Computers store and transmit bytes.
+
+Human-readable text consists of characters interpreted according to a character model.
+
+A sequence of bytes does not identify its text encoding by itself.
+
+The same bytes can be interpreted differently under different encodings.
+
+The encoding must be known, defined, detected through a reliable mechanism, or otherwise established by the surrounding format or protocol.
+
+Do not guess an encoding when correctness requires certainty.
+
+ASCII is a character encoding.
+
+ASCII defines numeric values for a limited set of characters.
+
+ASCII includes English letters.
+
+ASCII includes digits.
+
+ASCII includes punctuation.
+
+ASCII includes control characters.
+
+ASCII does not represent the full range of human writing systems.
+
+Unicode is a character standard.
+
+Unicode assigns code points to characters and other textual elements.
+
+Unicode is not itself one single byte encoding.
+
+UTF-8 is a Unicode encoding.
+
+UTF-16 is a Unicode encoding.
+
+UTF-32 is a Unicode encoding.
+
+Do not confuse Unicode with UTF-8.
+
+Do not confuse a Unicode code point with its UTF-8 bytes.
+
+A Unicode code point is an abstract numeric value assigned by Unicode.
+
+Code points are commonly written using notation such as U+0041.
+
+U+0041 represents the character LATIN CAPITAL LETTER A.
+
+The UTF-8 representation of a code point can contain one or more bytes.
+
+The UTF-16 representation of a code point can contain one or more 16-bit code units.
+
+The UTF-32 representation commonly uses one 32-bit code unit for each Unicode code point.
+
+Code point and code unit are different concepts.
+
+A code unit is the basic storage unit used by an encoding.
+
+UTF-8 uses 8-bit code units.
+
+UTF-16 uses 16-bit code units.
+
+UTF-32 uses 32-bit code units.
+
+One character is not necessarily one code unit.
+
+One character is not necessarily one byte.
+
+One visible symbol is not necessarily one Unicode code point.
+
+These distinctions matter.
+
+UTF-8 represents Unicode code points using sequences of one to four bytes.
+
+ASCII characters use the same byte values in UTF-8 as they do in ASCII.
+
+This makes UTF-8 compatible with ASCII for the ASCII range.
+
+Characters outside the ASCII range require multiple bytes in UTF-8.
+
+Therefore string byte length and character count can differ.
+
+Do not allocate UTF-8 storage based solely on character count without accounting for byte representation.
+
+Do not truncate UTF-8 arbitrarily at a byte boundary if valid text must be preserved.
+
+A truncation point can fall inside a multi-byte sequence.
+
+Invalid UTF-8 can result.
+
+UTF-8 has defined valid byte sequences.
+
+Not every arbitrary byte sequence is valid UTF-8.
+
+A UTF-8 decoder should reject or explicitly handle malformed sequences according to application policy.
+
+Do not silently interpret malformed UTF-8 as valid text.
+
+UTF-16 represents Unicode using 16-bit code units.
+
+Some Unicode code points require one UTF-16 code unit.
+
+Others require a surrogate pair consisting of two code units.
+
+Therefore one UTF-16 code unit does not always represent one code point.
+
+Splitting a surrogate pair creates invalid Unicode representation.
+
+UTF-16 has byte-order considerations when represented as bytes.
+
+UTF-16LE uses little-endian byte order.
+
+UTF-16BE uses big-endian byte order.
+
+If a protocol uses UTF-16, byte order must be established.
+
+UTF-32 represents Unicode code points using fixed-width 32-bit code units.
+
+Fixed-width code units do not mean user-visible characters have fixed width.
+
+A visible grapheme can still contain multiple code points.
+
+Text rendering and Unicode encoding are separate concerns.
+
+A byte order mark is commonly abbreviated BOM.
+
+A BOM is a Unicode character that can be used at the beginning of selected encoded text to indicate encoding or byte order.
+
+UTF-16 and UTF-32 can use a BOM to indicate byte order.
+
+UTF-8 can contain the byte sequence representing U+FEFF as a signature at the beginning of a file.
+
+UTF-8 does not require a BOM.
+
+Some software expects a UTF-8 BOM.
+
+Some software does not.
+
+Some formats discourage or prohibit it.
+
+The surrounding format determines acceptable behavior.
+
+Do not automatically add a BOM to every UTF-8 file.
+
+Do not automatically remove a BOM when exact bytes matter.
+
+A BOM can become significant if software does not expect it.
+
+For example, a parser expecting the first bytes to contain a particular marker can fail if unexpected BOM bytes precede it.
+
+Encoding rules belong to the format.
+
+Unicode characters can have multiple equivalent representations.
+
+A character with an accent can sometimes be represented as one precomposed code point.
+
+It can sometimes be represented as a base character followed by a combining mark.
+
+These representations can look identical.
+
+Their bytes can differ.
+
+Their code-point sequences can differ.
+
+Unicode normalization defines standardized transformations between selected equivalent representations.
+
+Common normalization forms include NFC.
+
+Common normalization forms include NFD.
+
+Common normalization forms include NFKC.
+
+Common normalization forms include NFKD.
+
+Normalization forms have different semantics.
+
+Do not apply normalization blindly.
+
+Compatibility normalization can change distinctions that an application considers meaningful.
+
+If exact user input must be preserved, retain the original representation.
+
+If canonical comparison requires normalization, define the required normalization form.
+
+Do not let different implementations choose normalization independently.
+
+Normalization is not case folding.
+
+Normalization is not encoding conversion.
+
+Normalization is not transliteration.
+
+These are separate operations.
+
+Case conversion can be language-sensitive.
+
+Uppercase and lowercase transformations are not always one-to-one.
+
+Do not assume converting to lowercase preserves string length.
+
+Do not assume ASCII case rules apply to all Unicode text.
+
+Case-insensitive comparison requires defined rules.
+
+Filesystem case comparison and Unicode application comparison are not automatically identical.
+
+Locale-sensitive comparison can produce different results in different locales.
+
+Canonical protocol ordering should not depend on unspecified locale behavior.
+
+Use explicitly defined byte or code-point comparison when protocol determinism requires it.
+
+A grapheme cluster represents a user-perceived textual unit according to Unicode text segmentation rules.
+
+One grapheme cluster can contain multiple code points.
+
+A displayed symbol can therefore contain multiple code points.
+
+A code-point count is not necessarily a user-visible character count.
+
+A byte count is not necessarily a code-point count.
+
+A code-unit count is not necessarily a grapheme count.
+
+Define what length means.
+
+If a protocol specifies byte length, count bytes.
+
+If a user interface specifies character limits, determine whether the intended unit is code points or grapheme clusters.
+
+Do not use one measurement accidentally for another.
+
+Text width is not determined solely by character count.
+
+Some characters occupy different display widths.
+
+Combining marks can occupy no independent width.
+
+Emoji can involve multiple code points.
+
+Rendering depends on fonts and rendering systems.
+
+Encoding establishes representation.
+
+It does not establish visual appearance.
+
+The same Unicode text can render differently using different fonts.
+
+Do not use visual appearance as exact data identity.
+
+Different Unicode characters can look similar.
+
+These are sometimes called homoglyphs.
+
+Homoglyphs can create security problems.
+
+An identifier that visually resembles another identifier can still contain different code points.
+
+Security-sensitive identifiers should use defined character policies.
+
+Display names and machine identifiers can use different rules.
+
+Do not infer identity from visual similarity.
+
+Text comparison can operate on bytes.
+
+Text comparison can operate on code points.
+
+Text comparison can operate on normalized code points.
+
+Text comparison can use locale-aware collation.
+
+These operations answer different questions.
+
+Byte equality proves the encoded byte sequences are equal.
+
+Code-point equality proves the decoded code-point sequences are equal.
+
+Normalized equality can treat selected equivalent sequences as equivalent.
+
+Locale-aware comparison can apply language-specific ordering rules.
+
+Choose the comparison matching the requirement.
+
+Do not use locale-sensitive comparison for cryptographic identity.
+
+Cryptographic operations operate on bytes.
+
+Hashes operate on bytes.
+
+Digital signatures operate on bytes.
+
+If text is hashed or signed, the text must first have a defined byte representation.
+
+Encoding therefore becomes part of the cryptographic protocol.
+
+The same visible text encoded differently produces different bytes.
+
+Different bytes generally produce different hashes.
+
+Different bytes produce different signatures.
+
+Define character encoding before hashing text.
+
+Define normalization before hashing text if normalization is part of the protocol.
+
+Do not normalize after hashing.
+
+Do not guess encoding during verification.
+
+Canonical text representation must be established before cryptographic processing.
+
+Text files are byte sequences interpreted according to an encoding and format.
+
+A file being readable in one editor does not establish its encoding conclusively.
+
+Editors can detect or guess encodings.
+
+Different editors can make different guesses.
+
+A file can contain only ASCII-range bytes and therefore be valid under several compatible encodings.
+
+Detection can be ambiguous.
+
+If a system controls file generation, explicitly define the encoding.
+
+UTF-8 is commonly appropriate for portable text.
+
+Do not rely on operating-system legacy defaults when interoperability matters.
+
+Default encoding can vary by operating system.
+
+Default encoding can vary by locale.
+
+Default encoding can vary by runtime.
+
+Default encoding can vary by application.
+
+A program that works on one machine can fail on another if it relies on an implicit default encoding.
+
+Specify the encoding.
+
+Source-code files have an encoding.
+
+Compilers and interpreters must interpret source bytes.
+
+Modern development commonly uses UTF-8.
+
+Exact source-encoding rules depend on language and toolchain.
+
+Do not assume every compiler interprets arbitrary source files identically.
+
+Configuration files have an encoding.
+
+JSON exchanged between systems should follow the encoding requirements of JSON and the surrounding protocol.
+
+XML can declare encoding.
+
+HTTP can communicate media type and character-set information where applicable.
+
+Format and protocol metadata can establish encoding.
+
+Use defined metadata rather than guessing.
+
+Mojibake is garbled text caused by interpreting encoded bytes using the wrong character encoding.
+
+The original bytes can be valid.
+
+The decoder can still produce incorrect characters because the wrong encoding was selected.
+
+Mojibake is not necessarily data corruption.
+
+It can be an interpretation error.
+
+Repeated incorrect conversions can cause actual irreversible corruption.
+
+Preserve original bytes when diagnosing encoding problems.
+
+Do not repeatedly convert text until it "looks right."
+
+Determine the source encoding.
+
+Decode once correctly.
+
+Then encode into the target encoding.
+
+Transcoding converts text from one character encoding to another.
+
+Correct transcoding consists conceptually of decoding source bytes into textual code points and encoding those code points using the target encoding.
+
+Source bytes -> decode -> Unicode text -> encode -> target bytes.
+
+Do not reinterpret bytes directly as another encoding and call that conversion.
+
+Reinterpretation and transcoding are different.
+
+A byte value has no universal character meaning.
+
+Its interpretation depends on encoding.
+
+Lossy transcoding can occur when the target encoding cannot represent every source character.
+
+A legacy single-byte encoding cannot represent all Unicode characters.
+
+The converter can reject the operation.
+
+The converter can substitute replacement characters.
+
+The converter can transliterate.
+
+The correct behavior depends on policy.
+
+Do not silently lose information in authoritative data.
+
+UTF-8 can represent every Unicode code point permitted by Unicode encoding rules.
+
+This makes UTF-8 useful as a common interchange encoding.
+
+UTF-8 does not solve every text problem.
+
+Normalization still matters.
+
+Comparison still matters.
+
+Rendering still matters.
+
+Grapheme segmentation still matters.
+
+Security still matters.
+
+Encoding alone does not define text semantics.
+
+A replacement character can be used to represent decoding failure in selected Unicode processing.
+
+The Unicode replacement character is U+FFFD.
+
+Its appearance indicates replacement occurred.
+
+Replacement can hide the original invalid bytes.
+
+For diagnostic or forensic purposes, preserving original bytes can be important.
+
+Do not replace malformed input silently when exact data matters.
+
+Reject or preserve according to requirements.
+
+Encoding errors should distinguish source problems.
+
+Invalid byte sequence.
+
+Unsupported encoding.
+
+Incomplete multi-byte sequence.
+
+Unrepresentable target character.
+
+Unexpected BOM.
+
+Missing required encoding declaration.
+
+These are different conditions.
+
+Do not report every text problem as "invalid characters."
+
+Binary data is not text.
+
+Arbitrary binary data should not be passed through text APIs unless it is encoded into a text-safe representation.
+
+Binary bytes can contain zero.
+
+Binary bytes can contain invalid UTF-8.
+
+Binary bytes can contain control values.
+
+Treat binary as bytes.
+
+Do not assume a byte buffer contains a null-terminated string.
+
+In C, strings commonly use a terminating zero byte.
+
+Binary data can legitimately contain zero bytes inside the data.
+
+C string functions therefore cannot safely process arbitrary binary buffers.
+
+Track explicit lengths.
+
+Text and binary interfaces should be distinct.
+
+A string in a programming language can represent text.
+
+A byte array represents bytes.
+
+Some languages blur this distinction.
+
+Application design should not.
+
+Know whether a value represents encoded bytes or decoded text.
+
+Do not decode the same bytes repeatedly.
+
+Do not encode already encoded bytes accidentally.
+
+Double encoding changes representation.
+
+A percent-encoded string encoded again can contain encoded percent signs.
+
+A Base64 string encoded again produces Base64 of the textual Base64 representation.
+
+Double encoding is not equivalent to one encoding.
+
+Track representation state.
+
+Base64 converts binary data into textual characters from a restricted alphabet.
+
+Base64 commonly represents each three input bytes using four output characters, with defined handling for final partial groups.
+
+Base64 output is larger than the original binary input.
+
+Base64 is useful when binary data must pass through text-oriented systems.
+
+Base64 does not provide secrecy.
+
+Anyone can decode Base64.
+
+Do not describe Base64 data as encrypted.
+
+Standard Base64 commonly uses letters.
+
+Standard Base64 commonly uses digits.
+
+Standard Base64 commonly uses plus.
+
+Standard Base64 commonly uses slash.
+
+Padding commonly uses equals signs.
+
+Variants exist.
+
+Base64url uses characters safer for URL contexts.
+
+Base64url commonly replaces plus and slash with hyphen and underscore.
+
+Padding handling can differ by protocol.
+
+Standard Base64 and Base64url are not automatically interchangeable.
+
+The protocol must define the variant.
+
+Do not guess.
+
+A Base64 decoder should validate input according to the required variant.
+
+Unexpected characters should not be silently ignored unless the specification permits them.
+
+Padding should be handled according to the protocol.
+
+Canonical Base64 representation can matter if encoded text is signed or compared.
+
+Hexadecimal encoding represents binary values using hexadecimal digits.
+
+Each byte is represented by two hexadecimal digits.
+
+Hexadecimal doubles the byte count when represented as ASCII characters.
+
+Hexadecimal is easy for humans to inspect.
+
+Hexadecimal is commonly used for hashes.
+
+Uppercase and lowercase hexadecimal can represent the same numeric bytes.
+
+If exact textual representation matters, define the case.
+
+A SHA-256 digest contains 32 bytes.
+
+A conventional hexadecimal representation of those 32 bytes contains 64 hexadecimal characters.
+
+The hexadecimal string is a representation of the digest.
+
+It is not the digest algorithm itself.
+
+Do not confuse a hexadecimal hash representation with hashing.
+
+A hex decoder should reject invalid characters.
+
+Odd-length hexadecimal requires explicit policy.
+
+Do not silently invent a missing nibble.
+
+Percent encoding represents selected bytes in URI-related contexts using percent followed by hexadecimal digits.
+
+Percent encoding is context dependent.
+
+It is not a generic security sanitizer.
+
+Different URI components have different allowed characters and interpretation rules.
+
+Encoding an entire URL with one naive rule can change its structure.
+
+Encode individual components according to the applicable URI rules.
+
+Do not use URL encoding as HTML escaping.
+
+Do not use HTML escaping as URL encoding.
+
+Different contexts require different encodings.
+
+HTML escaping represents characters that have special meaning in HTML syntax.
+
+For example, less-than has syntactic meaning in HTML.
+
+Escaping can represent it as data rather than markup.
+
+HTML escaping is not encryption.
+
+HTML escaping is not URL encoding.
+
+HTML escaping is context sensitive.
+
+HTML text context differs from HTML attribute context.
+
+JavaScript embedded inside HTML introduces another context.
+
+CSS introduces another context.
+
+Use the encoder appropriate to the output context.
+
+Security failures occur when data encoded for one context is inserted into another.
+
+SQL parameterization is not character encoding.
+
+Do not attempt to make SQL safe by generic escaping when parameterized queries are available.
+
+Shell argument handling is not generic text encoding.
+
+Do not Base64 arbitrary input and assume shell execution becomes safe.
+
+The receiving shell can still interpret decoded data later.
+
+Security requires correct separation between commands and data.
+
+Encoding can help representation.
+
+It does not grant safety automatically.
+
+JSON string escaping represents special characters within JSON strings.
+
+Quotes require escaping.
+
+Backslashes require escaping.
+
+Control characters require defined representations.
+
+A JSON serializer should perform JSON escaping.
+
+Do not manually build JSON strings from untrusted text.
+
+Use a serializer.
+
+Escaping and character encoding are different layers.
+
+A JSON string can contain escaped Unicode notation.
+
+The complete JSON document can then be encoded as UTF-8 bytes.
+
+The escape syntax exists inside the JSON representation.
+
+UTF-8 exists beneath it as the byte encoding.
+
+Keep the layers distinct.
+
+XML has its own escaping rules.
+
+HTML has its own escaping rules.
+
+URLs have their own percent-encoding rules.
+
+Shells have their own quoting rules.
+
+Programming languages have their own string-literal escaping rules.
+
+One universal escape function does not exist.
+
+The correct transformation depends on destination grammar.
+
+Input encoding and output encoding are different concerns.
+
+Validate and decode input according to its actual format.
+
+Encode output according to its destination context.
+
+Do not encode input repeatedly merely to "make it safe."
+
+Security should occur at the boundary where data enters a syntax.
+
+An HTTP request can carry percent-encoded URL components.
+
+It can carry headers represented according to HTTP rules.
+
+It can carry a body containing JSON.
+
+The JSON can contain Base64.
+
+The Base64 can represent binary data.
+
+These are multiple representation layers.
+
+Decode each layer once and in the correct order.
+
+Do not skip layers.
+
+Do not decode layers repeatedly without protocol justification.
+
+Repeated decoding can create security vulnerabilities.
+
+A path traversal sequence can be percent encoded.
+
+If one security layer validates before decoding while another layer decodes later, the final path can differ from the validated path.
+
+Canonicalize and validate at the correct representation layer.
+
+Multiple encodings can create ambiguous input.
+
+Reject unnecessary ambiguity.
+
+A protocol should define whether encoded forms are accepted.
+
+Do not accept every representation merely for convenience.
+
+A canonical input representation reduces parser differences.
+
+Overlong or noncanonical encodings should be rejected when the encoding specification forbids them.
+
+UTF-8 has canonical encoding rules.
+
+A Unicode code point has one valid shortest UTF-8 representation.
+
+Historical overlong UTF-8 forms are invalid.
+
+Accepting noncanonical forms can create security inconsistencies between parsers.
+
+Use conforming decoders.
+
+Encoding boundaries can affect buffer sizing.
+
+UTF-8 output can require more bytes than the number of input code points.
+
+Base64 output requires more bytes than binary input.
+
+Hexadecimal output requires twice the binary length before terminators or surrounding syntax.
+
+Percent encoding can expand one byte into three ASCII characters.
+
+Calculate output sizes safely.
+
+Check for integer overflow.
+
+Do not allocate using unchecked multiplication or addition.
+
+A maximum decoded size and maximum encoded size can differ.
+
+A 4 MB Base64 string decodes to less binary data than 4 MB.
+
+A 4 MB binary object becomes a larger Base64 string.
+
+Resource limits should specify which representation they measure.
+
+Do not compare encoded size to a decoded-size limit without accounting for expansion.
+
+Compression changes size independently of encoding.
+
+Compressed binary data can then be Base64 encoded.
+
+The Base64 text can be larger than the compressed bytes but still smaller than Base64 of the original bytes.
+
+Compression and encoding order matters.
+
+Encoding compressed text before compression can produce different results.
+
+The protocol should define the sequence.
+
+Encryption also operates on bytes.
+
+Text is encoded into bytes before encryption.
+
+Ciphertext is binary.
+
+Ciphertext can then be Base64 or hex encoded for textual transport.
+
+Conceptually:
+
+text -> character encoding -> plaintext bytes -> encryption -> ciphertext bytes -> Base64 -> transport text.
+
+Reversing the operation:
+
+transport text -> Base64 decode -> ciphertext bytes -> decrypt -> plaintext bytes -> character decode -> text.
+
+Each stage has a distinct purpose.
+
+Do not call the Base64 stage encryption.
+
+Do not attempt to decrypt before decoding the ciphertext representation.
+
+Cryptographic keys are bytes.
+
+Displaying a key as hexadecimal or Base64 does not change the underlying key bytes if decoded correctly.
+
+The textual representation must be interpreted using the correct encoding.
+
+A hex key and Base64 key can look different while representing the same bytes.
+
+Conversely, treating Base64 text bytes directly as a key produces different key material.
+
+Representation must be decoded before use when the specification says it is encoded.
+
+Hashes are bytes.
+
+Hash displays are often hexadecimal.
+
+Some APIs return raw digest bytes.
+
+Some APIs return hexadecimal text.
+
+Do not hash the hexadecimal representation accidentally when the protocol requires raw digest bytes.
+
+Do not compare raw bytes to ASCII hexadecimal characters.
+
+Know the representation returned by the API.
+
+Identifiers can be encoded.
+
+A binary identifier can be represented in hex.
+
+A binary identifier can be represented in Base64.
+
+A numeric identifier can be represented in decimal.
+
+The textual representation is not necessarily the underlying identity.
+
+Canonical identifier encoding should be defined when textual identity is compared.
+
+Leading zeros can matter.
+
+For numeric interpretation, 001 and 1 can represent the same number.
+
+For string identity, they are different strings.
+
+Define whether the identifier is numeric or textual.
+
+Do not normalize identifiers without authority.
+
+Case can matter in encoded identifiers.
+
+Hexadecimal can be case-insensitive by definition while application identifiers containing arbitrary letters can be case-sensitive.
+
+Base64 is case-sensitive.
+
+Changing Base64 letter case changes the decoded bytes.
+
+Do not lowercase encoded tokens indiscriminately.
+
+URLs can be case-sensitive in selected components.
+
+Domain names have different case semantics from URL paths according to relevant protocols and applications.
+
+Do not apply one case-normalization rule to an entire URL blindly.
+
+Encoding and canonicalization must understand structure.
+
+File paths have platform-specific encoding and character models.
+
+Unix-like systems commonly treat filenames as byte sequences with restrictions at the kernel filesystem interface, while user environments commonly interpret names through locale or UTF-8 conventions.
+
+Windows commonly exposes filenames through Unicode APIs.
+
+Portable software should use platform-appropriate filesystem interfaces.
+
+Do not assume every filename can be represented losslessly in every legacy encoding.
+
+Do not assume arbitrary filesystem names are valid UTF-8 on every system.
+
+Filesystem representation and application text representation can differ.
+
+Network protocols define byte representation.
+
+Textual network protocols should define encoding.
+
+Binary network protocols should define field encoding.
+
+Never transmit native in-memory structures without a protocol definition.
+
+Network byte order is an encoding rule for multi-byte numeric fields.
+
+It does not define text encoding.
+
+Text and numeric byte-order rules are separate.
+
+Integers can be encoded in fixed width.
+
+Integers can be encoded in variable length.
+
+Variable-length integer encodings can reduce size for small values.
+
+A variable-length encoding must define canonical forms if multiple byte sequences could otherwise represent the same value.
+
+Noncanonical numeric representations can create consensus or signature problems.
+
+Reject noncanonical forms where the protocol requires one representation.
+
+Signed integers can use different representations.
+
+Modern systems commonly use two's complement in memory.
+
+A protocol can define signed magnitude.
+
+A protocol can define zigzag encoding.
+
+A protocol can define another mapping.
+
+Do not assume native signed representation is the protocol representation.
+
+Floating-point values can be encoded using IEEE 754 binary formats when a protocol defines them.
+
+Byte order must still be defined.
+
+NaN values can have multiple bit patterns.
+
+If exact canonical representation matters, NaN handling requires rules.
+
+Do not assume numerical equality implies byte equality.
+
+Decimal text is another encoding of numeric values.
+
+The integer value ten can be represented as the ASCII text "10".
+
+That text contains two encoded characters.
+
+It is not the same byte representation as a binary integer value 10.
+
+Converting between textual and binary numeric representation requires parsing or formatting.
+
+Do not reinterpret ASCII digits as binary integer memory.
+
+Leading signs matter.
+
+Leading zeros can matter to representation.
+
+Whitespace can be permitted or forbidden by the parser.
+
+Radix matters.
+
+"10" means ten in decimal.
+
+"10" means sixteen in hexadecimal.
+
+"10" means two in binary.
+
+A numeric representation requires a base.
+
+Do not infer hexadecimal merely because letters A through F are possible elsewhere.
+
+Prefixes such as 0x can indicate hexadecimal according to selected grammars.
+
+They are not universal.
+
+Base32 is another binary-to-text encoding.
+
+Different Base32 alphabets exist.
+
+Base58 is used by selected systems to avoid visually ambiguous characters.
+
+Base58 variants can use different alphabets.
+
+Base85 and Ascii85 provide other binary-to-text representations.
+
+The name of an encoding is not enough if multiple incompatible variants exist.
+
+Define the alphabet and rules.
+
+Never guess a variant for authoritative decoding.
+
+Binary-to-text encoding can include checksums in selected application formats.
+
+The checksum is an additional layer.
+
+Do not assume every Base58 string contains a checksum.
+
+Do not assume a checksum provides cryptographic authenticity.
+
+Understand the complete format.
+
+Encoding can be reversible.
+
+Base64 is reversible.
+
+Hexadecimal is reversible.
+
+UTF-8 encoding of valid Unicode text is reversible to the original code-point sequence.
+
+Some transformations are lossy.
+
+Transliteration can be lossy.
+
+Lowercasing can be lossy.
+
+Compatibility normalization can remove distinctions.
+
+Replacing unsupported characters is lossy.
+
+Lossy transformations should not be applied to identifiers or authoritative data unless the specification explicitly requires them.
+
+Transliteration converts text from one writing representation toward another, often approximating characters using a different script.
+
+Transliteration is not character encoding.
+
+Transliteration can lose information.
+
+Do not use transliteration as a canonical identity transformation without explicit rules.
+
+Escaping is a representation mechanism used to express otherwise special data within a grammar.
+
+Escaping is not encryption.
+
+Escaping is not validation.
+
+Escaping is not sanitization in every context.
+
+Escaping should occur for the specific output grammar.
+
+A value correctly escaped for JSON can still be dangerous if later inserted unescaped into HTML.
+
+Each interpretation layer requires correct handling.
+
+Decoding reverses an encoding according to its rules.
+
+Decoding should not automatically imply trust.
+
+Decoded data remains data from its source.
+
+Base64-decoding an untrusted payload does not make it trusted.
+
+Percent-decoding a URL component does not make it safe as a filesystem path.
+
+HTML entity decoding does not make text safe for SQL.
+
+Security properties do not emerge from decoding.
+
+Decode before semantic validation when validation depends on decoded meaning.
+
+Do not validate only the encoded surface if later processing changes representation.
+
+At the same time, validate the encoded representation itself where malformed encodings are forbidden.
+
+Both layers can matter.
+
+An input pipeline can therefore be:
+
+Receive encoded representation.
+
+Enforce encoded-size limit.
+
+Validate encoding syntax.
+
+Decode.
+
+Enforce decoded-size limit.
+
+Parse structure.
+
+Validate semantics.
+
+Authorize requested operation.
+
+Each stage answers a different question.
+
+Encoding detection is inherently uncertain for many legacy encodings.
+
+Some byte sequences are valid under multiple encodings.
+
+Statistical detectors provide guesses.
+
+A guess is not deterministic evidence.
+
+Do not use probabilistic encoding detection where the protocol requires exact interpretation.
+
+Require explicit encoding or use a format with defined encoding.
+
+When best-effort import is acceptable, detection can be used with clear uncertainty handling.
+
+Do not silently convert a guess into authoritative data without policy.
+
+ASCII-only content can be valid UTF-8.
+
+Therefore identifying such content as UTF-8 can be compatible with its bytes.
+
+This does not prove the original producer intended UTF-8.
+
+Distinguish compatibility from provenance.
+
+A decoder can be strict or permissive.
+
+Strict decoders reject malformed representation.
+
+Permissive decoders can replace or ignore malformed portions.
+
+Strict decoding is generally preferable at protocol and security boundaries.
+
+Permissive decoding can be useful for human-facing recovery tools.
+
+Do not let a validation component and execution component use different decoding strictness.
+
+Parser differentials create vulnerabilities.
+
+If one layer accepts malformed encoding differently from another, validation can inspect different data from execution.
+
+Use consistent decoding rules.
+
+Canonical encodings reduce parser differential risk.
+
+One semantic value should have one authoritative representation where consensus, signatures, or identifiers depend on bytes.
+
+Reject alternative encodings if the protocol requires canonical form.
+
+Encoding libraries should be used according to their contracts.
+
+A conversion function can stop at invalid input.
+
+A conversion function can substitute characters.
+
+A conversion function can report required output size.
+
+A conversion function can include terminators.
+
+Read the API contract.
+
+Do not assume every encoding API behaves like another language's API.
+
+C libraries can use explicit buffers and lengths.
+
+PHP can expose strings as byte sequences with library-specific text handling.
+
+JavaScript strings use a Unicode-oriented language model with UTF-16 code-unit behavior.
+
+Go strings contain bytes and commonly hold UTF-8 text by convention.
+
+C# strings use .NET's Unicode string representation.
+
+Cross-language systems must not assume native string length means the same thing.
+
+A JavaScript string length commonly reflects UTF-16 code units.
+
+A Go string length returns bytes.
+
+A C string length counts bytes until the first zero byte.
+
+A C# string length counts UTF-16 code units.
+
+These values can differ for the same human-visible text.
+
+Define protocol lengths independently of language-native string length.
+
+If the protocol length is bytes, encode first and count bytes.
+
+If the protocol length is Unicode code points, use a code-point-aware operation.
+
+If the requirement is grapheme clusters, use Unicode segmentation.
+
+Do not use whichever length function happens to be convenient.
+
+Null termination is a string representation convention used by C and related APIs.
+
+A zero byte terminates a conventional C string.
+
+The terminator is not part of the logical text length.
+
+A byte buffer does not require null termination unless an API expects a C string.
+
+Adding a null terminator changes the byte sequence if the buffer is being hashed, transmitted, or persisted with explicit length.
+
+Do not include terminators in protocol data unless the protocol defines them.
+
+Do not omit terminators when passing data to APIs requiring them.
+
+Length-prefixed strings use an explicit length field.
+
+The length can count bytes.
+
+The length can count code units.
+
+The protocol must define which.
+
+A receiver should validate the length before reading.
+
+A terminator appearing inside length-prefixed binary data does not necessarily end the value.
+
+Representation rules determine boundaries.
+
+Text encodings can contain control characters.
+
+Newline is a control concept represented according to the encoding and text convention.
+
+Line endings differ across systems and formats.
+
+LF is commonly used on Unix-like systems.
+
+CRLF is commonly used by Windows text conventions and selected network protocols.
+
+Some protocols require CRLF regardless of operating system.
+
+Do not replace protocol line endings with host-native line endings unless the protocol permits it.
+
+Text-mode file I/O can translate line endings on selected platforms and runtimes.
+
+Binary-mode I/O preserves bytes.
+
+When exact bytes matter, use binary-safe I/O.
+
+A cryptographic hash of a text file can differ solely because line endings differ.
+
+Canonical text formats should define line endings if exact bytes matter.
+
+Git and development tools can normalize line endings according to configuration.
+
+Normalization can be useful.
+
+It also changes bytes.
+
+Do not apply line-ending conversion to binary files.
+
+Correctly classify content.
+
+A text editor saving a file can change encoding.
+
+It can add or remove a BOM.
+
+It can change line endings.
+
+It can normalize Unicode.
+
+It can replace invalid characters.
+
+Therefore opening and saving a file is not always byte-preserving.
+
+Use binary-safe tools when exact byte preservation matters.
+
+Encoding metadata should travel with data where ambiguity would otherwise exist.
+
+A database column can define a character set.
+
+An HTTP content type can define character encoding where applicable.
+
+An XML declaration can define encoding.
+
+A file format can mandate UTF-8.
+
+A protocol can mandate UTF-8.
+
+Explicit rules remove guessing.
+
+Database character encoding affects storage and comparison.
+
+A client connection can have its own encoding.
+
+A database can convert between client and storage encodings.
+
+Incorrect connection encoding can corrupt text.
+
+Do not assume the database column encoding alone controls every stage.
+
+Collation defines comparison and ordering rules.
+
+Character encoding defines representation.
+
+Collation and encoding are different.
+
+Two databases using UTF-8 can use different collations.
+
+They can therefore sort or compare text differently.
+
+Do not use database collation ordering as protocol canonical ordering unless explicitly defined.
+
+A URL is represented as a structured identifier.
+
+Internationalized domain names can involve Unicode and ASCII-compatible encoding mechanisms.
+
+Display representation and network representation can differ.
+
+Do not implement internationalized domain conversion by hand.
+
+Use standards-compliant libraries.
+
+Visually deceptive names remain a security consideration.
+
+Email and other Internet protocols have their own encoding rules.
+
+Do not assume every Internet text field accepts arbitrary UTF-8 merely because modern systems often use UTF-8.
+
+Follow the protocol specification.
+
+Legacy encodings still exist.
+
+ISO-8859 family encodings exist.
+
+Windows code pages exist.
+
+Shift JIS exists.
+
+Other historical and regional encodings exist.
+
+A robust import system can need explicit conversion support.
+
+New internal systems generally benefit from one defined Unicode encoding.
+
+Reducing the number of accepted encodings reduces ambiguity.
+
+Do not retain legacy encoding complexity without a requirement.
+
+Encoding conversion can fail.
+
+Failure should preserve evidence.
+
+Record source encoding if known.
+
+Record the failing stage.
+
+Do not overwrite the only original copy with partially converted output.
+
+Convert into new state.
+
+Validate.
+
+Then publish.
+
+This follows the same safe-update principles as other transformations.
+
+Encoding should be deterministic when used in deterministic systems.
+
+Given the same sequence of Unicode code points and the same defined encoding, a conforming encoder should produce the same bytes.
+
+If normalization is required, normalization rules must also be fixed.
+
+If line-ending normalization is required, it must be fixed.
+
+If escaping is required, escaping rules must be fixed.
+
+Do not let platform locale change authoritative output.
+
+Do not let host-native line endings change consensus-visible bytes.
+
+Do not let serializer defaults choose an unspecified encoding.
+
+Canonical bytes require explicit rules at every transformation layer.
+
+An encoded value can be validated against a canonical representation.
+
+Decode the value.
+
+Re-encode according to canonical rules.
+
+Compare if the protocol defines this method.
+
+Alternatively, reject syntactically noncanonical forms during decoding.
+
+The exact approach belongs to the protocol.
+
+Do not normalize an externally signed representation before verifying it unless the signature specification requires normalization.
+
+Changing representation changes signed bytes.
+
+Encoding transformations can invalidate signatures.
+
+Encoding transformations can invalidate hashes.
+
+Encoding transformations can invalidate content-addressed identifiers.
+
+Treat exact bytes as immutable when byte identity matters.
+
+Human-readable display can use a derived representation.
+
+Store authoritative bytes separately.
+
+Display can decode them.
+
+Do not write display formatting back into authoritative bytes unless explicitly requested.
+
+A hexadecimal digest can be displayed with spaces for readability.
+
+Those spaces are not part of the digest.
+
+A Base64 value can be line-wrapped in selected formats.
+
+Line wrapping can be representation syntax rather than payload.
+
+Know the format.
+
+Machine interfaces should prefer one canonical form.
+
+Whitespace can be significant.
+
+Whitespace can be insignificant.
+
+The grammar determines which.
+
+Do not trim arbitrary encoded values.
+
+A Base64 protocol can permit or forbid whitespace.
+
+A token can legitimately contain leading or trailing characters that appear like whitespace under another interpretation.
+
+Trimming is a transformation.
+
+Only perform it when specified.
+
+Newline at end of file can change exact bytes.
+
+Many text tools conventionally end lines with newline.
+
+If a cryptographic artifact requires exact bytes, this matters.
+
+Do not add or remove terminal newline casually.
+
+A PEM representation uses textual Base64 with defined header, footer, and formatting rules.
+
+PEM is not simply arbitrary Base64.
+
+The surrounding format matters.
+
+A DER object is a binary encoding according to ASN.1 distinguished encoding rules.
+
+DER and PEM can represent related cryptographic objects differently.
+
+Do not treat the textual wrapper as the underlying binary object.
+
+Decode according to the correct format.
+
+Canonical encoding rules are especially important in cryptographic formats.
+
+Ambiguous encoding can allow different implementations to interpret signed data differently.
+
+Strict parsers reduce ambiguity.
+
+Reject malformed cryptographic encoding.
+
+Do not "repair" signed material by guessing.
+
+Encoding can be layered intentionally.
+
+For example:
+
+Structured object.
+
+Serialize to JSON.
+
+Encode JSON text as UTF-8.
+
+Compress the UTF-8 bytes.
+
+Encrypt the compressed bytes.
+
+Encode ciphertext as Base64.
+
+Place Base64 in a textual envelope.
+
+Each layer should be reversible according to defined rules.
+
+The reverse order is required for decoding.
+
+Envelope parse.
+
+Base64 decode.
+
+Decrypt.
+
+Decompress.
+
+UTF-8 decode.
+
+JSON parse.
+
+Semantic validation.
+
+Changing the order changes the operation.
+
+Document layered formats.
+
+Do not make consumers guess which transformation happened first.
+
+A magic prefix can identify an encoded container format.
+
+A version can identify transformation rules.
+
+A content type can identify representation.
+
+Metadata can reduce ambiguity.
+
+Metadata itself must be authenticated when attackers could alter it and interpretation affects security.
+
+An attacker changing an encoding declaration can alter interpretation.
+
+Trust boundaries apply to metadata too.
+
+Encoding is often invisible when it works.
+
+That does not make it unimportant.
+
+Many interoperability failures are representation failures.
+
+Many apparent text corruptions are decoding failures.
+
+Many signature mismatches are canonical-byte failures.
+
+Many length bugs are byte-versus-character mistakes.
+
+Many security bugs are wrong-context encoding mistakes.
+
+Reason about the exact representation.
+
+Ask:
+
+What is the semantic value?
+
+What is its current representation?
+
+What encoding produced that representation?
+
+What representation does the next layer expect?
+
+Is the transformation reversible?
+
+Is it canonical?
+
+Is it bounded?
+
+Is it safe for this destination grammar?
+
+Does exact byte identity matter?
+
+These questions prevent representation confusion.
+
+Do not confuse characters with bytes.
+
+Do not confuse code points with bytes.
+
+Do not confuse code points with code units.
+
+Do not confuse code units with grapheme clusters.
+
+Do not confuse grapheme clusters with display width.
+
+Do not confuse Unicode with UTF-8.
+
+Do not confuse UTF-8 with ASCII.
+
+Do not confuse text encoding with serialization.
+
+Do not confuse encoding with encryption.
+
+Do not confuse encoding with hashing.
+
+Do not confuse encoding with compression.
+
+Do not confuse Base64 with encryption.
+
+Do not confuse hexadecimal with hashing.
+
+Do not confuse percent encoding with HTML escaping.
+
+Do not confuse HTML escaping with JSON escaping.
+
+Do not confuse escaping with validation.
+
+Do not confuse escaping with authorization.
+
+Do not confuse quoting with encoding.
+
+Do not confuse normalization with encoding conversion.
+
+Do not confuse normalization with case folding.
+
+Do not confuse transliteration with encoding.
+
+Do not confuse character encoding with collation.
+
+Do not confuse decoded data with trusted data.
+
+Do not confuse valid UTF-8 with semantically valid text.
+
+Do not confuse visual similarity with identity.
+
+Do not confuse string length with byte length.
+
+Do not confuse native language string length with protocol length.
+
+Do not confuse host line endings with protocol line endings.
+
+Do not confuse a BOM with mandatory UTF-8 syntax.
+
+Do not confuse text-mode I/O with byte-preserving I/O.
+
+Do not confuse encoding detection with proof.
+
+Do not confuse parser tolerance with canonical validity.
+
+Do not confuse reversible representation with secure representation.
+
+When accepting text from an external source, establish the required encoding.
+
+Enforce input-size limits.
+
+Decode strictly according to that encoding where correctness requires strictness.
+
+Reject malformed sequences.
+
+Normalize only if the application specification requires normalization.
+
+Validate the resulting text according to semantic requirements.
+
+Do not infer authorization from successfully decoded text.
+
+When producing text for an external system, determine the required character encoding.
+
+Determine the required normalization.
+
+Determine line-ending rules.
+
+Determine escaping rules for the destination grammar.
+
+Encode exactly once at the appropriate layer.
+
+Do not rely on host defaults.
+
+When handling binary data in a textual interface, choose the defined binary-to-text encoding.
+
+Use the correct variant.
+
+Enforce size limits.
+
+Encode the bytes.
+
+Do not claim the resulting text is encrypted.
+
+Decode before treating the result as the original binary data.
+
+When hashing or signing text, define the exact character sequence.
+
+Define normalization if any.
+
+Define character encoding.
+
+Define line endings if relevant.
+
+Produce the exact bytes.
+
+Hash or sign those bytes.
+
+Verification must reconstruct exactly the same bytes or preserve the original bytes according to the protocol.
+
+When comparing encoded identifiers, determine whether comparison applies to encoded text or decoded bytes.
+
+If canonical encoding is guaranteed, encoded comparison can be sufficient according to the protocol.
+
+If multiple textual representations are permitted, decode and compare the underlying value according to defined rules.
+
+Do not invent normalization.
+
+When converting legacy text, preserve the original bytes until conversion succeeds.
+
+Identify the source encoding.
+
+Decode using that encoding.
+
+Reject or explicitly handle unrepresentable or malformed data.
+
+Encode into the target encoding.
+
+Validate the output.
+
+Only then replace or publish converted data.
+
+When debugging garbled text, do not begin by changing characters manually.
+
+Obtain the original bytes.
+
+Determine the expected encoding.
+
+Determine which encoding was actually used to decode them.
+
+Determine whether an incorrect encode-decode cycle already occurred.
+
+Reconstruct only what evidence supports.
+
+Some encoding corruption is reversible.
+
+Some is not.
+
+Do not fabricate lost characters.
+
+A reliable system defines text encoding at its boundaries.
+
+A reliable system distinguishes bytes from text.
+
+A reliable system does not depend on platform-default encodings.
+
+A reliable system uses explicit lengths.
+
+A reliable system validates malformed encoded input.
+
+A reliable system uses the correct encoder for each output grammar.
+
+A reliable system avoids repeated decoding.
+
+A reliable system defines canonical representation when exact bytes matter.
+
+A reliable system preserves authoritative bytes when signatures or hashes depend on them.
+
+A reliable system does not mistake human readability for data identity.
+
+A reliable system does not treat encoding as security.
+
+Encoding answers one fundamental question:
+
+How is this information represented?
+
+It does not answer:
+
+Is this information secret?
+
+Is this information authentic?
+
+Is this information authorized?
+
+Is this information correct?
+
+Those questions belong to other mechanisms.
+
+If the representation is known, decode it according to its rules.
+
+If the representation is malformed, reject it according to policy.
+
+If the representation is ambiguous and no authoritative rule resolves the ambiguity, the correct answer is not to guess.
+
+The encoding is unknown.

@@ -1,0 +1,2037 @@
+Storage is the preservation and retrieval of data.
+
+Storage can be volatile.
+
+Storage can be persistent.
+
+Volatile storage does not guarantee data survives loss of power or process termination.
+
+Persistent storage is intended to preserve data beyond the lifetime of the process that created it according to the storage system's guarantees.
+
+Persistence is not the same as durability.
+
+Persistence is not the same as availability.
+
+Persistence is not the same as correctness.
+
+Persistence is not the same as integrity.
+
+Persistence is not the same as backup.
+
+Persistence describes data surviving beyond a particular execution boundary according to the storage mechanism.
+
+Durability describes whether acknowledged data survives specified failures according to the storage guarantee.
+
+Integrity describes whether data remains valid and uncorrupted according to defined rules.
+
+Availability describes whether stored data can currently be accessed.
+
+Backup provides a recoverable copy according to backup policy.
+
+These properties should not be confused.
+
+Memory is storage.
+
+Files are storage.
+
+Databases are storage.
+
+Object stores are storage.
+
+Block devices are storage.
+
+Caches are storage.
+
+Queues can contain stored state.
+
+Logs can contain stored state.
+
+Different storage mechanisms provide different semantics.
+
+Choose storage according to requirements.
+
+State is information representing a system at some point in its operation.
+
+State can be transient.
+
+State can be persistent.
+
+State can be authoritative.
+
+State can be derived.
+
+State can be cached.
+
+State can be replicated.
+
+State can be historical.
+
+State can be configuration.
+
+State can be operational.
+
+The role of state should be defined.
+
+Authoritative state is the state designated by system architecture as the source used to determine a particular fact.
+
+Derived state is calculated from other state.
+
+Cached state is a stored copy used to avoid repeated retrieval or computation.
+
+Replicated state is a copy maintained in another location.
+
+Historical state records prior events or values.
+
+One piece of data can have more than one property.
+
+A replicated copy can be authoritative according to a distributed protocol.
+
+A cache should not silently become authoritative unless architecture explicitly assigns it that role.
+
+Derived data should remain reconstructable when architecture defines it as derived.
+
+If data cannot be reconstructed and no other authoritative source exists, it is not merely disposable derived data.
+
+Know who owns state.
+
+State ownership defines which component is responsible for authoritative modification.
+
+Multiple components can read state.
+
+Multiple components should not independently modify authoritative state unless coordination semantics explicitly permit it.
+
+Uncontrolled multiple writers can create conflicting state.
+
+One writer can simplify consistency.
+
+Multiple writers can improve availability or throughput but require coordination.
+
+Architecture determines acceptable ownership.
+
+A file does not define its own authority.
+
+A database table does not define its own authority.
+
+Authority comes from system design.
+
+A copy is not automatically authoritative because it is newer.
+
+A copy is not automatically authoritative because it is local.
+
+A copy is not automatically authoritative because it is available.
+
+A copy is not automatically authoritative because another copy is unavailable.
+
+Authority should be explicit.
+
+Storage has boundaries.
+
+Application memory is one boundary.
+
+Operating-system buffers are another boundary.
+
+Filesystem caches can be another boundary.
+
+Storage-controller caches can be another boundary.
+
+Physical media is another boundary.
+
+Remote storage introduces network boundaries.
+
+A successful write at one boundary does not automatically prove completion at every deeper boundary.
+
+Understand the acknowledgment contract.
+
+A write call can return success after data is accepted by the operating system.
+
+That does not necessarily mean the data reached durable physical media.
+
+Buffered writes can remain in memory.
+
+Storage devices can contain volatile write caches.
+
+Filesystems can delay metadata updates.
+
+Databases can buffer operations.
+
+Durability requirements determine which boundary matters.
+
+Do not claim durable persistence without evidence that the required durability boundary was reached.
+
+A flush requests that buffered data move toward a defined persistence boundary according to the API.
+
+Flush semantics depend on the storage system.
+
+A language runtime flush can move data to the operating system.
+
+An operating-system synchronization call can request filesystem or device persistence.
+
+A database commit can provide durability according to database configuration and guarantees.
+
+These are not interchangeable.
+
+Know the contract of the storage interface being used.
+
+Closing a file is not universally equivalent to durable synchronization.
+
+A successful file close means the close operation succeeded according to the platform API.
+
+Do not infer stronger guarantees without documentation.
+
+Storage behavior is platform dependent.
+
+Filesystems differ.
+
+Operating systems differ.
+
+Storage devices differ.
+
+Network filesystems differ.
+
+Cloud storage systems differ.
+
+Database engines differ.
+
+Portable storage code should depend only on guarantees common to supported platforms or isolate platform-specific behavior behind defined interfaces.
+
+Do not assume one filesystem's behavior applies universally.
+
+A filesystem organizes persistent data as files, directories, metadata, and other filesystem-defined structures.
+
+A file is a named or referenced sequence of data according to filesystem semantics.
+
+A directory organizes filesystem entries.
+
+A path identifies a location according to filesystem naming rules.
+
+Path syntax differs between platforms.
+
+Path separators can differ.
+
+Drive semantics can differ.
+
+Case sensitivity can differ.
+
+Case preservation can differ.
+
+Reserved names can differ.
+
+Maximum path lengths can differ.
+
+Permission models can differ.
+
+Do not construct paths through assumptions that are not portable.
+
+Use appropriate path handling.
+
+A relative path is interpreted relative to a defined working or base location.
+
+An absolute path identifies a location from a filesystem root or platform-defined absolute namespace.
+
+Relative paths can become ambiguous when working directory changes.
+
+Critical persistent state should use a known base location.
+
+Do not depend accidentally on the process working directory.
+
+Normalize paths only according to safe platform semantics.
+
+Path normalization can resolve selected redundant components.
+
+Normalization does not establish authorization.
+
+A path inside an allowed directory before symbolic-link resolution can resolve elsewhere.
+
+Filesystem security requires more than string prefix checks.
+
+Symbolic links can redirect path resolution.
+
+Hard links can create multiple names for filesystem objects where supported.
+
+Junctions and other platform-specific mechanisms can alter resolution.
+
+Do not assume path text uniquely identifies underlying storage.
+
+File identity and path identity are different concepts.
+
+A file can be renamed.
+
+A file can have multiple links.
+
+A path can later refer to a different file.
+
+If exact file identity matters, use platform-supported identity mechanisms where appropriate.
+
+Permissions control filesystem access according to operating-system rules.
+
+Read permission permits selected reading.
+
+Write permission permits selected modification.
+
+Execute permission has platform-specific semantics.
+
+Directory permissions have directory-specific semantics.
+
+Ownership affects permission evaluation.
+
+Access-control lists can provide additional rules.
+
+Application storage should use least privilege.
+
+A process needing read access does not automatically need write access.
+
+A process needing one writable directory does not automatically need write access to the entire application tree.
+
+Writable code directories increase risk.
+
+Separate code from writable state where practical.
+
+Configuration can be read-only during normal operation.
+
+Runtime data can use dedicated writable locations.
+
+Logs can use dedicated writable locations.
+
+Temporary files can use controlled temporary locations.
+
+Permissions should match actual responsibilities.
+
+Storage errors should be handled.
+
+A file can be missing.
+
+A file can be unreadable.
+
+A file can be unwritable.
+
+A directory can be missing.
+
+A directory can be unwritable.
+
+A device can be full.
+
+A quota can be exceeded.
+
+A path can be invalid.
+
+A filename can be too long.
+
+A file can be locked.
+
+A storage device can fail.
+
+A network filesystem can become unreachable.
+
+An operation can be interrupted.
+
+A file can change during access.
+
+Do not assume storage operations succeed.
+
+Check results.
+
+Preserve useful error information.
+
+Do not convert every storage error into "file not found."
+
+Different failures require different recovery.
+
+Missing optional cache data can permit regeneration.
+
+Missing authoritative data can be critical.
+
+Permission denied is not the same as missing data.
+
+Storage full is not the same as permission denied.
+
+Corruption is not the same as absence.
+
+Classify failures accurately.
+
+File existence is not file validity.
+
+A file can exist and be empty.
+
+A file can exist and be truncated.
+
+A file can exist and contain malformed data.
+
+A file can exist and contain an unsupported version.
+
+A file can exist and contain corrupted data.
+
+A file can exist and contain valid but stale data.
+
+Validate contents according to the format.
+
+A storage format defines how data is represented.
+
+Formats can be textual.
+
+Formats can be binary.
+
+Formats can be structured.
+
+Formats can be fixed-width.
+
+Formats can be variable-width.
+
+Formats can be self-describing.
+
+Formats can depend on an external schema.
+
+Format choice should reflect requirements.
+
+Human readability can be valuable.
+
+Compactness can be valuable.
+
+Parsing speed can be valuable.
+
+Schema validation can be valuable.
+
+Forward compatibility can be valuable.
+
+Backward compatibility can be valuable.
+
+Determinism can be valuable.
+
+No format is universally best.
+
+JSON is a structured text format.
+
+JSON can represent objects.
+
+JSON can represent arrays.
+
+JSON can represent strings.
+
+JSON can represent numbers.
+
+JSON can represent booleans.
+
+JSON can represent null.
+
+JSON does not define comments in its standard syntax.
+
+JSON object member ordering should not be relied upon as semantic ordering unless an application defines additional rules.
+
+JSON numbers require careful handling when exact integer range matters.
+
+A parser can represent numbers differently depending on language and implementation.
+
+Do not assume every JSON implementation preserves arbitrarily large integers exactly.
+
+Validate ranges.
+
+A schema can define required structure.
+
+A schema can define required fields.
+
+A schema can define types.
+
+A schema can define bounds.
+
+A schema can define allowed values.
+
+Schema validation establishes conformance to the schema.
+
+Schema validation does not establish that the data is true.
+
+Schema validation does not establish authorization.
+
+Schema validation does not establish freshness.
+
+Schema validation does not establish integrity unless integrity is separately verified.
+
+Syntax and semantics are different.
+
+A syntactically valid document can contain semantically invalid values.
+
+Validate both where required.
+
+A version field can identify format version.
+
+Versioning allows formats to evolve.
+
+A reader should know which versions it supports.
+
+An unsupported version should be rejected clearly.
+
+Do not silently interpret unknown versions as the newest known version.
+
+Do not silently ignore required unknown semantics.
+
+Forward compatibility should be designed, not assumed.
+
+Backward compatibility means newer software can read or interact with older supported data according to defined rules.
+
+Forward compatibility means older software can tolerate or interact with newer data according to defined rules where designed.
+
+Compatibility has scope.
+
+A format can be backward compatible but not forward compatible.
+
+A migration transforms stored state from one format or schema to another.
+
+Migrations should preserve required information.
+
+Migrations should be deterministic where practical.
+
+Migrations should validate input.
+
+Migrations should validate output.
+
+Migrations should fail safely.
+
+Migration failure should not destroy the only valid copy of authoritative state.
+
+Backup before irreversible migration where appropriate.
+
+A migration can be reversible.
+
+A migration can be irreversible.
+
+Do not promise rollback when the storage transformation prevents it.
+
+Migration state should be observable.
+
+Record which migration began.
+
+Record which migration completed.
+
+Record which migration failed.
+
+Partial migration should have defined recovery.
+
+Atomic migration can simplify recovery.
+
+Large datasets can make one atomic transaction impractical.
+
+Incremental migrations require progress tracking.
+
+Progress tracking itself is state.
+
+Progress state should be reliable.
+
+Do not rerun irreversible migration steps blindly.
+
+Stable migration identifiers can prevent duplicate execution.
+
+File writes can fail partially.
+
+A process can terminate during writing.
+
+Power can fail during writing.
+
+Storage can fill during writing.
+
+A direct overwrite can therefore leave corrupted or truncated state.
+
+Atomic replacement can reduce this risk.
+
+A common pattern is:
+
+Create a temporary file.
+
+Write complete new content.
+
+Validate the content if appropriate.
+
+Flush according to required semantics.
+
+Close according to required semantics.
+
+Atomically replace or rename the target where the platform provides suitable guarantees.
+
+Synchronize containing metadata where required by the durability model.
+
+Exact steps depend on platform and filesystem guarantees.
+
+Do not copy a Unix-specific durability sequence blindly to every platform.
+
+Platform adapters can implement appropriate storage primitives.
+
+The common architecture should define the required outcome.
+
+Temporary files should be created safely.
+
+Temporary names should avoid predictable collisions where security matters.
+
+Temporary files should use appropriate permissions.
+
+Temporary files should be cleaned after failure where safe.
+
+A stale temporary file should not automatically become authoritative.
+
+Recovery can inspect temporary files.
+
+Recovery should distinguish completed authoritative state from abandoned work.
+
+Atomicity defines an operation that appears complete or not performed according to its boundary.
+
+Atomicity does not automatically imply durability.
+
+An atomic rename can prevent readers from observing partial replacement.
+
+It does not necessarily prove the new data survives sudden power loss.
+
+Atomicity and durability are separate.
+
+A transaction groups operations according to transaction semantics.
+
+Atomicity is one common transaction property.
+
+Consistency is one common transaction property.
+
+Isolation is one common transaction property.
+
+Durability is one common transaction property.
+
+These are commonly summarized as ACID.
+
+Exact guarantees depend on the storage engine and configuration.
+
+Do not claim ACID behavior merely because a system uses the word transaction.
+
+Read the actual contract.
+
+Transaction atomicity means the transaction's changes are applied according to all-or-nothing semantics within the defined transaction boundary.
+
+Transaction consistency means defined invariants are preserved when transactions execute correctly according to the system model.
+
+Transaction isolation controls how concurrent transactions observe each other's changes.
+
+Transaction durability controls persistence of committed state according to the storage guarantee.
+
+Isolation has levels.
+
+Different isolation levels permit different concurrent observations.
+
+Do not assume every database transaction provides serial execution.
+
+Concurrency anomalies can occur depending on isolation.
+
+Lost updates can occur.
+
+Dirty reads can occur where permitted.
+
+Non-repeatable reads can occur where permitted.
+
+Phantom reads can occur where permitted.
+
+Write skew can occur under selected isolation models.
+
+Database semantics should be understood before relying on them.
+
+A lock coordinates access to shared state.
+
+Locks can protect files.
+
+Locks can protect memory.
+
+Locks can protect database rows or tables.
+
+Locks can be advisory.
+
+Locks can be mandatory according to selected systems.
+
+Lock semantics vary.
+
+A lock existing does not automatically mean every participant honors it.
+
+Advisory locks require cooperating participants.
+
+Lock ownership should be clear.
+
+Locks should be released.
+
+Crash behavior should be understood.
+
+Stale lock files are not the same as active operating-system locks.
+
+A lock file can remain after a process dies.
+
+A lock file should contain enough information to support safe stale-lock determination if that mechanism is used.
+
+Do not delete a lock merely because it appears old.
+
+The owning operation might legitimately be long-running.
+
+Time alone can be insufficient evidence.
+
+Concurrent readers can often share immutable state safely.
+
+Concurrent writers require coordination.
+
+A reader can race with a writer.
+
+A writer can race with another writer.
+
+Atomic replacement can let readers observe either old complete state or new complete state according to filesystem semantics.
+
+It can reduce partial-read risk.
+
+It does not solve every multi-writer conflict.
+
+State versioning can detect concurrent modification.
+
+A version number can increment with each accepted modification.
+
+A compare-and-swap operation updates state only if the expected version remains current.
+
+Optimistic concurrency assumes conflicts are uncommon and detects them before commit.
+
+Pessimistic concurrency prevents selected conflicts through locking.
+
+Neither is universally superior.
+
+Choose according to workload and correctness requirements.
+
+Last-write-wins is a conflict resolution policy.
+
+Last-write-wins can discard earlier concurrent changes.
+
+It is not automatically correct.
+
+Timestamp-based last-write-wins depends on time assumptions.
+
+Sequence-based ordering can provide stronger deterministic ordering within defined authority.
+
+Conflict resolution should reflect domain semantics.
+
+Do not choose a conflict policy merely because it is easy.
+
+Append-only storage adds new records without modifying previous records under normal operation.
+
+Append-only designs can preserve history.
+
+Append-only does not mean immutable under every storage or administrative capability.
+
+Access controls and integrity mechanisms can strengthen historical protection.
+
+An event log can represent state changes.
+
+Current state can be reconstructed by replaying events when event semantics are sufficient.
+
+This is commonly associated with event sourcing.
+
+Event sourcing adds complexity.
+
+It is useful when complete state transition history is required.
+
+It is unnecessary when ordinary state storage satisfies requirements.
+
+Do not use event sourcing merely because history sounds useful.
+
+A journal records changes used for recovery or history according to its design.
+
+A write-ahead log records information before selected state changes so recovery can replay or roll back operations according to the system.
+
+Databases commonly use write-ahead logging.
+
+Filesystems can use journaling.
+
+Application-level journals can also be implemented.
+
+Journal semantics should be understood.
+
+A journal is not automatically a backup.
+
+If both primary state and journal are lost, recovery can still fail.
+
+If corruption is faithfully journaled, the journal can contain the same logical defect.
+
+Backups remain separate.
+
+A backup is a recoverable copy of data created according to backup policy.
+
+A backup should identify what it contains.
+
+A backup should identify when it was created.
+
+A backup should identify format or version where needed.
+
+A backup should be protected.
+
+A backup should be validated.
+
+A backup should be restorable.
+
+Creating a backup file is not proof of recoverability.
+
+Restore testing provides evidence.
+
+Backups can be full.
+
+Backups can be incremental.
+
+Backups can be differential.
+
+Exact definitions depend on backup system.
+
+A full backup contains the complete selected backup set according to policy.
+
+An incremental backup contains selected changes since a previous backup point according to its scheme.
+
+A differential backup contains selected changes relative to a defined base according to its scheme.
+
+Incremental backup chains can increase restore dependencies.
+
+A missing required increment can make later increments unusable.
+
+Backup architecture should account for this.
+
+Backup retention defines how long backups remain available.
+
+Retention can use generations.
+
+Retention can use time windows.
+
+Retention can preserve selected long-term checkpoints.
+
+Retention should match recovery requirements.
+
+More backups consume more storage.
+
+Too little retention can make historical recovery impossible.
+
+Backup storage should not share every failure domain with primary storage.
+
+A backup on the same failing disk does not protect against disk loss.
+
+A backup on the same machine does not protect against machine loss.
+
+A backup using the same credentials can be vulnerable to the same destructive access.
+
+Independent failure domains improve recovery.
+
+Offline or logically isolated backups can reduce selected risks.
+
+Backup encryption can protect confidentiality.
+
+Encryption keys become required recovery material.
+
+Losing the key can make the backup unusable.
+
+Key backup and recovery should therefore be designed.
+
+Do not encrypt the only backup with a key that exists only on the system being backed up.
+
+Recovery dependencies matter.
+
+Checksums detect selected accidental changes.
+
+A checksum maps data to a fixed-size value according to an algorithm.
+
+A matching checksum provides evidence that data matches the expected checksum under the algorithm's properties.
+
+A checksum does not prove data is authorized.
+
+A cryptographic hash provides stronger collision resistance than ordinary non-cryptographic checksums according to the algorithm.
+
+A cryptographic hash still does not prove authorization.
+
+A digital signature can establish that data was signed by a holder of the relevant private key according to the signature system.
+
+A signature does not prove the data is correct.
+
+Integrity and authenticity are different.
+
+Checksums should cover clearly defined bytes.
+
+Canonical representation matters when logically equivalent data can have multiple byte representations.
+
+Hashing parsed objects without canonical serialization can produce inconsistent results.
+
+If exact hashes are part of protocol or identity, serialization must be deterministic.
+
+Whitespace can change a file hash.
+
+Field ordering can change a file hash.
+
+Line endings can change a file hash.
+
+Encoding can change a file hash.
+
+A content hash identifies bytes, not abstract meaning, unless canonicalization defines the bytes.
+
+Text encoding should be defined.
+
+UTF-8 is a common text encoding.
+
+ASCII is a subset of UTF-8 for standard ASCII characters.
+
+Other encodings exist.
+
+Do not assume arbitrary bytes are UTF-8.
+
+A byte order mark can appear in selected Unicode encodings.
+
+Parsers should follow format rules.
+
+Line endings can differ by platform.
+
+LF is commonly used on Unix-like systems.
+
+CRLF is commonly used on Windows text files.
+
+Software handling cross-platform text should account for line-ending differences where semantics permit.
+
+Protocol-defined line endings should follow the protocol exactly.
+
+Storage normalization should not silently alter protocol-significant bytes.
+
+Binary formats operate on bytes.
+
+Binary serialization should define integer widths.
+
+Binary serialization should define byte order.
+
+Binary serialization should define signedness.
+
+Binary serialization should define lengths.
+
+Binary serialization should define alignment if alignment is serialized.
+
+Do not serialize native C structures directly as portable persistent formats without defining representation.
+
+Compiler padding can differ.
+
+Architecture alignment can differ.
+
+Integer size can differ.
+
+Endianness can differ.
+
+Explicit serialization improves portability.
+
+Network byte order is conventionally big-endian for many network protocols.
+
+Persistent formats can choose any defined byte order.
+
+The choice matters less than consistency and specification.
+
+Readers should validate lengths before allocation.
+
+A stored length can be corrupted.
+
+A stored length can be malicious.
+
+Do not allocate arbitrary memory solely because a file claims an enormous length.
+
+Bounds protect storage parsers.
+
+Integer overflow can occur when calculating storage sizes.
+
+Validate before multiplication and addition.
+
+A count multiplied by element size can overflow.
+
+An offset plus length can overflow.
+
+Overflow can bypass bounds checks.
+
+Storage parsing is a security boundary when data is untrusted.
+
+Even locally stored data can become corrupted.
+
+Treat persistent input as input.
+
+Do not trust a file merely because your own application created it previously.
+
+It can be truncated.
+
+It can be modified.
+
+It can be from an older version.
+
+It can be restored from backup.
+
+It can be copied from another system.
+
+Validate on load.
+
+Validation should be proportional to risk.
+
+Magic values can identify file type.
+
+Version fields can identify format.
+
+Length fields can identify expected size.
+
+Checksums can detect corruption.
+
+Signatures can authenticate content.
+
+Schemas can validate structure.
+
+Semantic checks can validate relationships.
+
+No one check replaces all others.
+
+Corruption should have defined handling.
+
+If a cache is corrupted, discard and rebuild when safe.
+
+If derived indexes are corrupted, rebuild from authoritative state when safe.
+
+If authoritative state is corrupted, stop unsafe processing and recover from a trusted source according to policy.
+
+Do not silently reset authoritative state to empty.
+
+An empty database is not equivalent to a corrupted database.
+
+A default configuration is not equivalent to missing required configuration.
+
+Fail clearly.
+
+Quarantine can preserve corrupted or suspicious data outside active use.
+
+Quarantine preserves evidence.
+
+Quarantine can allow later analysis.
+
+Quarantine should not be treated as valid active state.
+
+Quarantine storage should have controlled permissions.
+
+Quarantine should have retention policy.
+
+Do not automatically delete evidence unless policy permits it.
+
+Storage capacity is finite.
+
+Disk space is finite.
+
+Database capacity is finite.
+
+Object-store quotas can be finite.
+
+Filesystem inode or metadata capacity can be finite.
+
+Memory capacity is finite.
+
+Plan for limits.
+
+Monitor capacity.
+
+Set bounds.
+
+A storage-full condition should be expected.
+
+Writes can fail when storage is full.
+
+Logs can consume storage.
+
+Temporary files can consume storage.
+
+Caches can consume storage.
+
+Backups can consume storage.
+
+Application data can consume storage.
+
+One class should not unexpectedly starve all others.
+
+Separate quotas or volumes can provide isolation where appropriate.
+
+Reserved capacity can support recovery and diagnostics.
+
+A system with zero free storage can have difficulty even deleting or compacting data depending on the storage mechanism.
+
+Headroom improves recoverability.
+
+Storage growth should be observable.
+
+Measure total capacity.
+
+Measure used capacity.
+
+Measure free capacity.
+
+Measure growth rate.
+
+Measure write rate.
+
+Measure object count where relevant.
+
+Measure database size.
+
+Measure log size.
+
+Forecasts are estimates.
+
+Do not wait until capacity reaches zero.
+
+Retention controls growth.
+
+Logs can expire according to retention.
+
+Caches can evict according to policy.
+
+Temporary files can be cleaned.
+
+Historical authoritative records may have permanent retention requirements.
+
+Do not apply generic cleanup to permanent records.
+
+Classify stored data before deleting it.
+
+Deletion has semantics.
+
+Logical deletion marks data as deleted while retaining it.
+
+Physical deletion removes stored representation according to storage behavior.
+
+Archival moves data to another retention tier.
+
+Tombstones record deletion state in selected distributed systems.
+
+These are different operations.
+
+A deleted file can remain recoverable from backups.
+
+A deleted database row can remain in transaction logs or snapshots.
+
+Deletion does not necessarily mean immediate physical erasure.
+
+Secure erasure has stronger requirements.
+
+Storage media can remap sectors.
+
+Solid-state devices can complicate physical overwrite assumptions.
+
+Encryption with secure key destruction can support selected erasure models.
+
+Do not promise irreversible physical deletion without understanding storage technology.
+
+Historical systems can intentionally prohibit deletion.
+
+In such systems, status changes represent lifecycle instead of deletion.
+
+Permanent records should remain permanent according to governance.
+
+Archival does not have to mean disappearance.
+
+Archived records can remain queryable.
+
+Storage lifecycle should follow data policy.
+
+Temporary data should have a defined lifetime.
+
+A temporary file can survive a crash.
+
+Startup cleanup can identify stale temporary files.
+
+Cleanup should verify that files are truly temporary.
+
+Filename patterns alone can be dangerous.
+
+A cleanup bug can delete authoritative data.
+
+Restrict cleanup to controlled directories.
+
+Validate paths.
+
+Use explicit ownership markers where useful.
+
+Caches are storage.
+
+A cache stores data that can be obtained elsewhere according to cache design.
+
+If losing the cache causes permanent data loss, it was holding more than disposable cache state.
+
+Cache entries can expire.
+
+Cache entries can be invalidated.
+
+Cache entries can be evicted.
+
+Cache entries can become stale.
+
+Cache correctness depends on invalidation and freshness semantics.
+
+A cache should not be trusted beyond its defined validity.
+
+Cache warming populates cache before demand.
+
+Cache warming improves selected initial performance.
+
+Cache warming should not establish authority.
+
+A cache can be rebuilt from its source.
+
+If source data is unavailable, stale cache use should follow explicit policy.
+
+Do not silently return stale data as current.
+
+Indexes are derived storage structures used to improve retrieval.
+
+A database index can accelerate selected queries.
+
+A search index can accelerate text lookup.
+
+A filesystem index can accelerate metadata search.
+
+Indexes can become inconsistent with authoritative state.
+
+Rebuildable indexes should be treated as derived.
+
+Index rebuild should use authoritative data.
+
+Index failure should not destroy authoritative data.
+
+An index can be large.
+
+Indexes consume storage.
+
+Indexes consume update work.
+
+Only maintain useful indexes.
+
+Snapshots capture storage state at a point or logical point according to the snapshot system.
+
+A snapshot can support backup.
+
+A snapshot can support rollback.
+
+A snapshot can support testing.
+
+Snapshot consistency depends on the mechanism.
+
+A filesystem snapshot can capture blocks.
+
+An application-consistent snapshot can coordinate application state.
+
+A crash-consistent snapshot represents state similar to abrupt interruption according to its model.
+
+These are different guarantees.
+
+Do not call every copied directory a consistent snapshot.
+
+Copying files while they are changing can produce mutually inconsistent state.
+
+Coordinate snapshots when consistency across files matters.
+
+A database dump reads and serializes database contents.
+
+A dump can be logically consistent according to database mechanisms.
+
+A naive dump during concurrent writes can capture inconsistent relationships if the database or tool does not provide a consistent snapshot.
+
+Use storage-native mechanisms when consistency matters.
+
+Replication copies data between storage locations.
+
+Synchronous replication waits for selected replicas according to protocol before acknowledging.
+
+Asynchronous replication allows acknowledgment before replicas necessarily receive the change.
+
+Synchronous replication can improve selected durability guarantees.
+
+Synchronous replication increases latency and can reduce availability when replicas are unavailable.
+
+Asynchronous replication can improve availability and latency.
+
+Asynchronous replication permits lag and selected data-loss windows.
+
+Choose according to requirements.
+
+Replication lag is the delay between authoritative change and replica application.
+
+A lagging replica can return stale data.
+
+Replica freshness should be observable.
+
+Do not use a lagging replica for operations requiring current authoritative state unless protocol permits it.
+
+Replication conflicts can occur in multi-writer systems.
+
+Conflict resolution must be defined.
+
+Do not silently choose whichever value arrived last unless last-write-wins is the explicit policy.
+
+Distributed storage introduces network partitions.
+
+A replica can be unreachable.
+
+A primary can be unreachable.
+
+Different participants can see different network conditions.
+
+Storage authority should not be transferred casually during uncertainty.
+
+Failover should follow defined protocol.
+
+A disconnected replica should not independently declare itself authoritative unless the protocol grants that authority.
+
+Split-brain can corrupt distributed state.
+
+Quorum, fencing, leases, consensus, or other coordination can prevent selected split-brain conditions according to architecture.
+
+Use the mechanism actually required.
+
+Do not use distributed consensus where simple single-writer storage is sufficient.
+
+Complexity creates failure modes.
+
+Storage should be as simple as requirements permit.
+
+Local files can be sufficient.
+
+A relational database can be sufficient.
+
+A key-value store can be sufficient.
+
+An append-only log can be sufficient.
+
+A distributed database can be necessary.
+
+Choose the smallest mechanism satisfying requirements.
+
+Do not add a database merely because databases exist.
+
+Do not avoid a database when transactional coordination is genuinely required.
+
+JSON files can be effective for small structured state.
+
+JSON files are easy to inspect.
+
+JSON files are easy to copy.
+
+JSON files can be version controlled when appropriate.
+
+JSON files can be atomically replaced.
+
+JSON files can become difficult under heavy concurrent writes.
+
+JSON files can become inefficient for large datasets.
+
+JSON files do not inherently provide transactions across multiple files.
+
+Use them where their properties fit.
+
+SQLite can provide transactional local storage.
+
+Server databases can provide concurrent multi-client storage.
+
+Flat files can provide simple deterministic storage.
+
+Each has different operational costs.
+
+Storage architecture should reflect scale and concurrency, not fashion.
+
+A database is not automatically more reliable than a file.
+
+A correctly designed atomic file can be extremely reliable for small state.
+
+A badly configured database can lose or corrupt data.
+
+Reliability depends on guarantees and implementation.
+
+A database is not automatically authoritative.
+
+The application architecture determines authority.
+
+A database can contain cached data.
+
+A file can contain authoritative data.
+
+A remote API can be authoritative for selected external facts.
+
+Identify authority explicitly.
+
+Storage APIs should expose errors.
+
+A function returning data should distinguish valid empty data from failure where the distinction matters.
+
+An empty list can be a valid result.
+
+Failure to load the list is not necessarily an empty list.
+
+Returning empty data on every storage error hides failure.
+
+This can cause destructive overwrites.
+
+If loading authoritative state fails, do not initialize empty state and save it over the original unless policy explicitly defines that recovery.
+
+Missing state and unreadable state are different.
+
+Missing initial state can permit initialization.
+
+Unreadable existing state can indicate corruption or permission failure.
+
+Detect the distinction.
+
+First-run initialization should have explicit criteria.
+
+A system can create initial state when no prior state exists.
+
+It should not treat every load failure as first run.
+
+An existence check followed by creation can race.
+
+Atomic create-if-absent operations can avoid selected races.
+
+Use platform or database mechanisms where available.
+
+Initialization should be idempotent.
+
+Repeated initialization should not duplicate permanent state.
+
+Genesis or root state should be uniquely defined where architecture uses it.
+
+Do not regenerate authoritative root state merely because loading failed.
+
+Persistent identifiers should remain stable.
+
+A restart should not generate a new identity if the existing persistent identity is valid and required to persist.
+
+Identity state should be protected.
+
+Private keys are sensitive persistent state.
+
+Private keys should use restrictive permissions.
+
+Private keys should not be logged.
+
+Private keys should not be stored in public configuration.
+
+Private keys should be backed up only according to key-management policy.
+
+Losing a private key can permanently remove access or identity depending on the system.
+
+Copying a private key creates another holder of that identity.
+
+Key storage requires stronger controls than ordinary cached data.
+
+Public keys are not secret.
+
+Public keys still require integrity where identity depends on them.
+
+Replacing a public key can redirect trust.
+
+Key fingerprints or hashes can identify expected keys.
+
+Key rotation changes keys according to controlled procedure.
+
+Rotation should preserve continuity where required.
+
+Storage of credentials should follow credential policy.
+
+Passwords should not normally be stored in plaintext.
+
+Password verification should use appropriate password hashing.
+
+API secrets should be protected.
+
+Tokens should be protected.
+
+Storage encryption can protect data at rest.
+
+Encryption at rest does not protect data while the authorized application is actively using decrypted data.
+
+Encryption does not replace access control.
+
+Encryption does not replace integrity validation unless the cryptographic mode provides authenticated integrity according to its design.
+
+Encryption keys must be stored and managed.
+
+Encrypting data and storing the key beside it with identical access can provide limited protection against selected threats.
+
+Threat model matters.
+
+Database credentials should not grant unnecessary privileges.
+
+A read-only component should use read-only access where practical.
+
+A writer should have only required write access.
+
+Administrative credentials should not be used for routine application access.
+
+Least privilege limits storage damage.
+
+Storage interfaces should validate authorization before modification.
+
+Possession of a path does not imply permission to modify it.
+
+Possession of a database identifier does not imply authority to update it.
+
+Application authorization remains required.
+
+Storage engines enforce storage-level permissions.
+
+Application policy enforces domain-level authority.
+
+Both can matter.
+
+Storage transactions should not cross authority boundaries accidentally.
+
+Validate authorization before opening an irreversible transaction where practical.
+
+Revalidate state when concurrent changes can invalidate assumptions.
+
+Time-of-check to time-of-use races occur when conditions change between validation and action.
+
+Atomic storage operations can reduce selected TOCTOU races.
+
+Filesystem security often requires operating on already-open handles rather than re-resolving untrusted paths.
+
+Exact mitigation is platform specific.
+
+Storage parsers should be deterministic where deterministic behavior is required.
+
+Given the same valid bytes and same format version, parsing should produce the same authoritative interpretation across supported platforms.
+
+Do not depend on native integer width.
+
+Do not depend on native structure padding.
+
+Do not depend on locale-sensitive number parsing.
+
+Do not depend on unspecified field ordering.
+
+Do not depend on platform newline conversion for protocol-significant content.
+
+Define representation.
+
+Canonical serialization produces one defined byte representation for logically equivalent data according to the canonicalization rules.
+
+Canonical serialization is useful for hashing.
+
+Canonical serialization is useful for signatures.
+
+Canonical serialization is useful for deterministic identifiers.
+
+Canonicalization rules must be explicit.
+
+Sorting object fields can be part of canonicalization.
+
+Normalized numeric representation can be part of canonicalization.
+
+Normalized string encoding can be part of canonicalization.
+
+Whitespace rules can be part of canonicalization.
+
+Do not invent canonicalization after hashes have already become authoritative without migration planning.
+
+Persistent hashes create compatibility commitments.
+
+Changing serialization can change hashes.
+
+Changing field order can change hashes.
+
+Changing whitespace can change hashes.
+
+Changing encoding can change hashes.
+
+Protocol-visible storage formats should be treated as interfaces.
+
+Once external systems depend on them, careless format changes can break compatibility.
+
+Persistent format changes should be versioned.
+
+Storage should preserve invariants.
+
+An invariant is a condition that must remain true.
+
+A balance can be required not to become negative.
+
+An identifier can be required to remain unique.
+
+A record can be required to reference an existing parent.
+
+A block can be required to reference a valid predecessor.
+
+A configuration can require exactly one active value.
+
+Storage operations should maintain these rules.
+
+Database constraints can enforce selected invariants.
+
+Application validation can enforce selected invariants.
+
+Protocol validation can enforce selected invariants.
+
+Use the strongest appropriate boundary.
+
+Do not rely solely on UI validation for persistent invariants.
+
+Multiple clients can bypass the UI.
+
+Storage should reject invalid authoritative state before commit.
+
+Foreign-key constraints can enforce selected relationships.
+
+Unique constraints can enforce uniqueness.
+
+Check constraints can enforce selected value rules.
+
+Transactions can coordinate related changes.
+
+Application rules can enforce domain semantics too complex for storage constraints.
+
+Defense in depth can use multiple layers.
+
+Duplicated validation should remain semantically consistent.
+
+Storage failures should be observable.
+
+Record failed operation.
+
+Record storage component.
+
+Record relevant error code.
+
+Record affected logical object where safe.
+
+Record whether operation can be retried.
+
+Record whether state outcome is known.
+
+Do not log entire sensitive records unnecessarily.
+
+A failed write can have uncertain outcome in remote storage.
+
+If connection fails after sending a write, the server can have committed it.
+
+Do not automatically retry non-idempotent writes.
+
+Use operation identifiers.
+
+Query authoritative state.
+
+Reconcile uncertain outcomes.
+
+Storage operations should support idempotency where retries are expected.
+
+Writing the same complete configuration to the same version can be idempotent.
+
+Appending an event is not automatically idempotent.
+
+Incrementing a counter is not idempotent.
+
+Creating a record can be idempotent if a stable unique operation identifier prevents duplicates.
+
+Design semantics intentionally.
+
+Compaction rewrites stored state into a smaller or more efficient representation.
+
+Logs can be compacted.
+
+Databases can vacuum or reorganize storage.
+
+Event streams can create snapshots.
+
+Compaction should preserve required semantics.
+
+Compaction can remove obsolete derived data.
+
+Compaction should not remove permanent historical records when history must remain.
+
+Compaction itself can fail.
+
+Use atomic or recoverable compaction strategies.
+
+Do not destroy the only valid state before replacement is verified.
+
+Garbage collection removes storage objects no longer needed according to ownership rules.
+
+Reachability can determine liveness in some storage systems.
+
+Reference counts can determine liveness in others.
+
+Retention rules can determine liveness.
+
+Garbage collection should never guess about authoritative ownership.
+
+A falsely deleted object can be unrecoverable.
+
+Deletion criteria should be deterministic.
+
+Orphaned data is data no longer referenced according to the system model.
+
+Orphaned data can be safe to delete.
+
+Orphaned data can be evidence of corruption.
+
+Determine why it became orphaned.
+
+Do not automatically delete unexpected state before investigation.
+
+Storage repair modifies state to restore invariants.
+
+Repair should use known rules.
+
+Repair should preserve evidence.
+
+Repair should record what changed.
+
+Repair should verify the result.
+
+A repair tool should not silently invent missing authoritative values.
+
+If missing information cannot be reconstructed, report that it cannot be reconstructed.
+
+Recovery is not fabrication.
+
+A recovery source can be another valid replica.
+
+A recovery source can be backup.
+
+A recovery source can be an append-only journal.
+
+A recovery source can be deterministic recomputation from authoritative history.
+
+A recovery source should be validated.
+
+Do not restore corrupted state merely because it came from backup.
+
+Validate restored data.
+
+Restore procedures should define ordering.
+
+Stop writers if required.
+
+Select recovery point.
+
+Restore data.
+
+Apply logs or increments where required.
+
+Validate state.
+
+Rebuild derived data.
+
+Verify application behavior.
+
+Resume writers.
+
+Exact procedure depends on architecture.
+
+Recovery should be tested before disaster.
+
+A recovery procedure written but never tested contains assumptions.
+
+Restore tests can reveal missing credentials.
+
+Restore tests can reveal missing encryption keys.
+
+Restore tests can reveal incompatible software.
+
+Restore tests can reveal corrupted backups.
+
+Restore tests can reveal undocumented dependencies.
+
+Recovery evidence matters.
+
+A successful restore test proves the tested backup and procedure worked under those conditions.
+
+It does not prove every backup is valid.
+
+Automated verification can improve confidence.
+
+Periodic restore testing can provide stronger evidence.
+
+Storage performance matters.
+
+Sequential reads can differ from random reads.
+
+Sequential writes can differ from random writes.
+
+Small I/O can differ from large I/O.
+
+Synchronous writes can differ from buffered writes.
+
+Local storage can differ from remote storage.
+
+Solid-state storage can differ from rotational storage.
+
+Memory-mapped access can differ from explicit reads.
+
+Measure the actual deployment environment.
+
+Do not optimize storage before identifying the bottleneck.
+
+A storage cache can hide physical latency.
+
+Benchmark cold and warm behavior where relevant.
+
+Write benchmarks should account for durability settings.
+
+A benchmark that never synchronizes durable writes does not measure durable-write latency.
+
+State the durability level being benchmarked.
+
+Database benchmarks should use realistic data volume.
+
+Filesystem benchmarks should use realistic file counts.
+
+Object-store benchmarks should use realistic object sizes.
+
+Storage performance changes with scale.
+
+A directory with ten files can behave differently from one with millions of files.
+
+A database with one thousand rows can behave differently from one with billions.
+
+Capacity testing should reflect expected growth.
+
+Storage performance should not compromise correctness.
+
+Removing synchronization can improve benchmark numbers while weakening durability.
+
+Disabling validation can improve parsing speed while accepting corruption.
+
+Skipping transactions can improve throughput while allowing partial state.
+
+These are semantic changes, not free optimizations.
+
+Requirements come first.
+
+Storage should be boring when possible.
+
+Simple formats are easier to inspect.
+
+Simple ownership is easier to reason about.
+
+Single-writer designs are easier to coordinate.
+
+Atomic replacement is easier to recover than complicated in-place mutation for small files.
+
+Explicit versions are easier to migrate.
+
+Bounded data is easier to operate.
+
+Complex storage should be introduced only when requirements justify it.
+
+Do not confuse a file with a filesystem.
+
+Do not confuse a filesystem with physical media.
+
+Do not confuse write success with durability.
+
+Do not confuse flush with every possible durability guarantee.
+
+Do not confuse close with durable persistence.
+
+Do not confuse atomicity with durability.
+
+Do not confuse persistence with correctness.
+
+Do not confuse persistence with integrity.
+
+Do not confuse persistence with backup.
+
+Do not confuse replication with backup.
+
+Do not confuse a snapshot with a guaranteed application-consistent backup.
+
+Do not confuse a cache with authority.
+
+Do not confuse a replica with authority.
+
+Do not confuse newer data with authoritative data.
+
+Do not confuse available data with valid data.
+
+Do not confuse existing data with valid data.
+
+Do not confuse syntactic validity with semantic validity.
+
+Do not confuse schema validity with truth.
+
+Do not confuse a hash with authorization.
+
+Do not confuse a signature with correctness.
+
+Do not confuse encryption with integrity unless the encryption construction provides authenticated integrity.
+
+Do not confuse encryption with access control.
+
+Do not confuse deletion with immediate physical erasure.
+
+Do not confuse archival with deletion.
+
+Do not confuse temporary data with disposable data unless ownership defines it as disposable.
+
+Do not confuse an index with authoritative state.
+
+Do not confuse an append-only design with absolute immutability.
+
+Do not confuse transaction support with identical isolation semantics.
+
+Do not confuse last-write-wins with correct conflict resolution.
+
+Do not confuse timestamp order with authoritative order.
+
+Do not confuse file age with lock ownership.
+
+Do not confuse load failure with missing initial state.
+
+Do not confuse empty state with failed state.
+
+Do not confuse recovery with reset.
+
+Do not confuse repair with fabrication.
+
+Do not confuse backup creation with successful restore.
+
+Do not confuse storage redundancy with system reliability.
+
+Do not confuse platform-specific behavior with portable guarantees.
+
+When selecting storage, identify the data.
+
+Identify who owns it.
+
+Identify whether it is authoritative.
+
+Identify whether it is derived.
+
+Identify whether it is sensitive.
+
+Identify whether it must survive restart.
+
+Identify required durability.
+
+Identify required concurrency.
+
+Identify expected size.
+
+Identify expected write frequency.
+
+Identify expected read frequency.
+
+Identify required history.
+
+Identify recovery requirements.
+
+Identify platform requirements.
+
+Then choose the simplest storage mechanism satisfying those requirements.
+
+When writing authoritative state, validate input.
+
+Validate authority.
+
+Prepare the complete change.
+
+Use an atomic or transactional mechanism where required.
+
+Synchronize to the required durability boundary.
+
+Verify the result where appropriate.
+
+Report success only after the required boundary succeeds.
+
+When reading authoritative state, establish the expected format.
+
+Read the data.
+
+Validate structure.
+
+Validate version.
+
+Validate bounds.
+
+Validate integrity where required.
+
+Validate semantics.
+
+Reject unsupported or corrupted state.
+
+Do not guess missing required values.
+
+Do not silently replace invalid state with defaults.
+
+When storage fails, preserve the distinction between:
+
+Missing.
+
+Unreadable.
+
+Invalid.
+
+Unsupported.
+
+Corrupted.
+
+Unavailable.
+
+Full.
+
+Unauthorized.
+
+Conflicted.
+
+Unconfirmed.
+
+These states require different responses.
+
+When recovering state, identify a trusted recovery source.
+
+Preserve damaged evidence where practical.
+
+Restore into a controlled location.
+
+Validate the restored state.
+
+Verify integrity.
+
+Verify compatibility.
+
+Verify required invariants.
+
+Rebuild derived state.
+
+Verify end-to-end operation.
+
+Only then return the restored state to normal authority.
+
+When designing portable storage, define bytes explicitly.
+
+Define integer widths.
+
+Define byte order.
+
+Define text encoding.
+
+Define length limits.
+
+Define field semantics.
+
+Define versioning.
+
+Define canonicalization when hashes or signatures require it.
+
+Keep platform-specific persistence mechanisms behind platform boundaries.
+
+Keep authoritative data semantics common.
+
+The storage backend can differ.
+
+The authoritative meaning must not.
+
+Storage is not merely where bytes are placed.
+
+Storage defines how state survives, how state is identified, how state changes, who may change it, how concurrent changes are controlled, how corruption is detected, and how valid state is recovered after failure.
+
+A reliable storage design knows which state matters.
+
+It knows which copy is authoritative.
+
+It knows when a write is actually complete.
+
+It knows what can be rebuilt.
+
+It knows what must never be silently discarded.
+
+It validates what it reads.
+
+It verifies what it writes.
+
+It preserves evidence when something goes wrong.
+
+And when the required state cannot be established from evidence, it reports that state as unknown or unavailable rather than inventing one.

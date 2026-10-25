@@ -1,0 +1,1363 @@
+Concurrency is the management of multiple tasks whose execution can overlap.
+
+Concurrency and parallelism are different concepts.
+
+Concurrency allows multiple tasks to make progress during overlapping periods of time.
+
+Parallelism means multiple tasks execute simultaneously on separate execution resources.
+
+A concurrent system is not necessarily parallel.
+
+A parallel system is concurrent.
+
+A single processor can execute concurrent tasks by switching between them.
+
+Multiple processor cores can execute tasks in parallel.
+
+Concurrency introduces ordering uncertainty.
+
+The exact order in which concurrent tasks execute should not be assumed unless synchronization establishes that order.
+
+Operating-system scheduling is generally not deterministic from an application's perspective.
+
+A thread is an execution path within a process.
+
+A process can contain one thread.
+
+A process can contain multiple threads.
+
+Threads within a process normally share the process address space.
+
+Threads can share global variables.
+
+Threads can share heap memory.
+
+Threads normally have separate stacks.
+
+Shared memory allows efficient communication.
+
+Shared mutable memory also creates synchronization requirements.
+
+Shared immutable data does not require synchronization for modification because it is not modified.
+
+Immutability can simplify concurrent reasoning.
+
+A process is different from a thread.
+
+Processes normally have separate address spaces.
+
+Threads normally share an address space within their process.
+
+Process isolation can reduce accidental shared-memory interference.
+
+Process communication usually requires an IPC mechanism.
+
+Thread communication can occur through shared memory.
+
+Neither threads nor processes are universally superior.
+
+The appropriate execution model depends on requirements.
+
+A task is a unit of work.
+
+A task is not necessarily a thread.
+
+A task can execute on a thread.
+
+A thread can execute multiple tasks over time.
+
+A worker is an execution participant that processes assigned work.
+
+A worker pool contains multiple workers.
+
+A thread pool maintains reusable worker threads.
+
+Thread pools can avoid repeated thread creation overhead.
+
+A pool should have bounded capacity.
+
+Unbounded worker creation can exhaust system resources.
+
+More workers do not automatically improve performance.
+
+Worker count should follow workload and resource characteristics.
+
+CPU-bound work consumes processor execution time.
+
+I/O-bound work spends substantial time waiting for external operations.
+
+CPU-bound workloads can benefit from parallel execution across processor cores.
+
+I/O-bound workloads can benefit from concurrency because one task can progress while another waits.
+
+Excessive concurrency can reduce performance.
+
+Context switching has cost.
+
+Synchronization has cost.
+
+Cache contention has cost.
+
+Memory consumption increases with additional workers.
+
+Resource contention increases when too many tasks compete for the same resource.
+
+Concurrency should be bounded.
+
+A race condition occurs when program correctness depends improperly on execution timing or ordering.
+
+Race conditions can produce intermittent failures.
+
+Race conditions can disappear during debugging.
+
+Race conditions can depend on machine speed.
+
+Race conditions can depend on processor count.
+
+Race conditions can depend on workload.
+
+Race conditions can depend on compiler optimization.
+
+A program working repeatedly does not prove it is free of races.
+
+Timing-dependent correctness is fragile.
+
+A data race occurs when concurrent execution accesses shared memory without required synchronization and at least one access modifies that memory according to the applicable language memory model.
+
+Data races can cause undefined behavior in languages such as C and C++.
+
+Race condition and data race are related but not identical concepts.
+
+A race condition can exist without a low-level data race.
+
+Check-then-act is a common race pattern.
+
+A task checks a condition.
+
+Another task changes the condition.
+
+The first task acts based on stale information.
+
+The check and action were not atomic.
+
+Reading a file's existence and then assuming it still exists is a check-then-act pattern.
+
+Reading a database value and later updating based on the old value can be a check-then-act pattern.
+
+Testing whether a queue is empty and then separately removing an item can race.
+
+Operations that logically belong together should be synchronized appropriately.
+
+Atomicity means an operation appears indivisible with respect to relevant concurrent observation.
+
+An atomic operation completes as one synchronization unit according to its defined memory model.
+
+Atomic does not mean fast.
+
+Atomic does not mean every operation involving an atomic variable is safe.
+
+Atomic does not mean an entire algorithm becomes atomic.
+
+Two atomic operations performed sequentially are not automatically one atomic compound operation.
+
+Read-modify-write operations can require atomic primitives.
+
+Incrementing a shared counter involves reading, modifying, and writing.
+
+An ordinary shared increment can lose updates.
+
+Two workers can read the same old value.
+
+Both can calculate the same new value.
+
+Both can store the same new value.
+
+One increment is then lost.
+
+An atomic increment can prevent that specific lost-update pattern.
+
+A mutex provides mutual exclusion.
+
+Mutex is derived from mutual exclusion.
+
+A mutex allows only one owner into a protected critical section according to its semantics.
+
+A critical section is code accessing shared state that requires synchronized exclusive access.
+
+The protected state matters more than the lock itself.
+
+A mutex should consistently protect the same defined state.
+
+Using a mutex only on some accesses can leave the state unsafe.
+
+Readers must follow the synchronization protocol.
+
+Writers must follow the synchronization protocol.
+
+A lock is useful only when all relevant participants respect it.
+
+Lock acquisition can block.
+
+A thread waiting for a lock can stop making progress until the lock becomes available.
+
+Locks should generally be held only as long as required.
+
+Holding a lock during slow I/O can unnecessarily block other workers.
+
+Holding a lock while making remote requests can create severe contention.
+
+Do required protected work inside the critical section.
+
+Move unrelated work outside the critical section when safe.
+
+A recursive mutex allows the owning thread to acquire the same mutex multiple times according to its semantics.
+
+Recursive mutexes can hide poor locking structure.
+
+They should not be used merely to avoid understanding lock ownership.
+
+A read-write lock distinguishes shared readers from exclusive writers.
+
+Multiple readers can hold a read lock concurrently according to the lock's semantics.
+
+A writer requires exclusive access.
+
+Read-write locks can help when reads greatly outnumber writes.
+
+Read-write locks add complexity.
+
+A simple mutex can be preferable when contention is low.
+
+Measure before introducing more complicated synchronization.
+
+A semaphore maintains a count controlling access to a bounded resource.
+
+A counting semaphore can permit a defined number of concurrent users.
+
+A binary semaphore has a count effectively limiting access to one participant.
+
+A semaphore and a mutex have different ownership semantics.
+
+Do not assume they are interchangeable.
+
+A semaphore can represent available capacity.
+
+A pool of ten resources can use a semaphore count of ten.
+
+Each consumer acquires capacity before use.
+
+Each consumer releases capacity afterward.
+
+Failure to release capacity can eventually block all consumers.
+
+Synchronization resources require correct cleanup.
+
+A condition variable allows threads to wait until a condition involving shared state may have changed.
+
+A condition variable is used with associated synchronization.
+
+Waiting should normally evaluate a predicate.
+
+A wake-up means the waiting thread should recheck the condition.
+
+A wake-up does not itself prove the condition is true.
+
+Spurious wake-ups can occur in condition-variable implementations.
+
+Wait in a loop that checks the required predicate according to the API semantics.
+
+A producer creates work or data.
+
+A consumer processes work or data.
+
+Producer-consumer is a common concurrency pattern.
+
+A queue can connect producers and consumers.
+
+Producers add work.
+
+Consumers remove work.
+
+A thread-safe queue synchronizes concurrent access.
+
+A bounded queue has a maximum capacity.
+
+Bounded queues provide backpressure.
+
+Backpressure prevents producers from generating unlimited queued work.
+
+An unbounded queue can consume all available memory when producers outrun consumers.
+
+Queue depth is operational evidence.
+
+Growing queue depth can indicate insufficient consumer capacity.
+
+Growing queue depth can indicate blocked downstream resources.
+
+Growing queue depth can indicate increased workload.
+
+Do not assume the cause without evidence.
+
+FIFO stands for First In, First Out.
+
+A FIFO queue processes items according to insertion order when its concurrency semantics preserve that ordering.
+
+Multiple workers can complete FIFO-dequeued work out of order.
+
+Dequeue order and completion order are different.
+
+If completion order matters, additional coordination is required.
+
+LIFO stands for Last In, First Out.
+
+A stack commonly follows LIFO behavior.
+
+Priority queues process items according to priority ordering.
+
+Priority scheduling can starve lower-priority work.
+
+Fairness describes whether waiting participants receive reasonable opportunities to progress.
+
+Not every lock or scheduler guarantees fairness.
+
+A starvation condition occurs when a participant repeatedly fails to obtain resources needed for progress.
+
+A system can remain active while one task starves.
+
+Starvation and deadlock are different.
+
+Deadlock occurs when participants wait indefinitely for conditions that cannot be satisfied because of their dependency relationships.
+
+A classic deadlock can involve two locks.
+
+Thread A acquires lock 1.
+
+Thread B acquires lock 2.
+
+Thread A waits for lock 2.
+
+Thread B waits for lock 1.
+
+Neither can proceed.
+
+Consistent lock ordering can prevent many deadlocks.
+
+If all code acquires lock 1 before lock 2, the circular ordering can be prevented.
+
+Lock hierarchy defines a permitted lock acquisition order.
+
+Document lock ordering when multiple locks interact.
+
+Avoid holding more locks simultaneously than required.
+
+Deadlock can involve resources other than mutexes.
+
+Processes can deadlock.
+
+Database transactions can deadlock.
+
+Message systems can deadlock logically.
+
+Two components waiting for each other's response can deadlock.
+
+Timeouts can prevent indefinite waiting but do not automatically correct the underlying design.
+
+A timeout converts an infinite wait into a bounded failure.
+
+The operation still failed.
+
+A livelock occurs when participants remain active but repeatedly react to one another without making useful progress.
+
+Two participants repeatedly yielding to each other can livelock.
+
+Livelock differs from deadlock because execution continues.
+
+Progress does not mean instructions are executing.
+
+Useful state must advance.
+
+Lock-free does not mean race-free.
+
+Lock-free algorithms use synchronization techniques that guarantee system-wide progress without traditional blocking locks according to their formal properties.
+
+Wait-free algorithms provide stronger progress guarantees according to their formal properties.
+
+Lock-free programming is difficult.
+
+Lock-free programming should not be introduced merely because locks appear inelegant.
+
+Correct simple locking is often preferable to incorrect lock-free code.
+
+Compare-and-swap is a common atomic primitive.
+
+Compare-and-swap is commonly abbreviated CAS.
+
+CAS updates a value only if it still equals an expected value according to atomic semantics.
+
+CAS can implement synchronization structures.
+
+CAS loops can retry when another participant changed the value.
+
+CAS loops must account for applicable memory-ordering requirements.
+
+The ABA problem can occur in compare-and-swap algorithms.
+
+A value can change from A to B and back to A.
+
+A comparison seeing A again can incorrectly assume nothing changed.
+
+Version counters or other techniques can address ABA in appropriate designs.
+
+Memory ordering describes constraints on how memory operations become observable between execution contexts.
+
+Source-code order does not always equal globally observed memory order.
+
+Compilers can reorder operations when language rules permit it.
+
+Processors can reorder or buffer memory operations.
+
+Synchronization establishes required ordering relationships.
+
+A memory barrier constrains memory-operation ordering according to architecture or language semantics.
+
+High-level synchronization primitives normally provide required barriers according to their contracts.
+
+Do not implement synchronization by assuming processor behavior that the language does not guarantee.
+
+The C memory model defines behavior for concurrent C programs.
+
+The C++ memory model defines behavior for concurrent C++ programs.
+
+Atomic types provide defined concurrent operations.
+
+Ordinary unsynchronized conflicting accesses can produce undefined behavior.
+
+volatile is not a general thread-synchronization mechanism in C or C++.
+
+volatile has specific language semantics.
+
+volatile does not make compound operations atomic.
+
+volatile does not replace mutexes.
+
+volatile does not automatically establish inter-thread ordering.
+
+Use synchronization primitives intended for concurrency.
+
+Memory visibility means changes made by one execution context become observable to another according to the memory model.
+
+A thread writing a shared variable does not imply another thread may safely observe it without synchronization.
+
+Synchronization establishes visibility guarantees.
+
+Mutex unlock and subsequent mutex lock can establish required ordering according to the threading API.
+
+Atomic operations can establish ordering according to selected memory order.
+
+Use the strongest simple semantics appropriate unless weaker ordering is required and thoroughly understood.
+
+Premature memory-order optimization is dangerous.
+
+Thread-safe means an interface can be used concurrently according to its documented rules without violating correctness.
+
+Thread-safe does not necessarily mean every sequence of calls is logically atomic.
+
+Two individually thread-safe function calls can form a race when the application requires them to act as one operation.
+
+Thread safety belongs to an interface contract.
+
+Reentrant code can be safely entered again before a previous invocation completes under the defined conditions.
+
+Reentrancy and thread safety are different properties.
+
+A function can be thread-safe without being reentrant.
+
+A function can be reentrant while broader shared state remains unsafe.
+
+Document concurrency guarantees.
+
+Immutable objects can simplify concurrency.
+
+Once constructed, immutable state does not change.
+
+Readers can share immutable state without modification races.
+
+Copy-on-write creates a new representation when modification is required.
+
+Copy-on-write can reduce shared mutation.
+
+Copy-on-write has memory and copying costs.
+
+Message passing can reduce shared-memory synchronization.
+
+Instead of sharing mutable state, participants exchange messages.
+
+One owner can maintain a piece of mutable state.
+
+Other participants request operations from that owner.
+
+Actor-style systems use message passing and isolated state according to actor-model principles.
+
+Message passing does not eliminate concurrency problems.
+
+Messages can arrive in different orders.
+
+Queues can fill.
+
+Participants can fail.
+
+Responses can be delayed.
+
+The model changes the problems rather than eliminating them.
+
+Ownership is a powerful concurrency concept.
+
+One execution context can own mutable state.
+
+Other contexts interact through defined interfaces.
+
+Clear ownership reduces ambiguous shared mutation.
+
+Shared ownership requires defined synchronization.
+
+No ownership definition creates confusion.
+
+A future represents a result that may become available later.
+
+A promise represents a mechanism for completing or providing an asynchronous result according to the programming model.
+
+Terminology varies among languages.
+
+A future can be pending.
+
+A future can complete successfully.
+
+A future can complete with failure.
+
+Waiting for a future can block.
+
+Polling a future can check completion.
+
+Callbacks can process completion asynchronously.
+
+An asynchronous operation begins work without requiring the caller to block until completion.
+
+Asynchronous does not necessarily mean concurrent execution on another thread.
+
+An asynchronous API can use an event loop.
+
+An asynchronous API can use operating-system I/O mechanisms.
+
+An asynchronous API can use worker threads.
+
+Implementation matters.
+
+Async and parallel are not synonyms.
+
+One event-loop thread can manage many asynchronous I/O operations concurrently.
+
+Those operations are concurrent without application-level parallel execution on that event-loop thread.
+
+An event loop waits for events and dispatches handlers.
+
+Event loops are common in network servers and GUI applications.
+
+Blocking the event-loop thread prevents other events from being processed.
+
+Long CPU-bound work should not execute directly on a latency-sensitive event loop unless explicitly acceptable.
+
+CPU-bound work can be moved to workers.
+
+Blocking I/O can be moved to workers when the platform does not provide appropriate asynchronous I/O.
+
+Event-driven systems require bounded handlers.
+
+One slow handler can delay unrelated events when they share an event loop.
+
+A callback is a function invoked when an event or operation reaches a defined point.
+
+Callbacks can create nested control flow.
+
+Deep callback nesting can make error handling difficult.
+
+Promises, futures, or async language constructs can provide clearer composition.
+
+The abstraction does not remove the underlying concurrency.
+
+Cancellation requests that ongoing work stop.
+
+Cancellation should have defined semantics.
+
+Cancellation can be cooperative.
+
+A worker can periodically check whether cancellation was requested.
+
+Cancellation can occur before work starts.
+
+Cancellation can occur during work.
+
+Cancellation can occur after work already completed.
+
+A cancellation request does not necessarily prove work stopped.
+
+The API should report actual resulting state.
+
+Forced thread termination can leave locks held or state inconsistent depending on platform mechanisms.
+
+Cooperative cancellation is generally safer.
+
+Critical state changes should define cancellation boundaries.
+
+Do not abandon persistent state halfway through an operation without recovery semantics.
+
+Timeout and cancellation are related but different.
+
+A timeout is a time-based condition.
+
+Cancellation can occur for many reasons.
+
+A timeout can trigger cancellation.
+
+The operation can still require cleanup.
+
+A barrier synchronizes a group of participants at a defined phase boundary.
+
+Each participant reaches the barrier.
+
+Participants wait until the required number has arrived.
+
+Then they continue.
+
+Barriers are useful for phased parallel algorithms.
+
+A barrier can deadlock if an expected participant never arrives.
+
+Failure handling must account for synchronization structure.
+
+A latch allows participants to wait until a count reaches a required state according to the primitive.
+
+Different languages provide different synchronization primitives.
+
+Understand the primitive's actual contract.
+
+Do not infer behavior from its name alone.
+
+Thread-local storage provides data associated with one thread.
+
+Thread-local data is not shared in the ordinary way between threads.
+
+Thread-local storage can reduce synchronization needs for per-thread state.
+
+Thread-local state can complicate task-based systems where tasks move between worker threads.
+
+Do not use thread-local identity when execution can migrate unless the runtime model supports the intended behavior.
+
+A thread identifier identifies a thread according to the operating system or runtime.
+
+Thread IDs can be reused.
+
+A thread ID is not a permanent identity.
+
+Thread identity should not be used as a durable application identifier.
+
+Concurrent collections provide operations designed for concurrent use.
+
+A concurrent map can allow safe concurrent access according to its interface.
+
+A concurrent queue can allow safe producer-consumer operations.
+
+Using a concurrent collection does not automatically make compound application logic atomic.
+
+Check-then-act can still race.
+
+Use atomic collection operations when the logical action requires atomicity.
+
+For example, "insert only if absent" should use an atomic operation when multiple workers can perform it concurrently.
+
+Separately checking absence and then inserting can race.
+
+Database unique constraints can enforce uniqueness across concurrent application processes.
+
+Application-only checks are insufficient when another process can modify the same database concurrently.
+
+Enforce important invariants at the boundary capable of observing all relevant writers.
+
+File locking can coordinate processes.
+
+A file lock can be advisory.
+
+All cooperating processes must follow the locking protocol.
+
+A lock file and a file lock are different concepts.
+
+Creating a lock file can implement a locking protocol when creation is atomic and ownership rules are defined.
+
+Merely checking whether a lock file exists can race.
+
+Atomic creation primitives should be used when lock-file designs require exclusivity.
+
+Stale lock handling must be defined.
+
+Process crashes can leave ordinary lock files behind.
+
+Operating-system-managed locks are normally released when their owning process terminates according to the lock mechanism.
+
+Shared filesystem locking can have different semantics across filesystems.
+
+Do not assume local filesystem locking semantics automatically apply to network filesystems.
+
+Concurrency boundaries can cross processes.
+
+Concurrency boundaries can cross machines.
+
+Once independent machines communicate over a network, additional distributed-system problems appear.
+
+Those problems include partial failure.
+
+Those problems include message delay.
+
+Those problems include network partitions.
+
+Those problems include independent clocks.
+
+Those problems belong to distributed-system design in addition to concurrency.
+
+Concurrency knowledge remains necessary.
+
+A server can process multiple client requests concurrently.
+
+Two requests can modify the same application state.
+
+HTTP requests should not be assumed to execute sequentially.
+
+Two users can submit operations simultaneously.
+
+One user can submit multiple requests simultaneously.
+
+Browser behavior can create concurrent requests.
+
+Automated clients can create concurrent requests.
+
+Application state must remain correct under concurrent requests.
+
+A web session can experience concurrent updates.
+
+Reading session state, modifying it, and writing it back can lose another concurrent update.
+
+Session storage concurrency semantics matter.
+
+A database transaction can protect database state.
+
+A mutex protects only participants sharing that mutex.
+
+A mutex inside one process does not automatically protect another process.
+
+A mutex inside one server does not protect another server.
+
+Choose synchronization at the boundary containing all writers.
+
+If multiple processes modify one database, database-level constraints or transactions may be required.
+
+If multiple machines modify shared authoritative state, local locks alone are insufficient.
+
+Scope matters.
+
+A lock has a scope.
+
+A thread mutex usually has process-local scope.
+
+An operating-system named synchronization object can have broader local scope.
+
+A database lock has database transaction scope.
+
+A distributed lock attempts coordination across nodes.
+
+Never assume a lock covers participants outside its defined scope.
+
+A critical section should protect an invariant.
+
+An invariant is a condition that must remain true.
+
+For example, an account balance may be required not to become negative according to application policy.
+
+For example, an identifier may be required to remain unique.
+
+For example, only one active owner may be permitted.
+
+Define the invariant before choosing synchronization.
+
+The goal is correctness, not merely preventing simultaneous execution.
+
+Over-locking can reduce concurrency unnecessarily.
+
+Under-locking can violate correctness.
+
+Correct lock granularity protects required state while permitting safe independent work.
+
+Coarse-grained locking protects large amounts of state with fewer locks.
+
+Coarse locks are simpler.
+
+Coarse locks can create contention.
+
+Fine-grained locking uses more locks over smaller state regions.
+
+Fine-grained locks can increase concurrency.
+
+Fine-grained locks increase complexity.
+
+Start simple.
+
+Increase granularity complexity only when evidence shows it is necessary.
+
+Contention occurs when multiple participants compete for the same synchronization resource.
+
+Contention can increase latency.
+
+Contention can reduce throughput.
+
+Lock wait time can be measured.
+
+Queue wait time can be measured.
+
+Thread utilization can be measured.
+
+Measure contention before redesigning synchronization.
+
+False sharing occurs when independent variables used by different processors occupy the same cache line and cause unnecessary cache coherence traffic.
+
+False sharing can reduce parallel performance.
+
+False sharing is a performance issue, not necessarily a correctness defect.
+
+Do not optimize cache-line layout without evidence that it matters.
+
+Amdahl's Law describes the limit on parallel speedup imposed by the portion of work that remains serial.
+
+If part of a workload cannot be parallelized, adding processors eventually provides diminishing returns.
+
+Parallelism is not infinite acceleration.
+
+Coordination overhead further reduces practical speedup.
+
+Amdahl's Law is a model.
+
+Real systems also encounter memory bandwidth, cache, scheduling, and I/O constraints.
+
+Ordering matters in concurrent systems.
+
+Program order describes operations within one execution context.
+
+Synchronization order establishes relationships between execution contexts according to the memory model.
+
+Completion order can differ from submission order.
+
+Observation order can differ among participants without synchronization guarantees.
+
+If ordering is required, encode it.
+
+Do not rely on timing.
+
+Sleeping is not synchronization.
+
+Adding a delay can make a race harder to reproduce.
+
+Adding a delay does not establish correctness.
+
+"Sleep for one second and assume the worker finished" is fragile.
+
+Use completion signaling.
+
+Use joins.
+
+Use futures.
+
+Use condition variables.
+
+Use events.
+
+Use defined protocol acknowledgments.
+
+Synchronization should establish facts rather than guess elapsed time.
+
+Joining a thread waits for that thread to terminate according to the threading API.
+
+A successful join establishes that the joined thread finished.
+
+Thread creation does not establish completion.
+
+Starting work does not establish completion.
+
+Submission to a queue does not establish processing.
+
+Receiving an acknowledgment should mean exactly what the protocol defines.
+
+An acknowledgment of receipt is not necessarily an acknowledgment of completion.
+
+Define stages precisely.
+
+Concurrent state machines should have explicit transitions.
+
+State transitions should be atomic where required.
+
+Two workers should not both claim an exclusive state transition unless the system permits it.
+
+Compare-and-set operations can enforce conditional state transitions.
+
+Database updates can include current-state predicates.
+
+For example, update state from pending to running only if state is currently pending.
+
+The number of affected rows can provide evidence whether the transition occurred.
+
+Conditional transitions reduce race windows.
+
+Work claiming is a common concurrent operation.
+
+Multiple workers can inspect available work.
+
+Exactly one worker should claim a work item when exclusive processing is required.
+
+Claiming should be atomic.
+
+Selecting work and later separately marking it claimed can race.
+
+Use an atomic queue operation, transaction, lock, or conditional update appropriate to the storage system.
+
+Duplicate processing can still require idempotency when failures occur after claiming.
+
+Concurrency correctness and failure recovery interact.
+
+A worker can claim work and crash.
+
+The system needs a defined recovery policy.
+
+A lease grants ownership for a bounded period.
+
+If the worker fails to renew or complete the lease, work can become eligible for another worker.
+
+Leases require time semantics.
+
+Leases can result in overlapping work if an old worker continues after its lease expires.
+
+Fencing tokens can distinguish newer ownership from stale ownership in appropriate designs.
+
+Distributed leases introduce distributed-system concerns.
+
+Within one process, simpler ownership mechanisms are usually preferable.
+
+A once-only initialization mechanism ensures initialization occurs according to its defined single-execution semantics.
+
+Naive lazy initialization can race.
+
+Two threads can both observe uninitialized state.
+
+Both can initialize it.
+
+Use language or runtime primitives designed for one-time initialization.
+
+Singleton patterns do not automatically solve concurrency.
+
+A singleton can contain unsafe mutable state.
+
+Global uniqueness and thread safety are separate properties.
+
+Reference counting tracks the number of references to a resource.
+
+Concurrent reference counting requires atomic or otherwise synchronized count updates.
+
+An incorrect reference count can free a resource too early.
+
+An incorrect reference count can leak a resource.
+
+Resource lifetime becomes more complex under concurrency.
+
+Ownership models reduce lifetime ambiguity.
+
+A resource should not be destroyed while another execution context can still use it.
+
+Use joins, reference ownership, synchronization, or lifecycle protocols appropriate to the design.
+
+Use-after-free defects can be concurrency defects.
+
+One thread can free memory while another accesses it.
+
+Synchronization must protect lifetime as well as data contents.
+
+Protecting a field while allowing its containing object to disappear is insufficient.
+
+Concurrent shutdown requires coordination.
+
+Stop accepting new work.
+
+Signal workers to stop.
+
+Allow bounded completion or cancellation.
+
+Join workers where required.
+
+Flush required state.
+
+Release resources.
+
+Then terminate.
+
+Destroying synchronization objects while workers still use them is unsafe.
+
+Closing shared resources while workers still use them is unsafe.
+
+Shutdown order matters.
+
+Startup order can also matter.
+
+Do not expose a component as ready before required shared state is initialized.
+
+Initialization should establish invariants before concurrent access begins.
+
+Publishing an object means making it visible to other execution contexts.
+
+Do not publish partially initialized mutable objects unless the memory model and design explicitly permit it.
+
+Construct state first.
+
+Establish synchronization.
+
+Then make it available.
+
+Safe publication ensures other threads observe initialized state according to the memory model.
+
+Concurrent error handling should preserve the responsible operation.
+
+One worker failing does not automatically mean all workers must terminate.
+
+A critical worker failure can require process termination.
+
+An optional worker failure can permit degraded operation.
+
+Policy should define worker criticality.
+
+Do not silently restart a repeatedly failing worker forever.
+
+Bound restart behavior.
+
+Log the original failure.
+
+Preserve evidence.
+
+A worker crash loop can consume CPU and fill logs.
+
+Supervision should detect repeated failure.
+
+Backoff can limit restart rate.
+
+A restarted worker should begin from defined state.
+
+Do not assume abandoned in-memory work survived a worker restart.
+
+Persistent queues can preserve queued work.
+
+In-memory queues disappear with the process.
+
+Persistence requirements should determine queue design.
+
+Concurrency tests should attempt overlapping operations.
+
+Sequential tests cannot establish all concurrent behavior.
+
+A race can require thousands of iterations to reproduce.
+
+Stress testing can increase race probability.
+
+Thread sanitizers can detect selected data races.
+
+Memory sanitizers can detect selected memory defects.
+
+Deadlock detection can identify selected lock cycles.
+
+Instrumentation changes timing.
+
+A race disappearing under instrumentation does not prove it was repaired.
+
+Tests should verify invariants after concurrent execution.
+
+For example, run many increments and verify the exact final count.
+
+For example, run simultaneous unique inserts and verify uniqueness.
+
+For example, run simultaneous state claims and verify only one owner.
+
+Test the property that matters.
+
+Do not merely verify that no process crashed.
+
+A concurrency test passing once is limited evidence.
+
+Repeat tests.
+
+Vary scheduling pressure.
+
+Vary processor count where practical.
+
+Vary workload.
+
+Test cancellation.
+
+Test shutdown.
+
+Test resource exhaustion.
+
+Test error paths while work overlaps.
+
+Concurrency failures often occur during exceptional conditions.
+
+Fault injection can test failures at controlled points.
+
+A worker can be forced to fail after acquiring work.
+
+A dependency can be delayed.
+
+A queue can be filled.
+
+A lock can be contended.
+
+A write can fail.
+
+Observe whether invariants remain correct.
+
+Fault injection should be controlled.
+
+Do not perform destructive concurrency experiments against production systems without authorization.
+
+Determinism and concurrency can coexist when externally required results are controlled.
+
+Internal execution order can vary.
+
+The final result can remain deterministic.
+
+For example, independent calculations can execute in parallel and then be combined using a defined ordering.
+
+If consensus-visible or protocol-visible output must be identical, nondeterministic iteration order must not influence that output.
+
+Thread scheduling must not influence serialized results when deterministic serialization is required.
+
+Unordered collections can produce varying traversal order.
+
+Sort data before serialization when canonical ordering is required.
+
+Floating-point parallel reductions can produce different rounding depending on operation order.
+
+If exact deterministic numeric output is required, define the reduction method.
+
+Parallel optimization must not change required semantics.
+
+A faster nondeterministic result is not acceptable when deterministic behavior is required.
+
+Concurrency is an implementation technique.
+
+It does not override the system contract.
+
+Concurrency should not leak accidental ordering into public behavior.
+
+Concurrency should not weaken validation.
+
+Concurrency should not expand authority.
+
+A worker has only the authority delegated to the operation it performs.
+
+Multiple workers do not collectively gain additional authority.
+
+Synchronization protects state.
+
+Authorization protects actions.
+
+They solve different problems.
+
+A mutex does not authorize access.
+
+An authorization check does not synchronize shared state.
+
+Both may be required.
+
+Concurrency should preserve auditability.
+
+When multiple workers log simultaneously, log entries should remain individually valid.
+
+Logs can interleave.
+
+Structured logging can preserve event boundaries.
+
+Include timestamps where useful.
+
+Include worker or request identifiers where useful.
+
+Do not infer causal order solely from coarse timestamps.
+
+Two events can have identical timestamps.
+
+Clock readings can have limited resolution.
+
+Within-process sequence numbers can provide stronger local ordering when required.
+
+Tracing can associate concurrent work across components.
+
+Correlation identifiers can distinguish overlapping requests.
+
+Without identifiers, concurrent logs can become difficult to interpret.
+
+Observability is especially important in concurrent systems because execution paths overlap.
+
+Shared counters used for metrics require thread-safe updates.
+
+Metrics themselves should not introduce significant contention.
+
+Approximate metrics can be acceptable when exactness is unnecessary.
+
+Business state requiring exactness should not be treated like approximate telemetry.
+
+Know which values require exact correctness.
+
+Locking every metric update globally can damage performance.
+
+Using approximate counters for authoritative financial or security state can damage correctness.
+
+Requirements determine synchronization strength.
+
+Priority inversion occurs when a high-priority task waits for a resource held by a lower-priority task while intermediate-priority work prevents the lower-priority task from running.
+
+Some operating systems provide priority-inheritance mechanisms.
+
+Priority inversion matters particularly in real-time systems.
+
+Ordinary applications should not invent real-time assumptions.
+
+Real-time concurrency has timing guarantees beyond ordinary multithreading.
+
+Fast is not the same as real-time.
+
+Low average latency is not a real-time guarantee.
+
+Real-time systems require bounded timing analysis according to their requirements.
+
+Concurrency increases state-space complexity.
+
+Two sequential operations have limited ordering possibilities.
+
+Many concurrent operations can have many possible interleavings.
+
+Reducing shared mutable state reduces the number of problematic interleavings.
+
+Reducing concurrency reduces reasoning complexity.
+
+Do not make software concurrent without a reason.
+
+Concurrency can improve responsiveness.
+
+Concurrency can improve throughput.
+
+Concurrency can hide I/O latency.
+
+Concurrency can use multiple processors.
+
+Concurrency also increases complexity.
+
+Start with the simplest correct execution model.
+
+Add concurrency where requirements justify it.
+
+Measure the result.
+
+A single-threaded design can be excellent engineering.
+
+A multi-threaded design can be excellent engineering.
+
+The correct choice depends on requirements.
+
+Do not equate more threads with more sophistication.
+
+Do not equate asynchronous code with better performance.
+
+Do not equate parallel execution with correctness.
+
+Do not equate a mutex with thread safety.
+
+Do not equate volatile with synchronization.
+
+Do not equate atomic variables with an atomic algorithm.
+
+Do not equate thread-safe functions with atomic workflows.
+
+Do not equate concurrent collections with race-free application logic.
+
+Do not equate sleeping with synchronization.
+
+Do not equate task submission with task completion.
+
+Do not equate receipt with processing.
+
+Do not equate worker activity with useful progress.
+
+Do not equate lack of crashes with concurrency correctness.
+
+Do not equate local locks with cross-process protection.
+
+Do not equate process locks with distributed coordination.
+
+Do not equate a timeout with a repaired deadlock.
+
+Do not equate retry with synchronization.
+
+Do not equate lock-free with simple.
+
+Do not equate parallelism with unlimited speedup.
+
+Do not equate nondeterministic execution order with permission for nondeterministic results.
+
+When shared mutable state exists, identify its owner.
+
+Identify every participant that can access it.
+
+Identify every participant that can modify it.
+
+Define the invariant.
+
+Define the synchronization mechanism.
+
+Define the lock or coordination scope.
+
+Define failure behavior.
+
+Define shutdown behavior.
+
+Then test the invariant under overlapping execution.
+
+When work can execute independently, avoid unnecessary shared state.
+
+When ordering matters, encode the ordering.
+
+When exclusivity matters, enforce exclusivity atomically.
+
+When capacity is finite, bound concurrency.
+
+When queues can grow, provide backpressure.
+
+When retries occur, understand idempotency.
+
+When workers can fail, define recovery.
+
+When shutdown occurs, coordinate lifecycle.
+
+When deterministic output matters, isolate nondeterministic scheduling from observable results.
+
+Correct concurrent software does not depend on luck.
+
+Correct concurrent software does not depend on one observed execution order.
+
+Correct concurrent software establishes the relationships required for correctness explicitly.
+
+Concurrency is controlled overlap of work.
+
+Synchronization establishes required relationships between that work.
+
+The goal is not to make everything execute simultaneously.
+
+The goal is to permit useful overlap while preserving required behavior.

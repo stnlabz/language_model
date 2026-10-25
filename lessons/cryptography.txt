@@ -1,0 +1,1615 @@
+Cryptography is the study and application of techniques for protecting information and establishing security properties.
+
+Cryptography can provide confidentiality.
+
+Cryptography can provide integrity.
+
+Cryptography can provide authenticity.
+
+Cryptography can support identity verification.
+
+Cryptography can support non-repudiation under defined assumptions and systems.
+
+Cryptography does not automatically provide every security property.
+
+Different cryptographic mechanisms solve different problems.
+
+A cryptographic algorithm is not secure merely because it is complicated.
+
+A cryptographic algorithm is not secure merely because its implementation is secret.
+
+Modern cryptographic engineering relies on publicly studied algorithms and protected secret keys.
+
+Do not invent custom cryptographic algorithms for production security.
+
+Use established algorithms and established implementations according to system requirements.
+
+Cryptographic security depends on more than algorithm selection.
+
+Cryptographic security depends on correct implementation.
+
+Cryptographic security depends on correct key management.
+
+Cryptographic security depends on correct parameter selection.
+
+Cryptographic security depends on correct protocol composition.
+
+Cryptographic security depends on correct randomness where randomness is required.
+
+Cryptographic security depends on protecting secrets.
+
+Cryptographic security depends on validating inputs.
+
+Cryptographic security depends on maintaining authority boundaries.
+
+Encoding is not encryption.
+
+Compression is not encryption.
+
+Hashing is not encryption.
+
+Obfuscation is not encryption.
+
+Base64 is not encryption.
+
+Hexadecimal encoding is not encryption.
+
+Changing a filename extension is not encryption.
+
+Encryption transforms plaintext into ciphertext using a cryptographic algorithm and key material.
+
+Decryption transforms ciphertext back into plaintext when the required key material and algorithm conditions are satisfied.
+
+Plaintext is the original readable or interpretable information supplied to an encryption operation.
+
+Ciphertext is the encrypted representation.
+
+A cipher is an algorithm used for encryption and decryption.
+
+A key is cryptographic input controlling the transformation performed by an algorithm.
+
+The secrecy of protected data should depend on the secrecy of the key rather than secrecy of the algorithm.
+
+Key length is measured in bits.
+
+Larger key length does not automatically mean a cryptographic system is better.
+
+Security depends on the algorithm and effective security strength.
+
+Key sizes from different algorithms cannot be compared solely by their numeric bit length.
+
+A 256-bit symmetric key and a 256-bit asymmetric key do not imply equivalent security.
+
+Symmetric cryptography uses the same secret key or directly related secret key material for encryption and decryption according to the algorithm.
+
+Symmetric encryption is generally efficient for encrypting substantial amounts of data.
+
+AES is a standardized symmetric block cipher.
+
+AES supports defined key sizes.
+
+AES itself is a block cipher rather than a complete application protocol.
+
+A block cipher transforms fixed-size blocks according to its algorithm.
+
+Using a block cipher securely requires an appropriate mode or construction.
+
+ECB is a block cipher mode.
+
+ECB exposes repeated plaintext block patterns.
+
+ECB is generally inappropriate for protecting structured data where those patterns matter.
+
+CBC is a block cipher mode.
+
+CBC requires correct initialization-vector handling.
+
+CBC encryption by itself does not provide authenticated encryption.
+
+CTR mode converts block-cipher operations into a stream-like construction.
+
+CTR requires unique counter or nonce handling according to its security requirements.
+
+Reusing required-unique nonce or counter material can catastrophically weaken security.
+
+GCM is an authenticated-encryption mode commonly used with AES.
+
+AES-GCM provides confidentiality and integrity/authenticity properties according to its construction and correct use.
+
+Authenticated encryption is commonly abbreviated AE.
+
+Authenticated Encryption with Associated Data is commonly abbreviated AEAD.
+
+AEAD protects ciphertext integrity while permitting selected associated data to remain unencrypted but authenticated.
+
+Associated data is authenticated but not encrypted.
+
+Protocol headers can sometimes be associated data when the protocol requires their integrity without confidentiality.
+
+Authenticated encryption should generally be preferred over unauthenticated encryption when both confidentiality and integrity are required.
+
+Encryption without integrity protection can permit dangerous ciphertext modification attacks depending on the construction.
+
+Do not assume encrypted data cannot be modified.
+
+Confidentiality and integrity are different properties.
+
+Asymmetric cryptography uses mathematically related public and private keys.
+
+A public key can be distributed according to the system's trust model.
+
+A private key must remain protected.
+
+Knowledge of a public key should not reveal the corresponding private key under the security assumptions of the algorithm.
+
+Public-key cryptography can support encryption.
+
+Public-key cryptography can support digital signatures.
+
+Not every public-key algorithm supports both operations.
+
+Encryption and signing are different operations.
+
+A public key does not need to be secret.
+
+A private key does need protection.
+
+A private key should not be embedded in publicly distributed source code.
+
+A private key should not be committed to a public repository.
+
+A private key should not be exposed in logs.
+
+A private key should not be transmitted merely because the public key is transmitted.
+
+Public-key distribution requires authenticity.
+
+Receiving a public key does not prove who owns it.
+
+A trusted binding between identity and public key must be established according to system architecture.
+
+A certificate can bind identity information to a public key according to a certificate system.
+
+A certificate is not automatically trustworthy merely because it is syntactically valid.
+
+Certificate validation requires trust-chain and policy checks according to the applicable system.
+
+X.509 is a certificate format and public-key infrastructure framework widely used in TLS systems.
+
+A certificate authority is commonly abbreviated CA.
+
+A CA signs certificates according to its authority and validation procedures.
+
+A root certificate represents a trust anchor according to the applicable trust store.
+
+A trust anchor is trusted because the system's policy establishes it as trusted.
+
+Cryptography does not decide which authority should be trusted.
+
+Trust policy determines which keys or certificates are authoritative.
+
+A mathematically valid signature from an unauthorized key remains unauthorized.
+
+Cryptographic validity and authorization are different.
+
+RSA is an asymmetric cryptographic algorithm family.
+
+RSA can be used in appropriately defined encryption and signature schemes.
+
+Raw RSA operations should not be used as application cryptographic protocols.
+
+Padding and encoding schemes are essential to secure RSA use.
+
+RSA-OAEP is a standardized RSA encryption padding construction.
+
+RSA-PSS is a standardized RSA signature scheme.
+
+RSA key size affects security.
+
+RSA-2048 and RSA-3072 refer to RSA modulus sizes.
+
+An RSA public key can verify signatures generated by its corresponding private key under the signature scheme.
+
+A public key cannot generate a valid private-key signature merely because it can verify one.
+
+Elliptic-curve cryptography is commonly abbreviated ECC.
+
+ECC uses algebraic structures based on elliptic curves over finite fields.
+
+ECC can provide strong security with smaller key representations than traditional RSA at comparable security levels according to the selected algorithms.
+
+ECDSA is an elliptic-curve digital signature algorithm.
+
+Ed25519 is a digital signature system based on Edwards-curve cryptography.
+
+X25519 is commonly used for key agreement.
+
+Ed25519 and X25519 serve different purposes.
+
+A signing key and a key-agreement key should not be treated as interchangeable merely because both use related elliptic-curve technology.
+
+A digital signature provides evidence that data was signed using the private key corresponding to a public key according to the signature algorithm.
+
+Signing uses private key material.
+
+Verification uses the corresponding public key.
+
+A valid digital signature establishes cryptographic validity relative to the verified data and public key.
+
+A valid signature does not by itself establish that the signer was authorized to perform an action.
+
+Authorization is a separate decision.
+
+A valid signature does not prove that the signed statement is factually true.
+
+A signer can cryptographically sign false information.
+
+A signature proves the cryptographic relationship between the signed data and signing key according to the algorithm.
+
+Identity requires associating the key with an identity.
+
+Authority requires determining what that identity is permitted to do.
+
+Truth requires evidence beyond signature validity when the signed content makes factual claims.
+
+Signature verification should occur before trusting signed data according to protocol requirements.
+
+The exact bytes being verified matter.
+
+Changing signed data causes signature verification to fail under a secure signature scheme except under cryptographically negligible or otherwise defined exceptional conditions.
+
+Serialization therefore matters for signatures.
+
+If two systems serialize logically identical structures differently, their signatures can differ.
+
+Canonical serialization can ensure that logically equivalent data has one defined byte representation.
+
+A signature should cover the exact fields requiring integrity and authenticity.
+
+Unsigned fields can be modified without invalidating the signature.
+
+Signature scope must therefore be explicit.
+
+A digital signature is not encryption.
+
+Signed data can remain completely readable.
+
+A digital signature does not provide confidentiality.
+
+Encryption does not automatically provide signer identity.
+
+Encryption and signatures can be combined when both properties are required.
+
+Hashing transforms arbitrary input into a fixed-size digest according to the hash algorithm.
+
+A cryptographic hash function is deterministic.
+
+Identical input produces identical digest using the same hash algorithm.
+
+Different input should normally produce different digest values, but collisions are mathematically possible.
+
+A collision occurs when two different inputs produce the same hash digest.
+
+Cryptographic hash algorithms are designed to make finding useful collisions computationally difficult according to their security properties.
+
+Preimage resistance makes it computationally difficult to find an input producing a specified digest.
+
+Second-preimage resistance makes it computationally difficult to find another input producing the same digest as a particular input.
+
+Collision resistance makes it computationally difficult to find any two different inputs producing the same digest.
+
+These are related but distinct cryptographic properties.
+
+SHA-256 is a cryptographic hash function.
+
+SHA-256 produces a 256-bit digest.
+
+A SHA-256 digest is commonly represented as 64 hexadecimal characters.
+
+The hexadecimal representation is an encoding of the digest.
+
+The hexadecimal string is not the hash algorithm itself.
+
+SHA-256 does not encrypt data.
+
+SHA-256 cannot be decrypted.
+
+Hashing is one-way according to its security design.
+
+A hash digest can be recomputed from candidate input and compared.
+
+This is different from decrypting the digest.
+
+Hashes can verify file integrity.
+
+Compute the hash of the received file.
+
+Compare it with a trusted expected hash.
+
+Matching hashes provide strong evidence that the bytes match the expected hashed content according to the hash assumptions.
+
+A matching hash does not establish where the expected hash came from.
+
+If an attacker can replace both a file and its published hash, hash comparison alone does not establish authenticity.
+
+Integrity requires a trusted reference.
+
+Authenticity can require signatures, authenticated channels, or another trusted mechanism.
+
+SHA-1 is a cryptographic hash function with known collision weaknesses.
+
+SHA-1 should not be selected for new collision-resistant security designs.
+
+MD5 is a cryptographic hash function with serious collision weaknesses.
+
+MD5 should not be selected for modern cryptographic integrity security.
+
+Legacy hashes can still appear in non-security contexts.
+
+Their presence should not be interpreted as modern cryptographic protection.
+
+A password should not normally be stored using a simple fast general-purpose hash.
+
+Password hashing has different requirements from ordinary file hashing.
+
+Password hashing algorithms deliberately make guessing expensive.
+
+Argon2 is a password-hashing algorithm family.
+
+Argon2id is commonly recommended for password hashing when supported and appropriately configured.
+
+bcrypt is a password-hashing algorithm designed for password storage.
+
+scrypt is a password-based key derivation function designed to require substantial resources.
+
+PBKDF2 is a password-based key derivation function using repeated pseudorandom-function operations.
+
+Password-hashing parameters affect resistance to guessing attacks.
+
+A password hash should use a unique salt.
+
+A salt is non-secret random or unique data incorporated into password hashing.
+
+A salt prevents identical passwords from necessarily producing identical stored hashes under the same password-hashing construction.
+
+A salt reduces effectiveness of precomputed lookup attacks.
+
+A salt does not need to be secret.
+
+A salt is not a password.
+
+A salt is not an encryption key.
+
+A salt does not replace a strong password-hashing algorithm.
+
+A pepper is an additional secret value sometimes incorporated into password protection designs.
+
+A pepper must be protected as secret.
+
+A pepper and salt serve different purposes.
+
+Compromise of a password database containing salts does not automatically compromise a separately protected pepper.
+
+Pepper management introduces key-management responsibilities.
+
+Password verification hashes or derives from the supplied password using the stored parameters and compares according to the password-hashing scheme.
+
+Password verification does not decrypt a stored password hash.
+
+Applications should not need to recover user passwords from password storage.
+
+Passwords should not be logged.
+
+Passwords should not be sent by email in plaintext.
+
+Passwords should not be stored in reversible form merely for convenience.
+
+A Message Authentication Code is commonly abbreviated MAC.
+
+A MAC provides integrity and authenticity using secret key material according to its construction.
+
+HMAC is a widely used MAC construction based on a cryptographic hash function.
+
+HMAC-SHA-256 combines HMAC with SHA-256.
+
+HMAC is not the same thing as simply hashing secret data together with a message arbitrarily.
+
+Use the defined HMAC construction.
+
+Both sender and verifier normally need the shared secret for HMAC.
+
+Because both parties know the same secret, HMAC does not provide the same third-party verification property as a public-key digital signature.
+
+A digital signature can be verified using a public key without giving the verifier signing capability.
+
+An HMAC verifier possessing the shared secret can generally generate valid HMAC values too.
+
+This distinction matters.
+
+A checksum detects accidental changes according to its design.
+
+A checksum is not necessarily cryptographically secure.
+
+CRC is commonly used for accidental error detection.
+
+CRC is not a cryptographic integrity mechanism against an attacker.
+
+An attacker can deliberately modify data and recompute an ordinary CRC.
+
+Use cryptographic authentication when malicious modification is part of the threat model.
+
+Randomness is important in cryptography.
+
+Cryptographic randomness should be generated using a cryptographically secure random number generator.
+
+A cryptographically secure pseudorandom number generator is commonly abbreviated CSPRNG.
+
+A CSPRNG is designed to make future or previous output difficult to predict under its security model.
+
+Ordinary programming-language random functions are not automatically cryptographically secure.
+
+Do not use rand() in C for cryptographic key generation.
+
+Do not use predictable timestamps as cryptographic keys.
+
+Do not use process IDs as cryptographic keys.
+
+Do not use usernames as cryptographic keys.
+
+Do not construct cryptographic keys from easily predictable values.
+
+Cryptographic keys should have sufficient entropy.
+
+Entropy describes uncertainty in a value according to the relevant information model.
+
+A 256-bit storage field does not contain 256 bits of entropy merely because it is 256 bits long.
+
+A 256-bit field containing a human password can have far less entropy.
+
+Key generation should use an approved cryptographic random source.
+
+Operating systems provide cryptographically secure randomness facilities.
+
+Applications should use established system or cryptographic-library interfaces rather than inventing entropy collection.
+
+A nonce is a value intended to be used according to a cryptographic protocol's uniqueness or unpredictability requirements.
+
+Nonce means number used once.
+
+Some constructions require a nonce to be unique.
+
+Some constructions require randomness.
+
+Some require both properties or impose additional constraints.
+
+Never assume nonce requirements.
+
+Follow the algorithm specification.
+
+Nonce reuse can catastrophically break some encryption or signature schemes.
+
+An initialization vector is commonly abbreviated IV.
+
+An IV initializes a cryptographic mode according to its requirements.
+
+An IV is not necessarily secret.
+
+An IV can require unpredictability.
+
+An IV can require uniqueness.
+
+Requirements depend on the cryptographic construction.
+
+Do not replace an IV with a fixed constant unless the construction explicitly permits it.
+
+A cryptographic key and IV are different values with different roles.
+
+A key derivation function is commonly abbreviated KDF.
+
+A KDF derives key material from another secret or input according to defined rules.
+
+HKDF is a standardized key derivation function based on HMAC.
+
+HKDF can extract and expand keying material according to its construction.
+
+Password-based KDFs are designed for low-entropy password input.
+
+General KDFs and password KDFs solve different problems.
+
+Do not replace a password-hashing algorithm with a single SHA-256 operation merely because SHA-256 produces 256 bits.
+
+Key separation means using distinct keys for distinct cryptographic purposes when required.
+
+The same key should not be reused across unrelated algorithms or roles unless the protocol explicitly permits it.
+
+One key can be derived into multiple purpose-specific keys using a defined KDF.
+
+Context information can bind derived keys to specific purposes.
+
+Key separation limits cross-protocol interactions and compromise scope.
+
+Key management is part of cryptographic security.
+
+Keys must be generated.
+
+Keys must be stored.
+
+Keys can require distribution.
+
+Keys can require rotation.
+
+Keys can require revocation.
+
+Keys can require expiration.
+
+Keys can require backup according to system needs.
+
+Keys can require destruction according to system needs.
+
+A secure algorithm with exposed keys is not secure.
+
+A private key stored world-readable defeats private-key confidentiality.
+
+A private key committed to source control should be considered exposed according to incident policy.
+
+Removing a committed secret from the latest source revision does not necessarily remove it from repository history.
+
+Secret rotation may be required after exposure.
+
+Key rotation replaces active key material according to policy.
+
+Rotation should account for data or signatures created using previous keys.
+
+Old verification keys can remain necessary for historical signature verification.
+
+A retired signing key should not necessarily be deleted immediately if historical verification depends on it.
+
+Retired and revoked are different states.
+
+A retired key is no longer used for new operations according to policy.
+
+A revoked key is explicitly no longer trusted for applicable operations according to policy.
+
+Key status should be represented explicitly.
+
+A key identifier identifies key material according to system rules.
+
+A key identifier is not the secret key.
+
+A fingerprint can identify a public key using a digest.
+
+A fingerprint should be verified through a trusted channel when used for identity verification.
+
+Matching fingerprints establish that two observed keys are the same according to the fingerprint method.
+
+Matching fingerprints do not independently establish who owns the key.
+
+Trust must come from somewhere.
+
+A trust store contains trusted keys or certificates according to system policy.
+
+Adding a key to a trust store grants it some defined trust.
+
+That is an authority decision.
+
+Cryptographic software should not autonomously trust unknown keys merely because their signatures are mathematically valid.
+
+Trust on first use is commonly abbreviated TOFU.
+
+TOFU accepts an initial key and detects later changes according to the system model.
+
+TOFU protects differently from a certificate-authority model.
+
+TOFU cannot independently prove the first observed key was legitimate.
+
+Different trust models have different assumptions.
+
+TLS is a cryptographic protocol used to protect network communication.
+
+TLS can provide confidentiality.
+
+TLS can provide integrity.
+
+TLS can authenticate servers using certificates according to ordinary deployments.
+
+TLS can optionally authenticate clients according to configuration.
+
+HTTPS is HTTP carried over TLS.
+
+HTTPS does not mean the application itself is secure.
+
+HTTPS protects communication according to TLS properties.
+
+HTTPS does not fix SQL injection.
+
+HTTPS does not fix command injection.
+
+HTTPS does not fix broken authorization.
+
+HTTPS does not validate application business logic.
+
+Transport security and application security are different layers.
+
+TLS certificate validation should verify the certificate according to the client's trust and hostname rules.
+
+Disabling certificate verification defeats important TLS authentication properties.
+
+A successful TLS connection to an unverified certificate does not establish the intended server identity.
+
+Hostname verification checks whether the certificate is valid for the requested hostname according to certificate rules.
+
+Certificate expiration should be validated according to the system's time and policy.
+
+System time therefore matters for certificate validation.
+
+A certificate can be cryptographically valid but expired.
+
+A certificate can be within its validity period but signed by an untrusted authority.
+
+A certificate can be trusted but issued for a different hostname.
+
+These are distinct validation failures.
+
+Cryptographic errors should remain precise.
+
+"Certificate expired" is different from "unknown issuer."
+
+"Signature invalid" is different from "signer unauthorized."
+
+"Key missing" is different from "key malformed."
+
+"Ciphertext authentication failed" is different from "plaintext parsing failed."
+
+Precise errors improve diagnosis.
+
+Security-sensitive error messages should balance diagnostic usefulness against information exposure.
+
+Public interfaces should not expose secrets.
+
+Internal logs should not record key material.
+
+A digital signature workflow begins with defined data.
+
+The data is serialized according to the required representation.
+
+The signer applies the signature algorithm using private key material.
+
+The signature accompanies or is associated with the data.
+
+The verifier obtains the corresponding public key through a trusted mechanism.
+
+The verifier reconstructs the exact signed representation.
+
+The verifier applies the verification algorithm.
+
+Verification either succeeds or fails according to the algorithm.
+
+If verification succeeds, the system can then evaluate signer identity and authority.
+
+Signature verification should not be confused with authorization.
+
+A signed software module can be cryptographically valid but still incompatible.
+
+A signed software module can be cryptographically valid but still unauthorized.
+
+A signed software module can be cryptographically valid but still contain defects.
+
+A signed software module can be cryptographically valid but still contain malicious behavior if an authorized signing key was misused or compromised.
+
+A signature establishes origin relative to a key and integrity of signed bytes.
+
+It does not establish software quality.
+
+Module qualification and signature validation should remain separate checks.
+
+A module loader can validate a signature.
+
+A module loader can validate ABI compatibility.
+
+A module loader can validate manifest structure.
+
+A module loader can validate required exports.
+
+A module loader can enforce authorization policy.
+
+Passing one validation does not imply passing the others.
+
+Cryptographic identity can be useful for module provenance.
+
+A developer public key can identify a signing identity according to policy.
+
+A module signature can bind module bytes to that signing identity.
+
+The system can maintain a trusted developer-key registry.
+
+Only authorized keys should satisfy authorization policy.
+
+Unknown valid signatures can be reported as valid but unauthorized.
+
+Do not report an unauthorized valid signature as invalid merely because authorization failed.
+
+Preserve the distinction.
+
+File integrity can be checked with hashes.
+
+Suppose a file has an expected SHA-256 digest.
+
+Read the exact file bytes.
+
+Compute SHA-256.
+
+Compare the computed digest to the expected digest.
+
+If they match, the bytes match the expected hashed representation with overwhelming probability under the hash assumptions.
+
+If they differ, the file does not match the expected digest.
+
+Do not modify the expected digest to make a changed file pass validation unless an authorized change process requires establishing a new expected digest.
+
+A controlled document hash identifies exact document bytes or exact canonical representation according to policy.
+
+Changing document content changes its hash.
+
+Changing whitespace changes the raw-byte hash.
+
+Changing line endings changes the raw-byte hash.
+
+Changing encoding can change the raw-byte hash.
+
+If stable semantic hashing is required, canonicalization rules must be explicitly defined.
+
+Without canonicalization, hash exact bytes.
+
+Do not silently canonicalize data before hashing unless the specification requires it.
+
+A hash placeholder is not a completed integrity value.
+
+The actual digest must be calculated from the finalized content according to the governing process.
+
+Cryptographic verification should use exact algorithms.
+
+SHA-256 and SHA-512 are different algorithms.
+
+RSA-PSS and RSA PKCS#1 v1.5 signatures are different schemes.
+
+AES-GCM and AES-CBC are different modes.
+
+Ed25519 and ECDSA are different signature systems.
+
+Do not treat algorithms as interchangeable because they serve similar broad purposes.
+
+Protocol fields should identify algorithm choices when algorithm agility is required.
+
+Algorithm agility allows systems to support changing cryptographic algorithms.
+
+Algorithm agility can introduce complexity and downgrade risks.
+
+A protocol should not accept weaker algorithms merely because a peer requests them unless policy permits them.
+
+A downgrade attack causes participants to use weaker security than intended.
+
+Version and algorithm negotiation should protect against unauthorized downgrade where required.
+
+Deprecated algorithms should be rejected according to security policy.
+
+Cryptographic libraries can expose many options.
+
+Availability does not imply approval.
+
+A library supporting MD5 does not mean MD5 is appropriate for new cryptographic security.
+
+Policy determines approved algorithms.
+
+Algorithm implementation should use established cryptographic libraries.
+
+Cryptographic libraries should be maintained.
+
+Security updates matter.
+
+Implementation bugs can compromise mathematically sound algorithms.
+
+Memory safety matters when handling keys.
+
+Bounds checking matters.
+
+Error checking matters.
+
+Return values matter.
+
+Random-source failures matter.
+
+Do not continue with predictable fallback randomness when secure randomness fails.
+
+If secure key generation cannot obtain required entropy, fail according to security policy.
+
+Failure is safer than silently generating weak keys.
+
+Constant-time operations reduce information leakage through timing for selected secret-dependent computations.
+
+Timing side channels can reveal information about secrets.
+
+Cache behavior can create side channels.
+
+Branch behavior can create side channels.
+
+Memory access patterns can create side channels.
+
+Power consumption can create side channels in physical environments.
+
+Electromagnetic emissions can create side channels in physical environments.
+
+Cryptographic side-channel resistance is an implementation property as well as an algorithmic concern.
+
+Use established implementations rather than attempting casual constant-time code.
+
+A comparison of authentication tags or sensitive values can require constant-time comparison.
+
+Ordinary string equality functions can terminate at the first difference.
+
+Early termination can leak position information through timing.
+
+Whether that leakage is exploitable depends on environment and threat model.
+
+Use cryptographic-library comparison functions when provided for sensitive values.
+
+Memory containing secrets can remain after logical use.
+
+Secret material can require explicit clearing according to security requirements.
+
+Compilers can remove ordinary memory-clearing operations if they appear unnecessary.
+
+Use platform or library facilities designed for secure clearing where required.
+
+Secure deletion from persistent storage is difficult.
+
+Modern filesystems, SSD wear leveling, snapshots, backups, and journaling can preserve previous data.
+
+Do not promise physical secret erasure without evidence that the storage system supports the required guarantee.
+
+Encryption at rest can reduce exposure when storage media is lost or accessed without keys.
+
+Full-disk encryption protects storage under its threat model.
+
+Full-disk encryption does not protect data from an already authenticated running system with access to decrypted files.
+
+Application-level encryption can protect selected data with different key boundaries.
+
+Threat model determines required protection.
+
+A threat model identifies assets.
+
+A threat model identifies adversaries.
+
+A threat model identifies capabilities.
+
+A threat model identifies trust boundaries.
+
+A threat model identifies attack surfaces.
+
+Cryptographic design should follow the threat model.
+
+Adding encryption everywhere does not automatically improve security.
+
+Poor key management can make encryption useless.
+
+Unnecessary cryptography can increase complexity.
+
+Use cryptography where a defined security property requires it.
+
+Do not use cryptography as decoration.
+
+Confidentiality means preventing unauthorized disclosure according to the security model.
+
+Integrity means detecting unauthorized or accidental modification according to the mechanism and threat model.
+
+Authenticity means establishing that data or an entity originates from the claimed source according to the authentication mechanism.
+
+Authorization means determining whether an authenticated identity is permitted to perform an action.
+
+Availability means systems and data remain accessible as required.
+
+Cryptography can support confidentiality, integrity, and authenticity.
+
+Cryptography alone does not guarantee availability.
+
+Cryptography alone does not define authorization policy.
+
+Authentication and authorization are different.
+
+Identification and authentication are different.
+
+A username can identify an account.
+
+A password can participate in authentication.
+
+Authentication establishes identity according to the authentication mechanism.
+
+Authorization determines permitted actions.
+
+A signature can authenticate a message relative to a key.
+
+The application still needs to determine whether that key is authorized.
+
+A hash can establish content identity relative to an expected digest.
+
+The application still needs to determine whether the expected digest is trusted.
+
+A certificate can bind a key to identity under a trust framework.
+
+The application still needs to determine whether that identity is authorized.
+
+Cryptography supplies mechanisms.
+
+Policy supplies authority.
+
+Protocol design combines mechanisms according to requirements.
+
+A cryptographic protocol is more than a list of algorithms.
+
+Order matters.
+
+Context matters.
+
+Message binding matters.
+
+Identity binding matters.
+
+Freshness matters.
+
+Replay protection matters.
+
+A replay attack retransmits a previously valid message in a context where repeating it should not be accepted.
+
+A valid signature alone does not prevent replay.
+
+A previously signed request remains correctly signed when replayed.
+
+Replay prevention can use nonces.
+
+Replay prevention can use sequence numbers.
+
+Replay prevention can use timestamps with defined acceptance windows.
+
+Replay prevention can use unique transaction identifiers.
+
+The correct mechanism depends on protocol requirements.
+
+A timestamp requires trusted time assumptions.
+
+A nonce requires state or another mechanism preventing reuse according to the protocol.
+
+A sequence number requires tracking expected sequence state.
+
+Cryptographic validity and freshness are different properties.
+
+A signed message can be authentic but stale.
+
+A signed message can be authentic but already processed.
+
+A signed message can be authentic but unauthorized in the current state.
+
+State matters.
+
+Context binding incorporates relevant context into protected cryptographic data.
+
+A signature can include protocol version.
+
+A signature can include message type.
+
+A signature can include network identifier.
+
+A signature can include intended recipient.
+
+A signature can include transaction identifier.
+
+Including context can prevent a valid signature from being reused in an unintended context.
+
+The exact context fields depend on protocol design.
+
+Domain separation distinguishes cryptographic uses of related data or keys.
+
+A domain-separation label can identify the purpose of a hash or signature input.
+
+The same bytes used in different protocol contexts should not necessarily produce interchangeable authenticated objects.
+
+Domain separation can prevent cross-protocol confusion.
+
+Cryptographic formats should be versioned when future changes are expected.
+
+Version fields should be authenticated when changing them could affect interpretation.
+
+Unauthenticated metadata can be modified.
+
+If metadata changes security semantics, protect it.
+
+Cryptographic parsing should reject malformed lengths.
+
+Cryptographic parsing should reject unsupported algorithms.
+
+Cryptographic parsing should reject unsupported versions.
+
+Cryptographic parsing should reject invalid key encodings.
+
+Cryptographic parsing should reject invalid signatures.
+
+Cryptographic parsing should reject authentication failures.
+
+Do not attempt to recover plaintext after authenticated decryption reports authentication failure.
+
+Authentication failure means the ciphertext or associated data did not verify under the supplied key and parameters.
+
+Do not return partially decrypted unauthenticated plaintext to application logic.
+
+Authenticated decryption should succeed completely before plaintext is trusted.
+
+Error handling should avoid oracle vulnerabilities.
+
+An oracle reveals information through observable responses.
+
+A padding oracle reveals information about decrypted padding validity.
+
+Different error timing or messages can sometimes create cryptographic oracles.
+
+Protocol error behavior should follow secure design.
+
+Do not invent detailed external cryptographic errors without considering information leakage.
+
+Internal diagnostics can preserve more detail under protected logging policy.
+
+Passwords should be transmitted only through appropriately protected channels.
+
+Password hashing protects stored password representations.
+
+TLS protects passwords in transit according to the TLS connection.
+
+These protections solve different stages.
+
+Hashing a password in browser JavaScript does not automatically replace TLS.
+
+The resulting hash can itself become a reusable credential if the server accepts it directly.
+
+Credential protocol design requires more than transforming a password.
+
+API keys are secrets.
+
+API keys should be protected in storage and transit.
+
+API keys should not be embedded in public client-side code when secrecy is required.
+
+API keys should not be committed to public repositories.
+
+API keys should be scoped according to least privilege when the provider supports scope.
+
+API keys should be rotated after confirmed exposure according to policy.
+
+Tokens can be bearer credentials.
+
+Possession of a bearer token can grant its defined authority.
+
+Bearer tokens therefore require protection.
+
+Signing a token does not encrypt its contents.
+
+A signed token can remain readable.
+
+Do not put confidential information in a merely signed token unless exposure is acceptable.
+
+JWT is a token format and framework.
+
+JWT can be signed.
+
+JWT can be encrypted using applicable JOSE mechanisms.
+
+A common signed JWT is not encrypted.
+
+Base64url-encoded JWT fields are readable.
+
+JWT validation should verify signature according to the expected algorithm and key.
+
+JWT validation should validate relevant claims according to application policy.
+
+A valid JWT signature does not automatically mean the token is currently authorized.
+
+Expiration can matter.
+
+Audience can matter.
+
+Issuer can matter.
+
+Subject can matter.
+
+Scope can matter.
+
+Revocation or session state can matter.
+
+Claims should be interpreted according to protocol.
+
+Do not trust a token merely because it parses successfully.
+
+Parsing is not verification.
+
+Verification is not authorization.
+
+Cryptographic fingerprints can identify software artifacts.
+
+A build can publish a SHA-256 digest.
+
+A release can publish a digital signature.
+
+The digest verifies exact artifact content against the expected digest.
+
+The signature can authenticate the digest or artifact according to the signing-key trust model.
+
+Together they can provide integrity and provenance.
+
+Neither proves the software is free of defects.
+
+A signed malicious release remains malicious if an authorized key signed it.
+
+Software signing protects provenance, not correctness.
+
+Reproducible builds allow independent parties to build software and compare resulting artifacts under defined build conditions.
+
+Reproducible builds can strengthen confidence that published binaries correspond to source.
+
+Reproducible builds require deterministic build inputs and environment control.
+
+A signature and reproducible build answer different questions.
+
+Signature asks whether the trusted signer approved the artifact.
+
+Reproducibility asks whether the artifact corresponds to reproducible build inputs according to the build process.
+
+Cryptographic hashes are useful in content-addressed systems.
+
+An object's identifier can be derived from its content.
+
+Changing content changes the identifier according to the hash.
+
+Content addressing can detect accidental or unauthorized modification when trusted references exist.
+
+Content addressing does not establish access control.
+
+Knowing an object's hash can identify it.
+
+It does not necessarily authorize retrieving it.
+
+Hash chains connect records cryptographically.
+
+A record can contain the hash of a previous record.
+
+Changing an earlier record changes its hash.
+
+That change can invalidate later hash links.
+
+Hash chaining provides tamper evidence according to the construction and trusted anchors.
+
+Hash chaining does not physically prevent data modification.
+
+An attacker controlling all records and trust anchors can potentially replace the entire chain.
+
+Independent trusted checkpoints can strengthen tamper evidence.
+
+Digital signatures can authenticate checkpoints.
+
+Replication can preserve independent observations.
+
+A Merkle tree hashes data hierarchically.
+
+Leaf values represent data or hashes according to the construction.
+
+Parent hashes commit to child values.
+
+A Merkle root commits to the represented tree contents according to the construction.
+
+Merkle proofs can demonstrate inclusion of data relative to a trusted root.
+
+A Merkle proof does not prove the semantic truth of the included data.
+
+It proves cryptographic relationship to the committed root.
+
+A blockchain uses cryptographic structures but cryptography alone does not define the blockchain's consensus rules.
+
+Hashing does not create consensus.
+
+Digital signatures do not create consensus.
+
+Consensus determines which valid state transitions are accepted according to system rules.
+
+Cryptographic primitives support integrity, identity, and verification within that system.
+
+Do not attribute consensus properties solely to SHA-256 or signatures.
+
+Proof of work is not encryption.
+
+Mining is not encryption.
+
+Hashing during proof of work does not decrypt anything.
+
+A wallet address is not necessarily a public key.
+
+Address construction depends on the system.
+
+A private key is not an address.
+
+A seed phrase is not a public address.
+
+A transaction identifier is not necessarily a signature.
+
+Terminology must follow the protocol.
+
+Cryptographic engineering requires exact terminology because similar-looking values have different security properties.
+
+A digest is not a key.
+
+A key is not a password.
+
+A password is not a salt.
+
+A salt is not an IV.
+
+An IV is not a nonce in every construction.
+
+A nonce is not necessarily random in every construction.
+
+A certificate is not a private key.
+
+A public key is not a certificate.
+
+A signature is not a hash.
+
+A signature can internally use hashing according to its algorithm.
+
+An encrypted message is not necessarily authenticated.
+
+An authenticated message is not necessarily encrypted.
+
+A signed message is not necessarily secret.
+
+A secret message is not necessarily signed.
+
+A valid signature is not authorization.
+
+A trusted key is not automatically authorized for every operation.
+
+A trusted source can still make mistakes.
+
+Cryptography establishes defined mathematical properties.
+
+Human and system governance establish authority.
+
+Engineering must preserve the boundary between them.
+
+When evaluating a cryptographic system, ask what property is required.
+
+Ask what algorithm provides that property.
+
+Ask where keys originate.
+
+Ask how keys are protected.
+
+Ask how public keys become trusted.
+
+Ask what exact bytes are protected.
+
+Ask whether serialization is deterministic.
+
+Ask whether replay is possible.
+
+Ask whether nonces or IVs can repeat.
+
+Ask whether randomness is cryptographically secure.
+
+Ask whether algorithms are current and approved.
+
+Ask whether the implementation is maintained.
+
+Ask whether errors are checked.
+
+Ask whether verification occurs before trust.
+
+Ask whether authorization occurs after authentication.
+
+Ask whether old keys can be revoked.
+
+Ask whether key rotation is supported.
+
+Ask whether historical signatures remain verifiable.
+
+Ask what happens if a key is compromised.
+
+Ask what happens if randomness fails.
+
+Ask what happens if verification fails.
+
+Ask whether failure leaves unsafe partial state.
+
+Cryptographic design should fail safely.
+
+Signature verification failure should reject the signature-dependent trust claim.
+
+Authentication-tag failure should reject the ciphertext.
+
+Certificate-validation failure should reject authenticated connection establishment according to policy.
+
+Missing required key material should not silently disable protection.
+
+Unavailable secure randomness should not silently substitute insecure randomness.
+
+Unsupported algorithms should not silently downgrade without policy.
+
+Unknown cryptographic state should not be represented as verified.
+
+Verified means verification actually succeeded.
+
+Unverified means verification has not established validity.
+
+Invalid means verification was performed and failed according to the mechanism.
+
+Unknown, unverified, and invalid are different states.
+
+Preserve those distinctions.
+
+Cryptographic algorithms should be treated as specialized engineering components.
+
+Do not modify them casually.
+
+Do not implement them from memory when a vetted library exists.
+
+Do not remove validation merely to make an operation succeed.
+
+Do not disable certificate checks merely to eliminate TLS errors.
+
+Do not regenerate identity keys merely because another subsystem failed.
+
+Do not replace trusted keys merely because verification rejected modified content.
+
+Investigate why verification failed.
+
+A cryptographic failure can be evidence of corruption.
+
+A cryptographic failure can be evidence of wrong key selection.
+
+A cryptographic failure can be evidence of wrong data serialization.
+
+A cryptographic failure can be evidence of incompatible algorithms.
+
+A cryptographic failure can be evidence of unauthorized modification.
+
+A cryptographic failure does not by itself identify which cause applies.
+
+Debug using evidence.
+
+Preserve failing artifacts where appropriate.
+
+Record algorithm identifiers.
+
+Record key identifiers without exposing secret keys.
+
+Record signature-validation result.
+
+Record expected and actual digest where policy permits.
+
+Record exact version and serialization rules.
+
+Do not log private keys.
+
+Do not log passwords.
+
+Do not log seed material.
+
+Do not log secret tokens.
+
+Do not log plaintext merely because encryption failed when plaintext is sensitive.
+
+Observability must preserve confidentiality.
+
+Cryptography should remain deterministic where the algorithm requires deterministic behavior.
+
+Cryptography should use secure randomness where the algorithm requires randomness.
+
+These are not contradictory requirements.
+
+Hashing is deterministic.
+
+Signature algorithms can be deterministic or randomized depending on construction.
+
+Encryption commonly uses nonce, IV, or random material according to construction.
+
+Key generation requires secure randomness.
+
+Protocol design must follow each primitive's requirements.
+
+Never replace required randomness with determinism merely to make testing easier.
+
+Testing can inject controlled cryptographic test vectors into test environments.
+
+Production should use production-safe cryptographic randomness.
+
+A test vector contains known input and expected cryptographic output.
+
+Test vectors verify implementation behavior.
+
+Known-answer tests can verify hash implementations.
+
+Known-answer tests can verify cipher implementations.
+
+Known-answer tests can verify signature implementations.
+
+Passing test vectors is useful evidence.
+
+Passing test vectors does not prove an implementation has no side-channel or memory-safety defects.
+
+Multiple layers of testing are required for security-critical implementations.
+
+Cryptographic libraries should be tested against standards and interoperability requirements.
+
+Interoperability requires exact byte-level agreement.
+
+Algorithm name alone is insufficient.
+
+Parameters matter.
+
+Encoding matters.
+
+Padding matters.
+
+Key format matters.
+
+Byte order matters.
+
+Signature encoding matters.
+
+Nonce format matters.
+
+Protocol version matters.
+
+A signature represented as raw components can differ from one encoded using ASN.1 DER.
+
+Both can represent related mathematical values but are not byte-identical formats.
+
+Interfaces must specify representation.
+
+PEM is a textual encoding format commonly used to represent cryptographic objects.
+
+PEM commonly contains Base64-encoded DER data between labeled boundaries.
+
+PEM is not encryption by itself.
+
+A PEM private key can be encrypted or unencrypted depending on its format.
+
+DER is a binary encoding based on ASN.1 rules.
+
+File extension alone does not establish cryptographic object type.
+
+Inspect format according to specification.
+
+A key file named .pem is not automatically a public key.
+
+A key file named .key is not automatically private.
+
+Do not infer security properties from filenames.
+
+OpenSSL is a widely used cryptographic and TLS toolkit and library.
+
+Using OpenSSL does not automatically make an application secure.
+
+Correct API usage matters.
+
+Correct verification matters.
+
+Correct memory handling matters.
+
+Correct algorithm selection matters.
+
+Correct configuration matters.
+
+Libraries provide mechanisms.
+
+Engineering determines how they are used.
+
+Cryptographic security should be boring.
+
+Predictable is good.
+
+Established primitives are good.
+
+Explicit algorithms are good.
+
+Explicit key ownership is good.
+
+Explicit trust anchors are good.
+
+Explicit failure is good.
+
+Hidden cryptographic behavior is dangerous.
+
+Custom cleverness is dangerous.
+
+Silent downgrade is dangerous.
+
+Ignored verification errors are dangerous.
+
+Secret reuse is dangerous.
+
+Nonce reuse can be catastrophic.
+
+Weak randomness can be catastrophic.
+
+Private-key exposure can invalidate identity assumptions.
+
+Security depends on maintaining the assumptions the cryptographic construction requires.
+
+Cryptography is not magic.
+
+Cryptography is mathematics implemented by software under explicit assumptions.
+
+If the assumptions fail, the security claim can fail.
+
+If the implementation fails, the security claim can fail.
+
+If key management fails, the security claim can fail.
+
+If authority policy fails, cryptographic validity can still permit unauthorized behavior.
+
+If verification is skipped, cryptographic protection is not being enforced.
+
+Verify before trust.
+
+Authenticate before authorization.
+
+Authorize before protected action.
+
+Preserve exact bytes when signatures depend on exact bytes.
+
+Preserve provenance when keys establish identity.
+
+Preserve historical keys when historical verification requires them.
+
+Revoke compromised authority according to policy.
+
+Use cryptographically secure randomness where required.
+
+Use established algorithms.
+
+Use established libraries.
+
+Use defined protocols.
+
+Keep secrets secret.
+
+Do not confuse confidentiality with integrity.
+
+Do not confuse integrity with authenticity.
+
+Do not confuse authenticity with authorization.
+
+Do not confuse hashing with encryption.
+
+Do not confuse encoding with encryption.
+
+Do not confuse signatures with encryption.
+
+Do not confuse certificates with authority.
+
+Do not confuse cryptographic validity with factual truth.
+
+Do not confuse a public key with a trusted identity.
+
+Do not confuse a trusted identity with permission for every action.
+
+Do not confuse mathematical correctness with secure implementation.
+
+Do not confuse successful decryption with authenticated data unless the construction provides authentication.
+
+Do not confuse a matching checksum with adversarial integrity.
+
+Do not confuse random-looking data with cryptographically secure randomness.
+
+Do not confuse key length with effective security strength.
+
+Do not confuse possession of a credential with legitimate authority outside the credential's defined scope.
+
+Cryptographic systems should establish exactly the security properties they claim.
+
+No more should be inferred than the evidence establishes.

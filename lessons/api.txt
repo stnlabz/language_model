@@ -1,0 +1,1837 @@
+API stands for Application Programming Interface.
+
+An API defines how one software component can interact with another.
+
+An API is a contract.
+
+An API can define operations.
+
+An API can define inputs.
+
+An API can define outputs.
+
+An API can define errors.
+
+An API can define data formats.
+
+An API can define state transitions.
+
+An API can define authentication requirements.
+
+An API can define authorization requirements.
+
+An API can define compatibility requirements.
+
+An API is not necessarily a network service.
+
+A function interface can be an API.
+
+A library can expose an API.
+
+An operating system exposes APIs.
+
+A module can expose an API.
+
+A process can expose an API through IPC.
+
+A network service can expose an API.
+
+An HTTP service can expose an API.
+
+A command-line program can provide an interface consumed by other software.
+
+An API describes interaction rather than implementation.
+
+Consumers should not need to know unnecessary implementation details behind an API.
+
+An API consumer is software that uses an API.
+
+An API provider is software that implements an API.
+
+Provider and consumer must agree on the interface.
+
+An API contract should be explicit.
+
+A contract should define valid requests.
+
+A contract should define valid responses.
+
+A contract should define failure behavior.
+
+A contract should define relevant limits.
+
+A contract should define version behavior where versions exist.
+
+A consumer should not rely on undocumented behavior.
+
+Observed behavior is not automatically guaranteed behavior.
+
+An implementation detail is not automatically part of the API contract.
+
+Changing an implementation detail should not affect consumers when the contract remains unchanged.
+
+Changing the contract can affect consumers.
+
+API stability reduces unnecessary coupling between components.
+
+A local API operates within the same machine or process environment.
+
+A remote API crosses a communication boundary.
+
+Remote APIs have failure modes that local function calls do not normally have.
+
+A remote request can time out.
+
+A network can fail.
+
+A server can be unavailable.
+
+A response can be lost.
+
+A request can arrive more than once.
+
+A response can arrive later than expected.
+
+A remote service can return malformed data.
+
+A remote service can return an unexpected version.
+
+A remote service can partially complete an operation.
+
+Do not treat a remote API call exactly like a local function call.
+
+HTTP is commonly used as a transport for web APIs.
+
+HTTP stands for Hypertext Transfer Protocol.
+
+An HTTP API uses HTTP requests and responses according to its interface.
+
+HTTPS is HTTP transported through TLS.
+
+HTTPS protects transport according to TLS properties.
+
+HTTPS does not automatically make an API logically correct.
+
+HTTPS does not automatically provide application authorization.
+
+HTTPS does not automatically validate request data.
+
+HTTPS does not prevent application-level defects.
+
+An HTTP request contains a method.
+
+An HTTP request contains a target.
+
+An HTTP request contains headers.
+
+An HTTP request can contain a body.
+
+An HTTP response contains a status code.
+
+An HTTP response contains headers.
+
+An HTTP response can contain a body.
+
+The HTTP method communicates request semantics.
+
+GET is commonly used to retrieve a representation.
+
+POST is commonly used to submit data or request processing.
+
+PUT is commonly used to create or replace a resource representation according to API semantics.
+
+PATCH is commonly used to modify part of a resource.
+
+DELETE is commonly used to request removal of a resource where removal is permitted.
+
+HEAD requests response metadata corresponding to GET without the normal response body.
+
+OPTIONS can describe communication options supported for a target.
+
+HTTP methods have defined protocol semantics.
+
+An API should not assign arbitrary behavior to methods without reason.
+
+GET should normally be safe according to HTTP semantics.
+
+A safe method is intended not to request a state-changing action.
+
+Safe does not mean the server performs no internal activity.
+
+A GET request can be logged.
+
+A GET request can update cache metadata.
+
+A GET request should not ordinarily perform an application action such as deleting a record.
+
+Idempotency means repeating an operation has the same intended effect as performing it once according to the operation semantics.
+
+GET is intended to be idempotent.
+
+PUT is intended to be idempotent.
+
+DELETE is intended to be idempotent according to HTTP method semantics.
+
+POST is not inherently idempotent.
+
+PATCH is not inherently idempotent.
+
+An API can implement additional idempotency mechanisms.
+
+An idempotency key can identify repeated attempts at one logical operation.
+
+Idempotency is important when clients retry requests.
+
+A client can time out after the server successfully processes a request.
+
+The client may not know whether the operation occurred.
+
+Blindly repeating a non-idempotent operation can duplicate state changes.
+
+Retry behavior must consider operation semantics.
+
+A resource is an entity exposed through an API according to the API model.
+
+A resource can have an identifier.
+
+A resource can have a representation.
+
+A representation describes resource state in a particular format.
+
+The resource and its representation are not identical concepts.
+
+JSON is commonly used for API representations.
+
+JSON is not required for an API.
+
+APIs can use XML.
+
+APIs can use plain text.
+
+APIs can use binary formats.
+
+APIs can use protocol-specific encodings.
+
+The format should be explicitly defined.
+
+Content-Type describes the media type of HTTP message content.
+
+application/json identifies JSON content.
+
+A client sending JSON should use the appropriate Content-Type when the API requires it.
+
+A server should validate content type according to the API contract.
+
+Accept can communicate response media types acceptable to a client.
+
+Content negotiation selects a representation according to supported media types and HTTP rules.
+
+An API does not need multiple formats merely because HTTP supports content negotiation.
+
+Keep the interface as small as requirements permit.
+
+JSON parsing and JSON validation are different.
+
+Parsing determines whether input is syntactically valid JSON.
+
+Validation determines whether parsed data satisfies API requirements.
+
+A valid JSON document can be an invalid API request.
+
+Required fields should be validated.
+
+Field types should be validated.
+
+Allowed values should be validated.
+
+Length limits should be validated.
+
+Numeric ranges should be validated.
+
+Object structure should be validated.
+
+Unknown fields should be handled according to API policy.
+
+Malformed requests should not be silently interpreted as something else.
+
+Input validation should occur before trusted processing.
+
+An API schema can formally describe data structures.
+
+JSON Schema can describe JSON structure and constraints.
+
+OpenAPI can describe HTTP APIs.
+
+An API description can document endpoints.
+
+An API description can document methods.
+
+An API description can document parameters.
+
+An API description can document request bodies.
+
+An API description can document responses.
+
+An API description can document authentication mechanisms.
+
+Documentation does not guarantee implementation compliance.
+
+The implementation should be tested against the contract.
+
+An endpoint identifies an API interaction target according to the API design.
+
+An HTTP endpoint commonly consists of a path combined with supported methods.
+
+The same path can support different methods.
+
+GET /items and POST /items can represent different operations.
+
+The method is part of the interface.
+
+A URL can contain path parameters.
+
+A URL can contain query parameters.
+
+A request can contain body parameters.
+
+These serve different purposes.
+
+Path parameters commonly identify resources or hierarchy.
+
+Query parameters commonly modify retrieval, filtering, sorting, or pagination.
+
+Request bodies commonly carry structured input for state-changing or complex operations.
+
+These are conventions rather than universal laws.
+
+The API contract determines actual meaning.
+
+Do not accept the same security-sensitive parameter from multiple locations without a defined precedence rule.
+
+Ambiguous parameter precedence creates unpredictable behavior.
+
+A response status code communicates the result category.
+
+HTTP status codes are grouped by class.
+
+1xx status codes represent informational responses.
+
+2xx status codes represent successful processing.
+
+3xx status codes represent redirection.
+
+4xx status codes represent client-side request conditions or failures.
+
+5xx status codes represent server-side failures.
+
+200 OK indicates successful handling with an applicable response.
+
+201 Created indicates successful creation of a resource.
+
+202 Accepted indicates a request was accepted for processing but processing is not necessarily complete.
+
+204 No Content indicates successful processing with no response content.
+
+A 202 response does not mean the requested operation has completed.
+
+An asynchronous operation should expose completion state when consumers need it.
+
+400 Bad Request indicates the server cannot or will not process the request because of a client request problem according to the interface.
+
+401 Unauthorized is commonly used when valid authentication credentials are absent or insufficient for authentication.
+
+Despite its name, HTTP 401 primarily concerns authentication.
+
+403 Forbidden indicates the server understood the request but refuses the action according to authorization or policy.
+
+404 Not Found indicates the requested resource was not found or is not exposed as existing according to API policy.
+
+405 Method Not Allowed indicates the target exists but the requested HTTP method is not supported for it.
+
+409 Conflict indicates the request conflicts with current resource state.
+
+413 Content Too Large indicates request content exceeds accepted limits.
+
+415 Unsupported Media Type indicates the supplied content type is unsupported.
+
+422 Unprocessable Content can indicate syntactically acceptable content that cannot be processed according to defined semantics.
+
+429 Too Many Requests indicates rate limiting or request-frequency limits.
+
+500 Internal Server Error indicates an unexpected server-side failure.
+
+501 Not Implemented indicates the server does not support functionality required to fulfill the request according to HTTP semantics.
+
+502 Bad Gateway indicates a gateway or proxy received an invalid response from an upstream server.
+
+503 Service Unavailable indicates temporary service unavailability.
+
+504 Gateway Timeout indicates a gateway or proxy did not receive a timely upstream response.
+
+Status codes should describe the actual result.
+
+Do not return 200 merely because the server generated a response.
+
+An error response is still a response.
+
+Transport success and application success are different.
+
+A successful TCP connection does not establish API success.
+
+A successful TLS connection does not establish API success.
+
+An HTTP response does not establish application success.
+
+A 2xx status normally communicates application-level success according to the API contract.
+
+An API error body can provide structured diagnostic information.
+
+Error responses should be predictable.
+
+An error representation can contain an error code.
+
+An error representation can contain a human-readable message.
+
+An error representation can contain relevant field errors.
+
+An error representation can contain a request or correlation identifier.
+
+Internal stack traces should not ordinarily be exposed to remote clients.
+
+Database credentials should not appear in API errors.
+
+Filesystem paths should not be exposed without reason.
+
+Private keys should never appear in API errors.
+
+Tokens should not appear in API errors.
+
+Detailed internal errors can be recorded in protected logs.
+
+Public API errors should expose enough information for consumers to respond appropriately without leaking sensitive implementation details.
+
+Machine-readable error codes are more stable than parsing human-readable messages.
+
+A client should not need to search error prose to determine the failure category when a structured error code is available.
+
+Error codes should have stable meanings.
+
+Do not reuse one error code for unrelated conditions.
+
+A request identifier identifies one request for tracing or diagnostic purposes.
+
+A correlation identifier can associate activity across multiple components.
+
+Identifiers can make distributed debugging easier.
+
+A request ID is not automatically an authentication credential.
+
+A request ID should not grant authority.
+
+Authentication determines identity according to the authentication mechanism.
+
+Authorization determines what an authenticated identity can do.
+
+Authentication and authorization are separate.
+
+An API can be public and unauthenticated.
+
+An API can require authentication.
+
+An API can require authorization for selected operations.
+
+Authentication should occur before relying on identity.
+
+Authorization should occur before protected action.
+
+A valid credential does not grant unlimited authority.
+
+API keys can authenticate or identify clients according to the API design.
+
+API keys are secrets when possession grants access.
+
+API keys should be protected.
+
+API keys should not be embedded in publicly delivered client-side code when secrecy is required.
+
+API keys should not be written into public repositories.
+
+API keys should not be exposed in logs.
+
+API keys should have limited scope when supported.
+
+Bearer tokens grant defined access through possession.
+
+Bearer tokens must be protected.
+
+An Authorization header commonly carries authentication credentials in HTTP APIs.
+
+Bearer tokens are commonly transmitted using the Authorization header with the Bearer scheme.
+
+Credentials should not normally be placed in query strings.
+
+URLs can be stored in logs.
+
+URLs can be stored in browser history.
+
+URLs can be exposed through monitoring systems.
+
+Sensitive credentials belong in appropriate protected request mechanisms.
+
+Basic authentication transmits a username and password-derived credential encoding according to HTTP authentication rules.
+
+Base64 encoding used by Basic authentication is not encryption.
+
+Basic authentication should use protected transport when credentials require confidentiality.
+
+OAuth is an authorization framework.
+
+OAuth is not one single authentication protocol.
+
+OAuth defines flows for delegated authorization according to its specifications.
+
+OpenID Connect adds an identity layer on top of OAuth 2.0.
+
+OAuth and OpenID Connect solve related but different problems.
+
+JWT stands for JSON Web Token.
+
+A JWT is a token format.
+
+A JWT can contain claims.
+
+A JWT can be signed.
+
+A signed JWT is not necessarily encrypted.
+
+JWT payload data can often be decoded by anyone possessing the token.
+
+Do not store confidential data in a merely signed JWT unless disclosure is acceptable.
+
+A token signature must be verified before trusting signed claims.
+
+Parsing a JWT is not verification.
+
+Verification is not authorization.
+
+Claims must be validated according to the application.
+
+An expiration claim can define token expiration.
+
+An issuer claim can identify the issuer.
+
+An audience claim can identify intended recipients.
+
+A subject claim can identify the subject.
+
+Applications should validate claims required by their security model.
+
+An expired token should not be treated as current merely because its signature remains cryptographically valid.
+
+API sessions can use cookies.
+
+Cookies can carry session identifiers.
+
+Session identifiers should be unpredictable when they function as credentials.
+
+A session identifier is not the same as user identity.
+
+The server associates session state with identity according to its session model.
+
+Cookies have security attributes.
+
+Secure restricts cookie transmission to secure contexts according to browser rules.
+
+HttpOnly prevents ordinary client-side script access to the cookie according to browser rules.
+
+SameSite controls selected cross-site cookie behavior.
+
+Cookie security settings should follow application requirements.
+
+Cookie-authenticated APIs can be exposed to CSRF risks.
+
+CSRF stands for Cross-Site Request Forgery.
+
+CSRF causes a browser to send an authenticated request the user did not intend.
+
+State-changing browser requests should use appropriate CSRF defenses when the authentication model requires them.
+
+Using POST alone does not prevent CSRF.
+
+A CSRF token can bind a state-changing request to an authorized user interaction according to the application mechanism.
+
+Cross-Origin Resource Sharing is commonly abbreviated CORS.
+
+CORS is a browser security mechanism governing selected cross-origin web requests.
+
+CORS is not authentication.
+
+CORS is not authorization.
+
+Allowing an origin through CORS does not grant that origin application permissions by itself.
+
+Disabling CORS restrictions does not fix an API authentication problem.
+
+Server-to-server API clients are not governed by browser CORS enforcement in the same way browsers are.
+
+CORS should be configured according to actual browser-client requirements.
+
+REST stands for Representational State Transfer.
+
+REST is an architectural style.
+
+REST is not synonymous with JSON over HTTP.
+
+A REST-style API commonly models resources and uses HTTP semantics.
+
+An API can use HTTP without being RESTful.
+
+An API can be well designed without strictly following REST.
+
+Architecture should serve requirements rather than terminology.
+
+Resource-oriented APIs commonly use nouns in paths.
+
+An operation-oriented API can expose commands.
+
+Neither style is automatically correct for every system.
+
+If an operation is naturally a command, forcing it into artificial CRUD terminology can reduce clarity.
+
+CRUD stands for Create, Read, Update, and Delete.
+
+CRUD describes common data operations.
+
+Not every API operation is CRUD.
+
+Validation can be an operation.
+
+Qualification can be an operation.
+
+Compilation can be an operation.
+
+Submission can be an operation.
+
+Signing can be an operation.
+
+Processing can be an operation.
+
+The API should model the actual domain.
+
+RPC stands for Remote Procedure Call.
+
+An RPC API models remote operations as procedure or method calls.
+
+RPC can use many transports.
+
+JSON-RPC is an RPC protocol using JSON.
+
+gRPC is an RPC framework using Protocol Buffers and HTTP/2 or related supported transport behavior.
+
+RPC is not inherently inferior to REST.
+
+REST is not inherently superior to RPC.
+
+The appropriate interface depends on system requirements.
+
+A protocol should be deterministic where deterministic behavior is required.
+
+Given the same valid request and relevant state, a deterministic operation should produce the defined result.
+
+An API should not return arbitrary different meanings for identical status fields.
+
+Field semantics should remain stable.
+
+A boolean should not sometimes mean success and sometimes mean availability.
+
+One field should have one defined purpose.
+
+Response schemas should be explicit.
+
+Optional fields should be identified as optional.
+
+Required fields should be identified as required.
+
+Missing and null are not necessarily the same.
+
+A missing field means the field is absent.
+
+A null field explicitly carries a null value.
+
+The API contract determines whether these states are equivalent.
+
+Consumers should not invent values for missing fields unless the contract defines defaults.
+
+Defaults should be explicit.
+
+A default is part of behavior.
+
+Changing a default can be a compatibility change.
+
+Pagination divides large result sets into bounded responses.
+
+An API should not return unbounded data when the dataset can grow without limit.
+
+Pagination can use page numbers.
+
+Pagination can use offsets.
+
+Pagination can use cursors.
+
+Pagination can use continuation tokens.
+
+Cursor pagination can provide stable traversal for changing datasets when properly designed.
+
+A pagination token should be treated according to its documented semantics.
+
+Clients should not parse opaque continuation tokens.
+
+Opaque values belong to the provider.
+
+A consumer should return them unchanged when instructed.
+
+Filtering restricts returned resources according to criteria.
+
+Sorting determines result ordering.
+
+Ordering should be explicit when deterministic results matter.
+
+Without defined ordering, clients should not rely on accidental database or filesystem order.
+
+Stable pagination requires stable ordering.
+
+A unique tie-breaker can make ordering deterministic.
+
+Rate limiting bounds request frequency or resource use.
+
+Rate limits protect service capacity.
+
+Rate limiting is not a replacement for authorization.
+
+A rate limit can apply per identity.
+
+A rate limit can apply per address.
+
+A rate limit can apply per token.
+
+A rate limit can apply globally.
+
+The rate-limit policy should be defined.
+
+A 429 response commonly indicates rate limiting.
+
+Retry-After can tell clients when retry may be appropriate according to HTTP semantics.
+
+Clients should respect service limits.
+
+Repeated aggressive retry can worsen an outage.
+
+Timeouts should be bounded.
+
+A client should not wait forever for a remote API.
+
+Connection timeout limits connection establishment time.
+
+Read timeout limits waiting for response data according to the client implementation.
+
+Overall request timeout limits total operation duration.
+
+Different timeout categories should not be confused.
+
+A timeout does not prove the server did nothing.
+
+A timeout establishes that the expected result was not received within the defined time.
+
+Retry decisions should consider this uncertainty.
+
+Backoff delays repeated retries.
+
+Exponential backoff increases retry delay progressively.
+
+Jitter varies retry timing.
+
+Backoff and jitter reduce synchronized retry storms.
+
+Retries should be bounded.
+
+Permanent errors should not be retried indefinitely.
+
+A 400 request defect normally requires changing the request rather than repeating it.
+
+A 401 authentication failure normally requires valid credentials rather than immediate identical retry.
+
+A 403 authorization failure normally requires changed authority or policy rather than identical retry.
+
+A 404 normally does not become successful through immediate repeated requests unless resource creation or eventual consistency is expected.
+
+A 429 can be retryable according to rate-limit policy.
+
+A 500 can be transient or persistent.
+
+A 503 commonly indicates temporary unavailability.
+
+Retry policy should be based on interface semantics rather than status code alone.
+
+A circuit breaker temporarily stops requests to a failing dependency according to defined thresholds.
+
+Circuit breakers can prevent cascading failure.
+
+A circuit breaker has states.
+
+A circuit breaker can open after failures.
+
+An open circuit rejects or redirects calls without repeatedly contacting the failing dependency.
+
+After a defined period, the circuit can test whether the dependency recovered.
+
+Circuit breakers introduce state and should be used when their operational value justifies complexity.
+
+Bulkheads isolate resources so one failing workload does not consume all capacity.
+
+A separate worker pool can isolate one dependency.
+
+A separate connection pool can isolate one workload.
+
+Isolation can limit cascading failures.
+
+API gateways sit between clients and backend services.
+
+A gateway can route requests.
+
+A gateway can authenticate requests.
+
+A gateway can enforce rate limits.
+
+A gateway can terminate TLS.
+
+A gateway can transform requests.
+
+A gateway does not remove the need for correct backend authorization when backend trust boundaries require it.
+
+Reverse proxies forward client requests to backend services.
+
+A reverse proxy can provide TLS termination.
+
+A reverse proxy can provide caching.
+
+A reverse proxy can provide load balancing.
+
+The backend should understand which proxy-provided information is trustworthy.
+
+Forwarded client-address headers should not be blindly trusted from arbitrary clients.
+
+Trust proxy headers only from defined trusted proxies.
+
+A load balancer distributes requests among service instances.
+
+Load balancing improves capacity or availability according to architecture.
+
+Load balancing does not guarantee application state consistency.
+
+Stateful applications can require session affinity or shared state.
+
+Stateless API design makes horizontal distribution easier.
+
+Stateless does not mean the system stores no data.
+
+Stateless means each request contains or references sufficient context so the server does not require hidden per-client conversational state according to the interface model.
+
+Persistent database state is compatible with stateless HTTP request handling.
+
+Caching stores reusable results.
+
+HTTP defines caching mechanisms.
+
+Cache-Control communicates caching directives.
+
+ETag identifies a representation version according to server semantics.
+
+If-None-Match can request conditional retrieval using an ETag.
+
+A server can return 304 Not Modified when the client's cached representation remains valid according to the condition.
+
+Caching can reduce latency and load.
+
+Caching can return stale data if invalidation is incorrect.
+
+Sensitive responses should not be cached where policy forbids it.
+
+Cache behavior should be explicit.
+
+An API can support conditional updates.
+
+ETags can support optimistic concurrency.
+
+A client retrieves a representation and ETag.
+
+The client modifies the resource.
+
+The client sends an update with If-Match containing the expected ETag.
+
+The server can reject the update if the resource changed.
+
+This prevents silently overwriting another update according to the concurrency model.
+
+Concurrent modification should be handled deliberately.
+
+Last-write-wins is a policy.
+
+Last-write-wins is not automatically correct.
+
+Optimistic concurrency is another policy.
+
+Explicit conflict resolution is another policy.
+
+The domain determines appropriate behavior.
+
+API versioning manages incompatible interface changes.
+
+Versioning can occur in URL paths.
+
+Versioning can occur in headers.
+
+Versioning can occur through media types.
+
+Versioning can occur through protocol negotiation.
+
+No versioning strategy is universally correct.
+
+A version should have defined semantics.
+
+Do not increment versions without knowing what compatibility changed.
+
+Backward-compatible additions can sometimes occur without a major API version change.
+
+Removing a required field can break clients.
+
+Changing a field type can break clients.
+
+Changing the meaning of a field can break clients even when syntax remains identical.
+
+Semantic compatibility matters.
+
+Adding a new optional response field is often backward compatible for clients that correctly ignore unknown fields.
+
+A client that rejects every unknown response field can be less forward compatible.
+
+Whether unknown fields should be accepted depends on protocol policy.
+
+Requests can require stricter validation than responses.
+
+Compatibility rules should be explicit.
+
+Deprecation identifies API behavior planned for retirement.
+
+Deprecated endpoints can remain functional.
+
+Deprecation should provide migration information when consumers need it.
+
+Removing an endpoint without notice can break consumers.
+
+Internal APIs also have consumers.
+
+"Internal" does not mean changes are free.
+
+Another module can depend on an internal interface.
+
+Another service can depend on an internal endpoint.
+
+Dependency discovery matters before changing an interface.
+
+API documentation should describe behavior.
+
+Documentation should include request examples where useful.
+
+Documentation should include response examples where useful.
+
+Examples should not replace formal rules.
+
+An example demonstrates one case.
+
+A schema defines broader structure.
+
+Documentation should identify authentication requirements.
+
+Documentation should identify error behavior.
+
+Documentation should identify rate limits when applicable.
+
+Documentation should identify version behavior.
+
+Documentation should identify pagination.
+
+Documentation should identify side effects.
+
+Documentation should identify idempotency behavior.
+
+Documentation should identify limits.
+
+Limits are part of an interface.
+
+Maximum request size should be bounded.
+
+Maximum field length should be bounded where applicable.
+
+Maximum array length should be bounded where applicable.
+
+Maximum pagination size should be bounded.
+
+Maximum processing time can be bounded.
+
+Unbounded input creates resource-exhaustion risk.
+
+A server should reject input exceeding defined limits.
+
+Input limits should be enforced before excessive resource consumption when possible.
+
+API security begins at the trust boundary.
+
+Treat remote input as untrusted.
+
+Validate structure.
+
+Validate type.
+
+Validate range.
+
+Validate authorization.
+
+Validate state transitions.
+
+Use parameterized database queries.
+
+Avoid command injection.
+
+Avoid path traversal.
+
+Avoid unsafe deserialization.
+
+Encode output according to its destination.
+
+Do not trust a field merely because another server supplied it.
+
+Trust depends on the relationship and authentication boundary.
+
+Server-to-server communication still crosses a trust boundary.
+
+A compromised service can send malicious input.
+
+Defense in depth can validate data at important boundaries.
+
+File upload APIs require special care.
+
+A filename supplied by a client is untrusted input.
+
+A MIME type supplied by a client is untrusted metadata.
+
+A file extension supplied by a client is untrusted metadata.
+
+Validate content according to application requirements.
+
+Do not construct filesystem paths directly from arbitrary filenames.
+
+Generate controlled storage names where appropriate.
+
+Enforce size limits.
+
+Store uploads outside executable locations when appropriate.
+
+Authorization should control who can retrieve uploaded data.
+
+An API accepting URLs can create Server-Side Request Forgery risk.
+
+Server-Side Request Forgery is commonly abbreviated SSRF.
+
+SSRF occurs when an attacker causes a server to make unintended network requests.
+
+Do not fetch arbitrary user-supplied URLs from privileged network environments without appropriate controls.
+
+Network destination validation can be required.
+
+Redirect handling can affect destination validation.
+
+DNS resolution can change destination interpretation.
+
+SSRF defense requires considering the complete request path.
+
+Deserialization converts encoded data into application structures.
+
+Unsafe deserialization can permit unintended behavior when formats support executable object construction or dangerous type mechanisms.
+
+Prefer simple data formats for untrusted API input.
+
+Validate decoded structures.
+
+Do not allow untrusted data to select arbitrary application classes or executable behavior.
+
+Mass assignment occurs when application frameworks automatically map untrusted input onto object fields that should not be externally writable.
+
+Explicitly define writable fields.
+
+A user should not gain administrator status merely by adding an unexpected field to a request.
+
+Authorization applies to fields as well as endpoints when necessary.
+
+An endpoint can permit updating a display name while forbidding updating account authority.
+
+Validate requested state changes.
+
+Object-level authorization ensures a caller can access the specific requested object.
+
+Being authorized to use an endpoint does not automatically authorize every resource identifier supplied to it.
+
+A user allowed to view their own record should not automatically be able to view another user's record by changing an ID.
+
+Resource identity and authorization are separate.
+
+Function-level authorization controls access to operations.
+
+Administrative endpoints require appropriate authority.
+
+Do not rely on hiding an endpoint.
+
+An undocumented endpoint remains reachable if exposed.
+
+Security by obscurity is not authorization.
+
+API logs support operations and audit.
+
+Log request identity where appropriate.
+
+Log endpoint or operation.
+
+Log result status.
+
+Log latency where useful.
+
+Log request identifiers.
+
+Do not log passwords.
+
+Do not log private keys.
+
+Do not log bearer tokens.
+
+Do not log session secrets.
+
+Do not indiscriminately log complete request bodies containing sensitive information.
+
+Logging policy should identify sensitive fields.
+
+Audit logging differs from diagnostic logging.
+
+Audit logs preserve security-relevant or governance-relevant events.
+
+Diagnostic logs support debugging.
+
+Access logs record requests.
+
+These logs can have different retention requirements.
+
+API observability can include metrics.
+
+Request count can be measured.
+
+Error count can be measured.
+
+Latency can be measured.
+
+Active requests can be measured.
+
+Rate-limit events can be measured.
+
+Dependency failures can be measured.
+
+Metrics should distinguish meaningful status classes.
+
+A service returning 500 responses quickly is not healthy merely because latency is low.
+
+Health requires defined success criteria.
+
+An API health endpoint can report service health.
+
+A health endpoint should be small.
+
+A health endpoint should not expose sensitive configuration.
+
+A health endpoint should not perform destructive operations.
+
+A liveness endpoint and readiness endpoint can have different meanings.
+
+A service can be alive but not ready.
+
+A service can be ready for limited functionality while another optional subsystem is degraded.
+
+Health state should represent actual capability.
+
+An API can expose asynchronous operations.
+
+A client submits work.
+
+The server returns an operation identifier.
+
+The client can query operation state.
+
+Operation states can include pending.
+
+Operation states can include running.
+
+Operation states can include completed.
+
+Operation states can include failed.
+
+Operation states should have defined meanings.
+
+Completed should mean completion criteria were met.
+
+Failed should preserve an appropriate error result.
+
+Pending should not be reported as completed.
+
+Asynchronous work should not require clients to guess completion from elapsed time.
+
+Polling repeatedly queries operation status.
+
+Polling intervals should be bounded.
+
+Excessive polling wastes resources.
+
+Webhooks allow a server to send event notifications to another server.
+
+A webhook is an outbound HTTP callback according to the application design.
+
+Webhook delivery can fail.
+
+Webhook delivery can be duplicated.
+
+Webhook receivers should consider idempotency.
+
+Webhook senders should define retry policy.
+
+Webhook messages should be authenticated when trust requires it.
+
+A signature can authenticate webhook content according to the signing scheme.
+
+The receiver should verify signatures before trusting signed content.
+
+A valid webhook signature does not automatically authorize every possible operation.
+
+Event type and state should still be validated.
+
+An event-driven API communicates state changes through events.
+
+An event represents something that occurred.
+
+Commands request actions.
+
+Events describe occurrences.
+
+"Create user" is command-like.
+
+"User created" is event-like.
+
+Commands and events should not be confused.
+
+An event should normally describe a completed fact according to its semantics.
+
+An event identifier can support duplicate detection.
+
+Consumers can process an event more than once unless delivery guarantees prevent it.
+
+Exactly-once processing is difficult in distributed systems.
+
+Many systems instead use at-least-once delivery plus idempotent processing.
+
+At-most-once delivery can lose messages.
+
+At-least-once delivery can duplicate messages.
+
+Delivery guarantees should be explicit.
+
+A message queue can decouple API request handling from background processing.
+
+The API can accept work.
+
+The queue can hold work.
+
+Workers can process queued work.
+
+Queue acceptance does not mean processing completed.
+
+Return status should reflect this distinction.
+
+A queue can become unavailable.
+
+A queue can accumulate backlog.
+
+A worker can fail.
+
+A message can require retry.
+
+A poison message repeatedly fails processing.
+
+Poison-message handling should be bounded.
+
+A dead-letter queue can hold messages that cannot be processed according to queue policy.
+
+Do not retry permanently invalid work forever.
+
+Service boundaries should be deliberate.
+
+Splitting one application into many APIs increases operational complexity.
+
+Every network boundary introduces latency.
+
+Every network boundary introduces failure modes.
+
+Every service introduces deployment concerns.
+
+Every service introduces compatibility concerns.
+
+Every service can introduce authentication requirements.
+
+Microservices are not automatically better architecture.
+
+A monolithic application can expose clean internal APIs.
+
+A modular monolith can preserve component boundaries without distributed-system complexity.
+
+Distribute components when requirements justify distribution.
+
+An internal function call is cheaper and more reliable than an unnecessary network call.
+
+API design should minimize unnecessary round trips.
+
+A chatty API requires many small requests to complete one operation.
+
+A coarse API can perform a coherent operation in one request.
+
+Interfaces should match domain operations.
+
+Do not force consumers to reconstruct server-side domain logic through dozens of calls when one bounded operation is appropriate.
+
+Do not create enormous endpoints performing unrelated actions merely to reduce requests.
+
+Balance cohesion and communication cost.
+
+Batch APIs process multiple items in one request.
+
+Batch operations should define whether failure is atomic.
+
+All items can succeed or fail together.
+
+Items can succeed independently.
+
+The response should identify per-item outcomes when partial success is allowed.
+
+Do not return ambiguous success for partially failed batches.
+
+Partial success is a real state.
+
+Transaction boundaries should be explicit.
+
+A database transaction does not automatically span multiple independent services.
+
+Distributed transactions introduce additional complexity.
+
+An API operation should not claim atomicity across systems unless the architecture actually provides it.
+
+Compensating actions can reverse or offset completed steps according to workflow design.
+
+Compensation is not identical to database rollback.
+
+An external action may not be perfectly reversible.
+
+Distributed workflows should model these realities.
+
+An API can expose capability discovery.
+
+Capability discovery tells a consumer which features are supported.
+
+A protocol version can imply capabilities.
+
+A capabilities field can explicitly list them.
+
+Consumers should not assume optional capabilities.
+
+Feature negotiation should produce deterministic behavior.
+
+Unsupported capability requests should be rejected clearly.
+
+Do not silently pretend unsupported behavior succeeded.
+
+API clients should validate responses.
+
+A server response is external input from the client's perspective.
+
+Check status codes.
+
+Check required fields.
+
+Check types.
+
+Check protocol version.
+
+Check identifiers.
+
+Check integrity or authentication where required.
+
+Do not assume a response is correct merely because it came from the expected network address.
+
+API servers should validate requests.
+
+Both sides have responsibilities.
+
+Serialization converts structured data into a transferable representation.
+
+Deserialization reconstructs structured data from the representation.
+
+Serialization rules matter.
+
+Field names matter.
+
+Field types matter.
+
+Character encoding matters.
+
+Number representation matters.
+
+Ordering can matter for signatures or hashes.
+
+JSON object member order should not normally be treated as semantic application order unless a separate canonicalization scheme defines it.
+
+Canonical serialization defines one representation for logically equivalent data.
+
+Canonicalization can be important for signatures.
+
+If an API signs request content, signer and verifier must agree on exact signed bytes or canonical representation.
+
+Changing whitespace can change a raw-byte signature.
+
+Changing field ordering can change a raw-byte signature.
+
+Protocol design must define signature representation.
+
+Binary APIs require defined byte order.
+
+Network byte order is traditionally big-endian.
+
+Multibyte numeric representation must be specified when raw binary formats are used.
+
+Structure padding from a native C struct should not automatically become a network protocol.
+
+Native memory layout can differ by compiler and architecture.
+
+Serialize protocol fields explicitly.
+
+Do not transmit arbitrary in-memory structures and assume portability.
+
+API protocol fields should have defined sizes.
+
+Integer overflow should be considered.
+
+Length fields should be validated.
+
+A claimed payload length should not be trusted before bounds checking.
+
+Malformed lengths can cause memory safety defects.
+
+Allocate based on validated limits.
+
+Protocol parsers should reject truncated input.
+
+Protocol parsers should reject oversized input.
+
+Protocol parsers should reject invalid field values.
+
+Protocol parsers should reject unsupported versions.
+
+Protocol parsers should not read beyond received data.
+
+A parser should know exactly how many bytes remain.
+
+Binary protocols benefit from explicit framing.
+
+A length-prefixed message contains a length followed by the defined payload.
+
+The receiver should validate the length before allocation and reading.
+
+A delimiter-framed protocol uses defined delimiter values.
+
+Escaping can be required when payload data can contain the delimiter.
+
+Framing belongs to the protocol.
+
+TCP does not provide application message framing.
+
+An API implemented over TCP must define framing.
+
+One TCP receive operation does not equal one API message.
+
+A protocol implementation should handle partial reads.
+
+A protocol implementation should handle partial writes.
+
+A protocol implementation should handle disconnects.
+
+A protocol implementation should handle malformed peers.
+
+A peer following the transport protocol can still violate the application protocol.
+
+Protocol validation belongs above transport.
+
+API compatibility tests can verify old consumers against new providers.
+
+Contract tests verify interface expectations.
+
+Consumer-driven contract tests record expectations important to consumers according to that testing approach.
+
+Integration tests verify actual interaction.
+
+End-to-end tests verify complete workflows.
+
+Mock API tests do not prove the real provider behaves identically.
+
+Test real boundaries before claiming interoperability.
+
+API tests should include successful requests.
+
+API tests should include malformed requests.
+
+API tests should include missing fields.
+
+API tests should include invalid field types.
+
+API tests should include oversized input.
+
+API tests should include unauthorized requests.
+
+API tests should include forbidden requests.
+
+API tests should include missing resources.
+
+API tests should include duplicate requests where relevant.
+
+API tests should include concurrency where relevant.
+
+API tests should include timeout behavior.
+
+API tests should include dependency failure.
+
+API tests should include version mismatch.
+
+API tests should include unsupported methods.
+
+API tests should include unsupported content types.
+
+API tests should verify exact status semantics.
+
+A test receiving a response is not sufficient.
+
+Validate the response content.
+
+Validate the state change.
+
+Validate that unauthorized state did not change.
+
+Negative tests establish boundaries.
+
+A secure API should reject unauthorized behavior.
+
+A deterministic API should reject invalid states predictably.
+
+Fuzz testing supplies generated or mutated inputs to find unexpected behavior.
+
+Protocol parsers can benefit from fuzz testing.
+
+Fuzzing should not be performed against production systems without explicit authorization and controls.
+
+Generated malformed input can create load or unexpected state.
+
+Test environments should isolate destructive testing.
+
+API performance should be measured.
+
+Latency should be measured at meaningful percentiles.
+
+Average latency can hide slow outliers.
+
+Throughput should be measured.
+
+Error rate should be measured.
+
+Payload size should be measured when relevant.
+
+Dependency latency should be measured when relevant.
+
+Optimization should follow evidence.
+
+Do not add caching merely because an endpoint is slow.
+
+Determine why it is slow.
+
+Database queries can be slow.
+
+External dependencies can be slow.
+
+Serialization can be expensive.
+
+Network latency can dominate.
+
+Lock contention can dominate.
+
+Resource exhaustion can dominate.
+
+Measure the actual bottleneck.
+
+API availability depends on dependencies.
+
+If a required database is unavailable, applicable API operations can be unavailable.
+
+If an optional service is unavailable, unrelated API operations can remain available.
+
+Do not make every endpoint depend on every subsystem without need.
+
+Dependency isolation improves resilience.
+
+API startup should validate required configuration.
+
+Missing required credentials should produce explicit failure.
+
+Invalid port configuration should produce explicit failure.
+
+Unsupported protocol version should produce explicit failure.
+
+Do not silently invent configuration.
+
+Defaults should be defined.
+
+An API service should bind only to required interfaces.
+
+Binding to loopback restricts ordinary network exposure to the local host.
+
+Binding externally exposes the service according to network and firewall configuration.
+
+Exposure should be intentional.
+
+A development API should not automatically become publicly reachable.
+
+Production exposure should use appropriate network controls.
+
+TLS should be used when confidentiality or transport authentication is required.
+
+Certificates should be validated.
+
+Disabling TLS verification to eliminate an error removes an important security property.
+
+Fix the trust configuration instead of pretending verification succeeded.
+
+API secrets should be rotatable.
+
+Credential rotation should avoid unnecessary downtime where required.
+
+Multiple active keys can support controlled transition.
+
+Old keys should be revoked when transition completes according to policy.
+
+Key identifiers can identify which credential was used without logging the secret.
+
+Audit events can record credential identity safely when designed appropriately.
+
+API access should follow least privilege.
+
+A read-only client should not receive write authority.
+
+A monitoring client should not receive administrative authority.
+
+A service should receive only the endpoints and resources required for its mission.
+
+Scope limits token authority.
+
+Authorization policy should be enforced server-side.
+
+A client hiding a button is not authorization.
+
+Client-side validation is not server-side security.
+
+The server must enforce protected rules.
+
+An API should distinguish identity from authority.
+
+An authenticated developer is not automatically an administrator.
+
+An authenticated service is not automatically authorized for every resource.
+
+An authenticated module is not automatically authorized to modify core state.
+
+Authority belongs to policy.
+
+API implementation enforces that policy.
+
+An API should distinguish accepted from completed.
+
+An API should distinguish completed from successful when a completed operation can fail.
+
+An API should distinguish unavailable from unsupported.
+
+An API should distinguish invalid from unauthorized.
+
+An API should distinguish not found from malformed.
+
+An API should distinguish timeout from refusal.
+
+An API should distinguish conflict from server failure.
+
+Precise states improve interoperability.
+
+API consumers should not infer facts not established by the response.
+
+If the server reports pending, the operation is pending.
+
+If the server reports unknown, the result is unknown.
+
+If the server reports failed, do not reinterpret it as probably successful.
+
+If a request times out, outcome can be unknown.
+
+Unknown is a valid operational state.
+
+Evidence should resolve unknown state when possible.
+
+A status endpoint can resolve uncertain asynchronous state.
+
+A transaction identifier can allow querying an operation after timeout.
+
+Request identifiers can allow log correlation.
+
+Design APIs so important uncertainty can be resolved.
+
+API behavior should be small.
+
+API behavior should be deterministic where possible.
+
+API behavior should be documented.
+
+API behavior should be bounded.
+
+API behavior should be testable.
+
+API behavior should preserve authority boundaries.
+
+API behavior should fail explicitly.
+
+Do not expose functionality merely because implementation already exists.
+
+Do not accept input merely because it can be parsed.
+
+Do not perform an action merely because the caller requested it.
+
+Validate identity.
+
+Validate authority.
+
+Validate input.
+
+Validate current state.
+
+Perform the bounded operation.
+
+Validate the result where required.
+
+Return an accurate status.
+
+Record appropriate evidence.
+
+Do not report success before success criteria are satisfied.
+
+Do not return secret internal information as diagnostic convenience.
+
+Do not silently downgrade security.
+
+Do not silently change protocol versions.
+
+Do not silently reinterpret malformed requests.
+
+Do not silently ignore required fields.
+
+Do not silently invent missing authority.
+
+Do not silently retry non-idempotent operations without understanding the consequences.
+
+Do not confuse transport with protocol.
+
+Do not confuse protocol with application behavior.
+
+Do not confuse authentication with authorization.
+
+Do not confuse parsing with validation.
+
+Do not confuse HTTP 200 with universal success.
+
+Do not confuse HTTP 202 with completion.
+
+Do not confuse HTTP 401 with authorization success or failure.
+
+Do not confuse HTTP 403 with failed authentication.
+
+Do not confuse an endpoint with a resource.
+
+Do not confuse JSON with REST.
+
+Do not confuse REST with HTTP.
+
+Do not confuse HTTP with TCP.
+
+Do not confuse HTTPS with application security.
+
+Do not confuse API keys with encryption.
+
+Do not confuse a token with identity itself.
+
+Do not confuse a valid token with unlimited authority.
+
+Do not confuse an opaque identifier with a secret.
+
+Do not confuse an unguessable ID with authorization.
+
+Do not confuse retry with recovery.
+
+Do not confuse timeout with confirmed failure.
+
+Do not confuse queue acceptance with completed work.
+
+Do not confuse webhook delivery with webhook processing.
+
+Do not confuse a valid signature with authorization.
+
+Do not confuse an API implementation with its contract.
+
+Do not confuse undocumented behavior with guaranteed behavior.
+
+An API is a boundary.
+
+Good API engineering makes that boundary explicit.
+
+The provider defines supported behavior.
+
+The consumer uses supported behavior.
+
+The protocol communicates requests and results.
+
+Validation protects the boundary.
+
+Authentication establishes identity when required.
+
+Authorization controls permitted actions.
+
+Versioning manages change.
+
+Testing establishes evidence.
+
+Logging preserves operational evidence.
+
+Precise errors communicate failure.
+
+Bounded behavior prevents uncontrolled resource use.
+
+A good API exposes exactly what another component needs to perform authorized work and no more.

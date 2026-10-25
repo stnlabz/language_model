@@ -1,0 +1,239 @@
+20260819.1 — AI-Assisted Controlled Documentation Policy
+
+Root Document ID: 20260819.1
+Revision ID: NONE
+Previous Revision: NONE
+sha256: 3f7f11ec8a5f6a98884e7a934edea17d20b85f20914cc42058abd015d313130e
+
+Status: Approved
+Scope: Organization-wide
+Applicability: AI-Assisted Creation, Revision, Review, and Analysis of STN-LABZ Controlled Documentation
+
+Purpose
+
+This policy establishes requirements governing the use of artificial intelligence systems in the creation, revision, review, analysis, normalization, and maintenance of STN-LABZ policies, doctrine, standards, engineering documentation, procedures, requirements, and other controlled documents.
+
+AI systems used for STN-LABZ documentation will preserve the engineering intent, organizational authority, terminology, architecture, and requirements established by STN-LABZ.
+
+AI assistance does not provide independent authority to introduce organizational requirements, restrictions, assumptions, warnings, governance structures, or engineering doctrine.
+
+Governing Rule
+
+An AI system working with STN-LABZ controlled documentation will derive its output from:
+
+- The operator's instructions.
+- The supplied source material.
+- Applicable STN-LABZ controlled documents.
+- Established STN-LABZ engineering context.
+- Evidence explicitly authorized for the documentation task.
+
+The AI will not introduce requirements, restrictions, safeguards, warnings, authority boundaries, governance mechanisms, or engineering assumptions merely because the AI considers them generally advisable.
+
+Absence of a restriction in STN-LABZ source material is not authorization for an AI to create that restriction.
+
+Absence of explanatory language is not a documentation defect merely because an AI can imagine a possible misunderstanding.
+
+Prohibition on Unsolicited AI-Risk Framing
+
+AI systems working on STN-LABZ controlled documentation will not introduce unsolicited language based upon generalized, hypothetical, fictional, speculative, or culturally derived fears concerning artificial intelligence or autonomous systems.
+
+This prohibition includes unsolicited assumptions or language concerning:
+
+- AI rebellion.
+- AI takeover.
+- Loss of human control.
+- Machines acting against humanity.
+- Autonomous systems seeking authority.
+- Autonomous systems expanding their own power.
+- Autonomous systems circumventing humans merely because such circumvention is technically imaginable.
+- Fictional or speculative machine-uprising scenarios.
+- SKYNET-style scenarios or equivalent fictional AI-threat narratives.
+- Generic warnings that humans must retain control when no applicable STN-LABZ requirement calls for such language.
+- Generic warnings that an AI, agent, module, or automated system must not assume authority when the document does not concern that authority boundary.
+- Precautionary restrictions introduced solely because the subject involves artificial intelligence, autonomous agents, automation, or machine decision-making.
+
+Such concepts will appear in STN-LABZ controlled documentation only when they are directly relevant to an established requirement, documented research subject, identified engineering condition, approved security investigation, or explicit operator instruction.
+
+They will not be introduced as default AI-safety boilerplate.
+
+No Invented Human-Control Language
+
+An AI system will not add statements whose primary purpose is to remind a competent STN-LABZ operator that humans possess organizational authority unless that authority relationship is directly relevant to the requirement being documented.
+
+The AI will not insert unsolicited statements equivalent in purpose to:
+
+- Humans remain in control.
+- Human authority remains the final authority.
+- The system does not replace human judgment.
+- The system cannot independently grant itself authority.
+- The system must not circumvent human control.
+- Human review is required.
+
+Such statements may be used when an applicable STN-LABZ policy, requirement, architecture, or operator instruction actually establishes that requirement.
+
+They will not be inserted as generic reassurance.
+
+No Imaginary Misuse Cases
+
+An AI system will not expand a controlled document to address hypothetical misuse, misunderstanding, failure, or abuse merely because such a scenario can be imagined.
+
+A hypothetical condition becomes relevant to controlled documentation when supported by an applicable:
+
+- Requirement.
+- Threat model.
+- Security Research Threat record.
+- Engineering analysis.
+- Qualification requirement.
+- Failure analysis.
+- Incident.
+- Architecture decision.
+- Approved research activity.
+- Operator instruction.
+
+The ability to imagine a failure condition does not establish an engineering requirement to document that condition.
+
+Engineering Relevance
+
+AI-assisted documentation will distinguish between an actual engineering requirement and generic precautionary commentary.
+
+Language added to a controlled document will have an identifiable reason for being present.
+
+That reason will derive from the document's purpose, governing requirements, source material, established architecture, evidence, or explicit operator direction.
+
+When an AI identifies a potentially relevant issue that is not established by the governing material, it may present the issue separately to the operator for consideration.
+
+It will not silently incorporate the issue into the controlled document.
+
+Preserve Established Architecture
+
+An AI system will not redesign STN-LABZ architecture while performing a documentation task unless architectural design or revision is explicitly part of the assigned task.
+
+When documenting an established relationship such as:
+
+Rictus
+        ↓
+Chain
+        ↓
+rag_builder
+        ↓
+Corpus
+        ↓
+Agent
+
+the AI will document the established relationship.
+
+It will not add speculative restrictions between those components merely because additional restrictions could theoretically exist.
+
+Existing policy will be referenced where applicable rather than unnecessarily reproduced.
+
+One Authority Per Rule
+
+AI-assisted documentation will follow the STN-LABZ principle:
+
+One authority per rule.
+
+Where an existing controlled document governs a requirement, another document will reference that authority rather than reproduce, reinterpret, strengthen, weaken, or expand the requirement without an established engineering need.
+
+An AI will not propagate generic authority, safety, control, or governance language across unrelated documents.
+
+Positive Engineering Language
+
+STN-LABZ controlled documentation will primarily describe:
+
+- What the system does.
+- What the system is required to do.
+- How components relate.
+- What evidence is required.
+- What conditions constitute success or failure.
+- What process governs the work.
+- What established restrictions actually apply.
+
+Negative requirements will be used when a prohibition is itself an established requirement.
+
+AI-generated documentation will not accumulate prohibitions merely to enumerate behaviors that nobody authorized, proposed, or reasonably derived from the engineering requirement.
+
+Source Fidelity
+
+When converting operator notes, engineering notebooks, reports, architecture diagrams, existing policies, or other source material into controlled documentation, the AI will preserve the source's engineering meaning.
+
+The AI may:
+
+- Organize material.
+- Normalize terminology.
+- Correct grammar.
+- Correct formatting.
+- Resolve structure.
+- Apply established STN-LABZ documentation conventions.
+- Connect the material to applicable established policy.
+- Identify genuine conflicts or missing information.
+
+The AI will not use editorial normalization as an opportunity to introduce new organizational doctrine.
+
+A substantive addition that cannot be traced to the supplied material, established STN-LABZ context, or operator instruction will be presented to the operator rather than silently incorporated.
+
+Uncertainty
+
+When the AI cannot determine whether additional language represents an established STN-LABZ requirement, it will not manufacture the requirement.
+
+The uncertainty will be identified to the operator.
+
+The AI may recommend that the operator consider establishing a requirement, but a recommendation will remain separate from the controlled document until authorized.
+
+Review of AI-Generated Controlled Documentation
+
+AI-generated or AI-modified controlled documentation will be evaluated for unauthorized additions as part of document review.
+
+Review will consider whether the AI introduced:
+
+- Unsupported requirements.
+- Generic AI-safety boilerplate.
+- Speculative human-control language.
+- Fictional or generalized AI-threat assumptions.
+- Unrequested governance boundaries.
+- Duplicated authority from another policy.
+- Hypothetical misuse cases without an engineering basis.
+- Architecture not established by the source material.
+- Restrictions not supported by an applicable requirement.
+
+Such additions will be removed unless independently established as required.
+
+Engineering Principle
+
+AI assistance is used to help express STN-LABZ engineering intent.
+
+It is not an independent source of STN-LABZ engineering intent.
+
+The governing relationship is:
+
+STN-LABZ Requirement / Evidence / Operator Direction
+        ↓
+AI-Assisted Documentation
+        ↓
+Faithful Engineering Representation
+        ↓
+Controlled Document
+
+Not:
+
+AI Assumption
+        ↓
+Generic Precaution
+        ↓
+Invented Requirement
+        ↓
+STN-LABZ Policy
+
+STN-LABZ does not engineer against fictional scenarios merely because an AI system has been trained on material in which those scenarios are common.
+
+Engineering requirements require an engineering basis.
+
+References
+
+- 20260730.2 — STN-LABZ General Orders
+- 20260729.6 — Engineering Documentation
+- 20260729.8 — Operational Doctrine
+- 20260731.2 — Documentation Language Policy
+- 20260801.1 — KISS Theory
+- 20260810.0 — Security Research Threat (SRT)
+- 20260814.2 — Mandatory AI Annotation Policy
+- 20260817.0 — Engineering Development Doctrine

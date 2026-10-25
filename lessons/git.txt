@@ -1,0 +1,634 @@
+Git is a distributed version control system.
+Version control records changes to files over time.
+Git tracks snapshots of project content.
+A Git repository contains version-control history and metadata.
+A repository is not the same thing as a working directory.
+The working tree contains files currently checked out for editing.
+The Git index contains the proposed content for the next commit.
+The repository contains committed history.
+The working tree, index, and committed repository are distinct states.
+A file can differ between the working tree and the index.
+A file can differ between the index and the current commit.
+A file can differ between the working tree and the current commit.
+Understanding these states is fundamental to Git.
+git status reports information about the current working tree and index.
+git diff normally shows selected differences involving the working tree.
+git diff --staged shows changes staged for the next commit.
+git add places selected content into the index.
+git commit creates a new commit from the staged snapshot.
+A commit records a project snapshot and associated metadata.
+A commit does not automatically include every modified file.
+Only content staged for the commit is included according to Git operation.
+An untracked file is not automatically part of a commit.
+A tracked file is a file Git knows through repository history or the index.
+An untracked file exists in the working tree but is not currently tracked.
+git add can begin tracking a new file.
+git rm stages removal of a tracked file.
+Deleting a tracked file from the filesystem and committing the deletion removes it from later snapshots.
+Deleting a file in a later commit does not erase it from earlier Git history.
+Git history is historical evidence.
+Historical content does not automatically represent current project state.
+A README in an older commit describes the project according to that historical revision.
+A source header in the current checked-out revision can describe current source state.
+A historical version number should not automatically be treated as the current version.
+A sequence of historical versions does not mean all versions are currently active.
+Current state and historical state are different concepts.
+A commit is identified by an object identifier.
+Git object identifiers are derived from cryptographic hashes.
+Modern Git can support different repository object hash algorithms depending on repository format.
+SHA-1 has historically been Git's primary object hash algorithm.
+Git also supports SHA-256 repositories in applicable versions and configurations.
+A Git object identifier identifies repository content and object metadata according to Git's object model.
+A commit hash is not an arbitrary version number.
+A commit identifier is not an ABI version.
+A commit identifier is not an application version.
+A commit identifier is not a protocol version.
+Different identifiers answer different questions.
+A commit contains a reference to a tree.
+A commit normally contains a reference to one or more parent commits.
+A root commit has no parent commit.
+A normal linear commit has one parent.
+A merge commit commonly has multiple parents.
+A commit records author information.
+A commit records committer information.
+A commit records timestamps.
+A commit records a commit message.
+The author and committer can be different.
+The author timestamp and committer timestamp can be different.
+A commit message explains a change according to developer convention.
+A commit message is documentation.
+A commit message is not executable code.
+A commit message can be incorrect.
+A commit message does not override the actual committed content.
+Repository evidence should be interpreted according to what it actually establishes.
+Git objects include blobs.
+Git objects include trees.
+Git objects include commits.
+Git objects include annotated tags.
+A blob stores file content.
+A blob does not inherently store the filename.
+A tree associates names with Git objects and modes.
+A commit points to a tree representing a project snapshot.
+A branch is a movable reference to a commit.
+A branch is not a separate copy of every repository file.
+Creating a branch is normally inexpensive because the branch begins as a reference.
+A branch name identifies a line of development by reference.
+The commit graph represents history.
+A branch moves when new commits are made on that branch.
+The branch name is not part of the commit's immutable content.
+A commit can be reachable from multiple branches.
+A commit can remain in repository history after a branch moves beyond it.
+A commit can become unreachable from ordinary references.
+Unreachable objects can eventually be removed by Git maintenance.
+HEAD identifies the currently checked-out branch or commit context.
+HEAD commonly refers symbolically to the current branch.
+Detached HEAD means HEAD refers directly to a commit rather than a normal local branch reference.
+Detached HEAD is not inherently an error.
+Commits can be created while HEAD is detached.
+Such commits can become difficult to find if no persistent reference is created.
+A branch can preserve a detached-history commit by referencing it.
+git branch lists or manipulates branches according to options.
+git switch can change branches.
+git switch can create a new branch.
+git checkout historically performs branch switching and other operations.
+git checkout has multiple behaviors.
+Modern workflows can use git switch for branch switching and git restore for file restoration where supported.
+Commands should be understood before destructive use.
+Switching branches changes working-tree content according to repository state and local modifications.
+Git can refuse a branch switch when local changes would be overwritten.
+That refusal protects uncommitted work.
+Uncommitted work should not be discarded merely to make a command succeed.
+git log displays commit history according to selected traversal and formatting.
+git show displays information about Git objects, commonly commits.
+git show on a commit can display its metadata and patch.
+git diff compares selected Git states.
+A diff shows changes between two selected states.
+A diff is not necessarily the complete project.
+A patch describes changes.
+A snapshot describes resulting content.
+Git fundamentally stores snapshots even though differences are commonly displayed as patches.
+git blame associates lines with commits according to repository history.
+git blame does not establish why a line is correct.
+git blame does not establish who currently owns a subsystem.
+git blame identifies historical line attribution according to Git's algorithm and available history.
+Renames and code movement can complicate historical attribution.
+History is evidence, not automatic authority.
+The current source determines current implementation.
+Project policy can determine which current source is authoritative.
+Documentation can explain intent.
+Tests can provide behavioral evidence.
+Runtime execution can provide current operational evidence.
+Git history can explain how current state developed.
+These evidence sources should not be conflated.
+A branch can diverge from another branch.
+Divergence means each branch contains commits not contained in the other.
+A merge combines histories.
+git merge integrates another history into the current branch according to Git's merge algorithm.
+A fast-forward merge moves a branch reference forward when no divergent history requires a merge commit.
+A three-way merge uses common ancestry to combine changes.
+A merge can succeed automatically.
+An automatic merge does not prove the resulting program is correct.
+A merge can produce syntactically valid but semantically incorrect code.
+Merged code should still be tested.
+A merge conflict occurs when Git cannot automatically reconcile selected changes.
+A merge conflict requires resolution.
+Conflict markers can identify conflicting content in working files.
+<<<<<<< commonly begins one side of a textual conflict.
+======= commonly separates conflicting sections.
+>>>>>>> commonly ends the other side of a textual conflict.
+Conflict markers should not remain accidentally in production source.
+Resolving a conflict means deliberately choosing or constructing correct resulting content.
+Choosing ours automatically is not always correct.
+Choosing theirs automatically is not always correct.
+Both sides can contain necessary changes.
+Neither side can be correct after surrounding architecture changes.
+Conflict resolution requires understanding intent.
+After resolving a conflict, the resolved content is staged.
+The merge can then be committed according to workflow.
+A merge conflict is not evidence that either branch is defective.
+It is evidence that Git requires human or tool-assisted reconciliation.
+Rebase reapplies commits onto a different base.
+git rebase can create new commit identities.
+Rebased commits normally have different hashes from their original versions.
+Rebase rewrites history.
+Merge preserves both development histories through graph relationships.
+Rebase and merge solve related integration problems differently.
+Neither is universally superior.
+Repository policy should determine appropriate history practices.
+Rewriting public shared history can disrupt collaborators.
+Rewriting private unpublished history can be useful.
+History rewriting should be deliberate.
+git commit --amend replaces the current tip commit with a new commit.
+The amended commit has a new identity.
+Amending a pushed shared commit rewrites published history.
+git rebase -i can edit a sequence of commits.
+Interactive rebase can reorder commits.
+Interactive rebase can combine commits.
+Interactive rebase can edit commits.
+Interactive rebase can remove commits.
+These operations rewrite history.
+A rewritten history is not byte-for-byte the same history.
+A force push can replace a remote branch's reference.
+Force pushing can destroy collaborators' visible branch history.
+git push --force-with-lease provides additional protection compared with an unconditional force push.
+Force operations should be deliberate.
+A remote is a named configuration describing another repository location.
+origin is a conventional remote name.
+origin has no magical authority merely because it is named origin.
+A repository can have multiple remotes.
+A remote can be hosted on GitHub.
+A remote can be hosted on another Git service.
+A remote can be another filesystem repository.
+Git is not GitHub.
+GitHub is a service that hosts Git repositories and provides additional collaboration features.
+Git can operate without GitHub.
+A GitHub repository uses Git but GitHub provides features beyond Git.
+Issues are a GitHub collaboration feature.
+Pull requests are a GitHub collaboration feature.
+Git itself does not require pull requests.
+A remote-tracking branch records the last known state of a remote branch according to local fetch operations.
+origin/main is commonly a remote-tracking branch.
+main is commonly a local branch.
+main and origin/main are different references.
+A local branch can be ahead of a remote-tracking branch.
+A local branch can be behind a remote-tracking branch.
+A local branch can diverge from a remote-tracking branch.
+git fetch obtains objects and updates applicable remote-tracking references.
+git fetch does not normally merge fetched changes into the current local branch.
+git pull fetches and then integrates according to configured pull behavior.
+git pull can merge.
+git pull can rebase when configured or requested.
+The exact integration behavior should be known.
+Fetch and pull are different operations.
+Fetching is useful when changes should be inspected before integration.
+git push sends objects and updates remote references when permitted.
+A successful push means the remote accepted the requested reference update according to protocol and permissions.
+A successful push does not prove deployed software has changed.
+A source repository and a production deployment are different states.
+Pushing source code does not automatically rebuild binaries unless automation performs that action.
+Pushing source code does not automatically restart services.
+Pushing source code does not automatically migrate databases.
+Pushing source code does not automatically update every clone.
+Repository state and deployed state must remain distinguishable.
+A clone creates a new repository using data from another repository.
+git clone normally configures a remote named origin.
+A clone is a repository in its own right.
+A distributed Git repository contains local history.
+A developer can commit locally without network connectivity.
+Network connectivity is required only for operations involving remote systems.
+A remote outage does not prevent ordinary local Git operations.
+A GitHub outage does not destroy a local repository.
+Distributed version control provides multiple copies of repository history.
+Multiple copies do not replace a deliberate backup policy.
+A corrupted or force-rewritten remote can propagate undesirable state.
+Important repositories should have appropriate backup and recovery practices.
+A tag is a reference commonly used to identify important commits.
+A lightweight tag directly references an object.
+An annotated tag is a Git object containing metadata and a reference.
+Annotated tags can contain a message.
+Annotated tags can be cryptographically signed.
+Tags are commonly used for releases.
+A tag name can contain a software version.
+The tag name and software's internal version are still different pieces of information.
+A release tag named v1.5.0 does not change a program's compiled version constant by itself.
+The source should define its own required version information.
+Release automation can verify that tag and source versions agree.
+A tag can be moved or deleted by someone with sufficient repository authority.
+A tag should not be treated as immutable merely because convention says tags should not move.
+Signed tags can provide authenticity evidence.
+A cryptographic signature can verify that a tag was signed by a key.
+Signature verification does not establish that the signer was authorized unless the project defines that key as authorized.
+Cryptographic identity and organizational authority are different.
+A release can reference a commit.
+A release can contain built artifacts.
+Source commits and built artifacts are different objects.
+A binary should be traceable to its source revision when reproducibility or auditability matters.
+Build metadata can record a commit identifier.
+A commit identifier embedded in a binary can help identify source provenance.
+An embedded commit identifier does not prove the binary was honestly built from that commit.
+Reproducible builds can strengthen build provenance.
+A reproducible build produces identical output from defined identical inputs and environment according to the build specification.
+Reproducibility should be verified rather than assumed.
+Source integrity and build integrity are separate concerns.
+.gitignore specifies patterns for intentionally untracked files.
+.gitignore does not remove already tracked files from history.
+Adding a secret file to .gitignore after committing it does not remove the secret from Git history.
+A tracked file remains tracked even if a later .gitignore pattern matches it.
+git rm --cached can remove a path from the index while preserving a working-tree copy according to command usage.
+Removing a file from the current commit does not erase it from older commits.
+Sensitive data accidentally committed should be considered exposed according to repository access.
+Credentials exposed in Git should be rotated when required.
+History rewriting can remove sensitive data from ordinary repository history.
+History rewriting does not guarantee every existing clone or cache has lost the old data.
+Secret rotation is more reliable than assuming every copy was erased.
+.gitignore should exclude generated files when appropriate.
+.gitignore should exclude local configuration when appropriate.
+.gitignore should exclude secrets when those secrets should never be versioned.
+.gitignore should not blindly ignore files required to reproduce a build.
+Repository policy should define which artifacts belong under version control.
+Source code normally belongs under version control.
+Build output can often be reproduced and therefore can often be excluded.
+Generated artifacts can be committed when project requirements require them.
+Dependency directories can be excluded when dependencies are reproducibly restored.
+Rules should follow project architecture.
+.gitattributes defines path-specific Git attributes.
+.gitattributes can control text handling.
+.gitattributes can control line-ending normalization.
+.gitattributes can identify binary files.
+.gitattributes can configure diff behavior.
+.gitattributes can configure merge behavior.
+.gitattributes can configure export behavior.
+Line endings matter for cross-platform development.
+LF is a line-feed line ending commonly used on Unix-like systems.
+CRLF is a carriage-return plus line-feed line ending commonly used on Windows.
+Git can normalize line endings according to configuration and attributes.
+Line-ending policy should be explicit for cross-platform repositories.
+Unexpected line-ending conversion can make entire files appear modified.
+Line-ending conversion can affect scripts.
+Line-ending conversion can affect byte-sensitive files.
+Binary files should not undergo text line-ending conversion.
+A repository supporting Windows and Linux should define text-file behavior deliberately.
+Executable script line endings can affect execution on Unix-like systems.
+A shell script containing CRLF can fail unexpectedly in some environments.
+A Windows batch file can conventionally use CRLF.
+Cross-platform projects should distinguish platform-specific files from platform-independent content.
+A Git repository can contain source for multiple platforms.
+Branches do not need to correspond to operating systems.
+Platform-specific implementation can exist in directories within one branch.
+Platform-independent interfaces can remain shared.
+Version control structure should reflect development architecture rather than forcing unnecessary branch separation.
+Git does not understand programming-language semantics by default.
+Git primarily tracks content.
+Git can merge text without understanding whether the merged C code compiles.
+Git can merge PHP without understanding whether the resulting application works.
+Git can merge JSON without understanding application schema requirements.
+Git can merge a module manifest without understanding ABI compatibility.
+Tests and build systems provide semantic validation beyond Git.
+Version control records changes.
+Version control does not prove correctness.
+A clean git status means the working tree and index have no reportable differences according to Git.
+A clean git status does not mean the software is correct.
+A clean git status does not mean the software compiled.
+A clean git status does not mean tests passed.
+A clean git status does not mean deployment succeeded.
+A clean git status does not mean production matches the repository.
+Each claim requires its own evidence.
+git status should be checked before risky history operations.
+Uncommitted changes can be lost through destructive commands.
+git restore can replace working-tree or index content according to options.
+git reset changes references or index state according to mode.
+git reset --soft moves a branch reference while preserving index and working-tree changes according to its semantics.
+git reset --mixed changes the branch reference and resets index state while normally preserving working-tree changes.
+git reset --hard changes the branch reference and resets index and working tree.
+git reset --hard can destroy uncommitted work.
+Destructive Git commands should not be issued casually.
+git clean removes untracked files according to options.
+git clean can permanently remove untracked work.
+git clean -n can preview what would be removed.
+Previewing destructive operations reduces mistakes.
+A file not tracked by Git may have no recovery path through Git.
+Git protects committed history better than uncommitted files.
+Commit meaningful work before destructive experimentation when appropriate.
+A stash stores selected working-tree and index changes for later reapplication.
+git stash can temporarily clear local modifications.
+A stash is stored inside repository metadata.
+A stash should not be treated as a permanent backup.
+Stashes can conflict when reapplied.
+Stashed work can become difficult to understand if retained without context.
+A commit is usually a stronger long-term record than an unnamed stash.
+Commits should represent coherent changes when practical.
+A coherent commit has one understandable purpose.
+Small coherent commits simplify review.
+Small coherent commits simplify debugging.
+Small coherent commits simplify selective reversal.
+A commit should not combine unrelated changes without reason.
+Commit messages should explain meaningful intent.
+A useful commit message should identify what changed.
+A useful commit message can explain why the change was necessary.
+A useful commit message should not claim tests passed when they did not.
+Commit history should remain factual.
+A commit can be reverted.
+git revert creates a new commit that applies inverse changes from a selected commit according to Git semantics.
+Revert preserves history.
+Reset moves history references and can rewrite visible branch history.
+Revert and reset are different operations.
+Revert is often appropriate for undoing a published change.
+A revert does not erase the original commit.
+The original historical event remains.
+The revert records that its effect was later reversed.
+History should preserve what happened rather than pretending an earlier event never occurred when auditability matters.
+A reverted vulnerability fix can reintroduce the vulnerability.
+A reverted database migration can require additional handling.
+A reverted source commit does not automatically revert external state changed by the original software.
+Version-control reversal and operational rollback are different.
+Git bisect helps locate a commit associated with a behavioral change.
+git bisect performs a binary search through commit history using good and bad classifications.
+A good commit is one known not to exhibit the investigated behavior according to the test.
+A bad commit is one known to exhibit the investigated behavior according to the test.
+Git bisect can automate testing when a deterministic test command exists.
+A bisect result identifies a commit where behavior changed according to the test history.
+A bisect result does not automatically prove malicious intent or developer fault.
+The identified commit should be examined.
+A behavioral regression can arise from interactions between multiple components.
+The first commit where a test fails is strong evidence about the change boundary.
+Regression testing and version history complement each other.
+git grep searches tracked repository content.
+git grep can locate text quickly.
+Finding text in a repository does not establish that the text is current authority.
+A search can find historical terminology in current documentation.
+A search can find examples.
+A search can find tests.
+A search can find deprecated compatibility code.
+A search result must be interpreted according to file role and context.
+A README is documentation.
+A header can define interfaces.
+A configuration file can define runtime configuration.
+A test can define expected behavior.
+A changelog can define history.
+A source file can implement behavior.
+A generated file can reflect another source.
+A build artifact can reflect compiled source.
+These file roles differ.
+When asked for the current ABI, current authoritative ABI definition should be preferred over historical documentation.
+A README containing ABI history can explain previous ABI versions.
+A header defining the current ABI constant can establish the compile-time ABI contract when the architecture assigns it that role.
+The values 1.3, 1.4, and 1.5 appearing in repository history do not mean the current ABI is "1.3 -> 1.4 -> 1.5."
+They establish historical version progression when context supports that interpretation.
+If the authoritative current definition states ABI 1.5, the current ABI is 1.5.
+History explains how the system reached 1.5.
+History does not replace 1.5 with the entire sequence.
+A changelog records historical changes.
+A changelog can contain old version numbers.
+A changelog should not be queried as though every version mentioned were simultaneously current.
+A README can contain examples from older releases.
+Documentation can become stale.
+Source can become stale relative to deployed binaries.
+Deployed binaries can become stale relative to source.
+Current must always be defined relative to the object being examined.
+Current repository source means the selected checked-out revision.
+Current remote source means the selected remote reference at the observation time.
+Current deployed source means the source revision corresponding to the deployed artifact when known.
+Current runtime version means the version actually executing.
+These can differ.
+Git cannot infer deployment state merely from repository history.
+A production system can run an older commit.
+A development branch can contain newer code than production.
+A remote repository can contain commits not deployed anywhere.
+A local repository can contain commits not pushed anywhere.
+Evidence should specify which state it describes.
+A commit can be signed.
+Git supports cryptographic signing mechanisms according to configuration and version.
+Signed commits can provide authenticity evidence.
+A valid commit signature proves the commit signature verifies under the indicated key.
+A valid commit signature does not prove the code is safe.
+A valid commit signature does not prove tests passed.
+A valid commit signature does not prove deployment occurred.
+A valid commit signature does not prove the signer had organizational authority unless that authority is separately established.
+Signature verification and authorization remain different.
+Git hooks execute scripts at defined Git lifecycle points.
+Client-side hooks can run before commits.
+Client-side hooks can run before pushes.
+Server-side hooks can validate received updates.
+Hooks can enforce local or server policy.
+Client-side hooks can often be bypassed by users controlling their local repository.
+Server-side enforcement provides stronger centralized policy for remote updates.
+A pre-commit hook can run formatting or checks.
+A pre-push hook can run tests.
+A server hook can reject prohibited reference changes.
+A hook succeeding does not prove every possible test passed unless the hook actually executes those tests.
+Automated pipelines can build and test repository revisions.
+Continuous Integration is commonly abbreviated CI.
+Continuous Delivery or Continuous Deployment is commonly abbreviated CD depending on workflow.
+CI commonly builds and tests changes.
+CD can prepare or perform releases and deployments.
+Git itself does not provide the entire CI/CD process.
+External systems react to Git events.
+A commit being pushed can trigger automation.
+The automation result should be observed.
+A triggered pipeline is not the same as a successful pipeline.
+A successful build is not the same as successful tests.
+Successful tests are not the same as successful deployment.
+Successful deployment is not the same as healthy runtime operation.
+Each lifecycle stage requires evidence.
+A repository can use submodules.
+A Git submodule records a reference to a commit in another repository.
+A submodule is not ordinary copied directory content.
+Cloning a repository does not necessarily populate submodule working trees automatically without appropriate options or commands.
+Submodule state includes the exact referenced commit.
+Updating a submodule reference changes the parent repository's recorded commit pointer.
+A submodule branch can advance without the parent repository automatically changing its pinned commit.
+Submodules support explicit dependency revision control.
+Submodules also introduce operational complexity.
+Dependencies should use the simplest mechanism satisfying project requirements.
+A repository can use tags to identify releases.
+Semantic Versioning commonly uses MAJOR.MINOR.PATCH notation.
+Git does not enforce Semantic Versioning.
+Git does not automatically know whether a change is major, minor, or patch.
+Project policy determines release versioning.
+A Git tag can reflect project release policy.
+Version policy remains outside Git's core object model.
+An ABI version can evolve independently from application release version.
+Application version 2.0 can use ABI 1.5.
+Application version 2.1 can still use ABI 1.5.
+A later application release does not automatically require a later ABI.
+ABI changes should occur when binary interface compatibility requirements change according to architecture.
+Git history can record an ABI change.
+Git does not decide ABI compatibility.
+The module host and interface contract decide ABI compatibility.
+Version numbers should not be inferred from unrelated version fields.
+A repository can contain multiple version numbers simultaneously for legitimate reasons.
+One can identify application release.
+One can identify module ABI.
+One can identify protocol version.
+One can identify schema version.
+One can identify file-format version.
+Each version should be interpreted according to its field and authority.
+Searching for the word "version" and returning every value is not correct reasoning.
+Searching for "ABI" and returning every historical ABI mention is not correct reasoning.
+The question determines the required evidence.
+"What ABI do your modules use?" asks for the current module ABI.
+The answer should use the authoritative current module ABI source.
+Historical ABI values are irrelevant unless the user asks for ABI history or compatibility.
+"What ABI versions have existed?" asks a historical question.
+The answer can include previous ABI versions when supported by history.
+"What changed from ABI 1.4 to 1.5?" asks for comparison between historical interface revisions.
+The answer requires evidence describing those changes.
+Current-state questions and historical questions require different retrieval strategies.
+A knowledge system should rank source authority according to the question.
+Current interface declarations should outrank historical narrative for current interface questions.
+Historical logs should remain available for historical questions.
+Deleting history merely to prevent bad retrieval loses useful evidence.
+Better retrieval distinguishes source role.
+History should remain history.
+Current state should remain current state.
+The retrieval layer should understand the distinction.
+Git is especially useful because it preserves both.
+Git history allows engineers to examine previous states without pretending those states are still active.
+A previous commit can be checked out.
+Checking out a previous commit changes the working tree to represent that historical state.
+A historical checkout does not make that historical state the latest project state.
+Returning to the current branch restores its selected current snapshot.
+Time travel through history is an inspection capability.
+It is not a declaration that every visited state is current.
+Git reflog records local movements of references according to Git configuration and retention.
+Reflog can help recover commits after accidental reference changes.
+Reflog is local.
+Reflog is not the same as shared commit history.
+Reflog entries can expire.
+Reflog should not be treated as permanent archival history.
+git fsck checks repository object connectivity and validity according to Git's checks.
+Repository integrity checks can detect some corruption.
+A successful git fsck does not prove source-code correctness.
+Repository structural integrity and software correctness are separate.
+Git garbage collection performs repository maintenance.
+git gc can compress objects and remove eligible unreachable data according to retention behavior.
+Git object retention should not be mistaken for a permanent backup guarantee.
+Important historical records should remain reachable through appropriate references and repository policy.
+A Git repository is a development record.
+Repository history can support auditability.
+Repository history can support debugging.
+Repository history can support release management.
+Repository history can support rollback planning.
+Repository history can support source provenance.
+Repository history should not be silently rewritten when governing policy requires permanent historical evidence.
+Version control does not replace operational logs.
+Git records source and tracked-file history.
+Operational logs record runtime events.
+A runtime failure can occur without any source change.
+A source change can occur without being deployed.
+Both histories can matter during investigation.
+A source commit timestamp is not a runtime event timestamp.
+A deployment timestamp is not necessarily a commit timestamp.
+A log timestamp is not necessarily a deployment timestamp.
+Incident timelines should distinguish these events.
+A source repository can prove that a particular source state existed in repository history.
+It does not automatically prove that state executed on a particular machine.
+Deployment evidence is required for deployment claims.
+Build evidence is required for build claims.
+Runtime evidence is required for runtime claims.
+Git should be used for what Git actually proves.
+git remote -v can display configured remote locations.
+Remote configuration is local repository state.
+A remote URL does not prove current network availability.
+A remote URL does not prove authentication will succeed.
+A remote URL does not prove the repository still exists.
+git fetch provides stronger evidence that remote communication and Git protocol operations succeeded at that time.
+A failed fetch can result from networking.
+A failed fetch can result from authentication.
+A failed fetch can result from authorization.
+A failed fetch can result from repository absence.
+A failed fetch can result from protocol or server failure.
+The actual error should be preserved.
+A Git network failure is not a source-code failure.
+A Git authentication failure is not a merge conflict.
+A merge conflict is not a repository corruption error.
+A dirty working tree is not a remote outage.
+Failure categories should remain precise.
+Git can use HTTPS transport.
+Git can use SSH transport.
+Authentication mechanisms depend on transport and hosting configuration.
+SSH keys can authenticate Git access.
+HTTPS tokens or credentials can authenticate Git access.
+A Git signing key and a Git transport authentication key serve different purposes.
+Using an SSH key to access a repository does not automatically sign commits.
+Signing a commit does not automatically grant push permission.
+Authentication, authorization, and signing remain separate.
+Branches can be protected on hosting platforms.
+Branch protection is a hosting-platform feature rather than a fundamental Git object property.
+Protected branches can require reviews.
+Protected branches can require status checks.
+Protected branches can restrict force pushes.
+Protected branches can restrict direct pushes.
+Protection rules support workflow policy.
+Repository administrators can have authority to alter protection depending on platform policy.
+Technical controls implement governance but do not define governance by themselves.
+A pull request proposes integrating changes according to hosting workflow.
+A pull request is not itself a Git commit.
+A pull request can contain multiple commits.
+A pull request can change as commits are added.
+Approval of a pull request is a workflow event.
+Merge of a pull request changes repository references according to merge strategy.
+Approval does not mean merge occurred.
+Merge does not mean deployment occurred.
+Deployment does not mean runtime qualification passed.
+Lifecycle stages should remain explicit.
+A release should identify its source revision.
+A source revision should identify the exact commit.
+A release artifact can have a cryptographic hash.
+A release artifact can have a digital signature.
+The source commit, artifact hash, artifact signature, application version, and ABI version are distinct identifiers.
+Keeping them distinct improves traceability.
+A controlled document can record a Git revision when source provenance matters.
+A SHA-256 document hash and a Git commit identifier are different hashes with different purposes.
+One should not be substituted for the other merely because both are represented as hexadecimal strings.
+Hash purpose matters.
+A repository can store documentation.
+Documentation should be versioned when changes must track software evolution.
+Documentation history allows engineers to determine what instructions applied to earlier releases.
+Current documentation should describe current software unless explicitly labeled historical.
+A README should avoid presenting historical values ambiguously as current values.
+A changelog is a better place for chronological version history.
+A README can link to historical documentation.
+A current ABI field should state one current ABI value.
+Historical ABI progression can be stored separately.
+This reduces retrieval ambiguity for humans and automated systems.
+Machine-readable metadata is preferable for machine-critical facts.
+An ABI constant in an authoritative header can be parsed deterministically.
+A module manifest can declare the ABI it targets.
+A loader can compare module ABI with host ABI.
+The loader should not search README prose to determine ABI compatibility.
+Documentation is for explanation.
+Machine interfaces should rely on machine-readable contracts.
+Automated systems should prefer structured authoritative sources over prose when both exist.
+If an authoritative source says ABI 1.5 and a README says ABI 1.4, the sources conflict.
+The conflict should be identified.
+The system should not average them.
+The system should not concatenate them.
+The system should not invent ABI 1.45.
+The governing source determines current state according to architecture.
+The stale documentation should then be corrected.
+Correcting documentation reduces future ambiguity.
+Deleting legitimate historical information is not necessary when it is clearly labeled as historical.
+History and current state can coexist safely when their roles are explicit.
+Git exists in part to make that coexistence practical.
+Version control preserves the past without requiring the past to masquerade as the present.

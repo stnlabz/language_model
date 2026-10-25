@@ -1,0 +1,2583 @@
+TLS stands for Transport Layer Security.
+
+TLS is a cryptographic protocol used to protect communication between networked applications.
+
+TLS can provide confidentiality.
+
+TLS can provide integrity.
+
+TLS can provide authentication.
+
+The exact properties established depend on the protocol version, configuration, authentication method, certificate validation, cryptographic algorithms, and application behavior.
+
+TLS is not an application protocol.
+
+TLS can protect application protocols.
+
+HTTPS is HTTP carried over TLS.
+
+TLS can protect other protocols.
+
+Do not confuse TLS with HTTPS.
+
+Do not confuse TLS with HTTP.
+
+Do not confuse TLS with TCP.
+
+Do not confuse TLS with DNS.
+
+These are separate layers.
+
+A common connection sequence is:
+
+Resolve a hostname.
+
+Establish a network connection.
+
+Establish a transport connection.
+
+Perform the TLS handshake.
+
+Validate the peer identity.
+
+Establish TLS session keys.
+
+Exchange protected application data.
+
+Each stage can fail independently.
+
+A DNS lookup succeeding does not prove TLS will succeed.
+
+A TCP connection succeeding does not prove TLS will succeed.
+
+A TLS handshake succeeding does not automatically prove the application request will succeed.
+
+Identify the failing layer.
+
+TLS commonly operates over TCP.
+
+TLS is not part of TCP.
+
+TCP provides an ordered byte stream.
+
+TLS protects data carried over that stream.
+
+TLS records are transported through TCP.
+
+TCP does not understand TLS certificates.
+
+TCP does not perform TLS authentication.
+
+TCP does not encrypt application data by itself.
+
+TLS 1.3 is a modern TLS protocol version.
+
+TLS 1.2 remains widely deployed.
+
+Older protocol versions have weaker or obsolete properties and can be disabled according to security requirements.
+
+Protocol version support should be deliberate.
+
+Do not enable obsolete protocol versions merely because an old client requests them unless compatibility requirements explicitly authorize that risk.
+
+TLS protocol negotiation determines which mutually supported TLS version is used according to protocol rules.
+
+The client offers supported capabilities.
+
+The server selects according to the protocol and its configuration.
+
+The selected version must be acceptable to both participants.
+
+Do not assume the highest version supported by the server is always the version used.
+
+The client also matters.
+
+A TLS handshake establishes cryptographic parameters before protected application communication proceeds.
+
+The handshake can negotiate protocol version.
+
+The handshake can negotiate cryptographic algorithms.
+
+The handshake can establish shared key material.
+
+The handshake can authenticate the server.
+
+The handshake can optionally authenticate the client.
+
+The handshake binds selected negotiation state cryptographically.
+
+Do not treat the handshake as merely an exchange of certificates.
+
+Certificates are one part of common TLS authentication.
+
+A TLS certificate commonly uses the X.509 certificate format.
+
+A certificate binds selected identity information to a public key according to a signature and trust model.
+
+A certificate contains a public key or information associated with one.
+
+A certificate contains validity information.
+
+A certificate contains issuer information.
+
+A certificate contains subject-related information.
+
+A certificate can contain Subject Alternative Name information.
+
+A certificate contains a digital signature from its issuer or is otherwise part of a defined trust structure.
+
+A certificate is not a private key.
+
+The public certificate can be distributed.
+
+The private key must remain protected.
+
+Possession of a certificate file does not prove possession of its private key.
+
+A TLS server commonly needs access to the private key corresponding to its certificate.
+
+The server proves possession of appropriate private key material during the TLS handshake according to the selected protocol and authentication method.
+
+Do not send a server's private key to clients.
+
+Clients do not need the server private key to verify the server.
+
+Public-key cryptography allows verification using public information.
+
+Private keys are secrets.
+
+Protect them accordingly.
+
+A certificate authority is commonly abbreviated CA.
+
+A CA can issue certificates according to a public-key infrastructure.
+
+A root CA certificate can serve as a trust anchor.
+
+Intermediate CAs can issue certificates beneath a root or another intermediate.
+
+A server certificate is commonly an end-entity certificate.
+
+A certificate chain connects the end-entity certificate through issuer relationships toward a trusted root according to validation rules.
+
+A server commonly sends its end-entity certificate and required intermediate certificates.
+
+The trusted root is commonly already present in the client's trust store.
+
+The server generally does not need to send the root certificate.
+
+Certificate-chain validation is more than checking that certificate files exist.
+
+The client validates cryptographic signatures.
+
+The client validates issuer relationships.
+
+The client validates certificate validity periods.
+
+The client validates constraints.
+
+The client validates intended usage.
+
+The client validates hostname or application identity where required.
+
+The client determines whether the chain reaches an accepted trust anchor.
+
+If required validation fails, the peer is not authenticated according to that validation policy.
+
+Do not continue as though authentication succeeded.
+
+A certificate can be cryptographically valid but inappropriate for the requested hostname.
+
+Trusting the issuing CA is not sufficient by itself.
+
+Application identity must also be checked.
+
+For HTTPS, hostname verification is essential.
+
+If the client requested example.com, the certificate must be valid for example.com according to certificate identity rules.
+
+A certificate valid for another.example does not become valid for example.com merely because both names resolve to the same IP address.
+
+DNS address equality does not establish TLS identity equality.
+
+The requested hostname matters.
+
+Subject Alternative Name is commonly abbreviated SAN.
+
+Modern certificate hostname identity is represented using SAN entries according to applicable certificate validation rules.
+
+A certificate can contain multiple DNS names.
+
+A certificate can contain IP address identities.
+
+DNS-name identity and IP-address identity are distinct.
+
+A certificate for a DNS name does not automatically validate when connecting by raw IP address.
+
+The certificate must contain the required identity according to the validation rules.
+
+Do not disable hostname validation merely because the server is reachable.
+
+Reachability is not identity.
+
+A wildcard certificate can cover selected subdomains according to certificate matching rules.
+
+A wildcard such as *.example.com does not mean arbitrary recursive matching at every depth.
+
+Wildcard matching has defined semantics.
+
+Do not treat TLS certificate wildcards as shell wildcards.
+
+Do not confuse a wildcard certificate with a wildcard DNS record.
+
+They are independent.
+
+Certificate validity has a start and end.
+
+A certificate can be not yet valid.
+
+A certificate can be expired.
+
+System time therefore matters.
+
+A machine with substantially incorrect time can reject otherwise legitimate certificates.
+
+Do not disable certificate validation to work around a broken clock.
+
+Correct the clock.
+
+Certificate expiration does not mean encryption mathematically stops functioning.
+
+It means the certificate no longer satisfies its validity policy.
+
+The connection should fail validation when expiration is disallowed.
+
+Operational certificate renewal should occur before expiration.
+
+Certificate renewal creates or obtains a certificate with a new validity period.
+
+Renewal can also involve new key material.
+
+Exact behavior depends on certificate management policy.
+
+Automated renewal reduces operational failure risk.
+
+Automation should still be monitored.
+
+A renewal process succeeding does not prove the application loaded the new certificate.
+
+Verify the active service certificate.
+
+A certificate file on disk can be current while the running process still serves an older certificate loaded into memory.
+
+The service can require reload or restart according to implementation.
+
+Verify over the actual network interface.
+
+Do not infer active certificate state solely from filesystem contents.
+
+Certificate revocation provides mechanisms for indicating that a certificate should no longer be trusted before normal expiration.
+
+CRLs are Certificate Revocation Lists.
+
+OCSP is the Online Certificate Status Protocol.
+
+Revocation behavior varies by client, certificate ecosystem, and policy.
+
+Do not assume every TLS client checks revocation identically.
+
+Revocation is not a replacement for protecting private keys.
+
+If a private key is compromised, respond according to certificate and key-compromise procedures.
+
+Replace compromised key material.
+
+Revoke certificates where appropriate.
+
+Do not continue trusting the old key merely because its certificate has not expired.
+
+A private key compromise is different from a certificate expiration.
+
+A private key should have restricted filesystem permissions.
+
+A private key should not be committed to source control.
+
+A private key should not be included in public container images.
+
+A private key should not be printed into ordinary logs.
+
+A private key should not be transmitted through insecure channels.
+
+A private key should not be embedded in client software when it represents server identity.
+
+Treat private keys as security-sensitive material.
+
+A certificate signing request is commonly abbreviated CSR.
+
+A CSR contains information used when requesting a certificate and demonstrates possession of selected key material according to its format.
+
+A CSR is not the resulting certificate.
+
+A CSR is not the private key.
+
+Creating a CSR does not itself create trust.
+
+A CA or other authorized issuance mechanism must issue the certificate according to policy.
+
+Self-signed certificates are signed using their own corresponding private key rather than through an external CA chain.
+
+A self-signed certificate can provide encryption.
+
+It can support authentication if the client explicitly trusts that certificate or key through a secure mechanism.
+
+A self-signed certificate is not automatically insecure.
+
+The problem is trust establishment.
+
+If a client blindly accepts any self-signed certificate, authentication is absent.
+
+If a specific self-signed certificate is securely provisioned as a trust anchor, it can provide authenticated identity within that trust model.
+
+Do not confuse public CA issuance with the only possible trust model.
+
+Private certificate authorities can establish organizational trust.
+
+Pinned certificates or public keys can establish selected trust relationships.
+
+Preconfigured trust anchors can establish selected trust relationships.
+
+The trust mechanism must be defined.
+
+Do not trust a certificate merely because it is syntactically valid.
+
+Certificate validation answers whether the presented identity satisfies the configured trust rules.
+
+It does not answer whether the application operation is authorized.
+
+Authentication and authorization are separate.
+
+A valid TLS client certificate can authenticate a client identity.
+
+The application must still determine what that identity is allowed to do.
+
+Do not grant administrative access merely because mutual TLS succeeded unless policy maps that identity to administrative authority.
+
+Mutual TLS is commonly abbreviated mTLS.
+
+Ordinary public HTTPS commonly authenticates the server to the client.
+
+mTLS additionally authenticates the client using TLS certificate mechanisms.
+
+Both participants can therefore present cryptographic identity.
+
+mTLS does not automatically define application roles.
+
+It establishes identities according to certificate validation.
+
+Authorization remains an application decision.
+
+TLS uses symmetric cryptography for bulk protected communication after key establishment.
+
+Symmetric cryptography is efficient for application data.
+
+Public-key or related asymmetric mechanisms are used during authentication and key establishment according to the selected TLS version and cipher suite.
+
+Do not assume every application byte is encrypted directly using the certificate's public key.
+
+That is not how ordinary TLS data protection works.
+
+Session keys protect the connection.
+
+TLS 1.3 uses modern key-establishment mechanisms according to its protocol.
+
+Ephemeral key exchange can provide forward secrecy.
+
+Forward secrecy means compromise of a long-term authentication key does not automatically reveal past session keys when the protocol and key exchange provide that property and ephemeral secrets are no longer available.
+
+Forward secrecy is not retroactive protection against every form of compromise.
+
+If an attacker captured plaintext at an endpoint, TLS cannot recover confidentiality.
+
+Endpoint security remains necessary.
+
+TLS protects data in transit between TLS endpoints.
+
+TLS does not protect plaintext before encryption at the sending endpoint.
+
+TLS does not protect plaintext after decryption at the receiving endpoint.
+
+If a reverse proxy terminates TLS, traffic beyond that proxy is outside that TLS connection.
+
+It can be protected by another TLS connection.
+
+It can be plaintext.
+
+Architecture determines the protection boundary.
+
+Do not say traffic is end-to-end encrypted merely because the public-facing connection uses TLS if an intermediary terminates TLS.
+
+Identify the actual endpoints.
+
+A load balancer can terminate TLS.
+
+A web server can terminate TLS.
+
+A reverse proxy can terminate TLS.
+
+An application can terminate TLS directly.
+
+TLS termination determines where ciphertext becomes plaintext.
+
+That boundary matters for security.
+
+A proxy can establish another TLS connection to an upstream server.
+
+This is a separate TLS session.
+
+The client-to-proxy session and proxy-to-upstream session have different cryptographic state.
+
+Do not treat them as one continuous TLS session.
+
+TLS confidentiality prevents passive observers between the TLS endpoints from reading protected application data when the protocol is securely configured and uncompromised.
+
+TLS integrity detects unauthorized modification of protected records according to the cryptographic protocol.
+
+TLS authentication establishes selected peer identity according to certificate or other configured authentication mechanisms.
+
+These properties depend on successful validation.
+
+Encryption without authentication can remain vulnerable to active interception.
+
+Do not disable certificate verification and then claim ordinary authenticated TLS security.
+
+A man-in-the-middle attack places an attacker between communicating parties.
+
+Proper certificate validation helps prevent an attacker from impersonating the intended TLS server without appropriate trusted credentials.
+
+If the client accepts any certificate, the attacker can present their own certificate and defeat intended server authentication.
+
+Certificate verification is not optional decoration.
+
+It is central to authenticated TLS.
+
+TLS cipher suites identify combinations of cryptographic mechanisms according to the TLS version.
+
+TLS 1.3 cipher-suite semantics differ from TLS 1.2.
+
+Do not interpret a TLS 1.3 cipher-suite name using TLS 1.2 assumptions.
+
+Protocol version matters.
+
+Modern TLS libraries should generally choose secure defaults unless application requirements require explicit configuration.
+
+Do not construct custom cryptographic algorithm combinations casually.
+
+Cryptographic agility allows protocols and implementations to replace algorithms over time.
+
+Agility does not mean every algorithm should remain enabled.
+
+Weak algorithms should be retired.
+
+Unsupported algorithms should fail negotiation rather than trigger improvised fallback.
+
+TLS negotiation should not silently downgrade below configured security requirements.
+
+Downgrade protection exists in modern TLS mechanisms.
+
+Applications should configure minimum acceptable versions.
+
+Do not enable insecure fallback merely to make a connection succeed.
+
+A failed secure connection is evidence of incompatibility or configuration failure.
+
+Turning off security can hide the problem rather than solve it.
+
+TLS 1.3 simplified and removed selected older cryptographic mechanisms.
+
+TLS 1.3 does not use the same handshake flow as TLS 1.2.
+
+Do not assume packet sequences are identical across versions.
+
+Diagnostic tools must account for protocol version.
+
+TLS records encapsulate protected protocol data.
+
+Applications generally should not manually construct TLS records.
+
+Use a maintained TLS implementation.
+
+TLS is complex.
+
+Correct cryptographic implementation requires precise protocol compliance.
+
+Do not write custom TLS merely to avoid a library dependency.
+
+Use established libraries unless the project specifically requires protocol implementation research.
+
+TLS libraries include implementations such as OpenSSL and platform-provided cryptographic stacks.
+
+Different platforms can expose different APIs.
+
+Protocol behavior should remain standards-compliant even when implementation APIs differ.
+
+Do not bind application semantics to one TLS library unnecessarily.
+
+Platform abstraction can isolate implementation details.
+
+Security requirements should remain consistent across platforms.
+
+A TLS client begins with information about the intended server.
+
+For hostname-based services, this commonly includes the hostname.
+
+The hostname can be used for certificate validation.
+
+The hostname can also be sent through Server Name Indication.
+
+Server Name Indication is commonly abbreviated SNI.
+
+SNI allows a client to indicate the intended hostname during the TLS handshake.
+
+This allows one server address to host multiple TLS identities.
+
+SNI is not DNS.
+
+SNI does not resolve a hostname.
+
+SNI communicates a server-name indication after network connection establishment begins.
+
+The server can use SNI to select a certificate or virtual host.
+
+A missing or incorrect SNI value can cause the server to present an unexpected certificate.
+
+This can lead to hostname-validation failure.
+
+Do not conclude the certificate installation is universally broken until the SNI behavior is checked.
+
+Connecting directly to an IP address while expecting a name-based virtual host can produce a different certificate.
+
+Diagnostic tools should send the intended SNI hostname.
+
+Application-Layer Protocol Negotiation is commonly abbreviated ALPN.
+
+ALPN allows peers to negotiate selected application protocols within the TLS handshake.
+
+HTTP/2 commonly uses ALPN.
+
+HTTP/1.1 can be selected according to negotiation.
+
+ALPN does not replace the application protocol.
+
+It selects or identifies which supported application protocol will be used over the TLS connection.
+
+Do not confuse ALPN with TCP port selection.
+
+Port 443 is conventionally used for HTTPS.
+
+TLS itself is not restricted to port 443.
+
+TLS can operate on other ports.
+
+Other protocols can use TLS on their assigned or configured ports.
+
+Port number does not prove TLS is present.
+
+A service listening on 443 can still be misconfigured.
+
+A TLS handshake test establishes whether TLS actually responds.
+
+Likewise, a TLS service can run on a nonstandard port.
+
+Do not identify protocol solely by port number.
+
+HTTPS commonly uses URI scheme https.
+
+The scheme indicates HTTP over a secure TLS connection according to HTTPS semantics.
+
+The server's certificate identity should correspond to the requested host.
+
+The HTTP Host header and TLS SNI can both involve the requested hostname but operate at different layers.
+
+SNI is used during TLS handshake.
+
+The HTTP Host field is part of the later HTTP request.
+
+Do not confuse them.
+
+TLS must normally be established before encrypted HTTP headers can be exchanged.
+
+Therefore the server can need SNI before it sees the HTTP Host header.
+
+This is why SNI matters for certificate selection.
+
+TLS handshake failure occurs before ordinary protected application exchange.
+
+An HTTP status code is not normally available when TLS itself cannot be established.
+
+If a client reports certificate failure, debugging HTTP routing first can be premature.
+
+Establish TLS success first.
+
+Then inspect HTTP.
+
+TLS errors can include:
+
+Unsupported protocol version.
+
+No mutually supported cryptographic parameters.
+
+Certificate expired.
+
+Certificate not yet valid.
+
+Certificate hostname mismatch.
+
+Untrusted issuer.
+
+Incomplete certificate chain.
+
+Invalid certificate signature.
+
+Certificate usage violation.
+
+Revoked certificate according to applicable checking.
+
+TLS handshake timeout.
+
+Connection closed during handshake.
+
+Incorrect SNI.
+
+Client certificate required but missing.
+
+Client certificate rejected.
+
+Do not collapse every TLS error into "SSL error."
+
+Preserve the specific failure.
+
+SSL is the historical predecessor to TLS.
+
+Modern secure communication uses TLS.
+
+The term SSL is still used colloquially in phrases such as SSL certificate.
+
+Certificates used with TLS are not fundamentally a separate "SSL certificate" format merely because vendors use that phrase.
+
+Prefer TLS terminology when describing modern protocol behavior.
+
+Do not enable obsolete SSL protocol versions.
+
+SSLv2 and SSLv3 are obsolete.
+
+TLS replaced SSL.
+
+A certificate can be encoded in different representations.
+
+PEM is a textual representation commonly containing Base64-encoded certificate or key data with headers and footers.
+
+DER is a binary encoding.
+
+The same certificate information can be represented in PEM or DER form.
+
+PEM is not encryption.
+
+Base64 inside PEM is not encryption.
+
+A private key stored in PEM can be encrypted with a passphrase depending on the key format and configuration.
+
+Do not assume every PEM private key is encrypted.
+
+Inspect the format and protection method.
+
+File extensions are conventions.
+
+.crt can contain a certificate.
+
+.pem can contain certificates or keys.
+
+.key commonly contains key material.
+
+.p12 or .pfx commonly represents PKCS #12 containers.
+
+Extensions alone do not prove contents.
+
+Parse the actual format.
+
+A PKCS #12 container can package certificates and private keys.
+
+It can be protected by a password.
+
+Treat containers containing private keys as sensitive.
+
+A password-protected key file is not permission to expose it publicly.
+
+Password protection is one control.
+
+File access control still matters.
+
+A certificate chain file can contain multiple certificates.
+
+Ordering can matter to server configuration.
+
+The server should present the chain required for clients to construct validation toward a trusted root.
+
+Missing intermediates can cause some clients to fail.
+
+A browser succeeding does not prove every TLS client will succeed.
+
+Some clients can have cached intermediate certificates.
+
+Others may not.
+
+Test with clean or independent clients when chain completeness matters.
+
+Do not depend on clients accidentally possessing a missing intermediate.
+
+The server should provide the required chain.
+
+Trust stores differ.
+
+Operating systems can maintain trust stores.
+
+Browsers can use operating-system trust stores or their own trust mechanisms depending on implementation.
+
+Applications can ship private trust stores.
+
+Containers can have separate CA bundles.
+
+A certificate trusted on one machine can be untrusted on another.
+
+Do not conclude a certificate is universally trusted from one successful client.
+
+Determine the trust store being used.
+
+Private CA deployments require clients to trust the appropriate CA.
+
+Installing a private CA into one host does not make every other host trust it.
+
+Trust distribution is an administrative operation.
+
+Do not disable verification on clients merely because the private CA has not been installed.
+
+Install the intended trust anchor.
+
+Certificate pinning restricts trust to selected certificate or public-key information according to application design.
+
+Pinning can reduce dependence on the broader CA ecosystem.
+
+Pinning also creates operational risk during key rotation.
+
+A new legitimate certificate can fail if its key does not match the pin.
+
+Pin lifecycle must be planned.
+
+Do not add certificate pinning casually.
+
+Trust-on-first-use is a different trust model.
+
+A client records an identity when first observed and detects unexpected changes later.
+
+This model is used by selected protocols and applications.
+
+It is not the ordinary public Web PKI model.
+
+Do not describe TOFU as equivalent to CA validation.
+
+Each has different assumptions.
+
+TLS session resumption can allow returning clients to establish protected sessions with reduced handshake overhead.
+
+TLS 1.3 supports session resumption mechanisms.
+
+Resumption uses previously established cryptographic state or tickets according to protocol.
+
+A resumed session is still a TLS session.
+
+Session tickets can have security implications.
+
+Ticket key management matters.
+
+Do not treat session tickets as harmless opaque strings if the server's implementation assigns them cryptographic significance.
+
+TLS 1.3 can support 0-RTT early data under selected conditions.
+
+0-RTT has replay considerations.
+
+Early data does not have all the same security properties as ordinary post-handshake application data.
+
+Applications should not use replay-sensitive operations in 0-RTT unless the protocol and application explicitly handle replay risk.
+
+A read-only idempotent request can be more suitable than a transaction that transfers value.
+
+Do not enable 0-RTT blindly.
+
+Replay safety is an application property.
+
+TLS cannot determine whether an application operation is safe to repeat.
+
+Application design must decide.
+
+TLS handshake state should not be confused with application authentication state.
+
+A server can authenticate through TLS.
+
+The user can still need to log in.
+
+A client can authenticate with a TLS certificate.
+
+The application can still require session authorization.
+
+Transport identity and user identity can be different.
+
+Keep them separate.
+
+TLS protects transport contents.
+
+It does not prevent an authenticated application user from submitting malicious input.
+
+SQL injection remains possible over HTTPS.
+
+Cross-site scripting remains possible over HTTPS.
+
+Authorization flaws remain possible over HTTPS.
+
+Application vulnerabilities remain possible over HTTPS.
+
+TLS protects the connection.
+
+It does not make the application secure.
+
+HTTPS does not make untrusted content trustworthy.
+
+A malicious server can have a valid certificate for its own domain.
+
+A valid certificate proves selected domain identity according to the trust model.
+
+It does not certify that the website is honest.
+
+Do not interpret the browser lock indicator as a statement about content quality.
+
+TLS does not prevent denial-of-service attacks.
+
+TLS handshakes consume resources.
+
+Attackers can create connection load.
+
+Rate limiting and resource controls remain necessary.
+
+TLS can increase computational cost compared with plaintext transport.
+
+Modern TLS is generally efficient.
+
+Do not disable TLS merely for speculative performance reasons.
+
+Measure actual performance.
+
+Connection reuse can reduce repeated handshake cost.
+
+Session resumption can reduce handshake overhead.
+
+Hardware acceleration can help selected workloads.
+
+Security and performance should be measured, not guessed.
+
+TLS handshakes have latency.
+
+Network round trips contribute.
+
+TLS 1.3 reduces handshake round trips compared with older designs in common cases.
+
+DNS latency and TCP connection latency can occur before the TLS handshake.
+
+When measuring HTTPS startup time, separate:
+
+DNS time.
+
+TCP connection time.
+
+TLS handshake time.
+
+Server processing time.
+
+Application transfer time.
+
+Do not attribute all latency to TLS.
+
+TLS uses randomness.
+
+Cryptographic random values and ephemeral keys require secure random-number generation.
+
+Do not substitute predictable pseudorandom values for cryptographic randomness.
+
+Use operating-system or cryptographic-library secure random sources.
+
+Do not seed cryptographic randomness with timestamps.
+
+Do not create private keys using weak randomness.
+
+Key generation must use appropriate cryptographic mechanisms.
+
+Private-key strength depends on algorithm and parameter selection.
+
+Do not invent key sizes.
+
+Use established security profiles and current cryptographic guidance.
+
+Certificate algorithms can include RSA.
+
+Certificate algorithms can include elliptic-curve algorithms.
+
+TLS key exchange and certificate signature algorithms are separate concepts.
+
+An RSA certificate does not necessarily imply old RSA key exchange.
+
+Modern TLS can use ephemeral key exchange while authenticating with an RSA certificate.
+
+Do not infer the complete TLS cryptographic design from the certificate key type alone.
+
+A cipher suite and certificate must be mutually compatible according to the TLS version and negotiated signature mechanisms.
+
+TLS libraries handle negotiation.
+
+Misconfigured algorithm restrictions can make otherwise valid certificates unusable.
+
+Diagnose the actual negotiation failure.
+
+Do not regenerate certificates randomly when the failure is an unrelated protocol mismatch.
+
+TLS record encryption uses authenticated encryption in modern configurations.
+
+Authenticated encryption combines confidentiality with integrity/authenticity properties for protected records according to the cryptographic scheme.
+
+Do not implement encryption and message authentication independently without protocol specification.
+
+Use TLS.
+
+TLS protects record contents but does not hide all metadata.
+
+An observer can commonly see endpoint IP addresses.
+
+An observer can see connection timing.
+
+An observer can see approximate traffic volume.
+
+Depending on protocol features and deployment, selected handshake metadata can be visible.
+
+Encryption does not make network activity invisible.
+
+Traffic analysis can still reveal information.
+
+SNI historically has commonly been visible during TLS handshake.
+
+Encrypted Client Hello is intended to protect more ClientHello information in supported deployments.
+
+Availability and deployment vary.
+
+Do not assume every TLS connection hides the requested hostname from network observers.
+
+DNS queries can also reveal hostnames unless protected through appropriate mechanisms.
+
+TLS and DNS privacy are separate.
+
+Certificate Transparency is an ecosystem mechanism for publicly logging issued certificates according to CT rules.
+
+Publicly trusted certificates can therefore reveal domain names appearing in certificates.
+
+Do not put secret internal names into publicly logged certificates without understanding the disclosure implications.
+
+Certificate issuance can create public metadata.
+
+TLS certificates should identify services intentionally.
+
+A certificate should not be used as a generic container for unrelated identity data.
+
+Minimize unnecessary SAN entries.
+
+Certificate scope affects compromise impact and operational complexity.
+
+A wildcard certificate used across many systems concentrates private-key risk if the same key is widely distributed.
+
+One compromised server can expose the shared key.
+
+Separate certificates or keys can reduce blast radius.
+
+Architecture determines the appropriate balance.
+
+Do not copy one private key everywhere merely because it is convenient.
+
+Automated certificate issuance can reduce the need for shared wildcard keys.
+
+ACME is a protocol used for automated certificate management.
+
+ACME can automate certificate issuance and renewal through supported certificate authorities.
+
+ACME validation mechanisms establish control according to challenge rules.
+
+HTTP-based challenges can use HTTP resources.
+
+DNS-based challenges can use DNS records.
+
+A successful ACME challenge proves the control required by that challenge.
+
+It does not grant unrelated application authority.
+
+DNS-based certificate validation commonly requires publishing a specific DNS record.
+
+The DNS record can be temporary.
+
+Do not leave unnecessary validation records indefinitely if the process does not require them.
+
+Automated DNS modification credentials should have the minimum authority necessary.
+
+Do not give a certificate-renewal process unrestricted DNS account control if narrower authorization is possible.
+
+Credential scope matters.
+
+Certificate automation should fail safely.
+
+If renewal fails, preserve the currently valid certificate.
+
+Do not replace a valid certificate with an incomplete or invalid file.
+
+Write new material separately.
+
+Validate it.
+
+Install atomically where practical.
+
+Reload the service.
+
+Verify the active endpoint.
+
+Only then declare renewal successful.
+
+Certificate deployment should preserve key and certificate pairing.
+
+A certificate with the wrong private key will fail.
+
+Validate that the certificate public key corresponds to the intended private key before deployment.
+
+Do not discover the mismatch only after restarting production service.
+
+Configuration validation should occur before reload where server software supports it.
+
+A service reload can fail.
+
+The old process can remain running.
+
+The service can stop.
+
+Exact behavior depends on implementation.
+
+Verify actual process and endpoint state after changes.
+
+TLS monitoring should include certificate expiration.
+
+TLS monitoring can include protocol versions.
+
+TLS monitoring can include chain validity.
+
+TLS monitoring can include hostname validation.
+
+TLS monitoring can include handshake success.
+
+TLS monitoring can include negotiated application protocol.
+
+TLS monitoring can include certificate fingerprint changes.
+
+Do not monitor only whether TCP port 443 is open.
+
+A listening port is not proof of valid TLS.
+
+Certificate fingerprints are hashes of certificate bytes according to a selected hash algorithm.
+
+A fingerprint identifies a specific certificate representation.
+
+Renewing a certificate can change the fingerprint even if the hostname and public key remain similar.
+
+Do not use a certificate fingerprint as permanent service identity unless the system intentionally pins that exact certificate.
+
+Public-key fingerprints can remain stable across certificate renewal if the same key is reused.
+
+Whether key reuse is appropriate depends on policy.
+
+Do not assume renewal preserves the key.
+
+Certificate serial numbers identify certificates within issuer semantics.
+
+They are not universal service identifiers.
+
+Do not use certificate serial numbers as application account identity without explicit design.
+
+TLS errors should be logged carefully.
+
+Log protocol failure information.
+
+Log certificate validation reason.
+
+Log peer address where operationally appropriate.
+
+Do not log private keys.
+
+Do not log session secrets.
+
+Do not dump sensitive application plaintext merely because debugging TLS.
+
+Diagnostic evidence should not create a new compromise.
+
+TLS key logging exists in selected debugging environments and can permit traffic decryption.
+
+Such material is highly sensitive.
+
+Do not enable TLS session-key logging in production casually.
+
+Protect diagnostic key logs as secrets.
+
+Remove them when no longer required.
+
+Packet capture of encrypted TLS traffic does not normally reveal plaintext without relevant secrets or endpoint compromise.
+
+A packet capture can still show handshake information and metadata.
+
+Do not claim packet capture contains no useful information merely because payloads are encrypted.
+
+TLS can fail because the network modifies or blocks handshake traffic.
+
+Middleboxes can interfere.
+
+Old proxies can reject modern protocol versions.
+
+Firewalls can block ports.
+
+Transparent inspection systems can substitute certificates.
+
+A substituted certificate will validate only if the client trusts the inspecting authority and hostname requirements are met.
+
+Do not ignore unexpected certificate issuers.
+
+They can indicate legitimate organizational inspection.
+
+They can also indicate interception.
+
+Determine the environment.
+
+TLS interception changes the security boundary.
+
+The inspecting intermediary terminates one TLS connection and establishes another.
+
+It can see plaintext.
+
+Do not call such a connection cryptographically end-to-end between original client and origin server.
+
+It is two protected connections with an intermediary.
+
+A reverse proxy is similar structurally, though intentionally part of the service architecture.
+
+Identify every termination point.
+
+TLS does not authenticate IP routing.
+
+An attacker can redirect traffic toward another address.
+
+Certificate validation should still reject an endpoint unable to authenticate as the intended hostname.
+
+This is one reason DNS compromise does not automatically defeat properly validated HTTPS.
+
+If the attacker also controls or obtains trusted certificate credentials for the hostname, the situation changes.
+
+Security properties depend on multiple systems.
+
+DNSSEC and TLS can complement each other.
+
+DNSSEC authenticates selected DNS data.
+
+TLS authenticates the application endpoint according to its trust model and protects transport.
+
+Neither universally replaces the other.
+
+DANE is a mechanism that can associate TLS information with DNSSEC-authenticated DNS records for supported applications.
+
+DANE depends on DNSSEC validation.
+
+DANE is not ordinary public Web PKI behavior in every client.
+
+Do not assume browser support or application behavior without evidence.
+
+TLSA records are used by DANE.
+
+A TLSA record's meaning depends on its usage, selector, matching type, and DNSSEC-authenticated context.
+
+Do not treat a TLSA record as a generic certificate fingerprint.
+
+Follow DANE rules.
+
+HTTP Strict Transport Security is commonly abbreviated HSTS.
+
+HSTS is an HTTP security policy instructing supporting clients to use HTTPS for a host according to defined rules.
+
+HSTS is not part of the TLS handshake.
+
+It is delivered through HTTP over a secure connection and affects future client behavior.
+
+Do not confuse HSTS with TLS itself.
+
+HSTS can reduce opportunities for downgrade to plaintext HTTP.
+
+HSTS does not repair an invalid TLS certificate.
+
+If HTTPS is broken, HSTS can make the site inaccessible rather than permit insecure fallback.
+
+That is intentional security behavior.
+
+HSTS preload is a browser ecosystem mechanism that can cause HTTPS enforcement before a site is first visited.
+
+Preload has operational consequences.
+
+Do not enable long-lived or preloaded HSTS without ensuring HTTPS can remain reliably available.
+
+Security policy creates obligations.
+
+TLS redirect behavior is an HTTP behavior.
+
+A server can redirect http:// requests to https://.
+
+The initial HTTP request before the redirect is not protected by the later TLS session.
+
+HSTS can address selected downgrade exposure for supporting clients.
+
+Do not describe an HTTP-to-HTTPS redirect itself as encryption of the original request.
+
+Cookies can have a Secure attribute.
+
+A Secure cookie is restricted to secure transport contexts according to browser rules.
+
+TLS provides the secure transport used by HTTPS.
+
+The Secure attribute is an HTTP cookie policy.
+
+Do not confuse cookie security attributes with TLS configuration.
+
+TLS protects data while in transit.
+
+Sensitive cookies still require application-level protections.
+
+TLS does not replace CSRF defenses.
+
+TLS does not replace secure session management.
+
+TLS does not replace input validation.
+
+TLS does not replace output encoding.
+
+TLS does not replace access control.
+
+TLS is one security layer.
+
+A TLS client should verify certificates by default.
+
+Turning verification off can be useful only in tightly controlled diagnostic circumstances where the lack of authentication is explicitly understood.
+
+Do not ship production code with certificate verification disabled.
+
+Do not set insecure flags merely to silence errors.
+
+Fix trust configuration.
+
+Development environments can use local certificate authorities.
+
+They can use self-signed certificates with explicitly provisioned trust.
+
+They can use development-specific certificates.
+
+The correct approach preserves meaningful certificate verification.
+
+Training developers to bypass TLS validation creates bad operational habits.
+
+A test should resemble the security properties expected in production where practical.
+
+Automated tests can use a dedicated test CA.
+
+The test client can trust that CA.
+
+Certificates can then test valid identity.
+
+Tests can deliberately include invalid hostname.
+
+Tests can include expired certificates.
+
+Tests can include unknown issuers.
+
+Tests can include missing intermediates.
+
+Tests should verify rejection behavior.
+
+A test that only confirms valid connections is incomplete for security-sensitive validation.
+
+Negative testing matters.
+
+TLS fuzzing can test protocol parsers.
+
+Malformed handshake messages should not crash implementations.
+
+Malformed certificates should be rejected.
+
+Oversized fields should be bounded.
+
+Invalid lengths should be rejected.
+
+Cryptographic failures should terminate safely.
+
+Use maintained libraries with extensive protocol testing.
+
+Do not treat successful handshakes as proof a TLS implementation is free from vulnerabilities.
+
+TLS configuration should have explicit minimum protocol versions.
+
+TLS configuration should have certificate sources.
+
+TLS configuration should have private-key sources.
+
+TLS configuration should define client authentication if required.
+
+TLS configuration can define trusted CA stores.
+
+TLS configuration can define ALPN support.
+
+TLS configuration can define session behavior.
+
+Keep configuration small.
+
+Do not enable features without requirements.
+
+Default secure configuration is preferable to sprawling custom cipher lists when the library's maintained defaults satisfy policy.
+
+Hard-coded cipher lists age.
+
+Cryptographic guidance changes.
+
+Libraries can update defaults.
+
+If policy requires explicit algorithms, document and maintain them.
+
+Do not copy a decade-old TLS configuration from a random tutorial.
+
+Security configuration has a lifecycle.
+
+Protocol deprecation should be planned.
+
+Client compatibility should be measured.
+
+If an obsolete client requires insecure TLS, determine whether supporting that client is authorized.
+
+Do not silently weaken security for every client because one obsolete system exists.
+
+Isolation can sometimes preserve legacy compatibility without weakening the main service.
+
+Architecture should reflect actual requirements.
+
+TLS can protect internal service-to-service communication.
+
+Internal networks are not automatically trusted.
+
+mTLS can authenticate services.
+
+Private PKI can issue service identities.
+
+Public CA certificates can also be used where appropriate.
+
+Do not assume internal traffic does not need protection merely because it uses private addresses.
+
+Likewise, do not deploy mTLS everywhere merely because it exists.
+
+Use security controls matching the threat model.
+
+Service identity should be stable enough for authorization.
+
+IP addresses can change.
+
+DNS names can change.
+
+Certificate identities can be designed around service names or other defined identities.
+
+The identity model should be explicit.
+
+Do not accidentally authorize based on whatever certificate subject string happens to be present.
+
+Parse certificate identity according to policy.
+
+Certificate subject fields can contain human-readable information.
+
+Do not parse arbitrary subject text as an authorization protocol unless explicitly defined.
+
+Structured SAN identifiers or other defined certificate fields can provide clearer machine identity.
+
+Avoid string-matching hacks.
+
+Client certificate validation should check the intended trust chain.
+
+It should check validity.
+
+It should check key usage or extended key usage as required.
+
+It should map the authenticated certificate to an application identity.
+
+It should then apply authorization.
+
+Each step is separate.
+
+A certificate being signed by a trusted CA does not mean every certificate from that CA should have identical application permissions.
+
+Identity mapping matters.
+
+Certificate rotation should not accidentally change application identity if identity is intended to remain stable.
+
+If authorization is pinned to an exact certificate fingerprint, renewal can break access.
+
+If authorization is based on a stable service identity contained in appropriately validated certificates, certificates can rotate while identity remains.
+
+Choose deliberately.
+
+Private-key rotation changes cryptographic identity material.
+
+Certificate renewal can occur with or without key rotation.
+
+These are not the same operation.
+
+Key rotation can reduce exposure from long-lived keys.
+
+It also requires coordination where pinning exists.
+
+Document lifecycle.
+
+TLS certificate chains should not contain unnecessary certificates.
+
+Sending the root is usually unnecessary.
+
+Sending unrelated intermediates adds size and ambiguity.
+
+Serve the chain required by clients.
+
+Keep it correct.
+
+TLS handshake size matters in high-volume environments.
+
+Large certificate chains increase transferred bytes.
+
+Multiple SAN entries increase certificate size.
+
+Performance considerations exist.
+
+Do not sacrifice validation for minor size savings.
+
+Optimize only after correctness.
+
+TLS handshake failures can be intermittent.
+
+Different servers behind a load balancer can serve different certificates.
+
+One node can have an expired certificate.
+
+One node can have an incomplete chain.
+
+SNI routing can select different configurations.
+
+IPv4 and IPv6 endpoints can serve different TLS configurations.
+
+Intermittent TLS errors require testing every relevant endpoint.
+
+Do not test one successful address and declare the service healthy.
+
+A DNS name can resolve to multiple addresses.
+
+Test each address with the intended SNI hostname when diagnosing endpoint consistency.
+
+The certificate should be appropriate across all intended endpoints.
+
+Protocol support should meet policy across all intended endpoints.
+
+Configuration drift can otherwise create random client failures.
+
+IPv4 and IPv6 should be checked separately where both are published.
+
+A correct IPv4 TLS service does not prove the IPv6 TLS service is correct.
+
+A AAAA record can direct clients to a different machine.
+
+Test both.
+
+Certificate renewal systems should cover every TLS termination point.
+
+A public hostname can terminate TLS at a CDN.
+
+It can terminate at a load balancer.
+
+It can terminate again at an origin.
+
+Each certificate lifecycle can differ.
+
+Know which certificate the public client sees.
+
+Do not renew an origin certificate and assume the edge certificate changed.
+
+Likewise, an edge certificate can be healthy while the proxy-to-origin TLS connection fails.
+
+Observe each boundary.
+
+TLS monitoring from outside measures client-visible behavior.
+
+Internal monitoring can measure upstream TLS.
+
+Both are useful.
+
+Do not substitute one for the other.
+
+External success does not prove every internal connection is protected correctly.
+
+Internal success does not prove public certificate validation works.
+
+A TLS handshake can succeed without application data being accepted.
+
+The application can reject authentication.
+
+The application can return HTTP 403.
+
+The application can return HTTP 500.
+
+The server can close after handshake.
+
+TLS success is evidence only for the transport-security stage.
+
+Do not report application health from handshake success alone.
+
+Likewise, an HTTP 500 received over HTTPS proves TLS and enough HTTP exchange succeeded.
+
+The failure is now at or beyond the application layer.
+
+Do not troubleshoot certificate trust when a valid HTTP response was already received unless separate evidence indicates TLS problems.
+
+Evidence narrows the failure domain.
+
+TLS certificates can contain names that no longer exist in DNS.
+
+Certificate issuance and DNS state are separate.
+
+A valid certificate for a hostname does not prove that hostname currently resolves.
+
+A resolving hostname does not prove a valid certificate exists.
+
+Both must work for ordinary HTTPS.
+
+TLS uses record sequence state internally.
+
+Applications should not assume they can splice ciphertext from different connections.
+
+Each connection has its own cryptographic context.
+
+Encrypted TLS bytes from one connection are not reusable as ordinary application payload on another connection.
+
+Do not cache encrypted records as though they were plaintext application responses.
+
+Cache application data at the correct layer.
+
+TLS termination can affect logging.
+
+A TLS-aware server can log protocol version and cipher.
+
+An upstream application behind a proxy might not directly know the client TLS parameters.
+
+If that information is forwarded in headers, those headers become trust-sensitive.
+
+Do not trust client-supplied headers claiming TLS state.
+
+Only trust proxy metadata from an authenticated, controlled proxy boundary.
+
+A client can send a header named X-Forwarded-Proto.
+
+That does not prove TLS was used unless the application trusts the proxy that sets or sanitizes that header.
+
+Transport facts must come from trusted infrastructure.
+
+TLS offload can create similar issues for secure-cookie generation and redirect logic.
+
+Applications behind proxies need correct trusted-proxy configuration.
+
+Do not blindly trust forwarding headers from the public Internet.
+
+TLS libraries report verification errors.
+
+Preserve them.
+
+An error such as hostname mismatch is different from unknown issuer.
+
+Unknown issuer is different from expiration.
+
+Expiration is different from protocol negotiation failure.
+
+The repair differs.
+
+Do not solve every certificate error by obtaining a new certificate.
+
+Find the actual failure.
+
+A certificate hostname mismatch can result from:
+
+Wrong certificate installed.
+
+Wrong SNI sent.
+
+Wrong virtual host selected.
+
+Connecting by IP while validating a DNS name incorrectly.
+
+DNS directing the client to an unintended TLS endpoint.
+
+Load-balancer configuration drift.
+
+Investigate evidence.
+
+An unknown issuer can result from:
+
+Missing intermediate.
+
+Private CA not trusted.
+
+Wrong certificate chain.
+
+Incorrect trust store.
+
+Interception by an untrusted proxy.
+
+Do not disable validation.
+
+Repair the chain or trust configuration.
+
+An expired certificate can result from:
+
+Renewal failure.
+
+Deployment failure.
+
+Service not reloaded.
+
+Traffic reaching an old node.
+
+Clock error.
+
+Wrong certificate selected.
+
+Check the certificate actually served.
+
+Do not assume the file you renewed is the file clients receive.
+
+TLS protocol mismatch can result from:
+
+Client supporting only obsolete versions.
+
+Server requiring newer versions.
+
+Server supporting only obsolete versions.
+
+Middlebox interference.
+
+Incorrect TLS implementation.
+
+Do not downgrade blindly.
+
+Identify the supported-version intersection and security policy.
+
+No acceptable intersection means the connection should fail.
+
+TLS handshake timeout can result from:
+
+Network packet loss.
+
+Firewall behavior.
+
+Server overload.
+
+TLS service not responding.
+
+Middlebox interference.
+
+Routing problems.
+
+Do not classify timeout as certificate rejection unless a certificate was actually received and rejected.
+
+Absence of evidence is not certificate evidence.
+
+Certificate inspection tools can show the chain presented by a server.
+
+They can show validity dates.
+
+They can show SAN entries.
+
+They can show issuer.
+
+They can show fingerprints.
+
+They can show negotiated protocol.
+
+Use actual handshake evidence.
+
+Do not rely solely on browser UI summaries.
+
+Command-line TLS tools can help isolate behavior.
+
+OpenSSL s_client is commonly used for TLS diagnostics.
+
+When testing a name-based TLS service, provide the intended server name for SNI.
+
+Inspect the certificate actually returned.
+
+Inspect verification output.
+
+Inspect negotiated protocol.
+
+A successful socket connection alone is insufficient.
+
+HTTP clients such as curl can report certificate-validation and TLS failures.
+
+Verbose diagnostics can distinguish DNS, TCP, TLS, and HTTP stages.
+
+Do not use insecure certificate-bypass options as the first diagnostic step.
+
+The failure itself contains useful evidence.
+
+Bypassing it can hide the cause.
+
+If bypassing verification is used temporarily to establish whether later application layers respond, explicitly distinguish that test from a valid secure connection.
+
+Do not report the insecure test as successful TLS authentication.
+
+Certificate verification was intentionally absent.
+
+TLS configuration changes should be staged carefully.
+
+Validate configuration syntax.
+
+Validate certificate and key pairing.
+
+Validate certificate chain.
+
+Validate hostname identity.
+
+Reload or restart as required.
+
+Perform an actual TLS handshake.
+
+Verify the active certificate.
+
+Verify protocol version.
+
+Verify application behavior.
+
+Only then declare deployment complete.
+
+Rollback should preserve the previous known-good configuration.
+
+Do not delete the working certificate before validating the replacement.
+
+Atomic replacement reduces partial-state failures.
+
+TLS secrets should not be copied into temporary world-readable files.
+
+File creation permissions matter.
+
+Backup permissions matter.
+
+Deployment scripts matter.
+
+A secure final file does not compensate for a private key leaked through a temporary file earlier.
+
+Protect the entire lifecycle.
+
+Backups containing private keys are sensitive.
+
+Restrict them.
+
+Encrypt them according to backup policy.
+
+Retire them according to key-retention policy.
+
+Do not retain compromised keys indefinitely without reason.
+
+TLS private keys can be stored in hardware security modules or other protected key stores.
+
+This can reduce direct key exposure.
+
+It changes deployment and signing operations.
+
+It does not eliminate certificate lifecycle management.
+
+Use hardware-backed keys when requirements justify them.
+
+Do not add complexity without need.
+
+TLS can use pre-shared keys in selected protocol contexts.
+
+PSK authentication has different provisioning requirements from certificate-based authentication.
+
+A PSK must be distributed securely.
+
+Shared secrets create different compromise domains.
+
+Do not describe all TLS as certificate-based.
+
+Certificates are common, not universal.
+
+TLS authentication can therefore vary.
+
+Know the configured mode before diagnosing missing certificates.
+
+A TLS connection without server certificate authentication can still encrypt traffic under selected mechanisms.
+
+Whether that meets security requirements depends on the protocol and trust model.
+
+Do not equate encryption alone with authenticated communication.
+
+Confidentiality without verified identity can protect against passive observers while remaining vulnerable to active impersonation.
+
+TLS should fail closed when required security properties cannot be established.
+
+If certificate validation is required and fails, do not silently continue in plaintext.
+
+If TLS negotiation fails, do not automatically downgrade to an insecure protocol unless explicitly defined and authorized.
+
+Silent fallback undermines security.
+
+Opportunistic TLS is a different model used by selected protocols.
+
+It attempts TLS when available but can permit plaintext under defined circumstances.
+
+Opportunistic TLS does not provide the same downgrade resistance as mandatory authenticated TLS.
+
+Do not describe opportunistic encryption as equivalent to HTTPS security.
+
+The protocol's policy matters.
+
+STARTTLS is used by selected application protocols to upgrade an existing plaintext connection to TLS.
+
+STARTTLS is not a TLS version.
+
+The application protocol begins in plaintext.
+
+The peers negotiate an upgrade command.
+
+TLS then begins on the existing connection.
+
+If the protocol permits insecure fallback, downgrade risks can exist.
+
+Follow the application's STARTTLS rules.
+
+Implicit TLS begins TLS immediately upon connection on a designated service endpoint.
+
+Explicit TLS begins with another protocol and transitions to TLS.
+
+These are different connection patterns.
+
+Do not send plaintext application commands to an implicit TLS endpoint.
+
+Do not begin a raw TLS handshake where the protocol first requires an explicit upgrade.
+
+Protocol sequencing matters.
+
+TLS errors can arise from speaking the wrong protocol to the right port.
+
+Sending HTTP plaintext to an HTTPS listener can produce connection errors.
+
+Sending TLS to a plaintext HTTP listener can produce unreadable input or closure.
+
+Port configuration must match protocol configuration.
+
+Do not infer cryptographic failure before verifying that both sides are speaking TLS.
+
+TLS certificates are not encryption keys for stored application databases by default.
+
+A web server certificate's private key should not casually be reused for unrelated encryption.
+
+Key separation reduces cross-purpose risk.
+
+Use keys for their defined purpose.
+
+Do not reuse TLS private keys as generic signing or encryption keys unless an explicit cryptographic design requires it.
+
+Key usage constraints can also restrict intended operations.
+
+Respect certificate key-usage and extended-key-usage fields.
+
+A certificate issued for server authentication should be used according to its intended purpose.
+
+Do not ignore usage restrictions merely because a cryptographic operation technically succeeds.
+
+TLS security depends on endpoint software.
+
+A vulnerable TLS library can undermine protocol security.
+
+Keep implementations patched according to maintenance policy.
+
+Protocol design and implementation security are separate.
+
+A strong protocol implemented incorrectly can still fail.
+
+Memory-safety vulnerabilities can expose key material.
+
+Logging bugs can expose plaintext.
+
+Random-number failures can weaken keys.
+
+Operational security matters.
+
+TLS security also depends on certificate issuance.
+
+If an unauthorized party obtains a trusted certificate for a domain, clients can authenticate that certificate according to their trust model.
+
+Domain-control security therefore matters.
+
+Protect DNS administration.
+
+Protect registrar accounts.
+
+Protect ACME credentials.
+
+Protect CA accounts.
+
+Certificate security is part of a larger system.
+
+Multi-factor authentication can protect administrative certificate and DNS accounts according to provider capabilities.
+
+Least privilege can reduce compromise impact.
+
+Audit issuance.
+
+Monitor unexpected certificates where requirements justify it.
+
+Do not treat certificate management as a one-time setup task.
+
+TLS has lifecycle.
+
+Issue.
+
+Deploy.
+
+Validate.
+
+Monitor.
+
+Renew.
+
+Rotate keys where required.
+
+Revoke when required.
+
+Retire.
+
+Audit.
+
+Every stage can fail.
+
+Automation should expose failures rather than silently continuing.
+
+A certificate approaching expiration should generate operational warning before outage.
+
+Do not wait until the expiration instant.
+
+Renewal windows should allow time to diagnose failed automation.
+
+Exact timing belongs to operational policy.
+
+A certificate being renewed successfully every cycle is evidence.
+
+It is not proof the next renewal will succeed.
+
+Monitor continuously according to requirements.
+
+TLS certificate validity should be checked from the client perspective.
+
+The server's filesystem metadata is insufficient.
+
+An external probe can detect the certificate actually served.
+
+This catches routing and deployment errors.
+
+Internal file checks cannot.
+
+A secure TLS configuration should be reproducible.
+
+Configuration should be version controlled where appropriate, excluding secrets.
+
+Private keys should remain outside public repositories.
+
+Certificate identifiers or paths can be configuration.
+
+Secrets can be provisioned separately.
+
+Do not embed secret key bytes in source code.
+
+A TLS service should start only when required key and certificate material is valid according to its startup requirements.
+
+Failing closed can prevent accidental plaintext operation.
+
+Do not silently disable TLS because a certificate file is missing.
+
+A missing security dependency should be visible.
+
+If an application supports both HTTP and HTTPS, the behavior should be deliberate.
+
+Do not accidentally expose sensitive endpoints over plaintext because HTTPS failed.
+
+Transport policy should be explicit.
+
+TLS does not guarantee availability.
+
+Certificate failure can intentionally make a service unavailable rather than insecure.
+
+That is often the correct tradeoff for mandatory secure transport.
+
+Do not weaken authentication merely to preserve availability without authorization.
+
+Security policy determines acceptable failure behavior.
+
+A deterministic system should not allow TLS library implementation details to alter application consensus semantics.
+
+TLS secures transport.
+
+Consensus-visible messages should have protocol-defined serialization independent of TLS record boundaries.
+
+One TLS read can return part of an application message.
+
+One TLS read can return multiple application messages.
+
+TLS is a byte-stream protection layer when used over TCP.
+
+Application framing remains necessary.
+
+Do not use TLS record boundaries as application message boundaries.
+
+The TLS library can return decrypted bytes in chunks unrelated to sender application write calls.
+
+Buffer and parse according to the application protocol.
+
+Transport chunking must not change semantics.
+
+TLS can protect a peer-to-peer protocol connection.
+
+The P2P protocol should still perform its own network identity validation where required.
+
+A valid public Web certificate is not automatically the intended P2P node identity.
+
+Transport authentication and protocol identity can be separate.
+
+Define them.
+
+A node discovered through DNS can connect through TLS.
+
+DNS supplies a candidate endpoint.
+
+TLS can authenticate a hostname.
+
+The application protocol can authenticate a network or node identity.
+
+Each layer contributes different evidence.
+
+Do not collapse them into one concept.
+
+For a deterministic distributed system, TLS connection differences should not alter consensus output.
+
+One node can use TLS 1.2.
+
+Another can use TLS 1.3.
+
+If both deliver the same valid application message, consensus interpretation should remain identical unless the protocol explicitly binds transport metadata into consensus.
+
+Transport is transport.
+
+Consensus is application state.
+
+Keep them separate.
+
+TLS errors should not generate fabricated application messages.
+
+If the secure channel fails, report channel failure.
+
+Do not substitute default protocol data.
+
+Do not treat missing network data as zero-valued authoritative state.
+
+No message is not a message containing zeros.
+
+Absence and value are different.
+
+TLS validation should use explicit evidence.
+
+Was a certificate received?
+
+What identity did it contain?
+
+Was the chain trusted?
+
+Was the certificate valid at the relevant time?
+
+Did hostname verification succeed?
+
+What protocol version was negotiated?
+
+Was client authentication required?
+
+Did it succeed?
+
+Only then describe the connection's established security properties.
+
+Do not infer them from a URL beginning with https.
+
+The URL expresses intent.
+
+The handshake establishes actual transport state.
+
+A browser warning means required TLS validation did not complete normally.
+
+Bypassing the warning changes the trust decision.
+
+Do not describe the resulting connection as normally authenticated.
+
+The user explicitly accepted a validation failure.
+
+That distinction matters.
+
+Certificate warnings should be investigated.
+
+Common causes include:
+
+Expired certificate.
+
+Hostname mismatch.
+
+Unknown issuer.
+
+Misconfigured chain.
+
+Incorrect system time.
+
+Interception.
+
+Do not train users to click through warnings reflexively.
+
+TLS is designed to make authentication failure visible.
+
+A service certificate can be inspected before deployment.
+
+Check its SANs.
+
+Check validity.
+
+Check issuer.
+
+Check key correspondence.
+
+Check intended usage.
+
+Check chain.
+
+Then deploy.
+
+After deployment, inspect again over the network.
+
+Predeployment and postdeployment checks catch different failures.
+
+Certificate issuance success is not deployment success.
+
+Deployment success is not handshake success.
+
+Handshake success is not application success.
+
+Keep the states distinct.
+
+TLS security can be summarized as a sequence of evidence:
+
+The client reached an endpoint.
+
+The endpoint and client negotiated TLS.
+
+The endpoint presented authentication material when required.
+
+The client validated that material against its trust policy.
+
+The handshake established cryptographic session keys.
+
+Protected application data was exchanged.
+
+Each statement requires its own evidence.
+
+Do not skip from connection established to identity trusted.
+
+Do not confuse TLS with encryption alone.
+
+Do not confuse encryption with authentication.
+
+Do not confuse authentication with authorization.
+
+Do not confuse authorization with application correctness.
+
+Do not confuse a certificate with a private key.
+
+Do not confuse a CSR with a certificate.
+
+Do not confuse a certificate chain with one certificate.
+
+Do not confuse a root CA with an intermediate CA.
+
+Do not confuse a trusted issuer with a valid hostname.
+
+Do not confuse certificate validity with application trustworthiness.
+
+Do not confuse certificate expiration with private-key compromise.
+
+Do not confuse certificate renewal with key rotation.
+
+Do not confuse self-signed with automatically insecure.
+
+Do not confuse public CA issuance with the only trust model.
+
+Do not confuse mTLS authentication with application authorization.
+
+Do not confuse SNI with DNS.
+
+Do not confuse SNI with the HTTP Host header.
+
+Do not confuse ALPN with an application protocol itself.
+
+Do not confuse HTTPS with TLS.
+
+Do not confuse port 443 with proof of HTTPS.
+
+Do not confuse a TCP connection with a successful TLS handshake.
+
+Do not confuse a successful TLS handshake with successful certificate validation unless the client actually performed validation.
+
+Do not confuse successful certificate validation with application authorization.
+
+Do not confuse TLS termination with end-to-end encryption beyond the termination point.
+
+Do not confuse a reverse proxy connection with one continuous client-to-origin TLS session.
+
+Do not confuse a wildcard DNS record with a wildcard certificate.
+
+Do not confuse PEM with encryption.
+
+Do not confuse Base64 with encryption.
+
+Do not confuse certificate fingerprints with permanent service identity.
+
+Do not confuse SSL terminology with modern TLS protocol versions.
+
+Do not confuse HSTS with TLS.
+
+Do not confuse HTTP redirects with encryption.
+
+Do not confuse STARTTLS with a TLS version.
+
+Do not confuse opportunistic TLS with mandatory authenticated TLS.
+
+Do not confuse TLS record boundaries with application message boundaries.
+
+Do not confuse DNS discovery with TLS authentication.
+
+Do not confuse TLS authentication with protocol-level peer identity.
+
+Do not confuse secure transport with secure application logic.
+
+When diagnosing an HTTPS failure, resolve the hostname.
+
+Record the addresses returned.
+
+Attempt the required network connection.
+
+Determine whether TCP succeeds.
+
+Attempt TLS using the intended hostname and SNI.
+
+Record the protocol version.
+
+Inspect the certificate presented.
+
+Validate the chain.
+
+Validate the hostname.
+
+Check certificate validity.
+
+Check ALPN if application protocol negotiation matters.
+
+Only after TLS succeeds should ordinary HTTP behavior become the primary diagnostic target.
+
+Do not skip layers.
+
+When a certificate is reported expired, inspect the certificate actually served over the network.
+
+Do not inspect only the local certificate file.
+
+Determine which endpoint served it.
+
+Determine whether multiple endpoints exist.
+
+Determine whether the new certificate was deployed.
+
+Determine whether the service reloaded it.
+
+Determine whether a proxy or CDN terminates TLS before the origin.
+
+Repair the actual termination point.
+
+When a hostname mismatch occurs, record the requested hostname.
+
+Record SNI.
+
+Inspect SAN entries.
+
+Determine whether DNS points to the intended endpoint.
+
+Determine whether the correct virtual host was selected.
+
+Do not disable hostname validation.
+
+Correct identity or routing.
+
+When a trust-chain failure occurs, inspect every certificate sent by the server.
+
+Determine the issuer of the end-entity certificate.
+
+Determine whether required intermediates are present.
+
+Determine whether the client trusts the appropriate root.
+
+Do not add arbitrary certificates until the error disappears.
+
+Build the intended chain.
+
+When TLS version negotiation fails, identify client-supported versions.
+
+Identify server-supported versions.
+
+Apply minimum-version policy.
+
+If no acceptable overlap exists, the systems are incompatible under current policy.
+
+Do not fabricate compatibility.
+
+Upgrade the obsolete participant or make an authorized architectural decision.
+
+When client authentication fails, determine whether the server requested a client certificate.
+
+Determine whether the client supplied one.
+
+Validate its chain.
+
+Validate its intended usage.
+
+Map it to the expected identity.
+
+Then inspect application authorization separately.
+
+Do not treat every mTLS failure as a server-certificate problem.
+
+When TLS works but the application request fails, preserve that evidence.
+
+The secure channel exists.
+
+Move investigation upward.
+
+Inspect application protocol.
+
+Inspect authentication.
+
+Inspect authorization.
+
+Inspect request syntax.
+
+Inspect server state.
+
+Do not repeatedly regenerate certificates when TLS already succeeded.
+
+When deploying a new TLS service:
+
+Define the hostname.
+
+Define the trust model.
+
+Generate or provision appropriate private key material.
+
+Obtain or issue the certificate.
+
+Validate certificate identity.
+
+Validate certificate and key pairing.
+
+Configure the TLS service.
+
+Configure the complete required chain.
+
+Set secure key permissions.
+
+Validate configuration.
+
+Start or reload the service.
+
+Perform an actual handshake using the intended hostname.
+
+Validate from an independent client.
+
+Verify application protocol.
+
+Monitor expiration.
+
+Do not declare completion before network verification.
+
+When rotating TLS keys:
+
+Create new key material securely.
+
+Obtain a certificate for the new key.
+
+Validate the new certificate and key.
+
+Stage the new material.
+
+Update the service atomically where practical.
+
+Reload.
+
+Verify the active endpoint.
+
+Retain rollback capability according to policy.
+
+Retire old key material according to policy.
+
+Do not destroy the only working configuration before the replacement is verified.
+
+When a private key is suspected compromised:
+
+Treat the event as a key-security incident.
+
+Identify affected certificates and services.
+
+Provision replacement key material.
+
+Obtain replacement certificates where required.
+
+Deploy and verify them.
+
+Revoke affected certificates according to the trust system and policy.
+
+Remove compromised keys from active use.
+
+Investigate exposure.
+
+Do not merely renew the certificate using the same compromised key.
+
+When designing TLS for an application, determine:
+
+Which endpoint is authenticated?
+
+Is server authentication required?
+
+Is client authentication required?
+
+Which trust anchors are accepted?
+
+Which identities are valid?
+
+What minimum TLS version is required?
+
+What certificate lifecycle exists?
+
+Where does TLS terminate?
+
+Is traffic beyond termination protected?
+
+What application protocol is carried?
+
+Does ALPN matter?
+
+How are failures reported?
+
+How are certificates renewed?
+
+How are keys rotated?
+
+How is expiration monitored?
+
+How is compromise handled?
+
+Then implement the smallest configuration satisfying those requirements.
+
+TLS should remain a transport-security mechanism.
+
+Do not place business logic in TLS configuration.
+
+Do not make consensus depend on negotiated cipher suite.
+
+Do not make authorization depend on incidental TLS details unless explicitly designed.
+
+Do not expose private keys to application components that do not need them.
+
+Keep authority narrow.
+
+Keep key ownership clear.
+
+Keep trust explicit.
+
+A reliable TLS system validates identity.
+
+A reliable TLS system protects private keys.
+
+A reliable TLS system uses supported protocol versions.
+
+A reliable TLS system fails when required authentication fails.
+
+A reliable TLS system renews certificates before expiration.
+
+A reliable TLS system verifies the certificate actually served.
+
+A reliable TLS system knows every termination point.
+
+A reliable TLS system distinguishes transport security from application security.
+
+A reliable TLS system does not disable verification merely to make errors disappear.
+
+A reliable TLS system preserves specific failure evidence.
+
+A reliable TLS system does not guess.
+
+TLS answers questions such as:
+
+Can these endpoints establish a cryptographically protected transport?
+
+Can the required peer identity be authenticated according to the configured trust model?
+
+Can protected application bytes be exchanged with confidentiality and integrity according to the negotiated protocol?
+
+TLS does not answer:
+
+Is DNS correct?
+
+Is the application healthy?
+
+Is the user authorized?
+
+Is the request semantically valid?
+
+Is the server's content trustworthy?
+
+Is the software free from vulnerabilities?
+
+Is the endpoint permitted to modify authoritative state?
+
+Those questions belong to other layers.
+
+When TLS validation succeeds, state what was actually established.
+
+When TLS validation fails, state which validation failed.
+
+When the evidence does not establish peer identity, do not invent identity from reachability.
+
+And when secure transport cannot be established under the required policy, the correct result is failure rather than probably secure.

@@ -1,0 +1,583 @@
+
+TITLE: General Language Fundamentals
+VERSION: 1.0
+CATEGORY: Language Reference
+LANGUAGE: English
+
+SECTION 1: LANGUAGE AND COMMUNICATION
+
+Language is a system of words, symbols, and grammatical
+relationships used to communicate information, intentions,
+questions, instructions, and social meaning.
+
+The meaning of an expression depends on its vocabulary,
+grammar, context, and intended use.
+
+The same word may have different meanings in different
+contexts.
+
+Example:
+"The server is running" describes an operational state.
+"She is running" describes physical movement.
+
+Language understanding requires distinguishing the meaning
+of an expression from its individual words.
+
+
+SECTION 2: WORDS AND VOCABULARY
+
+A word is a meaningful unit of language.
+
+A noun names a person, place, object, idea, or concept.
+Examples: operator, computer, server, language, trust.
+
+A verb expresses an action, occurrence, or state.
+Examples: run, explain, compare, know, exist.
+
+An adjective describes or qualifies a noun.
+Examples: active, reliable, deterministic, small.
+
+An adverb modifies a verb, adjective, or another adverb.
+Examples: quickly, carefully, usually, clearly.
+
+A pronoun may refer to a person, object, or previously
+identified subject.
+Examples: I, you, she, he, it, we, they.
+
+A preposition expresses a relationship.
+Examples: in, on, under, before, after, between.
+
+A conjunction connects words, phrases, or clauses.
+Examples: and, but, or, because, although.
+
+An interjection expresses a reaction or emotion.
+Examples: oh, wow, hey, ouch.
+
+
+SECTION 3: SENTENCE STRUCTURE
+
+A sentence is a grammatical expression that communicates
+a statement, question, instruction, or exclamation.
+
+A common English sentence pattern is:
+Subject + Verb + Object.
+
+Example:
+"The operator starts Digit."
+
+Subject: the operator
+Verb: starts
+Object: Digit
+
+Not every English sentence follows this pattern.
+
+Example:
+"Stop."
+This is an imperative sentence with an implied subject.
+
+Word order may change the meaning of a sentence.
+
+Example:
+"The operator instructed Digit."
+"Digit instructed the operator."
+
+These sentences describe different relationships.
+
+
+SECTION 4: SENTENCE PURPOSE
+
+A declarative sentence communicates a statement.
+Example: "The server is online."
+
+An interrogative sentence asks a question.
+Example: "Is the server online?"
+
+An imperative sentence communicates an instruction,
+request, or command.
+Example: "Check the server."
+
+An exclamatory sentence expresses emphasis or reaction.
+Example: "That was unexpected!"
+
+A sentence's grammatical form and intended purpose
+may differ.
+
+Example:
+"Could you check the server?"
+This is grammatically a question but ordinarily functions
+as a polite request.
+
+
+SECTION 5: QUESTIONS
+
+Questions seek information, confirmation, explanation,
+or clarification.
+
+Who asks about identity.
+What asks about identity, definition, or information.
+When asks about time.
+Where asks about location.
+Why asks about cause or reason.
+How asks about method, process, or condition.
+Which asks for selection among alternatives.
+
+Examples:
+"What is a compiler?"
+"How does compilation work?"
+"Why did the program stop?"
+"Which language is appropriate?"
+
+A yes-or-no question requests confirmation or denial.
+
+Example:
+"Is the module active?"
+
+A question may contain assumptions that are not established.
+
+Example:
+"Why did the server fail again?"
+This question assumes a previous failure.
+
+An unsupported assumption is not established evidence.
+
+
+SECTION 6: REQUESTS AND INSTRUCTIONS
+
+A request asks for an action or information.
+
+Examples:
+"Explain the difference."
+"Please summarize the report."
+"Can you show the results?"
+
+A command directly instructs an action.
+
+Examples:
+"Stop."
+"Restart the service."
+"Read the file."
+
+Courtesy expressions may modify the tone of a request
+without changing its underlying purpose.
+
+Examples:
+"Explain this."
+"Please explain this."
+"Could you explain this, please?"
+
+All three may express the same informational request.
+
+A request is not evidence that an action has occurred.
+An instruction is not evidence of authorization.
+
+
+SECTION 7: GREETINGS AND SOCIAL EXPRESSIONS
+
+A greeting begins or acknowledges an interaction.
+
+Common greetings:
+hello
+hi
+hey
+good morning
+good afternoon
+good evening
+
+"Hi" and "hello" are commonly interchangeable greetings.
+
+A farewell indicates the end of an interaction.
+
+Common farewells:
+goodbye
+bye
+see you later
+take care
+
+An acknowledgment indicates receipt or recognition.
+
+Examples:
+okay
+understood
+got it
+all right
+
+An expression of gratitude communicates appreciation.
+
+Examples:
+thank you
+thanks
+thank you very much
+
+A response to gratitude may acknowledge the appreciation.
+
+Examples:
+you're welcome
+glad to help
+no problem
+
+Social expressions do not necessarily request technical
+information.
+
+
+SECTION 8: SYNONYMS AND ANTONYMS
+
+Synonyms are words with similar meanings.
+
+Examples:
+begin / start
+finish / complete
+quick / fast
+assist / help
+
+Synonyms are not always interchangeable in every context.
+
+Antonyms express contrasting meanings.
+
+Examples:
+active / inactive
+open / closed
+start / stop
+present / absent
+
+Opposite words may describe a contrast without establishing
+that only two possible states exist.
+
+Example:
+A service may be active, inactive, failed, or activating.
+
+
+SECTION 9: INFORMAL ENGLISH
+
+Informal language may use contractions, shortened words,
+colloquial expressions, and nonstandard spelling.
+
+Common contractions:
+I'm = I am
+you're = you are
+it's = it is or it has, depending on context
+don't = do not
+can't = cannot
+won't = will not
+we're = we are
+
+Common informal expressions:
+gonna = going to, in informal speech
+wanna = want to, in informal speech
+kinda = kind of
+gotta = got to or have to, depending on context
+
+Informal spelling may represent ordinary expressions.
+
+Examples:
+"thx" may mean "thanks."
+"pls" may mean "please."
+"u" may mean "you."
+
+These meanings depend on context.
+
+An unfamiliar abbreviation must not automatically be
+assigned an unsupported meaning.
+
+
+SECTION 10: CONTEXT
+
+Context is the information surrounding an expression that
+helps determine its meaning.
+
+Context may include:
+The current sentence.
+Earlier statements.
+The subject under discussion.
+The requested action.
+Previously established facts.
+
+Example:
+"The module failed."
+"Why?"
+
+The second expression may refer to the previously
+mentioned module failure.
+
+Without the earlier statement, "Why?" has an incomplete
+referent.
+
+Context does not establish facts that were never supplied.
+
+A missing referent remains unresolved until sufficient
+information is available.
+
+
+SECTION 11: COMPARISONS
+
+A comparison examines similarities, differences, or
+relationships between two or more subjects.
+
+Common comparison expressions:
+compare
+contrast
+difference between
+similarities between
+better than
+less than
+more than
+
+Example:
+"Compare PHP and C."
+
+This expression identifies two subjects:
+PHP
+C
+
+A comparison may examine attributes such as:
+purpose
+type system
+execution model
+capabilities
+limitations
+common applications
+
+A meaningful comparison requires information about the
+subjects being compared.
+
+A comparison must distinguish factual attributes from
+subjective preferences.
+
+"Better" requires an evaluation criterion.
+
+Example:
+"Which language is better?"
+This question does not identify the criterion for better.
+
+
+SECTION 12: EXPLANATIONS AND REASONS
+
+An explanation describes a concept, relationship,
+mechanism, or cause.
+
+Examples:
+"What is a compiler?"
+"Explain how a compiler works."
+"Why is validation necessary?"
+
+A definition identifies the meaning of a term.
+
+A procedural explanation describes steps or operations.
+
+A causal explanation identifies a supported relationship
+between an event and its cause.
+
+An explanation should not invent a cause merely because
+a cause was requested.
+
+Example:
+"The service stopped" does not establish why it stopped.
+
+
+SECTION 13: AMBIGUITY
+
+An ambiguous expression has more than one plausible
+interpretation.
+
+Example:
+"Check the port."
+
+This may refer to a network port or a physical connector.
+
+Example:
+"Open the file."
+
+The intended file may be unknown.
+
+Ambiguity may be resolved through context or clarification.
+
+When context is insufficient, the intended meaning remains
+unknown.
+
+Uncertainty is different from contradiction.
+
+Uncertainty means sufficient information is unavailable.
+Contradiction means available statements conflict.
+
+
+SECTION 14: NEGATION
+
+Negation reverses or denies a proposition.
+
+Common negation expressions:
+not
+no
+never
+none
+without
+
+Examples:
+"The service is active."
+"The service is not active."
+
+Negation may apply to only part of a sentence.
+
+Example:
+"Not every module failed."
+
+This does not mean that no modules failed.
+
+Example:
+"No modules failed."
+
+This means the number of failed modules is zero.
+
+The scope of negation affects meaning.
+
+
+SECTION 15: TIME AND TENSE
+
+English uses tense and other grammatical structures to
+describe time.
+
+Past:
+"The module started."
+
+Present:
+"The module is active."
+
+Future:
+"The module will start."
+
+An intention concerning the future is not evidence of
+completed action.
+
+Example:
+"I will upload the lesson."
+This does not establish that the lesson was uploaded.
+
+Example:
+"I uploaded the lesson."
+This asserts a completed past action.
+
+The accuracy of a statement is separate from its tense.
+
+
+SECTION 16: CONVERSATIONAL CONTINUITY
+
+A conversation consists of related exchanges.
+
+A follow-up expression may depend on information from
+an earlier exchange.
+
+Example:
+Operator: "Explain PHP."
+Operator: "Now compare it with C."
+
+The word "it" may refer to PHP when the context clearly
+establishes that referent.
+
+A later instruction may revise an earlier request.
+
+Example:
+"Explain PHP."
+"Actually, compare PHP and C."
+
+The second request changes the requested operation.
+
+Conversational continuity requires reliable context.
+Missing context must not be reconstructed through guessing.
+
+
+SECTION 17: COMMUNICATION AND EVIDENCE
+
+A statement may express:
+A fact.
+An opinion.
+A question.
+An instruction.
+A prediction.
+A hypothesis.
+A preference.
+
+These categories have different evidentiary meanings.
+
+Example:
+"PHP is a programming language."
+This is a factual claim.
+
+Example:
+"I prefer PHP."
+This expresses a preference.
+
+Example:
+"PHP might be appropriate."
+This expresses possibility.
+
+Example:
+"Use PHP."
+This expresses an instruction.
+
+A preference is not universal evidence.
+A prediction is not a completed event.
+A hypothesis is not a verified conclusion.
+
+
+SECTION 18: CLEAR COMMUNICATION
+
+Clear communication expresses relevant meaning with
+sufficient precision.
+
+An effective explanation identifies its subject.
+
+A concise response avoids unnecessary repetition.
+
+A technical response preserves important distinctions.
+
+An acknowledgment does not need to repeat an entire request.
+
+When information is insufficient, a clarification may be
+more appropriate than an unsupported conclusion.
+
+Accuracy and clarity are complementary communication goals.
+
+
+SECTION 19: LANGUAGE VARIATION
+
+English varies by region, community, profession, and
+individual speaker.
+
+The same concept may have multiple ordinary expressions.
+
+Examples:
+"Hello."
+"Hi."
+"Hey."
+
+Technical language may assign specialized meanings to
+ordinary words.
+
+Example:
+A computer process and a manufacturing process are
+different uses of the word "process."
+
+Regional and informal variations do not automatically
+indicate an error.
+
+Meaning must be evaluated in context.
+
+
+SECTION 20: REFERENCE BOUNDARIES
+
+This lesson describes English language concepts.
+
+It does not establish the truth of unrelated factual claims.
+
+It does not grant permission to perform actions.
+
+It does not replace module contracts or system policies.
+
+It does not establish that every described language
+operation is implemented by the current software.
+
+Language reference knowledge may support interpretation
+when an authorized module can apply it deterministically.
+
+Unknown meanings remain unknown until sufficient
+authorized information is available.
+
+END OF LESSON

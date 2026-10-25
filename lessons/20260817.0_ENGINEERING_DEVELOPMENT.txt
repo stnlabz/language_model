@@ -1,0 +1,410 @@
+20260817.0 — Engineering Development Doctrine
+
+Root Document ID: 20260817.0
+Revision ID: NONE
+Previous Revision: NONE
+sha256: 65f768a85e880ef522cb2f2f433f8c34e251845d6fdff1180ef9fdd54adb6422
+
+Status: Approved  
+Scope: Doctrine  
+Applicability: All STN-LABZ Engineering  
+Approval Date: 20260817
+
+Doctrine
+
+STN-LABZ engineering will progress through a continuing evidence-driven development cycle.
+
+The governing engineering progression is:
+
+Requirement / Engineering Need
+        ↓
+Define Expected Behavior
+        ↓
+Engineer Implementation
+        ↓
+Compile / Build
+        ↓
+Verify Implementation Works
+        ↓
+Establish Applicable Qualification Test(s)
+        ↓
+Run Qualification
+        ↓
+Failure → Investigate → Fix → Regression Test
+        ↓
+Continue Development
+        ↓
+Full Applicable Bench
+        ↓
+ALL PASS / NO OPEN REGRESSIONS
+        ↓
+QUALIFIED
+        ↓
+Integration
+        ↓
+Release / Operational Evaluation
+        ↓
+Evidence
+        ↓
+Next Development Cycle
+
+
+This is how engineering work progresses through STN-LABZ.
+
+Applicable established policies govern specialized requirements encountered during that progression.
+
+The development cycle does not replace applicable policy, qualification requirements, project requirements, or human authority.
+
+Evidence produced during development, qualification, integration, release, and operational evaluation informs subsequent development cycles.
+
+Development Cycle
+
+Requirement / Engineering Need
+
+Engineering begins with an identified requirement or demonstrated engineering need.
+
+The requirement establishes what capability, correction, change, or engineering outcome is required.
+
+Requirements may originate from engineering decisions, research, operational evidence, defects, incidents, security findings, qualification findings, maintenance requirements, or other authorized sources.
+
+Define Expected Behavior
+
+Expected behavior will be defined before qualification.
+
+The expected behavior provides the basis against which the resulting implementation can be evaluated and qualification requirements established.
+
+Unknown or unresolved behavior will not be silently converted into an assumed requirement.
+
+Engineer Implementation
+
+The implementation will be developed according to applicable architecture, engineering requirements, standards, policies, and authorized project decisions.
+
+Implementation convenience does not override established requirements or policy.
+
+Compile / Build
+
+The implementation will successfully compile or otherwise pass the applicable project build-validation boundary before qualification begins.
+
+Successful compilation or build validation establishes only that the implementation has passed the applicable build-validation boundary.
+
+It does not constitute qualification.
+
+Verify Implementation Works
+
+The implementation will be evaluated during development to determine whether it performs the expected behavior before formal qualification.
+
+Development verification demonstrates implementation behavior.
+
+Ordinary successful operation does not establish qualification.
+
+Successful execution under expected conditions does not demonstrate behavior under applicable failure, boundary, recovery, malformed-input, security, or other negative conditions.
+
+Development verification does not replace qualification.
+
+Establish Applicable Qualification Tests
+
+Qualification tests will be established from applicable:
+
+- Requirements.
+- Expected behavior.
+- Architecture.
+- Interfaces.
+- Operational boundaries.
+- Identified risks.
+- Failure conditions.
+- Security requirements.
+- Recovery requirements.
+- Engineering evidence.
+- Previous defects and regressions.
+
+Established minimum qualification test counts are qualification floors and do not establish maximum test counts.
+
+Qualification suites may expand when engineering evidence establishes additional conditions requiring verification.
+
+Applicable negative validation will be included according to established qualification requirements.
+
+Run Qualification
+
+The applicable qualification suite will be executed against the implementation being qualified.
+
+Qualification remains incomplete while any applicable required test is:
+
+- FAIL
+- NOT RUN
+- Otherwise unresolved
+
+A previously successful test does not establish qualification of behavior subsequently affected by implementation changes.
+
+Qualification applies to the specific implementation revision demonstrated by the resulting qualification evidence.
+
+Qualification Findings
+
+A qualification failure is an engineering finding.
+
+Qualification failures will be investigated rather than waived, suppressed, reclassified, or ignored merely to obtain a passing qualification result.
+
+When qualification exposes a defect, missing boundary, incomplete behavior, regression, or other engineering condition requiring correction, the affected implementation returns to development.
+
+Qualification is therefore an engineering activity and not merely a ceremonial release gate.
+
+Failure / Regression
+
+A qualification failure or identified regression will return the affected implementation to development.
+
+The engineering progression is:
+
+Failure
+    ↓
+Investigate
+    ↓
+Identify Cause
+    ↓
+Correct Implementation
+    ↓
+Regression Test
+    ↓
+Resume Applicable Qualification
+
+
+A change intended to satisfy one requirement may affect behavior previously demonstrated by another test.
+
+Previous PASS results will not be treated as permanently inherited after modification of the affected implementation.
+
+All identified regressions will be corrected before qualification is established or restored.
+
+Continue Development
+
+Corrective development will continue until identified failures and regressions have been addressed and the implementation is ready for the full applicable qualification bench.
+
+Development performed in response to qualification findings remains part of the same engineering evidence chain.
+
+Full Applicable Bench
+
+The complete applicable qualification suite will be executed against the implementation revision for which qualification is being determined.
+
+Previously established qualification tests remain applicable while they continue to verify current requirements.
+
+New qualification tests may be added when engineering requirements, defects, operational experience, security findings, architectural changes, or other evidence establish a need for additional verification.
+
+The authoritative qualification result will represent the applicable qualification suite after development changes and regression corrections have been incorporated.
+
+Qualification Boundary
+
+Qualification requires:
+
+ALL APPLICABLE TESTS PASS
+NO REQUIRED TESTS NOT RUN
+NO OPEN REGRESSIONS
+
+
+An implementation is not qualified merely because a minimum number of tests have been executed.
+
+An implementation is not qualified merely because it compiles.
+
+An implementation is not qualified merely because it operates successfully under ordinary conditions.
+
+All applicable qualification requirements and required tests will be successfully satisfied before qualification is established.
+
+Ambiguous qualification results do not become PASS.
+
+Qualification Evidence
+
+Qualification will produce sufficient engineering evidence to establish what implementation was tested and what result was demonstrated.
+
+Applicable qualification evidence will identify, as appropriate:
+
+- Project.
+- Component.
+- Implementation revision or version.
+- Applicable build or source identity.
+- Qualification test.
+- Expected result.
+- Actual result.
+- Qualification result.
+- Execution environment.
+- Timestamp.
+- Relevant diagnostic evidence.
+
+Qualification evidence will be preserved according to applicable STN-LABZ engineering documentation requirements.
+
+Qualification attaches to the demonstrated implementation revision.
+
+It is not automatically inherited by future modified implementations.
+
+Integration
+
+Qualified implementations may proceed to applicable system integration.
+
+Qualification of an individual component does not automatically establish qualification of a larger integrated system.
+
+Integration remains subject to applicable project requirements, policies, validation, qualification requirements, and engineering authority.
+
+Release / Operational Evaluation
+
+Integrated systems may proceed through applicable release and operational evaluation processes.
+
+Release does not terminate engineering development.
+
+Operational use may produce evidence unavailable during development or qualification.
+
+That evidence remains part of the engineering process.
+
+Evidence
+
+Development, qualification, integration, release, and operational evaluation will produce engineering evidence.
+
+Evidence may identify:
+
+- New requirements.
+- Defects.
+- Regressions.
+- Failure conditions.
+- Security findings.
+- Architectural concerns.
+- Operational requirements.
+- Recovery requirements.
+- Boundary conditions.
+- Maintenance requirements.
+- Opportunities for improvement.
+
+Applicable evidence will inform subsequent engineering decisions.
+
+Evidence that contradicts an existing engineering assumption will not be discarded merely because the existing implementation previously passed qualification.
+
+Next Development Cycle
+
+Operational evidence, new requirements, research, incidents, defects, security findings, qualification findings, or engineering decisions may initiate another development cycle.
+
+Completion of one development cycle does not terminate development of the project.
+
+A qualified implementation may therefore return to development when evidence establishes a legitimate engineering need.
+
+Requalification
+
+Modification of a qualified implementation requires applicable requalification according to established policy.
+
+Previous qualification is not inherited by a modified implementation.
+
+The modified implementation will not be represented as qualified solely because an earlier revision was qualified.
+
+Regression validation will determine whether previously demonstrated behavior remains correct.
+
+The applicable qualification suite will then establish the qualification state of the modified implementation.
+
+Human Authority
+
+Automation may execute engineering processes where authorized.
+
+Automation does not replace human authority at decision boundaries established by policy.
+
+Automated build, validation, qualification, testing, evidence collection, integration, or processing does not independently grant:
+
+- Approval.
+- Authority.
+- Qualification beyond demonstrated evidence.
+- Release authorization.
+- Policy authority.
+- Expansion of project scope.
+
+Human authority remains applicable wherever required by established STN-LABZ policy.
+
+Engineering Principle
+
+Development is continuous and evidence-driven.
+
+Qualification is evidence of demonstrated behavior, not an assumption of correctness.
+
+Qualification establishes the demonstrated state of a specific implementation at a specific point in the development cycle.
+
+It does not terminate engineering development.
+
+Modification of a qualified implementation returns that implementation to the applicable development and qualification process.
+
+Previous qualification is not inherited by a modified implementation.
+
+Failures discovered during qualification are engineering findings.
+
+Regressions are corrected, not waived.
+
+Operational evidence may establish new requirements and initiate the next development cycle.
+
+The continuing engineering relationship is:
+
+Requirement
+    ↓
+Implementation
+    ↓
+Build Validation
+    ↓
+Verification
+    ↓
+Qualification
+    ↓
+Integration
+    ↓
+Operation
+    ↓
+Evidence
+    ↓
+Next Development Cycle
+
+Policy Relationship
+
+This doctrine establishes the common STN-LABZ engineering progression.
+
+Applicable established policies govern specialized requirements and boundaries encountered during that progression.
+
+These may include:
+
+- Module creation.
+- Core and module qualification.
+- Change control.
+- Engineering documentation.
+- Knowledge approval.
+- Network isolation.
+- AI-assisted development.
+- Security research.
+- Project-specific engineering requirements.
+
+Where a specialized policy applies, that policy governs the applicable activity without replacing the overall engineering development cycle.
+
+The engineering development cycle does not grant authority beyond applicable policy, approved requirements, assigned mission, or human authority.
+
+Evidence Basis
+
+This doctrine is informed by observed STN-LABZ development and qualification activity.
+
+The Rictus Core qualification effort demonstrated that:
+
+- Qualification tests can expose defects not apparent during ordinary successful operation.
+- Qualification remains incomplete until all applicable mandatory tests have successfully executed.
+- Later development may introduce regressions into previously passing behavior.
+- Regression failures require correction before qualification proceeds.
+- Negative and adversarial validation provide engineering evidence unavailable through positive-path testing alone.
+- The full applicable qualification bench establishes the authoritative qualification result after development changes.
+- Qualification applies to the specific implementation revision represented by the successful qualification evidence.
+- Future modified revisions do not automatically inherit previous qualification.
+
+Development and architecture reports may provide additional engineering evidence as projects continue through subsequent development cycles.
+
+Proposed architectures remain proposed until approved through the applicable STN-LABZ process.
+
+References
+
+- STN-LABZ General Orders
+- 20260729.0 — Operational Authority
+- 20260729.1 — Engineering Organization
+- 20260729.2 — Engineering Workflow
+- 20260729.5 — Unknown State Doctrine
+- 20260729.6 — Engineering Documentation
+- 20260729.8 — Operational Doctrine
+- 20260731.2 — Drafting Standard
+- 20260801.1 — KISS Theory
+- 20260806.0 — Agent Modules
+- 20260806.1 — Change Request
+- 20260810.1 — Module Creation Request
+
+Supporting Engineering Evidence
+
+- 20260816.0 — Rictus Core Qualification Development Report
+- 20260816.1 — Rictus → RAG Builder → Digit Knowledge Pipeline Development / Architecture Report

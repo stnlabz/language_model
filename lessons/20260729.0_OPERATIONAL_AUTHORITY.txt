@@ -1,0 +1,30 @@
+20260729.0.R0 - Operational Authority
+
+Root Document ID: 20260729.0
+Revision ID:       NONE
+Previous Revision: NONE
+sha256: 0097c4c25ab5659edb24c16880759acc2a2b2a9d9c1c51eb4fc30eddbc1a7e5e
+
+Status: Approved
+
+TOPIC:
+- Operational Authority Model
+
+OBJECTIVE:
+- Define a scalable operational authority model for all STN-LABZ systems.
+
+DEFINITION:
+- Reject traditional RBAC as the primary authority model.
+
+PRINCIPLES:
+- Tier defines operational depth.
+- Certification defines qualification.
+- Assignment defines mission responsibility.
+- All actions are auditable.
+- Human authority remains the final decision maker.
+
+SUMMARY:
+- Operational responsibility will be determined by authority, qualification, and assignment, rather than a collection of individual permissions.
+
+REFERENCES:
+- NONE

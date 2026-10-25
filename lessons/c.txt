@@ -1,0 +1,416 @@
+C is a general-purpose programming language.
+C is a compiled programming language.
+C was designed for efficient systems programming.
+C provides relatively direct access to memory and machine-level resources.
+C source files commonly use the .c filename extension.
+C header files commonly use the .h filename extension.
+C source code is translated into executable machine code by a compiler and related build tools.
+A C implementation consists of a compiler and supporting implementation facilities.
+ISO C refers to standardized versions of the C programming language.
+Portable C code avoids unnecessary dependence on implementation-specific behavior.
+A C program begins execution through the main function in a hosted environment.
+The main function returns an int.
+Returning zero from main conventionally indicates successful program termination.
+A nonzero program exit status conventionally indicates some form of failure.
+C is case-sensitive.
+Uppercase and lowercase identifiers are distinct in C.
+Statements in C commonly end with a semicolon.
+A block of C statements is enclosed by braces.
+Whitespace generally separates tokens but is otherwise flexible in many contexts.
+C comments can use /* and */.
+Modern C also supports // line comments.
+An identifier names an object, function, type, label, macro, or other program entity.
+C identifiers can contain letters, digits, and underscores subject to language rules.
+An identifier cannot begin with a digit.
+C has reserved keywords that cannot be used as ordinary identifiers.
+A variable is a named object whose stored value can change during its lifetime.
+A declaration introduces information about an identifier.
+A definition provides the entity described by a declaration where required.
+A variable definition allocates storage for an object unless language rules specify otherwise.
+A function declaration describes a function's interface.
+A function definition provides a function's implementation.
+A function prototype declares the types of a function's parameters and return value.
+Calling a function with an incompatible declaration can produce incorrect behavior or a diagnostic.
+C is statically typed.
+Every object and expression in C has a type.
+The char type represents character-sized integer data.
+The short type is an integer type.
+The int type is an integer type.
+The long type is an integer type.
+The long long type is an integer type.
+Integer types can be signed or unsigned.
+Unsigned integer arithmetic has defined modulo behavior.
+Signed integer overflow has undefined behavior.
+The float type represents floating-point values.
+The double type represents floating-point values with at least the precision requirements specified for double.
+The long double type provides an implementation-defined extended floating-point type.
+The _Bool type represents boolean values in C.
+The stdbool.h header provides the bool, true, and false convenience macros in versions of C where they are defined by that header.
+The sizeof operator reports the size of an object or type in bytes.
+sizeof returns a value of type size_t.
+A C byte is the size of char.
+The number of bits in a byte is available through CHAR_BIT in limits.h.
+C does not require a byte to contain exactly eight bits.
+Exact-width integer types are provided by stdint.h when the implementation supports them.
+int8_t is an exact-width signed 8-bit integer type when provided.
+uint8_t is an exact-width unsigned 8-bit integer type when provided.
+int16_t and uint16_t represent exact-width 16-bit integer types when provided.
+int32_t and uint32_t represent exact-width 32-bit integer types when provided.
+int64_t and uint64_t represent exact-width 64-bit integer types when provided.
+size_t is an unsigned integer type suitable for representing object sizes.
+ptrdiff_t is a signed integer type suitable for representing pointer differences.
+A constant is a value that does not change during evaluation.
+Integer literals represent integer constants.
+Floating-point literals represent floating-point constants.
+Character constants represent integer values associated with characters.
+String literals represent arrays of character data.
+A string literal normally includes an implicit terminating null character.
+A C string is conventionally a sequence of characters terminated by a null character.
+The null character has numeric value zero.
+The null character is commonly written as '\\0'.
+A C string does not intrinsically store its own length.
+Functions processing C strings commonly search for the terminating null character.
+strlen returns the number of characters before the terminating null character.
+strlen does not count the terminating null character.
+strlen requires a valid null-terminated string.
+A character array is not necessarily a valid C string.
+A pointer stores an address or pointer value referring to an object, function, or permitted special location.
+The address-of operator & obtains the address of an object where permitted.
+The dereference operator * accesses the object designated by a pointer where permitted.
+A null pointer does not designate an object or function.
+The NULL macro can represent a null pointer constant in appropriate contexts.
+Dereferencing a null pointer has undefined behavior.
+Using an invalid pointer can have undefined behavior.
+Using a pointer after the lifetime of its referenced object has ended can have undefined behavior.
+Pointer arithmetic is defined only within constrained relationships to arrays and objects.
+A pointer can point to an element of an array.
+Adding one to a pointer to an array element advances it to the next element.
+Pointer arithmetic is scaled according to the pointed-to type.
+C arrays contain a fixed number of elements once defined.
+Array elements have the same element type.
+Array indexing begins at zero.
+The expression array[index] accesses an array element when the index is valid.
+Array indexing outside the permitted bounds has undefined behavior.
+C does not automatically perform array bounds checking.
+An array expression often converts to a pointer to its first element.
+An array and a pointer are not the same type of object.
+The size of an array can be determined with sizeof while the array type is still available in that scope.
+After an array parameter is adjusted to a pointer parameter, sizeof no longer reports the original array size.
+A multidimensional array is an array whose elements are themselves arrays.
+C stores ordinary multidimensional arrays in row-major order.
+A structure groups multiple named members into one type.
+The struct keyword declares or defines structure types.
+Structure members can have different types.
+The . operator accesses a member of a structure object.
+The -> operator accesses a structure member through a pointer to a structure.
+The expression ptr->member is equivalent to (*ptr).member when ptr validly points to the structure.
+A union allows multiple members to share overlapping storage.
+Only appropriate access to a union's stored representation should be relied upon according to C rules.
+An enumeration defines a set of named integer constants.
+The enum keyword declares enumeration types.
+typedef creates an alias for an existing type.
+typedef does not create a fundamentally new distinct type.
+The const qualifier indicates that an object should not be modified through that qualified access path.
+Attempting to modify an object defined as const through an inappropriate cast can have undefined behavior.
+The volatile qualifier indicates that accesses to an object have observable behavior relevant to the implementation.
+volatile is not a general thread-synchronization mechanism.
+The restrict qualifier can express pointer aliasing assumptions for optimization and semantics where applicable.
+The static keyword has different meanings depending on context.
+A static local variable retains its stored value between function calls.
+A file-scope identifier declared static has internal linkage where applicable.
+A static function at file scope is visible by name only within its translation unit.
+The extern keyword can declare an identifier whose definition exists elsewhere.
+External linkage allows appropriately declared entities to be referenced across translation units.
+A translation unit is the source processed by the compiler after preprocessing.
+A C project can contain multiple translation units.
+Header files commonly contain declarations shared between translation units.
+Function definitions are normally placed in source files.
+Header guards prevent repeated inclusion from causing unwanted duplicate declarations or definitions.
+A conventional header guard uses #ifndef, #define, and #endif.
+#pragma once is supported by many implementations but is not part of every ISO C standard.
+The C preprocessor operates before ordinary compilation.
+Preprocessor directives begin with #.
+#include causes preprocessing content from another file or header to be included.
+#include <header.h> is commonly used for implementation or system headers.
+#include "header.h" is commonly used for project-local headers.
+#define defines a macro.
+A macro performs preprocessing substitution rather than behaving exactly like a C function.
+Function-like macros can evaluate their arguments more than once if written carelessly.
+Macro parameters should often be parenthesized appropriately when used in expressions.
+Conditional compilation uses directives such as #if, #ifdef, #ifndef, #elif, #else, and #endif.
+Conditional compilation can select platform-specific implementation code.
+Platform-specific implementation code can be isolated behind a common interface.
+Portable interfaces allow different platform implementations to provide equivalent behavior.
+The compiler translates C source into lower-level program representation or object code.
+The linker combines object files and libraries into a final program or library.
+A compile error prevents successful translation of a translation unit.
+A linker error occurs when required definitions or symbol relationships cannot be resolved during linking.
+A runtime error occurs while an executing program is running.
+Compiler warnings can identify suspicious code even when compilation succeeds.
+Warnings should be reviewed rather than automatically ignored.
+-Wall enables a useful collection of GCC and compatible compiler warnings.
+-Wextra enables additional warnings in GCC and compatible compilers.
+-Wpedantic requests diagnostics related to strict standard conformance in GCC and compatible compilers.
+The -std option can select a particular C language standard mode in compilers that support that option.
+Optimization options can affect generated machine code without changing the intended defined behavior of a correct program.
+Undefined behavior permits the C implementation to impose no requirements on the resulting behavior.
+A program containing undefined behavior cannot rely on a particular result from that operation.
+Implementation-defined behavior is behavior where the implementation selects and documents a permitted choice.
+Unspecified behavior permits one of multiple possibilities without requiring the implementation to document which occurs.
+Portable C programs distinguish defined behavior from undefined, implementation-defined, and unspecified behavior.
+The assignment operator = stores a value into an object where permitted.
+The equality operator == compares two values for equality according to their types.
+The inequality operator != compares two values for inequality.
+The relational operators <, <=, >, and >= compare values according to C rules.
+The logical AND operator is &&.
+The logical OR operator is ||.
+The logical NOT operator is !.
+The bitwise AND operator is &.
+The bitwise OR operator is |.
+The bitwise XOR operator is ^.
+The bitwise complement operator is ~.
+The left shift operator is <<.
+The right shift operator is >>.
+Logical operators and bitwise operators are not interchangeable.
+The && operator uses short-circuit evaluation.
+The || operator uses short-circuit evaluation.
+Short-circuit evaluation can prevent evaluation of the right operand.
+The conditional operator ?: selects between two expressions according to a condition.
+The increment operator ++ increases an applicable scalar value by one.
+The decrement operator -- decreases an applicable scalar value by one.
+Prefix and postfix increment have different value computation timing.
+Operator precedence determines how expressions are grouped when parentheses do not override that grouping.
+Parentheses can make intended expression grouping explicit.
+The if statement conditionally executes code.
+The else clause provides an alternative branch for an if statement.
+The switch statement selects among cases based on an integer or enumeration expression.
+A case label identifies a value handled by a switch statement.
+The break statement can terminate the nearest enclosing loop or switch.
+Missing break statements in switch cases can intentionally or accidentally allow fallthrough.
+Intentional fallthrough should be made clear to maintainers.
+The for statement provides a looping construct.
+The while statement repeats while its controlling expression evaluates as true.
+The do statement executes its body before testing its loop condition.
+The continue statement skips to the next applicable loop iteration.
+The return statement ends execution of a function and can provide its return value.
+A function can accept parameters.
+C passes function arguments by value.
+Passing a pointer allows a function to access an object owned by its caller.
+Passing a pointer is still passing the pointer value by value.
+C does not provide pass-by-reference semantics as a separate language mechanism.
+A function returning void does not return a value.
+A void pointer can hold a converted pointer to an object type.
+void * is commonly used for generic object pointers.
+A void pointer must be converted or assigned appropriately before dereferencing as a typed object.
+Function pointers can store addresses of compatible functions.
+Function pointers can be used to implement callbacks.
+A callback allows one component to invoke behavior supplied by another component through an agreed function interface.
+An ABI is an Application Binary Interface.
+An ABI defines binary-level conventions required for independently compiled components to interact correctly.
+An ABI can define calling conventions.
+An ABI can define data layout requirements.
+An ABI can define symbol naming and binary interface expectations.
+A source-level API and a binary ABI are related but distinct concepts.
+An API defines interfaces used by source code.
+An ABI defines compatibility at the compiled binary level.
+Changing a public structure layout can break ABI compatibility.
+Changing a function signature can break API and ABI compatibility.
+Modules loaded dynamically must satisfy the binary interface expected by their host.
+A dynamically loaded module can expose a known entry point used by its host.
+The host and module must agree on structures passed across their binary boundary.
+Versioned ABIs can prevent incompatible modules from being accepted.
+ABI validation should occur before an incompatible module is allowed to operate.
+Dynamic libraries contain code that can be loaded and linked at runtime or program startup depending on the platform.
+Shared libraries on Unix-like systems commonly use the .so filename extension.
+Dynamic libraries on Windows commonly use the .dll filename extension.
+Platform-specific dynamic loading APIs differ.
+A platform-independent module architecture can hide dynamic-loading differences behind a common interface.
+C itself does not define a standard dynamic-library loading API.
+Dynamic module loading therefore requires platform-specific facilities or an abstraction over them.
+Memory for ordinary local automatic objects is managed according to their scope and lifetime.
+Dynamic memory can be requested using malloc.
+malloc returns a pointer to allocated storage or a null pointer when allocation fails.
+Memory returned by malloc is uninitialized.
+calloc allocates storage and initializes its bytes to zero.
+realloc changes the size of an existing dynamic allocation according to its contract.
+free releases dynamically allocated storage obtained through compatible allocation functions.
+Passing an invalid pointer to free has undefined behavior.
+Freeing the same allocation more than once has undefined behavior.
+Failing to release no-longer-needed dynamic allocations can cause memory leaks.
+Using memory after it has been freed has undefined behavior.
+A dangling pointer refers to storage whose lifetime has ended or that is otherwise no longer valid.
+Setting a pointer to NULL after free can help prevent accidental reuse of that particular pointer but does not repair other aliases.
+Every successful allocation should have clearly defined ownership and lifetime.
+Memory ownership conventions make C systems easier to reason about.
+A buffer is a region of memory used to hold data.
+A buffer has a finite capacity.
+Writing beyond the bounds of a buffer has undefined behavior and can create security vulnerabilities.
+Buffer sizes must be tracked explicitly when the program cannot otherwise derive them safely.
+A destination buffer must have enough capacity for data written into it.
+strcpy does not know the capacity of its destination buffer.
+strcat does not know the capacity of its destination buffer.
+Unbounded string copying can cause buffer overflows.
+snprintf accepts a destination size and can be used for bounded formatted output.
+The return value of snprintf should be checked when truncation matters.
+memcpy copies a specified number of bytes between non-overlapping memory regions.
+Using memcpy with overlapping source and destination regions has undefined behavior.
+memmove supports overlapping source and destination regions.
+memset writes a byte value across a specified number of bytes.
+memcmp compares byte sequences.
+strcmp compares null-terminated strings lexicographically.
+strncmp compares strings up to a specified maximum number of characters.
+String comparison using == compares pointer values rather than string contents.
+strcmp should be used when ordinary C string contents need to be compared.
+The standard library provides reusable functions defined by the C standard.
+stdio.h declares standard input and output facilities.
+stdlib.h declares general utility functions including memory allocation and conversions.
+string.h declares string and memory manipulation functions.
+stdint.h declares fixed-width and related integer types.
+stddef.h declares common types and macros such as size_t and ptrdiff_t.
+limits.h declares implementation limits for integer types.
+float.h declares characteristics of floating-point types.
+ctype.h declares character classification and conversion functions.
+time.h declares date and time facilities.
+errno.h provides access to errno and related error macros.
+assert.h provides the assert diagnostic macro.
+stdbool.h provides boolean convenience definitions in applicable C versions.
+FILE represents a stream used by standard I/O facilities.
+fopen opens a file stream.
+fclose closes a file stream.
+fread reads binary data from a stream.
+fwrite writes binary data to a stream.
+fgets reads a bounded line or character sequence from a stream.
+fputs writes a string to a stream.
+fprintf writes formatted output to a stream.
+printf writes formatted output to standard output.
+stderr is the standard error stream.
+stdout is the standard output stream.
+stdin is the standard input stream.
+File operations can fail.
+Programs should check the results of operations that can fail.
+fopen returns a null pointer when it cannot open the requested file.
+A file path valid on one operating system may not be valid on another.
+Portable software should isolate platform-specific filesystem assumptions where practical.
+Binary and text stream behavior can differ across platforms.
+C standard I/O distinguishes text streams from binary streams.
+Opening a file with mode "rb" requests binary reading.
+Opening a file with mode "wb" requests binary writing.
+Writing a file is not guaranteed to place all data permanently on physical storage immediately.
+Buffered I/O can delay underlying writes.
+fflush requests that buffered output for an applicable stream be transmitted to its host environment.
+Closing a writable stream flushes buffered output as part of normal stream closure.
+Error handling should be explicit.
+A function can return a status value indicating success or failure.
+A caller should check error status when failure matters.
+errno can provide additional error information for functions documented to set it.
+errno should only be interpreted according to the contract of the function that failed.
+perror can print a message associated with the current errno value.
+Defensive C programming validates assumptions at boundaries.
+Input from files, networks, users, and external processes should be treated as untrusted unless established otherwise.
+Lengths received from external input should be validated before being used for memory operations.
+Integer overflow can cause size calculations to produce unsafe results.
+Allocation-size calculations should be checked for overflow when input can influence their values.
+Network data must not be assumed to use the host machine's byte order.
+Network protocols should define serialization explicitly.
+Serialization converts structured data into a defined transferable representation.
+Deserialization reconstructs structured data from a serialized representation.
+A protocol should define field sizes and encoding rather than depending on compiler-specific structure layout.
+Writing a C struct directly to a network connection does not automatically create a portable protocol.
+Structure padding can vary according to implementation and ABI requirements.
+Integer byte order can vary between systems.
+Network byte order conventionally uses big-endian ordering for many Internet protocols.
+Portable protocol implementations explicitly encode and decode multibyte fields.
+Deterministic serialization produces the same defined byte representation for the same logical input.
+Consensus-sensitive software should not depend on unspecified or undefined behavior.
+Consensus-sensitive software should define serialization precisely.
+Consensus-sensitive calculations should produce identical required results across supported platforms.
+Floating-point behavior can vary in ways that make it unsuitable for some deterministic consensus calculations.
+Fixed-width integer arithmetic is often easier to specify deterministically than platform-dependent integer representations.
+Platform independence does not require every implementation file to be identical.
+Platform independence can be achieved by placing platform-specific behavior behind common interfaces.
+Platform-specific code must not alter protocol-defined or consensus-defined results.
+Compile-time platform selection can choose an implementation backend.
+Runtime platform detection can choose an implementation backend when architecture permits.
+Common code should avoid unnecessary operating-system dependencies.
+A module interface should define ownership of memory passed across module boundaries.
+A module interface should define the lifetime of pointers passed across module boundaries.
+A module interface should define the sizes and layouts of shared structures.
+A module interface should validate version compatibility.
+A module should not assume host internals that are not part of its declared interface.
+A host should reject a module that fails required qualification or compatibility checks.
+A test verifies expected program behavior.
+A unit test tests a bounded unit of functionality.
+A negative test verifies correct handling of invalid or prohibited input or behavior.
+Regression tests preserve previously established behavior against future changes.
+Tests should be deterministic when testing deterministic behavior.
+A passing test demonstrates that the tested condition passed for that execution.
+A passing test does not prove the absence of every possible defect.
+Compiler warnings and tests provide different kinds of evidence.
+A clean compilation does not prove runtime correctness.
+A successful runtime test does not prove that undefined behavior is absent.
+Static analysis can identify classes of defects without executing the program.
+Dynamic analysis examines behavior while a program executes.
+Code review can identify design and implementation problems not captured by automated tests.
+Small functions with clear responsibilities are generally easier to test.
+Clear interfaces reduce coupling between C components.
+Global mutable state can make program behavior harder to reason about.
+Explicit state passed through interfaces can improve testability.
+Initialization should establish valid program state before dependent operations execute.
+Cleanup should release resources acquired during execution.
+Resource acquisition and release paths should account for intermediate failures.
+A program should not continue using a resource after acquisition failed.
+A socket is an operating-system resource used for network communication.
+The ISO C standard library does not define sockets.
+Socket programming requires platform-specific networking facilities or an abstraction.
+TCP provides a reliable ordered byte stream.
+TCP does not preserve application message boundaries.
+An application protocol running over TCP must define its own message framing.
+A single send operation does not guarantee a single corresponding receive operation.
+A receive operation can return fewer bytes than the application ultimately requires.
+Network code must handle partial reads and writes.
+Network connections can fail or close at any time.
+Network timeouts prevent some operations from waiting indefinitely.
+A server listening on 0.0.0.0 accepts connections through applicable local IPv4 interfaces when permitted by the operating system and network configuration.
+A service listening on 127.0.0.1 is ordinarily reachable only through the local host's IPv4 loopback interface.
+Ports identify transport-layer service endpoints.
+Binding a server socket to a port can fail if the address is unavailable or permission is denied.
+HTTP is an application protocol commonly transported over TCP.
+A C program can implement an HTTP server using appropriate networking facilities.
+HTTP requests contain a request method, target, headers, and optionally a body according to protocol rules.
+HTTP responses contain a status, headers, and optionally a body according to protocol rules.
+A 200 HTTP status indicates successful handling according to HTTP semantics.
+A 404 HTTP status indicates that the requested resource was not found.
+A 503 HTTP status indicates that a service is unavailable.
+An application should use HTTP status codes according to the actual result of request handling.
+A JSON response is text formatted according to JSON syntax.
+C does not include JSON processing in the ISO C standard library.
+JSON support requires program code or an additional library.
+External libraries add dependencies that must be understood and managed.
+Minimizing dependencies can reduce deployment complexity.
+Avoiding unnecessary dependencies can make systems easier to audit and maintain.
+A Makefile describes build relationships and commands for the make utility.
+make is not part of the ISO C language.
+A Windows batch file can invoke a C compiler and linker directly.
+Build scripts should make compilation steps repeatable.
+Repeatable builds reduce accidental differences between development runs.
+Compiler options should be documented as part of a project's build procedure.
+Source control records changes to source and related project files.
+Version control does not replace testing.
+Comments should explain information that is not already obvious from the code.
+Comments that contradict the implementation are harmful.
+Names should communicate the purpose of functions, objects, and types.
+Consistent formatting improves readability.
+Misleading indentation can make control flow difficult to understand.
+Braces can make control flow clearer even when the language permits an unbraced statement.
+Combining multiple unrelated statements on one line can reduce readability.
+Code should favor clarity when compactness provides no functional benefit.
+C permits highly compact code but compact code is not automatically better code.
+Correctness is more important than cleverness.
+Defined behavior is more reliable than behavior that merely happens to work on one compiler.
+Portable behavior is more reliable across supported platforms than undocumented assumptions.
+A deterministic system should make important behavior explicit.
+A small interface is easier to reason about than an unnecessarily broad interface.
+C provides mechanisms rather than automatic safety.
+The programmer is responsible for many memory, lifetime, bounds, and resource-management decisions.
+Careful validation is essential when C processes untrusted input.
+C can provide efficient and predictable systems when its interfaces and invariants are carefully defined.

@@ -1,0 +1,446 @@
+20260909.0 - STN-LABZ / STN Chain Authority Separation Policy
+
+Root Document ID: 20260909.0
+Revision ID: NONE
+Previous Revision: NONE
+sha256: f9c07fcce44570205af1d25a07f0a2627570477a3d5f1189e0acd705ca212b9d
+
+Status: Approved
+Scope: Organization-wide
+Applicability: STN-LABZ, STN Chain, STN-LABZ Systems Interacting with STN Chain, Contracts, Agents, Services, Software, Documentation, and Network Participation
+
+---
+
+1. Purpose
+
+This policy establishes the organizational, architectural, and authority boundary between STN-LABZ and STN Chain.
+
+STN-LABZ is the organizational parent and home of STN Chain.
+
+STN Chain is a separate consensus entity whose network state and consensus-visible decisions are governed by STN Chain consensus.
+
+STN-LABZ participation in STN Chain does not establish unilateral consensus authority.
+
+Organizational ownership does not equal consensus authority.
+
+---
+
+2. Governing Relationship
+
+The authoritative relationship is:
+
+    STN-LABZ
+        |
+        | organizational parent / operator
+        v
+    STN Chain
+        |
+        | independent consensus domain
+        |
+        +-- Contract: STN-LABZ
+        |      |
+        |      +-- identities
+        |      +-- roles
+        |      +-- obligations
+        |      +-- approvals
+        |      +-- records
+        |      +-- global network coordination
+        |
+        +-- Contract: other organizations
+        |
+        +-- Contract: other participants
+
+This relationship will remain explicit in architecture, documentation, software, contracts, interfaces, and operational decisions.
+
+---
+
+3. Organizational Parent
+
+STN-LABZ is the organizational home of STN Chain.
+
+This relationship includes responsibility for applicable:
+
+- development;
+- engineering;
+- repositories;
+- infrastructure;
+- software maintenance;
+- research;
+- documentation;
+- releases;
+- organizational resources; and
+- continued development of the STN Chain ecosystem.
+
+This organizational relationship does not grant STN-LABZ authority to bypass STN Chain consensus.
+
+---
+
+4. Independent Consensus Domain
+
+STN Chain constitutes a separate consensus domain.
+
+Consensus-visible state will be established according to STN Chain's applicable consensus rules.
+
+STN-LABZ will not treat its organizational ownership, development role, infrastructure operation, software authorship, repository ownership, funding, or historical creation of STN Chain as authority to unilaterally alter consensus-visible state.
+
+Consensus remains authoritative within the consensus domain.
+
+---
+
+5. STN-LABZ-on-Chain
+
+When STN-LABZ interacts with STN Chain as a network participant, STN-LABZ will operate through its applicable contractual and protocol-defined relationship with the Chain.
+
+This relationship is referred to within this policy as:
+
+> STN-LABZ-on-Chain
+
+STN-LABZ-on-Chain is a contractual participant and consumer of STN Chain.
+
+It is distinct from STN-LABZ acting as the organizational parent responsible for development and operation of the STN Chain project.
+
+The distinction is:
+
+    STN-LABZ
+        |
+        +-- Organizational Parent
+        |       |
+        |       +-- develops
+        |       +-- maintains
+        |       +-- operates applicable infrastructure
+        |       +-- publishes applicable software
+        |
+        +-- STN-LABZ-on-Chain
+                |
+                +-- participates
+                +-- submits
+                +-- receives
+                +-- coordinates
+                +-- records
+                +-- operates through contract
+                        |
+                        v
+                    STN Chain
+                    Consensus
+
+These roles will not be conflated.
+
+---
+
+6. STN-LABZ Contract
+
+STN-LABZ may maintain one or more contracts within STN Chain for organizational participation and coordination.
+
+The STN-LABZ contractual domain may represent applicable:
+
+- identities;
+- roles;
+- obligations;
+- approvals;
+- records;
+- organizational relationships;
+- network coordination; and
+- other explicitly defined contractual state.
+
+The STN-LABZ contract governs the STN-LABZ contractual domain.
+
+It does not independently govern STN Chain consensus.
+
+---
+
+7. Other Organizations
+
+Other organizations may participate in STN Chain through their applicable contracts, identities, records, or protocol relationships.
+
+STN-LABZ organizational policy does not automatically become the internal policy of another participating organization.
+
+Likewise, another organization's internal policy does not automatically become STN-LABZ policy.
+
+The Chain provides a common consensus environment without requiring organizational identity or internal governance to collapse into a single authority.
+
+---
+
+8. Other Participants
+
+Individuals, systems, miners, nodes, services, or other recognized participants may interact with STN Chain according to applicable protocol and consensus rules.
+
+Participation does not independently establish authority over other participants.
+
+The ability to submit information, transactions, contracts, work, records, or other protocol-valid material does not establish unilateral authority over consensus.
+
+---
+
+9. Participation Does Not Equal Authority
+
+The following rule is organization-wide:
+
+> Participation ≠ Authority
+
+Participation in STN Chain may establish the ability to perform actions permitted by protocol, contract, or consensus.
+
+It does not establish authority beyond those boundaries.
+
+This applies equally to STN-LABZ and other participants.
+
+---
+
+10. Organizational Ownership Does Not Equal Consensus Authority
+
+The following rule is organization-wide:
+
+> Organizational Ownership ≠ Consensus Authority
+
+STN-LABZ may own, maintain, develop, operate, publish, or fund components of the STN Chain ecosystem.
+
+None of these conditions independently establish authority to override consensus.
+
+Specifically:
+
+    creation        ≠ consensus authority
+    ownership       ≠ consensus authority
+    development     ≠ consensus authority
+    maintenance     ≠ consensus authority
+    infrastructure  ≠ consensus authority
+    funding         ≠ consensus authority
+    participation   ≠ consensus authority
+
+Consensus authority derives from the applicable STN Chain consensus rules.
+
+---
+
+11. Software Authority Boundary
+
+STN-LABZ-controlled STN Chain software will preserve the distinction between organizational configuration and consensus-visible rules.
+
+Organizational configuration may govern STN-LABZ-operated systems.
+
+It will not silently redefine network consensus.
+
+A local administrative capability will not be interpreted as network consensus authority.
+
+A privileged operating-system account, repository permission, signing key, deployment credential, server credential, or infrastructure role does not independently establish authority over consensus-visible Chain state.
+
+---
+
+12. Contract Authority Boundary
+
+A contract may exercise only the authority established for that contract under applicable STN Chain rules.
+
+The existence of an STN-LABZ contract does not create implicit authority over:
+
+- unrelated contracts;
+- other organizations;
+- independent participants;
+- consensus validation;
+- network ownership;
+- protocol rules; or
+- consensus-visible state outside the contract's established authority.
+
+Contract authority will remain bounded.
+
+---
+
+13. Consensus Enforcement
+
+Where STN-LABZ organizational intent conflicts with valid STN Chain consensus state, software will not silently alter consensus state merely to satisfy organizational preference.
+
+A desired change to consensus behavior will proceed through the applicable STN Chain engineering and consensus-change process.
+
+The organizational parent may direct development of STN Chain software.
+
+Deployment of new software does not retroactively make an incompatible state valid.
+
+Consensus-visible behavior remains subject to the rules active for the applicable network state.
+
+---
+
+14. Global Network Coordination
+
+STN-LABZ may use its STN Chain contractual domain for global network coordination.
+
+Coordination may include applicable:
+
+- organizational identities;
+- system identities;
+- operational roles;
+- mission relationships;
+- approvals;
+- obligations;
+- records;
+- distributed instructions;
+- system relationships; and
+- other contract-defined organizational information.
+
+Global coordination through STN Chain does not transform STN-LABZ into the consensus authority of STN Chain.
+
+The Chain provides consensus-backed coordination.
+
+STN-LABZ provides organizational meaning within its contractual domain.
+
+---
+
+15. Identity Separation
+
+An STN-LABZ organizational identity and an STN Chain network identity are related only where that relationship is explicitly established.
+
+The existence of an organizational identity does not automatically establish a network identity.
+
+The existence of a network identity does not automatically establish an STN-LABZ organizational identity, role, qualification, assignment, approval, or authority.
+
+Identity relationships will be explicit.
+
+---
+
+16. Role Separation
+
+An STN-LABZ organizational role does not independently establish STN Chain consensus authority.
+
+An STN Chain participant role does not independently establish an STN-LABZ organizational role.
+
+Where a role crosses these domains, the relationship will be explicitly defined.
+
+No authority will be inferred merely because similar terminology exists in both domains.
+
+---
+
+17. Approval Separation
+
+STN-LABZ organizational approval and STN Chain consensus acceptance are separate events.
+
+An organizational approval may authorize STN-LABZ to submit an action to STN Chain.
+
+It does not guarantee consensus acceptance.
+
+Likewise, consensus acceptance of a technically valid Chain action does not independently establish STN-LABZ organizational approval for that action.
+
+The governing relationship is:
+
+    STN-LABZ Approval
+            |
+            v
+       Authorized
+       Submission
+            |
+            v
+       STN Chain
+       Consensus
+            |
+        +---+---+
+        |       |
+        v       v
+     Accept   Reject
+
+Organizational authorization and consensus validation will not be treated as interchangeable.
+
+---
+
+18. Records
+
+STN Chain may provide consensus-backed records for STN-LABZ.
+
+The existence of a record on STN Chain establishes only what the applicable Chain and contract semantics establish.
+
+Software and documentation will not infer additional organizational authority from the mere existence of a Chain record.
+
+STN-LABZ interpretation of organizational records remains subject to applicable STN-LABZ policy and contract semantics.
+
+---
+
+19. Agents and Automated Systems
+
+STN-LABZ agents, automated systems, software, services, and development tools will preserve the authority separation established by this policy.
+
+They will not infer that:
+
+- STN-LABZ owns consensus;
+- STN-LABZ may bypass consensus;
+- STN-LABZ organizational authority automatically exists on Chain;
+- Chain acceptance automatically establishes STN-LABZ organizational approval;
+- contract authority extends beyond its defined scope; or
+- participation creates governance authority.
+
+When the applicable authority domain is ambiguous, the system will preserve the distinction rather than collapse the domains.
+
+---
+
+20. Documentation
+
+STN-LABZ documentation concerning STN Chain will distinguish, where relevant, between:
+
+- STN-LABZ as organizational parent;
+- STN Chain as consensus entity;
+- STN-LABZ-on-Chain as contractual participant;
+- STN-LABZ-operated infrastructure;
+- STN Chain consensus;
+- STN-LABZ contractual authority; and
+- general network participation.
+
+Documentation will not describe STN-LABZ as possessing unilateral consensus authority merely because STN Chain exists within the STN-LABZ organization.
+
+---
+
+21. Core Hierarchy
+
+The organization-wide conceptual hierarchy is:
+
+    STN-LABZ
+        |
+        v
+    Organizational Home of STN Chain
+
+    STN Chain
+        |
+        v
+    Separate Consensus Entity
+
+    STN-LABZ-on-Chain
+        |
+        v
+    Contractual Participant / Consumer
+
+These relationships coexist.
+
+None eliminates the others.
+
+---
+
+22. Core Rules
+
+The controlling rules of this policy are:
+
+> STN-LABZ → organizational home of STN Chain
+
+> STN Chain → separate consensus entity
+
+> STN-LABZ-on-Chain → contractual participant and consumer
+
+> Participation ≠ Authority
+
+> Organizational Ownership ≠ Consensus Authority
+
+STN-LABZ will preserve these distinctions throughout STN Chain engineering, documentation, operations, contracts, integrations, and future development.
+
+---
+
+23. Consensus Review
+ Lab: APPROVE
+ Project Engineering: APPROVE
+ Project Legal: APPROVE
+
+24. Human Review
+
+Decision: APPROVED 
+Reviewer: P. Mei 
+Date: 20260909
+
+References
+
+- 20260730.2 — STN-LABZ General Orders
+- 20260729.8 — Operational Doctrine
+- 20260817.0 — Engineering Development Doctrine
+- 20260817.1 — STN-LABZ Trust Chain
+- 20260824.0 — STN-LABZ AI LAW
+- 20260905.0 — The 2026 Sovereignty Act of STN-LABZ
+- 20260906.0 — Version Numbering Doctrine
+
+END DOCUMENT

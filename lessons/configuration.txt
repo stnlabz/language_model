@@ -1,0 +1,3218 @@
+Configuration is the process of supplying a system with values that select or adjust behavior without requiring the program itself to be rewritten.
+
+Configuration can determine:
+
+Network addresses.
+
+Ports.
+
+Filesystem locations.
+
+Logging levels.
+
+Feature enablement.
+
+Resource limits.
+
+Timeouts.
+
+Retry limits.
+
+Module selection.
+
+Runtime modes.
+
+Service endpoints.
+
+Database connections.
+
+Protocol options.
+
+Operational parameters.
+
+Configuration should select among behavior the software is designed and authorized to perform.
+
+Configuration should not secretly redefine the architecture of the system.
+
+Code defines capability.
+
+Policy defines permitted behavior where policy applies.
+
+Configuration selects permitted operating parameters.
+
+Keep these concepts separate.
+
+A configuration value is input.
+
+Treat configuration as input.
+
+Do not assume configuration is valid merely because it came from a local file.
+
+Configuration can be:
+
+Malformed.
+
+Incomplete.
+
+Outdated.
+
+Mistyped.
+
+Corrupted.
+
+Generated incorrectly.
+
+Modified manually.
+
+Copied from another environment.
+
+Incompatible with the running software.
+
+Validate configuration before using it.
+
+A useful configuration lifecycle is:
+
+Discover configuration source.
+
+Read configuration.
+
+Parse configuration.
+
+Validate structure.
+
+Validate values.
+
+Resolve precedence.
+
+Apply defaults where defined.
+
+Construct the effective configuration.
+
+Validate cross-field relationships.
+
+Freeze or publish the effective configuration.
+
+Use it.
+
+Do not begin operating on partially validated configuration.
+
+Configuration formats can include:
+
+Plain text.
+
+TSV.
+
+CSV.
+
+INI.
+
+JSON.
+
+YAML.
+
+TOML.
+
+XML.
+
+Environment variables.
+
+Command-line arguments.
+
+Database records.
+
+Operating-system configuration stores.
+
+Remote configuration services.
+
+Compiled defaults.
+
+The format is not the configuration architecture.
+
+Choose a format appropriate to the system.
+
+Do not adopt a complex format merely because it is popular.
+
+Small systems often benefit from simple configuration.
+
+A configuration schema defines what configuration is accepted.
+
+The schema can specify:
+
+Known keys.
+
+Required keys.
+
+Optional keys.
+
+Types.
+
+Ranges.
+
+Allowed values.
+
+Defaults.
+
+Relationships.
+
+Deprecations.
+
+Version.
+
+For example:
+
+host = string
+
+port = integer from 1 through 65535
+
+timeout_seconds = integer from 1 through 300
+
+log_level = one of debug, info, warning, error
+
+enabled = boolean
+
+Do not accept arbitrary values and hope downstream code handles them.
+
+Configuration validation should fail clearly.
+
+For example:
+
+Invalid:
+
+port=banana
+
+Do not silently convert it to:
+
+port=0
+
+Reject it.
+
+Invalid:
+
+port=70000
+
+Do not clamp it to:
+
+65535
+
+Reject it.
+
+Invalid:
+
+log_level=verboseish
+
+Do not guess:
+
+debug
+
+Reject it.
+
+Configuration should be deterministic.
+
+The same configuration sources under the same precedence rules should produce the same effective configuration.
+
+Do not make configuration resolution depend on arbitrary iteration order.
+
+Do not randomly choose between duplicate settings.
+
+Define precedence.
+
+A common precedence model can be:
+
+Compiled defaults.
+
+System configuration file.
+
+Application configuration file.
+
+Environment variables.
+
+Command-line arguments.
+
+The exact order is application-specific.
+
+There is no universal precedence hierarchy.
+
+Define one.
+
+Document it.
+
+Implement it consistently.
+
+Do not let different modules invent different precedence rules.
+
+For example, if command-line options override environment variables, that rule should apply consistently unless an option explicitly defines otherwise.
+
+Precedence answers:
+
+When multiple sources provide the same setting, which one wins?
+
+It does not answer:
+
+Is the winning value valid?
+
+Validate the resulting value.
+
+A higher-precedence source should not be allowed to bypass validation.
+
+For example:
+
+File:
+
+port=8080
+
+Environment:
+
+PORT=banana
+
+If environment has higher precedence, the effective input is invalid.
+
+Do not fall back silently to 8080 unless fallback-on-invalid is explicitly defined.
+
+Invalid override is not the same as absent override.
+
+This distinction matters.
+
+Absent means:
+
+No value was supplied by this source.
+
+Invalid means:
+
+A value was supplied but violates the contract.
+
+Do not treat malformed configuration as missing configuration.
+
+Defaults apply to absent optional configuration according to defined rules.
+
+Defaults should not normally conceal malformed supplied values.
+
+For example:
+
+Default port = 8080.
+
+PORT absent:
+
+Use 8080.
+
+PORT=abc:
+
+Reject configuration.
+
+Do not use 8080 merely because parsing abc failed.
+
+Otherwise configuration mistakes become invisible.
+
+Defaults should be explicit.
+
+Do not scatter hidden defaults throughout the program.
+
+For example:
+
+network.c assumes timeout=10.
+
+worker.c assumes timeout=30.
+
+api.c assumes timeout=60.
+
+This creates inconsistent behavior.
+
+Define the authoritative default once where practical.
+
+Defaults are part of system behavior.
+
+Document important defaults.
+
+A default should be safe and meaningful.
+
+Do not choose insecure defaults merely because they make setup easier.
+
+For example:
+
+authentication_required = false
+
+can be a dangerous default if authentication is required by the product's security model.
+
+Security-sensitive defaults should follow policy.
+
+Do not let missing configuration silently disable required protections.
+
+Required configuration should be required.
+
+If the system cannot operate correctly without a value, do not invent one unless a defined default exists.
+
+For example:
+
+Required cryptographic identity file missing.
+
+Do not silently generate or select an unrelated identity unless the system explicitly defines that behavior.
+
+Fail clearly or enter the defined initialization workflow.
+
+Do not guess.
+
+Configuration keys should have stable names.
+
+For example:
+
+rpc_host
+
+rpc_port
+
+data_path
+
+log_level
+
+Avoid ambiguous names such as:
+
+address
+
+value
+
+mode2
+
+thing
+
+Configuration is an interface.
+
+Treat key names as interface design.
+
+Names should describe semantics.
+
+Namespaces can group related settings.
+
+For example:
+
+network.host
+
+network.port
+
+network.timeout
+
+logging.level
+
+logging.path
+
+storage.path
+
+storage.max_size
+
+Grouping can improve clarity.
+
+Do not create unnecessary hierarchy for a tiny configuration.
+
+Keep it proportional.
+
+Configuration types should remain explicit.
+
+A boolean is not an arbitrary string.
+
+Define accepted forms.
+
+For example:
+
+true
+
+false
+
+Do not accept:
+
+yes
+
+y
+
+1
+
+on
+
+enabled
+
+unless the configuration specification explicitly allows them.
+
+Permissive parsing can create ambiguity.
+
+If multiple forms are accepted, define them exactly.
+
+Integer configuration should be parsed strictly.
+
+Check:
+
+Complete parse.
+
+Range.
+
+Overflow.
+
+Sign.
+
+Do not use permissive conversion that accepts prefixes and ignores trailing garbage.
+
+For example:
+
+18473abc
+
+should not become:
+
+18473
+
+if the configuration requires an integer.
+
+Floating-point configuration requires defined semantics.
+
+If only finite values are permitted, reject:
+
+NaN
+
+Infinity
+
+-Infinity
+
+Define range and precision requirements.
+
+Do not use floating point for values requiring exact integer or decimal semantics merely because parsing is convenient.
+
+Durations should have clear units.
+
+Bad:
+
+timeout=30
+
+Thirty what?
+
+Seconds?
+
+Milliseconds?
+
+Minutes?
+
+Prefer either a documented universal unit:
+
+timeout_seconds=30
+
+or a defined duration grammar:
+
+timeout=30s
+
+Do not make units depend on which module reads the value.
+
+Storage sizes should also have defined units.
+
+For example:
+
+cache_bytes=1048576
+
+or:
+
+cache_size=1MiB
+
+if the parser explicitly supports that grammar.
+
+Do not interpret:
+
+1M
+
+differently on different platforms or modules.
+
+Configuration paths should have defined semantics.
+
+Questions include:
+
+Absolute or relative?
+
+If relative, relative to what?
+
+Working directory?
+
+Executable directory?
+
+Configuration file directory?
+
+Data directory?
+
+Define it.
+
+Do not let path interpretation depend accidentally on where the process was launched.
+
+A service started by systemd can have a different working directory than the same binary launched manually.
+
+Relative-path ambiguity creates deployment defects.
+
+Canonicalize paths where appropriate.
+
+Do not canonicalize away meaningful semantics blindly.
+
+Validate path existence only when existence is required at configuration time.
+
+For example:
+
+Input file must exist.
+
+Output directory might be created later.
+
+Know the requirement.
+
+Do not require every configured path to exist merely because path validation exists.
+
+Permissions matter.
+
+A path can exist while the process cannot read or write it.
+
+Configuration validation can check required access where practical.
+
+Do not claim a path is usable merely because stat() succeeded.
+
+The actual operation can still fail.
+
+Runtime error handling remains required.
+
+Configuration validation reduces predictable failures.
+
+It cannot prove future operations will succeed.
+
+Hostnames and addresses should use appropriate parsers.
+
+Do not parse network endpoints through casual string splitting when IPv6 or other valid formats can contain colons.
+
+Define endpoint representation.
+
+For example:
+
+host and port as separate fields.
+
+This can be clearer than one overloaded string.
+
+If a URL is expected, parse it as a URL.
+
+If a hostname is expected, do not accept an arbitrary URL unless explicitly supported.
+
+Keep types distinct.
+
+Ports must be validated according to the application's permitted range.
+
+The general transport range can be 1 through 65535.
+
+An application can impose a narrower allowed range.
+
+Do not assume any numerically valid port is permitted by application policy.
+
+Configuration relationships require cross-field validation.
+
+For example:
+
+tls_enabled=true
+
+can require:
+
+certificate_path
+
+private_key_path
+
+Another example:
+
+mode=client
+
+can require:
+
+server_host
+
+server_port
+
+Another:
+
+mode=standalone
+
+can prohibit:
+
+cluster_peer
+
+Validate combinations.
+
+Individually valid values can form an invalid configuration.
+
+Configuration modes should have defined behavior.
+
+For example:
+
+development
+
+test
+
+production
+
+Do not let a mode become a vague switch that changes dozens of undocumented behaviors.
+
+If a mode affects behavior, document what it selects.
+
+Security behavior should not be hidden behind surprising mode semantics.
+
+For example:
+
+production=true
+
+should not be the only thing preventing debug authentication bypass unless that architecture is explicitly designed and controlled.
+
+Prefer explicit security settings where clarity matters.
+
+Feature flags are configuration.
+
+A feature flag selects whether an existing feature is active.
+
+It should not introduce code paths that have never been validated.
+
+Feature flags can be:
+
+Boolean.
+
+Enumerated.
+
+Percentage-based.
+
+Identity-based.
+
+Time-based.
+
+Simple systems should prefer simple flags.
+
+Do not build an experimentation platform when a boolean is sufficient.
+
+A feature disabled by configuration still exists in the code.
+
+Do not confuse disabled with absent.
+
+Security analysis should consider dormant code if it can be re-enabled.
+
+Configuration can select modules.
+
+For example:
+
+modules=network,storage,monitoring
+
+Validate module names.
+
+Reject unknown modules unless forward-compatible behavior explicitly allows them.
+
+Do not dynamically load arbitrary paths merely because a configuration key says:
+
+module=/tmp/whatever
+
+unless arbitrary module loading is intentionally authorized.
+
+Module selection and module trust are separate.
+
+Configuration can select among approved components.
+
+It does not automatically authorize arbitrary executable code.
+
+Plugin paths are security boundaries.
+
+Treat them accordingly.
+
+A configuration file can be human-editable.
+
+Human-editable configuration should produce useful errors.
+
+For example:
+
+config.ini:12: invalid value for rpc_port: expected integer 1..65535
+
+This is more useful than:
+
+configuration failed
+
+Include enough context to correct the error.
+
+Do not expose secrets in error messages.
+
+For example:
+
+Invalid API token format.
+
+Do not print the entire token.
+
+Configuration diagnostics should identify source.
+
+For example:
+
+rpc_port = 18473
+source = /etc/example/config.ini
+
+or:
+
+rpc_port = 18473
+source = command line
+
+Knowing provenance helps debugging.
+
+Do not make operators guess which layer supplied the effective value.
+
+An effective configuration is the fully resolved configuration after precedence, defaults, parsing, and validation.
+
+For example:
+
+Effective configuration:
+
+host = 127.0.0.1
+
+port = 8080
+
+timeout_seconds = 30
+
+log_level = info
+
+Each value can optionally retain provenance.
+
+For example:
+
+host:
+value = 127.0.0.1
+source = default
+
+port:
+value = 8081
+source = environment
+
+This can greatly improve observability.
+
+Do not expose sensitive provenance or values where access is unauthorized.
+
+Configuration introspection can support:
+
+Debugging.
+
+Support.
+
+Auditing.
+
+Testing.
+
+Deployment verification.
+
+A command such as:
+
+program --show-config
+
+can display effective non-secret configuration.
+
+This can eliminate uncertainty.
+
+Do not require operators to mentally merge five configuration sources.
+
+Show what the process actually loaded.
+
+The effective configuration is more important than what one file contains.
+
+A file can say:
+
+port=8080
+
+while environment says:
+
+PORT=8081
+
+The running process uses 8081.
+
+Debug runtime state, not assumptions.
+
+Configuration loading should identify which files were actually read.
+
+Do not assume the file you edited is the file the process loaded.
+
+Possible causes include:
+
+Different working directory.
+
+Different service user.
+
+Different --config argument.
+
+Different environment.
+
+Container filesystem.
+
+Stale deployment.
+
+Symlink.
+
+Multiple installations.
+
+Log or expose the loaded configuration source where appropriate.
+
+Configuration discovery should be deterministic.
+
+Bad:
+
+Search arbitrary directories until a file named config is found.
+
+Better:
+
+Use a documented search order.
+
+For example:
+
+Explicit --config path.
+
+Application-specific environment path.
+
+System default path.
+
+Built-in defaults.
+
+Again, exact rules are application-specific.
+
+Define them.
+
+Do not let configuration discovery depend on filesystem enumeration order.
+
+Explicit configuration paths are useful for services.
+
+For example:
+
+program --config /etc/program/config.ini
+
+This reduces ambiguity.
+
+A default path can still exist.
+
+Command-line override can make testing easier.
+
+Do not create so many discovery mechanisms that operators cannot predict which file wins.
+
+Configuration files can include other files.
+
+Includes can be useful for:
+
+Shared settings.
+
+Environment separation.
+
+Secret separation.
+
+Large configurations.
+
+Includes also add complexity.
+
+If includes are supported, define:
+
+Path resolution.
+
+Maximum nesting.
+
+Cycle handling.
+
+Precedence.
+
+Duplicate keys.
+
+Missing includes.
+
+Optional includes.
+
+Do not allow infinite include recursion.
+
+Detect cycles.
+
+For example:
+
+a.conf includes b.conf
+
+b.conf includes a.conf
+
+Reject it.
+
+Do not recurse forever.
+
+Include order must be deterministic.
+
+If later files override earlier files, define that.
+
+Do not depend on directory ordering unless explicitly sorted and specified.
+
+Wildcard includes should have deterministic ordering.
+
+For example:
+
+conf.d/*.conf
+
+Sort filenames according to a defined rule before applying them.
+
+Do not trust filesystem enumeration order.
+
+Duplicate keys require defined semantics.
+
+Possible policies:
+
+Reject duplicates.
+
+First value wins.
+
+Last value wins.
+
+Collect into list.
+
+Different formats have different conventions.
+
+Choose intentionally.
+
+For security-sensitive configuration, rejecting ambiguous duplicates can be safer.
+
+Do not let one parser use first-value semantics while another uses last-value semantics.
+
+Parser differentials create defects.
+
+Unknown keys require policy.
+
+A strict configuration system can reject unknown keys.
+
+This catches:
+
+Typos.
+
+Removed settings.
+
+Unsupported features.
+
+Wrong-version configuration.
+
+For example:
+
+log_levle=debug
+
+should not silently do nothing.
+
+Rejecting it immediately reveals the mistake.
+
+Some systems need forward compatibility and can preserve or ignore unknown fields.
+
+If so, define that behavior.
+
+Do not silently ignore unknown security-sensitive settings.
+
+Warnings can be appropriate for deprecated keys.
+
+For example:
+
+warning: network_timeout is deprecated; use network.timeout_seconds
+
+Deprecation should have a migration path.
+
+Do not remove configuration keys without considering deployed installations.
+
+Configuration is an external interface.
+
+Version configuration formats when incompatible changes occur.
+
+For example:
+
+config_version=2
+
+Versioning can determine:
+
+Accepted keys.
+
+Value grammar.
+
+Defaults.
+
+Migration behavior.
+
+Do not infer incompatible versions from random key presence if an explicit version would be clearer.
+
+A configuration migration can transform old known configuration into a new known representation.
+
+Migration should be deterministic.
+
+Do not guess ambiguous mappings.
+
+If an old value has no safe equivalent, require operator intervention.
+
+Do not fabricate intent.
+
+Preserve a backup when modifying operator-owned configuration where appropriate.
+
+Automatic migration should not destroy evidence of prior state.
+
+A migration should be testable.
+
+Configuration parsers should not execute arbitrary code.
+
+A configuration file should normally describe data.
+
+Do not use a general programming language as configuration merely for convenience unless executable configuration is an intentional architectural choice.
+
+Executable configuration increases:
+
+Attack surface.
+
+Complexity.
+
+Nondeterminism.
+
+Debugging difficulty.
+
+Portability problems.
+
+Data configuration is easier to validate.
+
+Keep configuration declarative where practical.
+
+Declarative configuration describes desired parameters.
+
+Imperative scripts perform operations.
+
+Do not confuse them.
+
+For example:
+
+Configuration:
+
+data_path=/var/lib/program
+
+Imperative behavior:
+
+mkdir /var/lib/program
+
+The application can perform the operation according to defined initialization logic.
+
+The configuration should not need arbitrary shell commands.
+
+Do not put:
+
+on_start=rm -rf ...
+
+into a generic configuration language unless executing arbitrary commands is explicitly the feature.
+
+Configuration should not become an accidental command interpreter.
+
+Secrets can appear in configuration.
+
+Examples include:
+
+Passwords.
+
+API keys.
+
+Private keys.
+
+Tokens.
+
+Database credentials.
+
+Do not print secrets in configuration dumps.
+
+Do not include secrets in ordinary logs.
+
+Do not expose secrets through diagnostics.
+
+Redact them.
+
+For example:
+
+database_password = <redacted>
+
+Do not redact whether the value exists if existence is useful and safe.
+
+For example:
+
+database_password = configured
+
+can aid diagnostics.
+
+Secret storage should follow system security requirements.
+
+Possible sources include:
+
+Protected files.
+
+Environment variables.
+
+Operating-system secret stores.
+
+Dedicated secret systems.
+
+The correct method depends on deployment.
+
+Do not claim environment variables are universally secure.
+
+Do not claim configuration files are universally insecure.
+
+Evaluate actual access controls and threat model.
+
+File permissions matter.
+
+A secret configuration file readable by every user can expose credentials.
+
+Use least privilege.
+
+Do not make a configuration file world-writable.
+
+Configuration integrity matters.
+
+If an attacker can alter privileged configuration, they can often alter system behavior.
+
+Protect configuration according to its authority.
+
+A service running as an unprivileged user should not normally be able to rewrite root-controlled security policy configuration unless that behavior is explicitly required.
+
+Separate operator-controlled configuration from application-generated state.
+
+For example:
+
+/etc/program/config
+
+can be operator-owned configuration.
+
+/var/lib/program/state
+
+can be application state.
+
+Do not mix them casually.
+
+Configuration is not state.
+
+This distinction is important.
+
+Configuration describes selected operating parameters.
+
+State records what the system currently knows or has done.
+
+For example:
+
+Configuration:
+
+peer=chain01.example
+
+State:
+
+last_connected_peer=chain02.example
+
+Configuration:
+
+retry_limit=5
+
+State:
+
+retry_count=3
+
+Do not store changing runtime state in static configuration merely because a file already exists.
+
+Likewise, do not treat configuration as historical evidence.
+
+Configuration can change.
+
+If historical configuration matters, record snapshots or revision history separately.
+
+A current configuration file does not prove what configuration was active yesterday.
+
+Configuration and policy are different.
+
+Policy can establish:
+
+Authentication is required.
+
+Configuration can select:
+
+authentication_backend=local
+
+if multiple approved backends exist.
+
+Configuration should not be able to set:
+
+authentication_required=false
+
+if policy forbids disabling authentication.
+
+Do not let configuration override higher-level authority.
+
+Configuration operates within the boundaries established by the system and its governing rules.
+
+Configuration does not create authority.
+
+A configurable value is not automatically a permitted value.
+
+The schema and policy define permitted values.
+
+For example:
+
+role=administrator
+
+can be syntactically valid.
+
+That does not mean arbitrary configuration sources are authorized to assign administrator authority.
+
+Know who controls the configuration source.
+
+Configuration source authority matters.
+
+A user-specific configuration file can control user-level preferences.
+
+It should not necessarily control system-wide security policy.
+
+Separate scopes.
+
+Possible scopes include:
+
+Built-in.
+
+System.
+
+Organization.
+
+User.
+
+Project.
+
+Session.
+
+Command.
+
+Higher-precedence does not always mean higher authority.
+
+This distinction matters.
+
+A command-line argument supplied by an unprivileged user should not override root-controlled policy merely because CLI normally has highest precedence.
+
+Precedence operates only among settings that the source is authorized to control.
+
+Authority comes first.
+
+This can be modeled as:
+
+Determine source.
+
+Determine which settings the source may control.
+
+Parse.
+
+Validate.
+
+Apply precedence among authorized sources.
+
+Do not let precedence become privilege escalation.
+
+For example:
+
+System policy:
+
+sandbox_required=true
+
+User configuration:
+
+sandbox_required=false
+
+If users are not authorized to disable the sandbox, the user value must not override policy.
+
+This is not a precedence question.
+
+It is an authority question.
+
+Configuration layers should have explicit ownership.
+
+For example:
+
+System policy layer.
+
+Application defaults.
+
+Operator configuration.
+
+User preferences.
+
+Runtime overrides.
+
+Do not merge everything into one undifferentiated map if authority differs.
+
+Configuration can be immutable after startup.
+
+This is often the simplest model.
+
+Process starts.
+
+Configuration loads.
+
+Configuration validates.
+
+Effective configuration is created.
+
+Runtime uses it until restart.
+
+This reduces synchronization complexity.
+
+If runtime reload is unnecessary, do not implement it.
+
+Restart-based configuration changes are predictable.
+
+Dynamic reload can be useful where restarts are expensive.
+
+If reload is supported, define exactly which settings are reloadable.
+
+Some settings can change safely.
+
+Examples might include:
+
+Log level.
+
+Polling interval.
+
+Some timeouts.
+
+Other settings can require restart.
+
+Examples might include:
+
+Data directory.
+
+Process identity.
+
+Network architecture.
+
+Loaded cryptographic identity.
+
+The exact distinction depends on application.
+
+Do not pretend every setting can be hot-reloaded.
+
+Reload behavior is part of configuration semantics.
+
+A reload should:
+
+Read new configuration.
+
+Parse it.
+
+Validate it completely.
+
+Construct candidate effective configuration.
+
+Validate cross-field relationships.
+
+Apply allowed changes atomically where practical.
+
+If validation fails, preserve the previous valid configuration.
+
+Do not partially apply a malformed reload.
+
+For example:
+
+Old:
+
+port=8080
+
+timeout=30
+
+New:
+
+port=8081
+
+timeout=banana
+
+Do not change port to 8081 and then fail on timeout unless partial reload is explicitly designed.
+
+Prefer:
+
+Validate candidate.
+
+Reject entire candidate.
+
+Continue using previous valid configuration.
+
+This preserves known-good state.
+
+Log the rejection.
+
+Do not terminate a healthy service merely because an optional runtime reload file is malformed unless policy requires termination.
+
+Startup and reload can have different failure semantics.
+
+At startup:
+
+No valid configuration can mean the process cannot safely start.
+
+At reload:
+
+A previously valid configuration already exists.
+
+The system can often continue using it.
+
+Define behavior.
+
+Do not confuse reload failure with runtime failure.
+
+Configuration reload should not create races.
+
+If multiple threads read configuration, publish a consistent configuration snapshot.
+
+Do not let one thread observe half old and half new settings.
+
+Possible techniques include:
+
+Immutable configuration object replacement.
+
+Read-write locks.
+
+Atomic pointer swap.
+
+Language-specific synchronization.
+
+Choose according to implementation.
+
+A snapshot model is often simple:
+
+Build complete new configuration.
+
+Validate it.
+
+Atomically replace the current configuration reference.
+
+Readers use either old or new snapshot.
+
+Never partial.
+
+Dynamic configuration can affect active operations.
+
+For example:
+
+timeout changes from 60 to 10 seconds.
+
+Does an existing operation use 60 or 10?
+
+Define semantics.
+
+A common rule is:
+
+Existing operations retain the configuration snapshot they started with.
+
+New operations use new configuration.
+
+Another design can update active operations.
+
+Either can be valid.
+
+Do not leave it accidental.
+
+Configuration should have lifecycle boundaries.
+
+Some settings apply:
+
+At process start.
+
+At module initialization.
+
+At connection creation.
+
+Per request.
+
+At operation start.
+
+Define when a setting is read.
+
+Do not repeatedly read environment variables throughout the program if startup configuration is supposed to be fixed.
+
+Load once.
+
+Validate once.
+
+Use the validated representation.
+
+Environment variables are process input.
+
+They are strings.
+
+Parse them.
+
+For example:
+
+DIGIT_PORT=8080
+
+becomes validated integer 8080.
+
+Do not leave numeric environment values as strings throughout the application.
+
+Typed effective configuration reduces ambiguity.
+
+Environment variable names should be namespaced where appropriate.
+
+For example:
+
+DIGIT_PORT
+
+DIGIT_LOG_LEVEL
+
+This reduces collisions.
+
+Do not depend on generic names such as:
+
+PORT
+
+if the environment contains many applications and ambiguity matters.
+
+Case sensitivity of environment variables can differ across operating systems.
+
+Platform-independent systems should define canonical configuration semantics.
+
+Do not create behavior that works only because one operating system treats environment variable names case-insensitively.
+
+Configuration files can have encoding requirements.
+
+UTF-8 is a common choice.
+
+Define it.
+
+Do not rely on platform-default text encoding.
+
+The same configuration should parse consistently across supported platforms.
+
+Line endings can differ.
+
+Parsers should handle defined line-ending forms where appropriate.
+
+Do not make configuration invalid merely because it moved between Windows and Linux if the format is intended to be portable.
+
+Path values can still be platform-specific.
+
+Separate platform-neutral configuration from platform-specific implementation details.
+
+For example:
+
+data_directory=/var/lib/example
+
+is inherently deployment-specific.
+
+But protocol behavior selected by configuration should remain consistent.
+
+Platform-independent software can have platform-specific defaults.
+
+For example:
+
+Default data directory differs by operating system.
+
+That can be valid if the path is not consensus-visible or protocol-visible.
+
+Do not let platform-specific defaults alter shared protocol semantics.
+
+Consensus-visible configuration requires exceptional care.
+
+If configuration affects consensus decisions, every participating node must apply compatible values according to protocol.
+
+Local operator configuration should not arbitrarily redefine consensus rules.
+
+Protocol constants and consensus rules are generally not ordinary local preferences.
+
+Do not expose consensus-critical behavior as casual configuration unless the protocol explicitly defines it.
+
+For example:
+
+block_validity_rule=false
+
+would be disastrous if nodes could independently select validation rules.
+
+Shared rules belong to the protocol.
+
+Configuration can select:
+
+Network.
+
+Peer.
+
+Local storage.
+
+Logging.
+
+Resource use.
+
+Other non-consensus behavior.
+
+Know the boundary.
+
+Configuration can select a network identifier if the software supports multiple networks.
+
+Once selected, protocol validation should enforce that network.
+
+Do not dynamically reinterpret incoming data according to whichever network makes it valid.
+
+Configuration selects context.
+
+Validation operates within that context.
+
+Configuration changes can require state compatibility checks.
+
+For example:
+
+Changing network while reusing the same data directory can mix incompatible data.
+
+Validate relationships between configuration and persistent state.
+
+Do not blindly start.
+
+A marker file or database metadata can identify the state format or network.
+
+If configured network does not match stored network:
+
+Reject startup or require explicit migration according to policy.
+
+Do not silently rewrite state identity.
+
+Configuration can identify a database.
+
+Changing database endpoints can point the program at entirely different state.
+
+Treat such changes as operationally significant.
+
+Do not assume a syntactically valid database connection means the intended database was selected.
+
+Deployment verification can check identity.
+
+Configuration can include instance identifiers.
+
+Validate them.
+
+Do not generate a new identity every startup if stable identity is required.
+
+Stable identity belongs in durable state or protected key material depending on design.
+
+Know whether a value is:
+
+Configuration.
+
+Identity.
+
+State.
+
+Secret.
+
+Policy.
+
+These categories can overlap in storage but differ semantically.
+
+Do not collapse them.
+
+Configuration generation can be automated.
+
+An installer can write configuration.
+
+A deployment system can render configuration.
+
+A module can generate defaults.
+
+Generated configuration must still be validated by the receiving program.
+
+Do not trust generation merely because both components are yours.
+
+Bugs cross component boundaries.
+
+Generated configuration should be deterministic where possible.
+
+Given the same inputs, produce the same configuration.
+
+Do not inject timestamps or random ordering unless needed.
+
+Stable output improves:
+
+Diffs.
+
+Testing.
+
+Auditing.
+
+Reproducibility.
+
+Configuration writers should preserve syntax correctly.
+
+Do not edit structured configuration using naive string replacement.
+
+Use an appropriate parser and serializer where practical.
+
+For simple key-value formats, deliberate line-based editing can be sufficient.
+
+Know the format.
+
+Do not corrupt comments or unrelated values accidentally.
+
+If applications rewrite human-owned configuration, define whether comments and ordering are preserved.
+
+Often it is better for applications not to rewrite operator configuration at all.
+
+Separate generated files from human-maintained files.
+
+Configuration templates can provide examples.
+
+Example configuration should distinguish:
+
+Required values.
+
+Optional values.
+
+Defaults.
+
+Placeholders.
+
+Do not ship placeholders that look like real credentials.
+
+For example:
+
+api_key=CHANGE_ME
+
+should be detected if running with it would be unsafe.
+
+Do not silently operate with known placeholder secrets.
+
+A configuration check mode is useful.
+
+For example:
+
+program --check-config
+
+It can:
+
+Load configuration.
+
+Parse it.
+
+Validate it.
+
+Report errors.
+
+Exit without starting normal operations.
+
+This supports deployment testing.
+
+Do not require a production service start merely to discover a typo.
+
+A configuration dump mode can be separate:
+
+program --show-config
+
+It can show effective non-secret configuration.
+
+Check mode answers:
+
+Is configuration valid?
+
+Show mode answers:
+
+What configuration would be used?
+
+Both can be valuable.
+
+Configuration tests should cover defaults.
+
+For every default:
+
+Start without the optional value.
+
+Verify the defined default.
+
+Do not merely test explicit configuration.
+
+Defaults are executable behavior.
+
+Test overrides.
+
+For example:
+
+Default -> file -> environment -> CLI.
+
+Verify precedence exactly.
+
+Test absence separately from invalid value.
+
+Test duplicate keys.
+
+Test unknown keys.
+
+Test minimum and maximum values.
+
+Test malformed syntax.
+
+Test missing required values.
+
+Test cross-field conflicts.
+
+Test reload failure.
+
+Test platform-specific paths where supported.
+
+Do not test only a complete valid sample file.
+
+Boundary testing applies to configuration.
+
+For port 1 through 65535, test:
+
+0
+
+1
+
+65535
+
+65536
+
+For timeout 1 through 300, test:
+
+0
+
+1
+
+300
+
+301
+
+For enumerations, test every valid value and unknown values.
+
+For booleans, test accepted spellings and rejected spellings.
+
+Do not let parser behavior define the contract accidentally.
+
+Configuration tests should verify the effective result.
+
+Suppose:
+
+Default port = 8080.
+
+File port = 8081.
+
+Environment port = 8082.
+
+CLI port = 8083.
+
+If precedence says CLI wins, verify:
+
+effective port = 8083.
+
+Then remove CLI.
+
+Verify:
+
+effective port = 8082.
+
+Continue through layers.
+
+This proves precedence.
+
+Test source authority separately.
+
+For example:
+
+User config attempts to disable required system security.
+
+Verify it cannot.
+
+Do not assume precedence tests prove authority boundaries.
+
+Configuration fuzzing can expose parser failures.
+
+Malformed files should not crash the program.
+
+Random input should produce controlled errors.
+
+Do not accept fuzzing success as proof of semantic correctness.
+
+Use schema-driven tests too.
+
+Configuration errors should fail early.
+
+If a port is invalid, discover it at configuration loading.
+
+Do not wait until the first network connection six hours later.
+
+Early failure localizes defects.
+
+Likewise:
+
+Invalid path syntax.
+
+Unknown mode.
+
+Impossible timeout.
+
+Missing required key.
+
+Detect them before normal operation where possible.
+
+Some validation requires runtime resources.
+
+For example:
+
+DNS resolution.
+
+Remote database availability.
+
+Network connectivity.
+
+These are not necessarily configuration validity.
+
+A hostname can be syntactically valid while DNS is temporarily unavailable.
+
+Separate:
+
+Configuration validation.
+
+Dependency readiness.
+
+Do not declare configuration invalid because a remote service is temporarily down unless reachability is explicitly part of configuration validation.
+
+This distinction improves diagnosis.
+
+A useful startup sequence can be:
+
+Load configuration.
+
+Validate configuration.
+
+Initialize local resources.
+
+Validate required identities.
+
+Connect dependencies.
+
+Qualify dependencies.
+
+Enter operational state.
+
+If dependency connection fails, report dependency failure.
+
+Do not report:
+
+invalid configuration
+
+unless configuration itself is invalid.
+
+Error categories should preserve cause.
+
+Configuration parsing errors are different from:
+
+Permission errors.
+
+Missing files.
+
+Network failures.
+
+Authentication failures.
+
+Dependency failures.
+
+State corruption.
+
+Keep categories distinct.
+
+For example:
+
+CONFIG_FILE_NOT_FOUND
+
+CONFIG_PARSE_ERROR
+
+CONFIG_UNKNOWN_KEY
+
+CONFIG_INVALID_VALUE
+
+CONFIG_CONFLICT
+
+CONFIG_PERMISSION_DENIED
+
+These can aid diagnostics.
+
+Do not create hundreds of categories without operational value.
+
+Use enough structure to identify the failure class.
+
+A configuration file missing can have different semantics depending on whether the file is required.
+
+Optional file absent:
+
+Continue.
+
+Required file absent:
+
+Fail.
+
+Do not treat all missing files identically.
+
+An unreadable file is not the same as an absent file.
+
+For example:
+
+File exists but permission denied.
+
+Do not silently treat it as absent and use defaults.
+
+That can bypass intended configuration.
+
+Report the permission failure.
+
+Likewise, a malformed file is not absent.
+
+Reject it.
+
+This principle is important:
+
+Missing optional configuration can fall back.
+
+Present but invalid configuration should normally fail.
+
+Do not reward corruption by silently ignoring it.
+
+Configuration should support reproducibility.
+
+If two deployments are intended to behave identically, their effective configuration should be comparable.
+
+A normalized effective configuration can help.
+
+For example:
+
+network.host=127.0.0.1
+network.port=8080
+network.timeout_seconds=30
+logging.level=info
+
+Stable ordering makes diffs useful.
+
+Do not include secrets in ordinary configuration comparisons.
+
+Hashing configuration can provide an identifier for a specific effective configuration.
+
+For example:
+
+config_hash = SHA-256(normalized_nonsecret_or_complete_internal_representation)
+
+The exact representation must be defined if the hash has operational meaning.
+
+Do not hash arbitrary serializer output and assume stability across versions.
+
+Canonicalization matters.
+
+A configuration hash can help answer:
+
+Are these two processes running equivalent configuration?
+
+It does not prove the configuration is correct.
+
+It does not prove authorization.
+
+It is an identity for bytes or canonical data.
+
+Do not overstate it.
+
+Configuration revisions can be useful.
+
+For example:
+
+revision=17
+
+The process can report:
+
+loaded revision 17
+
+This improves auditability.
+
+Do not use revision numbers as substitutes for content validation.
+
+A revision can contain malformed data.
+
+Validate it.
+
+Remote configuration introduces additional concerns.
+
+A remote configuration service can fail.
+
+Responses can be stale.
+
+Authentication can fail.
+
+Network partitions can occur.
+
+Updates can arrive out of order.
+
+Do not make a small local application depend on remote configuration without a reason.
+
+If remote configuration is used, define:
+
+Authentication.
+
+Integrity.
+
+Caching.
+
+Startup behavior when unavailable.
+
+Update ordering.
+
+Rollback.
+
+Versioning.
+
+Staleness limits.
+
+Authority.
+
+Do not blindly accept whatever a remote endpoint returns.
+
+Validate remote configuration exactly like local configuration.
+
+Remote source does not eliminate schema validation.
+
+Configuration updates can carry versions.
+
+For example:
+
+revision 42
+
+revision 43
+
+If revision 42 arrives after 43, reject it as stale where monotonic ordering is required.
+
+Do not roll configuration backward accidentally.
+
+Intentional rollback should be explicit.
+
+A rollback is not the same as receiving stale data.
+
+Dynamic configuration can use a state machine.
+
+For example:
+
+ACTIVE
+
+RELOAD_PENDING
+
+VALIDATING
+
+APPLYING
+
+ACTIVE
+
+RELOAD_FAILED
+
+This can be useful for complex systems.
+
+Do not introduce a configuration state machine when an atomic reload function is sufficient.
+
+Keep systems small.
+
+Configuration can interact with modules.
+
+A module should receive the configuration it owns.
+
+Do not give every module unrestricted access to every configuration value unless needed.
+
+Scoped configuration reduces coupling.
+
+For example:
+
+network module receives network configuration.
+
+storage module receives storage configuration.
+
+logging module receives logging configuration.
+
+This makes dependencies explicit.
+
+A module should not secretly read random global environment variables if configuration is supposed to be centralized.
+
+Centralize acquisition.
+
+Distribute validated typed values.
+
+This produces one effective configuration.
+
+It also makes testing easier.
+
+A module test can supply:
+
+NetworkConfig {
+    host,
+    port,
+    timeout
+}
+
+without constructing the entire application environment.
+
+Typed configuration is preferable to repeatedly querying strings.
+
+For example:
+
+Bad:
+
+get_config("network.port")
+
+every time a connection opens.
+
+Better:
+
+network_config.port
+
+where port is already a validated integer.
+
+Do parsing at the boundary.
+
+Use typed values internally.
+
+Do not repeatedly reinterpret raw configuration.
+
+Configuration should not determine implementation details that should remain internal.
+
+For example:
+
+algorithm_internal_buffer_index=7
+
+might expose unnecessary internals.
+
+Expose configuration only where operators have a legitimate reason to select behavior.
+
+Every configuration option becomes:
+
+Documentation burden.
+
+Testing burden.
+
+Compatibility burden.
+
+Support burden.
+
+Security surface.
+
+Do not make everything configurable.
+
+Hard-coded is not automatically bad.
+
+A protocol constant can belong in code.
+
+A safety invariant can belong in code.
+
+A fixed file signature can belong in code.
+
+A consensus rule can belong in protocol logic.
+
+Configuration is appropriate when legitimate deployments need different values.
+
+Ask:
+
+Who needs to change this?
+
+Why?
+
+Under what authority?
+
+How often?
+
+What values are valid?
+
+What happens if it is wrong?
+
+If there is no good answer, it may not need to be configurable.
+
+Too much configuration creates accidental complexity.
+
+A system with 500 knobs can be harder to operate than one with 20 well-chosen settings.
+
+Prefer meaningful configuration.
+
+Small.
+
+Deterministic.
+
+Easy to understand.
+
+Configuration names should not require reading source code to understand basic behavior.
+
+Documentation should explain:
+
+Purpose.
+
+Type.
+
+Default.
+
+Allowed range.
+
+Whether required.
+
+Source precedence.
+
+Reload behavior.
+
+Security implications where relevant.
+
+Example.
+
+Do not document only the key name.
+
+For example:
+
+rpc_port
+
+Type: integer
+
+Range: 1..65535
+
+Default: 18473
+
+Reload: restart required
+
+Purpose: local RPC listener port
+
+This is useful.
+
+Configuration documentation should match implementation.
+
+Test examples where practical.
+
+Stale configuration documentation causes operational errors.
+
+When removing a configuration key:
+
+Deprecate if compatibility requires it.
+
+Warn.
+
+Provide replacement.
+
+Remove according to version policy.
+
+Do not silently reinterpret the old key as something unrelated.
+
+Meaning should remain stable.
+
+When renaming:
+
+old_name -> new_name
+
+define transition behavior.
+
+Possible approach:
+
+Accept old_name with warning.
+
+Reject both old_name and new_name together if ambiguous.
+
+Later remove old_name.
+
+Do not let both independently control the same behavior without defined precedence.
+
+Configuration aliases can create ambiguity.
+
+Use them temporarily and deliberately.
+
+Configuration values should not be copied into unrelated mutable globals.
+
+Build the effective configuration object.
+
+Pass required values to components.
+
+This makes ownership visible.
+
+Global configuration access can be convenient.
+
+It can also hide dependencies.
+
+Use it deliberately.
+
+A function requiring a timeout should receive or access the appropriate validated timeout through a clear interface.
+
+Do not have low-level functions secretly parse environment variables.
+
+Parsing belongs at boundaries.
+
+Configuration can influence logging.
+
+For example:
+
+log_level=info
+
+Changing logging level should not change application correctness.
+
+Debug logging should not be required for the program to function.
+
+Do not put side effects inside logging expressions that disappear when logging is disabled.
+
+Configuration can influence performance.
+
+For example:
+
+worker_count.
+
+cache_size.
+
+batch_size.
+
+Validate resource bounds.
+
+Do not allow:
+
+worker_count=1000000
+
+if that would exhaust the system.
+
+Operational limits are part of validation.
+
+Resource-related defaults should be reasonable for target environments.
+
+Do not automatically use all available resources unless that is intentional.
+
+Configuration can select automatic values.
+
+For example:
+
+worker_count=auto
+
+If supported, define exactly what auto means.
+
+Possible definition:
+
+number of available CPUs, capped at 8.
+
+Do not let auto mean whatever each platform happens to decide.
+
+Deterministic rules make behavior understandable.
+
+Platform-derived values can be legitimate inputs.
+
+Document them.
+
+Configuration can include lists.
+
+For example:
+
+allowed_hosts=host1,host2,host3
+
+Validate:
+
+Maximum count.
+
+Each element.
+
+Duplicates.
+
+Ordering semantics.
+
+Whitespace rules.
+
+Do not validate only the overall string.
+
+If ordering matters, preserve it.
+
+If ordering does not matter, canonicalize according to policy if useful.
+
+Maps require key validation.
+
+For example:
+
+peer aliases.
+
+module settings.
+
+Do not allow arbitrary keys to become filesystem paths or executable identifiers without validation.
+
+Nested configuration should have bounded depth.
+
+Do not accept arbitrarily deep structures if the format permits them.
+
+Configuration parsers should have resource limits.
+
+A configuration file should not consume unbounded memory.
+
+Set reasonable file-size limits.
+
+A 50-byte configuration does not need a 2 GB parser budget.
+
+Reject unreasonable configuration size.
+
+Do not confuse configuration size with data size.
+
+Configuration is usually small.
+
+If enormous data is being stored in configuration, reconsider whether it belongs there.
+
+For example:
+
+A million-row dataset is not configuration.
+
+It is data.
+
+A model corpus is not configuration.
+
+It is knowledge or data.
+
+Configuration can point to it.
+
+For example:
+
+corpus_path=/opt/digit/corpus
+
+Do not embed the entire corpus into configuration merely because the parser can read text.
+
+Keep responsibilities separate.
+
+For an autonomous system, configuration can select mission-approved resources and operating parameters.
+
+Configuration should not grant itself new mission authority.
+
+For example:
+
+allow_unrestricted_actions=true
+
+must not override governing authorization merely because the parser accepts a boolean.
+
+Authority is not a runtime preference.
+
+Configuration operates inside authority boundaries.
+
+Likewise, configuration should not alter foundational behavioral invariants unless those invariants are explicitly designed to be configurable.
+
+If the system requires:
+
+invalid transitions are rejected
+
+do not add:
+
+allow_invalid_transitions=true
+
+for convenience.
+
+That destroys the invariant.
+
+Debugging should not require violating core safety rules.
+
+Provide diagnostic visibility instead.
+
+Configuration can select diagnostic verbosity.
+
+It should not redefine truth.
+
+For example:
+
+log_level=debug
+
+changes what is reported.
+
+It should not change whether a protocol message is valid.
+
+Separate observation from semantics.
+
+Configuration can select strictness only where multiple strictness modes are intentionally part of the protocol or application.
+
+Do not create permissive modes casually.
+
+"Compatibility mode" can become a permanent bypass.
+
+Define exactly what compatibility changes.
+
+Test it.
+
+Remove it when obsolete if appropriate.
+
+Configuration errors should be actionable.
+
+Bad:
+
+failed to start
+
+Better:
+
+configuration error: rpc_port must be between 1 and 65535; received 70000 from /etc/digit/config.tsv line 14
+
+Do not reveal secret values.
+
+Do identify the failing setting and source.
+
+When several independent configuration errors exist, a validator can report multiple errors at once.
+
+This improves operator experience.
+
+For example:
+
+line 14: invalid rpc_port
+
+line 22: unknown key log_levle
+
+line 31: missing required identity_path
+
+However, do not continue into unsafe semantic processing merely to accumulate errors.
+
+Parse enough to diagnose safely.
+
+Configuration parsing should distinguish warnings from errors.
+
+Warning:
+
+Deprecated key.
+
+Unused optional setting.
+
+Recommended value not used.
+
+Error:
+
+Malformed syntax.
+
+Unknown required setting.
+
+Invalid type.
+
+Out-of-range value.
+
+Contradictory values.
+
+Missing required setting.
+
+Do not classify a fatal configuration defect as a warning merely to keep the service running.
+
+Likewise, do not prevent startup for cosmetic warnings.
+
+Severity should reflect operational consequence.
+
+Configuration validation should happen before privileged operations where possible.
+
+Do not bind privileged ports, modify files, or start workers and then discover the configuration is malformed.
+
+Validate first.
+
+Some validation requires privileges or resources.
+
+Perform non-invasive validation as early as possible.
+
+Minimize partial startup.
+
+Startup itself can be stateful:
+
+UNINITIALIZED
+
+CONFIG_LOADING
+
+CONFIG_VALIDATING
+
+INITIALIZING
+
+READY
+
+FAILED
+
+Do not report READY before configuration and required initialization succeed.
+
+Configuration success is one prerequisite for operational readiness.
+
+Configuration tests should include restart behavior.
+
+Change configuration.
+
+Restart.
+
+Verify effective configuration changed as expected.
+
+Restore configuration.
+
+Restart.
+
+Verify restoration.
+
+For reloadable settings:
+
+Change configuration.
+
+Reload.
+
+Verify allowed settings changed.
+
+Verify restart-required settings did not partially change.
+
+Verify malformed reload preserves prior configuration.
+
+These are operational tests.
+
+Configuration should be observable enough to diagnose production differences.
+
+If one machine works and another fails, compare:
+
+Software version.
+
+Effective configuration.
+
+Environment.
+
+Persistent state.
+
+External dependencies.
+
+Do not compare only source files.
+
+The effective configuration is what matters.
+
+Configuration drift occurs when supposedly equivalent systems acquire different configuration.
+
+Drift can come from:
+
+Manual edits.
+
+Different environment variables.
+
+Different command lines.
+
+Stale files.
+
+Deployment failures.
+
+Local overrides.
+
+Different defaults across versions.
+
+Detect drift through effective configuration comparison where useful.
+
+Do not assume deployment success means configuration equality.
+
+Version-specific defaults can cause drift even with identical files.
+
+For reproducibility, important defaults can be made explicit in deployment configuration.
+
+This reduces dependence on software-version defaults.
+
+Do not duplicate every default unnecessarily.
+
+Balance explicit deployment control with maintainability.
+
+Configuration should have one owner for each value.
+
+For example:
+
+Operator owns rpc_port.
+
+System owns detected_cpu_count.
+
+Protocol owns network_magic.
+
+Runtime owns current_connection_count.
+
+Do not expose all four through one generic configuration map.
+
+Ownership clarifies what can change.
+
+A configuration API should enforce ownership.
+
+If an administrative interface edits configuration, authenticate and authorize the operation.
+
+Do not assume local web administration is trusted automatically.
+
+Changing configuration can be equivalent to changing program behavior.
+
+Protect it accordingly.
+
+Configuration modifications should be auditable where operationally significant.
+
+Record:
+
+Who changed it.
+
+What setting changed.
+
+Previous value where safe.
+
+New value where safe.
+
+When.
+
+Revision.
+
+Do not record secrets in plaintext audit logs.
+
+For sensitive values, record:
+
+changed
+
+rather than the value.
+
+Configuration history should be append-oriented if audit integrity matters.
+
+Do not rewrite prior change records to match current configuration.
+
+Current configuration and configuration history are separate.
+
+Rollback can select a prior known configuration revision.
+
+Validate it against the current software before applying.
+
+An old configuration can be incompatible with a new binary.
+
+Do not assume historical means currently valid.
+
+Configuration and software versions should have compatibility rules.
+
+A configuration generated for version 1 may not work with version 3.
+
+Version fields or migration logic can make this explicit.
+
+Do not silently reinterpret removed semantics.
+
+When configuration controls external interfaces, changing it can break clients.
+
+For example:
+
+Port.
+
+Protocol version.
+
+Endpoint path.
+
+Authentication mode.
+
+Treat these as interface changes.
+
+Do not hide them as harmless configuration tweaks.
+
+Operational change management can still be necessary.
+
+Configuration is code-adjacent.
+
+It deserves review.
+
+A one-character configuration change can take down a system just as effectively as a code defect.
+
+Test important configuration.
+
+Validate before deployment.
+
+Keep backups where appropriate.
+
+Do not dismiss configuration failures as "not code."
+
+They are system behavior.
+
+For deterministic systems, configuration should narrow behavior to explicitly defined choices.
+
+It should not introduce uncertainty.
+
+Given:
+
+Software version.
+
+Effective configuration.
+
+Input.
+
+Relevant state.
+
+The resulting behavior should be predictable according to the system design.
+
+Do not let configuration invoke arbitrary probabilistic interpretation when deterministic behavior is required.
+
+For Digit-like systems, configuration can select:
+
+Corpus path.
+
+Retrieval limits.
+
+Model endpoint.
+
+Module paths.
+
+Logging level.
+
+Fallback availability.
+
+Timeouts.
+
+Resource limits.
+
+Configuration should not define engineering truth.
+
+The corpus and rules provide knowledge.
+
+The state machine provides lifecycle.
+
+Policy provides boundaries.
+
+Configuration selects operational parameters.
+
+Keep these layers distinct.
+
+For example:
+
+llm_fallback_enabled=true
+
+can select whether an already-authorized fallback mechanism is available.
+
+It should not mean:
+
+llm_may_override_deterministic_result=true
+
+unless the architecture explicitly grants that authority.
+
+A deterministic result should not be replaced merely because a probabilistic component disagrees.
+
+Configuration can select fallback.
+
+It does not change which component is authoritative.
+
+As a system becomes less dependent on an LLM, configuration can expose measurable fallback behavior.
+
+For example:
+
+llm_fallback_enabled=true
+
+llm_fallback_timeout_seconds=30
+
+llm_fallback_max_context=4096
+
+The deterministic engine decides whether fallback is required according to defined rules.
+
+Do not let configuration make every request use fallback merely because it is available unless that is intentional mode behavior.
+
+A future system can set:
+
+llm_fallback_enabled=false
+
+If deterministic coverage is sufficient, the rest of the architecture should continue operating.
+
+This is a useful separation.
+
+The system should know whether the LLM is:
+
+Required.
+
+Optional.
+
+Unavailable.
+
+Disabled.
+
+Do not make an optional component accidentally mandatory because configuration loading assumes its endpoint always exists.
+
+Dependency requirements should be explicit.
+
+For example:
+
+llm.mode = required
+
+llm.mode = fallback
+
+llm.mode = disabled
+
+if those modes are genuinely supported.
+
+Each mode should have defined behavior.
+
+Do not use vague values such as:
+
+llm.mode = maybe
+
+Configuration should make system behavior easier to predict.
+
+If a configuration option makes behavior harder to explain than the code it replaces, reconsider it.
+
+The core questions for every configuration value are:
+
+What does it control?
+
+Who is authorized to control it?
+
+What type is it?
+
+What values are valid?
+
+What is the default?
+
+Is it required?
+
+Which source supplies it?
+
+What precedence applies?
+
+When is it read?
+
+Can it be reloaded?
+
+Does changing it require restart?
+
+Does it affect persistent state?
+
+Does it affect protocol behavior?
+
+Does it affect security?
+
+How is an invalid value handled?
+
+How is the effective value observed?
+
+If those questions cannot be answered, the setting is not well defined.
+
+A reliable configuration system has explicit sources.
+
+A reliable configuration system has deterministic precedence.
+
+A reliable configuration system validates every value.
+
+A reliable configuration system distinguishes absent from invalid.
+
+A reliable configuration system has explicit defaults.
+
+A reliable configuration system rejects ambiguous configuration.
+
+A reliable configuration system validates cross-field relationships.
+
+A reliable configuration system knows source authority.
+
+A reliable configuration system protects secrets.
+
+A reliable configuration system exposes effective non-secret state for diagnosis.
+
+A reliable configuration system defines reload semantics.
+
+A reliable configuration system does not partially apply invalid reloads.
+
+A reliable configuration system preserves the previous known-good configuration when appropriate.
+
+A reliable configuration system separates configuration from state.
+
+A reliable configuration system separates configuration from policy.
+
+A reliable configuration system separates configuration from authority.
+
+A reliable configuration system does not guess.
+
+Do not confuse configuration with state.
+
+Do not confuse configuration with policy.
+
+Do not confuse configuration with authority.
+
+Do not confuse configuration with identity.
+
+Do not confuse configuration with secrets.
+
+Do not confuse configuration with data.
+
+Do not confuse a default with a fallback for malformed input.
+
+Do not confuse absent configuration with invalid configuration.
+
+Do not confuse precedence with authorization.
+
+Do not confuse a configuration file with the effective configuration.
+
+Do not confuse a valid value with a permitted source.
+
+Do not confuse a syntactically valid path with a usable path.
+
+Do not confuse a valid endpoint with a reachable dependency.
+
+Do not confuse configuration validation with dependency readiness.
+
+Do not confuse reload request with successful reload.
+
+Do not confuse desired configuration with applied configuration.
+
+Do not confuse configurable with arbitrary.
+
+When loading configuration:
+
+Identify authorized sources.
+
+Read sources in a defined manner.
+
+Parse strictly.
+
+Validate known keys.
+
+Validate types.
+
+Validate ranges.
+
+Apply source authority rules.
+
+Resolve precedence.
+
+Apply defined defaults to absent optional values.
+
+Reject malformed supplied values.
+
+Validate cross-field relationships.
+
+Construct the effective configuration.
+
+Publish it only after validation succeeds.
+
+Do not operate from partially validated configuration.
+
+When configuration is invalid:
+
+Identify the source.
+
+Identify the setting.
+
+Explain the requirement.
+
+Do not expose secrets.
+
+Do not guess a replacement value.
+
+Do not silently ignore malformed required configuration.
+
+Do not silently disable required protections.
+
+Fail according to defined startup or reload policy.
+
+When configuration is reloaded:
+
+Build a candidate configuration separately.
+
+Validate it completely.
+
+Determine which changes are reloadable.
+
+Apply changes atomically where practical.
+
+Preserve the previous valid configuration if the candidate is rejected.
+
+Record the result.
+
+Do not leave the system half old and half new.
+
+When configuration changes behavior:
+
+Ensure the behavior already exists within the software's defined capability.
+
+Ensure the source has authority to select it.
+
+Ensure the value is valid.
+
+Ensure the resulting combination is valid.
+
+Do not let configuration invent new authority.
+
+Do not let configuration bypass required state transitions.
+
+Do not let configuration rewrite protocol rules.
+
+Do not let configuration override deterministic evidence merely because a probabilistic component is enabled.
+
+Configuration selects.
+
+Code implements.
+
+State records.
+
+Rules constrain.
+
+Policy governs where applicable.
+
+Authority permits.
+
+Evidence establishes.
+
+Keep those boundaries clear.
+
+A configuration system is successful when an operator can answer:
+
+What configuration is running?
+
+Where did each important value come from?
+
+Why was that value selected?
+
+Is it valid?
+
+Who was permitted to set it?
+
+What happens if it changes?
+
+What happens if it is malformed?
+
+And the program can answer those questions deterministically.
+
+Configuration should make behavior more predictable.
+
+Not less.

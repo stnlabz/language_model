@@ -1,0 +1,207 @@
+20260810.0 — Security Research Threat (SRT)
+
+Root Document ID: 20260810.0
+Revision ID: NONE
+Previous Revision: NONE
+sha256: c239120779d003113defbf86630cfccd69d2fbfad8d7a5fa18bad14fd32e6fbe
+
+Project: Sentinel / Rictus  
+Status: Approved  
+Scope: Policy  
+Classification: Security Research
+
+Purpose
+
+The Security Research Threat (SRT) process establishes a structured method for documenting, investigating, reviewing, and preserving potential security conditions identified through STN-LABZ research, development, intelligence, or operational activity.
+
+An SRT allows a potential threat to be investigated without prematurely establishing that the reported condition is true, exploitable, applicable to STN-LABZ, or an established organizational threat.
+
+Identification
+
+A potential Security Research Threat may be identified through:
+
+- STN-LABZ research and development.
+- Rictus intelligence collection.
+- News and intelligence aggregation.
+- Engineering observations.
+- Security research.
+- Operational observations.
+- Other authorized STN-LABZ activities.
+
+Rictus may identify and report an SRT candidate.
+
+Identification of an SRT candidate does not establish the reported condition as fact.
+
+Security Research Threat Record
+
+Each SRT will use a stable identifier:
+
+SRT-YYYY-MM-DD
+
+The SRT record will include, as applicable:
+
+Title / Research State
+
+Identify the subject of the research and its current research state.
+
+Threat
+
+What potential security condition has been identified?
+
+Observation
+
+What has actually been observed, demonstrated, or reported?
+
+Observation will remain distinguishable from interpretation or inference.
+
+Potential Impact
+
+How could the identified condition affect STN-LABZ systems, operations, engineering, security, infrastructure, or the public?
+
+Affected Domains
+
+Applicable domains may include:
+
+- Desktop / Laptop
+- Server
+- Network
+- Space
+- AI
+- Communications
+- Infrastructure
+- Other affected systems or environments
+
+Evidence
+
+Preserve evidence supporting the SRT, including as applicable:
+
+- Original discovery source.
+- Root or primary source.
+- Supporting references.
+- Technical documentation.
+- Research.
+- Demonstrations.
+- Incidents.
+- Contradictory evidence.
+- Other relevant evidence.
+
+Provenance will be preserved sufficiently to allow later verification.
+
+Assessment
+
+Analysis and interpretation will remain distinguishable from established facts.
+
+Capability will not be interpreted as authority.
+
+The existence of a technical capability does not establish that its use was authorized, intended, exploitable, or applicable to STN-LABZ.
+
+Unknowns
+
+Information that cannot be established from available evidence will remain UNKNOWN.
+
+Unknown information will not be replaced with speculation.
+
+Confidence
+
+Confidence will be identified as:
+
+- LOW
+- MODERATE
+- HIGH
+
+Confidence describes the strength of the available assessment. It does not convert an unverified condition into established fact.
+
+Recommended Research
+
+Identify additional investigation, testing, evidence, or analysis required to determine the condition more completely.
+
+Potential Mitigation
+
+Potential defensive or engineering measures may be documented for research and review.
+
+Potential mitigation is not policy unless separately approved through the STN-LABZ policy process.
+
+Research State
+
+An SRT candidate will initially be treated as:
+
+POTENTIAL — NOT ESTABLISHED
+
+The condition remains potential until sufficient evidence and authorized human review establish otherwise.
+
+Human Review
+
+SRT candidates require human review.
+
+Human review may result in the candidate being:
+
+- Approved for further research.
+- Revised.
+- Escalated.
+- Closed.
+
+Creation of an SRT candidate does not establish that:
+
+- The reported condition is true.
+- The condition is exploitable.
+- The condition applies to STN-LABZ.
+- The condition constitutes an established organizational threat.
+- The condition requires policy.
+- The condition has been approved as a research assignment.
+
+Human authorization is required before an SRT candidate becomes an approved research assignment.
+
+Disposition
+
+An SRT may receive an applicable disposition including:
+
+- MONITOR
+- RESEARCH
+- ESCALATE
+- RECOMMEND POLICY
+- CLOSED
+
+Disposition will reflect the current authorized treatment of the SRT and will not be interpreted as evidence beyond what the SRT record establishes.
+
+Policy Boundary
+
+An SRT does not create organizational policy.
+
+An SRT may recommend policy when research identifies a condition requiring organizational governance.
+
+Policy creation, amendment, approval, or rejection remains a separate human-governed process.
+
+Potential mitigation documented within an SRT does not become mandatory merely because it appears in the research record.
+
+Authority Boundary
+
+Security research identifies and evaluates potential conditions.
+
+Rictus may discover, collect, correlate, document, and report information relevant to an SRT candidate within its assigned mission.
+
+Rictus will not:
+
+- Independently establish an SRT candidate as an organizational threat.
+- Independently approve SRT research assignments.
+- Independently approve organizational knowledge.
+- Establish company policy.
+- Bypass required human review.
+- Expand its own authority.
+
+Human authority remains the approval boundary.
+
+Historical Record
+
+SRT records will preserve supporting and contradictory evidence necessary to understand how the assessment developed.
+
+An SRT that is rejected, disproven, revised, or closed remains part of the engineering and security research record.
+
+Contrary evidence will not be removed merely because it weakens the original hypothesis.
+
+References
+
+- STN-LABZ General Orders
+- 20260729.0 — Operational Authority
+- 20260729.5 — Unknown State Doctrine
+- 20260729.6 — Engineering Documentation
+- 20260729.8 — Operational Doctrine

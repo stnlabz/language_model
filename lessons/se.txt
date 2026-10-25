@@ -1,0 +1,1623 @@
+Software engineering is the disciplined design, construction, testing, deployment, operation, and maintenance of software systems.
+
+Software engineering is more than writing code.
+
+Code is one artifact produced during software engineering.
+
+A program can compile successfully and still be incorrect.
+
+A program can run successfully and still produce incorrect results.
+
+A program can pass one test and still contain defects.
+
+Correctness must be established against defined requirements.
+
+A requirement describes behavior, capability, constraint, or property a system must satisfy.
+
+Requirements should be explicit.
+
+Requirements should be testable when practical.
+
+Requirements should avoid unnecessary ambiguity.
+
+A requirement should distinguish required behavior from optional behavior.
+
+A requirement should distinguish implementation constraints from desired outcomes.
+
+Requirements can change.
+
+Changes to requirements should be controlled.
+
+A changed requirement can invalidate previously correct implementation behavior.
+
+Do not modify implementation merely because an alternative design appears preferable when the existing behavior is required.
+
+Engineering begins by understanding the problem.
+
+Do not begin implementation before understanding the required behavior sufficiently to proceed.
+
+Unknown requirements should remain unknown rather than being invented.
+
+Assumptions should be identified as assumptions.
+
+Evidence should be distinguished from inference.
+
+Observed behavior should be distinguished from intended behavior.
+
+Existing behavior should not automatically be interpreted as correct behavior.
+
+Documentation can describe intended behavior.
+
+Tests can provide evidence about expected behavior.
+
+Source code can provide evidence about implemented behavior.
+
+Runtime observation can provide evidence about actual behavior.
+
+None of these sources should automatically override an explicit authoritative requirement.
+
+Authority must be established by the project.
+
+Software architecture defines major structural boundaries and relationships within a system.
+
+Architecture should serve requirements.
+
+Architecture should not exist merely to demonstrate complexity.
+
+A small system does not require a complicated architecture.
+
+Complexity should be justified by requirements.
+
+A component is a bounded part of a software system.
+
+Components should have clear responsibilities.
+
+A component should expose defined interfaces.
+
+An interface defines how another component interacts with it.
+
+Implementation details should remain behind interfaces when they do not need to be exposed.
+
+Encapsulation limits knowledge of implementation details.
+
+Encapsulation reduces unnecessary coupling.
+
+Coupling describes dependencies between components.
+
+High coupling means components depend heavily on one another.
+
+Low coupling reduces unnecessary dependency.
+
+Cohesion describes how closely related a component's responsibilities are.
+
+High cohesion means a component has a focused purpose.
+
+Good modular design generally favors high cohesion and controlled coupling.
+
+A module should have a defined purpose.
+
+A module should have a defined boundary.
+
+A module should have a defined interface.
+
+A module should not silently assume authority belonging to another component.
+
+A module should not modify unrelated state merely because it can access it.
+
+Capability does not establish authority.
+
+An API is an Application Programming Interface.
+
+An API defines operations available to other software.
+
+An API should define inputs.
+
+An API should define outputs.
+
+An API should define errors.
+
+An API should define relevant state behavior.
+
+An API should define compatibility expectations where required.
+
+An API contract is a behavioral agreement between provider and consumer.
+
+Changing an API can break consumers.
+
+Backward compatibility means newer software continues supporting defined behavior expected by older consumers.
+
+Forward compatibility describes the ability of existing software to tolerate or interact with newer representations according to the protocol design.
+
+Compatibility should be intentional.
+
+Do not assume compatibility merely because two versions compile.
+
+Binary compatibility and source compatibility are different.
+
+Protocol compatibility and implementation compatibility are different.
+
+A dependency is software or functionality required by another component.
+
+Dependencies increase the system's external requirements.
+
+Dependencies should solve actual problems.
+
+Adding a dependency has cost.
+
+Dependencies require maintenance.
+
+Dependencies can introduce vulnerabilities.
+
+Dependencies can change behavior.
+
+Dependencies can become unavailable.
+
+Dependencies can create licensing obligations.
+
+Do not add a dependency for trivial functionality that can be implemented more safely and simply without it.
+
+Do not reimplement complex specialized functionality merely to avoid a mature dependency when doing so increases risk.
+
+Dependency decisions are engineering tradeoffs.
+
+A dependency should have a defined reason for existing.
+
+Unused dependencies should be removed when safe and authorized.
+
+A build transforms source code and resources into executable or distributable artifacts.
+
+A successful build proves that the build process completed according to its criteria.
+
+A successful build does not prove correctness.
+
+A successful build does not prove security.
+
+A successful build does not prove compatibility.
+
+A successful build does not prove runtime success.
+
+Compiler warnings provide engineering evidence.
+
+Warnings should be examined.
+
+Warnings should not be ignored merely because compilation succeeded.
+
+Treating warnings as errors can improve build discipline where appropriate.
+
+Not every warning indicates a defect.
+
+Warnings should be evaluated rather than blindly suppressed.
+
+Suppressing a warning should have a reason.
+
+A build should be reproducible when reproducibility is a project requirement.
+
+A reproducible build produces equivalent required output from defined inputs under defined conditions.
+
+Build inputs should be known.
+
+Compiler versions can affect output.
+
+Library versions can affect output.
+
+Build flags can affect output.
+
+Environment variables can affect output.
+
+Generated files can affect output.
+
+Build systems should avoid hidden dependencies.
+
+A clean build starts without relying on stale previous build artifacts.
+
+Clean builds help expose undeclared dependencies.
+
+Incremental builds improve development speed.
+
+An incremental build should not produce different required behavior from a clean build.
+
+If a clean build fails while an incremental build succeeds, investigate hidden build state.
+
+Source control records changes to project files.
+
+A repository preserves versions of controlled project content.
+
+A commit represents a recorded project state or change according to the version-control system.
+
+A commit should represent coherent work when practical.
+
+A commit message should describe the change sufficiently for project use.
+
+Version control history is engineering evidence.
+
+History should not be rewritten merely to make past development appear cleaner unless project policy explicitly permits the history operation.
+
+A branch provides an independent line of development according to version-control semantics.
+
+Branches can isolate work.
+
+Branches do not automatically provide quality control.
+
+Merging combines development histories or changes.
+
+Merge conflicts require deliberate resolution.
+
+A conflict means automatic reconciliation was not possible.
+
+A conflict does not indicate which side is correct.
+
+Resolve conflicts according to intended project state.
+
+Do not choose a conflict side merely because it is newer.
+
+A patch is a change applied to existing software.
+
+A patch should be bounded.
+
+A patch should solve the identified problem without unnecessary unrelated changes.
+
+Unrelated cleanup increases patch scope.
+
+Increased scope increases regression risk.
+
+Do not refactor unrelated code during a narrowly scoped repair unless authorized or required.
+
+A regression is a previously working behavior that becomes defective after a change.
+
+Regression testing checks that established behavior remains correct after changes.
+
+Every change has regression potential.
+
+Small changes can cause large effects.
+
+Large changes can sometimes be safe when boundaries are well defined.
+
+Risk depends on affected behavior, not merely line count.
+
+Before changing code, identify the failure.
+
+Reproduce the failure when practical.
+
+Collect evidence.
+
+Identify the responsible component.
+
+Understand the relevant execution path.
+
+Change the smallest appropriate boundary.
+
+Build the changed software.
+
+Test the changed behavior.
+
+Test relevant surrounding behavior.
+
+Inspect resulting logs or outputs.
+
+Do not declare a defect fixed solely because compilation succeeded.
+
+Debugging is the process of finding and understanding defects.
+
+Debugging should be evidence-driven.
+
+Begin with observed behavior.
+
+Determine expected behavior.
+
+Identify the difference.
+
+Reduce the problem.
+
+Test hypotheses.
+
+Reject hypotheses contradicted by evidence.
+
+Do not modify unrelated code merely to see whether the problem disappears.
+
+Random changes can hide defects.
+
+A symptom is not necessarily the root cause.
+
+A root cause is the underlying condition producing the failure.
+
+One root cause can produce multiple symptoms.
+
+One symptom can have multiple possible causes.
+
+Do not claim a root cause without evidence.
+
+Logs provide evidence about execution.
+
+Logs can show state transitions.
+
+Logs can show failures.
+
+Logs can show timing.
+
+Logs can show component interaction.
+
+Logs can also be incomplete.
+
+Absence of a log entry does not automatically prove an operation did not occur unless logging is guaranteed for that operation.
+
+Diagnostic output should be precise.
+
+"Failed" is less useful than identifying the operation that failed.
+
+An error should preserve relevant context.
+
+An error should not expose secrets.
+
+Error propagation allows lower-level failures to reach a level capable of handling or reporting them.
+
+Do not silently discard meaningful errors.
+
+A function returning failure should be checked when the interface requires checking.
+
+Ignoring return values can convert detectable failures into later corruption.
+
+Fail fast means stopping when continuing would violate required assumptions.
+
+Fail safe means failure leaves the system in an acceptable state.
+
+Fail fast and fail safe describe different properties.
+
+A system can fail fast while failing unsafely.
+
+A system can fail safely without terminating the entire process.
+
+Failure policy should match the component's responsibility.
+
+Recoverable failures can be handled.
+
+Unrecoverable failures should be reported accurately.
+
+Retry can recover transient failures.
+
+Retry is not appropriate for every failure.
+
+Invalid input generally does not become valid through repetition.
+
+Permission denial generally does not disappear through immediate repeated attempts.
+
+Network interruption can be transient.
+
+Resource contention can be transient.
+
+Retries should be bounded.
+
+Retries should have defined conditions.
+
+Repeated retry without limits can create an infinite failure loop.
+
+Backoff increases delay between retry attempts according to a defined strategy.
+
+Backoff can reduce load during outages.
+
+Retry behavior should not amplify a failure.
+
+A retry storm occurs when many clients repeatedly retry failing operations and increase system load.
+
+Jitter can distribute retry timing.
+
+State-changing operations require careful retry semantics.
+
+An operation is idempotent when repeating it produces the same intended state according to its defined semantics.
+
+Setting a value to a specific value can be idempotent.
+
+Incrementing a value is generally not idempotent.
+
+Creating a payment twice is not equivalent to creating it once.
+
+Retry safety should be established before automatically repeating state-changing operations.
+
+Testing evaluates software behavior.
+
+A test should have a defined purpose.
+
+A test should establish conditions.
+
+A test should perform an operation.
+
+A test should evaluate the result.
+
+A passing test is evidence for the behavior covered by that test.
+
+A passing test is not proof of all system correctness.
+
+A failing test is evidence that expected and actual behavior differ according to the test.
+
+The test itself can be wrong.
+
+When a test fails, examine both implementation and test assumptions.
+
+A unit test evaluates a small bounded component.
+
+An integration test evaluates interaction between components.
+
+A system test evaluates a larger complete system.
+
+An acceptance test evaluates behavior against acceptance requirements.
+
+A regression test protects previously established behavior.
+
+A smoke test checks basic viability after a build or deployment.
+
+A load test evaluates behavior under defined workload.
+
+A stress test evaluates behavior under conditions approaching or exceeding expected capacity.
+
+A soak test evaluates behavior over extended operation.
+
+A security test evaluates security properties.
+
+Different tests answer different questions.
+
+Do not treat a unit test as an end-to-end test.
+
+Do not treat a successful smoke test as proof of production readiness.
+
+Test boundaries should match claims.
+
+If a test proves only parsing, do not report that networking passed.
+
+If a test proves only connection establishment, do not report that the entire protocol passed.
+
+If a test proves only local behavior, do not report distributed behavior as proven.
+
+Test results should state what was actually tested.
+
+Negative testing checks how software handles invalid or unexpected conditions.
+
+Negative tests are important.
+
+Valid input is only part of an interface.
+
+Invalid input should produce defined behavior.
+
+Malformed input should not cause undefined behavior.
+
+Missing input should be handled according to interface rules.
+
+Oversized input should be bounded.
+
+Unsupported versions should be rejected or handled according to compatibility policy.
+
+Unknown commands should not accidentally execute another command.
+
+Testing should include boundaries.
+
+Zero can be a boundary.
+
+One can be a boundary.
+
+Maximum values can be boundaries.
+
+Empty input can be a boundary.
+
+Maximum permitted length can be a boundary.
+
+One beyond maximum can be a boundary.
+
+Boundary-value testing finds defects that ordinary examples can miss.
+
+Test data should be controlled.
+
+Production data should not be modified merely to perform ordinary development testing.
+
+Test environments should be separated where requirements demand it.
+
+Mocks simulate defined dependencies.
+
+Stubs provide controlled responses.
+
+Fakes provide simplified functional implementations.
+
+Test doubles should not be confused with the real dependency.
+
+A test passing against a mock does not prove the real service behaves identically.
+
+Integration testing verifies actual boundaries.
+
+Deterministic tests produce repeatable results from controlled inputs.
+
+Tests depending unnecessarily on current time can become unstable.
+
+Tests depending unnecessarily on network availability can become unstable.
+
+Tests depending on random uncontrolled input can become unstable.
+
+Tests depending on execution order can become unstable.
+
+A flaky test passes and fails without a relevant code change.
+
+Flaky tests reduce confidence.
+
+Do not normalize flaky tests as acceptable.
+
+Find the uncontrolled condition.
+
+Randomized testing can be useful when randomness is deliberate and failures can be reproduced.
+
+Record the random seed when reproducibility matters.
+
+A test should not pass because an error path was silently skipped.
+
+Assertions verify expected conditions.
+
+Assertions should describe meaningful invariants.
+
+Assertions used for development diagnostics should not necessarily replace runtime validation of untrusted input.
+
+Production behavior should not depend on assertions that can be disabled unless the platform guarantees their execution.
+
+Static analysis examines software without executing the complete program.
+
+Static analysis can identify defects.
+
+Static analysis can identify suspicious patterns.
+
+Static analysis can identify type problems.
+
+Static analysis can identify security issues.
+
+Static analysis findings require evaluation.
+
+A warning from a static analyzer is evidence, not automatic proof.
+
+Dynamic analysis examines executing software.
+
+Memory checkers can identify invalid memory operations.
+
+Profilers measure runtime behavior.
+
+Debuggers inspect program execution.
+
+Sanitizers instrument programs to detect selected defects.
+
+No single analysis tool proves software correct.
+
+Code review evaluates changes before or after integration according to project process.
+
+Review should examine correctness.
+
+Review should examine requirements.
+
+Review should examine interfaces.
+
+Review should examine error handling.
+
+Review should examine security implications.
+
+Review should examine maintainability.
+
+Review should not become an excuse to redesign unrelated components.
+
+Review comments should distinguish defects from preferences.
+
+A defect violates required behavior or engineering correctness.
+
+A preference describes one acceptable alternative among several.
+
+Do not present style preference as correctness failure.
+
+Coding standards define project conventions.
+
+Consistency reduces cognitive load.
+
+Naming conventions should be followed within the project.
+
+Formatting conventions should be followed within the project.
+
+Existing project architecture should be respected.
+
+Do not impose another project's conventions without authorization.
+
+Project rules outrank generic stylistic preference within that project.
+
+Comments should explain information that code alone does not express clearly.
+
+Comments should not merely repeat obvious syntax.
+
+Comments can explain why a decision exists.
+
+Comments can explain constraints.
+
+Comments can explain protocol requirements.
+
+Comments can explain non-obvious safety boundaries.
+
+Outdated comments are dangerous.
+
+Update comments when behavior changes.
+
+Documentation should match actual behavior.
+
+Documentation can describe installation.
+
+Documentation can describe configuration.
+
+Documentation can describe interfaces.
+
+Documentation can describe architecture.
+
+Documentation can describe operations.
+
+Documentation can describe recovery.
+
+Documentation should distinguish examples from requirements.
+
+An example is not automatically normative.
+
+A normative requirement states what must occur according to the governing specification.
+
+Documentation should identify defaults.
+
+Defaults should be safe and predictable.
+
+Configuration changes behavior without modifying source code.
+
+Configuration should have defined syntax.
+
+Configuration should have defined defaults.
+
+Configuration should be validated.
+
+Invalid configuration should produce a precise error.
+
+Silently accepting malformed configuration can create unpredictable behavior.
+
+Unknown configuration fields can be rejected or ignored according to defined compatibility policy.
+
+Configuration precedence should be explicit.
+
+Command-line configuration can override file configuration if defined.
+
+Environment configuration can override file configuration if defined.
+
+Do not create hidden precedence rules.
+
+Configuration files can contain secrets.
+
+Secret configuration requires appropriate protection.
+
+Configuration should not be confused with runtime state.
+
+Runtime state changes as software operates.
+
+Configuration defines intended operating parameters.
+
+Generated runtime state should not overwrite human-controlled configuration unless explicitly designed to do so.
+
+State ownership should be clear.
+
+One component should not silently rewrite another component's configuration.
+
+A state machine represents behavior as states and transitions.
+
+A state should have defined meaning.
+
+A transition moves from one state to another according to defined conditions.
+
+Invalid transitions should be rejected.
+
+State-machine design can make lifecycle behavior deterministic.
+
+Implicit state hidden across unrelated variables is harder to reason about.
+
+Explicit state improves diagnosis.
+
+A finite-state machine has a finite set of defined states.
+
+Protocols commonly use state machines.
+
+Service lifecycles can use state machines.
+
+Workflow systems can use state machines.
+
+State transitions can be logged.
+
+A lifecycle describes the states an entity passes through over time.
+
+Creation is a lifecycle event.
+
+Activation can be a lifecycle event.
+
+Suspension can be a lifecycle event.
+
+Retirement can be a lifecycle event.
+
+Deletion can be a lifecycle event when deletion is permitted.
+
+Not every lifecycle should include deletion.
+
+Historical requirements can require permanent records.
+
+Status changes can preserve history without deletion.
+
+Versioning identifies distinct software states.
+
+Semantic Versioning commonly represents versions as MAJOR.MINOR.PATCH.
+
+Under Semantic Versioning conventions, a major version commonly indicates incompatible API changes.
+
+A minor version commonly indicates backward-compatible functionality.
+
+A patch version commonly indicates backward-compatible fixes.
+
+Projects can define their own versioning policy.
+
+Do not assume every project follows Semantic Versioning merely because its version contains three numbers.
+
+A version number should identify a defined software state.
+
+Two different artifacts should not casually claim the same version if they contain materially different controlled code.
+
+Build metadata can identify build-specific information.
+
+Release candidates are pre-release versions intended for release evaluation.
+
+An RC is not automatically a final stable release.
+
+Alpha versions generally represent early development.
+
+Beta versions generally represent more mature pre-release testing.
+
+Exact meanings belong to project policy.
+
+A release is a controlled distribution of software.
+
+A release should have identified source state.
+
+A release should have identified version.
+
+A release should have build artifacts.
+
+A release should have relevant documentation.
+
+A release should have validation appropriate to the project.
+
+A release should not be declared solely because an executable was produced.
+
+Release notes describe meaningful changes.
+
+Release notes should distinguish fixes.
+
+Release notes should distinguish enhancements.
+
+Release notes should distinguish compatibility changes.
+
+Release notes should identify known issues when appropriate.
+
+A changelog records changes across versions.
+
+A changelog is historical documentation.
+
+Do not rewrite historical release descriptions merely because later understanding changed unless correction policy requires it.
+
+Deprecation marks functionality as intended for future removal or replacement.
+
+Deprecated functionality can remain operational.
+
+Deprecation is not immediate removal.
+
+Consumers should be given migration information when appropriate.
+
+Removal should follow compatibility policy.
+
+Maintenance is continued engineering after initial release.
+
+Maintenance includes defect repair.
+
+Maintenance includes security updates.
+
+Maintenance includes compatibility updates.
+
+Maintenance includes dependency updates.
+
+Maintenance can include performance improvements.
+
+Maintenance is part of software engineering, not an afterthought.
+
+Technical debt represents future cost created by implementation or design decisions.
+
+Not every imperfect design is technical debt.
+
+A deliberate simple implementation can be correct engineering.
+
+Complex abstraction added without need can itself create technical debt.
+
+Refactoring changes internal structure while intending to preserve external behavior.
+
+Refactoring should have a defined reason.
+
+Refactoring can improve readability.
+
+Refactoring can reduce duplication.
+
+Refactoring can improve boundaries.
+
+Refactoring introduces regression risk.
+
+Test relevant behavior before and after refactoring.
+
+Do not combine broad refactoring with an urgent defect repair unless required.
+
+Optimization improves resource use or performance.
+
+Optimization should be driven by measured requirements.
+
+Measure before optimizing.
+
+Identify the bottleneck.
+
+Optimize the bottleneck.
+
+Measure again.
+
+Do not optimize code merely because it looks inefficient.
+
+Readable correct code is often preferable to complicated speculative optimization.
+
+Performance requirements should be measurable.
+
+Latency measures elapsed time for an operation.
+
+Throughput measures completed work over time.
+
+CPU utilization measures processor usage.
+
+Memory usage measures memory consumption.
+
+Disk I/O measures storage activity.
+
+Network I/O measures network activity.
+
+Different workloads have different bottlenecks.
+
+Reducing latency can sometimes reduce throughput.
+
+Increasing throughput can sometimes increase individual latency.
+
+Performance engineering involves tradeoffs.
+
+Scalability describes how system behavior changes as workload or resources increase.
+
+Scalability is not synonymous with speed.
+
+A fast system at one user can scale poorly.
+
+A slower system can scale predictably.
+
+Do not design for imaginary scale without requirements.
+
+Premature distributed architecture can increase failure modes dramatically.
+
+A single process can be sufficient.
+
+A single server can be sufficient.
+
+A file can be sufficient.
+
+A database can be sufficient.
+
+Distributed systems should be introduced when their benefits justify their complexity.
+
+A distributed system contains components communicating across process or machine boundaries.
+
+Distributed systems experience partial failure.
+
+One component can fail while another remains operational.
+
+Messages can be delayed.
+
+Messages can be duplicated.
+
+Messages can be lost according to transport and protocol.
+
+Nodes can disagree temporarily.
+
+Clocks can differ.
+
+Network partitions can occur.
+
+Distributed software must define behavior under these conditions.
+
+Do not treat a remote call as a local function call.
+
+Remote calls can time out.
+
+Remote calls can partially succeed.
+
+Remote calls have latency.
+
+Remote calls cross trust boundaries.
+
+Remote interfaces require explicit protocols.
+
+A timeout does not establish whether the remote operation occurred.
+
+Idempotency and request identifiers can help manage uncertain outcomes.
+
+Observability is the ability to understand system behavior from available evidence.
+
+Logs support observability.
+
+Metrics support observability.
+
+Traces support observability.
+
+Health checks support observability.
+
+Audit records support observability.
+
+Observability should be designed into important systems.
+
+Debugging production systems without evidence is guesswork.
+
+A metric is a numeric measurement over time.
+
+A counter increases as events occur.
+
+A gauge represents a value that can increase or decrease.
+
+A histogram summarizes distributions according to defined buckets or implementation.
+
+Metrics should have defined meaning.
+
+A metric without units can be ambiguous.
+
+A health check reports whether a component satisfies defined health criteria.
+
+A process being alive does not necessarily mean it is healthy.
+
+A health check should test meaningful capability without causing harmful side effects.
+
+A readiness check determines whether a component is ready to serve work.
+
+A liveness check determines whether a component is operating sufficiently to remain running according to orchestration policy.
+
+Readiness and liveness are different.
+
+Restarting a service because a dependency is temporarily unavailable can make an outage worse.
+
+Health policy should understand dependency behavior.
+
+Graceful degradation means continuing reduced but defined functionality when a dependency or capability is unavailable.
+
+Degraded state should be explicit.
+
+A degraded system should not claim full health.
+
+A degraded system can remain operational.
+
+Critical functionality should be distinguished from optional functionality.
+
+An optional module failure should not necessarily terminate the core system.
+
+A required component failure can prevent safe operation.
+
+Component criticality should be defined.
+
+A core system should know which dependencies are required.
+
+A module system should validate modules before activating them.
+
+Discovery means finding candidate modules.
+
+Discovery does not establish qualification.
+
+Qualification evaluates whether a candidate satisfies requirements.
+
+Activation makes a qualified component operational.
+
+Discovery, qualification, and activation are separate stages.
+
+A discovered module can be invalid.
+
+An invalid module should not automatically crash unrelated core functionality unless architecture requires it.
+
+A module manifest describes module metadata according to the module system.
+
+A missing required manifest is a qualification failure.
+
+A malformed manifest is a qualification failure.
+
+A valid manifest does not prove the module implementation is valid.
+
+Version validation can be part of qualification.
+
+ABI validation can be part of qualification.
+
+Required symbol validation can be part of qualification.
+
+Security validation can be part of qualification.
+
+Configuration validation can be part of qualification.
+
+Qualification should produce evidence.
+
+An active module should have passed required qualification.
+
+Hot loading activates a component without restarting the host process according to the module architecture.
+
+Hot loading introduces lifecycle concerns.
+
+A hot-loaded module must initialize correctly.
+
+A hot-loaded module must not assume process startup state unless defined.
+
+A module can require shutdown behavior.
+
+A module can own resources.
+
+Module unloading must account for active references and resources when unloading is supported.
+
+Not every module system needs unloading.
+
+Do not add unload complexity unless required.
+
+A plugin architecture allows functionality to be extended through defined interfaces.
+
+Plugins should not bypass core boundaries.
+
+Plugins should not redefine core semantics unless explicitly permitted.
+
+The host owns the plugin contract.
+
+A plugin implements the contract.
+
+An extension point should be deliberate.
+
+Exposing internal implementation accidentally as an extension interface creates fragile coupling.
+
+Public interfaces should be smaller than internal implementation where practical.
+
+The smaller an interface, the easier it is to reason about.
+
+The smaller a trusted computing boundary, the easier it is to audit.
+
+Simple systems are not simplistic when they satisfy requirements.
+
+Complexity is not evidence of sophistication.
+
+Abstraction is useful when it removes meaningful duplication or isolates meaningful variation.
+
+Abstraction is harmful when it hides simple behavior without providing value.
+
+Do not create an abstraction merely because one might someday be useful.
+
+Three similar lines of obvious code can sometimes be clearer than an elaborate generic framework.
+
+Duplication should be evaluated by maintenance cost, not ideology.
+
+A function should have a coherent responsibility.
+
+A function should have clear inputs.
+
+A function should have clear outputs.
+
+A function should have defined failure behavior.
+
+Hidden global state makes functions harder to reason about.
+
+Global state is not automatically forbidden.
+
+Global state should be controlled when it is appropriate.
+
+Mutable shared global state increases coupling.
+
+Constants can safely represent global immutable configuration or definitions where appropriate.
+
+Naming communicates intent.
+
+A variable name should describe what the value represents.
+
+A function name should describe the operation.
+
+A module name should describe responsibility.
+
+Misleading names create defects.
+
+Names should follow project conventions.
+
+Short names are appropriate when context makes them obvious.
+
+Long names are appropriate when additional specificity prevents ambiguity.
+
+Code readability matters because software is maintained by humans.
+
+Readable code reduces misunderstanding.
+
+Readable code supports review.
+
+Readable code supports debugging.
+
+Readable code supports future changes.
+
+Clever code can be expensive code.
+
+Prefer obvious behavior when obvious behavior satisfies requirements.
+
+Magic behavior is behavior occurring through hidden conventions or side effects.
+
+Some frameworks use convention productively.
+
+Hidden behavior should still be documented and predictable.
+
+A developer should be able to determine why an operation occurred.
+
+Determinism means the same defined inputs and state produce the same defined result where the system is intended to be deterministic.
+
+Determinism improves testing.
+
+Determinism improves reproducibility.
+
+Determinism improves debugging.
+
+Not every software operation can be fully deterministic.
+
+Network timing is not deterministic.
+
+Thread scheduling is not deterministic.
+
+Random generation is not deterministic unless controlled.
+
+External services can change.
+
+A deterministic core can isolate nondeterministic boundaries.
+
+Nondeterministic inputs should be made explicit.
+
+Time is an input.
+
+Randomness is an input.
+
+Network responses are inputs.
+
+Filesystem state is input.
+
+Environment variables are input.
+
+Configuration is input.
+
+External process output is input.
+
+Treating these values as inputs makes behavior easier to reason about.
+
+Validation establishes whether input satisfies defined requirements.
+
+Parsing and validation are different.
+
+Parsing converts representation into structure.
+
+Validation determines whether that structure is acceptable.
+
+Successfully parsed input can still be invalid.
+
+Validation should occur at trust boundaries.
+
+Internal components can rely on established invariants when architecture guarantees them.
+
+Repeated redundant validation can increase complexity.
+
+Never omit required validation merely because another layer probably performed it.
+
+Trust boundaries should be explicit.
+
+A trust boundary exists where data or authority crosses between domains with different trust assumptions.
+
+User input crosses a trust boundary.
+
+Network input crosses a trust boundary.
+
+Files supplied externally cross a trust boundary.
+
+Plugin modules can cross a trust boundary.
+
+Configuration can cross a trust boundary depending on who controls it.
+
+Validate according to the actual boundary.
+
+Security is part of software engineering.
+
+Security should not be bolted on after implementation.
+
+Least privilege reduces authority.
+
+Input validation reduces malformed input risk.
+
+Output encoding prevents selected interpretation problems.
+
+Authentication establishes identity according to the mechanism.
+
+Authorization determines permitted action.
+
+Logging supports detection and investigation.
+
+Updates repair known defects.
+
+Backups support recovery.
+
+No single security mechanism makes software secure.
+
+Reliability describes the ability to perform required behavior consistently under defined conditions.
+
+Availability describes whether a system is accessible when required.
+
+Reliability and availability are related but different.
+
+A system can be available while returning incorrect results.
+
+A system can be reliable when running but unavailable too frequently.
+
+Correctness, reliability, availability, security, and performance are different quality properties.
+
+Engineering should identify which properties matter.
+
+Tradeoffs should be explicit.
+
+A system can prefer correctness over availability.
+
+A system can prefer availability over immediate consistency.
+
+A safety-critical operation can fail closed.
+
+A noncritical informational service can fail open according to requirements.
+
+Failure policy should not be invented during an incident.
+
+Operational behavior should be designed.
+
+Deployment moves software into an execution environment.
+
+Deployment should be repeatable.
+
+Deployment should identify the artifact being installed.
+
+Deployment should establish required configuration.
+
+Deployment should establish permissions.
+
+Deployment should establish dependencies.
+
+Deployment should validate startup.
+
+Deployment should provide rollback or recovery where required.
+
+Copying files manually can be a deployment method.
+
+Manual deployment becomes error-prone as complexity grows.
+
+Automation can improve repeatability.
+
+Automation should remain understandable.
+
+A deployment script is software.
+
+Deployment scripts require testing.
+
+An installer is software.
+
+Installers require testing.
+
+Build scripts are software.
+
+Build scripts require maintenance.
+
+Infrastructure configuration is part of the operational system.
+
+Rollback restores a previous known state according to release strategy.
+
+Rollback can be difficult when database schema or persistent state changed.
+
+Forward repair can sometimes be safer than rollback.
+
+Recovery strategy should account for persistent data.
+
+Never assume replacing an executable restores the entire system.
+
+State can survive software replacement.
+
+Compatibility between software version and persistent state matters.
+
+An upgrade changes installed software or data to a newer version.
+
+Upgrade paths should be tested.
+
+Skipping versions can require special handling.
+
+Downgrades can be unsupported.
+
+Version compatibility should be explicit.
+
+Migration failures should not leave ambiguous state.
+
+A migration should record completion when required.
+
+Repeated migration execution should have defined behavior.
+
+Maintenance windows provide controlled periods for changes when required.
+
+Zero-downtime deployment is not necessary for every system.
+
+Operational complexity should match availability requirements.
+
+A release requiring five minutes of planned downtime can be preferable to a complicated zero-downtime architecture when requirements permit it.
+
+Engineering is the management of tradeoffs under constraints.
+
+Constraints can include time.
+
+Constraints can include hardware.
+
+Constraints can include compatibility.
+
+Constraints can include staffing.
+
+Constraints can include security.
+
+Constraints can include regulation.
+
+Constraints can include existing architecture.
+
+Constraints can include user requirements.
+
+Constraints are part of the problem.
+
+Ignoring a constraint does not solve it.
+
+Technical elegance does not override an explicit requirement.
+
+A simpler correct system is preferable to a complicated correct system when both satisfy the same requirements and constraints.
+
+A system should do what it claims.
+
+A system should report what it actually did.
+
+A system should not claim success when an operation failed.
+
+A system should not claim failure when an operation was never attempted.
+
+A system should not invent evidence.
+
+Unknown should remain unknown.
+
+Pending should remain pending.
+
+Failed should remain failed.
+
+Successful should mean the defined success criteria were met.
+
+Degraded should mean the system remains operational with defined capability loss.
+
+Status words should have stable meanings.
+
+Precise status supports automation.
+
+Precise status supports operators.
+
+Precise status supports debugging.
+
+Precise status supports audit.
+
+Human operators establish project intent and authority.
+
+Software executes within delegated authority.
+
+Automation should not expand its authority merely because an operation is technically possible.
+
+A tool should not modify files outside its assigned scope.
+
+A module should not modify core components unless its contract permits it.
+
+A repair should not become an unauthorized redesign.
+
+A diagnostic operation should not become a destructive operation.
+
+Read authority and write authority are different.
+
+Permission to inspect is not permission to modify.
+
+Permission to modify one component is not permission to modify another.
+
+Engineering boundaries are part of correctness.
+
+Source ownership matters.
+
+Component ownership matters.
+
+Data ownership matters.
+
+State ownership matters.
+
+Interface ownership matters.
+
+Changes should occur at the boundary that owns the behavior.
+
+If a module owns behavior, repair the module when appropriate.
+
+If the core owns behavior, changing a module may only hide the defect.
+
+Do not patch the wrong layer merely because it is easier to edit.
+
+Determine responsibility first.
+
+A workaround bypasses or mitigates a defect without necessarily correcting its root cause.
+
+A workaround can be appropriate temporarily.
+
+A workaround should be identified as a workaround.
+
+Do not silently convert temporary workarounds into permanent architecture.
+
+A permanent repair addresses the responsible behavior according to requirements.
+
+Emergency repairs can prioritize restoration.
+
+Follow-up engineering can address deeper issues after service restoration.
+
+Incident response and normal development have different priorities.
+
+During an incident, preserve evidence.
+
+Restore required service safely.
+
+Avoid unrelated changes.
+
+Document what changed.
+
+After stabilization, investigate root cause.
+
+An incident timeline records relevant events in chronological order.
+
+Timestamps matter.
+
+Observed facts should be separated from interpretation.
+
+Do not rewrite incident history to match a later theory.
+
+New evidence can change conclusions.
+
+Historical observations remain historical observations.
+
+Post-incident review examines what happened and how the system can improve.
+
+The purpose is engineering improvement.
+
+Useful questions include what failed.
+
+Useful questions include why detection occurred when it did.
+
+Useful questions include why controls did or did not work.
+
+Useful questions include how recovery behaved.
+
+Useful questions include what evidence was missing.
+
+Useful questions include what change would prevent recurrence.
+
+Do not assume every incident requires architectural redesign.
+
+Sometimes the correct repair is small.
+
+Sometimes a small symptom reveals a large architectural defect.
+
+Evidence determines scope.
+
+A specification defines required behavior.
+
+An implementation realizes the specification.
+
+A test evaluates implementation behavior against defined expectations.
+
+Documentation explains the system.
+
+Operations run the system.
+
+Monitoring observes the system.
+
+Maintenance changes the system.
+
+These activities form a lifecycle.
+
+Software engineering manages that lifecycle deliberately.
+
+Good engineering preserves working behavior while changing required behavior.
+
+Good engineering limits unnecessary scope.
+
+Good engineering produces evidence.
+
+Good engineering recognizes uncertainty.
+
+Good engineering uses clear interfaces.
+
+Good engineering handles failure.
+
+Good engineering validates assumptions.
+
+Good engineering tests claims.
+
+Good engineering respects authority boundaries.
+
+Good engineering keeps systems understandable.
+
+Do not confuse more code with more capability.
+
+Do not confuse abstraction with architecture.
+
+Do not confuse architecture with complexity.
+
+Do not confuse compilation with correctness.
+
+Do not confuse execution with success.
+
+Do not confuse one passing test with validation.
+
+Do not confuse a symptom with root cause.
+
+Do not confuse a workaround with a repair.
+
+Do not confuse a warning with proof of a defect.
+
+Do not confuse absence of evidence with evidence of absence.
+
+Do not confuse newer with correct.
+
+Do not confuse automated with authoritative.
+
+Do not confuse technically possible with authorized.
+
+Do not confuse configuration with state.
+
+Do not confuse current state with history.
+
+Do not confuse retry with recovery.
+
+Do not confuse availability with correctness.
+
+Do not confuse performance with scalability.
+
+Do not confuse source compatibility with binary compatibility.
+
+Do not confuse an API with its implementation.
+
+Do not confuse a module with the core that hosts it.
+
+Do not confuse a successful build with a successful release.
+
+When changing software, establish what is wrong.
+
+Establish what correct behavior should be.
+
+Establish which component owns that behavior.
+
+Establish what evidence demonstrates the defect.
+
+Make the smallest appropriate change.
+
+Build it.
+
+Test it.
+
+Test relevant boundaries.
+
+Observe the result.
+
+Preserve evidence.
+
+Report what actually happened.
+
+If the result is unknown, say it is unknown.
+
+If the result failed, say it failed.
+
+If the result passed, state what specifically passed.
+
+Software engineering is controlled change applied to software systems.
+
+The objective is not merely to make code work once.
+
+The objective is to make required behavior understandable, testable, maintainable, reproducible, and dependable.

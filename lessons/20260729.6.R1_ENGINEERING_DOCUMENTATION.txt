@@ -1,0 +1,71 @@
+20260729.6.R0 — Engineering Documentation
+
+Root Document ID: 20260729.6
+Revision ID:       20260729.6.R1
+Previous Revision: NONE
+sha256: 94a7c0c175dd135f98b0d0feae75e08e6e99a1a6682b9ed22b7db1a8cba61bf7
+
+Status: Approved  
+Scope: Policies  
+Revision Date: 20260817
+
+Policy
+
+STN-LABZ establishes a standardized format for all company physical notebooks and digital logs.
+
+Journal / Log Naming Rule
+
+YYYYMMDD.X_LOG_NAME
+
+Where:
+
+- YYYYMMDD = Entry date.
+- X = The next sequential number for that date.
+- LOG_NAME = Descriptive entry name.
+
+Example
+
+20260729.0_OPERATIONAL_AUTHORITY
+
+Each entry represents an evolution of thought rather than only a date stamp.
+
+Suggested Metadata
+
+- Topic
+- Objective
+- Decisions
+- Principles
+- References
+- Status
+
+Structured Documentation File Size
+
+All STN-LABZ Markdown (.md) and JSON (.json) files will have a maximum permitted file size of 8 MiB.
+
+The file-size acceptance boundary is:
+
+- ≤ 8 MiB → ACCEPT
+- 8 MiB + 1 byte → REJECT
+
+For enforcement purposes:
+
+8 MiB = 8,388,608 bytes
+
+Therefore:
+
+- 8,388,608 bytes → ACCEPT
+- 8,388,609 bytes → REJECT
+
+Markdown and JSON files exceeding the established limit will not be accepted for processing, ingestion, validation, or use as authorized STN-LABZ engineering documentation or knowledge.
+
+This boundary applies regardless of the system, agent, module, parser, ingestion mechanism, retrieval mechanism, or storage mechanism processing the file.
+
+Implementations will determine file size in bytes and will not approximate, round, or reinterpret the established boundary.
+
+References
+
+- STN-LABZ General Orders
+- 20260729.0 — Operational Authority
+- 20260729.1 — Engineering Organization
+- 20260729.2 — Engineering Workflow
+- 20260729.5 — Unknown State Doctrine

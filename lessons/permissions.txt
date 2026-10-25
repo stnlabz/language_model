@@ -1,0 +1,3035 @@
+Permissions define specific authority granted to a principal, role, group, service, process, or other recognized subject within a system.
+
+A permission answers a narrow question:
+
+Is this subject allowed to perform this action within this scope?
+
+Permissions are part of authorization.
+
+Permissions are not authentication.
+
+Authentication establishes identity.
+
+Permissions describe authority.
+
+Authorization evaluates whether the established authority permits the requested operation.
+
+Keep these concepts separate.
+
+A permission should describe an actual operation.
+
+Examples include:
+
+users.read
+
+users.create
+
+users.update
+
+users.delete
+
+users.assign_role
+
+documents.read
+
+documents.create
+
+documents.update
+
+documents.delete
+
+documents.publish
+
+settings.read
+
+settings.update
+
+jobs.execute
+
+reports.export
+
+keys.rotate
+
+sessions.revoke
+
+Precise permissions are easier to understand than vague permissions.
+
+Avoid names such as:
+
+power_user
+
+special_access
+
+full_access
+
+advanced
+
+trusted
+
+unless the system explicitly defines what those names mean.
+
+A permission name should communicate authority.
+
+A useful permission structure is:
+
+resource.action
+
+For example:
+
+users.read
+
+users.update
+
+documents.publish
+
+configuration.modify
+
+Another valid structure can include scope:
+
+project.documents.read
+
+repository.code.write
+
+billing.invoices.approve
+
+The naming convention itself is not security.
+
+Consistency makes policy easier to review.
+
+Do not create multiple names for the same authority without reason.
+
+For example:
+
+user_edit
+
+edit_user
+
+users.modify
+
+users.update
+
+If all mean the same operation, choose one canonical permission.
+
+Permission duplication creates ambiguity.
+
+A permission should have defined semantics.
+
+For example:
+
+documents.read
+
+must define what "documents" means.
+
+It must define whether the permission applies globally or only within another scope.
+
+It must define whether archived documents are included.
+
+It must define whether private documents are included.
+
+Do not rely on the English wording alone.
+
+Document permission semantics.
+
+Permissions can be granted directly to principals.
+
+For example:
+
+User 42 -> reports.export
+
+This is a direct grant.
+
+Permissions can also be inherited through roles.
+
+For example:
+
+User 42 -> Editor -> documents.update
+
+This is an indirect grant.
+
+Permissions can be inherited through groups.
+
+For example:
+
+User 42 -> Engineering Group -> Developer Role -> repositories.write
+
+Authorization should be able to determine the source of authority.
+
+Do not create authority that cannot be explained.
+
+A role is commonly a named collection of permissions.
+
+For example:
+
+Viewer:
+
+documents.read
+
+Editor:
+
+documents.read
+documents.create
+documents.update
+
+Publisher:
+
+documents.read
+documents.create
+documents.update
+documents.publish
+
+Administrator:
+
+users.read
+users.create
+users.update
+users.delete
+users.assign_role
+settings.read
+settings.update
+
+These are examples.
+
+Role contents are defined by application policy.
+
+Do not assume every application uses the same meaning for Editor or Administrator.
+
+A role name is not itself evidence of a particular permission.
+
+Check the defined role membership.
+
+Permissions can exist without roles.
+
+Roles are a management convenience.
+
+A small application can assign permissions directly.
+
+A larger application can use roles to avoid managing many individual grants.
+
+Do not introduce roles when direct permissions are simpler.
+
+Do not introduce direct grants everywhere when roles provide clearer governance.
+
+Choose the smallest model that satisfies the requirements.
+
+Role-Based Access Control commonly maps:
+
+Principal -> Role -> Permission.
+
+The authorization decision can then determine whether the principal receives the required permission through one or more roles.
+
+A principal can have multiple roles.
+
+For example:
+
+User 42:
+
+Editor.
+
+Report Viewer.
+
+The effective permission set can be the union of those roles if policy defines union semantics.
+
+Do not assume union semantics without defining it.
+
+Some systems support explicit deny rules.
+
+If explicit denies exist, conflict resolution must be defined.
+
+For example:
+
+Role A allows documents.read.
+
+Role B denies documents.read.
+
+What happens?
+
+Possible rules include:
+
+Explicit deny wins.
+
+Most specific rule wins.
+
+Priority rule wins.
+
+The policy engine determines precedence.
+
+Choose one deterministic rule.
+
+Do not leave permission conflicts ambiguous.
+
+If the system does not require explicit deny rules, avoiding them can simplify permission reasoning.
+
+Default deny is often simpler.
+
+No matching grant means no permission.
+
+Explicit deny systems can be useful.
+
+They also create additional complexity.
+
+Use them only when requirements justify them.
+
+A grant adds authority.
+
+A revocation removes authority.
+
+These are security-sensitive operations.
+
+Do not treat permission assignment as ordinary profile editing.
+
+Only authorized principals should grant permissions.
+
+Only authorized principals should revoke permissions.
+
+The authority to grant a permission can itself be represented by a permission.
+
+For example:
+
+users.assign_role
+
+permissions.grant
+
+permissions.revoke
+
+Do not allow ordinary users to assign their own permissions.
+
+Do not allow a user to modify role membership through unrestricted account updates.
+
+Privilege-management fields require protected operations.
+
+A direct grant can be represented conceptually as:
+
+subject
+
+permission
+
+scope
+
+grantor
+
+creation time
+
+expiration if applicable
+
+status
+
+Not every system needs every field.
+
+The important point is that authority should have a defined source and scope.
+
+A permission without scope can be global.
+
+For example:
+
+system.settings.update
+
+This can apply across the application.
+
+A scoped permission applies only within a defined boundary.
+
+For example:
+
+project:17:documents.update
+
+This grants update authority within project 17.
+
+It does not imply authority within project 18.
+
+Scope prevents authority from becoming broader than intended.
+
+Always ask:
+
+Permission over what?
+
+Authority without scope can become dangerously broad.
+
+A principal can have:
+
+documents.update
+
+within Project A.
+
+The same principal can have:
+
+documents.read
+
+within Project B.
+
+Do not flatten those into global document permissions.
+
+Preserve scope.
+
+Scopes can correspond to:
+
+Organization.
+
+Tenant.
+
+Project.
+
+Repository.
+
+Directory.
+
+Resource.
+
+Resource collection.
+
+Environment.
+
+Region.
+
+Application subsystem.
+
+Other defined boundaries.
+
+Do not invent arbitrary scopes without a real policy requirement.
+
+Scope hierarchy can exist.
+
+For example:
+
+Organization.
+
+Project.
+
+Repository.
+
+Document.
+
+A permission granted at organization scope can propagate to projects if policy defines inheritance.
+
+A project permission can propagate to repositories.
+
+A repository permission can propagate to documents.
+
+Inheritance must be explicit.
+
+Do not assume parent permissions automatically apply to children.
+
+Some systems permit inheritance.
+
+Some systems do not.
+
+Some permit exceptions.
+
+Define the actual behavior.
+
+Permission inheritance reduces repetitive configuration.
+
+It also increases the consequences of broad grants.
+
+A permission granted high in a hierarchy can affect many resources.
+
+Grant high-level permissions carefully.
+
+Least privilege means granting only the authority required.
+
+If a user only needs to read documents in one project, do not grant global documents.read.
+
+If a service only needs to insert telemetry, do not grant database administration.
+
+If an operator only needs to restart one service, do not grant unrestricted system administration.
+
+Narrow permissions reduce the consequences of compromise and mistakes.
+
+Least privilege applies to humans.
+
+Least privilege applies to applications.
+
+Least privilege applies to services.
+
+Least privilege applies to scheduled jobs.
+
+Least privilege applies to database accounts.
+
+Least privilege applies to API tokens.
+
+Least privilege applies to modules.
+
+Least privilege applies to infrastructure.
+
+Do not reserve least privilege only for end users.
+
+A service account can be overprivileged.
+
+A background worker can be overprivileged.
+
+An application process can be overprivileged.
+
+Every principal should receive only required authority.
+
+Permissions can be additive.
+
+For example:
+
+documents.read
+
+does not imply:
+
+documents.update
+
+unless policy explicitly defines that implication.
+
+documents.update
+
+does not necessarily imply:
+
+documents.delete
+
+documents.create
+
+does not necessarily imply:
+
+documents.publish
+
+Treat distinct operations as distinct authority.
+
+Do not infer permission relationships merely because one action sounds more powerful.
+
+If implication exists, define it explicitly.
+
+A permission hierarchy can intentionally define:
+
+documents.admin
+
+includes:
+
+documents.read
+
+documents.create
+
+documents.update
+
+documents.delete
+
+documents.publish
+
+This can simplify management.
+
+The hierarchy should be visible and deterministic.
+
+Do not hide permission implication in scattered application code.
+
+A reviewer should be able to determine the effective authority.
+
+Broad wildcard permissions can exist.
+
+For example:
+
+documents.*
+
+system.*
+
+*
+
+Wildcards can simplify administration.
+
+They can also create enormous authority.
+
+Use them cautiously.
+
+Do not give wildcard authority to ordinary users merely because listing permissions is inconvenient.
+
+Explicit permission sets are easier to audit.
+
+If wildcard matching exists, define it precisely.
+
+Does:
+
+documents.*
+
+match:
+
+documents.read
+
+documents.publish
+
+documents.security.change_owner
+
+?
+
+The matching rule must be deterministic.
+
+Do not use loose string matching.
+
+For example, do not determine permission through substring tests.
+
+Permission:
+
+user
+
+must not accidentally match:
+
+superuser.admin
+
+Use exact identifiers or a defined wildcard grammar.
+
+Permissions should be machine-comparable.
+
+Normalize naming conventions.
+
+For example:
+
+lowercase identifiers.
+
+dot-separated namespaces.
+
+No leading or trailing whitespace.
+
+No ambiguous aliases.
+
+Do not compare permission names using inconsistent case rules.
+
+If permission identifiers are case-sensitive, enforce that consistently.
+
+If they are case-insensitive, normalize them before storage and comparison.
+
+Do not allow:
+
+Users.Read
+
+users.read
+
+USERS.READ
+
+to accidentally become three different authorities unless intentionally defined.
+
+Permission registries can define all recognized permissions.
+
+For example:
+
+users.read
+
+users.create
+
+users.update
+
+users.delete
+
+users.assign_role
+
+documents.read
+
+documents.create
+
+documents.update
+
+documents.delete
+
+documents.publish
+
+A registry prevents arbitrary permission strings from appearing silently.
+
+Do not grant unknown permissions.
+
+Unknown permission should not become allow.
+
+A typo such as:
+
+documents.updtae
+
+should not create unpredictable behavior.
+
+Reject or flag unknown permission identifiers.
+
+Default deny.
+
+Permission definitions can include metadata.
+
+For example:
+
+Identifier.
+
+Description.
+
+Scope type.
+
+Risk classification.
+
+Assignable roles.
+
+Deprecated status.
+
+Not every application needs this.
+
+Metadata can improve administration and auditing.
+
+Do not let descriptive metadata control security unless explicitly intended.
+
+The permission identifier and policy semantics remain authoritative.
+
+Permission definitions can be version-controlled.
+
+Changes to permission meaning can affect security.
+
+If:
+
+reports.read
+
+originally means read public reports,
+
+and later silently changes to include confidential reports,
+
+existing grants become more powerful.
+
+Changing permission semantics can be equivalent to granting new authority.
+
+Review semantic changes carefully.
+
+Do not assume only assignment changes affect access.
+
+Permission code changes can expand privilege.
+
+Roles can also change over time.
+
+Suppose Editor originally contains:
+
+documents.read
+
+documents.update
+
+Later it gains:
+
+documents.delete
+
+Every Editor now receives deletion authority.
+
+That is a privilege change.
+
+Audit role-definition changes.
+
+Do not review only user-to-role assignments.
+
+Permission inheritance changes can also expand authority.
+
+Adding a parent relationship between roles can grant many permissions indirectly.
+
+Treat role hierarchy changes as security-sensitive.
+
+A permission model should make effective permissions calculable.
+
+For a principal, the system should be able to answer:
+
+Which permissions are effective?
+
+Where did each permission come from?
+
+What scope applies?
+
+Is the permission temporary?
+
+Is it revoked?
+
+Which rule produced the result?
+
+Do not create an opaque permission system.
+
+Effective permissions are the authority remaining after all applicable grants, inheritance, scopes, conditions, revocations, and conflict rules are evaluated.
+
+Stored permissions are not necessarily effective permissions.
+
+For example:
+
+A role contains documents.update.
+
+The role assignment expired.
+
+The stored relationship remains.
+
+Effective permission is absent.
+
+Do not confuse historical records with active authority.
+
+Temporary permission grants can have:
+
+starts_at
+
+expires_at
+
+Before starts_at, the permission is inactive.
+
+At or after expires_at according to policy, the permission is inactive.
+
+Time boundaries should be explicit.
+
+Do not let temporary access silently become permanent.
+
+Expiration should be enforced by authorization logic.
+
+A scheduled cleanup job can delete expired grants later.
+
+The existence of an expired record must not make it active.
+
+Logical expiration is authoritative.
+
+Temporary access can be useful for:
+
+Incident response.
+
+Maintenance.
+
+Contract work.
+
+Support.
+
+Emergency operations.
+
+Testing.
+
+Time-limited delegation.
+
+Grant the narrowest scope and duration required.
+
+Do not use permanent administrator roles for temporary tasks.
+
+Permission revocation should take effect according to defined policy.
+
+Possible behavior includes:
+
+Immediately on the next authorization check.
+
+After session refresh.
+
+After token expiration.
+
+After cache invalidation.
+
+After distributed replication.
+
+Know the actual behavior.
+
+Do not claim immediate revocation if cached authority remains active.
+
+Permission caching can improve performance.
+
+Caching creates freshness problems.
+
+If effective permissions are cached in a session:
+
+Role changes can be stale.
+
+Permission grants can be stale.
+
+Revocations can be stale.
+
+Group membership changes can be stale.
+
+Define cache lifetime and invalidation.
+
+Do not cache authorization forever.
+
+A permission version can help invalidate cached authority.
+
+For example:
+
+Account permission_version = 12.
+
+Session records version 12.
+
+Administrator changes roles.
+
+Account permission_version becomes 13.
+
+Session presents version 12.
+
+Application refreshes or rejects stale authorization state.
+
+This is one possible design.
+
+Do not add versioning unless requirements justify it.
+
+Simple applications can query current permissions directly.
+
+Measure before optimizing.
+
+Do not create complex permission caching to solve a performance problem that does not exist.
+
+Permissions can be stored relationally.
+
+For example:
+
+users
+
+roles
+
+permissions
+
+user_roles
+
+role_permissions
+
+This is a common RBAC structure.
+
+A direct-grant system can add:
+
+user_permissions
+
+A scoped system can add scope information.
+
+Exact schema depends on requirements.
+
+Do not copy a generic authorization schema blindly.
+
+Design from actual policy.
+
+A simple role table can be enough.
+
+A complex many-to-many permission system can be unnecessary for an application with only two fixed roles.
+
+Complexity creates maintenance cost.
+
+Use the simplest correct representation.
+
+Database constraints can protect permission integrity.
+
+For example:
+
+Foreign keys.
+
+Unique constraints.
+
+Known permission identifiers.
+
+Valid role identifiers.
+
+Do not rely solely on application code if the database can cheaply enforce structural invariants.
+
+A unique constraint can prevent duplicate role assignments.
+
+A foreign key can prevent references to nonexistent roles.
+
+Structural integrity supports reliable authorization.
+
+Database integrity does not replace authorization.
+
+A user might submit a structurally valid role ID they are not authorized to assign.
+
+Validate authority separately.
+
+Permission administration interfaces must enforce authorization.
+
+Hiding the permissions page from ordinary users is insufficient.
+
+Protect the endpoint that changes permissions.
+
+Protect APIs.
+
+Protect bulk operations.
+
+Protect import functions.
+
+Protect command-line administration according to its trust model.
+
+Every path that changes authority matters.
+
+Permission APIs should use explicit operations.
+
+For example:
+
+POST /users/42/roles
+
+DELETE /users/42/roles/editor
+
+can be clearer than a generic:
+
+PATCH /users/42
+
+with arbitrary fields including roles.
+
+Security-sensitive state benefits from dedicated operations.
+
+Do not expose permission fields through unrestricted mass assignment.
+
+If an ordinary profile update accepts:
+
+name
+
+email
+
+role
+
+permissions
+
+the design can allow privilege escalation.
+
+Use field allowlists.
+
+Keep security metadata out of ordinary update paths.
+
+Permission assignment can itself have scope.
+
+A project administrator can assign project roles.
+
+That does not necessarily mean the administrator can assign system-wide roles.
+
+For example:
+
+Project Admin can assign:
+
+Project Viewer.
+
+Project Editor.
+
+Project Maintainer.
+
+Project Admin cannot assign:
+
+System Administrator.
+
+Define delegation boundaries.
+
+Do not grant unlimited permission-management authority merely because someone manages one scope.
+
+A principal should not be able to grant authority beyond the delegation policy.
+
+One possible rule is:
+
+A grantor may assign only permissions they possess and are permitted to delegate.
+
+Another system can define a separate delegation matrix.
+
+The exact rule is policy-specific.
+
+Do not assume possession automatically grants delegation authority.
+
+Having permission to perform an action does not necessarily mean having permission to grant that action to someone else.
+
+For example:
+
+documents.delete
+
+does not imply:
+
+permissions.grant documents.delete
+
+Delegation is separate authority.
+
+Keep it explicit.
+
+Role assignment and permission assignment can require different permissions.
+
+For example:
+
+roles.assign
+
+permissions.grant
+
+roles.create
+
+roles.modify
+
+These operations have different security consequences.
+
+Creating a role is not necessarily dangerous by itself if nobody can assign it.
+
+Modifying a widely assigned role can be extremely powerful.
+
+Protect each operation appropriately.
+
+Changing a role definition can affect many users simultaneously.
+
+A role with 10,000 members receives a new permission.
+
+That single configuration change grants authority to 10,000 principals.
+
+Treat role modification as high-impact.
+
+Preview effective changes where practical.
+
+Audit them.
+
+Permission removal can also have broad effects.
+
+Removing:
+
+reports.read
+
+from a role can affect every role member.
+
+This may be intentional.
+
+Understand impact before changing shared roles.
+
+Role cloning can accidentally copy excessive permissions.
+
+Review cloned roles.
+
+Do not assume a clone is safe because the source role was appropriate for another context.
+
+Scope matters.
+
+Environment matters.
+
+Purpose matters.
+
+Permissions can differ by environment.
+
+Development.
+
+Testing.
+
+Staging.
+
+Production.
+
+A developer can have broad authority in development but limited authority in production.
+
+Do not automatically synchronize human privileges across environments.
+
+Production authority should be intentionally granted.
+
+Environment scope should be explicit.
+
+A permission such as:
+
+database.admin
+
+should identify which database or environment if multiple exist.
+
+Do not create ambiguous global authority.
+
+Service accounts should use dedicated permissions.
+
+Do not make services impersonate human administrators merely to access APIs.
+
+A service identity should receive its own authority.
+
+For example:
+
+telemetry.write
+
+threats.read
+
+queue.consume
+
+build.publish
+
+Do not give:
+
+system.admin
+
+when the service needs one operation.
+
+Machine permissions should be as understandable as human permissions.
+
+API keys can carry permission scopes.
+
+For example:
+
+API key A:
+
+reports.read
+
+API key B:
+
+reports.read
+reports.export
+
+API key C:
+
+telemetry.write
+
+A key's permissions should be narrower than or equal to the authority policy allows for that key.
+
+Do not treat every API key as a master key.
+
+API-key creation should require authority.
+
+API-key scope changes should require authority.
+
+API-key revocation should take effect according to policy.
+
+Do not embed permanent unrestricted API keys into client applications.
+
+Client-distributed secrets can be extracted.
+
+Permission scopes in OAuth or similar systems represent delegated authority according to the protocol and application.
+
+A token can have:
+
+documents.read
+
+without:
+
+documents.write
+
+The resource server checks the required scope.
+
+Do not accept any valid token for every operation.
+
+Token validity and permission scope are separate.
+
+A token can be authentic but insufficiently privileged.
+
+Return denial.
+
+Do not silently elevate.
+
+Permissions can be resource-specific.
+
+For example:
+
+User 42 can edit Document 100.
+
+This can be represented through an ACL or resource grant.
+
+The user does not necessarily receive global documents.update.
+
+Resource-specific authority should remain resource-specific.
+
+Do not convert one object grant into category-wide permission.
+
+An Access Control List can associate a resource with permitted principals or groups.
+
+For example:
+
+Document 100:
+
+User 42 -> read, update
+
+Group Editors -> read
+
+User 77 -> read
+
+ACLs can be appropriate when resources have unique sharing requirements.
+
+They can become expensive to manage at large scale.
+
+Choose based on actual requirements.
+
+ACL entries should use known permission semantics.
+
+Do not let each resource invent arbitrary meanings for read and write unless required.
+
+Ownership can imply permissions.
+
+For example:
+
+Owner can read.
+
+Owner can update.
+
+Owner can delete.
+
+This is policy.
+
+Do not assume ownership automatically grants every operation.
+
+Some systems prevent owners from deleting certain records.
+
+Some systems allow administrators to modify ownership.
+
+Some systems make ownership informational only.
+
+Define it.
+
+Ownership is a relationship.
+
+Permission is authority.
+
+Ownership can produce authority according to policy.
+
+They are not identical.
+
+A resource owner identifier should be protected from unauthorized modification.
+
+Otherwise a user could assign themselves ownership and gain implied permissions.
+
+Ownership transfer should be an explicit protected operation.
+
+Permission conditions can depend on resource attributes.
+
+For example:
+
+documents.update is allowed when:
+
+Principal has documents.update.
+
+Document belongs to principal's project.
+
+Document is in editable state.
+
+The permission alone is not necessarily sufficient.
+
+Authorization combines permission with context.
+
+Do not make permission names carry every possible business rule.
+
+Keep policy understandable.
+
+Permission checks can be implemented as functions.
+
+For example:
+
+has_permission(principal, "documents.update")
+
+For scoped permissions:
+
+has_permission(principal, "documents.update", project_id)
+
+For resource policy:
+
+can_update_document(principal, document)
+
+The resource policy can internally evaluate permissions and resource state.
+
+Do not scatter raw role-name comparisons throughout application code.
+
+For example:
+
+if role == "admin"
+
+appearing in fifty files becomes difficult to maintain.
+
+Prefer named permission checks.
+
+Roles can change.
+
+Permission semantics can remain stable.
+
+A route requiring:
+
+users.delete
+
+is clearer than a route requiring:
+
+role == "super_admin"
+
+when multiple roles can legitimately receive deletion authority.
+
+Do not hard-code role names where actual policy concerns permissions.
+
+There are cases where role membership itself is the policy.
+
+If so, checking the role is valid.
+
+Use the correct abstraction.
+
+Do not turn every role check into a permission system merely from habit.
+
+Permission checks should fail closed.
+
+If the permission cannot be loaded, do not grant it.
+
+If the role is unknown, do not grant it.
+
+If the scope is unknown, do not broaden it.
+
+If permission storage fails, do not assume administrator.
+
+Unknown authority means authority has not been established.
+
+Deny the protected operation.
+
+Do not catch authorization exceptions and continue.
+
+A permission lookup failure is not permission granted.
+
+Return controlled failure.
+
+Log the infrastructure problem.
+
+Keep the protected effect from occurring.
+
+Permission checks should happen before protected operations.
+
+Do not:
+
+Delete resource.
+
+Then check delete permission.
+
+Do not:
+
+Return confidential record.
+
+Then check read permission.
+
+Do not:
+
+Change role.
+
+Then check role-management permission.
+
+Authority must be established first.
+
+Time-of-check to time-of-use issues can matter.
+
+If permissions can change between check and effect, sensitive operations may require coordinated semantics.
+
+For ordinary small applications, checking immediately before the operation is often sufficient.
+
+For high-risk concurrent systems, stronger coordination can be required.
+
+Do not invent distributed complexity unless the risk demands it.
+
+Permissions can be evaluated inside transactions when resource state and authorization state share a database.
+
+This can improve consistency.
+
+It is one design option.
+
+Do not hold large transactions open unnecessarily.
+
+Balance correctness and operational behavior.
+
+Permission checks should be deterministic.
+
+Given the same:
+
+Principal.
+
+Permission definitions.
+
+Role assignments.
+
+Group memberships.
+
+Scope.
+
+Resource state.
+
+Applicable conditions.
+
+The same decision should result.
+
+Do not use random decisions.
+
+Do not use probability as permission.
+
+Do not ask whether the principal "probably" has authority.
+
+Either policy establishes the required permission or it does not.
+
+Machine-learning confidence is not permission.
+
+Behavioral similarity is not permission.
+
+Historical usage is not permission.
+
+A user commonly performs an operation.
+
+That does not grant the operation.
+
+Authority must come from policy.
+
+Permissions can be proposed by automated systems.
+
+Human or policy-defined processes can approve them.
+
+Do not let recommendation become grant without authorization.
+
+A recommendation is not authority.
+
+A prediction is not authority.
+
+Permission grants should be explicit.
+
+Permission records can include reason or ticket references where governance requires them.
+
+For example:
+
+Granted for project maintenance.
+
+Approved under change record X.
+
+Expires after deployment window.
+
+This can improve accountability.
+
+Do not fabricate justification.
+
+If no justification was recorded, say none was recorded.
+
+Evidence matters.
+
+Audit logs should record permission changes.
+
+Useful fields can include:
+
+Actor.
+
+Target principal.
+
+Permission or role.
+
+Scope.
+
+Action.
+
+Timestamp.
+
+Previous state.
+
+New state.
+
+Reason if supplied.
+
+Do not log secret credentials.
+
+Permission names are generally not secrets.
+
+User relationships can still be sensitive.
+
+Protect audit data appropriately.
+
+Audit logs should distinguish:
+
+Grant.
+
+Revoke.
+
+Role assignment.
+
+Role removal.
+
+Role definition change.
+
+Group membership change.
+
+Scope change.
+
+Expiration change.
+
+Emergency elevation.
+
+These events have different meanings.
+
+Do not reduce every change to "user updated."
+
+Security-relevant events deserve precise records.
+
+Permission checks can also be audited selectively.
+
+Logging every low-risk read permission can create enormous volume.
+
+High-risk operations can justify detailed authorization logging.
+
+Denied administrative actions can be important.
+
+Choose based on operational requirements.
+
+Do not generate so much logging that meaningful events disappear in noise.
+
+Do not log confidential resource contents merely to prove a permission check happened.
+
+Record identifiers and decision context where sufficient.
+
+Permission denial is not automatically malicious.
+
+A user can follow an old bookmark.
+
+A role can have changed.
+
+A UI can be stale.
+
+An integration can use an outdated scope.
+
+Record the denial.
+
+Interpret patterns using evidence.
+
+Repeated attempts across unrelated protected resources can warrant investigation.
+
+Do not declare an attack solely because one permission check failed.
+
+Permission errors should be precise internally.
+
+Examples:
+
+Missing permission.
+
+Scope mismatch.
+
+Expired grant.
+
+Revoked grant.
+
+Unknown role.
+
+Disabled account.
+
+Resource outside assignment.
+
+Public responses can be simpler.
+
+For example:
+
+Access denied.
+
+Do not reveal sensitive privilege structure unnecessarily.
+
+A user does not need a map of which privileged role would bypass the restriction.
+
+Administrative tooling can provide authorized diagnostic detail.
+
+Permission debugging should answer:
+
+What permission was required?
+
+What permissions did the principal have?
+
+Which scopes applied?
+
+Which roles contributed them?
+
+Was an explicit deny involved?
+
+Was the grant expired?
+
+Was cached authority stale?
+
+Which policy rule denied the operation?
+
+Use evidence.
+
+Do not "fix" authorization by granting administrator until the error disappears.
+
+That hides the actual problem.
+
+Debug the required permission.
+
+Grant only what is needed.
+
+Overgranting during debugging can become permanent privilege.
+
+Temporary diagnostic grants should expire.
+
+Remove them when no longer required.
+
+Better yet, reproduce the issue in a controlled environment where possible.
+
+Permission tests should verify positive cases.
+
+Authorized principal succeeds.
+
+Permission tests should verify negative cases.
+
+Principal without permission is denied.
+
+Wrong scope is denied.
+
+Expired grant is denied.
+
+Revoked grant is denied.
+
+Wrong tenant is denied.
+
+Wrong resource is denied.
+
+Lower role is denied.
+
+Unauthenticated requester behaves according to policy.
+
+Unknown permission is denied.
+
+Permission-store failure does not become allow.
+
+Negative testing establishes boundaries.
+
+Do not test only administrators.
+
+Administrators often bypass restrictions and can hide missing checks.
+
+Test ordinary principals.
+
+Test principals with one permission missing.
+
+Test horizontal isolation.
+
+Test scoped access.
+
+A useful permission test matrix can include:
+
+Principal.
+
+Role.
+
+Permission.
+
+Scope.
+
+Resource.
+
+Expected decision.
+
+This makes policy explicit.
+
+Do not generate a huge matrix if the system is small.
+
+Test the meaningful boundaries.
+
+Permissions should be tested at the actual enforcement layer.
+
+If the controller checks permission, test the controller path.
+
+If a service enforces policy, test the service.
+
+If the API endpoint is externally reachable, test direct API requests.
+
+Do not test only UI visibility.
+
+A hidden delete button does not prove delete permission enforcement.
+
+Call the delete endpoint directly with a lower-privilege session.
+
+It should fail.
+
+Permission enforcement belongs at the protected effect.
+
+Middleware can enforce route-level permissions.
+
+For example:
+
+Route requires users.read.
+
+Route requires settings.update.
+
+This is useful when the permission is independent of a specific resource.
+
+Object-level policy can happen after resource loading.
+
+For example:
+
+Route requires documents.update.
+
+Policy additionally verifies document scope.
+
+Do not force resource-dependent checks into middleware without the necessary resource context.
+
+Do not omit resource checks because middleware already verified a broad permission.
+
+Both can be required.
+
+Database queries can enforce scope.
+
+For example:
+
+SELECT ...
+WHERE id = ?
+AND project_id IN authorized_projects
+
+This can reduce accidental cross-scope exposure.
+
+The application must still construct the authorized scope correctly.
+
+Do not let client-supplied project IDs define authority.
+
+Scope comes from trusted permission state.
+
+Bulk operations need permission checks.
+
+If a user can delete one authorized record, a bulk delete endpoint must not allow deletion of unauthorized records in the same request.
+
+Check each resource or constrain the operation to authorized scope.
+
+Do not assume collection-level permission automatically covers every object.
+
+Bulk export can deserve its own permission.
+
+For example:
+
+reports.read
+
+does not necessarily imply:
+
+reports.export
+
+Export can expose large amounts of information at once.
+
+Define separate authority where risk differs.
+
+Bulk role assignment can also deserve stronger permission.
+
+High-impact operations should be explicit.
+
+Permission granularity should reflect meaningful security differences.
+
+Too coarse:
+
+admin
+
+user
+
+can force unnecessary broad access.
+
+Too fine:
+
+one permission for every minor UI action
+
+can become impossible to manage.
+
+Find the useful boundary.
+
+Create separate permissions when operations have meaningfully different security consequences.
+
+Do not create permissions solely because two buttons exist.
+
+UI structure is not policy structure.
+
+Permissions describe authority, not interface layout.
+
+A single permission can govern several interface controls representing the same operation.
+
+One interface control can require several policy conditions.
+
+Keep the model semantic.
+
+Read permissions deserve attention.
+
+A common mistake is protecting writes while exposing reads.
+
+Private records.
+
+User information.
+
+System configuration.
+
+Audit logs.
+
+Internal reports.
+
+Keys and secrets.
+
+These require explicit read authority.
+
+Do not assume read-only means harmless.
+
+Read access can be the most sensitive permission in a system.
+
+Secret-management systems should separate:
+
+secret.metadata.read
+
+secret.value.read
+
+secret.create
+
+secret.update
+
+secret.delete
+
+secret.rotate
+
+A user can need metadata without needing the secret value.
+
+Granularity can reduce exposure.
+
+Do not reveal secret values merely because someone can list secret names.
+
+Key-management permissions should separate operations where appropriate.
+
+For example:
+
+keys.list
+
+keys.public.read
+
+keys.private.export
+
+keys.rotate
+
+keys.revoke
+
+Private-key export is substantially more sensitive than listing key metadata.
+
+Do not hide this difference behind one broad keys.manage permission unless policy intentionally grants all of it.
+
+Administrative permissions can be separated.
+
+For example:
+
+users.manage
+
+roles.manage
+
+permissions.manage
+
+configuration.manage
+
+audit.read
+
+sessions.revoke
+
+system.shutdown
+
+An administrator role can aggregate them.
+
+Separate identifiers preserve clarity.
+
+Do not assume every administrator needs every administrative operation.
+
+Operational separation can reduce risk.
+
+Support staff can receive:
+
+users.read
+
+sessions.revoke
+
+without:
+
+permissions.grant
+
+This allows account assistance without privilege-management authority.
+
+Design around actual duties.
+
+Auditors can receive read-only access to audit records.
+
+They do not necessarily need configuration authority.
+
+Developers can receive deployment authority without user-management authority.
+
+Treasurers can receive financial approval authority without infrastructure authority.
+
+Different duties deserve different permissions.
+
+Separation of duties can prohibit one principal from combining certain permissions.
+
+For example:
+
+payment.create
+
+payment.approve
+
+Policy can prevent the same principal from approving a payment they created.
+
+This is more than a permission lookup.
+
+Authorization evaluates relationship and state.
+
+Do not assume possessing both permission names automatically means every combination of actions is allowed.
+
+Policy can impose constraints.
+
+Permission sets can have incompatible combinations.
+
+For example:
+
+security.audit
+
+security.audit.modify
+
+might intentionally be separated.
+
+If incompatible roles exist, enforce the constraint during assignment or authorization.
+
+Do not merely document the separation and allow the system to violate it.
+
+Permission systems can enforce cardinality.
+
+For example:
+
+Only designated principals can hold a specific high-risk role.
+
+A role can require approval before assignment.
+
+A role can require two approvers.
+
+These are governance requirements layered onto permission management.
+
+Do not add them unless policy requires them.
+
+But if policy requires them, enforce them deterministically.
+
+Approval to grant permission should itself be authenticated and authorized.
+
+An approval record from an unknown actor is not authority.
+
+A valid digital signature can establish who approved.
+
+Policy determines whether that signer had approval authority.
+
+Do not confuse signature validity with permission to approve.
+
+A signed unauthorized grant remains unauthorized.
+
+Permission changes can require quorum.
+
+For example:
+
+Two authorized administrators approve a high-risk role assignment.
+
+The system must verify:
+
+Distinct approvers if required.
+
+Each approver's identity.
+
+Each approver's authority.
+
+The target grant.
+
+The required threshold.
+
+Do not merely count approval rows.
+
+Validate them.
+
+Emergency permissions can bypass ordinary restrictions according to defined policy.
+
+They should be:
+
+Explicit.
+
+Limited.
+
+Audited.
+
+Temporary where possible.
+
+Reviewable.
+
+Do not create hidden emergency administrator credentials.
+
+Emergency authority is still authority.
+
+Represent it honestly.
+
+A break-glass role can have broad permissions.
+
+Its activation can require additional authentication.
+
+Its use can generate high-priority audit events.
+
+Its lifetime can be short.
+
+Exact design depends on requirements.
+
+Do not leave break-glass access permanently active.
+
+Permission systems should support removal.
+
+A system that can grant authority but cannot reliably revoke it is incomplete.
+
+Revocation is a first-class operation.
+
+Test it.
+
+Do not treat permission deletion as merely database housekeeping.
+
+Revocation changes security state.
+
+Permission removal can invalidate sessions or tokens according to policy.
+
+If it does not, document the delay.
+
+Do not pretend removal is effective while cached credentials remain valid.
+
+Access reviews can examine effective permissions.
+
+Questions include:
+
+Who can administer users?
+
+Who can change permissions?
+
+Who can read audit logs?
+
+Who can export data?
+
+Who can access production?
+
+Who has wildcard permissions?
+
+Which temporary grants have not expired correctly?
+
+Which service accounts have excessive authority?
+
+Review effective authority, not just role names.
+
+A harmless-looking role can inherit powerful permissions.
+
+A powerful-looking role can have limited scope.
+
+Inspect actual policy.
+
+Permission creep happens when authority accumulates.
+
+A user changes responsibilities.
+
+New permissions are added.
+
+Old permissions remain.
+
+Over time the account becomes overprivileged.
+
+Periodic review can remove obsolete authority.
+
+Do not only ask what access must be added.
+
+Ask what access is no longer required.
+
+Group membership can create permission creep.
+
+A user belongs to multiple old groups.
+
+Each group grants authority.
+
+Removing direct permissions does not remove inherited permissions.
+
+Effective-access analysis must include every grant path.
+
+Do not assume no direct grant means no access.
+
+Nested groups make this harder.
+
+If nested groups are supported, detect cycles.
+
+For example:
+
+Group A contains Group B.
+
+Group B contains Group A.
+
+Naive permission resolution can loop forever.
+
+Prevent or safely handle cycles.
+
+Do not allow malformed hierarchy to crash authorization.
+
+Role inheritance can also contain cycles.
+
+Validate role graphs.
+
+A deterministic permission hierarchy should be acyclic unless the engine explicitly supports cycles with well-defined semantics.
+
+Simpler is usually better.
+
+Permission aliases can help migration.
+
+For example:
+
+old.permission -> new.permission
+
+Aliases introduce complexity.
+
+They can preserve unintended authority if left indefinitely.
+
+Prefer explicit migrations where practical.
+
+Deprecate old permission identifiers deliberately.
+
+Do not silently interpret unknown old names as broad new permissions.
+
+Permission migration should preserve intended authority.
+
+If one old permission becomes two new permissions, decide which existing users receive.
+
+Do not automatically grant both unless policy requires it.
+
+Migration is a security change.
+
+Review it.
+
+Application upgrades can introduce new permissions.
+
+Default behavior matters.
+
+If a new privileged feature appears, existing ordinary roles should not automatically gain access unless explicitly intended.
+
+Default deny protects new operations.
+
+Add the new permission.
+
+Assign it deliberately.
+
+Do not interpret absence of configuration as everyone allowed.
+
+New permissions can be included in selected existing roles through an intentional migration.
+
+Record the change.
+
+Do not hide privilege expansion inside a software upgrade.
+
+Module installation can introduce permissions.
+
+For example:
+
+module.reports.read
+
+module.reports.manage
+
+Register them explicitly.
+
+Do not give every installed module unrestricted administrative authority.
+
+Module permissions should integrate with the host authorization model when architecture supports it.
+
+Removing a module should handle its permission records safely.
+
+Historical audit references can remain.
+
+Active grants to nonexistent permissions should not become wildcard authority.
+
+Unknown means no authority.
+
+Permission names can be namespaced to avoid collisions.
+
+For example:
+
+core.users.read
+
+reports.reports.read
+
+sentinel.events.read
+
+Exact namespace convention depends on the system.
+
+The goal is unambiguous identifiers.
+
+Do not let two modules define the same permission name with different meanings.
+
+Collision creates unpredictable policy.
+
+Permission registries should reject conflicting definitions.
+
+Configuration permissions should be particularly narrow.
+
+Changing authentication configuration can affect security.
+
+Changing authorization configuration can affect security.
+
+Changing network configuration can affect exposure.
+
+Changing logging configuration can affect evidence.
+
+Do not hide all of these behind one generic edit_settings permission unless broad authority is intentional.
+
+High-impact configuration can require separate permissions.
+
+For example:
+
+settings.general.update
+
+settings.authentication.update
+
+settings.authorization.update
+
+settings.logging.update
+
+This can support separation of duties.
+
+Again, do not over-fragment without need.
+
+Permission design is a balance between clarity and manageability.
+
+File permissions are a separate authorization domain.
+
+Unix-like filesystems commonly use owner, group, and other permission classes.
+
+Common bits include:
+
+Read.
+
+Write.
+
+Execute.
+
+Application permission names do not automatically map to filesystem bits.
+
+A web user with documents.read can still require the application process to have OS read access to the underlying file.
+
+Both layers must permit the operation.
+
+Do not confuse application permissions with operating-system permissions.
+
+Unix root can bypass many ordinary filesystem restrictions.
+
+That does not mean a remote application user should receive application administrator permissions.
+
+Authority domains differ.
+
+Database permissions are also separate.
+
+A database account can have:
+
+SELECT.
+
+INSERT.
+
+UPDATE.
+
+DELETE.
+
+EXECUTE.
+
+CREATE.
+
+ALTER.
+
+DROP.
+
+Application-level users can have different authority even though queries use one shared database account.
+
+The application must enforce its own permissions.
+
+Do not assume database access control automatically provides per-user application authorization.
+
+Cloud permissions can use policies, roles, and resource scopes.
+
+The same principles apply:
+
+Narrow authority.
+
+Explicit scope.
+
+Deterministic evaluation.
+
+Auditable grants.
+
+Revocation.
+
+Do not copy cloud permission complexity into a small local application unless needed.
+
+Use architecture appropriate to scale.
+
+Permissions can be represented in configuration files.
+
+Protect those files.
+
+If an untrusted user can edit the permission configuration, they can potentially grant themselves authority.
+
+Filesystem permissions become part of the authorization trust boundary.
+
+Do not secure the application UI while leaving policy files world-writable.
+
+Permissions can be represented in source code.
+
+Changing them then requires software deployment.
+
+This can be appropriate for fixed roles.
+
+Dynamic applications can store assignments in a database while keeping permission definitions in code.
+
+There is no universal storage requirement.
+
+Choose based on how often policy changes and who is authorized to change it.
+
+Static policy can be easier to audit.
+
+Dynamic policy can be easier to administer.
+
+Both require integrity protection.
+
+Permission state should have one authoritative source.
+
+Do not maintain conflicting permission truth in:
+
+Database.
+
+JSON file.
+
+Session.
+
+Cache.
+
+Configuration.
+
+without defining precedence and synchronization.
+
+Caches are derived state.
+
+Sessions can contain cached state.
+
+The authoritative policy should be identifiable.
+
+When sources disagree, behavior must be defined.
+
+Do not guess.
+
+Permission decisions should be explainable.
+
+For an allow:
+
+Allowed because User 42 has Editor role in Project 7, which grants documents.update in Project 7.
+
+For a denial:
+
+Denied because documents.update is required and no active grant exists in Project 7.
+
+This level of reasoning makes systems debuggable.
+
+Do not return internal explanations to unauthorized users if they reveal sensitive structure.
+
+But make them available to authorized diagnostics.
+
+A permission engine can return:
+
+ALLOW
+
+DENY
+
+It can also return structured reason information internally.
+
+For example:
+
+missing_permission
+
+scope_mismatch
+
+expired_grant
+
+explicit_deny
+
+inactive_assignment
+
+unknown_permission
+
+Do not make security behavior depend on human-readable error strings.
+
+Use stable machine states.
+
+Human-readable messages can be generated separately.
+
+Permission enforcement should be consistent across interfaces.
+
+Web UI.
+
+REST API.
+
+GraphQL.
+
+CLI.
+
+Background jobs.
+
+Message queues.
+
+Administrative tools.
+
+If they perform the same protected operation, they should enforce equivalent policy.
+
+Do not protect only the web route while leaving the CLI remotely exposed through another mechanism.
+
+Know the trust boundary of each interface.
+
+Internal function calls can still require policy enforcement if untrusted paths can reach them.
+
+Place enforcement where bypass is difficult.
+
+A service layer can centralize policy.
+
+Controllers can also enforce route-level rules.
+
+Defense in depth can be appropriate.
+
+Do not duplicate inconsistent policy everywhere.
+
+One source of authorization semantics is easier to maintain.
+
+Permission checks should use current principal context.
+
+Do not pass arbitrary user IDs into:
+
+has_permission(user_id, permission)
+
+from client-controlled input and assume that user is the requester.
+
+The authenticated principal comes from trusted authentication state.
+
+Administrative operations can intentionally check another principal's permissions for diagnostics.
+
+That is a separate authorized function.
+
+Do not confuse subject inspection with requester identity.
+
+Permission simulation can be useful for administrators.
+
+For example:
+
+What could User 42 access?
+
+Simulation should not actually execute the protected operation.
+
+It should evaluate policy.
+
+Protect simulation interfaces because they can reveal security structure.
+
+Do not allow ordinary users to enumerate every administrator permission unless intended.
+
+Permission enumeration can disclose capabilities.
+
+A user can often be allowed to see their own effective permissions.
+
+This can help interfaces adapt.
+
+The server still enforces them.
+
+Do not rely on the permission list sent to the browser as authoritative.
+
+It is presentation data.
+
+An attacker can modify it.
+
+Server-side enforcement remains required.
+
+UI permission checks improve usability.
+
+For example:
+
+Hide Publish if user lacks documents.publish.
+
+Disable Delete if user lacks documents.delete.
+
+These are interface conveniences.
+
+They are not security controls.
+
+Direct requests must still be denied.
+
+Never write:
+
+if button is hidden, endpoint is safe.
+
+The endpoint must check permission.
+
+Client applications can cache permission lists.
+
+Those lists can become stale.
+
+A stale UI might show an action the server now denies.
+
+That is acceptable if the server remains authoritative.
+
+The client can refresh state after denial.
+
+Do not weaken server policy to match stale client state.
+
+A stale UI can also hide newly granted actions.
+
+Refresh appropriately.
+
+Security favors server truth.
+
+Permission evaluation can be expensive in highly complex systems.
+
+Optimize after correctness.
+
+Possible optimizations include:
+
+Role-permission caching.
+
+Effective-permission caching.
+
+Scope indexes.
+
+Precomputed grants.
+
+Policy compilation.
+
+Do not optimize by skipping checks.
+
+Do not optimize by granting broad permissions.
+
+Do not remove object-level checks because they require another query without measuring alternatives.
+
+Correctness first.
+
+Performance second.
+
+Measure.
+
+Permission data structures should support the actual lookup pattern.
+
+If every request asks:
+
+Does principal P have permission X in scope S?
+
+index accordingly.
+
+Do not scan every permission record for every request if a simple index solves it.
+
+Efficiency can remain deterministic and simple.
+
+Permission evaluation should not depend on database row order unless policy explicitly defines priority.
+
+SQL result order without ORDER BY is not guaranteed.
+
+If rule priority matters, store and evaluate explicit priority.
+
+Do not let accidental storage order decide authority.
+
+Policy precedence must be intentional.
+
+If explicit deny wins, implement that rule.
+
+If specific scope overrides parent scope, implement that rule.
+
+If temporary emergency authority overrides ordinary denial, define exactly when.
+
+Do not let different modules implement different precedence rules for the same policy.
+
+Centralize semantics.
+
+Permissions can have conditions.
+
+For example:
+
+reports.export allowed only during assigned operation.
+
+deploy.execute allowed only in staging.
+
+payments.approve allowed below a defined amount.
+
+Conditions should use trusted state.
+
+Do not trust client claims such as:
+
+environment=staging
+
+amount_under_limit=true
+
+Load or calculate authoritative values.
+
+The client requests.
+
+The server decides.
+
+Location-based permissions can exist.
+
+Network-based permissions can exist.
+
+Time-based permissions can exist.
+
+Device-based permissions can exist.
+
+These are contextual policy conditions.
+
+Use them only if requirements justify them.
+
+Do not infer strong identity from weak context.
+
+An IP range can be one condition.
+
+It is not automatically a person.
+
+A time window can restrict authority.
+
+It does not authenticate the actor.
+
+Keep evidence types distinct.
+
+Permissions can depend on active assignment.
+
+For example:
+
+A principal is qualified to perform maintenance.
+
+The principal receives maintenance authority only while actively assigned to that system.
+
+Qualification alone does not grant access.
+
+Assignment alone might not be sufficient if qualification is also required.
+
+Policy can require both.
+
+Do not collapse separate states.
+
+A useful relationship can be:
+
+Identity.
+
+Position.
+
+Qualification.
+
+Assignment.
+
+Permission.
+
+Access decision.
+
+Each stage has distinct meaning.
+
+Do not infer one from another unless policy explicitly defines the relationship.
+
+A principal can hold a position without a particular permission.
+
+A principal can be qualified without active access.
+
+A principal can have an assignment with narrowly scoped authority.
+
+Permission is not a social title.
+
+It is operational authority.
+
+Human-directed policy determines that authority.
+
+Software should enforce the defined decision.
+
+Do not reinterpret policy to make an operation convenient.
+
+If permission is absent, deny.
+
+If an authorized human changes the policy, enforce the changed policy.
+
+Software does not invent organizational authority.
+
+Permission models should preserve explicit human decisions.
+
+Do not silently expand authority because a new feature appears similar to an old feature.
+
+Ask whether the existing permission semantically covers it.
+
+If not, define a new permission.
+
+Do not silently narrow authority either if established policy grants it.
+
+Implement the actual policy.
+
+No speculation.
+
+No implied permission without defined inheritance.
+
+No implied denial beyond defined policy.
+
+Use evidence from the permission state.
+
+A permission decision can be expressed as:
+
+Required permission P.
+
+Principal S.
+
+Scope C.
+
+Applicable conditions K.
+
+Evaluate whether S possesses active authority P within C while K is satisfied.
+
+If yes, permit the operation.
+
+If no, deny the operation.
+
+Do not replace that evaluation with:
+
+S seems trustworthy.
+
+Trustworthiness is not a permission.
+
+Do not replace it with:
+
+S is an administrator-like user.
+
+Check actual authority.
+
+Do not replace it with:
+
+S performed this operation before.
+
+Historical behavior is not current permission.
+
+Do not replace it with:
+
+The request came from inside the network.
+
+Network origin is not automatically application authority.
+
+Do not replace it with:
+
+The request contains role=admin.
+
+Client claims are not authoritative.
+
+Do not replace it with:
+
+The ID is hard to guess.
+
+Identifier secrecy is not permission.
+
+Permission must be established.
+
+When adding a permission:
+
+Define its identifier.
+
+Define its exact operation.
+
+Define its scope.
+
+Define any conditions.
+
+Define which roles receive it.
+
+Define who may grant it.
+
+Define whether it can be delegated.
+
+Define whether it can expire.
+
+Define how revocation works.
+
+Add enforcement at the protected operation.
+
+Add positive tests.
+
+Add negative tests.
+
+Document the semantics.
+
+Do not merely add the name to a database table.
+
+When granting a permission:
+
+Identify the target principal.
+
+Identify the exact permission.
+
+Identify the scope.
+
+Verify the grantor has authority to grant it.
+
+Apply required approval policy.
+
+Set expiration if temporary.
+
+Record the grant.
+
+Invalidate stale authorization state where required.
+
+Audit the change.
+
+Do not grant broader authority than requested.
+
+When revoking a permission:
+
+Identify the grant source.
+
+Remove or deactivate it.
+
+Consider inherited grants.
+
+Invalidate caches where required.
+
+Invalidate sessions or tokens where policy requires.
+
+Verify future authorization no longer receives the permission.
+
+Audit the revocation.
+
+Do not assume deleting one direct grant removes authority if another role still grants the same permission.
+
+Effective authority matters.
+
+When changing a role:
+
+Identify all affected principals.
+
+Identify permissions added.
+
+Identify permissions removed.
+
+Evaluate scope.
+
+Review privilege expansion.
+
+Apply the change.
+
+Invalidate derived permission state where required.
+
+Audit the change.
+
+Test effective permissions.
+
+Do not treat role editing as cosmetic configuration.
+
+When investigating unexpected access:
+
+Identify the principal.
+
+Identify the required permission.
+
+Identify the scope.
+
+Enumerate active direct grants.
+
+Enumerate roles.
+
+Enumerate group memberships.
+
+Enumerate inherited permissions.
+
+Check explicit denies if supported.
+
+Check temporary grants.
+
+Check expiration.
+
+Check cached authority.
+
+Check token scopes.
+
+Check resource ownership.
+
+Check contextual conditions.
+
+Determine the exact path that produced the allow decision.
+
+Do not guess.
+
+When investigating unexpected denial:
+
+Identify the required permission.
+
+Confirm the principal identity.
+
+Confirm active roles.
+
+Confirm scope.
+
+Confirm the permission exists.
+
+Confirm role mappings.
+
+Confirm temporary grants have not expired.
+
+Confirm no explicit deny applies.
+
+Confirm authorization state is current.
+
+Confirm the resource is within scope.
+
+Confirm the enforcement point requires the intended permission.
+
+Do not solve the problem by granting unrestricted administrator access.
+
+Find the missing authority.
+
+When designing permissions, ask:
+
+What operations exist?
+
+Which operations require protection?
+
+Which operations have materially different security consequences?
+
+What resources exist?
+
+What scopes exist?
+
+Which roles exist?
+
+Which permissions belong to each role?
+
+Can permissions be granted directly?
+
+Can groups grant permissions?
+
+Does inheritance exist?
+
+Can explicit deny exist?
+
+What is the precedence rule?
+
+Can permissions expire?
+
+Can permissions be delegated?
+
+Who can grant them?
+
+Who can revoke them?
+
+How quickly does revocation take effect?
+
+How are effective permissions calculated?
+
+Where are permission checks enforced?
+
+How are changes audited?
+
+How are permissions tested?
+
+Then build only what is required.
+
+Keep permission names precise.
+
+Keep scopes narrow.
+
+Keep roles understandable.
+
+Keep grants explicit.
+
+Keep inheritance visible.
+
+Keep revocation reliable.
+
+Keep policy deterministic.
+
+Keep privilege minimal.
+
+Keep enforcement server-side.
+
+Keep authority explainable.
+
+A reliable permission system can identify why authority exists.
+
+A reliable permission system can identify its scope.
+
+A reliable permission system can revoke authority.
+
+A reliable permission system rejects unknown permissions.
+
+A reliable permission system does not trust client-supplied roles.
+
+A reliable permission system does not use UI hiding as enforcement.
+
+A reliable permission system does not silently convert scope-specific authority into global authority.
+
+A reliable permission system does not infer authority from identity alone.
+
+A reliable permission system does not infer authority from position alone.
+
+A reliable permission system does not infer authority from qualification alone.
+
+A reliable permission system does not infer authority from historical behavior.
+
+A reliable permission system does not grant authority because the requester seems trustworthy.
+
+A reliable permission system does not guess.
+
+Authentication establishes the principal.
+
+Permissions establish defined authority.
+
+Authorization evaluates that authority against the requested operation.
+
+Sessions can preserve the principal's authenticated continuity.
+
+None of these concepts replaces the others.
+
+For every protected operation ask:
+
+What permission is required?
+
+Who is the principal?
+
+What scope applies?
+
+What trusted evidence establishes the permission?
+
+Is the permission currently active?
+
+Do additional policy conditions apply?
+
+If the required permission is established, continue according to policy.
+
+If it is not established, deny.
+
+If permission state cannot be determined, do not invent authority.
+
+If multiple grants conflict, apply the defined deterministic precedence rule.
+
+If the permission is scoped elsewhere, it does not apply here.
+
+If it expired, it is not active.
+
+If it was revoked, it is not active.
+
+If the client merely claims it, it is not established.
+
+Permission is explicit authority.
+
+Probable permission is not permission.

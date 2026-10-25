@@ -1,0 +1,2790 @@
+State machines describe systems whose behavior depends on their current state and on defined transitions between states.
+
+A state represents a meaningful condition of a system.
+
+A transition represents a permitted movement from one state to another.
+
+An event is something that can cause a transition to be considered.
+
+A guard is a condition that must be satisfied before a transition can occur.
+
+An action is work performed as part of a transition.
+
+Keep these concepts separate.
+
+A basic state machine can be represented as:
+
+Current State + Event + Conditions -> Next State
+
+For example:
+
+DISCONNECTED + CONNECT -> CONNECTING
+
+CONNECTING + CONNECTION_SUCCESS -> CONNECTED
+
+CONNECTING + CONNECTION_FAILURE -> DISCONNECTED
+
+CONNECTED + DISCONNECT -> DISCONNECTED
+
+The current state matters.
+
+The same event can produce different behavior in different states.
+
+For example:
+
+CONNECT while DISCONNECTED can begin a connection.
+
+CONNECT while CONNECTED can be rejected or ignored according to policy.
+
+Do not assume an event always means the same transition.
+
+State defines context.
+
+A finite-state machine has a finite set of defined states.
+
+For example:
+
+STOPPED
+
+STARTING
+
+RUNNING
+
+STOPPING
+
+FAILED
+
+The system should know which states exist.
+
+Do not create states implicitly through combinations of unrelated flags unless that complexity is intentional.
+
+Multiple Boolean flags can accidentally represent impossible conditions.
+
+For example:
+
+is_running = true
+
+is_stopped = true
+
+is_starting = true
+
+What state is the system actually in?
+
+A single explicit state can make the invariant clearer.
+
+state = RUNNING
+
+Use explicit states when behavior is fundamentally state-dependent.
+
+Not every Boolean requires a state machine.
+
+A feature that is simply enabled or disabled can remain a Boolean.
+
+Do not introduce state-machine complexity where two independent values are sufficient.
+
+Use a state machine when transitions and sequencing matter.
+
+States should represent meaningful system conditions.
+
+Avoid vague states such as:
+
+BUSY
+
+OTHER
+
+UNKNOWN_STATE_2
+
+unless their semantics are explicitly defined.
+
+A state name should communicate what condition exists.
+
+For example:
+
+UNINITIALIZED
+
+INITIALIZING
+
+READY
+
+PROCESSING
+
+SHUTTING_DOWN
+
+FAILED
+
+State names are part of the model.
+
+Choose them deliberately.
+
+A state machine should define its initial state.
+
+For example:
+
+INITIAL STATE: DISCONNECTED
+
+Do not leave initialization dependent on uninitialized memory, arbitrary database contents, or whichever event arrives first.
+
+Initial state must be deterministic.
+
+Initialization can itself be a state.
+
+For example:
+
+UNINITIALIZED
+
+INITIALIZING
+
+READY
+
+FAILED
+
+This can make startup behavior explicit.
+
+A terminal state is a state from which no ordinary transition continues.
+
+Examples can include:
+
+COMPLETED
+
+CANCELLED
+
+TERMINATED
+
+Terminal does not necessarily mean the process exits.
+
+It means the modeled lifecycle is finished according to that state machine.
+
+Define terminal behavior.
+
+Do not accidentally permit transitions out of a terminal state unless policy explicitly allows them.
+
+A transition table is a useful representation.
+
+For example:
+
+State          Event                Next State
+
+STOPPED        START                STARTING
+
+STARTING       START_SUCCESS        RUNNING
+
+STARTING       START_FAILURE        FAILED
+
+RUNNING        STOP                 STOPPING
+
+STOPPING       STOP_SUCCESS         STOPPED
+
+STOPPING       STOP_FAILURE         FAILED
+
+FAILED         RESET                STOPPED
+
+This table defines permitted transitions.
+
+Anything not defined is not automatically permitted.
+
+Default behavior for undefined transitions should be explicit.
+
+Common choices include:
+
+Reject.
+
+Ignore.
+
+Log and ignore.
+
+Return an error.
+
+Escalate according to policy.
+
+Do not invent a transition because an unexpected event arrived.
+
+An event does not authorize an arbitrary transition.
+
+Only a defined transition does.
+
+This is fundamental.
+
+Suppose the machine defines:
+
+STOPPED + START -> STARTING
+
+RUNNING + STOP -> STOPPING
+
+Receiving:
+
+STOPPED + STOP
+
+does not mean the machine should guess that STOPPED is already the desired state and report success unless that behavior is explicitly defined.
+
+It can reject.
+
+It can treat the operation as idempotent.
+
+Either design can be correct.
+
+Define it.
+
+Do not guess.
+
+State transitions should be deterministic.
+
+Given the same:
+
+Current state.
+
+Event.
+
+Guard conditions.
+
+Relevant authoritative data.
+
+The same transition decision should result.
+
+Do not use probability to decide deterministic lifecycle transitions.
+
+A system is not "probably RUNNING."
+
+It is in the state established by its state model.
+
+If state cannot be determined, represent that condition explicitly or fail safely according to policy.
+
+Do not invent certainty.
+
+Transition validity should be checked before changing state.
+
+Conceptually:
+
+if transition_is_valid(current_state, event):
+    next_state = defined_transition(current_state, event)
+else:
+    reject_event()
+
+Do not change state first and validate afterward.
+
+The current state is part of the evidence for whether the transition is permitted.
+
+State machines can use guards.
+
+For example:
+
+PENDING + APPROVE -> APPROVED
+
+Guard:
+
+required approvals >= 2
+
+If the guard is false, the transition does not occur.
+
+The event alone is insufficient.
+
+Guards should use authoritative state.
+
+Do not trust a client-supplied field such as:
+
+approved=true
+
+when approval must come from stored approval records.
+
+Load the actual evidence.
+
+Evaluate the guard.
+
+Then transition.
+
+A guard should answer a defined condition.
+
+Examples:
+
+Connection established.
+
+Required file exists.
+
+Signature verified.
+
+Required approvals present.
+
+Queue empty.
+
+Authentication established.
+
+Resource available.
+
+Timeout expired.
+
+Do not make guards vague.
+
+Avoid:
+
+if system_seems_ok
+
+Prefer measurable conditions.
+
+A transition can have an action.
+
+For example:
+
+DISCONNECTED + CONNECT -> CONNECTING
+
+Action:
+
+Begin network connection attempt.
+
+The action and the state transition must have defined ordering.
+
+Possible models include:
+
+Change state to CONNECTING, then initiate connection.
+
+Initiate connection, then change state if initiation succeeds.
+
+The correct order depends on semantics.
+
+Define it.
+
+Do not let implementation accident determine state meaning.
+
+Intermediate states are useful when operations take time.
+
+For example:
+
+STOPPED
+
+STARTING
+
+RUNNING
+
+Without STARTING, a long startup can create ambiguity.
+
+Is the service stopped?
+
+Is it running?
+
+Is startup underway?
+
+An intermediate state makes the operation explicit.
+
+Likewise:
+
+CONNECTED
+
+DISCONNECTING
+
+DISCONNECTED
+
+or:
+
+PENDING
+
+PROCESSING
+
+COMPLETED
+
+Intermediate states can prevent duplicate operations.
+
+If the system is already STARTING, another START event can be rejected or treated according to defined idempotent behavior.
+
+Do not start multiple copies accidentally because there was no state representing startup in progress.
+
+Failure can be represented as a state.
+
+For example:
+
+FAILED
+
+The failure state should have defined semantics.
+
+Questions include:
+
+Can the system retry?
+
+Can it reset?
+
+Can it shut down?
+
+Can it recover automatically?
+
+Does it require operator intervention?
+
+Do not use FAILED as a dead-end dumping ground without recovery policy.
+
+Different failures can require different behavior.
+
+A single FAILED state can include structured failure information.
+
+For example:
+
+state = FAILED
+
+reason = NETWORK_TIMEOUT
+
+This can be simpler than creating a state for every possible error.
+
+Do not turn every error code into a state unless behavior genuinely differs by state.
+
+State describes lifecycle condition.
+
+Error information describes why something failed.
+
+Keep them distinct where useful.
+
+Some failures can transition back automatically.
+
+For example:
+
+CONNECTING + TIMEOUT -> RETRY_WAIT
+
+RETRY_WAIT + RETRY_TIMER -> CONNECTING
+
+This is an explicit retry state machine.
+
+Do not implement retries as uncontrolled loops detached from state.
+
+Retry behavior should define:
+
+Maximum attempts if bounded.
+
+Delay.
+
+Backoff if used.
+
+Conditions for retry.
+
+Conditions for permanent failure.
+
+Cancellation behavior.
+
+Do not retry forever merely because failure occurred unless continuous retry is intentional policy.
+
+A retry is another transition.
+
+Model it.
+
+Timeouts are events.
+
+For example:
+
+WAITING_FOR_REPLY + TIMEOUT -> FAILED
+
+or:
+
+WAITING_FOR_REPLY + TIMEOUT -> RETRY_WAIT
+
+A timeout should not directly mutate unrelated state.
+
+The state machine determines what timeout means in the current state.
+
+A timeout received after the operation already completed can be stale.
+
+For example:
+
+WAITING + RESPONSE -> COMPLETED
+
+Then an old timer fires:
+
+COMPLETED + TIMEOUT
+
+If no transition is defined, reject or ignore it according to policy.
+
+Do not let stale events roll completed state backward.
+
+Timers should be associated with the state or operation that created them.
+
+Generation identifiers can help.
+
+For example:
+
+operation_generation = 7
+
+Timer created for generation 7.
+
+System begins a new operation.
+
+operation_generation = 8
+
+Old timer for generation 7 fires.
+
+Reject it as stale.
+
+Do not allow old asynchronous events to mutate new state.
+
+State machines are especially useful for asynchronous systems.
+
+Events can arrive:
+
+Late.
+
+Out of order.
+
+Repeated.
+
+Concurrently.
+
+After cancellation.
+
+After timeout.
+
+The state machine provides a deterministic boundary.
+
+For each event ask:
+
+Is this event valid in the current state?
+
+If yes, evaluate the defined transition.
+
+If no, follow invalid-event policy.
+
+Do not assume event arrival proves relevance.
+
+Events can be duplicated.
+
+Design idempotency where appropriate.
+
+For example:
+
+COMPLETED + COMPLETE
+
+can be ignored safely if duplicate completion events are expected.
+
+Or it can be treated as invalid.
+
+Define the semantics.
+
+Idempotency means repeating an operation produces no additional effect beyond the intended result.
+
+Not every transition should be idempotent.
+
+For example:
+
+ACCOUNT_BALANCE + DEBIT
+
+must not accidentally execute twice because the same event was delivered twice.
+
+Use event identifiers or transaction identifiers where duplicate execution matters.
+
+State alone may not be enough to detect duplicates.
+
+State machines and idempotency solve related but different problems.
+
+An event identifier can establish whether a specific event was already processed.
+
+The current state establishes whether that type of event is valid now.
+
+Use both where needed.
+
+Events should have defined types.
+
+For example:
+
+START
+
+STOP
+
+CONNECTED
+
+DISCONNECTED
+
+TIMEOUT
+
+RETRY
+
+CANCEL
+
+Do not use arbitrary free-form strings if the event vocabulary is fixed.
+
+Use enumerations or constants.
+
+Reject unknown event types.
+
+Unknown events should not map to default privileged behavior.
+
+Default deny applies naturally to state transitions.
+
+If a transition is not defined, do not perform it.
+
+This makes state machines easier to reason about.
+
+An explicit transition graph provides evidence of permitted behavior.
+
+State machines can enforce workflow.
+
+For example:
+
+DRAFT
+
+SUBMITTED
+
+REVIEWED
+
+APPROVED
+
+PUBLISHED
+
+Possible transitions:
+
+DRAFT + SUBMIT -> SUBMITTED
+
+SUBMITTED + REVIEW -> REVIEWED
+
+REVIEWED + APPROVE -> APPROVED
+
+APPROVED + PUBLISH -> PUBLISHED
+
+Do not allow:
+
+DRAFT -> PUBLISHED
+
+unless an explicit transition permits it.
+
+A caller requesting the final state does not grant authority to skip intermediate requirements.
+
+Transitions matter.
+
+This is especially important where intermediate states represent:
+
+Validation.
+
+Review.
+
+Approval.
+
+Consensus.
+
+Payment.
+
+Signature.
+
+Verification.
+
+Testing.
+
+Do not bypass required process merely because the requested destination state is valid.
+
+A valid destination state does not imply a valid transition.
+
+State validation and transition validation are separate.
+
+For example:
+
+APPROVED is a recognized state.
+
+That does not mean any object can be assigned APPROVED directly.
+
+The transition into APPROVED must be authorized and satisfy its guards.
+
+Do not expose unrestricted state fields through generic update APIs.
+
+For example:
+
+PATCH /document
+
+{
+    "state": "approved"
+}
+
+can bypass workflow if state is mass-assigned.
+
+Use explicit transition operations.
+
+For example:
+
+POST /document/42/approve
+
+Then:
+
+Authenticate.
+
+Authorize.
+
+Load current state.
+
+Evaluate guards.
+
+Execute transition.
+
+Record result.
+
+Do not treat state as ordinary editable metadata when state controls behavior.
+
+State transitions can require permissions.
+
+For example:
+
+DRAFT + SUBMIT requires documents.submit
+
+REVIEWED + APPROVE requires documents.approve
+
+APPROVED + PUBLISH requires documents.publish
+
+State validity does not replace authorization.
+
+Authorization does not replace state validity.
+
+A user can possess documents.publish while the document is still DRAFT.
+
+The operation can still be denied because the required state transition is not available.
+
+Both conditions matter.
+
+A useful transition rule can include:
+
+Source state.
+
+Event.
+
+Required permission.
+
+Guard.
+
+Destination state.
+
+Action.
+
+For example:
+
+Source: REVIEWED
+
+Event: APPROVE
+
+Permission: documents.approve
+
+Guard: required review complete
+
+Destination: APPROVED
+
+This makes authority and lifecycle explicit.
+
+Do not scatter pieces of transition policy across unrelated files if they can be centralized clearly.
+
+State transition logic should have one authoritative definition where practical.
+
+If one controller allows:
+
+DRAFT -> APPROVED
+
+while another service requires:
+
+DRAFT -> REVIEWED -> APPROVED
+
+the system has inconsistent semantics.
+
+Centralize the state machine.
+
+All interfaces should use it.
+
+Web.
+
+API.
+
+CLI.
+
+Background jobs.
+
+Scheduled tasks.
+
+Message consumers.
+
+Do not enforce workflow only in the UI.
+
+A hidden Approve button is not a state machine.
+
+The server must enforce transitions.
+
+State machines can represent process lifecycles.
+
+For example:
+
+CREATED
+
+QUEUED
+
+RUNNING
+
+SUCCEEDED
+
+FAILED
+
+CANCELLED
+
+Transitions can include:
+
+CREATED + QUEUE -> QUEUED
+
+QUEUED + START -> RUNNING
+
+RUNNING + SUCCESS -> SUCCEEDED
+
+RUNNING + FAILURE -> FAILED
+
+CREATED + CANCEL -> CANCELLED
+
+QUEUED + CANCEL -> CANCELLED
+
+RUNNING + CANCEL_REQUEST -> CANCELLING
+
+CANCELLING + CANCELLED -> CANCELLED
+
+Do not assume cancellation is instantaneous.
+
+If work must stop asynchronously, CANCELLING can be meaningful.
+
+A cancellation request is an event.
+
+CANCELLED is a state.
+
+Keep them separate.
+
+A requested state is not necessarily the current state.
+
+For example:
+
+desired_state = STOPPED
+
+actual_state = STOPPING
+
+This distinction matters in control systems.
+
+Desired state expresses intent.
+
+Actual state expresses observed system condition.
+
+Do not report desired state as actual state.
+
+Reconciliation systems compare desired and actual state.
+
+For example:
+
+Desired: RUNNING
+
+Actual: STOPPED
+
+Action:
+
+Attempt transition toward RUNNING.
+
+After action:
+
+Actual state must be established from evidence.
+
+Do not mark RUNNING merely because start was requested.
+
+Command success and resulting state can be separate.
+
+A command can be accepted.
+
+The operation can later fail.
+
+State should reflect what actually happened.
+
+For example:
+
+START request accepted.
+
+State becomes STARTING.
+
+Startup succeeds.
+
+State becomes RUNNING.
+
+Do not jump immediately to RUNNING if the operation is not complete.
+
+Evidence should establish completion.
+
+State machines can model network connections.
+
+For example:
+
+DISCONNECTED
+
+RESOLVING
+
+CONNECTING
+
+HANDSHAKING
+
+CONNECTED
+
+CLOSING
+
+FAILED
+
+Transitions can represent actual protocol phases.
+
+Do not mark CONNECTED before required handshake validation succeeds if handshake is part of connection qualification.
+
+TCP connection establishment and application-protocol readiness can be different states.
+
+For example:
+
+TCP_CONNECTED
+
+PROTOCOL_HANDSHAKE
+
+READY
+
+This distinction can prevent operations from being sent too early.
+
+Protocol state machines define which messages are legal at which point.
+
+For example:
+
+NEW
+
+HELLO_RECEIVED
+
+AUTHENTICATED
+
+READY
+
+CLOSED
+
+A DATA message received in NEW can be invalid.
+
+Do not process it merely because DATA is a valid message type.
+
+Message validity depends on protocol state.
+
+Network protocols often have state transitions driven by received messages.
+
+Validate:
+
+Message framing.
+
+Message type.
+
+Message fields.
+
+Current protocol state.
+
+Required authentication.
+
+Required sequence.
+
+Then transition.
+
+Do not allow a malformed or out-of-sequence message to advance state.
+
+A handshake is a state machine.
+
+For example:
+
+DISCONNECTED
+
+CONNECTED
+
+HELLO_SENT
+
+HELLO_VERIFIED
+
+READY
+
+Each stage establishes additional evidence.
+
+Do not collapse all stages into a single connected flag if protocol behavior depends on them.
+
+Authentication protocols also have state.
+
+For example:
+
+UNAUTHENTICATED
+
+CHALLENGE_SENT
+
+RESPONSE_RECEIVED
+
+AUTHENTICATED
+
+FAILED
+
+Do not allow protected operations in intermediate states.
+
+AUTHENTICATED means authentication has completed successfully according to policy.
+
+A challenge being sent does not mean authentication succeeded.
+
+A response being received does not mean authentication succeeded.
+
+Verification establishes the transition.
+
+State machines can model sessions.
+
+For example:
+
+NEW
+
+ACTIVE
+
+EXPIRED
+
+REVOKED
+
+CLOSED
+
+A revoked session should not transition back to ACTIVE merely because another request arrives.
+
+Terminal security states should remain terminal unless explicit policy defines recovery.
+
+Revocation should be monotonic where appropriate.
+
+A monotonic state transition moves in one direction with respect to a property.
+
+For example:
+
+UNVERIFIED -> VERIFIED
+
+A system may intentionally prohibit:
+
+VERIFIED -> UNVERIFIED
+
+except through a distinct revocation or reset process.
+
+Another example:
+
+ACTIVE -> REVOKED
+
+REVOKED should not casually return to ACTIVE.
+
+Monotonic properties simplify reasoning.
+
+Use them where semantics support them.
+
+Do not force monotonic behavior when legitimate reversal exists.
+
+A service can transition:
+
+RUNNING -> STOPPED -> RUNNING
+
+That is normal.
+
+State topology depends on the lifecycle.
+
+A state graph can contain cycles.
+
+For example:
+
+DISCONNECTED -> CONNECTING -> CONNECTED -> DISCONNECTED
+
+Cycles are valid.
+
+Do not confuse state-machine cycles with invalid dependency cycles.
+
+The important requirement is that transitions are defined.
+
+State diagrams visualize states and transitions.
+
+A simple diagram can show:
+
+[STOPPED]
+    |
+   START
+    v
+[STARTING]
+   /     \
+SUCCESS FAILURE
+  |        |
+  v        v
+[RUNNING] [FAILED]
+
+Diagrams are useful for communication.
+
+Transition tables are often easier to test mechanically.
+
+Use whichever representation improves clarity.
+
+For critical systems, maintaining both can be useful if they derive from the same authoritative definition.
+
+Do not maintain contradictory diagrams and code manually without review.
+
+Documentation should match implementation.
+
+State-machine tests should test every defined transition.
+
+For each transition:
+
+Set source state.
+
+Apply event.
+
+Set guard conditions.
+
+Verify destination state.
+
+Verify action.
+
+Verify recorded history where applicable.
+
+Also test undefined transitions.
+
+For example:
+
+RUNNING + START
+
+STOPPED + SUCCESS
+
+FAILED + RANDOM_EVENT
+
+These should follow invalid-transition policy.
+
+Do not test only the happy path.
+
+Negative transition tests establish boundaries.
+
+A transition matrix can be useful.
+
+Rows:
+
+Current states.
+
+Columns:
+
+Events.
+
+Cells:
+
+Destination or INVALID.
+
+For example:
+
+             START      SUCCESS     FAILURE     STOP
+
+STOPPED      STARTING   INVALID     INVALID     INVALID
+
+STARTING     INVALID    RUNNING     FAILED      INVALID
+
+RUNNING      INVALID    INVALID     FAILED      STOPPING
+
+STOPPING     INVALID    STOPPED     FAILED      INVALID
+
+FAILED       INVALID    INVALID     INVALID     INVALID
+
+This makes undefined combinations visible.
+
+Do not automatically fill empty cells with self-transitions.
+
+A self-transition is still a transition.
+
+Define it intentionally.
+
+A self-transition keeps the same state while potentially performing an action.
+
+For example:
+
+CONNECTED + KEEPALIVE -> CONNECTED
+
+Action:
+
+Update last-seen timestamp.
+
+This is a legitimate transition.
+
+It is not equivalent to ignoring the event.
+
+Ignoring an event performs no transition action.
+
+Keep the distinction clear.
+
+Entry actions occur when entering a state.
+
+Exit actions occur when leaving a state.
+
+Transition actions occur during a specific transition.
+
+These can be useful abstractions.
+
+For example:
+
+Enter RUNNING:
+
+Start health monitoring.
+
+Exit RUNNING:
+
+Stop health monitoring.
+
+Transition STOPPED -> STARTING:
+
+Launch service.
+
+Do not use entry and exit hooks if they obscure simple behavior.
+
+Small explicit transition functions can be easier to understand.
+
+Keep the implementation proportional to the system.
+
+State machines can be implemented with switch statements.
+
+For example:
+
+switch current_state:
+    case STOPPED:
+        handle events valid for STOPPED
+    case STARTING:
+        handle events valid for STARTING
+
+This can be perfectly adequate.
+
+Do not require a state-machine framework merely because the design is a state machine.
+
+A table-driven implementation can also work.
+
+For example:
+
+transition[current_state][event] = next_state
+
+This is useful when transitions are simple.
+
+Guards and actions can require associated functions.
+
+Choose the simplest implementation that preserves clarity.
+
+Do not hide transition logic behind excessive abstraction.
+
+In C, state and event enums can provide explicit representation.
+
+For example:
+
+enum state {
+    STATE_STOPPED,
+    STATE_STARTING,
+    STATE_RUNNING,
+    STATE_STOPPING,
+    STATE_FAILED
+};
+
+enum event {
+    EVENT_START,
+    EVENT_START_SUCCESS,
+    EVENT_START_FAILURE,
+    EVENT_STOP,
+    EVENT_STOP_SUCCESS
+};
+
+Use explicit enumeration values.
+
+Do not use arbitrary integers without names.
+
+Validate values received from external input before casting them into enums.
+
+An integer is not automatically a valid enumeration member.
+
+C enums do not inherently prevent invalid numeric values.
+
+Check boundaries or explicit values.
+
+Do not index transition arrays using unchecked external values.
+
+That can create out-of-bounds access.
+
+Validation comes before state evaluation.
+
+In C++, enum class can provide stronger type separation.
+
+State and event remain different types.
+
+Do not cast freely between them.
+
+Type safety supports state-machine correctness.
+
+In C#, enums can represent state and event sets.
+
+Validate externally supplied enum values.
+
+Parsing a numeric value into an enum can produce values not explicitly defined depending on API behavior.
+
+Do not assume enum type means valid enum member.
+
+In Go, typed constants can represent states.
+
+For example:
+
+type State int
+
+const (
+    StateStopped State = iota
+    StateStarting
+    StateRunning
+)
+
+Validate external values.
+
+Go's type system does not prevent every arbitrary integer conversion into a custom integer type.
+
+State validity still matters.
+
+In JavaScript, strings or symbols can represent states.
+
+Use centralized constants.
+
+Do not scatter literal strings such as:
+
+"runing"
+
+"running"
+
+"Running"
+
+throughout the code.
+
+Typographical errors can create accidental states.
+
+TypeScript can improve this with union types or enums.
+
+Runtime validation is still required for external input.
+
+In PHP, enums can represent states in modern versions.
+
+Older systems can use constants.
+
+Do not trust request strings simply because they match a state name.
+
+Transition policy still determines whether the requested transition is allowed.
+
+State should have a single authoritative representation.
+
+Do not maintain:
+
+status_string
+
+is_running
+
+is_stopped
+
+is_failed
+
+lifecycle_code
+
+all as independent writable fields representing the same lifecycle.
+
+They can disagree.
+
+If derived fields are useful, derive them from authoritative state.
+
+For example:
+
+is_running = state == RUNNING
+
+Do not independently store both unless synchronization is rigorously defined.
+
+Duplicated state creates inconsistency.
+
+State persistence matters when processes restart.
+
+If state is purely runtime state, restarting can begin from the initial state.
+
+If state represents durable workflow, persist it.
+
+For example:
+
+Order status.
+
+Job lifecycle.
+
+Document approval.
+
+Contract state.
+
+Do not lose durable lifecycle merely because a process restarted.
+
+Persistent state should be validated when loaded.
+
+Database contents can be corrupted or from older versions.
+
+If stored state is unknown, do not silently map it to a privileged state.
+
+Handle it according to recovery policy.
+
+State persistence and side effects require care.
+
+Suppose a transition is:
+
+PENDING -> PAID
+
+Action:
+
+Send payment.
+
+If the payment occurs but the state update fails, retrying can send payment twice.
+
+This is a transactional problem.
+
+The state machine alone does not solve external side-effect atomicity.
+
+Use idempotency, transaction records, durable queues, or other appropriate patterns.
+
+Do not assume changing a state variable makes external effects atomic.
+
+Likewise:
+
+State updated to EMAIL_SENT.
+
+Process crashes before email is sent.
+
+The stored state is now false evidence.
+
+Ordering matters.
+
+Design state transitions around side-effect guarantees.
+
+A useful pattern can separate intent from completion.
+
+For example:
+
+PENDING
+
+PAYMENT_REQUESTED
+
+PAID
+
+FAILED
+
+Transition:
+
+PENDING -> PAYMENT_REQUESTED
+
+Then perform or dispatch payment.
+
+Verified payment result:
+
+PAYMENT_REQUESTED -> PAID
+
+This records that work is in progress.
+
+Do not claim completion before evidence exists.
+
+Exactly-once external effects are difficult in distributed systems.
+
+State machines should not pretend otherwise.
+
+Use unique operation identifiers.
+
+Make handlers idempotent where possible.
+
+Record outcomes.
+
+Reconcile uncertain states.
+
+Do not mark unknown outcomes as success.
+
+An UNKNOWN or RECONCILIATION_REQUIRED state can be legitimate if external outcome cannot be established.
+
+Use it only when uncertainty is real.
+
+Do not use UNKNOWN as a substitute for investigating ordinary implementation bugs.
+
+State should reflect evidence.
+
+Distributed state machines require ordering rules.
+
+Two nodes can receive different events concurrently.
+
+Without coordination they can produce different states.
+
+Consensus, leader coordination, transactions, version checks, or other mechanisms can serialize transitions.
+
+Choose according to architecture.
+
+Do not assume local state-machine determinism automatically creates distributed consistency.
+
+A deterministic transition function is necessary but not sufficient for distributed agreement.
+
+Nodes must also agree on:
+
+Starting state.
+
+Event ordering.
+
+Event contents.
+
+Applicable rules.
+
+If those differ, results can differ.
+
+Replicated state machines apply the same ordered operations to the same initial state.
+
+If transition logic is deterministic, replicas can reach the same result.
+
+This is a foundation of many consensus systems.
+
+Do not introduce nondeterministic behavior into consensus-visible transitions.
+
+Examples of dangerous nondeterminism include:
+
+Local wall-clock time without protocol definition.
+
+Random numbers without agreed source.
+
+Platform-specific behavior.
+
+Unordered map iteration affecting results.
+
+Locale-dependent parsing.
+
+External network queries.
+
+Machine-specific filesystem state.
+
+Consensus-visible transitions must depend on shared deterministic inputs.
+
+A replicated state machine should not ask:
+
+What time does this local machine think it is?
+
+unless the protocol explicitly supplies an agreed time value.
+
+It should not ask:
+
+What did this external API return?
+
+unless that result is part of agreed input.
+
+Determinism means identical inputs and state produce identical outputs and next state.
+
+This principle is broader than blockchain or consensus.
+
+It improves ordinary testing and reliability too.
+
+Concurrency can cause race conditions around state transitions.
+
+For example:
+
+Current state = STOPPED
+
+Thread A receives START.
+
+Thread B receives START.
+
+Both observe STOPPED.
+
+Both launch startup.
+
+Now two startup operations exist.
+
+The state transition must be synchronized if concurrent access is possible.
+
+Possible mechanisms include:
+
+Mutex.
+
+Atomic compare-and-swap.
+
+Database transaction.
+
+Optimistic version check.
+
+Single-threaded event loop.
+
+Serialized message queue.
+
+Choose according to architecture.
+
+Do not assume reading and writing a small enum makes the transition atomic as a whole.
+
+The transition includes:
+
+Read current state.
+
+Evaluate event.
+
+Evaluate guard.
+
+Perform required mutation.
+
+Possibly schedule action.
+
+These steps can require coordination.
+
+Optimistic concurrency can use a version.
+
+For example:
+
+state = STOPPED
+
+version = 12
+
+Transition request expects version 12.
+
+Another transition commits first.
+
+state = STARTING
+
+version = 13
+
+The original request attempts update using version 12.
+
+Reject as stale.
+
+This prevents lost updates.
+
+Do not retry automatically unless the event remains valid in the new state.
+
+Reload state.
+
+Re-evaluate transition.
+
+Do not apply an old decision to new state.
+
+Database transitions can use conditional updates.
+
+Conceptually:
+
+UPDATE jobs
+SET state = 'RUNNING'
+WHERE id = ?
+AND state = 'QUEUED'
+
+Then check affected rows.
+
+If zero rows changed, the expected source state was not present.
+
+Do not blindly overwrite current state.
+
+Conditional updates can enforce transition preconditions atomically.
+
+Complex guards can require transactions.
+
+Keep the critical section as small as practical.
+
+State history can be useful.
+
+For example:
+
+timestamp
+
+source_state
+
+event
+
+destination_state
+
+actor
+
+reason
+
+operation_id
+
+Do not confuse current state with history.
+
+Current state answers:
+
+What condition exists now?
+
+History answers:
+
+How did it get here?
+
+Both can matter.
+
+Audit history should record actual transitions.
+
+Do not write a transition record if the transition was rejected unless the log explicitly records it as a rejected attempt.
+
+Distinguish:
+
+Transition occurred.
+
+Transition attempted.
+
+Transition denied.
+
+These are different events.
+
+A state history can support recovery and debugging.
+
+For example:
+
+12:00 STOPPED -> STARTING
+
+12:01 STARTING -> RUNNING
+
+13:45 RUNNING -> STOPPING
+
+13:46 STOPPING -> FAILED
+
+This provides evidence.
+
+Do not rewrite transition history to match the current desired narrative.
+
+History records what occurred.
+
+Event sourcing stores events as the authoritative history from which state can be derived.
+
+For example:
+
+AccountCreated
+
+FundsDeposited
+
+FundsWithdrawn
+
+State is reconstructed by replaying events.
+
+This is one architecture.
+
+Do not use event sourcing merely because a system has events.
+
+A normal state table plus audit log is often simpler.
+
+Event sourcing adds requirements around:
+
+Event immutability.
+
+Versioning.
+
+Replay.
+
+Schema evolution.
+
+Snapshotting.
+
+Ordering.
+
+Idempotency.
+
+Use it when the architecture benefits.
+
+A state machine does not require event sourcing.
+
+State-machine events can be transient function calls.
+
+Persistent state can be stored normally.
+
+Keep concepts separate.
+
+State reconstruction must be deterministic.
+
+Given the same ordered event history, replay should produce the same state.
+
+Do not make replay depend on current external services.
+
+Otherwise historical state can change.
+
+Events should contain or reference the information required by the defined model.
+
+Event versioning can matter.
+
+Old events may have different schemas.
+
+Replay code must understand supported historical versions.
+
+Do not reinterpret historical events silently under new semantics if that changes past state.
+
+Migration or versioned handling can be required.
+
+State-machine versioning matters even without event sourcing.
+
+Suppose version 1 allows:
+
+PENDING -> APPROVED
+
+Version 2 requires:
+
+PENDING -> REVIEWED -> APPROVED
+
+Existing objects already in APPROVED remain valid historical state unless policy says otherwise.
+
+Do not force them backward merely because the new machine has different transitions.
+
+New transitions apply according to migration policy.
+
+State schemas can evolve.
+
+Removing a state requires migration.
+
+Renaming a state requires migration or compatibility handling.
+
+Adding a state can require older software to reject or understand it.
+
+Do not change persistent state identifiers casually.
+
+Stable machine identifiers can differ from display labels.
+
+For example:
+
+Machine value:
+
+pending_review
+
+Display label:
+
+Pending Review
+
+Changing the UI wording does not require changing persistent state.
+
+Separate representation from presentation.
+
+State values in protocols should have stable encoding.
+
+For example:
+
+0 = DISCONNECTED
+
+1 = CONNECTING
+
+2 = CONNECTED
+
+If numeric values are protocol-visible, do not reorder enum declarations casually.
+
+Explicit numeric assignments can preserve compatibility.
+
+Internal-only enums can be more flexible.
+
+Know whether representation is externally visible.
+
+Unknown state values from newer protocol versions should be handled according to compatibility policy.
+
+Do not map unknown state to READY.
+
+Unknown must not become privileged or successful by default.
+
+Reject, preserve, or mark unsupported according to specification.
+
+State transitions can emit events.
+
+For example:
+
+RUNNING -> FAILED
+
+emits:
+
+SERVICE_FAILED
+
+Other components can react.
+
+Do not let event emission recursively create uncontrolled transition loops.
+
+Understand causal chains.
+
+A transition can trigger another component.
+
+That component can send another event.
+
+Design loops intentionally.
+
+Do not create:
+
+A transitions because of B.
+
+B transitions because of A.
+
+forever.
+
+Cycle detection, idempotency, or state guards can stop unintended loops.
+
+State machines can be hierarchical.
+
+For example:
+
+CONNECTED
+
+contains substates:
+
+IDLE
+
+SENDING
+
+RECEIVING
+
+The parent state establishes broad behavior.
+
+Substates refine it.
+
+Hierarchical state machines can reduce duplicated transitions.
+
+For example:
+
+Any CONNECTED substate can respond to DISCONNECT.
+
+Do not introduce hierarchy unless it simplifies a genuinely complex machine.
+
+Flat state machines are easier to reason about when the number of states is small.
+
+Orthogonal state regions represent independent dimensions.
+
+For example:
+
+Connection state:
+
+DISCONNECTED
+
+CONNECTED
+
+and authentication state:
+
+UNAUTHENTICATED
+
+AUTHENTICATED
+
+Combining them into:
+
+DISCONNECTED_UNAUTHENTICATED
+
+CONNECTED_UNAUTHENTICATED
+
+CONNECTED_AUTHENTICATED
+
+can be manageable at first.
+
+With many dimensions, combinations explode.
+
+Independent state machines can be clearer.
+
+Do not force unrelated state dimensions into one giant enum.
+
+However, independent machines can have cross-constraints.
+
+For example:
+
+Authentication can only be AUTHENTICATED while connection is CONNECTED.
+
+Define that invariant.
+
+Do not allow impossible combinations.
+
+A composite system can coordinate multiple state machines.
+
+Each machine should have clear ownership.
+
+For example:
+
+Connection machine owns network lifecycle.
+
+Authentication machine owns identity establishment.
+
+Job machine owns work lifecycle.
+
+Do not let every component mutate every state.
+
+State ownership reduces confusion.
+
+Only authorized code paths should transition protected state.
+
+A public setter such as:
+
+set_state(any_state)
+
+can bypass the machine.
+
+Prefer:
+
+start()
+
+stop()
+
+approve()
+
+cancel()
+
+handle_event()
+
+These operations evaluate transition rules.
+
+Do not expose unrestricted state mutation unless the caller is inside the trusted state-machine implementation.
+
+State fields should often be read-only to ordinary consumers.
+
+Consumers can observe.
+
+The state machine transitions.
+
+This preserves invariants.
+
+Testing should ensure direct mutation paths do not exist where they would bypass policy.
+
+Reflection, serialization frameworks, database tools, or generic model update code can accidentally bypass transition logic.
+
+Protect persistence layers accordingly.
+
+State machines can be used for user interfaces.
+
+For example:
+
+IDLE
+
+SUBMITTING
+
+SUCCESS
+
+ERROR
+
+This can prevent duplicate submissions.
+
+But client-side UI state is not server authority.
+
+The server still validates and authorizes operations.
+
+Do not confuse frontend state with authoritative workflow state.
+
+A browser can claim:
+
+state=APPROVED
+
+The server should ignore that claim unless the protocol intentionally accepts transition requests and validates them.
+
+Server state remains authoritative for protected operations.
+
+State machines can model autonomous agents.
+
+For example:
+
+IDLE
+
+ASSIGNED
+
+EXECUTING
+
+WAITING
+
+REPORTING
+
+COMPLETE
+
+ESCALATED
+
+The exact states depend on mission design.
+
+State transitions should remain within delegated authority.
+
+An event does not grant new authority.
+
+A transition cannot legitimately bypass external policy simply because the state machine contains an edge.
+
+The state machine itself must conform to governing authorization and policy.
+
+State-machine permission is not organizational authority.
+
+Software implements authority granted elsewhere.
+
+Do not encode an unauthorized action and then claim it is permitted because the transition table allows it.
+
+Transition definitions must be authorized design.
+
+Human-directed policy establishes the permitted lifecycle.
+
+The machine enforces it.
+
+State-machine guards can include authority checks.
+
+For example:
+
+ASSIGNED + EXECUTE -> EXECUTING
+
+Guard:
+
+assignment is active
+
+and
+
+required permission exists
+
+and
+
+required qualification exists
+
+if policy requires those conditions.
+
+Do not infer missing authority.
+
+If a required condition is not established, the transition does not occur.
+
+Autonomous recovery can be represented explicitly.
+
+For example:
+
+EXECUTING + ROUTINE_FAILURE -> RECOVERING
+
+RECOVERING + RECOVERY_SUCCESS -> EXECUTING
+
+RECOVERING + RECOVERY_FAILURE -> ESCALATED
+
+This allows routine handling while preserving escalation boundaries.
+
+Do not escalate every ordinary recoverable event if policy delegates recovery.
+
+Do not conceal failures requiring escalation.
+
+The state machine should encode the boundary.
+
+An escalation state can mean:
+
+Normal delegated handling is no longer sufficient.
+
+It does not necessarily mean failure.
+
+It means another authority or process is required according to policy.
+
+Define what events leave ESCALATED.
+
+Do not let the machine self-authorize beyond its boundary.
+
+A mission state machine can separate:
+
+PLANNED
+
+AUTHORIZED
+
+ACTIVE
+
+COMPLETE
+
+CANCELLED
+
+An event such as START does not necessarily move PLANNED to ACTIVE.
+
+Authorization may be required first.
+
+Again:
+
+An event does not authorize an arbitrary transition.
+
+Only a defined transition whose guards are satisfied does.
+
+State machines can represent software installation.
+
+For example:
+
+NOT_INSTALLED
+
+INSTALLING
+
+INSTALLED
+
+UPDATING
+
+ROLLING_BACK
+
+FAILED
+
+Do not mark INSTALLED merely because files were copied.
+
+If configuration and verification are part of installation, completion occurs after those requirements succeed.
+
+State meaning should correspond to actual system condition.
+
+Updates can have rollback states.
+
+For example:
+
+INSTALLED -> UPDATING
+
+UPDATING -> INSTALLED on success
+
+UPDATING -> ROLLING_BACK on failure
+
+ROLLING_BACK -> INSTALLED on successful rollback
+
+ROLLING_BACK -> FAILED on rollback failure
+
+This provides explicit recovery behavior.
+
+Do not hide failed updates by resetting state to INSTALLED if the previous installation was not actually restored.
+
+Evidence determines state.
+
+State machines can model transactions.
+
+For example:
+
+CREATED
+
+PREPARED
+
+COMMITTED
+
+ABORTED
+
+The exact semantics depend on transaction protocol.
+
+Do not use transaction terminology casually.
+
+COMMITTED should mean the commit conditions defined by the protocol have been satisfied.
+
+A local request to commit is not necessarily committed state.
+
+Distributed transactions can have uncertain states after failures.
+
+Represent uncertainty where required.
+
+Do not fabricate completion.
+
+State machines can model distributed membership.
+
+For example:
+
+UNKNOWN
+
+DISCOVERED
+
+VALIDATING
+
+ADMITTED
+
+ACTIVE
+
+REMOVED
+
+Transitions can require validation.
+
+Do not move DISCOVERED directly to ACTIVE if admission requires validation.
+
+Discovery is not admission.
+
+Admission is not necessarily activation.
+
+Keep lifecycle stages meaningful.
+
+State machines can model peer connections.
+
+For example:
+
+UNKNOWN
+
+CONNECTING
+
+CONNECTED
+
+QUALIFYING
+
+QUALIFIED
+
+REJECTED
+
+A socket connection does not mean the peer is qualified.
+
+Protocol validation establishes qualification.
+
+Do not collapse transport success into trust.
+
+State machines can model security incidents.
+
+For example:
+
+DETECTED
+
+TRIAGED
+
+INVESTIGATING
+
+CONFIRMED
+
+CONTAINED
+
+RESOLVED
+
+CLOSED
+
+Exact lifecycle depends on policy.
+
+Do not mark an incident CONFIRMED merely because a detection occurred.
+
+Detection is evidence requiring evaluation.
+
+State names should reflect evidence level.
+
+Do not let workflow labels make unsupported factual claims.
+
+A state transition should preserve evidence.
+
+For example:
+
+DETECTED -> CONFIRMED
+
+should have a defined basis.
+
+If evidence is insufficient, remain in investigation or another appropriate state.
+
+Do not transition to satisfy expectation.
+
+State machines can model publication.
+
+For example:
+
+DRAFT
+
+REVIEW
+
+APPROVED
+
+PUBLISHED
+
+RETIRED
+
+Historical published state can be preserved in transition history even after RETIRED.
+
+Current state does not erase prior states.
+
+Do not rewrite history because an item is no longer active.
+
+State history and current state answer different questions.
+
+A state machine should define restart behavior.
+
+Suppose a process crashes while state is:
+
+PROCESSING
+
+On restart, what happens?
+
+Possible policies:
+
+Resume PROCESSING.
+
+Move to RECOVERING.
+
+Move to FAILED.
+
+Requeue work.
+
+Inspect durable operation record.
+
+The correct answer depends on architecture.
+
+Define it.
+
+Do not automatically assume PROCESSING means work is still occurring after the worker died.
+
+Persistent state can become stale.
+
+Recovery must reconcile stored state with reality.
+
+Leases can help represent temporary ownership.
+
+For example:
+
+Job state = RUNNING
+
+Worker lease expires.
+
+System transitions:
+
+RUNNING -> RECOVERY_PENDING
+
+Another worker can later claim it.
+
+Do not assume a RUNNING database value proves a live worker exists forever.
+
+Time and liveness require evidence.
+
+Heartbeats can provide liveness evidence.
+
+A heartbeat event can update liveness information.
+
+Missing heartbeats can trigger a timeout transition.
+
+Do not use one delayed heartbeat as proof of permanent failure unless policy defines that threshold.
+
+State transitions should use defined thresholds.
+
+For example:
+
+ACTIVE + heartbeat_timeout -> SUSPECT
+
+SUSPECT + further_timeout -> FAILED
+
+This can distinguish uncertainty from confirmed failure.
+
+Distributed failure detection is often imperfect.
+
+Do not represent suspicion as certainty.
+
+Use state names that match evidence.
+
+SUSPECT is not FAILED.
+
+State machines can model confidence boundaries without using probability for deterministic transitions.
+
+For example:
+
+UNKNOWN
+
+OBSERVED
+
+VERIFIED
+
+REJECTED
+
+Transition criteria remain deterministic.
+
+The evidence can be incomplete.
+
+The machine does not need to guess.
+
+State-machine observability should expose current state.
+
+Useful diagnostics can include:
+
+Current state.
+
+Time entered state.
+
+Last event.
+
+Last successful transition.
+
+Pending operation.
+
+Failure reason.
+
+Transition version.
+
+Do not expose sensitive state to unauthorized users.
+
+Operational visibility should respect access controls.
+
+Metrics can count:
+
+Transitions.
+
+Failures.
+
+Invalid transition attempts.
+
+Time spent in states.
+
+Retries.
+
+Timeouts.
+
+These can reveal reliability problems.
+
+Do not make metrics the authoritative state.
+
+They are observations.
+
+The state store remains authoritative.
+
+Logs should identify transitions clearly.
+
+For example:
+
+state transition: CONNECTING -> CONNECTED event=HANDSHAKE_OK
+
+Do not log:
+
+status changed
+
+when precise state information is available.
+
+Structured logs improve analysis.
+
+Avoid logging secrets carried in events.
+
+State transition logs can be security-sensitive.
+
+Protect them appropriately.
+
+An invalid transition attempt can indicate:
+
+Programming error.
+
+Stale request.
+
+Duplicate event.
+
+Race condition.
+
+Protocol violation.
+
+Malicious request.
+
+Do not automatically classify every invalid transition as an attack.
+
+Record evidence.
+
+Investigate patterns.
+
+Context matters.
+
+Repeated attempts to bypass required workflow can be suspicious.
+
+One duplicate timeout can be ordinary asynchronous behavior.
+
+Do not overstate evidence.
+
+State machines should fail safely.
+
+If the current state is corrupt or unknown:
+
+Do not assume READY.
+
+Do not assume AUTHENTICATED.
+
+Do not assume APPROVED.
+
+Do not assume COMPLETE.
+
+Choose a safe recovery or failure state according to policy.
+
+Unknown must not become privileged.
+
+If transition logic encounters an unknown event:
+
+Do not execute a default action with broad effect.
+
+Reject it.
+
+If a guard evaluation fails because required data cannot be loaded:
+
+Do not treat the guard as true.
+
+The required condition has not been established.
+
+Fail closed where the transition controls protected behavior.
+
+State-machine errors should not silently mutate state.
+
+If transition persistence fails, report failure.
+
+Do not claim the transition occurred unless the authoritative state was actually committed.
+
+If an action fails after state mutation, recovery policy must handle the discrepancy.
+
+Design transitions with failure points in mind.
+
+Ask:
+
+What if we crash before the state write?
+
+What if we crash after the state write?
+
+What if the side effect succeeds but acknowledgement is lost?
+
+What if the event is delivered twice?
+
+What if two events arrive concurrently?
+
+What if a stale event arrives later?
+
+What if storage is unavailable?
+
+What if the process restarts?
+
+These questions expose weak lifecycle design.
+
+Do not design only for the uninterrupted happy path.
+
+A transition can be modeled as:
+
+validate event
+
+load current state
+
+validate current state
+
+authenticate actor if required
+
+authorize event if required
+
+evaluate guards
+
+reserve or synchronize transition if required
+
+perform transition action according to defined ordering
+
+persist next state
+
+emit resulting events
+
+record audit information
+
+Exact ordering depends on the system.
+
+Do not mechanically apply one ordering to every architecture.
+
+Define transactional boundaries.
+
+For purely in-memory state:
+
+Lock if required.
+
+Evaluate transition.
+
+Change state.
+
+Perform defined local actions.
+
+Release according to synchronization design.
+
+For durable workflow:
+
+Use transactions or conditional updates where appropriate.
+
+For distributed side effects:
+
+Use durable intent, idempotency, and reconciliation where appropriate.
+
+Do not pretend one technique solves every state transition.
+
+State machines should remain small enough to understand.
+
+A machine with hundreds of states can indicate several independent lifecycles have been combined.
+
+Consider decomposition.
+
+Do not split a coherent lifecycle merely to reduce a number.
+
+Architecture should follow semantics.
+
+State explosion occurs when every combination of independent properties becomes a separate state.
+
+For example:
+
+CONNECTED_AUTHENTICATED_SYNCED_ACTIVE
+
+CONNECTED_AUTHENTICATED_SYNCED_PAUSED
+
+CONNECTED_AUTHENTICATED_UNSYNCED_ACTIVE
+
+and many more.
+
+Separate independent dimensions when possible.
+
+Then define cross-machine invariants.
+
+Do not hide complexity by creating giant names.
+
+State-machine documentation should answer:
+
+What states exist?
+
+What is the initial state?
+
+Which states are terminal?
+
+What events exist?
+
+Which transitions are permitted?
+
+What guards apply?
+
+What actions occur?
+
+What permissions are required?
+
+What happens on invalid events?
+
+What happens on failure?
+
+What happens on restart?
+
+What state is persisted?
+
+What transitions are audited?
+
+What concurrency controls apply?
+
+What recovery behavior exists?
+
+If these cannot be answered, the machine is not fully defined.
+
+A reliable state machine has explicit states.
+
+A reliable state machine has explicit events.
+
+A reliable state machine has explicit transitions.
+
+A reliable state machine rejects undefined transitions.
+
+A reliable state machine evaluates guards before protected transitions.
+
+A reliable state machine does not confuse desired state with actual state.
+
+A reliable state machine does not confuse command acceptance with completion.
+
+A reliable state machine handles duplicate and stale events according to policy.
+
+A reliable state machine coordinates concurrent transitions.
+
+A reliable state machine preserves durable state when required.
+
+A reliable state machine records meaningful transition history when required.
+
+A reliable state machine has defined recovery behavior.
+
+A reliable state machine does not invent authority.
+
+A reliable state machine does not guess.
+
+Do not confuse state with event.
+
+Do not confuse state with action.
+
+Do not confuse state with error code.
+
+Do not confuse requested state with current state.
+
+Do not confuse valid destination with valid transition.
+
+Do not confuse a transport connection with protocol readiness.
+
+Do not confuse authentication attempt with authenticated state.
+
+Do not confuse detection with confirmation.
+
+Do not confuse discovery with admission.
+
+Do not confuse work requested with work completed.
+
+Do not confuse stored state with current reality when external systems can change independently.
+
+Do not confuse deterministic transition logic with distributed consensus.
+
+Do not confuse event arrival with authority to transition.
+
+For every event ask:
+
+What is the current state?
+
+Is this event defined for that state?
+
+Is the event valid?
+
+Is the actor authenticated where required?
+
+Is the actor authorized where required?
+
+Are the guards satisfied?
+
+Is the event stale?
+
+Has it already been processed?
+
+Does concurrency require synchronization?
+
+What is the defined next state?
+
+What actions are required?
+
+How is success established?
+
+How is failure represented?
+
+If the transition is defined and all required conditions are established, perform it according to policy.
+
+If the transition is not defined, do not invent one.
+
+If a guard fails, remain according to defined policy.
+
+If authority is absent, deny the transition.
+
+If state is unknown, do not assume a privileged state.
+
+If the event is stale, do not let it mutate current state.
+
+If the event is duplicated, apply defined idempotency behavior.
+
+If the operation outcome is uncertain, do not claim completion.
+
+State is evidence of the system's current modeled condition.
+
+Events request or report change.
+
+Transitions define permitted change.
+
+Guards define required conditions.
+
+Actions implement the effects associated with change.
+
+Authority remains external to mere event arrival.
+
+An event does not authorize an arbitrary transition.
+
+Only a defined transition does.

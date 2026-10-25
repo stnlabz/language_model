@@ -1,0 +1,136 @@
+20260815.0 — Digit: Large Language Model Prohibition
+
+Root Document ID: 20260815.0
+Revision ID: NONE
+Previous Revision: NONE
+sha256: 6b5f63ee24b237d97c7ebddbd35104662b65f953adaa255329661bd21b583a8b
+
+Project: Digit  
+Status: Approved  
+Scope: Policy  
+Classification: Architecture / Knowledge
+
+Purpose
+
+This policy establishes that Large Language Models (LLMs) are not required for Digit's assigned mission and are therefore not authorized as part of Digit's operational architecture, unless that LLM or GRU is developed and managed by STN-Labz.
+
+Digit already operates under established requirements governing authorized knowledge, deterministic behavior, human authority, network isolation, and controlled knowledge approval.
+
+An LLM does not replace or supersede those requirements.
+
+Policy
+
+Digit will not incorporate, depend upon, query, or operate a Large Language Model as part of her operational architecture.
+
+LLMs are not an authorized knowledge source for Digit.
+
+LLMs will not be introduced into Digit merely to provide reasoning, conversation, interpretation, generation, inference, or other capabilities that can be satisfied through Digit's approved core, qualified modules, deterministic processing, and authorized STN-LABZ knowledge sources.
+
+The technical availability of an LLM does not establish an engineering requirement for its use.
+
+Capability does not establish necessity.
+
+Authorized Knowledge
+
+Digit will reason only from knowledge sources authorized by STN-LABZ.
+
+Authorized knowledge may be provided through approved mechanisms including:
+
+- STN-LABZ knowledge bases.
+- Retrieval-Augmented Generation (RAG) systems.
+- STN-LABZ intranet resources.
+- Approved engineering documentation.
+- Approved policies and doctrine.
+- Approved source repositories.
+- Approved technical references.
+- Approved build and test artifacts.
+- Other knowledge sources explicitly authorized by STN-LABZ.
+
+The mechanism used to retrieve or process authorized knowledge does not grant authority to introduce an unauthorized knowledge source.
+
+An LLM will not be used as an intermediary to circumvent Digit's authorized-knowledge boundary.
+
+Architectural Boundary
+
+Digit's architecture will be derived from her approved mission and requirements.
+
+An LLM will not be treated as a default architectural component merely because Digit performs reasoning, planning, analysis, natural-language interaction, or other functions commonly associated with AI systems.
+
+Digit's required capabilities will be implemented through the simplest architecture capable of satisfying the approved engineering requirement.
+
+Where deterministic implementation can satisfy a requirement, unnecessary probabilistic infrastructure will not be introduced.
+
+Network Boundary
+
+Digit will remain subject to established Network Isolation policy.
+
+This policy does not authorize:
+
+- Public LLM services.
+- Hosted LLM APIs.
+- External model inference services.
+- Internet-connected model providers.
+- Indirect access to an LLM through another service, agent, module, or interface.
+
+Routing a request through another STN-LABZ component does not make an otherwise unauthorized LLM authorized for Digit.
+
+Modules
+
+An LLM will not be introduced as a Digit module to bypass this policy.
+
+Approval of a Module Creation Request does not supersede this policy.
+
+A module will not:
+
+- Provide Digit with access to an LLM.
+- Proxy Digit requests to an LLM.
+- Treat LLM output as authorized Digit knowledge.
+- Use an LLM to circumvent deterministic processing requirements.
+- Expand Digit's authorized knowledge boundary.
+
+Module capability remains subordinate to applicable policy.
+
+Development Tools
+
+This policy governs Digit's operational architecture and execution environment.
+
+It does not prohibit authorized human engineers from using approved development tools, including AI-assisted development tools, when developing STN-LABZ software.
+
+AI-assisted source modifications remain subject to applicable STN-LABZ development, annotation, review, qualification, and human-approval requirements.
+
+Use of an AI development tool does not authorize incorporation of that tool, its model, or its services into Digit.
+
+Exception Boundary
+
+An LLM will not become authorized for Digit through implementation convenience, experimentation, historical source code, architectural assumption, or developer preference.
+
+Any future proposal to introduce an LLM into Digit would require an explicit revision or supersession of this policy through established STN-LABZ governance.
+
+Until such authorization exists, the operational state is:
+
+NOT AUTHORIZED
+
+Rationale
+
+Digit possesses defined and approved knowledge sources and operates within a controlled engineering environment.
+
+Introducing an LLM without a demonstrated requirement would add unnecessary complexity, probabilistic behavior, additional trust boundaries, and an additional source of information outside Digit's established knowledge architecture.
+
+STN-LABZ engineering begins with mission requirements rather than technology selection.
+
+If Digit's mission does not require an LLM, an LLM does not belong in Digit.
+
+References
+
+- STN-LABZ General Orders
+- 20260729.5 — Unknown State Doctrine
+- 20260729.6 — Engineering Documentation
+- 20260729.8 — Operational Doctrine
+- 20260730.0 — Digit: Foundation
+- 20260730.1 — Digit: Authorized Knowledge
+- 20260801.1 — KISS Theory
+- 20260801.4 — Network Isolation
+- 20260801.5 — Digit Knowledge Approval
+- 20260806.0 — Agent Modules
+- 20260810.1 — Module Creation Request
+- 20260814.2 — Mandatory AI Annotation Policy

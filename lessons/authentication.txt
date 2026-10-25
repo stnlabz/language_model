@@ -1,0 +1,2753 @@
+Authentication is the process of establishing or verifying an identity according to a defined system.
+
+Authentication answers:
+
+Who or what is this entity?
+
+Authentication does not by itself answer:
+
+What is this entity allowed to do?
+
+That second question belongs to authorization.
+
+Authentication and authorization are separate security functions.
+
+A user can authenticate successfully and still be unauthorized to perform an operation.
+
+A user can possess authorization policy entries but fail to authenticate.
+
+Do not confuse identity with permission.
+
+Authentication requires an identity claim and evidence sufficient to validate that claim according to the system's authentication policy.
+
+The evidence can take different forms.
+
+A password can be authentication evidence.
+
+A cryptographic key can be authentication evidence.
+
+A client certificate can be authentication evidence.
+
+A hardware authenticator can provide authentication evidence.
+
+A one-time code can provide authentication evidence.
+
+A biometric measurement can provide authentication evidence.
+
+A signed challenge can provide authentication evidence.
+
+Different authentication mechanisms provide different security properties.
+
+Do not assume all credentials provide equivalent assurance.
+
+An identifier is not necessarily a credential.
+
+A username can identify an account.
+
+An email address can identify an account.
+
+A public key can identify a cryptographic principal according to system design.
+
+An account number can identify an account.
+
+Knowing an identifier does not prove control of the identity.
+
+Authentication requires evidence.
+
+A credential is information or material used to establish authentication.
+
+Passwords are credentials.
+
+Private keys are credentials.
+
+Authentication tokens can be credentials.
+
+Client certificates can participate in credentials.
+
+Recovery codes can be credentials.
+
+Credential handling is security-sensitive.
+
+Do not log credentials.
+
+Do not expose credentials unnecessarily.
+
+Do not transmit credentials through unprotected channels when secure transport is required.
+
+Do not store plaintext passwords.
+
+A password is a shared secret between the user and the authentication system in the conceptual authentication model.
+
+The system should not need to recover the original password from storage.
+
+Password verification should use an appropriate password-hashing mechanism.
+
+Password hashing is not ordinary fast cryptographic hashing.
+
+Password hashing should be deliberately expensive enough to resist offline guessing according to current security requirements.
+
+Use established password-hashing algorithms.
+
+Do not design a custom password hashing scheme.
+
+Do not store passwords using reversible encryption merely so the application can retrieve them.
+
+If the application can decrypt every user's password, compromise of the decryption capability exposes those passwords.
+
+Password verification normally needs comparison, not recovery.
+
+A password hash is derived from a password using a password-hashing function.
+
+The stored hash is not the password.
+
+The hash should still be treated as sensitive security data.
+
+An attacker obtaining password hashes can attempt offline password guessing.
+
+Password hashing slows that process.
+
+It does not make weak passwords impossible to guess.
+
+A salt is a value incorporated into password hashing.
+
+Salts prevent identical passwords from necessarily producing identical stored password hashes.
+
+Salts reduce the usefulness of precomputed password-hash tables.
+
+A salt does not need to be secret.
+
+A salt should be generated according to the password-hashing mechanism's requirements.
+
+Do not use one fixed salt for every account.
+
+Modern password-hashing APIs commonly generate and encode salts automatically.
+
+Use the library correctly rather than manually reconstructing the scheme.
+
+A pepper is an additional secret value that can be incorporated into password protection according to system design.
+
+A pepper is different from a salt.
+
+A salt is not normally secret.
+
+A pepper is secret.
+
+If a pepper is used, it should not be stored alongside the password hashes in the same compromised storage boundary when the design depends on its secrecy.
+
+Peppering adds operational key-management requirements.
+
+Do not add it casually without a defined lifecycle.
+
+Password verification should use the password-hashing library's verification function where available.
+
+Do not compare password hashes using improvised string manipulation.
+
+The verification function understands the encoded algorithm parameters.
+
+Password-hash formats can contain algorithm identifiers.
+
+They can contain cost parameters.
+
+They can contain salts.
+
+They can contain the resulting hash.
+
+Do not assume the stored string is merely a raw digest.
+
+Password hashing parameters can become obsolete.
+
+A system can determine after successful authentication that a stored password hash should be upgraded.
+
+The password can then be rehashed using current parameters.
+
+This allows gradual migration without storing plaintext passwords.
+
+Do not require every user password to be recoverable merely to upgrade hashing.
+
+Password authentication should compare the submitted password against the stored verifier.
+
+Authentication succeeds only when verification succeeds according to the mechanism.
+
+Do not authenticate because the username exists.
+
+Do not authenticate because a password field is nonempty.
+
+Do not authenticate because the submitted hash resembles the stored format.
+
+Perform actual verification.
+
+Password comparison should not reveal unnecessary information through timing behavior.
+
+Use established authentication functions.
+
+Do not write custom comparison logic when the cryptographic library provides an appropriate constant-time comparison primitive.
+
+Constant-time comparison is relevant for selected secret comparisons.
+
+It does not make an otherwise insecure authentication design secure.
+
+Use the correct primitive for the correct data.
+
+Passwords should not be sent by email in plaintext.
+
+Passwords should not be displayed back to users.
+
+Passwords should not be written to application logs.
+
+Passwords should not be included in URLs.
+
+URLs can appear in browser history.
+
+URLs can appear in proxy logs.
+
+URLs can appear in server logs.
+
+URLs can be sent through referrer mechanisms.
+
+Credentials belong in protected protocol fields appropriate to the authentication mechanism.
+
+Authentication over HTTP should use TLS when credentials or authentication tokens require confidentiality and integrity in transit.
+
+HTTPS protects the transport.
+
+HTTPS does not replace password hashing.
+
+Password hashing protects stored password verifiers.
+
+TLS protects communication in transit.
+
+These solve different problems.
+
+Do not send plaintext passwords over an unprotected network merely because the database stores hashes.
+
+The password is plaintext before hashing at some point in the authentication flow unless a different authentication protocol is used.
+
+Protect the transport.
+
+A login form is an application interface.
+
+HTML collects the credentials.
+
+HTTP transports the request.
+
+TLS can protect the transport.
+
+The server validates the credentials.
+
+The application establishes authenticated state.
+
+Each is a separate responsibility.
+
+Do not confuse the presence of a login form with authentication.
+
+The server must actually validate the submitted evidence.
+
+Client-side JavaScript cannot be the sole authority for authentication.
+
+Client-side checks can improve user experience.
+
+They cannot establish trusted authentication because the client is controlled by the user.
+
+The server must make the authoritative authentication decision.
+
+Never trust a hidden form field saying authenticated=true.
+
+Never trust a client-supplied role.
+
+Never trust a client-supplied user ID as proof of identity.
+
+Client input is a claim.
+
+Server-side evidence must establish identity.
+
+Authentication state commonly persists after initial login through a session or token.
+
+The user should not need to resend the password for every request.
+
+The server establishes an authenticated session.
+
+The session represents previously established authentication according to application policy.
+
+A session identifier is therefore security-sensitive.
+
+Possession of a valid session identifier can allow a requester to act as the authenticated session.
+
+Protect session identifiers.
+
+Do not expose them unnecessarily.
+
+A session ID should be difficult to predict.
+
+It should be generated using a cryptographically secure random source.
+
+Do not generate session IDs from sequential account IDs.
+
+Do not generate session IDs from timestamps.
+
+Do not generate session IDs using ordinary predictable pseudorandom functions.
+
+Session identifiers are credentials.
+
+Treat them accordingly.
+
+A session identifier commonly maps to server-side session state.
+
+The server can store:
+
+Authenticated user identity.
+
+Authentication time.
+
+Session creation time.
+
+Last activity.
+
+Authentication assurance information.
+
+Other required session state.
+
+Do not store more sensitive information than required.
+
+The client commonly receives a session identifier in a cookie.
+
+The cookie does not need to contain the complete authentication state when server-side sessions are used.
+
+A cookie carrying a session identifier should use appropriate security attributes.
+
+Secure restricts transmission according to secure-context cookie rules.
+
+HttpOnly prevents ordinary client-side script access according to browser behavior.
+
+SameSite can restrict selected cross-site cookie behavior.
+
+These attributes address different risks.
+
+Do not treat any one cookie attribute as complete session security.
+
+Session cookies should not be transmitted over plaintext HTTP when secure transport is required.
+
+Use Secure where appropriate.
+
+Enforce HTTPS according to application policy.
+
+Do not expose the same authenticated session over both protected and unprotected transport without an explicit design.
+
+Session fixation occurs when an attacker causes or predicts a session identifier and the application continues using that identifier after authentication.
+
+Regenerate or rotate the session identifier when authentication state changes according to framework and application requirements.
+
+Do not preserve an attacker-controlled anonymous session identifier as the authenticated session identifier.
+
+Session hijacking occurs when an attacker obtains a valid session credential and uses it.
+
+Preventing session hijacking requires protecting session credentials.
+
+TLS protects them in transit.
+
+Secure cookie configuration reduces selected exposure.
+
+Application security reduces script-based theft.
+
+Server-side lifecycle controls limit duration.
+
+Logout invalidation limits continued use.
+
+No single control eliminates every possibility.
+
+Logout should invalidate authenticated state according to the session design.
+
+Deleting a browser cookie without invalidating the server-side session can leave the session usable if the identifier was copied elsewhere.
+
+Server-side sessions should be invalidated where required.
+
+Token-based systems require their own invalidation or expiration strategy.
+
+Do not assume removing the local token destroys every copy.
+
+Authentication state has a lifecycle.
+
+Unauthenticated.
+
+Authentication attempt.
+
+Authenticated.
+
+Session active.
+
+Session expired or invalidated.
+
+Logged out.
+
+Possibly reauthenticated.
+
+Transitions should be explicit.
+
+Do not allow ambiguous state to grant access.
+
+A failed authentication attempt should remain unauthenticated.
+
+Authentication failure should not create partially trusted identity.
+
+Do not populate privileged session state before credential verification completes.
+
+Authenticate first.
+
+Then establish authenticated state.
+
+Authentication failures should avoid revealing unnecessary account information.
+
+A response saying "username does not exist" reveals different information from "password incorrect."
+
+This can enable account enumeration.
+
+Applications can use a generic authentication failure response when account existence should remain undisclosed.
+
+Operational logs can retain more specific internal failure reasons according to security policy.
+
+User-visible information and internal diagnostic information have different purposes.
+
+Do not expose internal authentication details merely for convenience.
+
+Authentication logging can record:
+
+Authentication success.
+
+Authentication failure.
+
+Account involved where policy permits.
+
+Timestamp.
+
+Source information where appropriate.
+
+Authentication mechanism.
+
+Session establishment.
+
+Logout.
+
+Credential changes.
+
+Recovery operations.
+
+Security-sensitive changes.
+
+Do not log submitted passwords.
+
+Do not log private keys.
+
+Do not log full reusable authentication tokens.
+
+Logs are not a safe credential store.
+
+Repeated authentication failures can indicate mistakes.
+
+They can indicate automated guessing.
+
+They can indicate credential stuffing.
+
+They can indicate attack activity.
+
+Rate limiting can reduce automated authentication abuse.
+
+Rate limiting should be designed carefully.
+
+A simple per-account lockout can itself become a denial-of-service mechanism.
+
+An attacker can intentionally lock other users out.
+
+Consider multiple signals according to requirements.
+
+Do not implement permanent account lockout after a small number of failures without considering abuse.
+
+Backoff can slow repeated attempts.
+
+Rate limits can apply to source addresses.
+
+Rate limits can apply to accounts.
+
+Rate limits can apply to device or session context.
+
+Attackers can distribute requests.
+
+No single rate-limit dimension is universally sufficient.
+
+Use evidence appropriate to the system.
+
+Credential stuffing uses username and password combinations obtained from other compromises.
+
+Password reuse makes credential stuffing effective.
+
+Strong password hashing on the current system does not prevent attackers from trying already known passwords.
+
+Rate limiting and additional authentication factors can reduce risk.
+
+Users should not reuse passwords across unrelated services.
+
+Authentication design should assume credential reuse attacks can occur.
+
+Brute-force guessing systematically attempts possible credentials.
+
+Online guessing is constrained by the authentication service.
+
+Offline guessing can occur when password verifiers are stolen.
+
+Rate limiting helps online attacks.
+
+Password hashing helps offline attacks.
+
+These are different threat boundaries.
+
+Do not claim rate limiting protects stolen password hashes.
+
+Do not claim password hashing prevents online guessing by itself.
+
+Multi-factor authentication is commonly abbreviated MFA.
+
+MFA requires authentication evidence from more than one factor category according to the system's design.
+
+Common factor categories include:
+
+Something the user knows.
+
+Something the user has.
+
+Something the user is.
+
+A password is something the user knows.
+
+A hardware authenticator can be something the user has.
+
+A biometric characteristic can be something the user is.
+
+Two passwords are not two factors.
+
+Two knowledge-based secrets remain the same factor category.
+
+Do not count multiple pieces of the same category as MFA merely because there are two prompts.
+
+A one-time password can be a possession-related factor when generated from a provisioned authenticator.
+
+Exact assurance depends on the mechanism.
+
+SMS-delivered codes have different security properties from cryptographic hardware authenticators.
+
+Do not treat all second factors as equivalent.
+
+TOTP stands for Time-based One-Time Password.
+
+TOTP generates short-lived codes from a shared secret and time according to its algorithm.
+
+The server and authenticator share secret material.
+
+That secret must be protected.
+
+Anyone possessing the TOTP secret can generate valid codes.
+
+A QR code used to provision TOTP commonly contains the secret or information sufficient to provision it.
+
+Treat provisioning QR codes as sensitive.
+
+Do not store them in public locations.
+
+Do not log them.
+
+TOTP depends on reasonably synchronized time.
+
+Small clock differences can be tolerated according to implementation.
+
+Large clock errors can cause valid-looking codes to fail.
+
+Do not disable TOTP verification because a system clock is wrong.
+
+Correct time synchronization.
+
+TOTP codes expire.
+
+A previously valid code should not remain valid indefinitely.
+
+Verification should follow defined time-window policy.
+
+Do not create arbitrary large acceptance windows merely to avoid user inconvenience.
+
+Larger windows increase the set of currently acceptable codes.
+
+HOTP stands for HMAC-based One-Time Password.
+
+HOTP is counter-based rather than time-based.
+
+TOTP is derived from HOTP concepts using time as the moving factor.
+
+Do not confuse HOTP and TOTP state management.
+
+Recovery codes provide an alternate authentication path.
+
+Recovery codes are credentials.
+
+They should be unpredictable.
+
+They should be stored securely.
+
+They should normally be single-use where designed that way.
+
+They should be invalidated after use.
+
+Do not log recovery codes.
+
+Do not email a permanent list of recovery codes insecurely.
+
+Recovery mechanisms are part of the authentication system.
+
+A strong primary authentication mechanism can be undermined by a weak recovery mechanism.
+
+If an attacker can reset a password through an easily compromised email or predictable security question, the stronger login mechanism can be bypassed.
+
+Evaluate recovery with the same seriousness as login.
+
+Password reset is an authentication-sensitive operation.
+
+A reset process must establish sufficient authority to change the credential.
+
+A reset token should be unpredictable.
+
+A reset token should expire.
+
+A reset token should be single-purpose.
+
+A reset token should normally be single-use.
+
+A reset token should be invalidated after successful use.
+
+Do not create password-reset tokens from predictable account information.
+
+Do not put reusable passwords into reset links.
+
+Reset links can contain temporary tokens.
+
+Treat those tokens as credentials.
+
+Password-reset tokens stored server-side should be protected according to the design.
+
+Where practical, store a verifier rather than a reusable plaintext token.
+
+If the database is compromised, plaintext active reset tokens can provide immediate account access.
+
+Authentication token storage deserves the same threat analysis as password storage.
+
+A password change by an authenticated user should normally require appropriate current authentication according to policy.
+
+A sensitive account can require reauthentication before changing credentials.
+
+An existing session alone might not always provide sufficient assurance for highly sensitive changes.
+
+Authentication age matters in some systems.
+
+Reauthentication can require the user to prove identity again before a sensitive operation.
+
+Do not confuse reauthentication with authorization.
+
+The user can already be authorized.
+
+Reauthentication increases confidence that the current actor still controls the authenticated identity.
+
+Step-up authentication increases authentication assurance for selected operations.
+
+A low-risk session can use one authentication level.
+
+A high-risk operation can require an additional factor.
+
+This allows authentication strength to match operation sensitivity.
+
+The application must define assurance levels explicitly.
+
+Do not infer assurance from arbitrary UI flows.
+
+Biometric authentication uses measured physical or behavioral characteristics.
+
+Biometric data is not equivalent to a password.
+
+A compromised password can be changed.
+
+A biometric characteristic can be difficult or impossible to replace.
+
+Store and process biometric data according to the authentication technology and privacy requirements.
+
+Do not store raw biometric samples merely because the application can.
+
+Many platform biometric systems keep biometric matching inside trusted hardware or operating-system components.
+
+The application can receive an authentication result rather than raw biometric data.
+
+Prefer the platform security boundary when it satisfies requirements.
+
+Do not request biometric data the application does not need.
+
+A biometric unlock can authorize use of a cryptographic credential stored on a device.
+
+In that design, the server may authenticate the cryptographic credential rather than receiving biometric information.
+
+Keep local user verification and remote authentication distinct.
+
+The server does not need to possess the user's fingerprint merely because the user touched a fingerprint sensor.
+
+WebAuthn is a web authentication standard using public-key credentials.
+
+WebAuthn can support passwordless authentication.
+
+WebAuthn can support multi-factor authentication.
+
+The authenticator creates or uses a credential associated with a relying party.
+
+The server stores public credential information.
+
+The private key remains associated with the authenticator.
+
+Authentication uses cryptographic challenge-response.
+
+The server does not need the private key.
+
+Do not store authenticator private keys on the server.
+
+A challenge is a value supplied for an authentication exchange.
+
+A challenge should be unpredictable when unpredictability is required by the protocol.
+
+The response proves possession of authentication material according to the protocol.
+
+Challenges should prevent replay according to protocol design.
+
+Do not reuse authentication challenges indefinitely.
+
+A signed challenge can prove possession of a private key.
+
+It does not automatically prove the human identity behind that key.
+
+The system must already define what identity the public key represents.
+
+Cryptographic possession and human identity are different concepts.
+
+A key can authenticate a machine.
+
+A key can authenticate a service.
+
+A key can authenticate a user.
+
+A key can authenticate a device.
+
+The mapping is determined by system policy.
+
+Do not assume every cryptographic key represents a person.
+
+Public-key authentication uses asymmetric cryptography.
+
+The authenticating entity proves possession of a private key.
+
+The verifier uses corresponding public information.
+
+The private key does not need to be transmitted.
+
+Do not send private keys to the verifier merely to prove possession.
+
+Use a challenge-response or protocol designed for public-key authentication.
+
+SSH commonly supports public-key authentication.
+
+The server stores or recognizes authorized public keys according to its configuration.
+
+The client proves possession of the corresponding private key.
+
+An SSH public key is not a password.
+
+The security properties and lifecycle differ.
+
+Protect the private key.
+
+A private key can itself be encrypted at rest using a passphrase.
+
+The passphrase protects the stored key material.
+
+The key then authenticates to the remote system.
+
+These are separate authentication boundaries.
+
+Do not confuse a private-key passphrase with the remote account password.
+
+API authentication can use tokens.
+
+An API key is a credential.
+
+A bearer token is a credential.
+
+A signed request can provide authentication.
+
+Client certificates can provide authentication.
+
+OAuth-related access tokens can participate in API access.
+
+Different mechanisms have different semantics.
+
+Do not call every secret string an API key.
+
+A bearer token grants whatever authority is associated with possession of that token according to the receiving system.
+
+The bearer does not need to prove possession of another secret merely to present the token unless the protocol adds such requirements.
+
+Protect bearer tokens against disclosure.
+
+Anyone possessing a valid bearer token can potentially use it according to its scope and lifetime.
+
+Bearer tokens should use protected transport.
+
+Do not place long-lived bearer tokens in URLs.
+
+Do not log bearer tokens.
+
+Do not expose bearer tokens to unrelated application components.
+
+Token scope limits what a token is intended to authorize.
+
+Scope is authorization information.
+
+The token itself participates in authentication or delegated access.
+
+Do not confuse token authentication with token authorization.
+
+A token can authenticate a principal while its scopes determine permitted operations.
+
+A token can expire.
+
+Expiration limits its usable lifetime.
+
+A token can be revoked according to the token system.
+
+Expiration and revocation are different.
+
+An expired token is invalid because its lifetime ended.
+
+A revoked token is invalidated before normal expiration according to system state.
+
+Do not use expiration and revocation interchangeably.
+
+Short-lived tokens reduce exposure duration.
+
+They also require renewal or reissuance mechanisms.
+
+Refresh tokens can obtain new access tokens according to a token protocol.
+
+Refresh tokens are sensitive credentials.
+
+They commonly have longer lifetimes than access tokens.
+
+Protect them accordingly.
+
+Do not expose refresh tokens to components that only need access tokens.
+
+Refresh-token rotation can limit reuse according to protocol design.
+
+If a rotated refresh token is used again unexpectedly, that can indicate token theft.
+
+Exact behavior depends on the authentication system.
+
+Do not invent refresh-token semantics outside the protocol.
+
+JSON Web Token is commonly abbreviated JWT.
+
+A JWT is a token format.
+
+JWT does not itself mean authenticated.
+
+JWT does not itself mean encrypted.
+
+JWT does not itself mean authorized.
+
+A JWT can be signed.
+
+A JWT can be encrypted using related JOSE mechanisms.
+
+A JWT can contain claims.
+
+Security depends on correct creation and validation.
+
+Do not trust a JWT merely because it has three dot-separated sections.
+
+A signed JWT must have its signature validated.
+
+The expected signing algorithm must be enforced.
+
+The expected issuer should be validated where required.
+
+The expected audience should be validated where required.
+
+Expiration should be validated where required.
+
+Not-before conditions should be validated where required.
+
+Application-specific claims should be validated according to policy.
+
+Do not decode a JWT and treat the decoded claims as trusted without cryptographic validation.
+
+Base64url decoding is not authentication.
+
+Readable claims are not proof.
+
+A JWT signature proves integrity and authenticity only according to the key and trust model used.
+
+It does not encrypt the claims.
+
+Signed JWT contents can be readable by anyone possessing the token.
+
+Do not put secrets into an ordinary signed JWT merely because it is signed.
+
+Signature is not confidentiality.
+
+Token validation should not allow the untrusted token to choose arbitrary verification policy.
+
+Algorithm-confusion vulnerabilities can occur when implementations accept unexpected algorithms or key interpretations.
+
+Configure allowed algorithms explicitly.
+
+Use maintained JWT libraries.
+
+Do not implement token signature verification casually.
+
+Token claims are assertions.
+
+The verifier must determine whether the issuer is trusted to make those assertions.
+
+A correctly signed token from an untrusted issuer is still untrusted for the application.
+
+Cryptographic validity and trust are separate.
+
+Issuer validation matters.
+
+Audience validation ensures the token was intended for the receiving service according to token design.
+
+A token valid for Service A should not automatically be accepted by Service B.
+
+Do not accept tokens merely because the signature is valid under some known key.
+
+Validate intended audience.
+
+Authentication federation allows one system to rely on authentication performed by another identity provider according to a trust protocol.
+
+The relying system does not necessarily handle the user's password.
+
+It trusts defined assertions or tokens from the identity provider.
+
+Federation moves authentication responsibilities.
+
+It does not eliminate them.
+
+The trust relationship must be configured correctly.
+
+Single sign-on is commonly abbreviated SSO.
+
+SSO allows one authentication event or identity-provider session to provide access across multiple relying applications according to the federation design.
+
+SSO does not mean every application has identical authorization.
+
+Authentication can be shared.
+
+Authorization remains application-specific.
+
+Compromise of a central identity provider can affect multiple relying systems.
+
+Centralization changes the security boundary.
+
+Protect identity-provider administration strongly.
+
+OAuth is primarily an authorization framework.
+
+OAuth should not be described simply as an authentication protocol.
+
+OpenID Connect adds an identity layer on top of OAuth 2.0.
+
+OpenID Connect can provide authentication information to relying applications.
+
+Do not confuse OAuth access delegation with user authentication.
+
+Protocol roles matter.
+
+An OAuth access token is intended for a resource server.
+
+An OpenID Connect ID token communicates authentication-related claims to the client according to OpenID Connect.
+
+Do not use an access token as an ID token merely because both are tokens.
+
+Validate each according to its protocol.
+
+SAML can carry authentication and authorization assertions in federated identity systems.
+
+SAML has its own signing, validation, issuer, audience, and trust requirements.
+
+Do not parse a SAML assertion as generic XML and trust its contents.
+
+Use a protocol-aware implementation.
+
+XML signature validation is security-sensitive.
+
+Federated authentication redirects can contain state values.
+
+State can bind the authentication response to the initiating client transaction according to protocol.
+
+Do not ignore state-validation requirements.
+
+Cross-request confusion can create security vulnerabilities.
+
+Nonce values can prevent selected replay or token-substitution conditions according to authentication protocols.
+
+Use them as defined.
+
+Do not invent your own meaning for protocol nonce fields.
+
+Authentication protocols should be implemented according to their specifications.
+
+Small deviations can break security assumptions.
+
+Use established libraries.
+
+Do not simplify away validation because a happy-path test works.
+
+Machine authentication differs from interactive human login.
+
+A service can authenticate using:
+
+Private keys.
+
+Client certificates.
+
+Workload identities.
+
+Signed tokens.
+
+Platform credentials.
+
+Other defined machine credentials.
+
+Do not force machine identities into human username-and-password mechanisms without reason.
+
+Machine credentials should support rotation.
+
+Long-lived static secrets create operational risk.
+
+Where infrastructure supports short-lived credentials, they can reduce exposure.
+
+Short lifetime does not eliminate the need to protect credentials.
+
+A credential valid for five minutes can still be abused during those five minutes.
+
+Credential lifetime and credential confidentiality are separate controls.
+
+Service accounts represent nonhuman principals.
+
+A service account should have a defined owner.
+
+It should have a defined purpose.
+
+It should have only required authorization.
+
+Its credentials should be rotated according to policy.
+
+Do not share one service account across unrelated systems merely for convenience.
+
+Shared credentials weaken attribution.
+
+If five services use the same credential, logs can identify the credential but not necessarily which service actually used it.
+
+Distinct identities improve accountability.
+
+Authentication identity should be specific enough for required auditing.
+
+Device authentication establishes the identity of a device according to system design.
+
+Device identity is not necessarily user identity.
+
+A trusted device can be used by an unauthorized person.
+
+A trusted user can use an untrusted device.
+
+Do not collapse device and user authentication.
+
+Both can matter.
+
+Network location is not authentication by itself.
+
+An IP address can provide contextual information.
+
+It can be shared.
+
+It can change.
+
+It can be spoofed in selected contexts.
+
+It can represent a proxy.
+
+It can represent a NAT gateway.
+
+Do not authenticate a human solely because a request came from an expected IP unless the system explicitly defines that limited trust model and accepts its risks.
+
+MAC addresses are not general Internet authentication credentials.
+
+They operate at different network scopes.
+
+They can be changed or spoofed.
+
+Do not use a MAC address as proof of human identity.
+
+DNS names are not authentication credentials.
+
+A hostname resolving to an address does not prove the process at that address has a particular identity.
+
+TLS, cryptographic protocols, or application authentication can establish stronger identity.
+
+DNS discovery and authentication are separate.
+
+Reverse DNS is not authentication.
+
+A PTR record can associate an address with a name according to DNS.
+
+It does not prove the remote party controls a trusted application identity.
+
+Do not authorize privileged operations based solely on reverse DNS.
+
+TLS server certificates authenticate server identity according to a certificate trust model.
+
+TLS client certificates can authenticate clients.
+
+TLS authentication can be used by applications.
+
+Application authentication can also occur inside the protected TLS connection.
+
+Do not duplicate mechanisms without understanding why both exist.
+
+mTLS can authenticate a service.
+
+An API token can then identify a user or delegated operation.
+
+Different identities can exist at different layers.
+
+Preserve them separately.
+
+An operating system can authenticate local users.
+
+An application can rely on operating-system authentication according to its architecture.
+
+This is different from implementing its own password database.
+
+If the operating system establishes the user's identity, the application should not pretend it independently verified a password it never saw.
+
+State the actual authority.
+
+PAM is a pluggable authentication framework used on many Unix-like systems.
+
+PAM allows applications to use configured authentication modules.
+
+The application delegates authentication according to PAM configuration.
+
+PAM can support passwords and other mechanisms.
+
+Do not assume PAM means password authentication specifically.
+
+Authentication behavior depends on the configured module stack.
+
+Changing PAM configuration can affect multiple applications.
+
+Treat authentication-stack changes carefully.
+
+Do not edit system authentication configuration casually.
+
+Test recovery access before making changes that could lock out administrators.
+
+Authentication failure at the operating-system level can prevent system access.
+
+Preserve a recovery path.
+
+Windows provides platform authentication mechanisms.
+
+Applications can use Windows identity and security APIs according to architecture.
+
+Do not collect a Windows password unnecessarily if platform authentication can establish the required identity.
+
+Use platform security boundaries where appropriate.
+
+Kerberos is a network authentication protocol using tickets and a trusted key distribution infrastructure.
+
+Kerberos allows principals to authenticate to services without transmitting reusable passwords to every service.
+
+Tickets have defined lifetimes.
+
+Service principals have defined identities.
+
+Time synchronization matters.
+
+Do not describe Kerberos as merely encrypted passwords.
+
+Its ticket-based protocol has distinct semantics.
+
+LDAP is a directory access protocol.
+
+LDAP can store identity-related information.
+
+LDAP can participate in authentication architectures.
+
+LDAP itself should not be equated with authentication as a whole.
+
+An application can bind to an LDAP directory using credentials.
+
+Directories can provide account data.
+
+Authentication policy can exist elsewhere.
+
+Do not say "LDAP authenticated it" without knowing the actual mechanism.
+
+Directory identity and application authorization remain separate.
+
+An authenticated directory account can still lack permission to use an application.
+
+The application must apply its own authorization policy or explicitly rely on a defined centralized policy.
+
+Authentication systems should normalize identifiers carefully.
+
+Case sensitivity can differ.
+
+Unicode normalization can differ.
+
+Email-address semantics can differ.
+
+Usernames can have application-specific rules.
+
+Do not accidentally create two identities that compare equal in one component and different in another.
+
+Define canonical identity representation.
+
+Identity canonicalization must be deterministic.
+
+If usernames are case-insensitive, enforce that consistently.
+
+If usernames are case-sensitive, enforce that consistently.
+
+Do not allow registration logic and login logic to disagree.
+
+Ambiguous identity mapping creates security problems.
+
+Authentication should bind to one unambiguous principal.
+
+Display names are not necessarily identifiers.
+
+Two users can share the same display name.
+
+A user can change a display name.
+
+Do not use display names as unique authentication keys unless the system explicitly guarantees uniqueness and stability.
+
+Use stable internal identifiers.
+
+An internal user ID can identify the account after authentication.
+
+The user does not prove identity merely by submitting that ID.
+
+Authentication maps presented evidence to the trusted internal identity.
+
+After that mapping, authorization can use the internal identity.
+
+Do not accept account IDs from clients as proof.
+
+Email-based login treats an email address as an identifier.
+
+Possession of the email account is only proven if the authentication mechanism actually verifies control of that mailbox.
+
+Typing an email address proves nothing.
+
+Email verification and login authentication are separate events unless the system intentionally combines them.
+
+A magic-link login sends a temporary credential to a controlled communication channel such as email.
+
+The link token authenticates possession of that channel according to the system's assumptions.
+
+The token should be unpredictable.
+
+The token should expire.
+
+The token should be single-use where required.
+
+The token should be bound to the intended purpose.
+
+Do not treat a magic link as harmless because it is convenient.
+
+Anyone obtaining the active link can potentially authenticate.
+
+SMS login codes similarly rely on control of the telephone channel according to the system's assumptions.
+
+Telephone numbers can be reassigned.
+
+SIM-related attacks can occur.
+
+SMS has different assurance from cryptographic authenticators.
+
+Choose mechanisms according to risk.
+
+Security questions are knowledge-based authentication.
+
+Answers can be guessable.
+
+Answers can be publicly discoverable.
+
+Answers can be forgotten.
+
+They are generally weaker than strong cryptographic recovery mechanisms.
+
+Do not treat personal trivia as inherently secret.
+
+Authentication factors should be evaluated by actual resistance to attack.
+
+Risk-based authentication uses contextual information to influence authentication decisions.
+
+Context can include:
+
+Device characteristics.
+
+Network source.
+
+Location consistency.
+
+Time.
+
+Previous behavior.
+
+Request characteristics.
+
+Risk signals are not necessarily proof of identity.
+
+Do not convert probability into certainty.
+
+A familiar device can still be stolen.
+
+An unusual location can still be legitimate.
+
+Risk signals can trigger additional verification.
+
+They should not silently replace deterministic credential validation where policy requires it.
+
+Authentication evidence and risk assessment are different.
+
+A probabilistic score is not proof of identity.
+
+If the system requires deterministic authentication, define the required evidence.
+
+Do not authenticate because a model says the request probably belongs to the user.
+
+Probability can inform review.
+
+It does not become cryptographic proof.
+
+Authentication should fail explicitly when required evidence is absent.
+
+Unknown identity is not authenticated identity.
+
+Do not infer identity from historical similarity.
+
+Do not infer identity from writing style.
+
+Do not infer identity from user-agent strings.
+
+Do not infer identity from IP address alone.
+
+Do not infer identity from a claimed account name.
+
+Claims require evidence.
+
+Authentication confidence should reflect the mechanism actually used.
+
+If a password was verified, state that password authentication succeeded.
+
+If a client certificate was validated, state that certificate authentication succeeded.
+
+If a hardware authenticator verified a challenge, state that authenticator verification succeeded.
+
+Do not state stronger assurance than the evidence provides.
+
+Authentication state should be invalidated when the underlying credential is revoked where system policy requires it.
+
+Changing a password can invalidate existing sessions.
+
+Revoking a device credential can invalidate sessions derived from that device.
+
+Exact behavior belongs to session policy.
+
+Do not assume credential change automatically destroys all existing sessions unless implemented.
+
+Users can require a "log out all sessions" operation.
+
+The server must track enough session state to invalidate relevant sessions.
+
+Deleting cookies on one device cannot invalidate tokens already copied elsewhere unless server-side controls support it.
+
+Global logout is a server-side security operation.
+
+Account disabling should prevent new authentication.
+
+It can also invalidate existing sessions according to policy.
+
+Do not assume disabled accounts immediately lose every active token unless the token-validation design checks current account state or revocation.
+
+Stateless tokens complicate immediate revocation.
+
+A self-contained token can remain cryptographically valid until expiration.
+
+If immediate revocation is required, maintain revocation state, short lifetimes, introspection, key rotation, or another defined mechanism.
+
+"Stateless" is an architectural tradeoff.
+
+It does not eliminate lifecycle requirements.
+
+Token signing keys are authentication infrastructure secrets.
+
+Protect them.
+
+Rotate them according to policy.
+
+Publish public verification keys where appropriate.
+
+Do not expose private signing keys.
+
+Compromise of a signing key can allow forged tokens.
+
+This is different from compromise of one user's token.
+
+Signing-key compromise can affect many identities.
+
+Key identifiers can allow verifiers to select among active verification keys.
+
+A key identifier is not proof.
+
+The signature must still validate.
+
+Do not allow an untrusted key identifier to cause arbitrary filesystem or network key retrieval without controls.
+
+Key selection itself can become an attack surface.
+
+Authentication systems should have clear trust anchors.
+
+A trust anchor can be:
+
+A password verifier database.
+
+A CA root.
+
+A public signing key.
+
+A hardware-backed root key.
+
+An identity provider configuration.
+
+Another explicitly trusted authority.
+
+Do not let untrusted input redefine the trust anchor.
+
+The claimant does not get to decide which key makes its claim valid.
+
+Trust is configured by the verifier.
+
+Authentication protocols should resist replay where replay would permit impersonation.
+
+Passwords sent through a secure channel can still be replayed by someone who learns the password because the password itself is reusable.
+
+One-time codes limit replay windows.
+
+Challenge-response protocols can bind responses to unique challenges.
+
+Signed requests can include timestamps or nonces according to protocol.
+
+Choose according to requirements.
+
+Replay protection requires state or freshness evidence.
+
+A timestamp alone depends on synchronized clocks and acceptance windows.
+
+A nonce requires uniqueness tracking or protocol guarantees.
+
+Do not invent replay protection casually.
+
+Use established protocols.
+
+Authentication can bind to a channel.
+
+Channel binding associates authentication with characteristics of the secure transport according to a protocol.
+
+This can reduce credential forwarding attacks in selected systems.
+
+Channel binding is protocol-specific.
+
+Do not assume TLS automatically channel-binds every application credential.
+
+Authentication protocols must explicitly use the relevant mechanism.
+
+Credential forwarding allows one system to use credentials to authenticate onward to another system.
+
+This can be necessary in selected architectures.
+
+It increases credential exposure.
+
+Prefer delegation mechanisms when the downstream system does not require the original reusable credential.
+
+Do not pass user passwords through multiple services merely for convenience.
+
+Delegation allows one principal to grant another system limited authority without sharing the original credential according to protocol.
+
+Delegated authority is not necessarily impersonation.
+
+The distinction matters for auditing.
+
+Do not label every token use as direct user authentication.
+
+Some tokens represent delegated access.
+
+An authentication event should identify the principal actually authenticated.
+
+If Service A authenticates itself while carrying delegated authority from User B, logs should distinguish the service identity from the user context where the protocol supports it.
+
+Do not erase actor identity.
+
+Auditability matters.
+
+Impersonation features should be explicit.
+
+An administrator acting as another user should remain attributable to the administrator.
+
+Do not replace audit identity with the impersonated account and lose the original actor.
+
+Authentication and audit identity can carry multiple principals.
+
+A secure system records who authenticated and under what mechanism.
+
+Credential rotation replaces authentication credentials.
+
+Password rotation changes the password.
+
+Key rotation changes key material.
+
+Token rotation changes token material.
+
+Certificate rotation can change certificate and possibly key material.
+
+Do not call every lifecycle event password reset.
+
+Use precise terminology.
+
+Forced periodic password changes are not automatically beneficial if they cause predictable password patterns or unnecessary user behavior.
+
+Password-change policy should follow the system's security requirements.
+
+Require change when compromise is known or suspected.
+
+Do not invent arbitrary credential policy without a reason.
+
+Password length matters.
+
+Password entropy depends on selection behavior.
+
+Longer user-chosen passwords or passphrases can provide strong resistance when selected well.
+
+Arbitrary composition rules can encourage predictable substitutions.
+
+Authentication policy should be designed for actual security properties.
+
+Do not measure password strength solely by whether it contains one uppercase letter and one symbol.
+
+Password managers can generate and store unique passwords.
+
+Supporting password managers improves practical credential hygiene.
+
+Do not block paste into password fields merely to force manual typing.
+
+Manual typing is not an authentication factor.
+
+Password fields should use appropriate input types in HTML.
+
+The browser can obscure display.
+
+Obscuring a password on screen is not encryption.
+
+The server still requires protected transport.
+
+Do not confuse masked characters with cryptographic protection.
+
+Credential autocomplete behavior should be configured according to the form's purpose and platform standards.
+
+Password managers are security tools.
+
+Do not deliberately break them without a defined requirement.
+
+Authentication forms should protect against cross-site request attacks where authentication state changes or account operations make such protection relevant.
+
+Login CSRF can matter in selected applications.
+
+Logout requests can require deliberate state-changing request semantics.
+
+Authentication endpoints are still web application endpoints.
+
+Normal web security principles apply.
+
+Authentication responses should avoid open redirects.
+
+An attacker can abuse a login return URL to send users to a malicious destination after successful authentication.
+
+Validate redirect targets.
+
+Do not trust arbitrary return URLs.
+
+Authentication pages should not embed untrusted third-party scripts unnecessarily.
+
+Scripts running in the authentication origin can potentially access submitted data according to browser security rules.
+
+Minimize attack surface around credentials.
+
+Content security controls can help reduce script injection risk.
+
+TLS cannot protect credentials from malicious script executing inside the legitimate page.
+
+Endpoint integrity matters.
+
+Cross-site scripting can steal session credentials or perform authenticated actions depending on browser protections.
+
+HttpOnly can prevent direct JavaScript reading of selected cookies.
+
+It does not prevent all actions using the authenticated session.
+
+Prevent XSS.
+
+Do not rely solely on cookie flags.
+
+CSRF abuses a browser's existing authentication state to submit unwanted requests.
+
+The attacker does not necessarily know the session credential.
+
+Authentication can be completely valid while the request is unauthorized by the user's intent.
+
+CSRF defenses are therefore separate from authentication.
+
+Do not treat authenticated request as proof the human intentionally initiated it.
+
+Authentication establishes principal identity.
+
+Request integrity and intent can require additional controls.
+
+Sensitive operations can require confirmation or reauthentication.
+
+Context matters.
+
+Authentication endpoints themselves require availability protection.
+
+An attacker can flood login attempts.
+
+Expensive password hashing intentionally consumes resources.
+
+This can create denial-of-service pressure.
+
+Rate limiting and resource controls should account for hashing cost.
+
+Do not weaken password hashing solely because attackers can send requests.
+
+Control request volume.
+
+Authentication databases are high-value targets.
+
+Protect password hashes.
+
+Protect MFA secrets.
+
+Protect recovery credentials.
+
+Protect signing keys.
+
+Protect session state.
+
+Restrict administrative access.
+
+Audit changes.
+
+Backups contain authentication data too.
+
+Protect backups according to the sensitivity of the original data.
+
+Deleting credentials from the active database while leaving unprotected backups can preserve exposure.
+
+Credential lifecycle includes backup retention.
+
+Authentication data should have defined retention.
+
+Do not retain expired reset tokens indefinitely without reason.
+
+Do not retain obsolete MFA secrets after replacement unless required for controlled rollback.
+
+Do not retain revoked API keys as usable credentials.
+
+Historical audit records can retain identifiers without retaining usable secrets.
+
+Separate history from active credential material.
+
+Authentication systems need recovery procedures.
+
+Loss of the authentication database can prevent login.
+
+Loss of signing keys can invalidate tokens.
+
+Loss of private CA keys can affect certificate issuance.
+
+Loss of MFA seed data can prevent verification.
+
+Back up what must be recoverable.
+
+Do not back up what should never leave protected hardware without explicit policy.
+
+Recovery planning is part of authentication architecture.
+
+High availability can require multiple authentication servers.
+
+Replicated authentication state must remain consistent enough for security requirements.
+
+A revoked credential should not remain accepted indefinitely by a stale replica.
+
+Distributed authentication systems must define consistency behavior.
+
+Do not assume replication delay has no security consequence.
+
+Authentication decisions should be deterministic for the same relevant validated state where system design requires determinism.
+
+If credential verification succeeds under the defined rules, the authentication result follows those rules.
+
+If required evidence is absent, authentication fails.
+
+Do not replace missing evidence with probability.
+
+Machine-learning risk signals can supplement authentication policy.
+
+They should not silently redefine identity.
+
+A model prediction that a login "looks normal" is not possession of the user's credential.
+
+Keep evidence and inference separate.
+
+Authentication should be explainable at the mechanism level.
+
+For example:
+
+Password verifier matched.
+
+TOTP verified.
+
+Client certificate chain validated.
+
+WebAuthn signature verified.
+
+Token signature and claims validated.
+
+Session identifier mapped to active authenticated session.
+
+These are concrete authentication facts.
+
+"User seemed legitimate" is not equivalent.
+
+Authentication failures should be classified.
+
+Unknown account.
+
+Invalid credential.
+
+Expired credential.
+
+Revoked credential.
+
+Invalid token signature.
+
+Expired token.
+
+Wrong audience.
+
+Wrong issuer.
+
+MFA required.
+
+MFA failed.
+
+Session expired.
+
+Session invalidated.
+
+Certificate validation failed.
+
+Protocol error.
+
+Rate limit applied.
+
+Internal authentication service failure.
+
+These are different states.
+
+User-facing responses can intentionally generalize them.
+
+Internal systems should preserve enough distinction for diagnosis.
+
+Do not convert authentication-service failure into invalid password unless that behavior is explicitly required.
+
+If the password database is unavailable, the system does not know that the password was wrong.
+
+The correct internal state is authentication unavailable or failed due to system error.
+
+Absence of verification is not verification failure caused by incorrect credentials.
+
+This distinction matters.
+
+Fail closed for protected operations when authentication authority is unavailable unless architecture explicitly defines another trusted mechanism.
+
+Do not authenticate everyone because the authentication database is offline.
+
+Availability failure must not become authorization bypass.
+
+Cached authentication can exist in selected systems.
+
+Offline authentication can exist in selected systems.
+
+Such behavior must be explicitly designed.
+
+The cache itself becomes authentication authority for its validity period.
+
+Protect it.
+
+Define expiration.
+
+Do not invent offline trust automatically.
+
+An account can have multiple credentials.
+
+A user can have a password.
+
+A user can have multiple WebAuthn authenticators.
+
+A user can have recovery codes.
+
+A user can have API tokens.
+
+Revoking one credential does not necessarily disable the account.
+
+Credential identity and account identity are separate.
+
+Track which credential authenticated the session when useful.
+
+This enables selective revocation and auditing.
+
+A stolen hardware credential can be revoked without changing unrelated credentials.
+
+A compromised API key can be revoked without changing the user's password.
+
+Credential granularity improves incident response.
+
+Do not make every credential share one irreversible global state unless simplicity requirements justify it.
+
+API keys should have identifiers distinct from secret material.
+
+The system can display an identifier safely while storing a protected verifier for the secret.
+
+This allows operators to identify which key was used without logging the secret itself.
+
+Do not use the complete secret as the key's display name.
+
+API keys can have creation dates.
+
+They can have expiration dates.
+
+They can have last-used information.
+
+They can have scopes.
+
+They can have revocation state.
+
+These improve lifecycle management.
+
+Do not create permanent anonymous secrets with no ownership metadata.
+
+Secret comparison for API keys should use appropriate secure verification.
+
+If API keys have sufficient random entropy, storing a cryptographic hash of the secret can reduce direct disclosure risk.
+
+Exact design depends on lookup requirements and threat model.
+
+Do not assume API secrets must always be stored plaintext.
+
+Authentication keys should be generated using cryptographically secure randomness.
+
+Human-generated API keys are likely to be weaker.
+
+Generate them automatically.
+
+Provide them once where appropriate.
+
+Store only what the server requires for verification.
+
+Authentication tokens should have enough entropy to resist guessing.
+
+Do not use incremental token values.
+
+Do not use account ID plus timestamp.
+
+Do not use predictable database row IDs.
+
+Random credential generation must use a cryptographically secure random-number generator.
+
+UUIDs have different versions and properties.
+
+Do not assume every UUID is an authentication secret.
+
+Some UUIDs contain predictable or structured information.
+
+Use purpose-built random tokens for credentials.
+
+Credential format can include a nonsecret prefix.
+
+A prefix can identify token type.
+
+A prefix can help secret-scanning systems.
+
+A prefix does not reduce security if the remaining secret has sufficient entropy.
+
+Do not treat the visible prefix as secret.
+
+Secret scanners can detect credential patterns in source repositories.
+
+Use them as a defensive control.
+
+They do not replace credential management.
+
+If a credential is committed publicly, assume exposure according to incident policy.
+
+Deleting the commit later may not remove every copy.
+
+Rotate the credential.
+
+Do not merely hide the repository and continue using the exposed secret.
+
+Version-control history can retain deleted secrets.
+
+Credential removal requires history handling where appropriate and credential rotation.
+
+Rotation is the critical security action.
+
+A secret already exposed cannot become secret again by deleting one copy.
+
+Environment variables can provide credentials to processes.
+
+Environment variables are not automatically secure.
+
+Other processes, debugging tools, crash reports, or configuration dumps can expose them depending on platform.
+
+Use the credential mechanism appropriate to the environment.
+
+Do not print environment variables containing secrets.
+
+Secret-management systems can provide credentials dynamically.
+
+They can centralize rotation.
+
+They can control access.
+
+They add infrastructure dependencies.
+
+Use them when requirements justify them.
+
+Do not add a secret manager merely as decoration.
+
+The authentication system itself becomes critical infrastructure.
+
+Administrative authentication should be stronger where risk requires it.
+
+Administrative accounts should not share credentials.
+
+Administrative actions should be attributable.
+
+Default passwords should be changed or eliminated.
+
+Factory credentials should not remain active in production.
+
+Do not ship universal administrative passwords.
+
+Bootstrap authentication requires special care.
+
+A system's first administrator must be established through a controlled process.
+
+Bootstrap credentials should be temporary where possible.
+
+They should be invalidated after initial setup.
+
+Do not leave installation credentials active indefinitely.
+
+Account provisioning establishes an identity record.
+
+Provisioning is not authentication.
+
+An administrator creating an account does not prove the future user is currently present.
+
+Credential enrollment establishes how that user will authenticate.
+
+Keep provisioning and authentication separate.
+
+Credential enrollment should occur through an authenticated or otherwise controlled process.
+
+Adding a new MFA device changes future authentication authority.
+
+Treat it as a security-sensitive operation.
+
+Do not allow a session with insufficient assurance to silently enroll a new authenticator if policy requires stronger verification.
+
+Removing MFA similarly changes authentication strength.
+
+Require appropriate verification.
+
+Log the change.
+
+Notify the account owner where policy requires it.
+
+Do not allow an attacker with a temporary session to permanently weaken authentication without controls.
+
+Authentication notifications can alert users to new logins or credential changes.
+
+Notifications are detection mechanisms.
+
+They are not authentication proof.
+
+An email saying a login occurred does not prevent the login.
+
+Use notification as an additional control, not the primary verifier.
+
+Account enumeration can occur through:
+
+Login error differences.
+
+Password-reset responses.
+
+Registration responses.
+
+Timing differences.
+
+API status codes.
+
+Authentication design should consider information disclosure across all related endpoints.
+
+Do not fix the login message while leaving reset endpoints revealing the same account information.
+
+Authentication endpoints should return appropriate HTTP status behavior according to application design.
+
+HTTP status codes communicate protocol state.
+
+They do not themselves perform authentication.
+
+A 401 response commonly indicates authentication is required or has failed according to HTTP authentication semantics.
+
+A 403 response commonly indicates the server understood the request but refuses it according to authorization semantics.
+
+Exact application behavior can vary.
+
+Do not use status codes as substitutes for internal security logic.
+
+Authenticate first.
+
+Authorize second.
+
+Then construct the appropriate response.
+
+HTTP Basic authentication transmits a username and password-like credential encoded for HTTP.
+
+Base64 encoding is not encryption.
+
+Basic authentication should use TLS when confidentiality is required.
+
+Do not describe Basic authentication as encrypted because the header is Base64 encoded.
+
+The Authorization header can carry credentials.
+
+Protect it.
+
+Do not log it by default.
+
+Proxies should not expose it unnecessarily.
+
+Application debugging should redact it.
+
+Bearer authentication commonly uses:
+
+Authorization: Bearer <token>
+
+The token is a credential.
+
+The word Bearer is not the secret.
+
+Do not expose the token.
+
+Do not put bearer tokens in public examples using real credentials.
+
+Use placeholders.
+
+Authentication headers can traverse reverse proxies.
+
+Proxy configuration must preserve or deliberately remove them according to architecture.
+
+Do not accidentally forward external credentials to unrelated upstream services.
+
+Credential boundaries matter.
+
+A reverse proxy can perform authentication before forwarding a request.
+
+The upstream application can trust authentication metadata only if the proxy boundary is controlled.
+
+The proxy must remove client-supplied copies of trusted identity headers.
+
+Then it can set its own authenticated identity headers.
+
+Do not trust X-User or similar headers directly from the Internet.
+
+A client can forge them.
+
+Trusted authentication headers require a trusted intermediary.
+
+The upstream should only accept requests from that intermediary or otherwise authenticate the intermediary.
+
+Transport and network controls can establish the boundary.
+
+Do not create header-based authentication without defining who is allowed to set the header.
+
+Authentication middleware can centralize credential validation.
+
+Authorization middleware can then evaluate permissions.
+
+Keep their responsibilities distinct.
+
+Authentication middleware should establish principal identity.
+
+It should not silently grant every authenticated user every route.
+
+Authorization remains necessary.
+
+Public routes intentionally require no authentication.
+
+Protected routes require authenticated identity.
+
+Privileged routes require authenticated identity plus authorization.
+
+Do not add authentication to a route and assume privilege separation now exists.
+
+Authentication state should have one authoritative representation within the request context.
+
+Avoid multiple components independently parsing credentials and reaching conflicting identities.
+
+Authenticate once through a controlled mechanism where practical.
+
+Propagate the established principal.
+
+Do not let downstream code replace it using untrusted parameters.
+
+An authenticated user ID should come from authentication context.
+
+It should not come from request parameters for operations acting as the current user.
+
+For example, changing the current user's password should use the authenticated principal.
+
+Do not accept user_id=123 as proof that the requester is user 123.
+
+For administrative operations targeting another account, the target account can come from the request.
+
+The actor identity must still come from authenticated context.
+
+Keep actor and target distinct.
+
+Audit both.
+
+Authentication should not be bypassed because a request originates from localhost unless architecture explicitly defines localhost as a trusted boundary.
+
+Local processes can be compromised.
+
+Containers can share hosts.
+
+Proxy configurations can make remote traffic appear local.
+
+Use explicit authentication where required.
+
+Unix domain sockets or local IPC can provide different trust boundaries.
+
+Filesystem permissions can restrict access.
+
+Peer credentials can provide process identity on supported platforms.
+
+These can participate in authentication architecture.
+
+Do not pretend they are password authentication.
+
+State the actual mechanism.
+
+Peer credential APIs can identify local process user IDs according to operating-system semantics.
+
+That identity can be sufficient for selected local services.
+
+The trust root is then the operating system.
+
+Authorization still determines permitted operations.
+
+Authentication chains can involve multiple authorities.
+
+A hardware module can authenticate a key.
+
+The operating system can authenticate a user.
+
+The application can authenticate a session.
+
+The service can authenticate another service.
+
+Do not lose track of which authority established which identity.
+
+Authentication evidence should have provenance.
+
+Who asserted the identity?
+
+What credential was verified?
+
+Which trust anchor was used?
+
+When was authentication performed?
+
+What assurance level resulted?
+
+These questions support secure decisions.
+
+Do not accept unauthenticated identity metadata simply because it looks structured.
+
+JSON claims are still claims.
+
+Headers are still claims.
+
+Form fields are still claims.
+
+Cookies are still claims until validated.
+
+Tokens are still claims until validated.
+
+Certificates are still data until validated.
+
+Validation establishes trusted meaning.
+
+Authentication libraries can fail.
+
+Database connections can fail.
+
+Identity providers can be unavailable.
+
+Certificate validation can fail.
+
+Time services can fail.
+
+Random-number generation can fail.
+
+Do not convert infrastructure failure into successful authentication.
+
+Fail safely.
+
+Authentication errors should not leak secrets.
+
+An exception message should not include passwords.
+
+Database errors should not expose password hashes.
+
+Token-validation errors should not dump complete tokens.
+
+Certificate errors should not dump private keys.
+
+Debugging output must remain bounded.
+
+Security-sensitive values should be redacted.
+
+Redaction should preserve enough identifiers for diagnosis.
+
+For example, log a token identifier or fingerprint rather than the token itself where appropriate.
+
+Do not destroy all diagnostic value merely by writing "[SECRET]" for everything.
+
+Design observability intentionally.
+
+Authentication metrics can include:
+
+Success count.
+
+Failure count.
+
+Failure categories.
+
+MFA challenge rate.
+
+Password-reset rate.
+
+Credential-revocation rate.
+
+Session creation rate.
+
+Identity-provider latency.
+
+Authentication-service availability.
+
+Do not put secret values into metric labels.
+
+Metrics systems can have broad access.
+
+Authentication rate anomalies can indicate attacks.
+
+They can also indicate software bugs.
+
+Evidence is required before assigning cause.
+
+A spike in failed logins does not prove a malicious attack by itself.
+
+Investigate source patterns and context.
+
+Do not turn correlation into certainty.
+
+Authentication should support incident containment.
+
+Disable an account.
+
+Revoke a credential.
+
+Invalidate sessions.
+
+Rotate signing keys.
+
+Disable an authentication mechanism.
+
+Block compromised identity-provider trust.
+
+Exact controls depend on architecture.
+
+Plan them before incidents.
+
+Emergency access accounts can provide recovery when normal identity infrastructure fails.
+
+They are highly sensitive.
+
+Protect them strongly.
+
+Monitor their use.
+
+Do not use them for ordinary administration.
+
+A recovery mechanism that is routinely used becomes an ordinary authentication mechanism and should be governed accordingly.
+
+Authentication systems should minimize shared secrets.
+
+Shared administrator passwords make attribution difficult.
+
+Shared API keys make selective revocation difficult.
+
+Distinct credentials improve control.
+
+Do not trade away identity clarity merely for convenience.
+
+Authentication is not ownership.
+
+Authenticating an account proves control according to the authentication mechanism at that moment.
+
+It does not establish legal ownership of data, devices, domains, or other property.
+
+Keep technical identity separate from external ownership concepts.
+
+Authentication is not permanent.
+
+A session can expire.
+
+A credential can be revoked.
+
+A key can be rotated.
+
+An account can be disabled.
+
+Identity evidence has context and lifetime.
+
+Do not assume authentication performed months ago is sufficient for every present operation.
+
+Authentication is not trust in every statement made by the authenticated principal.
+
+An authenticated user can provide false data.
+
+An authenticated service can malfunction.
+
+Authentication establishes identity.
+
+It does not establish correctness.
+
+Authentication is not authorization.
+
+Authentication is not encryption.
+
+Authentication is not hashing.
+
+Authentication is not identification alone.
+
+Authentication is not account creation.
+
+Authentication is not session storage.
+
+Authentication is not permission.
+
+Authentication is not auditing.
+
+Authentication interacts with all of these systems but remains distinct.
+
+Do not confuse username with authenticated identity.
+
+Do not confuse email address with authenticated identity.
+
+Do not confuse account existence with authentication.
+
+Do not confuse password presence with password verification.
+
+Do not confuse password hashing with encryption.
+
+Do not confuse salt with pepper.
+
+Do not confuse Base64 with encryption.
+
+Do not confuse a session ID with harmless metadata.
+
+Do not confuse a cookie with authentication merely because it exists.
+
+Do not confuse MFA with asking for two passwords.
+
+Do not confuse TOTP with a permanent password.
+
+Do not confuse a recovery code with ordinary account metadata.
+
+Do not confuse password reset with password recovery.
+
+A secure system should not need to reveal the old password.
+
+Do not confuse a public key with a private key.
+
+Do not confuse possession of a certificate with possession of its private key.
+
+Do not confuse a valid certificate with application authorization.
+
+Do not confuse mTLS with role assignment.
+
+Do not confuse a bearer token with encryption.
+
+Do not confuse JWT decoding with JWT validation.
+
+Do not confuse a JWT signature with confidentiality.
+
+Do not confuse token validity with token authorization.
+
+Do not confuse OAuth with authentication generally.
+
+Do not confuse OpenID Connect with OAuth authorization alone.
+
+Do not confuse SSO with identical permissions across applications.
+
+Do not confuse a service account with a human account.
+
+Do not confuse a device identity with a user identity.
+
+Do not confuse IP address with identity.
+
+Do not confuse DNS name with identity proof.
+
+Do not confuse reverse DNS with authentication.
+
+Do not confuse risk score with identity proof.
+
+Do not confuse familiar behavior with authentication.
+
+Do not confuse successful TLS transport with application login.
+
+Do not confuse an HTTP status code with an authentication decision.
+
+Do not confuse account provisioning with authentication.
+
+Do not confuse authentication with authorization.
+
+When implementing password login:
+
+Receive the identifier and password over protected transport.
+
+Locate the candidate account according to the identifier rules.
+
+Perform password verification using the established password-hashing function.
+
+Do not expose whether the account exists when policy requires nondisclosure.
+
+If verification fails, remain unauthenticated.
+
+If additional authentication factors are required, complete them.
+
+Only after all required evidence succeeds should authenticated state be established.
+
+Create or rotate the session credential securely.
+
+Bind the session to the authenticated internal principal.
+
+Return the session credential through the intended secure mechanism.
+
+Record the authentication event according to logging policy.
+
+Do not set authenticated state before verification completes.
+
+When validating a session:
+
+Receive the session credential.
+
+Validate its format.
+
+Locate or verify the session according to the session design.
+
+Confirm it exists.
+
+Confirm it is active.
+
+Confirm it is not expired.
+
+Confirm the associated account remains eligible for authentication according to policy.
+
+Establish the request principal.
+
+Do not trust a user ID supplied separately by the client.
+
+When validating a signed token:
+
+Parse it using a protocol-aware library.
+
+Determine the expected issuer and validation policy from trusted configuration.
+
+Select trusted verification keys according to controlled rules.
+
+Verify the signature.
+
+Verify the allowed algorithm.
+
+Verify issuer where required.
+
+Verify audience where required.
+
+Verify expiration.
+
+Verify not-before conditions where required.
+
+Verify application-specific claims.
+
+Only then establish authenticated identity.
+
+Do not trust claims before validation.
+
+When authenticating a service with a private key:
+
+Provision the service with the intended private key.
+
+Provision the verifier with appropriate public trust information.
+
+Generate a fresh challenge or use a protocol providing equivalent freshness.
+
+Have the service prove possession of the private key according to the protocol.
+
+Verify the proof.
+
+Map the validated key identity to the service principal.
+
+Then apply authorization.
+
+Do not transmit the private key.
+
+When adding MFA:
+
+Define which factor categories are required.
+
+Enroll the additional authenticator through a controlled process.
+
+Verify enrollment before relying on it.
+
+Provide controlled recovery mechanisms.
+
+Protect enrollment secrets.
+
+Log authenticator changes.
+
+Require the factors according to policy.
+
+Do not call the system MFA merely because it displays two screens.
+
+When resetting a password:
+
+Establish the account being recovered.
+
+Issue a cryptographically unpredictable, limited-lifetime recovery credential through the defined recovery channel.
+
+Verify that credential.
+
+Invalidate it after successful use.
+
+Accept the new password.
+
+Hash it using the current password-hashing policy.
+
+Replace the old verifier.
+
+Invalidate other authentication state where policy requires.
+
+Record the security event.
+
+Do not reveal or email the previous password.
+
+When revoking an API credential:
+
+Identify the exact credential.
+
+Mark it revoked or remove its verifier according to design.
+
+Ensure future validation rejects it.
+
+Invalidate derived sessions or tokens where policy requires.
+
+Record the revocation.
+
+Do not disable unrelated credentials unless the incident requires it.
+
+When authentication infrastructure fails:
+
+Determine whether credential verification can still be performed according to an explicitly trusted mechanism.
+
+If not, fail protected authentication attempts safely.
+
+Report authentication infrastructure failure.
+
+Do not report invalid credentials unless they were actually tested and found invalid.
+
+Do not grant anonymous access to protected operations.
+
+Preserve evidence for diagnosis.
+
+When investigating suspicious authentication:
+
+Identify the account.
+
+Identify the credential or mechanism used.
+
+Identify whether authentication actually succeeded.
+
+Identify the session created.
+
+Identify source information available.
+
+Identify subsequent authorized actions separately.
+
+Identify credential changes.
+
+Identify session invalidations.
+
+Do not infer compromise merely from one unusual login.
+
+Do not dismiss compromise merely because a valid credential was used.
+
+A stolen credential can authenticate successfully.
+
+Authentication proves credential possession according to the mechanism.
+
+It does not prove benevolent intent.
+
+When designing an authentication system, define:
+
+What identities exist?
+
+What identifies each principal?
+
+What evidence authenticates each principal?
+
+Where are credentials stored?
+
+How are credentials protected?
+
+How are credentials enrolled?
+
+How are credentials rotated?
+
+How are credentials revoked?
+
+How are sessions created?
+
+How do sessions expire?
+
+How are sessions invalidated?
+
+Is MFA required?
+
+How does recovery work?
+
+How are authentication events audited?
+
+How does the system behave when authentication infrastructure fails?
+
+How are machine identities handled?
+
+How are administrative identities handled?
+
+How is trust bootstrapped?
+
+Only then implement the mechanism.
+
+Keep authentication small.
+
+Keep authentication deterministic.
+
+Keep credential ownership explicit.
+
+Keep trust anchors explicit.
+
+Keep failure explicit.
+
+Keep authentication separate from authorization.
+
+A reliable authentication system does not guess identity.
+
+A reliable authentication system validates evidence.
+
+A reliable authentication system protects credentials.
+
+A reliable authentication system does not store plaintext passwords.
+
+A reliable authentication system does not trust client claims without validation.
+
+A reliable authentication system uses secure randomness for authentication secrets.
+
+A reliable authentication system limits credential lifetime where appropriate.
+
+A reliable authentication system supports revocation.
+
+A reliable authentication system preserves auditability.
+
+A reliable authentication system fails safely.
+
+A reliable authentication system does not turn infrastructure failure into successful login.
+
+A reliable authentication system distinguishes account identity from credential identity.
+
+A reliable authentication system distinguishes human identity from machine identity.
+
+A reliable authentication system distinguishes authentication from authorization.
+
+Authentication answers:
+
+Which principal has been established by the evidence accepted under this authentication policy?
+
+If the evidence validates, authenticate according to policy.
+
+If the evidence does not validate, do not authenticate.
+
+If the evidence is missing, do not authenticate.
+
+If the authentication authority is unavailable, do not fabricate an identity.
+
+If the evidence establishes only possession of a credential, do not claim it establishes anything beyond what that credential represents.
+
+Identity is established by evidence.
+
+Permission comes afterward.

@@ -1,0 +1,140 @@
+20260814.2 — Mandatory AI Annotation Policy
+
+Root Document ID: 20260814.2
+Revision ID: NONE
+Previous Revision: NONE
+sha256: ed2d16079ea70946cc95e71bf353d8ab4b14922ddcf78d47ad595b0be0426bdb
+
+Status: Approved  
+Scope: All STN-LABZ software development
+
+Policy
+
+Any source code written or modified by an AI system will be annotated using the approved STN-LABZ AI annotation format.
+
+This requirement applies to all development languages used by STN-LABZ.
+
+The programming language's appropriate comment syntax will contain the annotation. The required annotation content and structure will remain consistent regardless of language.
+
+AI Annotation Format
+
+The required logical format is:
+
+text
+[AI:MODEL_NAME | YYYY-MM-DD HH:MM:SS UTC]
+
+<AI-created or AI-modified code>
+
+[End AI:MODEL_NAME]
+
+
+When expressed using a C-style block comment syntax:
+
+text
+/*
+ * [AI:MODEL_NAME | YYYY-MM-DD HH:MM:SS UTC]
+ */
+
+<AI-created or AI-modified code>
+
+/* [End AI:MODEL_NAME] */
+
+
+Equivalent native comment syntax will be used for languages that do not support C-style block comments.
+
+Required AI Annotation Fields
+
+Every AI annotation will identify:
+
+- The AI model responsible for the modification.
+- The UTC date and time of the modification.
+- The beginning of the AI-created or AI-modified code.
+- The end of the AI-created or AI-modified code.
+
+The timestamp format will be:
+
+text
+YYYY-MM-DD HH:MM:SS UTC
+
+
+Human Approval Annotation
+
+AI modifications applied to architectural components require an accompanying human approval annotation.
+
+The required logical format is:
+
+text
+[AI:MODEL_NAME | YYYY-MM-DD HH:MM:SS UTC]
+[HUMAN: REVIEWER | YYYY-MM-DD HH:MM:SS UTC | APPROVE/DENY]
+
+<AI-created or AI-modified code>
+
+[End AI:MODEL_NAME]
+
+
+The human annotation will identify:
+
+- The human reviewer.
+- The UTC date and time of review.
+- The review decision as APPROVE or DENY.
+
+Architectural Components
+
+An AI annotation establishes modification provenance. It does not establish human approval.
+
+AI-created or AI-modified architectural code requires explicit human review.
+
+Where human approval is required, the applicable code will not be treated as approved until the required human annotation records an APPROVE decision.
+
+A DENY decision will not be represented or interpreted as approval.
+
+Annotation Integrity
+
+AI and human annotations are engineering records and will accurately represent modification and review history.
+
+Annotations will not be:
+
+- Falsified.
+- Backdated.
+- Removed to conceal AI involvement.
+- Altered to misrepresent the responsible AI model.
+- Altered to misrepresent human review.
+- Used to imply approval that was not granted.
+
+Unknown attribution or approval information will not be guessed.
+
+Language Independence
+
+This policy governs annotation content, not programming-language comment syntax.
+
+Each development language will use its appropriate native comment mechanism while preserving the required STN-LABZ annotation fields and modification boundaries.
+
+Language-specific coding standards may define the exact syntax necessary to implement this policy.
+
+They will not remove or weaken the underlying annotation requirement.
+
+Applicability
+
+This policy applies to all STN-LABZ development languages, repositories, projects, agents, modules, applications, services, libraries, tools, and other software assets where source-code annotation is technically supported.
+
+Project-specific development standards may impose additional annotation requirements.
+
+Purpose
+
+This policy establishes direct source-level traceability and accountability for AI-assisted software development.
+
+It preserves a durable distinction between:
+
+- AI modification provenance.
+- Human architectural review.
+- Human approval authority.
+
+Source-control history may provide additional provenance, but it does not replace annotations required by this policy.
+
+References
+
+- STN-LABZ General Orders
+- 20260729.6 — Engineering Documentation
+- 20260729.8 — Operational Doctrine
+- 20260731.2 — Drafting Standard
+- Applicable STN-LABZ language and development standards
