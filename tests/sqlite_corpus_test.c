@@ -39,7 +39,7 @@ int main(void){
  FILE *f=fopen(out,"rb");if(!f)fail=1;
  else {
   char buf[1024];size_t n=fread(buf,1,sizeof(buf)-1,f);buf[n]=0;
-  if(strcmp(buf,"Approved prose one.\n\nApproved prose two.\n\n"))fail=1;
+  if(strcmp(buf,"Approved prose one.\036Approved prose two.\036"))fail=1;
   fclose(f);
  }
  unlink(path);unlink(out);
