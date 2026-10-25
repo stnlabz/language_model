@@ -416,6 +416,17 @@ static size_t record_gcd(size_t a,size_t b){
 }
 static int train(const char *corpus,const char *output,int steps){
  if(steps<1||steps>200000){fputs("steps must be 1..200000\n",stderr);return 2;}
+ /* Explicit epochs for SQLite training; ordinary direct CLI retains one.
+  * Bound the value to prevent accidental unbounded CPU runs. */
+ int epochs=1;
+ const char *epoch_env=getenv("STN_EPOCHS");
+ if(epoch_env&&*epoch_env){
+  char *tail=NULL;errno=0;long value=strtol(epoch_env,&tail,10);
+  if(errno||!tail||*tail||value<1||value>16){
+   fputs("STN_EPOCHS must be 1..16\n",stderr);return 2;
+  }
+  epochs=(int)value;
+ }
  if(!load_data(corpus))return 1;
  if(data_len<=T+1024){fputs("corpus too short for train/validation split\n",stderr);free(data);return 1;}
  /* Collect boundaries before splitting so held-out examples do not leak
@@ -436,6 +447,13 @@ static int train(const char *corpus,const char *output,int steps){
  if(count<2){free(starts);free(data);fputs("corpus needs at least two records\n",stderr);return 1;}
  size_t training_count=count*9/10;
  if(training_count<1)training_count=1;
+ size_t total_visits=training_count*(size_t)epochs;
+ if((size_t)steps>total_visits){
+  fputs("optimizer steps exceed supervised record visits; lower STEPS or raise STN_EPOCHS\n",stderr);
+  free(starts);free(data);return 2;
+ }
+ printf("training_schedule epochs=%d optimizer_steps=%d training_records=%zu record_visits=%zu\n",
+        epochs,steps,training_count,total_visits);
  /* Original SQL export is ordered by record id. Visiting consecutive ids
   * together creates correlated parameter updates and a fixed curriculum.
   * A coprime stride visits every training record exactly once in a full
@@ -460,25 +478,20 @@ static int train(const char *corpus,const char *output,int steps){
  if(!grad||!moment||!variance)return 1;
  Cache *c=malloc(sizeof(*c));if(!c)return 1;
  for(int s=1;s<=steps;s++){
-  /* Cover every training record in a complete scheduled pass. When the
-   * requested number of optimizer steps is smaller than the record count,
-   * group a full interleaved corpus pass within steps. Otherwise rotate
-   * over the same deterministic record permutation.
-   * Windows never cross record boundaries. Every supervised target is
-   * counted once in the coverage bitmap. */
+  /* Spread complete training epochs across the optimizer-step budget.
+   * Steps are weight updates; epochs are complete record passes.
+   * The coverage bitmap tracks unique targets, not repeated visits. */
   memset(grad,0,sizeof(*model));
   double total=0.0;
   size_t batches=0,supervised_in_step=0;
-  size_t first_record,last_record;
-  if((size_t)steps<=training_count){
-   first_record=((size_t)(s-1)*training_count)/(size_t)steps;
-   last_record=((size_t)s*training_count)/(size_t)steps;
-  }else{
-   first_record=((size_t)(s-1)%training_count);
-   last_record=first_record+1;
-  }
-  for(size_t visit=first_record;visit<last_record;visit++){
-   size_t index=(visit*record_stride)%training_count;
+  /* Every epoch visits all training records, with a deterministic
+   * rotated permutation on successive epochs; never visit held-out. */
+  size_t first_visit=((size_t)(s-1)*total_visits)/(size_t)steps;
+  size_t last_visit=((size_t)s*total_visits)/(size_t)steps;
+  for(size_t visit=first_visit;visit<last_visit;visit++){
+   size_t epoch=visit/training_count;
+   size_t within=visit%training_count;
+   size_t index=((within*record_stride)+epoch)%training_count;
    size_t begin=starts[index];
    size_t end=index+1<count?starts[index+1]:data_len;
    while(end>begin&&(data[end-1]=='\n'||data[end-1]=='\r'||data[end-1]==0x1e))end--;
