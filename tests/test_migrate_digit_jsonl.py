@@ -23,6 +23,24 @@ class MigrationTests(unittest.TestCase):
         self.assertEqual(data, b"Question: Hello there Answer: Good answer\n")
         self.assertEqual(stats["written"], 1)
 
+    def test_structured_records_are_statements_not_dialogue(self):
+        source = (record("Digit Corpus record 10, category technical:", "A verified statement.") +
+                  record("Digit Observation record 11:", "An observed event.") +
+                  record("Digit Context record 12:", "Context for recall.") +
+                  record("Digit, explain yourself", "I am Digit."))
+        converted, stats = migration.convert(source, "all")
+        self.assertEqual(converted,
+                         b"A verified statement.\n"
+                         b"An observed event.\n"
+                         b"Context for recall.\n"
+                         b"Question: Digit, explain yourself Answer: I am Digit.\n")
+        self.assertEqual(stats["structured_records"], 3)
+        self.assertEqual(stats["written"], 4)
+        dialogue, dialogue_stats = migration.convert(source, "dialogue")
+        self.assertEqual(dialogue,
+                         b"Question: Digit, explain yourself Answer: I am Digit.\n")
+        self.assertEqual(dialogue_stats["excluded_structured"], 3)
+
     def test_filter_and_dedup(self):
         data = (record("Digit Context record 1, category utterance.observed:") +
                 record("What is PHP?", "A language.") +
