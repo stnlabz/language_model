@@ -23,3 +23,17 @@ printf ' A gardener grows plants.\n' > "$run/gardener.expected"
 cmp "$run/engineer.expected" "$run/engineer.actual"
 cmp "$run/gardener.expected" "$run/gardener.actual"
 printf 'PASS: exact trained continuations; artifacts=%s\n' "$run"
+# Held-out paraphrases are never included in the synthetic training corpus.
+# Report independent outcomes; a memorization pass alone must not qualify
+# generalization. Keep all outputs in the test-specific directory.
+"$run/micro_llm" generate "$checkpoint" "$(printf 'Question: Explain what an engineer does.\nAnswer:')" 29 913 greedy > "$run/engineer-paraphrase.actual"
+"$run/micro_llm" generate "$checkpoint" "$(printf 'Question: Describe the work of a gardener.\nAnswer:')" 25 913 greedy > "$run/gardener-paraphrase.actual"
+printf 'Held-out engineer: '; cat "$run/engineer-paraphrase.actual"
+printf 'Held-out gardener: '; cat "$run/gardener-paraphrase.actual"
+if cmp -s "$run/engineer.expected" "$run/engineer-paraphrase.actual" &&
+   cmp -s "$run/gardener.expected" "$run/gardener-paraphrase.actual"; then
+ printf 'PASS: held-out paraphrases reproduced expected answers\n'
+else
+ printf 'FAIL: held-out paraphrase exact-answer qualification; artifacts=%s\n' "$run" >&2
+ exit 1
+fi
