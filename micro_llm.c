@@ -440,9 +440,49 @@ static int generate(const char *checkpoint,const char *prompt,int length,int req
  int ok=fwrite(out+plen,1,used-plen,stdout)==used-plen && putchar('\n')!=EOF;
  free(out);free(c);free(model);return ok?0:1;
 }
+/* Read-only training-input audit. Mirrors the present record/window rules
+ * without running optimizer steps or creating checkpoints. */
+static void audit_corpus(void){
+ size_t records=0,qa=0,prose=0,short_records=0,clipped=0;
+ size_t prose_bytes=0,qa_bytes=0,largest=0;
+ for(size_t begin=0;begin<data_len;){
+  size_t end=begin;
+  while(end+1<data_len && !(data[end]=='\n' && data[end+1]=='\n'))end++;
+  if(end+1>=data_len)end=data_len;
+  size_t actual=end;
+  while(actual>begin && (data[actual-1]=='\n'||data[actual-1]=='\r'))actual--;
+  if(actual>begin){
+   size_t length=actual-begin;
+   if(length>largest)largest=length;
+   records++;
+   if(length<2)short_records++;
+   int labeled=0;
+   for(size_t i=begin;i+7<=actual;i++){
+    if(memcmp(data+i,"Answer:",7)==0){labeled=1;break;}
+   }
+   if(labeled){qa++;qa_bytes+=length;}
+   else {prose++;prose_bytes+=length;}
+   if(length>T+1)clipped++;
+  }
+  if(end==data_len)break;
+  begin=end+2;
+  while(begin<data_len && (data[begin]=='\n'||data[begin]=='\r'))begin++;
+ }
+ printf("audit records=%zu qa=%zu prose=%zu short=%zu\n",
+        records,qa,prose,short_records);
+ printf("audit qa_bytes=%zu prose_bytes=%zu largest_record=%zu context=%d\n",
+        qa_bytes,prose_bytes,largest,T);
+ printf("audit long_records=%zu current_training_window_limit=%d\n",
+        clipped,T+1);
+ if(clipped)
+  puts("audit WARNING: existing trainer samples only one initial/context-selected window per record per update; full-length prose coverage is not established.");
+ if(prose)
+  puts("audit NOTE: unlabeled prose uses next-byte targets, not question-answer supervision.");
+}
 int main(int argc,char **argv){
  if(argc==3&&!strcmp(argv[1],"inspect")){
   if(!load_data(argv[2]))return 1;
+  audit_corpus();
   free(data);data=NULL;return 0;
  }
  if(argc==5&&!strcmp(argv[1],"train"))return train(argv[2],argv[3],atoi(argv[4]));
