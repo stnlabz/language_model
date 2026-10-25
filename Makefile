@@ -26,10 +26,10 @@ gru_learn: gru_learn.c json_fields.h
 	$(CC) $(CFLAGS) gru_learn.c -o gru_learn
 llm_service: llm_service.c json_fields.h
 	$(CC) $(CFLAGS) llm_service.c -o llm_service
-test: build
-	./micro_llm 2>/dev/null; test $$? -eq 2
-	./gru_learn 2>/dev/null; test $$? -eq 2
-	./llm_service 2>/dev/null; test $$? -eq 2
+tests/native_regression: tests/native_regression.c json_fields.h
+	$(CC) $(CFLAGS) tests/native_regression.c -o tests/native_regression
+test: build tests/native_regression
+	./tests/native_regression
 prepare: gru_learn
 	@echo 'Corpus preparation is integrated into gru_learn. Use make learn.'
 train: micro_llm
