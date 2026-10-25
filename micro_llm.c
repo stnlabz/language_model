@@ -406,6 +406,19 @@ static int train(const char *corpus,const char *output,int steps){
  if(count<2){free(starts);free(data);fputs("corpus needs at least two records\n",stderr);return 1;}
  size_t training_count=count*9/10;
  if(training_count<1)training_count=1;
+ /* Measure actual supervised target coverage; never infer it from total
+  * window sizes, which double-count overlapping positions. */
+ unsigned char *seen=calloc(data_len,1);
+ if(!seen){free(starts);free(data);return 1;}
+ size_t eligible=0;
+ for(size_t j=0;j<training_count;j++){
+  size_t lo=starts[j],hi=j+1<count?starts[j+1]:data_len;
+  while(hi>lo&&(data[hi-1]=='\n'||data[hi-1]=='\r'))hi--;
+  size_t first=lo+1;
+  for(size_t p=lo;p+7<=hi;p++)
+   if(!memcmp(data+p,"Answer:",7)){first=p+7;break;}
+  if(first<hi)eligible+=hi-first;
+ }
  init();
  grad=calloc(1,sizeof(*model));moment=calloc(1,sizeof(*model));variance=calloc(1,sizeof(*model));
  if(!grad||!moment||!variance)return 1;
@@ -446,6 +459,7 @@ static int train(const char *corpus,const char *output,int steps){
    }
    total+=forward(data+window,n,0,c);
    backward(data+window,n,c,(Model*)grad);
+   for(int t=supervision_start;t<n;t++)seen[window+(size_t)t+1]=1;
   }
   supervision_start=0;
   float *w=(float*)model;
@@ -457,9 +471,10 @@ static int train(const char *corpus,const char *output,int steps){
    w[i]-=0.0007f*(moment[i]/b1)/(sqrtf(variance[i]/b2)+1e-8f);
   }
   if(s==1||s%100==0||s==steps){
-   size_t covered=((size_t)s*2u*T);
-   printf("exposure_window_bytes=%zu training_partition_bytes=%zu approx_passes=%.3f\n",
-          covered,starts[training_count],(double)covered/(double)starts[training_count]);
+   size_t covered=0;
+   for(size_t k=0;k<data_len;k++)covered+=seen[k]!=0;
+   printf("supervised_unique_targets=%zu eligible_training_targets=%zu target_coverage=%.4f\n",
+          covered,eligible,eligible?(double)covered/(double)eligible:0.0);
    float validation=0;
    for(int j=0;j<8;j++){
     size_t index=training_count+(size_t)(rng()%(count-training_count));
@@ -488,7 +503,7 @@ static int train(const char *corpus,const char *output,int steps){
   }
  }
  int ok=save(output,(uint64_t)steps);
- free(starts);free(c);free(data);free(grad);free(moment);free(variance);free(model);
+ free(seen);free(starts);free(c);free(data);free(grad);free(moment);free(variance);free(model);
  return ok?0:1;
 }
 /* Compatibility only: legacy filtered sampler used by the existing service.
@@ -611,7 +626,7 @@ static void audit_corpus(void){
  printf("audit long_records=%zu model_context_plus_target=%d\n",
         clipped,T+1);
  if(clipped)
-  puts("audit NOTE: long prose records use random windows throughout their length; coverage over a finite training run is not guaranteed.");
+  puts("audit NOTE: long records require multiple context windows; run training and inspect measured target coverage.");
  if(prose)
   puts("audit NOTE: unlabeled prose uses next-byte targets, not question-answer supervision.");
 }
