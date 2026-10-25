@@ -1,0 +1,5 @@
+Question: Identify the first label.
+Answer: A label.
+
+Question: Confirm the second label.
+Answer: Yes.
