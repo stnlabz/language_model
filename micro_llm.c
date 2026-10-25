@@ -418,9 +418,15 @@ static int train(const char *corpus,const char *output,int steps){
  if(!starts){free(data);return 1;}
  size_t count=0;
  starts[count++]=0;
- for(size_t i=1;i+1<data_len;i++)
-  if(data[i-1]=='\n' && data[i]=='\n' && i+1<data_len && data[i+1]!='\n')
-   starts[count++]=i+1;
+ if(memchr(data,0x1e,data_len)){
+  for(size_t i=0;i+1<data_len;i++)
+   if(data[i]==0x1e)starts[count++]=i+1;
+  if(starts[count-1]==data_len)count--;
+ }else{
+  for(size_t i=1;i+1<data_len;i++)
+   if(data[i-1]=='\n' && data[i]=='\n' && data[i+1]!='\n')
+    starts[count++]=i+1;
+ }
  if(count<2){free(starts);free(data);fputs("corpus needs at least two records\n",stderr);return 1;}
  size_t training_count=count*9/10;
  if(training_count<1)training_count=1;
@@ -431,7 +437,7 @@ static int train(const char *corpus,const char *output,int steps){
  size_t eligible=0;
  for(size_t j=0;j<training_count;j++){
   size_t lo=starts[j],hi=j+1<count?starts[j+1]:data_len;
-  while(hi>lo&&(data[hi-1]=='\n'||data[hi-1]=='\r'))hi--;
+  while(hi>lo&&(data[hi-1]=='\n'||data[hi-1]=='\r'||data[hi-1]==0x1e))hi--;
   size_t first=lo+1;
   for(size_t p=lo;p+7<=hi;p++)
    if(!memcmp(data+p,"Answer:",7)){first=p+7;break;}
@@ -461,7 +467,7 @@ static int train(const char *corpus,const char *output,int steps){
   for(size_t index=first_record;index<last_record;index++){
    size_t begin=starts[index];
    size_t end=index+1<count?starts[index+1]:data_len;
-   while(end>begin&&(data[end-1]=='\n'||data[end-1]=='\r'))end--;
+   while(end>begin&&(data[end-1]=='\n'||data[end-1]=='\r'||data[end-1]==0x1e))end--;
    if(end<=begin+1)continue;
    size_t first=begin+1;
    for(size_t p=begin;p+7<=end;p++)
@@ -513,7 +519,7 @@ static int train(const char *corpus,const char *output,int steps){
    for(int j=0;j<8;j++){
     size_t index=training_count+(size_t)(rng()%(count-training_count));
     size_t begin=starts[index],end=index+1<count?starts[index+1]:data_len;
-    while(end>begin && (data[end-1]=='\n'||data[end-1]=='\r'))end--;
+    while(end>begin && (data[end-1]=='\n'||data[end-1]=='\r'||data[end-1]==0x1e))end--;
     if(end<=begin+1)continue;
     size_t window=begin;
     if(end-begin>T+1){
@@ -680,8 +686,13 @@ static int evaluate_corpus(const char *path,const char *checkpoint){
  size_t *starts=malloc((data_len+1)*sizeof(*starts));
  if(!starts){free(data);return 1;}
  size_t count=0;starts[count++]=0;
- for(size_t i=1;i+1<data_len;i++)
-  if(data[i-1]=='\n'&&data[i]=='\n'&&data[i+1]!='\n')starts[count++]=i+1;
+ if(memchr(data,0x1e,data_len)){
+  for(size_t i=0;i+1<data_len;i++)if(data[i]==0x1e)starts[count++]=i+1;
+  if(starts[count-1]==data_len)count--;
+ }else{
+  for(size_t i=1;i+1<data_len;i++)
+   if(data[i-1]=='\n'&&data[i]=='\n'&&data[i+1]!='\n')starts[count++]=i+1;
+ }
  if(count<2){fputs("evaluation requires two or more records\n",stderr);free(starts);free(data);return 1;}
  size_t training_count=count*9/10;
  if(training_count<1)training_count=1;
