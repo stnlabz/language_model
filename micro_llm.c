@@ -408,6 +408,12 @@ static int train_aligned(const char *path,const char *output,int steps,const cha
  return ok?0:1;
 }
 
+/* A deterministic full-cycle stride permutes record visitation without
+ * allocating another corpus-sized table or changing target coverage. */
+static size_t record_gcd(size_t a,size_t b){
+ while(b){size_t rem=a%b;a=b;b=rem;}
+ return a;
+}
 static int train(const char *corpus,const char *output,int steps){
  if(steps<1||steps>200000){fputs("steps must be 1..200000\n",stderr);return 2;}
  if(!load_data(corpus))return 1;
@@ -430,6 +436,12 @@ static int train(const char *corpus,const char *output,int steps){
  if(count<2){free(starts);free(data);fputs("corpus needs at least two records\n",stderr);return 1;}
  size_t training_count=count*9/10;
  if(training_count<1)training_count=1;
+ /* Original SQL export is ordered by record id. Visiting consecutive ids
+  * together creates correlated parameter updates and a fixed curriculum.
+  * A coprime stride visits every training record exactly once in a full
+  * pass, but interleaves distant records between optimizer steps. */
+ size_t record_stride=training_count/2+1;
+ while(record_gcd(record_stride,training_count)!=1)record_stride++;
  /* Measure actual supervised target coverage; never infer it from total
   * window sizes, which double-count overlapping positions. */
  unsigned char *seen=calloc(data_len,1);
@@ -450,7 +462,8 @@ static int train(const char *corpus,const char *output,int steps){
  for(int s=1;s<=steps;s++){
   /* Cover every training record in a complete scheduled pass. When the
    * requested number of optimizer steps is smaller than the record count,
-   * group consecutive records within steps. Otherwise rotate records.
+   * group a full interleaved corpus pass within steps. Otherwise rotate
+   * over the same deterministic record permutation.
    * Windows never cross record boundaries. Every supervised target is
    * counted once in the coverage bitmap. */
   memset(grad,0,sizeof(*model));
@@ -464,7 +477,8 @@ static int train(const char *corpus,const char *output,int steps){
    first_record=((size_t)(s-1)%training_count);
    last_record=first_record+1;
   }
-  for(size_t index=first_record;index<last_record;index++){
+  for(size_t visit=first_record;visit<last_record;visit++){
+   size_t index=(visit*record_stride)%training_count;
    size_t begin=starts[index];
    size_t end=index+1<count?starts[index+1]:data_len;
    while(end>begin&&(data[end-1]=='\n'||data[end-1]=='\r'||data[end-1]==0x1e))end--;
