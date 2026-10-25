@@ -1,3 +1,4 @@
+#define _POSIX_C_SOURCE 200809L
 /* STN-Labz micro Transformer: original C11 CPU-only causal self-attention LM.
  * One decoder block, learned token/position embeddings, causal attention,
  * tanh feed-forward, tied output embedding. Analytic gradients, Adam.
@@ -95,7 +96,8 @@ static int load_data(const char *path){
   memcpy(full,path,pn);full[pn]='/';memcpy(full+pn+1,names[i],nn+1);
   struct stat item;
   if(lstat(full,&item)!=0 || !S_ISREG(item.st_mode) ||
-     item.st_size<1 || (uintmax_t)item.st_size>MAX_CORPUS_BYTES-used-2){
+     used>MAX_CORPUS_BYTES-2 || item.st_size<1 ||
+     (uintmax_t)item.st_size>MAX_CORPUS_BYTES-used-2){
    fprintf(stderr,"invalid or oversized lesson: %s\n",full);
    free(full);ok=0;break;
   }
