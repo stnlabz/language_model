@@ -263,6 +263,129 @@ static int restore(const char *name){
  if(!ok)fputs("checkpoint invalid/incompatible\n",stderr);
  return ok;
 }
+/* Record-aligned teacher forcing: each answer byte uses precisely the
+ * context available to autoregressive inference. */
+typedef struct {size_t begin,end,answer,unused;} TrainingRecord;
+typedef struct {unsigned char *bytes;TrainingRecord *records;size_t count;} TrainingCorpus;
+static void corpus_free(TrainingCorpus *c){
+ free(c->bytes);free(c->records);memset(c,0,sizeof(*c));
+}
+static int corpus_read(const char *path,TrainingCorpus *c){
+ memset(c,0,sizeof(*c));
+ FILE *f=fopen(path,"rb");if(!f){perror(path);return 0;}
+ if(fseek(f,0,SEEK_END)){fclose(f);return 0;}
+ long size=ftell(f);
+ if(size<=0||(unsigned long)size>MAX_CORPUS_BYTES||fseek(f,0,SEEK_SET)){fclose(f);return 0;}
+ c->bytes=malloc((size_t)size);
+ c->records=calloc((size_t)size,sizeof(*c->records));
+ if(!c->bytes||!c->records){fclose(f);corpus_free(c);return 0;}
+ int ok=fread(c->bytes,1,(size_t)size,f)==(size_t)size;
+ if(fclose(f))ok=0;
+ if(!ok){corpus_free(c);return 0;}
+ size_t len=(size_t)size,begin=0;
+ while(begin<len){
+  while(begin<len&&(c->bytes[begin]=='\n'||c->bytes[begin]=='\r'))begin++;
+  if(begin==len)break;
+  size_t end=begin;
+  while(end<len){
+   if(end+1<len&&c->bytes[end]=='\n'&&c->bytes[end+1]=='\n')break;
+   end++;
+  }
+  size_t finish=end;
+  while(finish>begin&&(c->bytes[finish-1]=='\n'||c->bytes[finish-1]=='\r'))finish--;
+  if(finish>begin+1){
+   size_t answer=0;
+   for(size_t j=begin;j+7<=finish;j++)
+    if(!memcmp(c->bytes+j,"Answer:",7)){answer=j+7;break;}
+   c->records[c->count++]=(TrainingRecord){begin,finish,answer,0};
+  }
+  begin=end<len?end+2:len;
+ }
+ if(!c->count){corpus_free(c);return 0;}
+ return 1;
+}
+static int corpora_overlap(const TrainingCorpus *a,const TrainingCorpus *b){
+ for(size_t i=0;i<a->count;i++){
+  size_t an=a->records[i].end-a->records[i].begin;
+  for(size_t j=0;j<b->count;j++){
+   size_t bn=b->records[j].end-b->records[j].begin;
+   if(an==bn&&!memcmp(a->bytes+a->records[i].begin,b->bytes+b->records[j].begin,an))
+    return 1;
+  }
+ }
+ return 0;
+}
+static float record_pass(const TrainingCorpus *corpus,const TrainingRecord *r,
+                         Cache *c,Model *out,Model *scratch){
+ size_t first=r->answer?r->answer:r->begin+1;
+ if(first<r->begin+1)first=r->begin+1;
+ if(first>=r->end)return 0.f;
+ size_t targets=r->end-first;
+ double loss=0;
+ for(size_t k=first;k<r->end;k++){
+  size_t begin=k-r->begin<T?r->begin:k-T;
+  int n=(int)(k-begin);
+  supervision_start=n-1;
+  loss+=forward(corpus->bytes+begin,n,0,c);
+  if(out){
+   memset(scratch,0,sizeof(*scratch));
+   backward(corpus->bytes+begin,n,c,scratch);
+   float *dst=(float*)out,*src=(float*)scratch;
+   for(size_t z=0;z<sizeof(*out)/sizeof(float);z++)dst[z]+=src[z]/(float)targets;
+  }
+ }
+ supervision_start=0;
+ return (float)(loss/(double)targets);
+}
+/* Explicitly separated held-out corpora are never used for updates. */
+static int train_aligned(const char *path,const char *output,int steps,const char *heldout){
+ if(steps<1||steps>200000)return 2;
+ TrainingCorpus training={0},validation={0};
+ if(!corpus_read(path,&training)||!corpus_read(heldout,&validation)){
+  corpus_free(&training);corpus_free(&validation);return 1;
+ }
+ if(corpora_overlap(&training,&validation)){
+  fputs("training and held-out records overlap\n",stderr);
+  corpus_free(&training);corpus_free(&validation);return 1;
+ }
+ init();
+ Model *g=calloc(1,sizeof(*g)),*scratch=malloc(sizeof(*scratch));
+ float *m=calloc(1,sizeof(*model)),*v=calloc(1,sizeof(*model));
+ Cache *c=malloc(sizeof(*c));
+ if(!g||!scratch||!m||!v||!c){corpus_free(&training);corpus_free(&validation);free(g);free(scratch);free(m);free(v);free(c);free(model);return 1;}
+ size_t parameters=sizeof(*model)/sizeof(float);
+ for(int step=1;step<=steps;step++){
+  memset(g,0,sizeof(*g));
+  double training_loss=0;
+  for(size_t j=0;j<training.count;j++){
+   Model *part=calloc(1,sizeof(*part));
+   if(!part){corpus_free(&training);corpus_free(&validation);free(g);free(scratch);free(m);free(v);free(c);free(model);return 1;}
+   training_loss+=record_pass(&training,&training.records[j],c,part,scratch);
+   for(size_t i=0;i<parameters;i++)((float*)g)[i]+=((float*)part)[i]/(float)training.count;
+   free(part);
+  }
+  float b1=1.f-powf(0.9f,(float)step),b2=1.f-powf(0.999f,(float)step);
+  for(size_t i=0;i<parameters;i++){
+   float d=fmaxf(-1.f,fminf(1.f,((float*)g)[i]));
+   m[i]=0.9f*m[i]+0.1f*d;
+   v[i]=0.999f*v[i]+0.001f*d*d;
+   ((float*)model)[i]-=0.0007f*(m[i]/b1)/(sqrtf(v[i]/b2)+1e-8f);
+  }
+  if(step==1||step%100==0||step==steps){
+   double heldout_loss=0;
+   for(size_t j=0;j<validation.count;j++)
+    heldout_loss+=record_pass(&validation,&validation.records[j],c,NULL,NULL);
+   printf("step=%d train_loss=%.5f validation_loss=%.5f\n",
+          step,training_loss/training.count,heldout_loss/validation.count);
+   fflush(stdout);
+  }
+ }
+ int ok=save(output,(uint64_t)steps);
+ corpus_free(&training);corpus_free(&validation);
+ free(g);free(scratch);free(m);free(v);free(c);free(model);
+ return ok?0:1;
+}
+
 static int train(const char *corpus,const char *output,int steps){
  if(steps<1||steps>200000){fputs("steps must be 1..200000\n",stderr);return 2;}
  if(!load_data(corpus))return 1;
@@ -509,6 +632,7 @@ int main(int argc,char **argv){
   free(data);data=NULL;return 0;
  }
  if(argc==5&&!strcmp(argv[1],"train"))return train(argv[2],argv[3],atoi(argv[4]));
+ if(argc==6&&!strcmp(argv[1],"train"))return train_aligned(argv[2],argv[3],atoi(argv[4]),argv[5]);
  if(argc==6&&!strcmp(argv[1],"generate"))return generate_legacy(argv[2],argv[3],atoi(argv[4]),atoi(argv[5]));
  if((argc==7)&&!strcmp(argv[1],"generate")){
   if(argc==7&&strcmp(argv[6],"greedy")&&strcmp(argv[6],"sample"))return 2;
