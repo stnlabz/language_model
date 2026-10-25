@@ -9,13 +9,13 @@
 #include <string.h>
 #include <math.h>
 #include <errno.h>
-#define D 32
-#define F 64
-#define T 32
+#define D 48
+#define F 96
+#define T 64
 #define V 256
 #define NPARAM (V*D+T*D+4*D*D+D*F+F*D+F+D)
 #define MAGIC 0x4d544c53u
-#define VERSION 1u
+#define VERSION 2u
 #define AT(a,b,stride) ((a)*(stride)+(b))
 static uint64_t seed=20261024;
 static uint64_t rng(void){seed^=seed>>12;seed^=seed<<25;seed^=seed>>27;return seed*2685821657736338717ULL;}
@@ -135,35 +135,57 @@ static int save(const char *name,uint64_t steps){
  Header h={MAGIC,VERSION,D,T,(uint32_t)sizeof(*model),steps};
  int ok=fwrite(&h,sizeof(h),1,f)==1&&fwrite(model,sizeof(*model),1,f)==1;
  if(fclose(f))ok=0;
- if(!ok)remove(name);return ok;
+ if(!ok)remove(name);
+ return ok;
 }
 static int restore(const char *name){
  FILE *f=fopen(name,"rb");if(!f){perror(name);return 0;}
  Header h;int ok=fread(&h,sizeof(h),1,f)==1&&h.magic==MAGIC&&h.version==VERSION&&h.dimensions==D&&h.context==T&&h.bytes==sizeof(*model);
  if(ok)ok=fread(model,sizeof(*model),1,f)==1&&fgetc(f)==EOF;
- fclose(f);if(!ok)fputs("checkpoint invalid/incompatible\n",stderr);return ok;
+ fclose(f);
+ if(!ok)fputs("checkpoint invalid/incompatible\n",stderr);
+ return ok;
 }
 static int train(const char *corpus,const char *output,int steps){
  if(steps<1||steps>200000){fputs("steps must be 1..200000\n",stderr);return 2;}
  if(!load_data(corpus))return 1;
+ if(data_len<=T+1024){fputs("corpus too short for train/validation split\n",stderr);free(data);return 1;}
+ const size_t split=data_len*9/10;
  init();
  grad=calloc(1,sizeof(*model));moment=calloc(1,sizeof(*model));variance=calloc(1,sizeof(*model));
  if(!grad||!moment||!variance)return 1;
  Cache *c=malloc(sizeof(*c));if(!c)return 1;
  for(int s=1;s<=steps;s++){
-  size_t start=(size_t)(rng()%(data_len-T-1));
-  unsigned char *tok=data+start;int target=tok[T];
-  float loss=forward(tok,T,target,c);
-  memset(grad,0,sizeof(*model));backward(tok,T,target,c,(Model*)grad);
+  /* Four supervised next-byte targets per update, each with its own
+   * causal prefix. Previous code supervised only one position/update. */
+  memset(grad,0,sizeof(*model));
+  float total=0;
+  for(int sample=0;sample<4;sample++){
+   size_t start=(size_t)(rng()%(split-T-1));
+   unsigned char *tok=data+start;
+   for(int offset=0;offset<4;offset++){
+    int n=T-3+offset;
+    total+=forward(tok,n,tok[n],c);
+    backward(tok,n,tok[n],c,(Model*)grad);
+   }
+  }
   float *w=(float*)model;
   float b1=1.f-powf(0.9f,(float)s),b2=1.f-powf(0.999f,(float)s);
   for(size_t i=0;i<sizeof(*model)/sizeof(float);i++){
-   float d=fmaxf(-1.f,fminf(1.f,grad[i]));
+   float d=fmaxf(-1.f,fminf(1.f,grad[i]/16.f));
    moment[i]=0.9f*moment[i]+0.1f*d;
    variance[i]=0.999f*variance[i]+0.001f*d*d;
-   w[i]-=0.0005f*(moment[i]/b1)/(sqrtf(variance[i]/b2)+1e-8f);
+   w[i]-=0.0007f*(moment[i]/b1)/(sqrtf(variance[i]/b2)+1e-8f);
   }
-  if(s==1||s%100==0||s==steps)printf("step=%d loss=%.5f\n",s,loss);
+  if(s==1||s%100==0||s==steps){
+   float validation=0;
+   for(int j=0;j<16;j++){
+    size_t pos=split+(size_t)(rng()%(data_len-split-T));
+    validation+=forward(data+pos,T,data[pos+T],c)/16.f;
+   }
+   printf("step=%d train_loss=%.5f validation_loss=%.5f\n",s,total/16.f,validation);
+   fflush(stdout);
+  }
  }
  int ok=save(output,(uint64_t)steps);
  free(c);free(data);free(grad);free(moment);free(variance);free(model);
