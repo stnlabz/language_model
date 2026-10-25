@@ -512,7 +512,11 @@ static int train(const char *corpus,const char *output,int steps){
    size_t record_targets=0;
    size_t next=first;
    while(next<end){
-    size_t window=next>begin+(size_t)(T/2)?next-(size_t)(T/2)-1:begin;
+    /* Keep the longest available prior context for each supervised
+     * continuation, instead of discarding half the window at each chunk.
+     * This aligns more training targets with inference-length contexts
+     * while preserving nonoverlapping supervision and record boundaries. */
+    size_t window=next>begin+(size_t)T?next-(size_t)T:begin;
     size_t available=end-window-1;
     int n=(int)(available<(size_t)T?available:(size_t)T);
     if(n<1)break;
