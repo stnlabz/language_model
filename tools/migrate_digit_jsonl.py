@@ -61,8 +61,13 @@ def convert(blob, mode="all"):
             stats["duplicates"] += 1
             continue
         seen.add(pair)
-        # Each record is one line; the existing preparer partitions whole pairs.
-        rows.append(f"Question: {question} Answer: {answer}\n")
+        # Keep each record separate while retaining source approval checks.
+        # Structured records are approved statements, not dialogue turns.
+        # Preserve their approved response text without adding Q/A markers.
+        if is_structured:
+            rows.append(f"{answer}\n")
+        else:
+            rows.append(f"Question: {question} Answer: {answer}\n")
     data = "".join(rows).encode("utf-8")
     if len(data) > MAX_BYTES:
         raise ValueError("converted corpus exceeds existing prepare.c 16 MiB limit")
