@@ -1,9 +1,0 @@
-step=1 train_loss=5.55977 validation_loss=5.46735
-step=100 train_loss=0.99666 validation_loss=1.92891
-step=200 train_loss=0.04210 validation_loss=3.08923
-step=300 train_loss=0.01035 validation_loss=4.39142
-step=400 train_loss=0.00472 validation_loss=4.07385
-step=500 train_loss=0.00244 validation_loss=5.25615
-step=600 train_loss=0.00139 validation_loss=5.34050
-step=700 train_loss=0.00120 validation_loss=5.32227
-step=800 train_loss=0.00088 validation_loss=6.66679
