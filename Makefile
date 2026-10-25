@@ -32,6 +32,10 @@ CHECKPOINT ?= word_gru.stn
 SAMPLE ?= $(RUN)_word_sample.txt
 # Optional, separately approved Q/A corpus for answer-only supervision.
 DIALOGUE ?=
+# Explicit operator-supplied, approved dialogue withheld from all training.
+HELDOUT_DIALOGUE ?=
+BASE_VALID ?= $(GO_DIR)/gru_validation.bin
+TRAIN_DIALOGUE ?= $(GO_DIR)/dialogue_corpus.txt
 
 .DEFAULT_GOAL := help
 .PHONY: help all build test prepare-data train evaluate generate probe pipeline status train-state resume quality compare-sampling api go promote-go
@@ -42,6 +46,7 @@ help:
 	@echo 'Prepare: make prepare-data DATA=stn_language_sentences.txt RUN=corpus'
 	@echo 'Train: make train RUN=corpus CHECKPOINT=word_gru.stn [DIALOGUE=approved_qa.txt]'
 	@echo 'Generate: make generate CHECKPOINT=word_gru.stn PROMPT="The engineer"'
+	@echo 'Evaluate: make evaluate HELDOUT_DIALOGUE=/path/to/approved_unseen.txt'
 	@echo 'API: make api CHECKPOINT=word_gru.stn PORT=8766'
 	@echo 'Pipeline: make pipeline DATA=stn_language_sentences.txt RUN=corpus'
 	@echo 'CPU train from approved Digit JSONL with separated Q/A: make go (GO_SOURCE=... GO_TIMEOUT=6h)'
@@ -89,8 +94,14 @@ train: build
 	  nice -n '$(NICE)' timeout '$(TIMEOUT)' ./word_gru train '$(TRAIN)' '$(VALID)' '$(CHECKPOINT)' '$(SAMPLE)'; \
 	fi
 
-evaluate:
-	@echo 'Word GRU validation loss is reported by make train; no separate word-GRU evaluation command exists.' >&2; exit 2
+# Read-only evaluation: no trained/held-out Q/A overlap, no automatic qualification.
+# The operator must supply actual approved dialogue never used in any training.
+evaluate: build
+	@test -s '$(CHECKPOINT)' || { echo 'Missing checkpoint: $(CHECKPOINT)' >&2; exit 1; }
+	@test -s '$(BASE_VALID)' || { echo 'Missing preserved base validation set: $(BASE_VALID)' >&2; exit 1; }
+	@test -s '$(TRAIN_DIALOGUE)' || { echo 'Missing original supervised dialogue set: $(TRAIN_DIALOGUE)' >&2; exit 1; }
+	@test -n '$(HELDOUT_DIALOGUE)' && test -s '$(HELDOUT_DIALOGUE)' || { echo 'No separately approved held-out dialogue set supplied; evaluation cannot establish generalization' >&2; exit 1; }
+	./word_gru evaluate-checkpoint '$(CHECKPOINT)' '$(BASE_VALID)' '$(TRAIN_DIALOGUE)' '$(HELDOUT_DIALOGUE)'
 
 generate: build
 	@test -s '$(CHECKPOINT)' || { echo 'Missing word-GRU checkpoint: $(CHECKPOINT)' >&2; exit 1; }
