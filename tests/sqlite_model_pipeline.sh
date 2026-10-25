@@ -1,5 +1,5 @@
 #!/bin/sh
-# Run export, train (optional), and read-only evaluation on one DB snapshot.
+# Export SQLite corpus and perform only the explicitly selected operation.
 set -eu
 if [ "$#" -ne 4 ]; then
  echo "usage: sqlite_model_pipeline.sh DB CHECKPOINT STEPS train|evaluate" >&2
@@ -14,6 +14,7 @@ trap 'rm -f "$temp"' EXIT HUP INT TERM
 ./sqlite_corpus "$database" > "$temp"
 if [ "$mode" = train ]; then
  ./micro_llm train "$temp" "$checkpoint" "$steps"
+ exit 0
 elif [ "$mode" != evaluate ]; then
  echo "unsupported pipeline mode" >&2
  exit 2
