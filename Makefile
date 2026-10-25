@@ -21,7 +21,7 @@ help:
 	@echo 'make sqlite-export SQLITE_DB=/opt/digit/data/digit_memory.db (read-only; stdout)'
 	@echo 'make sqlite-test (synthetic database; does not access Digit)'
 	@echo 'make prose-test (synthetic prose training, held-out loss and generation diagnostic)'
-	@echo 'make sqlite-learn SQLITE_DB=... CHECKPOINT=new.stn STEPS=... (train and evaluate that checkpoint)' 
+	@echo 'make sqlite-learn SQLITE_DB=... CHECKPOINT=new.stn STEPS=... (train only; evaluation is separate)' 
 	@echo 'make sqlite-evaluate SQLITE_DB=... CHECKPOINT=existing.stn (evaluate existing model against DB)'
 	@echo 'make language-test SQLITE_CHECKPOINT=sqlite-retrained.stn (evaluate DB-backed checkpoint, no fixture retraining)'
 	@echo 'make prepare DATA=digit_approved_learning.jsonl CORPUS=micro_corpus.txt'
