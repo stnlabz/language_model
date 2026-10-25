@@ -78,4 +78,4 @@ tests/model_math: tests/model_math.c micro_llm.c
 	$(CC) $(CFLAGS) tests/model_math.c -lm -o tests/model_math
 language-test:
 	@echo 'Language qualification: bounded to 180 seconds; training artifacts retained.'
-	@timeout -k 5s 180s sh ./tests/language_qualification.sh || { code=$?; if [ "$code" -eq 124 ] || [ "$code" -eq 137 ]; then echo 'FAIL: language qualification exceeded its 180-second limit' >&2; fi; exit "$code"; }
+	@timeout -v -k 5s 180s sh ./tests/language_qualification.sh
