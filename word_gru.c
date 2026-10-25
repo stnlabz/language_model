@@ -780,7 +780,7 @@ int main(int argc,char **argv){
   if(!accepted_epoch)
    puts("dialogue_checkpoint=BASE_RETAINED (all evaluated dialogue candidates regressed)");
   else
-   printf("dialogue_checkpoint=ACCEPTED epoch=%d dialogue_train_loss=%.6f\\n",
+   printf("dialogue_checkpoint=ACCEPTED epoch=%d dialogue_loss_sum=%.6f\\n",
           accepted_epoch,accepted_answer_loss);
  }else{
   puts("dialogue_pairs_supervised=0");
