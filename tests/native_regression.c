@@ -60,6 +60,28 @@ static void service_test(const char *ckpt){
   CHECK(n>0);
   if(n>0){reply[n]=0;CHECK(strstr(reply,"200 OK")!=NULL);}
   close(sock);
+  sock=socket(AF_INET,SOCK_STREAM,0);
+  if(sock>=0){
+   struct sockaddr_in target={0};
+   target.sin_family=AF_INET;
+   target.sin_port=htons((unsigned short)port);
+   inet_pton(AF_INET,"127.0.0.1",&target.sin_addr);
+   if(connect(sock,(struct sockaddr*)&target,sizeof(target))==0){
+    const char *payload="{\\"prompt\\":\\"Hello\\",\\"max_bytes\\":8,\\"seed\\":42}";
+    char post[512];
+    int size=snprintf(post,sizeof(post),"POST /generate HTTP/1.1\\r\\nHost: 127.0.0.1\\r\\nContent-Type: application/json\\r\\nContent-Length: %zu\\r\\nConnection: close\\r\\n\\r\\n%s",strlen(payload),payload);
+    CHECK(size>0&&(size_t)size<sizeof(post));
+    if(size>0&&(size_t)size<sizeof(post)){
+     CHECK(send(sock,post,(size_t)size,0)==size);
+     char response_buf[2048]={0};size_t used=0;ssize_t received;
+     while(used+1<sizeof(response_buf)&&(received=recv(sock,response_buf+used,sizeof(response_buf)-used-1,0))>0)used+=(size_t)received;
+     response_buf[used]=0;
+     CHECK(strstr(response_buf,"200 OK")!=NULL);
+     CHECK(strstr(response_buf,"\\\"text\\\"")!=NULL);
+    }
+   }else CHECK(0);
+   close(sock);
+  }else CHECK(0);
  }else CHECK(0);
  kill(pid,SIGTERM);waitpid(pid,NULL,0);
 }
