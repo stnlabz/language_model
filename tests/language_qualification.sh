@@ -34,6 +34,51 @@ if cmp -s "$run/engineer.expected" "$run/engineer-paraphrase.actual" &&
    cmp -s "$run/gardener.expected" "$run/gardener-paraphrase.actual"; then
  printf 'PASS: held-out paraphrases reproduced expected answers\n'
 else
- printf 'FAIL: held-out paraphrase exact-answer qualification; artifacts=%s\n' "$run" >&2
+ printf 'BASELINE FAIL: unseen phrasing (two-question training); artifacts=%s\n' "$run" >&2
+fi
+
+# Separate controlled generalization experiment: four distinct phrasings
+# per concept. Held-out prompts below never appear in the training fixture.
+cat > "$run/variants-once.txt" <<'EOF'
+Question: What is an engineer?
+Answer: An engineer designs systems.
+
+Question: Tell me what an engineer does.
+Answer: An engineer designs systems.
+
+Question: What work does an engineer perform?
+Answer: An engineer designs systems.
+
+Question: Describe an engineer's job.
+Answer: An engineer designs systems.
+
+Question: What is a gardener?
+Answer: A gardener grows plants.
+
+Question: Tell me what a gardener does.
+Answer: A gardener grows plants.
+
+Question: What work does a gardener perform?
+Answer: A gardener grows plants.
+
+Question: Describe a gardener's job.
+Answer: A gardener grows plants.
+
+EOF
+i=0
+while [ "$i" -lt 100 ]; do
+ cat "$run/variants-once.txt"
+ i=$((i+1))
+done > "$run/variants-corpus.txt"
+"$run/micro_llm" train "$run/variants-corpus.txt" "$run/variants.stn" 4000 > "$run/variants-train.log"
+"$run/micro_llm" generate "$run/variants.stn" "$(printf 'Question: Explain what an engineer does.\nAnswer:')" 29 913 greedy > "$run/variants-engineer.actual"
+"$run/micro_llm" generate "$run/variants.stn" "$(printf 'Question: Describe the work of a gardener.\nAnswer:')" 25 913 greedy > "$run/variants-gardener.actual"
+printf 'Variant-trained held-out engineer: '; cat "$run/variants-engineer.actual"
+printf 'Variant-trained held-out gardener: '; cat "$run/variants-gardener.actual"
+if cmp -s "$run/engineer.expected" "$run/variants-engineer.actual" &&
+   cmp -s "$run/gardener.expected" "$run/variants-gardener.actual"; then
+ printf 'PASS: controlled held-out paraphrases; artifacts=%s\n' "$run"
+else
+ printf 'FAIL: controlled held-out paraphrases; artifacts=%s\n' "$run" >&2
  exit 1
 fi
