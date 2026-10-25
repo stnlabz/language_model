@@ -290,7 +290,16 @@ static int train(const char *corpus,const char *output,int steps){
   memset(grad,0,sizeof(*model));
   float total=0.f;
   for(int sample=0;sample<2;sample++){
+   /* Sample prose proportionally to its byte length, not by paragraph count.
+    * Find the record containing a uniformly selected training byte. */
    size_t index=(size_t)(rng()%training_count);
+   size_t pick=(size_t)(rng()%starts[training_count]);
+   size_t low=0,high=training_count;
+   while(low+1<high){
+    size_t mid=low+(high-low)/2;
+    if(starts[mid]<=pick)low=mid;else high=mid;
+   }
+   index=low;
    size_t begin=starts[index];
    size_t end=index+1<count?starts[index+1]:data_len;
    while(end>begin && (data[end-1]=='\n'||data[end-1]=='\r'))end--;
@@ -302,7 +311,14 @@ static int train(const char *corpus,const char *output,int steps){
    /* Crop from the record, keeping as much question context as fits
     * before the answer. Train only answer bytes for labeled records. */
    size_t window=begin;
-   if(end-begin>T+1){
+   if(answer==begin && end-begin>T+1){
+    /* Ordinary prose: each update can reach any byte in a long lesson,
+     * using its preceding context. No blank-line record is truncated
+     * permanently to the first 96 bytes. */
+    size_t last=end-(T+1);
+    window=begin+(size_t)(rng()%(last-begin+1));
+   }
+   if(answer>begin && end-begin>T+1){
     if(answer>begin && end-answer<T)window=end-(T+1);
     else if(answer>begin)window=answer>T/2?answer-T/2:begin;
     else window=begin+(size_t)(rng()%(end-begin-T));
