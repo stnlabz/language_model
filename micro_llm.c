@@ -647,7 +647,7 @@ static int evaluate_corpus(const char *path,const char *checkpoint){
    * Every sampled byte is predicted from prior text only. */
   const size_t budget=256;
   for(size_t j=0;j<budget;j++){
-   size_t index=lo+(j%(hi-lo));
+   size_t index=lo+(j*(hi-lo))/budget;
    size_t begin=starts[index],end=index+1<count?starts[index+1]:data_len;
    while(end>begin&&(data[end-1]=='\n'||data[end-1]=='\r'))end--;
    if(end<=begin+1)continue;
@@ -655,7 +655,7 @@ static int evaluate_corpus(const char *path,const char *checkpoint){
    for(size_t p=begin;p+7<=end;p++)
     if(!memcmp(data+p,"Answer:",7)){first=p+7;break;}
    if(first>=end)continue;
-   size_t k=first+(j/(hi-lo))%(end-first);
+   size_t k=first+((j*17u)%(end-first));
    size_t window=k-begin>T?k-T:begin;
    int n=(int)(k-window);
    if(n<1)continue;
