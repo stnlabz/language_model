@@ -9,6 +9,9 @@
 #include <string.h>
 #include <math.h>
 #include <errno.h>
+#include <dirent.h>
+#include <sys/stat.h>
+#include <limits.h>
 #define D 48
 #define F 96
 #define T 96
@@ -35,13 +38,91 @@ static size_t data_len;
  * answer byte (the position immediately preceding the answer). */
 static int supervision_start=0;
 static Model *model;
+/* Read approved .txt lessons in deterministic lexical order. No lesson is
+ * rewritten or converted on disk. Limit input to the existing 50MB budget. */
+#define MAX_CORPUS_BYTES 50000000UL
+#define MAX_LESSONS 4096
+static size_t lesson_count=0,lesson_bytes=0;
+static int lesson_name(const char *name){
+ size_t n=strlen(name);
+ return n>4 && strcmp(name+n-4,".txt")==0 && name[0]!='.';
+}
+static int cmp_names(const void *a,const void *b){
+ return strcmp(*(const char *const*)a,*(const char *const*)b);
+}
 static int load_data(const char *path){
- FILE *f=fopen(path,"rb");if(!f){perror(path);return 0;}
- if(fseek(f,0,SEEK_END)){fclose(f);return 0;}
- long n=ftell(f);if(n<1024||n>50000000L){fclose(f);fputs("corpus must be 1KiB..50MB\n",stderr);return 0;}
- rewind(f);data=malloc((size_t)n);if(!data){fclose(f);return 0;}
- data_len=(size_t)n;int ok=fread(data,1,data_len,f)==data_len;
- fclose(f);if(!ok){free(data);data=NULL;}return ok;
+ struct stat st;
+ if(lstat(path,&st)!=0){perror(path);return 0;}
+ if(S_ISREG(st.st_mode)){
+  FILE *f=fopen(path,"rb");if(!f){perror(path);return 0;}
+  if(st.st_size<1024||st.st_size>(long)MAX_CORPUS_BYTES){
+   fclose(f);fputs("corpus must be 1KiB..50MB\n",stderr);return 0;
+  }
+  data_len=(size_t)st.st_size;
+  data=malloc(data_len);
+  if(!data){fclose(f);return 0;}
+  int ok=fread(data,1,data_len,f)==data_len && fgetc(f)==EOF;
+  if(fclose(f))ok=0;
+  if(!ok){free(data);data=NULL;return 0;}
+  lesson_count=1;lesson_bytes=data_len;
+  printf("corpus_source=file files=1 bytes=%zu\n",lesson_bytes);
+  return 1;
+ }
+ if(!S_ISDIR(st.st_mode)){
+  fputs("corpus path must be a regular file or directory\n",stderr);return 0;
+ }
+ DIR *dir=opendir(path);
+ if(!dir){perror(path);return 0;}
+ char *names[MAX_LESSONS];size_t count=0;
+ struct dirent *ent;int ok=1;
+ while((ent=readdir(dir))!=NULL){
+  if(!lesson_name(ent->d_name))continue;
+  if(count==MAX_LESSONS){fputs("too many lesson files\n",stderr);ok=0;break;}
+  names[count]=malloc(strlen(ent->d_name)+1);
+  if(!names[count]){ok=0;break;}
+  strcpy(names[count],ent->d_name);count++;
+ }
+ if(closedir(dir))ok=0;
+ if(ok&&count==0){fputs("no .txt lessons found\n",stderr);ok=0;}
+ if(ok)qsort(names,count,sizeof(names[0]),cmp_names);
+ size_t used=0,raw=0;
+ if(ok){data=malloc(MAX_CORPUS_BYTES);if(!data)ok=0;}
+ for(size_t i=0;ok&&i<count;i++){
+  size_t pn=strlen(path),nn=strlen(names[i]);
+  if(pn>SIZE_MAX-nn-2){ok=0;break;}
+  char *full=malloc(pn+nn+2);
+  if(!full){ok=0;break;}
+  memcpy(full,path,pn);full[pn]='/';memcpy(full+pn+1,names[i],nn+1);
+  struct stat item;
+  if(lstat(full,&item)!=0 || !S_ISREG(item.st_mode) ||
+     item.st_size<1 || (uintmax_t)item.st_size>MAX_CORPUS_BYTES-used-2){
+   fprintf(stderr,"invalid or oversized lesson: %s\n",full);
+   free(full);ok=0;break;
+  }
+  FILE *f=fopen(full,"rb");
+  if(!f){perror(full);free(full);ok=0;break;}
+  size_t bytes=(size_t)item.st_size;
+  if(fread(data+used,1,bytes,f)!=bytes||fgetc(f)!=EOF)ok=0;
+  if(fclose(f))ok=0;
+  if(!ok){fprintf(stderr,"could not read lesson: %s\n",full);free(full);break;}
+  /* Verify stable content for this read; do not silently truncate files. */
+  struct stat after;
+  if(stat(full,&after)!=0 || after.st_size!=item.st_size){
+   fprintf(stderr,"lesson changed during inspection: %s\n",full);
+   free(full);ok=0;break;
+  }
+  free(full);
+  used+=bytes;raw+=bytes;
+  if(data[used-1]!='\n')data[used++]='\n';
+  data[used++]='\n';
+ }
+ for(size_t i=0;i<count;i++)free(names[i]);
+ if(!ok){free(data);data=NULL;return 0;}
+ data_len=used;lesson_count=count;lesson_bytes=raw;
+ printf("corpus_source=directory files=%zu bytes=%zu training_bytes=%zu\n",
+        lesson_count,lesson_bytes,data_len);
+ if(data_len<1024){free(data);data=NULL;fputs("corpus must be at least 1KiB\n",stderr);return 0;}
+ return 1;
 }
 /* Initialize each parameter family at an appropriate scale.
  * Uniform +/-0.025 for every tensor made query/key scores effectively
@@ -358,12 +439,16 @@ static int generate(const char *checkpoint,const char *prompt,int length,int req
  free(out);free(c);free(model);return ok?0:1;
 }
 int main(int argc,char **argv){
+ if(argc==3&&!strcmp(argv[1],"inspect")){
+  if(!load_data(argv[2]))return 1;
+  free(data);data=NULL;return 0;
+ }
  if(argc==5&&!strcmp(argv[1],"train"))return train(argv[2],argv[3],atoi(argv[4]));
  if(argc==6&&!strcmp(argv[1],"generate"))return generate_legacy(argv[2],argv[3],atoi(argv[4]),atoi(argv[5]));
  if((argc==7)&&!strcmp(argv[1],"generate")){
   if(argc==7&&strcmp(argv[6],"greedy")&&strcmp(argv[6],"sample"))return 2;
   return generate(argv[2],argv[3],atoi(argv[4]),atoi(argv[5]),argc==7&&!strcmp(argv[6],"greedy"));
  }
- fputs("usage:\n  micro_llm train CORPUS CHECKPOINT STEPS\n  micro_llm generate CHECKPOINT PROMPT BYTES SEED [sample|greedy]\n",stderr);
+ fputs("usage:\n  micro_llm inspect CORPUS_FILE_OR_DIRECTORY\n  micro_llm train CORPUS_FILE_OR_DIRECTORY CHECKPOINT STEPS\n  micro_llm generate CHECKPOINT PROMPT BYTES SEED [sample|greedy]\n",stderr);
  return 2;
 }
