@@ -12,13 +12,14 @@ PORT ?= 8765
 SQLITE_DB ?= /opt/digit/data/digit_memory.db
 
 .DEFAULT_GOAL := help
-.PHONY: help build test native-test math-test language-test sqlite-test sqlite-export sqlite-learn prepare train generate learn serve status clean
+.PHONY: help build test native-test math-test language-test prose-test sqlite-test sqlite-export sqlite-learn prepare train generate learn serve status clean
 help:
 	@echo 'make build'
 	@echo 'make test (native, mathematical, and language qualification; aggregate PASS/FAIL)'
 	@echo 'make clean'
 	@echo 'make sqlite-export SQLITE_DB=/opt/digit/data/digit_memory.db (read-only; stdout)'
 	@echo 'make sqlite-test (synthetic database; does not access Digit)'
+	@echo 'make prose-test (synthetic prose training, held-out loss and generation diagnostic)'
 	@echo 'make sqlite-learn SQLITE_DB=... CHECKPOINT=new.stn STEPS=... (explicit training only)'
 	@echo 'make prepare DATA=digit_approved_learning.jsonl CORPUS=micro_corpus.txt'
 	@echo 'make learn DATA=digit_approved_learning.jsonl CHECKPOINT=llm.stn STEPS=5000'
@@ -51,7 +52,7 @@ native-test:
 # individual exit status and fail the aggregate if any group fails.
 test:
 	@failed=0; \
-	for target in native-test math-test sqlite-test language-test; do \
+	for target in native-test math-test sqlite-test prose-test language-test; do \
 		printf '\n=== %s ===\n' "$$target"; \
 		if $(MAKE) --no-print-directory "$$target"; then \
 			printf 'PASS: %s\n' "$$target"; \
@@ -99,3 +100,8 @@ tests/sqlite_corpus_test: tests/sqlite_corpus_test.c
 sqlite-test:
 	@$(MAKE) --no-print-directory -B sqlite_corpus tests/sqlite_corpus_test
 	./tests/sqlite_corpus_test
+
+# Independent prose learning diagnostic, not a replacement for Q&A qualification.
+prose-test:
+	@echo 'Prose training diagnostic: bounded to 180 seconds.'
+	@timeout -v -k 5s 180s sh ./tests/prose_qualification.sh
