@@ -29,7 +29,10 @@ help:
 	@echo 'make generate CHECKPOINT=llm.stn PROMPT="The engineer"'
 	@echo 'make serve CHECKPOINT=llm.stn PORT=8765'
 	@echo 'No Python, auto-deployment, or automatic service installation.'
+# A completed build leaves no stale GRU run artifacts. The active model
+# checkpoint and approved source data are not touched.
 build: micro_llm gru_learn llm_service sqlite_corpus
+	@if [ -d gru_runs ]; then find gru_runs -mindepth 1 -maxdepth 1 -exec rm -rf -- {} +; fi
 sqlite_corpus: sqlite_corpus.c
 	$(CC) $(CFLAGS) sqlite_corpus.c -lsqlite3 -o sqlite_corpus
 sqlite-export: sqlite_corpus
