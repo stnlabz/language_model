@@ -30,6 +30,8 @@ TRAIN = $(RUN)_train.bin
 VALID = $(RUN)_validation.bin
 CHECKPOINT ?= word_gru.stn
 SAMPLE ?= $(RUN)_word_sample.txt
+# Optional, separately approved Q/A corpus for answer-only supervision.
+DIALOGUE ?=
 
 .DEFAULT_GOAL := help
 .PHONY: help all build test prepare-data train evaluate generate probe pipeline status train-state resume quality compare-sampling api go
@@ -38,11 +40,11 @@ help:
 	@echo 'Word GRU checkpoint: word_gru.stn'
 	@echo 'Build/test: make build | make test'
 	@echo 'Prepare: make prepare-data DATA=stn_language_sentences.txt RUN=corpus'
-	@echo 'Train: make train RUN=corpus CHECKPOINT=word_gru.stn'
+	@echo 'Train: make train RUN=corpus CHECKPOINT=word_gru.stn [DIALOGUE=approved_qa.txt]'
 	@echo 'Generate: make generate CHECKPOINT=word_gru.stn PROMPT="The engineer"'
 	@echo 'API: make api CHECKPOINT=word_gru.stn PORT=8766'
 	@echo 'Pipeline: make pipeline DATA=stn_language_sentences.txt RUN=corpus'
-	@echo 'CPU train from Digit JSONL: make go (GO_SOURCE=... GO_TIMEOUT=6h)'
+	@echo 'CPU train from approved Digit JSONL with separated Q/A: make go (GO_SOURCE=... GO_TIMEOUT=6h)'
 	@echo 'go reuses gru_run/, backs up root word_gru.stn to word_gru.previous.stn,'
 	@echo 'then moves the trained checkpoint to the root; does not restart the API.'
 	@echo 'Status: make status'
@@ -74,7 +76,14 @@ prepare-data: build
 train: build
 	@test -s '$(TRAIN)' && test -s '$(VALID)' || { echo 'Missing prepared data: run make prepare-data first' >&2; exit 1; }
 	@if test -e '$(CHECKPOINT)' || test -e '$(SAMPLE)'; then echo 'Word checkpoint or sample already exists; never overwrite' >&2; exit 1; fi
-	nice -n '$(NICE)' timeout '$(TIMEOUT)' ./word_gru train '$(TRAIN)' '$(VALID)' '$(CHECKPOINT)' '$(SAMPLE)'
+	@if test -n '$(DIALOGUE)'; then \
+	  test -s '$(DIALOGUE)' || { echo 'Approved dialogue corpus missing or empty: $(DIALOGUE)' >&2; exit 1; }; \
+	  echo 'Answer-only supervision: enabled (approved dialogue file supplied)'; \
+	  nice -n '$(NICE)' timeout '$(TIMEOUT)' ./word_gru train '$(TRAIN)' '$(VALID)' '$(CHECKPOINT)' '$(SAMPLE)' '$(DIALOGUE)'; \
+	else \
+	  echo 'Answer-only supervision: disabled (no DIALOGUE supplied)'; \
+	  nice -n '$(NICE)' timeout '$(TIMEOUT)' ./word_gru train '$(TRAIN)' '$(VALID)' '$(CHECKPOINT)' '$(SAMPLE)'; \
+	fi
 
 evaluate:
 	@echo 'Word GRU validation loss is reported by make train; no separate word-GRU evaluation command exists.' >&2; exit 2
@@ -111,6 +120,7 @@ go:
 	if test -d '$(GO_DIR)'; then \
 	  rm -f -- '$(GO_DIR)/snapshot.jsonl' '$(GO_DIR)/corpus.txt' \
 	    '$(GO_DIR)/gru_train.bin' '$(GO_DIR)/gru_validation.bin' \
+	    '$(GO_DIR)/dialogue_corpus.txt' \
 	    '$(GO_DIR)/word_gru.stn' '$(GO_DIR)/word_sample.txt'; \
 	fi; \
 	mkdir -p -m 0700 '$(GO_DIR)'; \
@@ -120,9 +130,14 @@ go:
 	fi; \
 	$(PYTHON) tools/migrate_digit_jsonl.py \
 	  --input '$(GO_DIR)/snapshot.jsonl' --output '$(GO_DIR)/corpus.txt'; \
+	$(PYTHON) tools/migrate_digit_jsonl.py \
+	  --input '$(GO_DIR)/snapshot.jsonl' --output '$(GO_DIR)/dialogue_corpus.txt' --mode dialogue; \
+	printf '%s\n' 'NOTICE: Only explicitly approved non-structured exchanges enter answer-only supervision.'; \
+	printf '%s\n' 'NOTICE: Seven dialogue pairs cannot establish conversational qualification.'; \
 	$(MAKE) prepare-data DATA='$(GO_DIR)/corpus.txt' RUN='$(GO_DIR)/gru'; \
 	$(MAKE) train RUN='$(GO_DIR)/gru' CHECKPOINT='$(GO_DIR)/word_gru.stn' \
-	  SAMPLE='$(GO_DIR)/word_sample.txt' NICE='$(NICE)' TIMEOUT='$(GO_TIMEOUT)'; \
+	  SAMPLE='$(GO_DIR)/word_sample.txt' DIALOGUE='$(GO_DIR)/dialogue_corpus.txt' \
+	  NICE='$(NICE)' TIMEOUT='$(GO_TIMEOUT)'; \
 	test -s '$(GO_DIR)/word_gru.stn' || { \
 	  echo 'Training completed without a nonempty checkpoint' >&2; exit 1; \
 	}; \
