@@ -340,6 +340,17 @@ static double evaluate(net *m,const int *seq,int count){
  }
  return used?loss/used:1e9;
 }
+static int save(const char *path,net *m){
+ FILE *f=fopen(path,"wb");if(!f)return 0;
+ const uint32_t magic=0x57524731;int ok=fwrite(&magic,4,1,f)==1&&fwrite(&nw,sizeof(nw),1,f)==1&&fwrite(words,sizeof(words),1,f)==1&&fwrite(m,sizeof(*m),1,f)==1;
+ if(fclose(f))ok=0;
+ return ok;
+}
+static int restore(const char *path,net *m){
+ FILE *f=fopen(path,"rb");if(!f)return 0;uint32_t magic=0;
+ int ok=fread(&magic,4,1,f)==1&&magic==0x57524731&&fread(&nw,sizeof(nw),1,f)==1&&nw>=10&&nw<=VOC&&fread(words,sizeof(words),1,f)==1&&fread(m,sizeof(*m),1,f)==1&&fgetc(f)==EOF;
+ fclose(f);return ok;
+}
 /* Evaluate an unchanged checkpoint against approved, disjoint dialogue
  * records and the held-out base text. This is teacher-forced diagnostic loss,
  * not a semantic judgment of generated answers. */
@@ -422,17 +433,6 @@ static int evaluate_checkpoint(int argc,char **argv){
  int rc=evaluate_dialogues(m,held,hn,train,tn);
  free(seq);free(valid);free(train);free(held);free(m);
  return rc;
-}
-static int save(const char *path,net *m){
- FILE *f=fopen(path,"wb");if(!f)return 0;
- const uint32_t magic=0x57524731;int ok=fwrite(&magic,4,1,f)==1&&fwrite(&nw,sizeof(nw),1,f)==1&&fwrite(words,sizeof(words),1,f)==1&&fwrite(m,sizeof(*m),1,f)==1;
- if(fclose(f))ok=0;
- return ok;
-}
-static int restore(const char *path,net *m){
- FILE *f=fopen(path,"rb");if(!f)return 0;uint32_t magic=0;
- int ok=fread(&magic,4,1,f)==1&&magic==0x57524731&&fread(&nw,sizeof(nw),1,f)==1&&nw>=10&&nw<=VOC&&fread(words,sizeof(words),1,f)==1&&fread(m,sizeof(*m),1,f)==1&&fgetc(f)==EOF;
- fclose(f);return ok;
 }
 static const int *training_tokens;
 static int training_count;
