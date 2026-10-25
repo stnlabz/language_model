@@ -86,8 +86,9 @@ static int sensitivity_probe(const size_t *starts,size_t count,Cache *c){
  }
  return 0;
 }
-\nint main(int argc,char **argv){
- if(argc!=3){fputs("usage: context_window_probe EXPORTED_CORPUS CHECKPOINT\n",stderr);return 2;}
+
+int main(int argc,char **argv){
+ if(argc!=3 && !(argc==4 && !strcmp(argv[3],"sensitivity"))){fputs("usage: context_window_probe EXPORTED_CORPUS CHECKPOINT [sensitivity]\n",stderr);return 2;}
  if(!load_data(argv[1]))return 1;
  /* Same record delimiter precedence as train() and evaluate_corpus(). */
  size_t *starts=malloc((data_len+1)*sizeof(*starts));
@@ -105,7 +106,8 @@ static int sensitivity_probe(const size_t *starts,size_t count,Cache *c){
  if(!restore(argv[2])){free(model);free(starts);free(data);return 1;}
  Cache *c=malloc(sizeof(*c));
  if(!c){free(model);free(starts);free(data);return 1;}
- if(argc==4){int rc=sensitivity_probe(starts,count,c);free(c);free(model);free(starts);free(data);return rc;}\n size_t training_count=count*9/10;
+ if(argc==4){int rc=sensitivity_probe(starts,count,c);free(c);free(model);free(starts);free(data);return rc;}
+ size_t training_count=count*9/10;
  if(training_count<1)training_count=1;
  puts("partition,record,target_offset,training_context,inference_context,training_nll,inference_nll,training_rank,inference_rank,training_best,inference_best,target");
  for(int part=0;part<2;part++){
