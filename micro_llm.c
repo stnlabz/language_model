@@ -424,42 +424,35 @@ static int train(const char *corpus,const char *output,int steps){
  if(!grad||!moment||!variance)return 1;
  Cache *c=malloc(sizeof(*c));if(!c)return 1;
  for(int s=1;s<=steps;s++){
-  /* Every position now contributes a next-byte target. The old trainer
-   * supervised only four bytes per optimizer step, far too sparse for
-   * the available approved corpus. */
+  /* Each optimizer sample trains exactly one next-byte target with the
+   * same preceding context as inference. Report measured coverage. */
   memset(grad,0,sizeof(*model));
   float total=0.f;
   for(int sample=0;sample<2;sample++){
-   /* Visit records in stable rotation. Within each record, sweep across
-    * target bytes in T-byte increments instead of pinning Q&A examples to
-    * one answer window or relying on random crops. Plain lessons and prose
-    * are supervised on all next bytes; labeled records on answer bytes.
-    * Windows never cross record boundaries. */
+   /* Match autoregressive inference: for each selected target byte k,
+    * use exactly the preceding min(T,k-record_begin) bytes as context.
+    * The previous window construction computed target but supervised
+    * unrelated positions, often leaving later record bytes unseen. */
    size_t serial=((size_t)(s-1)*2u+(size_t)sample);
    size_t index=serial%training_count;
    size_t begin=starts[index];
    size_t end=index+1<count?starts[index+1]:data_len;
-   while(end>begin && (data[end-1]=='\n'||data[end-1]=='\r'))end--;
+   while(end>begin&&(data[end-1]=='\\n'||data[end-1]=='\\r'))end--;
    if(end<=begin+1)continue;
-   size_t answer=begin;
+   size_t first=begin+1;
    for(size_t p=begin;p+7<=end;p++)
-    if(!memcmp(data+p,"Answer:",7)){answer=p+7;break;}
-   size_t first=answer>begin?answer:begin+1;
+    if(!memcmp(data+p,"Answer:",7)){first=p+7;break;}
    if(first>=end)continue;
    size_t span=end-first;
    size_t cycle=serial/training_count;
-   size_t target=first+((cycle*T)%span);
-   size_t window=target>begin+T?target-T:begin;
-   int n=(int)((end-window-1)<T?(end-window-1):T);
-   if(n<1)continue;
-   supervision_start=0;
-   if(answer>window){
-    if(answer>window+(size_t)n)continue;
-    supervision_start=(int)(answer-window-1);
-   }
+   size_t target=first+(cycle%span);
+   size_t window=target-begin>T?target-T:begin;
+   int n=(int)(target-window);
+   if(n<1||n>T)continue;
+   supervision_start=n-1;
    total+=forward(data+window,n,0,c);
    backward(data+window,n,c,(Model*)grad);
-   for(int t=supervision_start;t<n;t++)seen[window+(size_t)t+1]=1;
+   seen[target]=1;
   }
   supervision_start=0;
   float *w=(float*)model;
