@@ -32,9 +32,14 @@ sample=$(mktemp /tmp/stn-language-output-XXXXXX)
 trap 'rm -f "$temp" "$sample"' EXIT HUP INT TERM
 echo "=== ACTUAL CHECKPOINT LANGUAGE GENERATION ==="
 printf 'checkpoint: %s\nsource_prompt: %s\n' "$checkpoint" "$prompt"
-# 256 is the existing native CLI's maximum output per invocation; this
-# bounded observation is not a restriction on the model or its corpus.
-./micro_llm generate "$checkpoint" "$prompt" 256 913 greedy > "$sample"
+# Use the length of the actual source record as the observation size.
+# There is no imposed 64/256-byte generation ceiling.
+output_bytes=$(LC_ALL=C awk 'BEGIN { RS="" } NF { print length($0); exit }' "$temp")
+if [ -z "$output_bytes" ] || [ "$output_bytes" -lt 1 ]; then
+ echo "FAIL: no source-record length available" >&2
+ exit 1
+fi
+./micro_llm generate "$checkpoint" "$prompt" "$output_bytes" 913 greedy > "$sample"
 printf 'model_continuation:\n'
 cat "$sample"
 printf '\n'
